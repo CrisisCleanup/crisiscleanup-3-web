@@ -9,8 +9,8 @@
   ></object>
 </template>
 <script lang="ts">
-import { ref, computed } from '@vue/composition-api';
-import Incident from '@/models/Incident';
+import { ref, computed } from 'vue';
+import Incident from '../models/Incident';
 
 export default {
   name: 'DisasterIcon',

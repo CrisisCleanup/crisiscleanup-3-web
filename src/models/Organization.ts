@@ -1,5 +1,5 @@
 import { Model } from '@vuex-orm/core';
-import Incident from '@/models/Incident';
+import Incident from '../models/Incident';
 
 export default class Organization extends Model {
   static entity = 'organizations';
@@ -63,7 +63,7 @@ export default class Organization extends Model {
 
   static apiConfig = {
     actions: {
-      addFile(id, file, type) {
+      addFile(id: string, file: any, type: string) {
         return this.post(
           `/organizations/${id}/files`,
           {
@@ -73,7 +73,7 @@ export default class Organization extends Model {
           { save: false },
         );
       },
-      deleteFile(id, file) {
+      deleteFile(id: string, file: any) {
         return this.delete(
           `/organizations/${id}/files`,
           {
@@ -82,14 +82,14 @@ export default class Organization extends Model {
           { save: false },
         );
       },
-      approve(id, reason) {
+      approve(id: string, reason: string) {
         return this.post(
           `/organizations/${id}/approve`,
           { approve_reject_reason_t: reason },
           { save: false },
         );
       },
-      reject(id, reason, note = null) {
+      reject(id: string, reason: string, note: string | null = null) {
         const data: Record<string, any> = { approve_reject_reason_t: reason };
         if (note) {
           data.rejection_note = note;

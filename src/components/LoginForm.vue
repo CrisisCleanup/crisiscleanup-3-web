@@ -70,10 +70,10 @@
 </template>
 
 <script>
-import {useStore} from "vuex";
+import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
 import { ref, reactive } from "vue";
-import {useRouter, useRoute} from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import BaseButton from "./BaseButton.vue";
 import { useI18n } from 'vue-i18n'
 

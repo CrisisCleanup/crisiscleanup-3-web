@@ -1,7 +1,7 @@
 <template>
   <div
-    class="badge flex items-center justify-center rounded-full"
-    :style="{
+      class="badge flex items-center justify-center rounded-full"
+      :style="{
       backgroundColor: color,
       width: width || '10px',
       height: height || '10px',
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Badge',

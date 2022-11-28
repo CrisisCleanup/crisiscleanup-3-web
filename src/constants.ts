@@ -3,6 +3,7 @@
  */
 import { snakeCase } from 'lodash';
 
+// ICONS
 import attentionRed from './assets/icons/attention-red.svg'
 import about from './assets/icons/about-us.svg'
 import arrowLeft from './assets/icons/arrow-left.svg'
@@ -76,6 +77,48 @@ import plane from './assets/icons/plane.svg'
 import news from './assets/icons/news.svg'
 import stickyNoteSolid from './assets/icons/sticky-note-solid.svg'
 
+// DISASTER ICONS
+import contaminatedWater from './assets/disaster_icons/contaminated-water.svg'
+import earthquake from './assets/disaster_icons/earthquake.svg'
+import fire from './assets/disaster_icons/fire.svg'
+import flood from './assets/disaster_icons/flood.svg'
+import floodTornadoWind from './assets/disaster_icons/flood-tornado_wind.svg'
+import floodTropicalStorm from './assets/disaster_icons/flood-tstorm.svg'
+import hail from './assets/disaster_icons/hail.svg'
+import hurricane from './assets/disaster_icons/hurricane.svg'
+import mudslide from './assets/disaster_icons/mudslide.svg'
+import other from './assets/disaster_icons/other.svg'
+import rebuild from './assets/disaster_icons/rebuild.svg'
+import snow from './assets/disaster_icons/snow.svg'
+import tornado from './assets/disaster_icons/tornado.svg'
+import tornadoFlood from './assets/disaster_icons/tornado-flood.svg'
+import tornadoWindFlood from './assets/disaster_icons/tornado-wind-flood.svg'
+import tropicalStorm from './assets/disaster_icons/tropical-storm.svg'
+import virus from './assets/disaster_icons/virus.svg'
+import volcano from './assets/disaster_icons/volcano.svg'
+import wind from './assets/disaster_icons/wind.svg'
+
+export const DISASTER_ICONS: Record<string, any> = {
+    'contaminated-water': contaminatedWater,
+    earthquake,
+    fire,
+    flood,
+    'flood-tornado_wind': floodTornadoWind,
+    'flood-tstorm': floodTropicalStorm,
+    hail,
+    hurricane,
+    mudslide,
+    other,
+    rebuild,
+    snow,
+    tornado,
+    'tornado-flood': tornadoFlood,
+    'tornado-wind-flood': tornadoWindFlood,
+    'tropical-storm': tropicalStorm,
+    virus,
+    volcano,
+    wind,
+}
 
 export const TEXT_VARIANTS = [
     'h1',

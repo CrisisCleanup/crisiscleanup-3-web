@@ -1,25 +1,27 @@
 // import axios from 'axios';
 
+import State from "@vuex-orm/core/dist/src/model/contracts/State";
+
 const EventState = {
   events: [],
 };
 
 // getters
 const getters = {
-  getEvents: (state) => {
+  getEvents: (state: State) => {
     return state.events;
   },
 };
 
 // actions
 const actions = {
-  async pushEvents({ commit, getters: { getEvents } }) {
+  async pushEvents({ commit, getters: { getEvents } }: State) {
     const events = getEvents;
     if (events.length === 0 || process.env.NODE_ENV !== 'development') {
       return null;
     }
     // const response = await axios.post(
-    //   `${process.env.VUE_APP_API_BASE_URL}/events_new`,
+    //   `${import.meta.env.VITE_APP_API_BASE_URL}/events_new`,
     //   events,
     // );
     commit('setEvents', []);
@@ -29,10 +31,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  setEvents(state, events) {
+  setEvents(state: State, events: any[]) {
     state.events = events;
   },
-  addEvent(state, event) {
+  addEvent(state: State, event: any) {
     state.events = [...state.events, event];
   },
 };

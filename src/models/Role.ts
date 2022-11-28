@@ -5,7 +5,7 @@ export default class Role extends Model {
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       name_t: this.string(''),
       description_t: this.string(''),
       level: this.attr(null),

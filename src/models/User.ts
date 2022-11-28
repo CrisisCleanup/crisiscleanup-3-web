@@ -1,13 +1,13 @@
 import moment from 'moment';
 import Bowser from 'bowser';
-// import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/browser';
 import { AuthService } from '../services/auth.service';
-// import Language from '@/models/Language';
-// import Role from '@/models/Role';
-import CCUModel from './model';
+import Language from '../models/Language';
+import Role from '../models/Role';
 import {useRouter} from "vue-router";
+import { Model } from "@vuex-orm/core";
 
-export default class User extends CCUModel<User> {
+export default class User extends Model {
   static entity = 'users';
 
   id!: string;
@@ -27,6 +27,8 @@ export default class User extends CCUModel<User> {
   first_name!: string;
 
   last_name!: string;
+
+  email!: string;
 
   mobile!: string;
 
@@ -69,12 +71,12 @@ export default class User extends CCUModel<User> {
     };
   }
 
-  static afterUpdate(model) {
+  static afterUpdate(model: User) {
     if (model.id === User.store().getters['auth/userId']) {
       AuthService.updateUser(model.$toJson());
-      // Sentry.setUser(model.$toJson());
-      // Sentry.setContext('user_states', model.states);
-      // Sentry.setContext('user_preferences', model.preferences);
+      Sentry.setUser(model.$toJson());
+      Sentry.setContext('user_states', model.states);
+      Sentry.setContext('user_preferences', model.preferences);
       User.store().commit('auth/setAcl', useRouter());
     }
   }
@@ -101,9 +103,9 @@ export default class User extends CCUModel<User> {
     return `https://avatars.dicebear.com/api/bottts/${this.full_name}.svg`;
   }
 
-  // get currentRole() {
-  //   return Role.query().whereIdIn(this.active_roles).get()[0];
-  // }
+  get currentRole() {
+    return Role.query().whereIdIn(this.active_roles).get()[0];
+  }
 
   get referringUser() {
     return User.find(this.referring_user);
@@ -111,12 +113,12 @@ export default class User extends CCUModel<User> {
 
   get languages() {
     const languageList: any[] = [];
-    // if (this.primary_language) {
-    //   languageList.push(Language.find(this.primary_language));
-    // }
-    // if (this.secondary_language) {
-    //   languageList.push(Language.find(this.secondary_language));
-    // }
+    if (this.primary_language) {
+      languageList.push(Language.find(this.primary_language));
+    }
+    if (this.secondary_language) {
+      languageList.push(Language.find(this.secondary_language));
+    }
     return languageList;
   }
 
@@ -150,7 +152,7 @@ export default class User extends CCUModel<User> {
     return this.active_roles.includes(3);
   }
 
-  getStatesForIncident(incidentId, fallback = true) {
+  getStatesForIncident(incidentId: string, fallback = true) {
     if (
       this.states &&
       this.states.incidents &&

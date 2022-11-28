@@ -20,8 +20,8 @@
           -right-8
           p-3
         "
-        :title="$t('info.new_badge')"
-        >{{ $t('info.new') }}</badge
+        :title="$t('~~New Badge')"
+        >{{ $t('~~New') }}</badge
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
@@ -36,32 +36,40 @@
 </template>
 
 <script>
-import VueTypes from 'vue-types';
+import {computed} from "vue";
+import { useI18n } from 'vue-i18n'
+import { useRoute } from "vue-router";
 
 export default {
   name: 'NavButton',
   props: {
-    route: VueTypes.shape({
-      key: VueTypes.string,
-      text: VueTypes.string,
-      to: VueTypes.string,
-      icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-      iconSize: VueTypes.string,
-      disabled: VueTypes.bool,
-    }),
+    route: {
+      type: Object,
+      default: () => ({}),
+    },
   },
-  computed: {
-    iconProps() {
-      return typeof this.route.icon === 'object'
-        ? this.route.icon
-        : {
-            type: this.route.icon || this.route.key,
+
+  setup(props) {
+    const { t } = useI18n();
+
+    const iconProps = computed(() => {
+      return typeof props.route.icon === 'object'
+          ? props.route.icon
+          : {
+            type: props.route.icon || props.route.key,
             size: 'xl',
           };
-    },
-    isActive() {
-      return this.$t(this.$route.name).includes(this.route.key.toLowerCase());
-    },
+    });
+
+    let routeName = useRoute().name;
+    const isActive = computed(() =>
+        routeName ? t(routeName).includes(props.route.key.toLowerCase()): false,
+    );
+
+    return {
+      isActive,
+      iconProps
+    }
   },
 };
 </script>

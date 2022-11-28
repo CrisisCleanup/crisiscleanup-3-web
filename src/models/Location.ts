@@ -1,12 +1,14 @@
 import { Model } from '@vuex-orm/core';
-import LocationType from '@/models/LocationType';
+import LocationType from '../models/LocationType';
 
 export default class Location extends Model {
   static entity = 'locations';
 
+  type!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       name: this.string(''),
       notes: this.string(''),
       shared: this.string('shared'),
@@ -25,10 +27,10 @@ export default class Location extends Model {
 
   static apiConfig = {
     actions: {
-      fetchById(id) {
+      fetchById(id: string) {
         return this.get(`/locations/${id}`);
       },
-      download(id) {
+      download(id: string) {
         return this.request({
           url: `/locations/${id}/download`,
           method: 'GET',
@@ -36,6 +38,6 @@ export default class Location extends Model {
           save: false,
         });
       },
-    },
+    } as any,
   };
 }

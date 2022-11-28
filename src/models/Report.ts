@@ -1,6 +1,6 @@
 import { Model } from '@vuex-orm/core';
 import moment from 'moment';
-import Role from '@/models/Role';
+import Role from './Role';
 
 export default class Report extends Model {
   static entity = 'reports';
@@ -35,7 +35,7 @@ export default class Report extends Model {
 
   static apiConfig = {
     actions: {
-      addFile(id, file, type) {
+      addFile(id: string, file: any, type: string) {
         return this.post(
           `/reports/${id}/files`,
           {
@@ -45,7 +45,7 @@ export default class Report extends Model {
           { save: false },
         );
       },
-      deleteFile(id, file) {
+      deleteFile(id: string, file: any) {
         return this.delete(
           `/reports/${id}/files`,
           {

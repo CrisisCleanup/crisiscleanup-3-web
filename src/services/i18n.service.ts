@@ -1,10 +1,10 @@
 import moment from 'moment';
-import { StorageService } from '@/services/storage.service';
+import { StorageService } from './storage.service';
 
-const BASE_URL = process.env.VUE_APP_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 
 const i18nService = {
-  async getLanguage(subtag) {
+  async getLanguage(subtag: string) {
     const cachedLocalizations = StorageService.getItem(
       `cachedLocalizations:${subtag}`,
     );
@@ -28,7 +28,7 @@ const i18nService = {
     );
     return localizations;
   },
-  async getLocalizations(subtag) {
+  async getLocalizations(subtag: string) {
     const url = new URL(`${BASE_URL}/languages/${subtag}`);
 
     return fetch(url, {

@@ -1,11 +1,11 @@
-import CCUModel from '@/models/model';
+import CCUModel from './model';
 
-export default class PhoneStatus extends CCUModel {
+export default class PhoneStatus extends CCUModel<PhoneStatus> {
   static entity = 'phone_statuses';
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       substatus: this.string(''),
       status: this.string(''),
       primary_state: this.string(''),

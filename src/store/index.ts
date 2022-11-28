@@ -1,15 +1,20 @@
 import { createStore } from 'vuex'
 import auth from './modules/auth';
+import incident from './modules/incident';
+
 import VuexORM from '@vuex-orm/core';
+import VuexORMAxios from '@vuex-orm/plugin-axios'
 import database from "./database";
 import acl from "./modules/acl";
+import enums from "./modules/enums";
+import locale from "./modules/locale";
+import loading from './modules/loading';
+import events from './modules/events';
+import axios from "axios";
+import {AuthService} from "../services/auth.service";
 
 // import events from './modules/events';
 // import phone_legacy from './modules/phone_legacy';
-// import enums from './modules/enums';
-// import incident from './modules/incident';
-// import loading from './modules/loading';
-// import locale from './modules/locale';
 // import rc from './modules/rc';
 // import socket from './modules/socket';
 // import ui from './modules/ui';
@@ -17,15 +22,24 @@ import acl from "./modules/acl";
 
 const debug = process.env.NODE_ENV !== 'production';
 
+VuexORM.use(VuexORMAxios, {
+    axios,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AuthService.getToken()}`,
+    },
+    baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}`,
+});
 export const store = createStore({
     modules: {
         auth,
         acl,
-        // events,
-        // incident,
-        // loading,
-        // locale,
-        // enums,
+        events,
+        incident,
+        loading,
+        locale,
+        enums,
         // rc,
         // socket,
         // phone_legacy,

@@ -1,9 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
-import Vue from 'vue';
-// import Acl from 'vue-browser-acl';
-// import * as Sentry from '@sentry/browser';
-// import User from '@/models/User';
+import * as Sentry from '@sentry/browser';
 import { AuthService } from '../../services/auth.service';
 import State from "@vuex-orm/core/dist/src/model/contracts/State";
 import {ActionContext} from "vuex";
@@ -29,7 +26,9 @@ const getters = {
     return state.user && state.user.user_claims.active_roles.includes(1);
   },
   userId: (state: State) => (state.user ? state.user.user_claims.id : null),
+  user: (state: State) => state.user,
   userToken: (state: State) => (state.user ? state.user.access_token : null),
+  showLoginModal: (state: State) => (state.showLoginModal),
 };
 
 // actions
@@ -48,7 +47,7 @@ const actions = {
 
   logout({ commit }: ActionContext<any, any>) {
     commit('setUser', null);
-    window.location.reload();
+    // window.location.reload();
   },
 };
 
@@ -57,16 +56,16 @@ const mutations = {
   setUser(state: State, user: User) {
     state.user = user;
     if (!user) {
-      // Sentry.setUser(null);
+      Sentry.setUser(null);
       AuthService.removeUser();
     } else {
       AuthService.saveUser(user);
-      // Sentry.setUser({
-      //   ...state.user,
-      //   id: state.user.user_claims.id,
-      //   username: state.user.email,
-      //   email: state.user.email,
-      // });
+      Sentry.setUser({
+        ...state.user,
+        id: state.user.user_claims.id,
+        username: state.user.email,
+        email: state.user.email,
+      });
     }
   },
   setShowLoginModal(state: State, toggle: boolean) {

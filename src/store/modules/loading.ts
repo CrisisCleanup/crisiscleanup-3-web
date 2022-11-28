@@ -1,5 +1,7 @@
+import State from "@vuex-orm/core/dist/src/model/contracts/State";
+
 const AppState = {
-  language: null,
+  worksitesLoading: false,
 };
 
 // getters
@@ -10,8 +12,8 @@ const actions = {};
 
 // mutations
 const mutations = {
-  setLanguage(state, language) {
-    state.language = language;
+  setWorksitesLoading(state: State, worksitesLoading: boolean) {
+    state.worksitesLoading = worksitesLoading;
   },
 };
 
