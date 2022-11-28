@@ -1,14 +1,14 @@
-import moment from 'moment';
-import Bowser from 'bowser';
-import * as Sentry from '@sentry/browser';
-import { AuthService } from '../services/auth.service';
-import Language from '../models/Language';
-import Role from '../models/Role';
-import {useRouter} from "vue-router";
+import moment from "moment";
+import Bowser from "bowser";
+import * as Sentry from "@sentry/browser";
+import { AuthService } from "../services/auth.service";
+import Language from "../models/Language";
+import Role from "../models/Role";
+import { useRouter } from "vue-router";
 import { Model } from "@vuex-orm/core";
 
 export default class User extends Model {
-  static entity = 'users';
+  static entity = "users";
 
   id!: string;
 
@@ -48,11 +48,11 @@ export default class User extends Model {
 
   static fields() {
     return {
-      id: this.attr(''),
-      first_name: this.string(''),
-      last_name: this.string(''),
-      email: this.string(''),
-      mobile: this.string(''),
+      id: this.attr(""),
+      first_name: this.string(""),
+      last_name: this.string(""),
+      email: this.string(""),
+      mobile: this.string(""),
       roles: this.attr(null),
       active_roles: this.attr(null),
       files: this.attr(null),
@@ -72,19 +72,19 @@ export default class User extends Model {
   }
 
   static afterUpdate(model: User) {
-    if (model.id === User.store().getters['auth/userId']) {
+    if (model.id === User.store().getters["auth/userId"]) {
       AuthService.updateUser(model.$toJson());
       Sentry.setUser(model.$toJson());
-      Sentry.setContext('user_states', model.states);
-      Sentry.setContext('user_preferences', model.preferences);
-      User.store().commit('auth/setAcl', useRouter());
+      Sentry.setContext("user_states", model.states);
+      Sentry.setContext("user_preferences", model.preferences);
+      User.store().commit("auth/setAcl", useRouter());
     }
   }
 
   get hasProfilePicture() {
     if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
-        (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+        (file) => file.file_type_t === "fileTypes.user_profile_picture"
       );
       return profilePictures.length;
     }
@@ -94,7 +94,7 @@ export default class User extends Model {
   get profilePictureUrl() {
     if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
-        (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+        (file) => file.file_type_t === "fileTypes.user_profile_picture"
       );
       if (profilePictures.length) {
         return profilePictures[0].large_thumbnail_url;
@@ -168,17 +168,17 @@ export default class User extends Model {
 
   static apiConfig = {
     actions: {
-      login(email, password) {
+      login(email: string, password: string) {
         return this.post(
           `/api-token-auth`,
           {
             email,
             password,
           },
-          { save: false },
+          { save: false }
         );
       },
-      inviteUser(email, organization = null) {
+      inviteUser(email: string, organization = null) {
         const data: Record<string, any> = {
           invitee_email: email,
         };
@@ -187,7 +187,14 @@ export default class User extends Model {
         }
         return this.post(`/invitations`, data, { save: false });
       },
-      acceptInvite({ token, first_name, last_name, password, mobile, title }) {
+      acceptInvite({
+        token,
+        first_name,
+        last_name,
+        password,
+        mobile,
+        title,
+      }: Record<string, any>) {
         return this.post(
           `/invitations/accept`,
           {
@@ -198,61 +205,65 @@ export default class User extends Model {
             mobile,
             title,
           },
-          { save: false },
+          { save: false }
         );
       },
-      orphan(id) {
+      orphan(id: string) {
         return this.patch(`/users/${id}/orphan`);
       },
-      addFile(id, file, type) {
+      addFile(id: string, file: string, type: string) {
         return this.post(
           `/users/${id}/files`,
           {
             file,
             type_t: type,
           },
-          { save: false },
+          { save: false }
         );
       },
-      deleteFile(id, file) {
+      deleteFile(id: string, file: string) {
         return this.delete(
           `/users/${id}/files`,
           {
             data: { file },
           },
-          { save: false },
+          { save: false }
         );
       },
       async clearUserStates() {
-        const currentUser = User.find(User.store().getters['auth/userId']);
+        const currentUser = User.find(User.store().getters["auth/userId"]);
         await this.patch(
           `/users/${currentUser?.id}`,
           {
             states: {},
           },
-          { save: false },
+          { save: false }
         );
-        await this.get('/users/me');
+        await this.get("/users/me");
       },
       async clearUserPreferences() {
-        const currentUser = User.find(User.store().getters['auth/userId']);
+        const currentUser = User.find(User.store().getters["auth/userId"]);
         await this.patch(
           `/users/${currentUser?.id}`,
           {
             preferences: {},
           },
-          { save: false },
+          { save: false }
         );
-        await this.get('/users/me');
+        await this.get("/users/me");
       },
-      async updateUserState(globalStates, incidentStates, reload = false) {
+      async updateUserState(
+        globalStates: Record<string, any>,
+        incidentStates: Record<string, any>,
+        reload = false
+      ) {
         /* Update user states JSON with new states.
 
            To be backwards-compatible with clients without per-incident states,
            update top-level with both globalStates and incidentStates
            and then update state for current incident with incidentStates.
         */
-        let currentUser = User.find(User.store().getters['auth/userId']);
+        let currentUser = User.find(User.store().getters["auth/userId"]);
 
         if (!currentUser) {
           return;
@@ -289,13 +300,16 @@ export default class User extends Model {
           {
             states: updatedStates,
           },
-          { save: false },
+          { save: false }
         );
         if (reload) {
-          await this.get('/users/me');
+          await this.get("/users/me");
         }
       },
-      async updateUserPreferences(preferences, reload = false) {
+      async updateUserPreferences(
+        preferences: Record<string, any>,
+        reload = false
+      ) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
         if (!currentUser) {
           return;
@@ -309,10 +323,10 @@ export default class User extends Model {
           {
             preferences: newPreferences,
           },
-          { save: false },
+          { save: false }
         );
         if (reload) {
-          await this.get('/users/me', {});
+          await this.get("/users/me", {});
         }
       },
       async acceptTerms() {

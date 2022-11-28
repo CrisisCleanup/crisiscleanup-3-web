@@ -33,7 +33,7 @@
           }
         "
       >
-        {{ $t('actions.accept') }}
+        {{ $t("actions.accept") }}
       </base-button>
     </div>
   </modal>
@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: 'TermsandConditionsModal',
+  name: "TermsandConditionsModal",
   props: {
     organization: {
       type: Object,

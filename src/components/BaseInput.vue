@@ -93,26 +93,26 @@
 </template>
 
 <script>
-import { ref, computed, defineComponent } from 'vue';
+import { ref, computed, defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'BaseInput',
+  name: "BaseInput",
   props: {
     size: {
       type: String,
-      default: '',
+      default: "",
     },
     icon: {
       type: String,
-      default: '',
+      default: "",
     },
     faIcon: {
       type: String,
-      default: '',
+      default: "",
     },
     iconSize: {
       type: String,
-      default: 'small',
+      default: "small",
     },
     modelValue: {
       type: null,
@@ -128,11 +128,11 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      default: '',
+      default: "",
     },
     pattern: {
       type: String,
-      default: '.*',
+      default: ".*",
     },
     required: {
       type: Boolean,
@@ -140,23 +140,23 @@ export default defineComponent({
     },
     tooltip: {
       type: String,
-      default: '',
+      default: "",
     },
     topLabel: {
       type: String,
-      default: '',
+      default: "",
     },
     type: {
       type: String,
-      default: '',
+      default: "",
     },
     inputStyle: {
       type: String,
-      default: '',
+      default: "",
     },
     inputClasses: {
       type: String,
-      default: '',
+      default: "",
     },
     breakGlass: {
       type: Boolean,
@@ -168,11 +168,11 @@ export default defineComponent({
     },
     selector: {
       type: String,
-      default: '',
+      default: "",
     },
     autocomplete: {
       type: String,
-      default: 'off',
+      default: "off",
     },
     textArea: {
       type: Boolean,
@@ -188,11 +188,11 @@ export default defineComponent({
     },
     width: {
       type: String,
-      default: '300',
+      default: "300",
     },
     height: {
       type: String,
-      default: '40',
+      default: "40",
     },
   },
 
@@ -200,41 +200,41 @@ export default defineComponent({
     const id = ref(null);
     const isInvalid = ref(false);
     const input = ref(null);
-    const passwordView = ref(props.type === 'password' ? 'password' : '');
+    const passwordView = ref(props.type === "password" ? "password" : "");
     const iconClasses = ref({
-      large: props.size === 'large',
-      small: props.size === 'small',
-      base: props.size !== 'large' && props.size !== 'small',
-      'has-tooltip': Boolean(props.tooltip),
+      large: props.size === "large",
+      small: props.size === "small",
+      base: props.size !== "large" && props.size !== "small",
+      "has-tooltip": Boolean(props.tooltip),
     });
     const glassBroken = ref(false);
 
     const cssVars = computed(() => {
       return {
-        '--height': `${props.height}px`,
-        '--width': `${props.width}px`,
+        "--height": `${props.height}px`,
+        "--width": `${props.width}px`,
       };
     });
 
     const classes = computed(() => ({
-      'border-crisiscleanup-red-100': props.topLabel && isInvalid.value,
-      'flex-col items-start border': Boolean(props.topLabel),
-      'items-center': !props.topLabel,
+      "border-crisiscleanup-red-100": props.topLabel && isInvalid.value,
+      "flex-col items-start border": Boolean(props.topLabel),
+      "items-center": !props.topLabel,
     }));
 
     const defaultInputClasses = computed(() => ({
-      'flex-grow': true,
-      'p-1': true,
-      'text-base': !props.inputClasses,
-      xlarge: props.size === 'xlarge',
-      large: props.size === 'large',
-      medium: props.size === 'medium',
-      small: props.size === 'small',
+      "flex-grow": true,
+      "p-1": true,
+      "text-base": !props.inputClasses,
+      xlarge: props.size === "xlarge",
+      large: props.size === "large",
+      medium: props.size === "medium",
+      small: props.size === "small",
       base: !props.size,
-      'has-icon': Boolean(props.icon),
-      'has-tooltip': Boolean(props.tooltip),
+      "has-icon": Boolean(props.icon),
+      "has-tooltip": Boolean(props.tooltip),
       invalid: Boolean(isInvalid.value),
-      'border-none': Boolean(props.topLabel),
+      "border-none": Boolean(props.topLabel),
     }));
 
     function update(e) {
@@ -244,16 +244,16 @@ export default defineComponent({
         isInvalid.value = valid;
         if (newValue) {
           input.value = newValue;
-          return context.emit('update:modelValue', newValue);
+          return context.emit("update:modelValue", newValue);
         }
       }
-      context.emit('update:modelValue', value);
+      context.emit("update:modelValue", value);
       isInvalid.value = !input?.value?.checkValidity();
       return value;
     }
 
     function change(e) {
-      context.emit('change', e.target.value);
+      context.emit("change", e.target.value);
       isInvalid.value = !input?.value?.checkValidity();
     }
 
@@ -309,7 +309,7 @@ textarea {
   border-radius: 0;
 }
 
-input:not([type='radio']):not([type='checkbox']) {
+input:not([type="radio"]):not([type="checkbox"]) {
   -webkit-appearance: none;
   border-radius: 0;
 }

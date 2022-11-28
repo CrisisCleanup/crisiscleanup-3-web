@@ -7,14 +7,14 @@
   >
     <div class="p-3">
       <div>
-        {{ $t('userTransfer.you_have_been_moved_to') }}
-        {{ currentUser.organization.name }} {{ $t('userTransfer.by') }}
+        {{ $t("userTransfer.you_have_been_moved_to") }}
+        {{ currentUser.organization.name }} {{ $t("userTransfer.by") }}
         {{ requestingUser.first_name }} {{ requestingUser.last_name }} ({{
           requestingUser.email
         }})
       </div>
       <div>
-        {{ $t('userTransfer.choose_to_stay_return') }}
+        {{ $t("userTransfer.choose_to_stay_return") }}
       </div>
     </div>
     <div slot="footer" class="p-3 flex items-center justify-center">
@@ -35,15 +35,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue';
-import moment from 'moment';
+import { computed, defineComponent, onMounted } from "vue";
+import moment from "moment";
 import { useRouter } from "vue-router";
-import User from '../../models/User';
+import User from "../../models/User";
 import axios from "axios";
 import { useStore } from "vuex";
 
 export default defineComponent({
-  name: 'CompletedTransferModal',
+  name: "CompletedTransferModal",
   props: {
     transferRequest: {
       type: Object,
@@ -52,13 +52,13 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const store = useStore()
-    const currentUser = User.find(store.getters['auth/userId']);
+    const store = useStore();
+    const currentUser = User.find(store.getters["auth/userId"]);
     const $http = axios;
     const router = useRouter();
 
     const requestingUser = computed(() =>
-      User.find(props.transferRequest.requested_by),
+      User.find(props.transferRequest.requested_by)
     );
 
     async function getRequestingUser() {
@@ -66,20 +66,22 @@ export default defineComponent({
     }
     async function markAsSeen() {
       await $http.patch(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests/${props.transferRequest.id}`,
+        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests/${
+          props.transferRequest.id
+        }`,
         {
           user_approved_at: moment().toISOString(),
-        },
+        }
       );
     }
     async function stay() {
       await markAsSeen();
-      context.emit('close');
+      context.emit("close");
     }
     async function goBack() {
       await markAsSeen();
-      await router.push('/profile?move=true');
-      context.emit('close');
+      await router.push("/profile?move=true");
+      context.emit("close");
     }
 
     onMounted(async () => {

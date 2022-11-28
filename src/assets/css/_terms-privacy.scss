@@ -7,7 +7,8 @@ ol.outline > li {
   counter-increment: customlistcounter;
   display: block;
 }
-ol.outline:first-child, ol.outline:second-child {
+ol.outline:first-child,
+ol.outline:second-child {
   counter-reset: customlistcounter;
 }
 ol.outline > li:before {

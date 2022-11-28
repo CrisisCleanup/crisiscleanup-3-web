@@ -1,8 +1,8 @@
-import { Model } from '@vuex-orm/core';
-import Incident from '../models/Incident';
+import { Model } from "@vuex-orm/core";
+import Incident from "../models/Incident";
 
 export default class Organization extends Model {
-  static entity = 'organizations';
+  static entity = "organizations";
 
   id!: string;
 
@@ -14,11 +14,11 @@ export default class Organization extends Model {
 
   static fields() {
     return {
-      id: this.attr(''),
-      name: this.string(''),
-      url: this.string(''),
-      facebook: this.string(''),
-      twitter: this.string(''),
+      id: this.attr(""),
+      name: this.string(""),
+      url: this.string(""),
+      facebook: this.string(""),
+      twitter: this.string(""),
       affiliates: this.attr([]),
       primary_location: this.attr(null),
       secondary_location: this.attr(null),
@@ -52,13 +52,13 @@ export default class Organization extends Model {
   get logo_url() {
     if (this.files.length) {
       const logos = this.files.filter(
-        (file) => file.file_type_t === 'fileTypes.logo',
+        (file) => file.file_type_t === "fileTypes.logo"
       );
       if (logos.length) {
         return logos[0].small_thumbnail_url;
       }
     }
-    return '';
+    return "";
   }
 
   static apiConfig = {
@@ -70,7 +70,7 @@ export default class Organization extends Model {
             file,
             type_t: type,
           },
-          { save: false },
+          { save: false }
         );
       },
       deleteFile(id: string, file: any) {
@@ -79,14 +79,14 @@ export default class Organization extends Model {
           {
             data: { file },
           },
-          { save: false },
+          { save: false }
         );
       },
       approve(id: string, reason: string) {
         return this.post(
           `/organizations/${id}/approve`,
           { approve_reject_reason_t: reason },
-          { save: false },
+          { save: false }
         );
       },
       reject(id: string, reason: string, note: string | null = null) {

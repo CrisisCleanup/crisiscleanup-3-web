@@ -18,7 +18,7 @@ const getters = {
   workTypeCommercialValues: (state: State) => {
     return Object.assign(
       {},
-      ...state.workTypes.map((s: any) => ({ [s.key]: s.commercial_value })),
+      ...state.workTypes.map((s: any) => ({ [s.key]: s.commercial_value }))
     );
   },
 };

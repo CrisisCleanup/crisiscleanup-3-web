@@ -1,4 +1,4 @@
-import {Database} from "@vuex-orm/core";
+import { Database } from "@vuex-orm/core";
 import User from "../models/User";
 import Incident from "../models/Incident";
 import Location from "../models/Location";

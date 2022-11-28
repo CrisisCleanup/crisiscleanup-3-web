@@ -1,9 +1,9 @@
-import axios from 'axios';
-import moment from 'moment';
-import * as Sentry from '@sentry/browser';
-import { AuthService } from '../../services/auth.service';
+import axios from "axios";
+import moment from "moment";
+import * as Sentry from "@sentry/browser";
+import { AuthService } from "../../services/auth.service";
 import State from "@vuex-orm/core/dist/src/model/contracts/State";
-import {ActionContext} from "vuex";
+import { ActionContext } from "vuex";
 import User from "../../models/User";
 
 const AuthState = {
@@ -28,25 +28,28 @@ const getters = {
   userId: (state: State) => (state.user ? state.user.user_claims.id : null),
   user: (state: State) => state.user,
   userToken: (state: State) => (state.user ? state.user.access_token : null),
-  showLoginModal: (state: State) => (state.showLoginModal),
+  showLoginModal: (state: State) => state.showLoginModal,
 };
 
 // actions
 const actions = {
-  async login({ commit }: ActionContext<any, any>, { email, password }: Record<string, string>) {
+  async login(
+    { commit }: ActionContext<any, any>,
+    { email, password }: Record<string, string>
+  ) {
     const response = await axios.post(
       `${import.meta.env.VITE_APP_API_BASE_URL}/api-token-auth`,
       {
         email,
         password,
-      },
+      }
     );
-    commit('setUser', response.data);
+    commit("setUser", response.data);
     return response;
   },
 
   logout({ commit }: ActionContext<any, any>) {
-    commit('setUser', null);
+    commit("setUser", null);
     // window.location.reload();
   },
 };

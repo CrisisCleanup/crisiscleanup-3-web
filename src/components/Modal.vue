@@ -62,7 +62,7 @@
                     }
                   "
                 >
-                  {{ $t('actions.ok') }}
+                  {{ $t("actions.ok") }}
                 </base-button>
               </div>
             </slot>
@@ -75,7 +75,7 @@
 
 <script>
 export default {
-  name: 'Modal',
+  name: "Modal",
   props: {
     modalClasses: {
       type: null,
@@ -91,7 +91,7 @@ export default {
     },
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     closeable: {
       type: Boolean,

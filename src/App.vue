@@ -1,99 +1,101 @@
 <script lang="ts">
-import {defineComponent, computed, onMounted, watch, ref} from "vue";
-import {useRoute} from "vue-router";
-import {useI18n} from "vue-i18n";
+import { defineComponent, computed, onMounted, watch, ref } from "vue";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import moment from "moment";
-import {AuthService} from "./services/auth.service";
+import { AuthService } from "./services/auth.service";
 import axios from "axios";
-import {useStore} from "vuex";
-import {cachedGet, hash} from "./utils/promise";
+import { useStore } from "vuex";
+import { cachedGet, hash } from "./utils/promise";
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   setup() {
     const route = useRoute();
-    const defaultLayout = 'authenticated';
-    const layout = computed(() => `${route.meta?.layout || defaultLayout}-layout`);
+    const defaultLayout = "authenticated";
+    const layout = computed(
+      () => `${route.meta?.layout || defaultLayout}-layout`
+    );
     const { t } = useI18n();
     const store = useStore();
 
     const eventsInterval = ref<any | null>(null);
 
     async function pushCurrentEvents(): Promise<void> {
-      if (store.getters['auth/isLoggedIn']) {
-        await store.dispatch('events/pushEvents')
+      if (store.getters["auth/isLoggedIn"]) {
+        await store.dispatch("events/pushEvents");
       }
     }
 
     async function getEnums(): Promise<void> {
       const enums = await hash({
         statuses: cachedGet(
-            `${import.meta.env.VITE_APP_API_BASE_URL}/statuses`,
-            {
-              headers: {
-                Authorization: null,
-              },
+          `${import.meta.env.VITE_APP_API_BASE_URL}/statuses`,
+          {
+            headers: {
+              Authorization: null,
             },
-            'statuses',
+          },
+          "statuses"
         ),
         workTypes: axios.get(
-            `${import.meta.env.VITE_APP_API_BASE_URL}/work_types`,
-            {
-              headers: {
-                Authorization: null,
-              },
+          `${import.meta.env.VITE_APP_API_BASE_URL}/work_types`,
+          {
+            headers: {
+              Authorization: null,
             },
+          }
         ),
         phases: cachedGet(
-            `${import.meta.env.VITE_APP_API_BASE_URL}/incidents_phases`,
-            {
-              headers: {
-                Authorization: null,
-              },
+          `${import.meta.env.VITE_APP_API_BASE_URL}/incidents_phases`,
+          {
+            headers: {
+              Authorization: null,
             },
-            'incidents_phases',
+          },
+          "incidents_phases"
         ),
         locationTypes: cachedGet(
-            `${import.meta.env.VITE_APP_API_BASE_URL}/location_types`,
-            {
-              headers: {
-                Authorization: null,
-              },
+          `${import.meta.env.VITE_APP_API_BASE_URL}/location_types`,
+          {
+            headers: {
+              Authorization: null,
             },
-            'location_types',
+          },
+          "location_types"
         ),
         portal: cachedGet(
-            `${import.meta.env.VITE_APP_API_BASE_URL}/portals/current`,
-            {
-              headers: {
-                Authorization: null,
-              },
+          `${import.meta.env.VITE_APP_API_BASE_URL}/portals/current`,
+          {
+            headers: {
+              Authorization: null,
             },
-            'portal',
+          },
+          "portal"
         ),
       });
-      store.commit('enums/setStatuses', enums.statuses.data.results);
-      store.commit('enums/setWorkTypes',enums.workTypes.data.results);
-      store.commit('enums/setLocationTypes',enums.locationTypes.data.results);
-      store.commit('enums/setPhases',enums.phases.data.results);
-      store.commit('enums/setPortal', enums.portal.data);
+      store.commit("enums/setStatuses", enums.statuses.data.results);
+      store.commit("enums/setWorkTypes", enums.workTypes.data.results);
+      store.commit("enums/setLocationTypes", enums.locationTypes.data.results);
+      store.commit("enums/setPhases", enums.phases.data.results);
+      store.commit("enums/setPortal", enums.portal.data);
     }
 
     watch(
-        () => route,
-        (to) => {
-          const newTitle = `${t(to?.name?.toString() || '')}: Crisis Cleanup`;
-          if (document.title !== newTitle) {
-            document.title = newTitle;
-          }
-        },
+      () => route,
+      (to) => {
+        const newTitle = `${t(to?.name?.toString() || "")}: Crisis Cleanup`;
+        if (document.title !== newTitle) {
+          document.title = newTitle;
+        }
+      }
     );
 
     onMounted(async () => {
       if (moment().isAfter(AuthService.getExpiry())) {
         AuthService.removeUser();
       }
-      if (import.meta.env.NODE_ENV === 'development') {
+      if (import.meta.env.NODE_ENV === "development") {
         eventsInterval.value = setInterval(pushCurrentEvents, 2000);
       }
       axios.interceptors.request.use((config) => {
@@ -108,19 +110,15 @@ export default defineComponent({
     });
 
     return {
-      layout
-    }
-  }
-})
-
+      layout,
+    };
+  },
+});
 </script>
 
 <template>
-  <component
-      class="main"
-      :is="layout"
-  >
-    <router-view/>
+  <component class="main" :is="layout">
+    <router-view />
   </component>
 </template>
 

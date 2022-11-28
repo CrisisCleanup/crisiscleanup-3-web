@@ -1,17 +1,17 @@
-import { Model } from '@vuex-orm/core';
-import LocationType from '../models/LocationType';
+import { Model } from "@vuex-orm/core";
+import LocationType from "../models/LocationType";
 
 export default class Location extends Model {
-  static entity = 'locations';
+  static entity = "locations";
 
   type!: string;
 
   static fields() {
     return {
-      id: this.attr(''),
-      name: this.string(''),
-      notes: this.string(''),
-      shared: this.string('shared'),
+      id: this.attr(""),
+      name: this.string(""),
+      notes: this.string(""),
+      shared: this.string("shared"),
       type: this.attr(null),
       geom: this.attr(null),
       poly: this.attr(null),
@@ -33,8 +33,8 @@ export default class Location extends Model {
       download(id: string) {
         return this.request({
           url: `/locations/${id}/download`,
-          method: 'GET',
-          responseType: 'blob',
+          method: "GET",
+          responseType: "blob",
           save: false,
         });
       },

@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import NavButton from './NavButton.vue';
+import NavButton from "./NavButton.vue";
 
 export default {
-  name: 'NavMenu',
+  name: "NavMenu",
   components: { NavButton },
   props: {
     routes: {

@@ -9,11 +9,11 @@
   ></object>
 </template>
 <script lang="ts">
-import { ref, computed } from 'vue';
-import Incident from '../models/Incident';
+import { ref, computed } from "vue";
+import Incident from "../models/Incident";
 
 export default {
-  name: 'DisasterIcon',
+  name: "DisasterIcon",
   props: {
     width: {
       type: [Number, null],
@@ -38,8 +38,8 @@ export default {
     const icon = ref<HTMLObjectElement | null>(null);
 
     const style = computed(() => ({
-      visibility: ready.value ? 'visible' : 'hidden',
-      pointerEvents: 'none',
+      visibility: ready.value ? "visible" : "hidden",
+      pointerEvents: "none",
     }));
 
     const incidentImage = computed(() => {
@@ -56,7 +56,7 @@ export default {
     function setColor() {
       if (svgDocument.value) {
         const { value } = svgDocument;
-        value.getElementsByTagName('path')[0].style.fill =
+        value.getElementsByTagName("path")[0].style.fill =
           props.currentIncident.color;
       }
     }

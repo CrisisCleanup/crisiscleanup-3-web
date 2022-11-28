@@ -3,9 +3,9 @@
  * CrisisCleanup Base Vuex-ORM model.
  */
 
-import { Model } from '@vuex-orm/core';
-import _ from 'lodash';
-import { QueryResult } from 'aws-sdk/clients/kendra';
+import { Model } from "@vuex-orm/core";
+import _ from "lodash";
+import { QueryResult } from "aws-sdk/clients/kendra";
 
 interface BaseFieldsT {
   id: number;
@@ -31,10 +31,10 @@ export default class CCUModel<T> extends Model {
         // id: this.number(''),
         // ...this.historyFields,
       },
-      omit,
+      omit
     );
 
-  static entity: string = '';
+  static entity: string = "";
 
   /**
    * Fetch and store item(s) by id.
@@ -44,17 +44,17 @@ export default class CCUModel<T> extends Model {
    */
   static fetchById(
     id: number | number[] | string | string[],
-    save: boolean = true,
+    save: boolean = true
   ) {
-    if (typeof id === 'number' || typeof id === 'string') {
+    if (typeof id === "number" || typeof id === "string") {
       return this.api().get(`/${this.entity}/${id}`, { save });
     }
     return this.api().get(`/${this.entity}`, {
       params: {
-        id__in: id.join(','),
+        id__in: id.join(","),
         limit: id.length,
       },
-      dataKey: 'results',
+      dataKey: "results",
       save,
     });
   }
@@ -67,9 +67,9 @@ export default class CCUModel<T> extends Model {
    */
   static async fetchOrFindId(id: number | number[], save: boolean = true) {
     const _ids = _.castArray(id);
-    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ''));
+    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ""));
     const resolvedIds = ids.filter((itemId) =>
-      this.query().whereId(itemId).exists(),
+      this.query().whereId(itemId).exists()
     );
     const unresolved = _.difference(ids, resolvedIds);
     if (!_.isEmpty(unresolved)) {
@@ -91,9 +91,9 @@ export default class CCUModel<T> extends Model {
     params?: {
       [key: string]: string;
     },
-    dataKey?: string,
+    dataKey?: string
   ) {
-    const _dataKey = dataKey || 'results';
+    const _dataKey = dataKey || "results";
     const _params = params || {};
     await this.api().get(`/${this.entity}`, {
       dataKey: _dataKey,

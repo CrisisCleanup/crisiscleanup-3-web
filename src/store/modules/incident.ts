@@ -7,11 +7,10 @@ const AppState = {
 
 // getters
 const getters = {
-  currentIncidentId: (state: State) =>
-      state.currentIncidentId,
+  currentIncidentId: (state: State) => state.currentIncidentId,
 
   currentIncident: (state: State) =>
-      state.currentIncidentId ? Incident.find(state.currentIncidentId) : null,
+    state.currentIncidentId ? Incident.find(state.currentIncidentId) : null,
 };
 
 // actions
@@ -21,8 +20,8 @@ const actions = {};
 const mutations = {
   setCurrentIncidentId(state: State, currentIncidentId: string) {
     state.currentIncidentId = currentIncidentId
-        ? parseInt(currentIncidentId)
-        : currentIncidentId;
+      ? parseInt(currentIncidentId)
+      : currentIncidentId;
   },
 };
 

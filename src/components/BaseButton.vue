@@ -1,19 +1,19 @@
 <template>
   <button
-      :class="[styles, buttonSelector]"
-      :alt="alt || text"
-      :disabled="disabled || loading"
-      type="submit"
-      :size="size"
-      :title="buttonTitle"
-      :data-cy="buttonSelector"
-      @click.prevent="performAction"
+    :class="[styles, buttonSelector]"
+    :alt="alt || text"
+    :disabled="disabled || loading"
+    type="submit"
+    :size="size"
+    :title="buttonTitle"
+    :data-cy="buttonSelector"
+    @click.prevent="performAction"
   >
     <font-awesome-icon
-        v-if="loading || showSpinner"
-        size="sm"
-        icon="spinner"
-        spin
+      v-if="loading || showSpinner"
+      size="sm"
+      icon="spinner"
+      spin
     />
     <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
     <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
@@ -23,15 +23,15 @@
 </template>
 
 <script lang="ts">
-import { kebabCase } from 'lodash';
-import { ref, computed, defineComponent, PropType } from 'vue';
-import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '../constants';
+import { kebabCase } from "lodash";
+import { ref, computed, defineComponent, PropType } from "vue";
+import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from "../constants";
 
-type ButtonSize = 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
+type ButtonSize = "small" | "medium" | "large" | "sm" | "md" | "lg";
 type IconSize = typeof ICON_SIZES[number];
 
 export default defineComponent({
-  name: 'BaseButton',
+  name: "BaseButton",
 
   props: {
     action: {
@@ -48,51 +48,51 @@ export default defineComponent({
     },
     text: {
       type: String,
-      default: '',
+      default: "",
     },
     alt: {
       type: String,
-      default: 'button',
+      default: "button",
     },
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     ccuEvent: {
       type: String,
-      default: '',
+      default: "",
     },
     size: {
       type: String as PropType<ButtonSize>,
-      default: '',
+      default: "",
     },
     icon: {
       type: String,
-      default: '',
+      default: "",
     },
     ccuIcon: {
       type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
-      default: '',
+      default: "",
     },
     iconSize: {
       type: String as PropType<IconSize>,
-      default: '',
+      default: "",
     },
     suffixIcon: {
       type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
-      default: '',
+      default: "",
     },
     selector: {
       type: String,
-      default: '',
+      default: "",
     },
     variant: {
       type: String as PropType<typeof VARIANTS[keyof typeof VARIANTS]>,
-      default: '',
+      default: "",
     },
     type: {
       type: String,
-      default: '',
+      default: "",
     },
   },
 
@@ -103,28 +103,28 @@ export default defineComponent({
     const buttonTitle = computed(() => props.text || props.alt || props.title);
 
     const buttonSelector = computed(
-        () => props.selector || `js-${kebabCase(buttonTitle.value)}`,
+      () => props.selector || `js-${kebabCase(buttonTitle.value)}`
     );
 
     const styles = computed(() => {
       const styleObject = {
-        'large text-h3 font-h3': ['large', 'lg'].includes(props.size),
-        'medium text-sans text-h4 font-h4': ['medium', 'md'].includes(
-            props.size,
+        "large text-h3 font-h3": ["large", "lg"].includes(props.size),
+        "medium text-sans text-h4 font-h4": ["medium", "md"].includes(
+          props.size
         ),
-        'small text-bodysm font-bodysm': ['small', 'sm'].includes(props.size),
+        "small text-bodysm font-bodysm": ["small", "sm"].includes(props.size),
         disabled: props.disabled,
         // **** DEPRECATED ****
-        primary: props.type === 'primary',
-        danger: props.type === 'danger',
-        warning: props.type === 'warning',
-        link: props.type === 'link',
-        bare: props.type === 'bare',
+        primary: props.type === "primary",
+        danger: props.type === "danger",
+        warning: props.type === "warning",
+        link: props.type === "link",
+        bare: props.type === "bare",
         // **************
         flex: true,
-        'items-center': true,
-        'justify-center': true,
-        'base-button': true,
+        "items-center": true,
+        "justify-center": true,
+        "base-button": true,
       };
       if (props.variant) {
         styleObject[props.variant] = true;

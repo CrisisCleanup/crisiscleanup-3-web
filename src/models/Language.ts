@@ -1,9 +1,9 @@
 /**
  * Language Model
  */
-import detectBrowserLanguage from 'detect-browser-language';
-import _ from 'lodash';
-import CCUModel from './model';
+import detectBrowserLanguage from "detect-browser-language";
+import _ from "lodash";
+import CCUModel from "./model";
 
 interface LanguageTranslationResponse {
   text: string;
@@ -13,7 +13,7 @@ interface LanguageTranslationResponse {
 }
 
 export default class Language extends CCUModel<Language> {
-  static entity = 'languages';
+  static entity = "languages";
 
   id!: string;
 
@@ -31,7 +31,7 @@ export default class Language extends CCUModel<Language> {
 
   static fields() {
     return {
-      id: this.attr(''),
+      id: this.attr(""),
       subtag: this.attr(null),
       name_t: this.attr(null),
     };
@@ -40,8 +40,8 @@ export default class Language extends CCUModel<Language> {
   static get browserLanguage() {
     return Language.query()
       .where(
-        'subtag',
-        Language.store().state.entities.languages._browserLanguage,
+        "subtag",
+        Language.store().state.entities.languages._browserLanguage
       )
       .first();
   }
@@ -50,21 +50,21 @@ export default class Language extends CCUModel<Language> {
     const _subtags: string[] = _.castArray(subtags);
 
     const resolved = _subtags.filter((s) =>
-      this.query().where('subtag', s).exists(),
+      this.query().where("subtag", s).exists()
     );
 
     const unresolved = _.difference(_subtags, resolved);
 
     if (!_.isEmpty(unresolved)) {
-      await this.api().get('/languages', {
+      await this.api().get("/languages", {
         params: {
-          subtag: unresolved.join(','),
+          subtag: unresolved.join(","),
         },
-        dataKey: 'results',
+        dataKey: "results",
       });
     }
 
-    return subtags.map((s) => this.query().where('subtag', s).first());
+    return subtags.map((s) => this.query().where("subtag", s).first());
   }
 
   /**
@@ -89,12 +89,12 @@ export default class Language extends CCUModel<Language> {
       },
       {
         save: false,
-      },
+      }
     );
     return data;
   }
 
   get shortName() {
-    return this.name_t.split(' ')[0];
+    return this.name_t.split(" ")[0];
   }
 }
