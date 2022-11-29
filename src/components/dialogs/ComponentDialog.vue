@@ -19,7 +19,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                    $close('cancel');
+                   closeDialog('cancel');
                   }
                 "
               />
@@ -46,11 +46,11 @@
                   size="lg"
                   :action="
                     () => {
-                      $close('ok');
+                     closeDialog('ok');
                     }
                   "
                 >
-                  {{ $t(actionText) || $t('actions.ok') }}
+                  {{ $t(actionText) || $t("actions.ok") }}
                 </base-button>
               </div>
             </div>
@@ -62,49 +62,57 @@
 </template>
 
 <script>
-import { EventBus } from '@/event-bus';
+import useEmitter from "../hooks/useEmitter";
+import { computed, defineComponent } from "vue";
+import { closeDialog } from "vue3-promise-dialog";
 
-export default {
-  name: 'ComponentDialog',
-  created() {
-    EventBus.$on('modal_component:close', (key) => {
-      if (key === this.id) {
-        this.$close();
+export default defineComponent({
+  name: "ComponentDialog",
+  setup(props) {
+    const { emitter } = useEmitter();
+
+    emitter.on("modal_component:close", (key) => {
+      if (key === props.id) {
+        closeDialog("ok");
       }
     });
-  },
-  computed: {
-    dynamicComponent() {
-      if (typeof this.component === 'string') {
-        return () => import(`@/components/${this.component}`);
+
+    const dynamicComponent = computed(() => {
+      if (typeof props.component === "string") {
+        return () => import(`../../components/${props.component}`);
       }
-      return this.component;
-    },
+      return props.component;
+    });
+
+    return {
+      dynamicComponent,
+      closeDialog,
+    };
   },
   props: {
     id: {
       type: String,
-      default: '',
+      default: "",
     },
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     component: {
       type: [String, Function],
-      default: '',
+      default: "",
     },
     classes: {
       type: String,
-      default: '',
+      default: "",
     },
     actionText: {
       type: String,
-      default: '',
+      default: "",
     },
     modalClasses: {
       type: null,
-      default: 'max-w-lg',
+      default: "max-w-lg",
     },
     modalBodyClasses: {
       type: null,
@@ -127,7 +135,7 @@ export default {
       },
     },
   },
-};
+});
 </script>
 
 <style scoped>

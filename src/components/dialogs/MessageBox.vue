@@ -15,7 +15,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                    $close('cancel');
+                    closeDialog('cancel');
                   }
                 "
               />
@@ -40,11 +40,11 @@
                   class="px-6 p-3"
                   :action="
                     () => {
-                      $close('ok');
+                      closeDialog('ok');
                     }
                   "
                 >
-                  {{ $t('actions.ok') }}
+                  {{ $t("actions.ok") }}
                 </base-button>
               </div>
 
@@ -61,7 +61,7 @@
                   :class="value.buttonClass"
                   :action="
                     () => {
-                      $close(key);
+                      closeDialog(key);
                     }
                   "
                 >
@@ -77,25 +77,33 @@
 </template>
 
 <script>
-export default {
+import { closeDialog } from 'vue3-promise-dialog'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'MessageBox',
   props: {
     title: {
       type: String,
-      default: '',
+      default: ''
     },
     content: {
       type: String,
-      default: '',
+      default: ''
     },
     actions: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
+        return {}
+      }
+    }
   },
-};
+  setup () {
+    return {
+      closeDialog
+    }
+  }
+})
 </script>
 
 <style scoped>

@@ -6,7 +6,7 @@
           <div class="modal-header flex-shrink">
             <div class="title p-3 flex items-center justify-between border-b">
               <span class="text-base font-bold">{{
-                $t('adminOrganization.approve_or_reject')
+                $t("adminOrganization.approve_or_reject")
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
@@ -14,7 +14,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               />
@@ -24,12 +24,7 @@
           <div class="modal-body flex-grow p-3">
             <form-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
-              class="
-                w-auto
-                flex-grow
-                border border-crisiscleanup-dark-100
-                select
-              "
+              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
               :options="approveRejectReasons"
               v-model="response.reason"
               item-key="key"
@@ -52,22 +47,22 @@
                 class="px-4 p-2 mx-2"
                 :action="
                   () => {
-                    $close(response);
+                    closeDialog(response);
                   }
                 "
               >
-                {{ $t('actions.ok') }}
+                {{ $t("actions.ok") }}
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               >
-                {{ $t('actions.cancel') }}
+                {{ $t("actions.cancel") }}
               </base-button>
             </div>
           </div>
@@ -78,42 +73,53 @@
 </template>
 
 <script>
-export default {
-  name: 'OrganizationApprovalDialog',
-  data() {
+import {defineComponent, reactive} from "vue";
+import {closeDialog} from "vue3-promise-dialog";
+import {useI18n} from "vue-i18n";
+
+export default defineComponent({
+  name: "OrganizationApprovalDialog",
+  setup() {
+    const { t } = useI18n();
+
+    const response = reactive({
+      reason: "",
+      note: "",
+    })
+    
+    const approveRejectReasons = [
+      "approveRejectReasons.approve_none",
+      "approveRejectReasons.approve_public",
+      "approveRejectReasons.approve_preliminary",
+      "approveRejectReasons.approve_statistics",
+      "approveRejectReasons.approve_situational_awareness",
+      "approveRejectReasons.approve_coordination",
+      "approveRejectReasons.approve_ltr",
+      "approveRejectReasons.approve_recovery",
+      "approveRejectReasons.approve_academic",
+      "approveRejectReasons.approve_waiver",
+      "approveRejectReasons.reject_not_reputable",
+      "approveRejectReasons.reject_spam",
+      "approveRejectReasons.reject_contractor",
+      "approveRejectReasons.reject_duplicate",
+      "approveRejectReasons.reject_inactive",
+      "approveRejectReasons.reject_unresponsive",
+      "approveRejectReasons.reject_no_capacity",
+      "approveRejectReasons.reject_out_of_scope",
+      "approveRejectReasons.reject_survivor",
+      "approveRejectReasons.reject_volunteer",
+      "approveRejectReasons.reject_withdrawn",
+    ].map((key) => {
+      return { key, label: t(key) };
+    })
+    
     return {
-      response: {
-        reason: '',
-        note: '',
-      },
-      approveRejectReasons: [
-        'approveRejectReasons.approve_none',
-        'approveRejectReasons.approve_public',
-        'approveRejectReasons.approve_preliminary',
-        'approveRejectReasons.approve_statistics',
-        'approveRejectReasons.approve_situational_awareness',
-        'approveRejectReasons.approve_coordination',
-        'approveRejectReasons.approve_ltr',
-        'approveRejectReasons.approve_recovery',
-        'approveRejectReasons.approve_academic',
-        'approveRejectReasons.approve_waiver',
-        'approveRejectReasons.reject_not_reputable',
-        'approveRejectReasons.reject_spam',
-        'approveRejectReasons.reject_contractor',
-        'approveRejectReasons.reject_duplicate',
-        'approveRejectReasons.reject_inactive',
-        'approveRejectReasons.reject_unresponsive',
-        'approveRejectReasons.reject_no_capacity',
-        'approveRejectReasons.reject_out_of_scope',
-        'approveRejectReasons.reject_survivor',
-        'approveRejectReasons.reject_volunteer',
-        'approveRejectReasons.reject_withdrawn',
-      ].map((key) => {
-        return { key, label: this.$t(key) };
-      }),
-    };
+      approveRejectReasons,
+      response,
+      closeDialog
+    }
   },
-};
+});
 </script>
 
 <style scoped>

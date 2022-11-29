@@ -1,32 +1,45 @@
 import AgentLibrary from 'cf-agent-library';
-import store from '@/store';
-import Logger from '@/utils/log';
-import User from '@/models/User';
-import Incident from '@/models/Incident';
-import { CallType } from '@/models/phone/Contact';
+import { store } from '../store';
+// import Logger from '@/utils/log';
+import User from '../models/User';
+import Incident from '../models/Incident';
+import axios from "axios";
+import {useI18n} from "vue-i18n";
 
-const LANGUAGE_ID_MAPPING = {
-  2: process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
-  6: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-  7: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-  76: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+const LANGUAGE_ID_MAPPING: Record<any, any> = {
+  2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+  6: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+  7: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+  76: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
 };
 
-const Log = Logger({
-  name: 'phoneLegacy',
-});
+// const Log = Logger({
+//   name: 'phoneLegacy',
+// });
 export default class PhoneService {
+  store!: any
+  loggedInAgentId: string | null
+  agent_id: string | null
+  callInfo: any
+  queueIds: any
+  username: string | null
+  password: string | null
+  cf: AgentLibrary | null
+
   constructor() {
-    this.store = store;
     this.loggedInAgentId = null;
+    this.agent_id = null;
+    this.username = null;
+    this.password = null;
     this.callInfo = {};
   }
 
   initPhoneService(accessToken = null) {
+    this.store = store;
     this.queueIds = Array.from(
       new Set([
-        process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
-        process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+        import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+        import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
       ]),
     );
     let socketDest;
@@ -51,43 +64,43 @@ export default class PhoneService {
     });
   }
 
-  async apiLogoutAgent(agentId) {
-    await window.vue.$http.post(
-      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/logout`,
+  async apiLogoutAgent(agentId: string | null) {
+    await axios.post(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/logout`,
       {},
     );
   }
 
-  async apiUpdateStats(agentId) {
-    await window.vue.$http.post(
-      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/update_stats`,
+  async apiUpdateStats(agentId: string | null) {
+    await axios.post(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/update_stats`,
       {},
     );
   }
 
   async apiGetQueueStats() {
-    return window.vue.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/connect_first/stats`,
+    return axios.get(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/stats`,
     );
   }
 
-  async apiLoginsByPhone(phone, queue) {
-    return window.vue.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
+  async apiLoginsByPhone(phone: string, queue: number) {
+    return axios.get(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
     );
   }
 
   async createAgent() {
-    await window.vue.$http.post(
-      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents`,
+    await axios.post(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents`,
       {},
     );
   }
 
-  async getUserNameForAgent(agentId) {
+  async getUserNameForAgent(agentId: string) {
     try {
-      const response = await window.vue.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
+      const response = await axios.get(
+        `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
       );
       return response.data.username;
     } catch (e) {
@@ -98,35 +111,35 @@ export default class PhoneService {
         null,
         true,
       );
-      return process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
+      return import.meta.env.VUE_APP_PHONE_DEFAULT_USERNAME;
     }
   }
 
-  async onNewCall(info) {
-    Log.debug('callinfo: ', info);
+  async onNewCall(info: any) {
+    // Log.debug('callinfo: ', info);
     const currentUser = User.find(this.store.getters['auth/userId']);
     this.callInfo = info;
     let state = null;
     if (info.callType === 'INBOUND') {
       state = 'ENGAGED-INBOUND';
-      const response = await window.vue.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
+      const response = await axios.get(
+        `${import.meta.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
       );
-      this.store.commit('phone_legacy/setIncomingCall', response.data);
+      this.store.commit('phone/setIncomingCall', response.data);
 
       const availableIncidentIds = Incident.all().map(
         (incident) => incident.id,
       );
-      const incidentsToRequest = response.data.incident_id.filter((id) => {
+      const incidentsToRequest = response.data.incident_id.filter((id: string) => {
         return !availableIncidentIds.includes(id);
       });
       try {
         await Promise.all(
-          incidentsToRequest.map((id) => {
-            return window.vue.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+          incidentsToRequest.map((id: string) => {
+            return axios.post(
+              `${import.meta.env.VUE_APP_API_BASE_URL}/incident_requests`,
               {
-                organization: currentUser.organization.id,
+                organization: currentUser?.organization.id,
                 incident: id,
                 temporary_access: true,
               },
@@ -143,18 +156,18 @@ export default class PhoneService {
           response.data.incident_id[0],
         );
       } catch (error) {
-        Log.debug('Error requesting incident access: ', error);
+        // Log.debug('Error requesting incident access: ', error);
       }
     } else if (info.callType === 'OUTBOUND') {
       state = 'ENGAGED-OUTBOUND';
     }
 
-    this.store.commit('phone_legacy/setState', state);
-    const dnisResponse = await window.vue.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis=${info.ani}&sort=-created_at&limit=1`,
+    this.store.commit('phone/setState', state);
+    const dnisResponse = await axios.get(
+      `${import.meta.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis=${info.ani}&sort=-created_at&limit=1`,
     );
     const [caller] = dnisResponse.data.results;
-    this.store.commit('phone_legacy/setCaller', caller);
+    this.store.commit('phone/setCaller', caller);
   }
 
   getAccessToken() {
@@ -173,7 +186,7 @@ export default class PhoneService {
       headers: myHeaders,
       body: raw,
       redirect: 'follow',
-    };
+    } as RequestInit;
 
     return fetch(
       'https://engage.ringcentral.com/api/auth/login/agent',
@@ -184,30 +197,30 @@ export default class PhoneService {
   }
 
   onCloseFunction() {
-    Log.debug('AgentLibrary closed');
+    // Log.debug('AgentLibrary closed');
     this.loggedInAgentId = null;
-    this.store.commit('phone_legacy/resetState');
+    this.store.commit('phone/resetState');
 
     this.getAccessToken().then((result) => {
       this.initPhoneService(result.accessToken);
     });
   }
 
-  async onNewSession(info) {
+  async onNewSession(info: any) {
     if (info.sessionType === 'AGENT') {
-      if (this.store.getters['phone_legacy/getIncomingCall']) {
+      if (this.store.getters['phone/getIncomingCall']) {
         this.store.commit(
-          'phone_legacy/setCurrentCall',
-          this.store.getters['phone_legacy/getIncomingCall'],
+          'phone/setCurrentCall',
+          this.store.getters['phone/getIncomingCall'],
         );
-        this.store.commit('phone_legacy/setCallType', CallType.INBOUND);
-        this.store.commit('phone_legacy/setIncomingCall', null);
+        this.store.commit('phone/setCallType', 'INBOUND');
+        this.store.commit('phone/setIncomingCall', null);
       } else {
         this.store.commit(
-          'phone_legacy/setCurrentCall',
-          this.store.getters['phone_legacy/getOutgoingCall'],
+          'phone/setCurrentCall',
+          this.store.getters['phone/getOutgoingCall'],
         );
-        this.store.commit('phone_legacy/setOutgoingCall', null);
+        this.store.commit('phone/setOutgoingCall', null);
       }
       await Incident.api().get(
         '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
@@ -216,45 +229,40 @@ export default class PhoneService {
         },
       );
     }
-    Log.debug(info);
+    // Log.debug(info);
   }
 
   onOpenFunction() {
-    Log.debug('AgentLibrary open');
+    // Log.debug('AgentLibrary open');
   }
 
-  endCallFunction(info) {
-    Log.debug(info);
+  endCallFunction(info: any) {
+    // Log.debug(info);
     if (!info.callDts) {
-      this.store.commit(
-        'phone_legacy/setPotentialFailedCall',
-        this.store.getters['phone_legacy/getCall'],
-      );
-      this.store.commit('phone_legacy/clearCall');
+      this.store.commit('phone/clearCall');
     } else {
-      this.store.commit('phone_legacy/setIncomingCall', null);
-      this.store.commit('phone_legacy/setOutgoingCall', null);
+      this.store.commit('phone/setIncomingCall', null);
+      this.store.commit('phone/setOutgoingCall', null);
     }
     this.changeState('AWAY').then(() => {});
     this.apiUpdateStats(this.loggedInAgentId).catch(() => {});
   }
 
-  onGetStatsAgent(info) {
-    Log.debug(info);
+  onGetStatsAgent(info: any) {
+    // Log.debug(info);
   }
 
-  onGetStatsAgentDaily(info) {
-    this.store.commit('phone_legacy/setAgentStats', { ...info });
+  onGetStatsAgentDaily(info: any) {
+    this.store.commit('phone/setAgentStats', { ...info });
   }
 
-  onQueueStats(info) {
-    this.store.commit('phone_legacy/setGeneralStats', { ...info.totals });
-    this.store.commit('phone_legacy/setGateStats', [...info.queues]);
+  onQueueStats(info: any) {
+    this.store.commit('phone/setGeneralStats', { ...info.totals });
   }
 
   login(
-    username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
-    password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
+    username = import.meta.env.VUE_APP_PHONE_DEFAULT_USERNAME,
+    password = import.meta.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
     state = 'AVAILABLE',
     agentId = null,
   ) {
@@ -263,18 +271,18 @@ export default class PhoneService {
     this.agent_id = agentId;
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
-      if (!currentUser.mobile) {
+      if (!currentUser?.mobile) {
         throw new Error(
-          window.vue.$t('phoneDashboard.please_set_valid_phone_number'),
+            useI18n().t('phoneDashboard.please_set_valid_phone_number'),
         );
       }
       this.cf.loginAgent(
         username,
         password,
-        async (data) => {
-          Log.debug('Logged in agent', data);
+        async (data: any) => {
+          // Log.debug('Logged in agent', data);
           if (data.status === 'FAILURE') {
-            reject(new Error(window.vue.$t('phoneDashboard.phone_no_log_in')));
+            reject(new Error(useI18n().t('phoneDashboard.phone_no_log_in')));
             return;
           }
           this.loggedInAgentId = data.agentSettings?.agentId;
@@ -302,15 +310,15 @@ export default class PhoneService {
             null,
             null,
             null,
-            (configureResponse) => {
-              Log.debug('Configure response', configureResponse);
+            (configureResponse: any) => {
+              // Log.debug('Configure response', configureResponse);
               if (configureResponse.status === 'FAILURE') {
                 if (
                   configureResponse.detail.includes(
                     'Active agent session found',
                   )
                 ) {
-                  Log.debug('Existing login found. Setting status');
+                  // Log.debug('Existing login found. Setting status');
                   this.apiLogoutAgent(this.loggedInAgentId).then(() => {
                     this.loggedInAgentId = null;
                     reject();
@@ -320,17 +328,17 @@ export default class PhoneService {
                   reject();
                 }
               } else {
-                Log.debug('AgentLibrary successfully logged in');
+                // Log.debug('AgentLibrary successfully logged in');
                 this.changeState(state)
-                  .then(() => resolve())
+                  .then(() => resolve(state))
                   .catch(() => reject());
               }
             },
           );
         },
-        (e) => {
+        (e: Error) => {
           reject(e);
-          Log.debug(e);
+          // Log.debug(e);
         },
       );
     });
@@ -338,18 +346,18 @@ export default class PhoneService {
 
   logout(agentId = null) {
     return new Promise((resolve) => {
-      this.cf.logoutAgent(agentId || this.loggedInAgentId, (data) => {
-        Log.debug('logged out agent', data);
-        this.store.commit('phone_legacy/setState', 'AWAY');
-        resolve();
+      this.cf.logoutAgent(agentId || this.loggedInAgentId, (data: any) => {
+        // Log.debug('logged out agent', data);
+        this.store.commit('phone/setState', 'AWAY');
+        resolve(true);
       });
     });
   }
 
-  changeState(newState) {
+  changeState(newState: any) {
     return new Promise((resolve) => {
       let state = newState;
-      this.cf.setAgentState(newState, null, (setAgentStateResponse) => {
+      this.cf.setAgentState(newState, null, (setAgentStateResponse: any) => {
         if (setAgentStateResponse.currentState === 'ENGAGED') {
           if (this.callInfo.callType === 'INBOUND') {
             state = 'ENGAGED-INBOUND';
@@ -360,32 +368,32 @@ export default class PhoneService {
           state = setAgentStateResponse.currentState;
         }
 
-        this.store.commit('phone_legacy/setState', state);
-        window.vue.$log.debug(
-          'Set agent state response',
-          setAgentStateResponse,
-        );
-        resolve();
+        this.store.commit('phone/setState', state);
+        // window.vue.$log.debug(
+        //   'Set agent state response',
+        //   setAgentStateResponse,
+        // );
+        resolve(true);
       });
     });
   }
 
-  dial(destination, callerId = null) {
+  dial(destination: string, callerId = null) {
     return new Promise((resolve) => {
-      this.cf.offhookInit((offhookInitResponse) => {
-        Log.debug('Offhook init response', offhookInitResponse);
+      this.cf.offhookInit((offhookInitResponse: any) => {
+        // Log.debug('Offhook init response', offhookInitResponse);
         if (offhookInitResponse.status === 'FAILURE') {
-          this.store.commit('phone_legacy/setState', 'ENDED');
-          this.store.commit('phone_legacy/setIncomingCall', null);
-          this.store.commit('phone_legacy/setOutgoingCall', null);
+          this.store.commit('phone/setState', 'ENDED');
+          this.store.commit('phone/setIncomingCall', null);
+          this.store.commit('phone/setOutgoingCall', null);
           this.callInfo = {};
-          resolve();
+          resolve(true);
         } else {
           this.cf.manualOutdial(
             destination,
-            callerId || process.env.VUE_APP_DEFAULT_CALLER_ID,
+            callerId || import.meta.env.VUE_APP_DEFAULT_CALLER_ID,
           );
-          resolve();
+          resolve(true);
         }
       });
     });
@@ -395,10 +403,10 @@ export default class PhoneService {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
       // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
-      Log.debug(this.store.callState);
-      this.cf.offhookTerm((offhookTermResponse) => {
-        Log.debug('Offhook term response', offhookTermResponse);
-        this.changeState('AWAY').then(() => resolve());
+      // Log.debug(this.store.callstate);
+      this.cf.offhookTerm((offhookTermResponse:any) => {
+        // Log.debug('Offhook term response', offhookTermResponse);
+        this.changeState('AWAY').then(() => resolve(true));
       });
     });
   }

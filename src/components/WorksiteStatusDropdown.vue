@@ -16,7 +16,7 @@
         v-html="workTypeImage"
       ></div>
       <div class="tooltip-target" v-if="!hideName">
-        {{ currentWorkType.status | getStatusName }}
+        {{ getStatusName(currentWorkType.status) }}
       </div>
       <font-awesome-icon
         class="tooltip-target"
@@ -25,28 +25,18 @@
         icon="chevron-down"
       />
     </div>
-    <template #popover>
+    <template #popper>
       <div
-        class="
-          bg-white
-          border
-          outline-none
-          h-84
-          w-56
-          overflow-auto
-          tooltip-content
-        "
+        class="bg-white border outline-none h-84 w-56 overflow-auto tooltip-content"
         @keyup="nextItem"
       >
         <div
           v-for="status in displayStatuses"
           :key="`${status.id}`"
-          :value="status.status"
           class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
           :class="{ selected: currentItem === status.selectionKey }"
         >
           <div
-            v-close-popover
             class="badge-holder text-xs"
             @click="
               () => {
@@ -64,13 +54,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { getColorForStatus, getWorkTypeImage } from '@/filters';
-import { WorksitesMixin } from '@/mixins';
+import { useStore } from "vuex";
+import { getColorForStatus, getStatusName, getWorkTypeImage } from "../filters";
+import useWorktypeImages from "./hooks/useWorktypeImages";
+import { computed, ref, nextTick, onMounted } from "vue";
 
 export default {
-  name: 'WorksiteStatusDropdown',
-  mixins: [WorksitesMixin],
+  name: "WorksiteStatusDropdown",
   props: {
     currentWorkType: {
       type: Object,
@@ -92,32 +82,30 @@ export default {
     },
     iconSize: {
       type: Number,
-      default: 0,
+      default: 40,
     },
     size: {
       type: String,
-      default: '',
+      default: "",
     },
   },
-  data() {
-    return {
-      getColorForStatus,
-      getWorkTypeImage,
-      currentItem: 1,
-    };
-  },
-  computed: {
-    ...mapState('enums', ['statuses']),
-    displayStatuses() {
-      return this.statuses
+  setup(props) {
+    const currentItem = ref(1);
+    const svgContainer = ref(null);
+    const store = useStore();
+
+    const { getWorktypeSVG, getWorktypeColors } = useWorktypeImages();
+    const statuses = computed(() => store.getters["enums/statuses"]);
+    const displayStatuses = computed(() => {
+      return statuses.value
         .filter((status) =>
-          this.phase ? status.phases.includes(this.phase) : true,
+          props.phase ? status.phases.includes(props.phase) : true
         )
         .filter((status) => {
           if (
-            this.currentWorkType &&
-            !this.currentWorkType.recur_default &&
-            status.primary_state === 'need'
+            props.currentWorkType &&
+            !props.currentWorkType.recur_default &&
+            status.primary_state === "need"
           ) {
             return false;
           }
@@ -129,48 +117,60 @@ export default {
             selectionKey: index + 1,
           };
         });
-    },
-    workTypeImage() {
-      if (this.iconSize) {
-        return this.getWorktypeSVG(this.currentWorkType, this.iconSize);
+    });
+    const workTypeImage = computed(() => {
+      if (props.iconSize) {
+        return getWorktypeSVG(props.currentWorkType, props.iconSize);
       }
-      return this.getWorkTypeImage(this.currentWorkType);
-    },
-    dropdownStyle() {
+      return getWorkTypeImage(props.currentWorkType);
+    });
+    const dropdownStyle = computed(() => {
       return {
         color: getColorForStatus(
-          this.currentWorkType.status,
-          Boolean(this.currentWorkType.claimed_by),
+          props.currentWorkType.status,
+          Boolean(props.currentWorkType.claimed_by)
         ),
         backgroundColor: `${getColorForStatus(
-          this.currentWorkType.status,
-          Boolean(this.currentWorkType.claimed_by),
+          props.currentWorkType.status,
+          Boolean(props.currentWorkType.claimed_by)
         )}3D`,
       };
-    },
-  },
-  mounted() {
-    document.addEventListener('keyup', this.nextItem);
-    this.$nextTick(() => this.setSVGStyles());
-  },
-  methods: {
-    nextItem(e) {
-      if (e.keyCode === 38 && this.currentItem > 1) {
-        this.currentItem -= 1;
+    });
+
+    function nextItem(e) {
+      if (e.keyCode === 38 && currentItem.value > 1) {
+        currentItem.value -= 1;
       } else if (
         e.keyCode === 40 &&
-        this.currentItem < this.displayStatuses.length
+        currentItem.value < displayStatuses.value.length
       ) {
-        this.currentItem += 1;
+        currentItem.value += 1;
       }
-    },
-    setSVGStyles() {
-      if (!this.$refs.svgContainer) return;
-      if (this.iconSize) {
-        this.$refs.svgContainer.style.minHeight = `${this.iconSize}px`;
-        this.$refs.svgContainer.style.minWidth = `${this.iconSize}px`;
+    }
+    function setSVGStyles() {
+      if (!svgContainer.value) return;
+      if (props.iconSize) {
+        svgContainer.value.style.minHeight = `${props.iconSize}px`;
+        svgContainer.value.style.minWidth = `${props.iconSize}px`;
       }
-    },
+    }
+
+    onMounted(() => {
+      document.addEventListener("keyup", nextItem);
+      nextTick(() => setSVGStyles());
+    });
+
+    return {
+      getColorForStatus,
+      getWorkTypeImage,
+      statuses,
+      displayStatuses,
+      workTypeImage,
+      dropdownStyle,
+      getStatusName,
+      nextItem,
+      currentItem,
+    };
   },
 };
 </script>

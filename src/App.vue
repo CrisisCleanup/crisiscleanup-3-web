@@ -7,9 +7,13 @@ import { AuthService } from "./services/auth.service";
 import axios from "axios";
 import { useStore } from "vuex";
 import { cachedGet, hash } from "./utils/promise";
+import { DialogWrapper } from "vue3-promise-dialog";
 
 export default defineComponent({
   name: "App",
+  components: {
+    DialogWrapper,
+  },
   setup() {
     const route = useRoute();
     const defaultLayout = "authenticated";
@@ -119,6 +123,7 @@ export default defineComponent({
 <template>
   <component class="main" :is="layout">
     <router-view />
+    <DialogWrapper :transition-attrs="{ name: 'dialog' }" />
   </component>
 </template>
 

@@ -4,9 +4,17 @@ import moment from 'moment';
 export default class WorksiteRequest extends Model {
   static entity = 'worksite_requests';
 
+  token_expiration!: string;
+
+  created_at!: string;
+
+  approved_at!: string;
+
+  rejected_at!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       worksite_work_type: this.attr(null),
       worksite: this.attr(null),
       case_number: this.attr(null),
@@ -69,7 +77,7 @@ export default class WorksiteRequest extends Model {
 
   static apiConfig = {
     actions: {
-      acceptRequest(id, reason = 'Accept') {
+      acceptRequest(id: string, reason = 'Accept') {
         const data = {
           action: 'approve',
           accepted_rejected_reason: reason,
@@ -78,7 +86,7 @@ export default class WorksiteRequest extends Model {
           save: false,
         });
       },
-      rejectRequest(id, reason = 'Reject') {
+      rejectRequest(id: string, reason = 'Reject') {
         const data = {
           action: 'reject',
           accepted_rejected_reason: reason,
@@ -87,9 +95,9 @@ export default class WorksiteRequest extends Model {
           save: false,
         });
       },
-      cancelRequest(id) {
+      cancelRequest(id: string) {
         return this.delete(`/worksite_requests/${id}`, {}, { save: false });
       },
     },
-  };
+  } as any;
 }

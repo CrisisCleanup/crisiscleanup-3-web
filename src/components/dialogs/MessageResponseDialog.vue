@@ -15,7 +15,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               />
@@ -29,16 +29,7 @@
             <div>
               <textarea
                 v-model="response"
-                class="
-                  text-base
-                  border border-crisiscleanup-dark-100
-                  placeholder-crisiscleanup-dark-200
-                  outline-none
-                  p-2
-                  my-2
-                  resize-none
-                  w-full
-                "
+                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 rows="4"
               />
             </div>
@@ -55,22 +46,22 @@
                 class="px-4 p-2 mx-2"
                 :action="
                   () => {
-                    $close(response);
+                    closeDialog(response);
                   }
                 "
               >
-                {{ $t('actions.ok') }}
+                {{ $t("actions.ok") }}
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               >
-                {{ $t('actions.cancel') }}
+                {{ $t("actions.cancel") }}
               </base-button>
             </div>
             <div
@@ -86,7 +77,7 @@
                 :class="value.buttonClass"
                 :action="
                   () => {
-                    $close({
+                    closeDialog({
                       key,
                       response,
                     });
@@ -104,16 +95,19 @@
 </template>
 
 <script>
-export default {
-  name: 'MessageResponseDialog',
+import {closeDialog} from "vue3-promise-dialog";
+import {defineComponent, ref} from "vue";
+
+export default defineComponent({
+  name: "MessageResponseDialog",
   props: {
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     content: {
       type: String,
-      default: '',
+      default: "",
     },
     actions: {
       type: Object,
@@ -122,12 +116,14 @@ export default {
       },
     },
   },
-  data() {
+  setup() {
+    const response = ref('')
     return {
-      response: '',
-    };
+      response,
+      closeDialog,
+    }
   },
-};
+});
 </script>
 
 <style scoped>

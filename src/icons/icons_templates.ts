@@ -1,5 +1,5 @@
 /* eslint-disable */
-const colors = {
+const colors: Record<string, { fillColor: string; strokeColor: string }> = {
   open_unassigned_unclaimed: {
     fillColor: "#d0021b",
     strokeColor: "#e30001",
@@ -934,7 +934,7 @@ const sandbagging = `<svg width="54" height="31" viewBox="0 0 54 31" fill="none"
     <path d="M26.4294 21.3364C26.6751 20.7314 25.0289 19.5215 16.4788 19.5215C8.37083 20.4289 5.79104 19.9752 4.68542 20.4289C3.57979 20.8826 1 23.1512 1 24.9661M1 24.9661C1 26.781 2.10563 30.4108 3.94833 30.4108C5.4225 30.4108 19.0585 30.4108 25.6923 30.4108C26.4294 30.4108 27.535 30.4108 26.7979 29.0496C26.4294 28.369 25.3238 25.4198 24.5867 24.9661C23.997 24.6031 8.61653 25.1174 1 24.9661Z" stroke="{{fillColor}}" stroke-width="0.75"/>{{multiple}}
 </svg>`;
 
-const templates = {
+const templates: Record<string, string> = {
   circle,
   orb,
   plus,

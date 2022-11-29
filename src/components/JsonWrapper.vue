@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'JsonWrapper',
+  name: "JsonWrapper",
   props: {
     jsonData: {
       type: Object,

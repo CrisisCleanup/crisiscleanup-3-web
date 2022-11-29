@@ -14,7 +14,7 @@ import axios from "axios";
 import { AuthService } from "../services/auth.service";
 
 // import events from './modules/events';
-// import phone_legacy from './modules/phone_legacy';
+import phone from './modules/phone';
 // import rc from './modules/rc';
 // import socket from './modules/socket';
 // import ui from './modules/ui';
@@ -42,7 +42,7 @@ export const store = createStore({
     enums,
     // rc,
     // socket,
-    // phone_legacy,
+    phone,
     // map,
     // ui,
   },

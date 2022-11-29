@@ -1,12 +1,12 @@
-import { secondsToHm } from '@/filters';
-import Organization from '@/models/Organization';
-import User from '@/models/User';
-import enums from '@/store/modules/enums';
-import { getQueryString } from '@/utils/urls';
-import CCUModel from '@/models/model';
+import { secondsToHm } from "../filters";
+import Organization from "../models/Organization";
+import User from "../models/User";
+import enums from "../store/modules/enums";
+import { getQueryString } from "../utils/urls";
+import CCUModel from "../models/model";
 
 export default class Worksite extends CCUModel<Worksite> {
-  static entity = 'worksites';
+  static entity = "worksites";
 
   id!: string;
 
@@ -40,8 +40,8 @@ export default class Worksite extends CCUModel<Worksite> {
 
   static fields() {
     return {
-      id: this.string(''),
-      address: this.string(''),
+      id: this.string(""),
+      address: this.string(""),
       location: this.attr(null),
       case_number: this.attr(null),
       city: this.attr(null),
@@ -130,7 +130,7 @@ export default class Worksite extends CCUModel<Worksite> {
     let currentFilteredTypes: string[] = [];
     if (filters && filters.fields) {
       currentFilteredTypes = Object.keys(filters.fields).filter((fieldKey) =>
-        Boolean(filters.fields[fieldKey]),
+        Boolean(filters.fields[fieldKey])
       );
     }
 
@@ -205,25 +205,25 @@ export default class Worksite extends CCUModel<Worksite> {
           worksiteParams.incident = incident;
         }
         const worksite = await this.get(
-          `/worksites/${id}?${getQueryString(worksiteParams)}`,
+          `/worksites/${id}?${getQueryString(worksiteParams)}`
         );
         const organizations = worksite.response.data.work_types
           .filter((workType) => Boolean(workType.claimed_by))
           .map((workType) => workType.claimed_by);
         await Organization.api().get(
-          `/organizations?id__in=${organizations.join(',')}`,
+          `/organizations?id__in=${organizations.join(",")}`,
           {
-            dataKey: 'results',
-          },
+            dataKey: "results",
+          }
         );
         const eventUserIds = worksite.response.data.events
           .map((event) => event.created_by)
           .filter(
             (userId) =>
-              Number(userId) !== Number(User.store().getters['auth/userId']),
+              Number(userId) !== Number(User.store().getters["auth/userId"])
           );
-        await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
-          dataKey: 'results',
+        await User.api().get(`/users?id__in=${eventUserIds.join(",")}`, {
+          dataKey: "results",
         });
         return worksite;
       },
@@ -247,7 +247,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             work_types: workTypes,
           },
-          { save: false },
+          { save: false }
         );
       },
       unclaimWorksite(id, workTypes, status = null) {
@@ -259,7 +259,7 @@ export default class Worksite extends CCUModel<Worksite> {
         }
         return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
-      releaseWorkType(id, workTypes, unclaimReason = '') {
+      releaseWorkType(id, workTypes, unclaimReason = "") {
         const data: Record<string, any> = {
           work_types: workTypes,
         };
@@ -275,7 +275,7 @@ export default class Worksite extends CCUModel<Worksite> {
             work_types: workTypes,
             requested_reason: reason,
           },
-          { save: false },
+          { save: false }
         );
       },
       addNote(id, note) {
@@ -284,7 +284,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             note,
           },
-          { save: false },
+          { save: false }
         );
       },
       addTime(worksiteId, seconds, volunteers) {
@@ -295,7 +295,7 @@ export default class Worksite extends CCUModel<Worksite> {
             seconds,
             volunteers,
           },
-          { save: false },
+          { save: false }
         );
       },
       updateTimeEntry(id, seconds, volunteers) {
@@ -305,7 +305,7 @@ export default class Worksite extends CCUModel<Worksite> {
             seconds,
             volunteers,
           },
-          { save: false },
+          { save: false }
         );
       },
       addFile(id, file) {
@@ -314,7 +314,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             file,
           },
-          { save: false },
+          { save: false }
         );
       },
       addFileWithToken(token, file) {
@@ -323,7 +323,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             file,
           },
-          { save: false },
+          { save: false }
         );
       },
       addFileWithSurvivorToken(token, file) {
@@ -332,7 +332,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             file,
           },
-          { save: false },
+          { save: false }
         );
       },
       getHistory(id) {
@@ -344,7 +344,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             data: { file },
           },
-          { save: false },
+          { save: false }
         );
       },
       deleteFileWithSurvivorToken(id, file) {
@@ -353,7 +353,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             data: { file },
           },
-          { save: false },
+          { save: false }
         );
       },
       addFlag(id, flag) {
@@ -365,14 +365,14 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             data: { flag_id: flag.id },
           },
-          { save: false },
+          { save: false }
         );
       },
-      favorite(id, type = 'favorite') {
+      favorite(id, type = "favorite") {
         return this.post(
           `/worksites/${id}/favorite`,
           { type_t: type },
-          { save: false },
+          { save: false }
         );
       },
       unfavorite(id, favoriteId) {
@@ -381,7 +381,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             data: { favorite_id: favoriteId },
           },
-          { save: false },
+          { save: false }
         );
       },
       sendSurvivorSms(id, phone) {
@@ -390,16 +390,16 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             phone,
           },
-          { save: false },
+          { save: false }
         );
       },
       searchWorksites(search, incident) {
         return this.get(
           `/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
           {
-            dataKey: 'results',
+            dataKey: "results",
           },
-          { save: false },
+          { save: false }
         );
       },
       updateWorkTypeStatus(workTypeID, status) {
@@ -408,7 +408,7 @@ export default class Worksite extends CCUModel<Worksite> {
           {
             status,
           },
-          { save: false },
+          { save: false }
         );
       },
       // TODO: handle exceptions and ensure a value is returned
@@ -421,10 +421,10 @@ export default class Worksite extends CCUModel<Worksite> {
           }
           return this.request({
             url: `/worksites/${id}/download`,
-            method: 'POST',
-            responseType: 'blob',
+            method: "POST",
+            responseType: "blob",
             data,
-            headers: { Accept: 'application/pdf' },
+            headers: { Accept: "application/pdf" },
             save: false,
           });
         } catch (e) {
@@ -433,15 +433,15 @@ export default class Worksite extends CCUModel<Worksite> {
       },
       // TODO: handle exceptions and ensure a value is returned
       // eslint-disable-next-line consistent-return
-      downloadWorksite(ids, type = 'text/csv') {
+      downloadWorksite(ids, type = "text/csv") {
         if (!ids.length) {
-          throw Error('Ids are required');
+          throw Error("Ids are required");
         }
         try {
           return this.request({
-            url: `/worksites?id__in=${ids.join(',')}`,
-            method: 'GET',
-            responseType: 'blob',
+            url: `/worksites?id__in=${ids.join(",")}`,
+            method: "GET",
+            responseType: "blob",
             headers: { Accept: type },
             save: false,
           });
@@ -458,7 +458,7 @@ export default class Worksite extends CCUModel<Worksite> {
               incident: incidentId,
             },
           },
-          { save: false },
+          { save: false }
         );
         const {
           response: { data },

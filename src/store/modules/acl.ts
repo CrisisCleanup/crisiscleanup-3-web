@@ -8,7 +8,9 @@ const AclState = {
 };
 
 // getters
-const getters = {};
+const getters = {
+  acl: (state: State) => state.acl,
+};
 
 // actions
 const actions = {};

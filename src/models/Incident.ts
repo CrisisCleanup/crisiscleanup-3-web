@@ -16,6 +16,8 @@ export default class Incident extends CCUModel<Incident> {
 
   start_at!: string;
 
+  active_phone_number!: string;
+
   locations!: any[];
 
   form_fields!: any[];
