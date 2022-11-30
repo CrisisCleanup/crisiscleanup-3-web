@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
-import { getColorForStatus, getStatusName, getWorkTypeImage } from "../filters";
-import useWorktypeImages from "./hooks/useWorktypeImages";
-import { computed, ref, nextTick, onMounted } from "vue";
+import { useStore } from 'vuex';
+import { getColorForStatus, getStatusName, getWorkTypeImage } from '../filters';
+import useWorktypeImages from '../hooks/useWorktypeImages';
+import { computed, ref, nextTick, onMounted } from 'vue';
 
 export default {
-  name: "WorksiteStatusDropdown",
+  name: 'WorksiteStatusDropdown',
   props: {
     currentWorkType: {
       type: Object,
@@ -86,7 +86,7 @@ export default {
     },
     size: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   setup(props) {
@@ -95,17 +95,17 @@ export default {
     const store = useStore();
 
     const { getWorktypeSVG, getWorktypeColors } = useWorktypeImages();
-    const statuses = computed(() => store.getters["enums/statuses"]);
+    const statuses = computed(() => store.getters['enums/statuses']);
     const displayStatuses = computed(() => {
       return statuses.value
         .filter((status) =>
-          props.phase ? status.phases.includes(props.phase) : true
+          props.phase ? status.phases.includes(props.phase) : true,
         )
         .filter((status) => {
           if (
             props.currentWorkType &&
             !props.currentWorkType.recur_default &&
-            status.primary_state === "need"
+            status.primary_state === 'need'
           ) {
             return false;
           }
@@ -128,11 +128,11 @@ export default {
       return {
         color: getColorForStatus(
           props.currentWorkType.status,
-          Boolean(props.currentWorkType.claimed_by)
+          Boolean(props.currentWorkType.claimed_by),
         ),
         backgroundColor: `${getColorForStatus(
           props.currentWorkType.status,
-          Boolean(props.currentWorkType.claimed_by)
+          Boolean(props.currentWorkType.claimed_by),
         )}3D`,
       };
     });
@@ -156,7 +156,7 @@ export default {
     }
 
     onMounted(() => {
-      document.addEventListener("keyup", nextItem);
+      document.addEventListener('keyup', nextItem);
       nextTick(() => setSVGStyles());
     });
 

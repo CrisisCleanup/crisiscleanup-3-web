@@ -17,15 +17,13 @@
       :disabled="disabled"
       class="form-select text-base"
       :class="[
-        selectClasses,
         isInvalid && !modelValue ? 'invalid' : '',
         floatLabel ? 'py-2 pt-3' : '',
       ]"
       :placeholder="placeholder"
       :classes="{
         search: selectClasses,
-        container:
-          'relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none',
+        container: containerClasses,
       }"
     >
       <template #singlelabel="{ value }">
@@ -54,13 +52,13 @@
 </template>
 
 <script>
-import Multiselect from "@vueform/multiselect";
-import { computed, h, nextTick, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { isEmpty as empty, kebabCase, xor } from "lodash";
+import Multiselect from '@vueform/multiselect';
+import { computed, h, nextTick, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { isEmpty as empty, kebabCase, xor } from 'lodash';
 
 export default {
-  name: "BaseSelect",
+  name: 'BaseSelect',
   components: {
     Multiselect,
   },
@@ -87,7 +85,12 @@ export default {
     },
     selectClasses: {
       type: String,
-      default: "",
+      default: '',
+    },
+    containerClasses: {
+      type: String,
+      default:
+        'border relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none',
     },
     options: {
       type: Array,
@@ -101,15 +104,15 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "",
+      default: '',
     },
     label: {
       type: String,
-      default: "",
+      default: '',
     },
     size: {
       type: String,
-      default: "large",
+      default: 'large',
     },
     modelValue: {
       type: null,
@@ -121,18 +124,18 @@ export default {
     },
     indicatorIcon: {
       type: String,
-      default: "sort",
+      default: 'sort',
     },
     floatLabel: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   setup(props, { emit }) {
     const { t } = useI18n();
-    const cancelText = t("actions.cancel");
+    const cancelText = t('actions.cancel');
 
-    const iconSize = props.multiple ? "xxs" : "medium";
+    const iconSize = props.multiple ? 'xxs' : 'medium';
     const { indicatorIcon } = props;
     const input = ref(null);
     const inputLabel = ref(null);
@@ -154,11 +157,11 @@ export default {
           option.name = item;
         }
         return option;
-      })
+      }),
     );
 
     const inputIdSelector = computed(() => {
-      const idSpec = props.floatLabel ? props.floatLabel : "";
+      const idSpec = props.floatLabel ? props.floatLabel : '';
       return `select-id-${kebabCase(idSpec)}`;
     });
 
@@ -197,16 +200,16 @@ export default {
       isEmpty_.value = value === null;
       if (value === null && props.floatLabel) {
         isFloated_.value = false;
-        inputLabel.value.classList.remove("focused");
+        inputLabel.value.classList.remove('focused');
       }
       if (props.multiple) {
         const current = props.modelValue || [];
         emit(
-          "changed",
+          'changed',
           xor(
             value,
-            current.map((item) => (props.itemKey ? item[props.itemKey] : item))
-          )
+            current.map((item) => (props.itemKey ? item[props.itemKey] : item)),
+          ),
         );
       }
       if (props.required) {
@@ -219,22 +222,22 @@ export default {
     function onBlur() {
       if (props.floatLabel && isEmpty.value) {
         isFloated_.value = false;
-        inputLabel.value.classList.remove("focused");
+        inputLabel.value.classList.remove('focused');
       }
     }
 
     function open() {
       if (props.floatLabel) {
         isFloated_.value = true;
-        inputLabel.value.classList.add("focused");
+        inputLabel.value.classList.add('focused');
       }
       nextTick(() => {
         const items = [].slice.call(
-          document.querySelectorAll(".vs__dropdown-option")
+          document.querySelectorAll('.vs__dropdown-option'),
         );
 
         items.forEach((item) => {
-          item.classList.remove("vs__dropdown-option--highlight");
+          item.classList.remove('vs__dropdown-option--highlight');
         });
 
         const selected = items.find((item) => {
@@ -248,29 +251,29 @@ export default {
         });
 
         if (selected) {
-          selected.classList.add("vs__dropdown-option--highlight");
-          document.querySelector(".vs__dropdown-menu").scrollTop =
+          selected.classList.add('vs__dropdown-option--highlight');
+          document.querySelector('.vs__dropdown-menu').scrollTop =
             selected.offsetTop;
         }
       });
     }
     function handleResize() {
       currentHeight_.value = inputRef.value.parentElement.clientHeight;
-      emit("resize", currentHeight_.value);
+      emit('resize', currentHeight_.value);
     }
 
     onMounted(() => {
       if (props.required) {
         input.value.addEventListener(
-          "invalid",
+          'invalid',
           () => {
             isInvalid.value = true;
           },
-          true
+          true,
         );
       }
       if (props.floatLabel) {
-        inputRef.value.parentElement.classList.add("has-float");
+        inputRef.value.parentElement.classList.add('has-float');
         baseHeight_.value = inputRef.value.parentElement.clientHeight;
       }
     });

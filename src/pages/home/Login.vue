@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import LoginForm from "../../components/LoginForm.vue";
-import Home from "../../layouts/Home.vue";
+import LoginForm from '../../components/LoginForm.vue';
+import Home from '../../layouts/Home.vue';
 export default {
-  name: "Login",
+  name: 'Login',
   components: { Home, LoginForm },
 };
 </script>

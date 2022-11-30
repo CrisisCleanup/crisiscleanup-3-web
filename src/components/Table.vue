@@ -73,7 +73,7 @@
           class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
         >
           <template v-if="column.searchable">
-            <form-select
+            <base-select
               v-if="column.searchSelect"
               class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
               :options="column ? column.getSelectValues(data) : []"
@@ -86,7 +86,7 @@
                   onSearch();
                 }
               "
-            ></form-select>
+            ></base-select>
             <base-input
               v-else
               :placeholder="column.title"
@@ -183,7 +183,7 @@
         </div>
       </div>
       <div v-if="!data.length" class="p-2 text-crisiscleanup-grey-700 italic">
-        {{ $t("info.no_items_found") }}
+        {{ $t('info.no_items_found') }}
       </div>
     </div>
     <div
@@ -191,7 +191,7 @@
       class="footer flex flex-col sm:flex-row sm:items-center justify-between p-4"
     >
       <div class="flex items-center mb-4 sm:mb-0">
-        <span class="mr-2">{{ $t("tableVue.per_page") }}</span>
+        <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
         <form-select
           :model-value="pagination.pageSize"
           :options="pageSizes"
@@ -251,12 +251,12 @@
 
 <script>
 // import { EventsMixin } from '@/mixins';
-import { exportCSVFile } from "../utils/downloads";
-import { computed, ref } from "vue";
-import { useMq } from "vue3-mq";
+import { exportCSVFile } from '../utils/downloads';
+import { computed, ref } from 'vue';
+import { useMq } from 'vue3-mq';
 
 export default {
-  name: "Table",
+  name: 'Table',
   // mixins: [EventsMixin], TODO: Events Mixin
   props: {
     columns: {
@@ -324,7 +324,7 @@ export default {
 
     const pageCount = computed(() => {
       return Math.ceil(
-        (props.pagination.total || 1) / props.pagination.pageSize
+        (props.pagination.total || 1) / props.pagination.pageSize,
       );
     });
 
@@ -352,7 +352,7 @@ export default {
         const pagintationTriggers = pagintationTriggersArray.map(
           (paginationTrigger, index) => {
             return pagintationTriggersArray[0] + index;
-          }
+          },
         );
         pagintationTriggers.push(pageCount.value);
         return pagintationTriggers;
@@ -362,7 +362,7 @@ export default {
         const pagintationTriggers = pagintationTriggersArray.map(
           (paginationTrigger, index) => {
             return pageCount.value - index;
-          }
+          },
         );
         pagintationTriggers.reverse().unshift(1);
         return pagintationTriggers;
@@ -372,7 +372,7 @@ export default {
       const pagintationTriggers = pagintationTriggersArray.map(
         (paginationTrigger, index) => {
           return pagintationTriggersArray[0] + index;
-        }
+        },
       );
       pagintationTriggers.unshift(1);
       pagintationTriggers[pagintationTriggers.length - 1] = pageCount.value;
@@ -380,35 +380,35 @@ export default {
     });
 
     const gridTemplate = computed(() => {
-      const columnWidths = props.columns.map((column) => column.width || "1fr");
+      const columnWidths = props.columns.map((column) => column.width || '1fr');
       if (props.hasRowDetails) {
-        columnWidths.unshift("35px");
+        columnWidths.unshift('35px');
       }
       if (props.enableSelection) {
-        columnWidths.unshift("35px");
+        columnWidths.unshift('35px');
       }
-      return columnWidths.join(" ");
+      return columnWidths.join(' ');
     });
 
     const gridStyleHeader = computed(() => {
       return {
-        display: "grid",
-        "grid-template-columns": gridTemplate.value,
+        display: 'grid',
+        'grid-template-columns': gridTemplate.value,
         ...props.headerStyle,
       };
     });
 
     const gridStyleBody = computed(() => {
       return {
-        overflow: "auto",
+        overflow: 'auto',
         ...props.bodyStyle,
       };
     });
 
     const gridStyleRow = computed(() => {
       return {
-        display: "grid",
-        "grid-template-columns": mq === "sm" ? "auto" : gridTemplate.value,
+        display: 'grid',
+        'grid-template-columns': mq === 'sm' ? 'auto' : gridTemplate.value,
         ...props.rowStyle,
       };
     });
@@ -420,7 +420,7 @@ export default {
         selectedItems.value.delete(item.id);
       }
       selectedItems.value = new Set(selectedItems.value);
-      emit("selectionChanged", selectedItems.value);
+      emit('selectionChanged', selectedItems.value);
     }
     function setShowingDetails(item) {
       if (showingDetails.value.has(item.id)) {
@@ -433,20 +433,20 @@ export default {
     function setAllChecked(value) {
       if (value) {
         selectedItems.value = new Set(props.data.map((item) => item.id));
-        emit("allSelected", selectedItems.value);
+        emit('allSelected', selectedItems.value);
       } else {
         selectedItems.value = new Set();
-        emit("allDeselected", selectedItems.value);
+        emit('allDeselected', selectedItems.value);
       }
-      emit("selectionChanged", selectedItems.value);
+      emit('selectionChanged', selectedItems.value);
     }
     function pageChangeHandle(value) {
       let newPage;
       switch (value) {
-        case "next":
+        case 'next':
           newPage = props.pagination.current + 1;
           break;
-        case "previous":
+        case 'previous':
           newPage = props.pagination.current - 1;
           break;
         default:
@@ -463,7 +463,7 @@ export default {
       const sorter = {
         ...props.sorter,
       };
-      emit("change", { pagination, filter, sorter, columnSearch });
+      emit('change', { pagination, filter, sorter, columnSearch });
     }
     function onSelectPageSize(pageSize) {
       const columnSearch = { ...props.columnSearch };
@@ -476,16 +476,16 @@ export default {
       const sorter = {
         ...props.sorter,
       };
-      emit("change", { pagination, filter, sorter, columnSearch });
+      emit('change', { pagination, filter, sorter, columnSearch });
     }
     function sort(key) {
       const columnSearch = { ...props.columnSearch };
       const sorter = { ...props.sorter };
       sorter.key = key;
-      if (sorter.direction === "asc") {
-        sorter.direction = "desc";
+      if (sorter.direction === 'asc') {
+        sorter.direction = 'desc';
       } else {
-        sorter.direction = "asc";
+        sorter.direction = 'asc';
       }
 
       const pagination = {
@@ -495,7 +495,7 @@ export default {
       // this.logEvent(
       //     sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
       // );
-      emit("change", { pagination, filter, sorter, columnSearch });
+      emit('change', { pagination, filter, sorter, columnSearch });
     }
     function onSearch() {
       const columnSearch = { ...props.columnSearch };
@@ -504,7 +504,7 @@ export default {
         ...props.pagination,
       };
       const filter = {};
-      emit("change", { pagination, filter, sorter, columnSearch });
+      emit('change', { pagination, filter, sorter, columnSearch });
     }
     function rowClick(item, event) {
       const hasClass = (className) =>
@@ -513,21 +513,21 @@ export default {
       if (
         event &&
         [
-          "case-flag",
-          "checkmark",
-          "checkmark-input",
-          "base-button",
-          "link",
+          'case-flag',
+          'checkmark',
+          'checkmark-input',
+          'base-button',
+          'link',
         ].some(hasClass)
       ) {
         return;
       }
-      emit("rowClick", item);
+      emit('rowClick', item);
     }
     function exportTableCSV() {
       const headers = {};
       const headersColumns = props.columns.filter((column) =>
-        Boolean(column.title)
+        Boolean(column.title),
       );
       headersColumns.forEach((column) => {
         headers[column.key] = column.title;
@@ -540,7 +540,7 @@ export default {
         });
         return response;
       });
-      exportCSVFile(headers, data, "export");
+      exportCSVFile(headers, data, 'export');
     }
     async function handleColumnAction(column, data, item) {
       if (column.action) {

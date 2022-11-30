@@ -1,9 +1,9 @@
-import { openDialog } from "vue3-promise-dialog";
+import { openDialog } from 'vue3-promise-dialog';
 
-import ComponentDialog from "../../components/dialogs/ComponentDialog.vue";
-import MessageBox from '../../components/dialogs/MessageBox.vue';
-import MessageResponseDialog from '../../components/dialogs/MessageResponseDialog.vue';
-import SelectionDialog from '../../components/dialogs/SelectionDialog.vue';
+import ComponentDialog from '../components/dialogs/ComponentDialog.vue';
+import MessageBox from '../components/dialogs/MessageBox.vue';
+import MessageResponseDialog from '../components/dialogs/MessageResponseDialog.vue';
+import SelectionDialog from '../components/dialogs/SelectionDialog.vue';
 
 async function component(props: any) {
   return await openDialog(ComponentDialog, props);

@@ -19,7 +19,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                   closeDialog('cancel');
+                    closeDialog('cancel');
                   }
                 "
               />
@@ -46,11 +46,11 @@
                   size="lg"
                   :action="
                     () => {
-                     closeDialog('ok');
+                      closeDialog('ok');
                     }
                   "
                 >
-                  {{ $t(actionText) || $t("actions.ok") }}
+                  {{ $t(actionText) || $t('actions.ok') }}
                 </base-button>
               </div>
             </div>
@@ -62,23 +62,23 @@
 </template>
 
 <script>
-import useEmitter from "../hooks/useEmitter";
-import { computed, defineComponent } from "vue";
-import { closeDialog } from "vue3-promise-dialog";
+import useEmitter from '../../hooks/useEmitter';
+import { computed, defineComponent } from 'vue';
+import { closeDialog } from 'vue3-promise-dialog';
 
 export default defineComponent({
-  name: "ComponentDialog",
+  name: 'ComponentDialog',
   setup(props) {
     const { emitter } = useEmitter();
 
-    emitter.on("modal_component:close", (key) => {
+    emitter.on('modal_component:close', (key) => {
       if (key === props.id) {
-        closeDialog("ok");
+        closeDialog('ok');
       }
     });
 
     const dynamicComponent = computed(() => {
-      if (typeof props.component === "string") {
+      if (typeof props.component === 'string') {
         return () => import(`../../components/${props.component}`);
       }
       return props.component;
@@ -92,27 +92,27 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-      default: "",
+      default: '',
     },
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     component: {
       type: [String, Function],
-      default: "",
+      default: '',
     },
     classes: {
       type: String,
-      default: "",
+      default: '',
     },
     actionText: {
       type: String,
-      default: "",
+      default: '',
     },
     modalClasses: {
       type: null,
-      default: "max-w-lg",
+      default: 'max-w-lg',
     },
     modalBodyClasses: {
       type: null,

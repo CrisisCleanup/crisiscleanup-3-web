@@ -33,7 +33,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import { computed, defineComponent, PropType } from 'vue';
+import useCurrentUser from "../hooks/useCurrentUser";
 
 type AvatarSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xl';
 
@@ -58,6 +59,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { currentUser } = useCurrentUser();
     const classes = computed(() => {
       return {
         [props.size]: true,
@@ -66,6 +68,7 @@ export default defineComponent({
 
     return {
       classes,
+      currentUser,
     };
   },
 });

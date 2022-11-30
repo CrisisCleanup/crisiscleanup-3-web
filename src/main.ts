@@ -46,6 +46,7 @@ import 'floating-vue/dist/style.css';
 
 // JSON
 import JsonViewer from 'vue-json-viewer';
+import BaseSelect from './components/BaseSelect.vue';
 
 const getI18n = (messages = {}) => {
   return createI18n({
@@ -72,6 +73,7 @@ app.component('badge', Badge);
 app.component('v-select', vSelect);
 app.component('authenticated-layout', Authenticated);
 app.component('form-select', FormSelect);
+app.component('base-select', BaseSelect);
 app.component('modal', Modal);
 app.component('v-popover', Dropdown);
 

@@ -24,60 +24,53 @@
           </span>
         </base-text>
       </div>
-      <div slot="popover" class="flex flex-col">
-        <base-button
-          data-cy="auth.userprofile.profile"
-          class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-          :text="$t('actions.profile')"
-          :action="
-            () => {
-              $router.push(`/profile`);
-            }
-          "
-        />
-        <base-button
-            data-cy="auth.userprofile.downloads"
+      <template #popper>
+        <div class="flex flex-col">
+          <base-button
+            data-cy="auth.userprofile.profile"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-            :text="$t('actions.downloads')"
+            :text="$t('actions.profile')"
             :action="
               () => {
-                $router.push(`/downloads`);
+                $router.push(`/profile`);
               }
             "
           />
-        <base-button
-          data-cy="auth.userprofile.logout"
-          class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-          :text="$t('actions.logout')"
-          :action="() => $emit('auth:logout')"
-        />
-      </div>
+          <base-button
+            data-cy="auth.userprofile.logout"
+            class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+            :text="$t('actions.logout')"
+            :action="() => $emit('auth:logout')"
+          />
+        </div>
+      </template>
     </v-popover>
   </div>
 </template>
 <script>
-import Avatar from '@/components/Avatar';
-import { UserMixin } from '@/mixins';
+import Avatar from '../../components/Avatar.vue';
+import { computed } from 'vue';
 
 export default {
   name: 'UserProfileMenu',
   components: { Avatar },
-  mixins: [UserMixin],
   props: {
     invert: {
       type: Boolean,
       default: false,
     },
   },
-  computed: {
-    styles() {
-      return {
-        title:
-          this.invert === true
-            ? ['text-white']
-            : ['text-crisiscleanup-dark-300'],
-      };
-    },
+  setup(props) {
+    const styles = computed(() => ({
+      title:
+        props.invert === true
+          ? ['text-white']
+          : ['text-crisiscleanup-dark-300'],
+    }));
+
+    return {
+      styles,
+    };
   },
 };
 </script>

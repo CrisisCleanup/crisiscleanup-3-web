@@ -3,8 +3,8 @@ import { store } from '../store';
 // import Logger from '@/utils/log';
 import User from '../models/User';
 import Incident from '../models/Incident';
-import axios from "axios";
-import {useI18n} from "vue-i18n";
+import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
   2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
@@ -17,14 +17,14 @@ const LANGUAGE_ID_MAPPING: Record<any, any> = {
 //   name: 'phoneLegacy',
 // });
 export default class PhoneService {
-  store!: any
-  loggedInAgentId: string | null
-  agent_id: string | null
-  callInfo: any
-  queueIds: any
-  username: string | null
-  password: string | null
-  cf: AgentLibrary | null
+  store!: any;
+  loggedInAgentId: string | null;
+  agent_id: string | null;
+  callInfo: any;
+  queueIds: any;
+  username: string | null;
+  password: string | null;
+  cf: AgentLibrary | null;
 
   constructor() {
     this.loggedInAgentId = null;
@@ -66,33 +66,39 @@ export default class PhoneService {
 
   async apiLogoutAgent(agentId: string | null) {
     await axios.post(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/logout`,
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/connect_first/agents/${agentId}/logout`,
       {},
     );
   }
 
   async apiUpdateStats(agentId: string | null) {
     await axios.post(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/update_stats`,
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/connect_first/agents/${agentId}/update_stats`,
       {},
     );
   }
 
   async apiGetQueueStats() {
     return axios.get(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/stats`,
+      `${import.meta.env.VITE_APP_API_BASE_URL}/connect_first/stats`,
     );
   }
 
   async apiLoginsByPhone(phone: string, queue: number) {
     return axios.get(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
+      `${
+        import.meta.env.VITE_APP_API_BASE_URL
+      }/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
     );
   }
 
   async createAgent() {
     await axios.post(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents`,
+      `${import.meta.env.VITE_APP_API_BASE_URL}/connect_first/agents`,
       {},
     );
   }
@@ -100,7 +106,9 @@ export default class PhoneService {
   async getUserNameForAgent(agentId: string) {
     try {
       const response = await axios.get(
-        `${import.meta.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/connect_first/agents/${agentId}`,
       );
       return response.data.username;
     } catch (e) {
@@ -123,21 +131,25 @@ export default class PhoneService {
     if (info.callType === 'INBOUND') {
       state = 'ENGAGED-INBOUND';
       const response = await axios.get(
-        `${import.meta.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/phone_inbound/get_by_session_id?session_id=${info.uii}`,
       );
       this.store.commit('phone/setIncomingCall', response.data);
 
       const availableIncidentIds = Incident.all().map(
         (incident) => incident.id,
       );
-      const incidentsToRequest = response.data.incident_id.filter((id: string) => {
-        return !availableIncidentIds.includes(id);
-      });
+      const incidentsToRequest = response.data.incident_id.filter(
+        (id: string) => {
+          return !availableIncidentIds.includes(id);
+        },
+      );
       try {
         await Promise.all(
           incidentsToRequest.map((id: string) => {
             return axios.post(
-              `${import.meta.env.VUE_APP_API_BASE_URL}/incident_requests`,
+              `${import.meta.env.VITE_APP_API_BASE_URL}/incident_requests`,
               {
                 organization: currentUser?.organization.id,
                 incident: id,
@@ -164,7 +176,9 @@ export default class PhoneService {
 
     this.store.commit('phone/setState', state);
     const dnisResponse = await axios.get(
-      `${import.meta.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis=${info.ani}&sort=-created_at&limit=1`,
+      `${import.meta.env.VITE_APP_API_BASE_URL}/phone_dnis?dnis=${
+        info.ani
+      }&sort=-created_at&limit=1`,
     );
     const [caller] = dnisResponse.data.results;
     this.store.commit('phone/setCaller', caller);
@@ -273,7 +287,7 @@ export default class PhoneService {
     return new Promise((resolve, reject) => {
       if (!currentUser?.mobile) {
         throw new Error(
-            useI18n().t('phoneDashboard.please_set_valid_phone_number'),
+          useI18n().t('phoneDashboard.please_set_valid_phone_number'),
         );
       }
       this.cf.loginAgent(
@@ -404,7 +418,7 @@ export default class PhoneService {
       this.cf.hangup(this.callInfo.sessionId);
       // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
       // Log.debug(this.store.callstate);
-      this.cf.offhookTerm((offhookTermResponse:any) => {
+      this.cf.offhookTerm((offhookTermResponse: any) => {
         // Log.debug('Offhook term response', offhookTermResponse);
         this.changeState('AWAY').then(() => resolve(true));
       });

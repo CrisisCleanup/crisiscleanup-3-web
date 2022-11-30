@@ -15,7 +15,8 @@
             :options="incidents"
             :clearable="false"
             searchable
-            select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
+            container-classes="relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none"
+            select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded p-2"
             item-key="id"
             label="name"
             @update:modelValue="(payload) => $emit('update:incident', payload)"
@@ -56,48 +57,43 @@
           <PhoneIndicator />
         </div>
 
-        <!--        <UserProfileMenu-->
-        <!--          @auth:logout="() => $emit('auth:logout')"-->
-        <!--          class="header-item"-->
-        <!--        />-->
+        <UserProfileMenu
+          @auth:logout="() => $emit('auth:logout')"
+          class="header-item"
+        />
       </div>
     </div>
-    <!--    <RedeployRequest-->
-    <!--      v-if="showRedeployModal"-->
-    <!--      :hide-trigger="true"-->
-    <!--      :open-modal="true"-->
-    <!--      @close="showRedeployModal = false"-->
-    <!--    />-->
+    <RedeployRequest
+      v-if="showRedeployModal"
+      :hide-trigger="true"
+      :open-modal="true"
+      @close="showRedeployModal = false"
+    />
   </div>
-  <!--  </div>-->
 </template>
 
 <script>
-// import VueTypes from 'vue-types';
 import DisasterIcon from '../DisasterIcon.vue';
-// import useUser from '@/use/user/useUser';
-// import { DialogsMixin } from '@/mixins';
-// import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
+import UserProfileMenu from '../header/UserProfileMenu.vue';
 // import RedeployRequest from '@/pages/RedeployRequest';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import BaseSelect from '../BaseSelect.vue';
-import { useStore } from 'vuex';
-import useDialogs from '../hooks/useDialogs';
-import User from '../../models/User';
+import useDialogs from '../../hooks/useDialogs';
 import JsonWrapper from '../JsonWrapper.vue';
-import useAcl from '../hooks/useAcl';
+import useAcl from '../../hooks/useAcl';
 import PhoneIndicator from '../phone/PhoneIndicator.vue';
+import RedeployRequest from '../modals/RedeployRequest.vue';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 export default {
   name: 'Header',
   components: {
+    RedeployRequest,
     PhoneIndicator,
     BaseSelect,
-    // RedeployRequest,
-    // UserProfileMenu,
+    UserProfileMenu,
     DisasterIcon,
   },
-  // mixins: [DialogsMixin],
   props: {
     incidents: {
       type: Array,
@@ -109,19 +105,16 @@ export default {
     },
   },
   setup() {
-    const store = useStore();
     const { component } = useDialogs();
     const { $can } = useAcl();
-    const currentUser = computed(() =>
-      User.find(User.store().getters['auth/userId']),
-    );
+    const { currentUser } = useCurrentUser();
     async function showCurrentUser() {
       await component({
-        title: `User: ${currentUser.value.id} | ${currentUser.value.first_name} ${currentUser.value.last_name}`,
+        title: `User: ${currentUser.id} | ${currentUser.first_name} ${currentUser.value.last_name}`,
         component: JsonWrapper,
         classes: 'w-full h-96',
         props: {
-          jsonData: currentUser.value,
+          jsonData: currentUser,
         },
       });
     }
@@ -134,16 +127,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="postcss">
-/*.header {*/
-/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
-/*  border: 1px solid #efefef;*/
-/*}*/
-
-/*.header-item {*/
-/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
-/*  border: 1px solid rgba(151, 151, 151, 0.1);*/
-/*  @apply px-2;*/
-/*}*/
-</style>
