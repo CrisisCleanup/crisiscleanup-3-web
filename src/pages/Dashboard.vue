@@ -1,8 +1,8 @@
 <template>
   <div v-if="!loading" class="flex flex-col">
     <div class="flex self-end mr-4">
-      <!--      <RedeployRequest />-->
-      <!--      <InviteUsers class="mx-1" />-->
+      <RedeployRequest />
+      <InviteUsers class="mx-1" />
     </div>
 
     <div class="flex flex-wrap">
@@ -20,7 +20,7 @@
             </div>
             <div class="flex-1 text-right md:text-center">
               <h5 class="uppercase text-grey-900">
-                {{ $t("dashboard.my_claimed_cases") }} ({{
+                {{ $t('dashboard.my_claimed_cases') }} ({{
                   currentIncident.name
                 }})
               </h5>
@@ -48,13 +48,13 @@
             </div>
             <div class="flex-1 text-right md:text-center">
               <h5 class="uppercase text-grey-900">
-                {{ $t("dashboard.total_claimed") }} ({{ currentIncident.name }})
+                {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
               </h5>
               <h3 class="text-3xl">
                 {{ numeral(totalClaimed.length) }}
                 <span class="text-base">
                   ({{ numeral(totalClaimed / totalWorksites) }}
-                  {{ $t("dashboard.of_total") }})
+                  {{ $t('dashboard.of_total') }})
                 </span>
                 <span class="text-orange"
                   ><i class="fas fa-exchange-alt"></i
@@ -84,13 +84,13 @@
             </div>
             <div class="flex-1 text-right md:text-center">
               <h5 class="uppercase text-grey-900">
-                {{ $t("dashboard.in_progress") }} ({{ currentIncident.name }})
+                {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
               </h5>
               <h3 class="text-3xl">
                 {{ numeral(totalInProgess) }}
                 <span class="text-base">
                   ({{ numeral(totalInProgess / totalWorksites) }}
-                  {{ $t("dashboard.of_total") }})
+                  {{ $t('dashboard.of_total') }})
                 </span>
                 <span class="text-yellow-900"
                   ><i class="fas fa-caret-up"></i
@@ -122,13 +122,13 @@
             </div>
             <div class="flex-1 text-right md:text-center">
               <h5 class="uppercase text-grey-900">
-                {{ $t("dashboard.closed") }} ({{ currentIncident.name }})
+                {{ $t('dashboard.closed') }} ({{ currentIncident.name }})
               </h5>
               <h3 class="text-3xl">
                 {{ numeral(totalClosed) }}
                 <span class="text-base">
                   ({{ numeral(totalClosed / totalWorksites) }}
-                  {{ $t("dashboard.of_total") }})
+                  {{ $t('dashboard.of_total') }})
                 </span>
               </h3>
             </div>
@@ -145,7 +145,7 @@
     <div class="flex">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="py-4 px-4 text-gray-500 border-b">
-          {{ $t("dashboard.my_cases") }}
+          {{ $t('dashboard.my_cases') }}
         </div>
         <div class="p-4">
           <Table
@@ -249,7 +249,7 @@
     <div class="flex">
       <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
         <div class="py-4 px-4 text-gray-500 border-b">
-          {{ $t("dashboard.case_transfer_requests") }}
+          {{ $t('dashboard.case_transfer_requests') }}
         </div>
         <div class="py-4 px-4 border-b flex items-center">
           <base-button
@@ -296,7 +296,7 @@
                   :style="{
                     backgroundColor: `${getColorForStatus(
                       slotProps.item.worksite_work_type.status,
-                      Boolean(slotProps.item.worksite_work_type.claimed_by)
+                      Boolean(slotProps.item.worksite_work_type.claimed_by),
                     )}3D`,
                   }"
                 >
@@ -364,7 +364,7 @@
     <div class="flex">
       <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
         <div class="py-4 px-4 text-gray-500 border-b">
-          {{ $t("dashboard.user_transfer_requests") }}
+          {{ $t('dashboard.user_transfer_requests') }}
         </div>
         <div class="p-4">
           <UserTransferRequestTable
@@ -398,35 +398,39 @@ import {
   computed,
   watch,
   onMounted,
-} from "vue";
-import { colors } from "../icons/icons_templates";
+} from 'vue';
+import { colors } from '../icons/icons_templates';
 import {
   getColorForStatus,
   getWorkTypeImage,
   getWorkTypeName,
-} from "../filters/index";
-import { useI18n } from "vue-i18n";
-import User from "../models/User";
-import Incident from "../models/Incident";
-import { useStore } from "vuex";
-import WorksiteRequest from "../models/WorksiteRequest";
-import Worksite from "../models/Worksite";
-import axios from "axios";
-import { useToast } from "vue-toastification";
-import { forceFileDownload } from "../utils/downloads";
-import { getErrorMessage } from "../utils/errors";
-import { useRouter, useRoute } from "vue-router";
-import { getQueryString } from "../utils/urls";
-import Table from "../components/Table.vue";
-import WorksiteStatusDropdown from "../components/WorksiteStatusDropdown.vue";
+} from '../filters/index';
+import { useI18n } from 'vue-i18n';
+import User from '../models/User';
+import Incident from '../models/Incident';
+import { useStore } from 'vuex';
+import WorksiteRequest from '../models/WorksiteRequest';
+import Worksite from '../models/Worksite';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { forceFileDownload } from '../utils/downloads';
+import { getErrorMessage } from '../utils/errors';
+import { useRouter, useRoute } from 'vue-router';
+import { getQueryString } from '../utils/urls';
+import Table from '../components/Table.vue';
+import WorksiteStatusDropdown from '../components/WorksiteStatusDropdown.vue';
+import UserTransferRequestTable from '../components/UserTransferRequestTable.vue';
+import RedeployRequest from '../components/modals/RedeployRequest.vue';
+import InviteUsers from '../components/modals/InviteUsers.vue';
+import useDialogs from '../hooks/useDialogs';
 
 export default defineComponent({
-  name: "Dashboard.vue",
+  name: 'Dashboard',
   components: {
     // ReportWidget,
-    // UserTransferRequestTable,
-    // RedeployRequest,
-    // InviteUsers,
+    UserTransferRequestTable,
+    RedeployRequest,
+    InviteUsers,
     Table,
     WorksiteStatusDropdown,
   },
@@ -436,7 +440,8 @@ export default defineComponent({
     const $toasted = useToast();
     const route = useRoute();
     const router = useRouter();
-    const usersToInvite = ref("");
+    const { prompt } = useDialogs();
+    const usersToInvite = ref('');
     const totalWorksites = ref(0);
     const totalClaimed = ref(0);
     const totalClosed = ref(0);
@@ -450,7 +455,7 @@ export default defineComponent({
     const loading = ref(false);
     const datacollection = ref(null);
     const pendingViewLoading = ref(false);
-    const pendingView = ref("inbound");
+    const pendingView = ref('inbound');
     const sorter = ref({
       key: null,
       direction: null,
@@ -461,26 +466,26 @@ export default defineComponent({
     });
     const options = reactive({
       responsive: true,
-      hoverMode: "index",
+      hoverMode: 'index',
       stacked: false,
       title: {
         display: true,
       },
       legend: {
-        align: "end",
+        align: 'end',
       },
       scales: {
         yAxes: [
           {
-            type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
             display: true,
-            position: "left",
+            position: 'left',
             ticks: {
               beginAtZero: true,
               stepSize: 50,
             },
             scaleLabel: {
-              labelString: "Cases",
+              labelString: 'Cases',
               display: true,
             },
           },
@@ -491,7 +496,7 @@ export default defineComponent({
               display: false,
             },
             scaleLabel: {
-              labelString: "Date",
+              labelString: 'Date',
               display: true,
             },
           },
@@ -500,61 +505,61 @@ export default defineComponent({
     });
     const pendingCasesColumns = [
       {
-        title: t("dashboard.no"),
-        dataIndex: "case_number",
-        key: "case_number",
-        width: "80px",
+        title: t('dashboard.no'),
+        dataIndex: 'case_number',
+        key: 'case_number',
+        width: '80px',
         sortable: true,
       },
       {
-        title: t("dashboard.work_type"),
-        dataIndex: "worksite_work_type",
-        key: "worksite_work_type",
-        width: "10%",
+        title: t('dashboard.work_type'),
+        dataIndex: 'worksite_work_type',
+        key: 'worksite_work_type',
+        width: '10%',
       },
       {
-        title: t("dashboard.status"),
-        dataIndex: "status",
-        key: "status",
-        width: "0.5fr",
+        title: t('dashboard.status'),
+        dataIndex: 'status',
+        key: 'status',
+        width: '0.5fr',
       },
       {
-        title: t("dashboard.org_label"),
-        dataIndex: "organization",
-        key: "organization",
+        title: t('dashboard.org_label'),
+        dataIndex: 'organization',
+        key: 'organization',
       },
       {
-        title: t("dashboard.last_action"),
-        dataIndex: "last_action",
-        key: "last_action",
+        title: t('dashboard.last_action'),
+        dataIndex: 'last_action',
+        key: 'last_action',
       },
       {
-        title: t("dashboard.next_action"),
-        dataIndex: "next_action",
-        key: "next_action",
+        title: t('dashboard.next_action'),
+        dataIndex: 'next_action',
+        key: 'next_action',
       },
       {
-        title: "",
-        dataIndex: "actions",
-        key: "actions",
+        title: '',
+        dataIndex: 'actions',
+        key: 'actions',
       },
     ];
     const columns = computed(() => [
       {
-        title: t("dashboard.no"),
-        dataIndex: "case_number",
-        key: "case_number",
-        width: "0.75fr",
+        title: t('dashboard.no'),
+        dataIndex: 'case_number',
+        key: 'case_number',
+        width: '0.75fr',
         sortable: true,
         searchable: true,
-        searchTitle: t("all"),
+        searchTitle: t('all'),
       },
       {
-        title: t("dashboard.work_type"),
-        dataIndex: "work_types",
-        key: "work_types",
-        scopedSlots: { customRender: "work_types" },
-        width: "2fr",
+        title: t('dashboard.work_type'),
+        dataIndex: 'work_types',
+        key: 'work_types',
+        scopedSlots: { customRender: 'work_types' },
+        width: '2fr',
         searchable: true,
         searchSelect: true,
         getSelectValues: (data) => {
@@ -574,47 +579,47 @@ export default defineComponent({
           }
           return [];
         },
-        searchTitle: t("dashboard.all_time"),
+        searchTitle: t('dashboard.all_time'),
       },
       {
-        title: t("dashboard.name"),
-        dataIndex: "name",
-        key: "name",
-        width: "1fr",
+        title: t('dashboard.name'),
+        dataIndex: 'name',
+        key: 'name',
+        width: '1fr',
         sortable: true,
         searchable: true,
-        searchTitle: t("all"),
+        searchTitle: t('all'),
       },
       {
-        title: t("dashboard.full_address"),
-        dataIndex: "short_address",
-        key: "short_address",
+        title: t('dashboard.full_address'),
+        dataIndex: 'short_address',
+        key: 'short_address',
         searchable: true,
-        searchTitle: t("all"),
+        searchTitle: t('all'),
       },
       {
-        title: t("dashboard.phone"),
-        dataIndex: "phone1",
-        key: "phone1",
+        title: t('dashboard.phone'),
+        dataIndex: 'phone1',
+        key: 'phone1',
         sortable: false,
         searchable: true,
-        searchTitle: t("all"),
+        searchTitle: t('all'),
       },
       {
-        title: "",
-        dataIndex: "actions",
-        key: "actions",
+        title: '',
+        dataIndex: 'actions',
+        key: 'actions',
         sortable: false,
       },
     ]);
     const currentIncidentId = computed(
-      () => store.getters["incident/currentIncidentId"]
+      () => store.getters['incident/currentIncidentId'],
     );
     const currentUser = computed(() =>
-      User.find(User.store().getters["auth/userId"])
+      User.find(User.store().getters['auth/userId']),
     );
     const currentIncident = computed(() =>
-      Incident.find(currentIncidentId.value)
+      Incident.find(currentIncidentId.value),
     );
     const worksiteRequests = computed(() => {
       const preferences = currentUser.value.preferences || {};
@@ -622,42 +627,42 @@ export default defineComponent({
       const query = WorksiteRequest.query();
       if (pendingSorter.value.key) {
         let { key } = pendingSorter.value;
-        if (key === "case_number") {
-          key = "id";
+        if (key === 'case_number') {
+          key = 'id';
         }
         query.orderBy(pendingSorter.value.key, pendingSorter.value.direction);
       }
-      if (pendingView.value === "inbound") {
+      if (pendingView.value === 'inbound') {
         return query
           .where(
             (request) =>
               Number(request.requested_to_org.id) ===
                 Number(currentUser.value.organization.id) &&
               !archivedRequests.value.includes(request.id) &&
-              !request.has_response
+              !request.has_response,
           )
           .get();
       }
-      if (pendingView.value === "outbound") {
+      if (pendingView.value === 'outbound') {
         return query
           .where(
             (request) =>
               Number(request.requested_by_org.id) ===
                 Number(currentUser.value.organization.id) &&
               !archivedRequests.value.includes(request.id) &&
-              !request.has_response
+              !request.has_response,
           )
           .get();
       }
-      if (pendingView.value === "archived") {
+      if (pendingView.value === 'archived') {
         return query
           .whereIdIn(archivedRequests)
-          .orWhere("has_response", true)
+          .orWhere('has_response', true)
           .get();
       }
       return [];
     });
-    const statuses = computed(() => store.getters["enums/statuses"]);
+    const statuses = computed(() => store.getters['enums/statuses']);
     const claimedWorksites = computed(() => {
       const query = Worksite.query().where((worksite) => {
         if (
@@ -666,7 +671,7 @@ export default defineComponent({
         ) {
           const claimed = worksite.work_types.find(
             (workType) =>
-              workType.claimed_by === currentUser.value.organization.id
+              workType.claimed_by === currentUser.value.organization.id,
           );
           return Boolean(claimed);
         }
@@ -674,8 +679,8 @@ export default defineComponent({
       });
       if (sorter.value.key) {
         let { key } = sorter.value;
-        if (key === "case_number") {
-          key = "id";
+        if (key === 'case_number') {
+          key = 'id';
         }
         query.orderBy(sorter.value.key, sorter.value.direction);
       }
@@ -684,7 +689,7 @@ export default defineComponent({
         Object.entries(columnSearch.value).forEach(([key, value]) => {
           if (value) {
             query.where(key, (prop) =>
-              JSON.stringify(prop).toLowerCase().includes(value.toLowerCase())
+              JSON.stringify(prop).toLowerCase().includes(value.toLowerCase()),
             );
           }
         });
@@ -698,11 +703,11 @@ export default defineComponent({
         incident: currentIncidentId.value,
         work_type__claimed_by: currentUser.value.organization.id,
         fields:
-          "id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data",
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
 
       Worksite.api().get(`/worksites?${getQueryString(params)}`, {
-        dataKey: "results",
+        dataKey: 'results',
       });
     }
     async function getReportedWorkSites() {
@@ -710,30 +715,30 @@ export default defineComponent({
         incident: currentIncidentId.value,
         reported_by: currentUser.value.organization.id,
         fields:
-          "id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by",
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by',
       };
 
       Worksite.api().get(`/worksites?${getQueryString(params)}`, {
-        dataKey: "results",
+        dataKey: 'results',
       });
     }
     async function getWorksiteRequests() {
       await WorksiteRequest.deleteAll();
       pendingViewLoading.value = true;
       await WorksiteRequest.api().get(`/worksite_requests`, {
-        dataKey: "results",
+        dataKey: 'results',
       });
       pendingViewLoading.value = false;
     }
     async function getUserTransferRequests() {
       const response = await axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`
+        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
       );
       transferRequests.value = response.data.results;
     }
     async function getUserReportWidgets() {
       const response = await axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/user_widgets`
+        `${import.meta.env.VITE_APP_API_BASE_URL}/user_widgets`,
       );
       reportWidgets.value = response.data.results;
 
@@ -749,8 +754,8 @@ export default defineComponent({
                 incident_id: currentIncidentId.value,
                 ...widget.filters,
               },
-            }
-          )
+            },
+          ),
         );
       });
       Promise.all(widgetPromises).then((results) => {
@@ -768,9 +773,9 @@ export default defineComponent({
           params: {
             incident: currentIncidentId.value,
             limit: 1,
-            fields: "id",
+            fields: 'id',
           },
-        }
+        },
       );
       totalWorksites.value = response.data.count;
     }
@@ -782,15 +787,15 @@ export default defineComponent({
             incident: currentIncidentId.value,
             limit: 1,
             work_type__claimed_by__isnull: false,
-            fields: "id",
+            fields: 'id',
           },
-        }
+        },
       );
       totalClaimed.value = response.data.count;
     }
     async function getInProgressCount() {
       const openStatuses = statuses.value.filter(
-        (status) => status.primary_state === "open"
+        (status) => status.primary_state === 'open',
       );
 
       const response = await axios.get(
@@ -801,16 +806,16 @@ export default defineComponent({
             limit: 1,
             work_type__status__in: openStatuses
               .map((status) => status.status)
-              .join(","),
-            fields: "id",
+              .join(','),
+            fields: 'id',
           },
-        }
+        },
       );
       totalInProgess.value = response.data.count;
     }
     async function getClosedCount() {
       const closedStatuses = statuses.value.filter(
-        (status) => status.primary_state === "closed"
+        (status) => status.primary_state === 'closed',
       );
 
       const response = await axios.get(
@@ -821,10 +826,10 @@ export default defineComponent({
             limit: 1,
             work_type__status__in: closedStatuses
               .map((status) => status.status)
-              .join(","),
-            fields: "id",
+              .join(','),
+            fields: 'id',
           },
-        }
+        },
       );
       totalClosed.value = response.data.count;
     }
@@ -854,9 +859,9 @@ export default defineComponent({
     }
     async function inviteUsers() {
       try {
-        const emails = usersToInvite.value.split(",");
+        const emails = usersToInvite.value.split(',');
         await Promise.all(emails.map((email) => User.api().inviteUser(email)));
-        await $toasted.success(t("inviteTeammates.invites_sent_success"));
+        await $toasted.success(t('inviteTeammates.invites_sent_success'));
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
@@ -870,21 +875,19 @@ export default defineComponent({
       await getWorksiteRequests();
     }
     async function acceptRequest(id) {
-      // const result = await this.$prompt({
-      //   title: this.$t('actions.approve_worksite_request'),
-      //   content: this.$t('dashboard.approve_worksite_request_reason'),
-      // });
-      // TODO: Implement programmatic prompts
-      await WorksiteRequest.api().acceptRequest(id, "");
+      const result = await prompt({
+        title: this.$t('actions.approve_worksite_request'),
+        content: this.$t('dashboard.approve_worksite_request_reason'),
+      });
+      await WorksiteRequest.api().acceptRequest(id, result);
       await getWorksiteRequests();
     }
     async function rejectRequest(id) {
-      // const result = await this.$prompt({
-      //   title: this.$t('actions.reject_worksite_request'),
-      //   content: this.$t('dashboard.reject_worksite_request_reason'),
-      // });
-      // TODO: Implement programmatic prompts
-      await WorksiteRequest.api().rejectRequest(id, "");
+      const result = await prompt({
+        title: this.$t('actions.reject_worksite_request'),
+        content: this.$t('dashboard.reject_worksite_request_reason'),
+      });
+      await WorksiteRequest.api().rejectRequest(id, result);
       await getWorksiteRequests();
     }
     async function cancelRequest(id) {
@@ -913,7 +916,7 @@ export default defineComponent({
         loading.value = true;
         await reloadDashBoard();
         loading.value = false;
-      }
+      },
     );
 
     function numeral(value) {
@@ -968,6 +971,7 @@ export default defineComponent({
       acceptRequest,
       rejectRequest,
       cancelRequest,
+      getUserTransferRequests,
     };
   },
 });

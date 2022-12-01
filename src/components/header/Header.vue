@@ -110,7 +110,7 @@ export default {
     const { currentUser } = useCurrentUser();
     async function showCurrentUser() {
       await component({
-        title: `User: ${currentUser.id} | ${currentUser.first_name} ${currentUser.value.last_name}`,
+        title: `User: ${currentUser.id} | ${currentUser.first_name} ${currentUser.last_name}`,
         component: JsonWrapper,
         classes: 'w-full h-96',
         props: {

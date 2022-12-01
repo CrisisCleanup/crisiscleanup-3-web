@@ -37,45 +37,22 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import { DialogsMixin } from '../mixins';
+import Table from '../components/Table.vue';
 import Organization from '../models/Organization';
 import User from '../models/User';
 import { getStatusName, getWorkTypeName } from '../filters';
+import useDialogs from '../hooks/useDialogs';
+import { useI18n } from 'vue-i18n';
+import axios from 'axios';
+import { onMounted, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'UserTransferRequestTable',
-  components: { Table },
-  mixins: [DialogsMixin],
-  props: {
-    requests: {
-      type: Array,
-      default: () => [],
-    },
-    loading: Boolean,
-  },
-  async mounted() {
-    if (this.requests.length) {
-      const organizations = this.requests.map(
-        (request) => request.origin_organization,
-      );
-      await Organization.api().get(
-        `/organizations?id__in=${organizations.join(',')}`,
-        {
-          dataKey: 'results',
-        },
-      );
-      await this.getUsers();
-    }
-  },
-  methods: {
-    async getUsers() {
-      const userIds = this.requests.map((request) => request.user);
-      await User.api().get(`/users?id__in=${userIds.join(',')}`, {
-        dataKey: 'results',
-      });
-    },
-    async getChildRequests(childRequests, item) {
+  setup(props, { emit }) {
+    const { confirm, prompt } = useDialogs();
+    const { t } = useI18n();
+
+    async function getChildRequests(childRequests, item) {
       const userIds = childRequests.map((request) => request.user);
       userIds.push(item.user);
       const results = await User.api().get(
@@ -85,8 +62,8 @@ export default {
         },
       );
       const { users } = results.entities;
-      await this.$confirm({
-        title: this.$t('userTransfer.transferring_users'),
+      await confirm({
+        title: t('userTransfer.transferring_users'),
         content: users
           .map(
             (user) => `
@@ -96,22 +73,22 @@ export default {
           .join(''),
         actions: {
           ok: {
-            text: this.$t('actions.ok'),
+            text: t('actions.ok'),
             type: 'solid',
           },
         },
       });
-    },
-    async getTransferringRequests(requests) {
+    }
+    async function getTransferringRequests(requests) {
       const requestIds = requests.map((request) => request);
-      const response = await this.$http.get(
+      const response = await axios.get(
         `${
-          process.env.VUE_APP_API_BASE_URL
+          import.meta.env.VITE_APP_API_BASE_URL
         }/worksite_work_types?id__in=${requestIds.join(',')}`,
       );
       const { results } = response.data;
-      await this.$confirm({
-        title: this.$t('userTransfer.transferring_cases'),
+      await confirm({
+        title: t('userTransfer.transferring_cases'),
         content: results
           .map(
             (work_type) => `
@@ -123,120 +100,159 @@ export default {
           .join(''),
         actions: {
           ok: {
-            text: this.$t('actions.ok'),
+            text: t('actions.ok'),
             type: 'solid',
           },
         },
       });
-    },
-    async approveRequest(requestId) {
-      const result = await this.$prompt({
-        title: this.$t('userTransfer.approve_user_transfer'),
-        content: this.$t('userTransfer.please_give_approval_reason'),
+    }
+
+    const columns = [
+      {
+        title: t('userTransfer.origin_organization'),
+        dataIndex: 'origin_organization',
+        key: 'origin_organization',
+        width: '30%',
+        transformer: (field) => {
+          const organization = Organization.find(field);
+          return organization && organization.name;
+        },
+      },
+      {
+        title: t('userTransfer.email'),
+        dataIndex: 'email',
+        key: 'email',
+        width: '1.5fr',
+        transformer: (_, item) => {
+          const user = User.find(item.user);
+          if (user) {
+            return user.email;
+          }
+          return '';
+        },
+      },
+      {
+        title: t('userTransfer.requested_by'),
+        dataIndex: 'full_name',
+        key: 'full_name',
+        width: '1.5fr',
+        transformer: (_, item) => {
+          const user = User.find(item.user);
+          if (user) {
+            return `${user.first_name} ${user.last_name}`;
+          }
+          return '';
+        },
+      },
+      {
+        title: t('userTransfer.user_count'),
+        dataIndex: 'child_requests',
+        key: 'child_requests',
+        width: '1fr',
+        class: 'text-primary-dark underline',
+        transformer: (field) => {
+          return field.length + 1;
+        },
+        action: (field, item) => {
+          getChildRequests(field, item);
+        },
+      },
+      {
+        title: t('userTransfer.case_count'),
+        dataIndex: 'transfering_wwwtsp_ids',
+        key: 'transfering_wwwtsp_ids',
+        width: '1fr',
+        class: 'text-primary-dark underline',
+        transformer: (field) => {
+          return field.length;
+        },
+        action: (field) => {
+          getTransferringRequests(field);
+        },
+      },
+      {
+        title: '',
+        dataIndex: 'actions',
+        key: 'actions',
+        width: '2fr',
+      },
+    ];
+    async function getUsers() {
+      const userIds = props.requests.map((request) => request.user);
+      await User.api().get(`/users?id__in=${userIds.join(',')}`, {
+        dataKey: 'results',
+      });
+    }
+    async function approveRequest(requestId) {
+      const result = await prompt({
+        title: t('userTransfer.approve_user_transfer'),
+        content: t('userTransfer.please_give_approval_reason'),
       });
       if (result) {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/transfer_requests/${requestId}/respond`,
+        await axios.post(
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/transfer_requests/${requestId}/respond`,
           {
             action: 'approve',
             accepted_rejected_reason: result,
           },
         );
-        this.$emit('reload');
+        emit('reload');
       }
-    },
-    async rejectRequest(requestId) {
-      const result = await this.$prompt({
-        title: this.$t('userTransfer.reject_user_transfer'),
-        content: this.$t('userTransfer.please_give_reject_reason'),
+    }
+    async function rejectRequest(requestId) {
+      const result = await prompt({
+        title: t('userTransfer.reject_user_transfer'),
+        content: t('userTransfer.please_give_reject_reason'),
       });
       if (result) {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/transfer_requests/${requestId}/respond`,
+        await axios.post(
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/transfer_requests/${requestId}/respond`,
           {
             action: 'reject',
             accepted_rejected_reason: result,
           },
         );
-        this.$emit('reload');
+        emit('reload');
       }
-    },
-  },
-  data() {
+    }
+
+    onMounted(async () => {
+      if (props.requests.length) {
+        const organizations = props.requests.map(
+          (request) => request.origin_organization,
+        );
+        await Organization.api().get(
+          `/organizations?id__in=${organizations.join(',')}`,
+          {
+            dataKey: 'results',
+          },
+        );
+        await getUsers();
+      }
+    });
+
     return {
-      columns: [
-        {
-          title: this.$t('userTransfer.origin_organization'),
-          dataIndex: 'origin_organization',
-          key: 'origin_organization',
-          width: '30%',
-          transformer: (field) => {
-            const organization = Organization.find(field);
-            return organization && organization.name;
-          },
-        },
-        {
-          title: this.$t('userTransfer.email'),
-          dataIndex: 'email',
-          key: 'email',
-          width: '1.5fr',
-          transformer: (_, item) => {
-            const user = User.find(item.user);
-            if (user) {
-              return user.email;
-            }
-            return '';
-          },
-        },
-        {
-          title: this.$t('userTransfer.requested_by'),
-          dataIndex: 'full_name',
-          key: 'full_name',
-          width: '1.5fr',
-          transformer: (_, item) => {
-            const user = User.find(item.user);
-            if (user) {
-              return `${user.first_name} ${user.last_name}`;
-            }
-            return '';
-          },
-        },
-        {
-          title: this.$t('userTransfer.user_count'),
-          dataIndex: 'child_requests',
-          key: 'child_requests',
-          width: '1fr',
-          class: 'text-primary-dark underline',
-          transformer: (field) => {
-            return field.length + 1;
-          },
-          action: (field, item) => {
-            this.getChildRequests(field, item);
-          },
-        },
-        {
-          title: this.$t('userTransfer.case_count'),
-          dataIndex: 'transfering_wwwtsp_ids',
-          key: 'transfering_wwwtsp_ids',
-          width: '1fr',
-          class: 'text-primary-dark underline',
-          transformer: (field) => {
-            return field.length;
-          },
-          action: (field) => {
-            this.getTransferringRequests(field);
-          },
-        },
-        {
-          title: '',
-          dataIndex: 'actions',
-          key: 'actions',
-          width: '2fr',
-        },
-      ],
+      columns,
+      getUsers,
+      getChildRequests,
+      getTransferringRequests,
+      approveRequest,
+      rejectRequest,
     };
   },
-};
+  components: { Table },
+  props: {
+    requests: {
+      type: Array,
+      default: () => [],
+    },
+    loading: Boolean,
+  },
+});
 </script>
 
 <style scoped></style>
