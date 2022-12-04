@@ -1,4 +1,4 @@
-import { colors, templates } from '../icons/icons_templates';
+import { colors, templates } from '../../icons/icons_templates';
 
 const getWorktypeColors = (worktype: any) => {
   const colorsKey = `${worktype.status}_${

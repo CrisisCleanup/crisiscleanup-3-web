@@ -8,7 +8,7 @@
       class="checkmark-input"
       :class="isInvalid ? 'checkmark-input-invalid' : ''"
       :disabled="disabled"
-      @input="update"
+      @update:modelValue="update"
       @change="change"
       :required="required"
     />
@@ -16,16 +16,16 @@
   </label>
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
-import { EventsMixin } from '@/mixins';
-import useLogEvent from '@/use/events/useLogEvent';
+import { ref, defineComponent, onMounted } from 'vue';
+// import { EventsMixin } from '@/mixins';
+// import useLogEvent from '@/use/events/useLogEvent';
 
 export default defineComponent({
   name: 'BaseCheckbox',
-  mixins: [EventsMixin],
+  // mixins: [EventsMixin],
 
   setup(props, context) {
-    const { logEvent } = useLogEvent();
+    // const { logEvent } = useLogEvent();
 
     const isInvalid = ref(false);
     const input = ref<HTMLInputElement | null>(null);
@@ -43,7 +43,7 @@ export default defineComponent({
     function update(e) {
       context.emit('input', e.target.checked);
       isInvalid.value = input?.value?.checkValidity() || false;
-      logEvent(props.ccuEvent);
+      // logEvent(props.ccuEvent);
     }
 
     function change(e) {

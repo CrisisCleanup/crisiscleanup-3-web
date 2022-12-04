@@ -17,22 +17,15 @@
               v-if="$moment(message.created_at).isSame($moment(), 'day')"
               class="opacity-40 text-xs ml-1"
               :title="message.created_at"
-              >{{ message.created_at | moment('h:mm A') }}</span
+              >{{ formatDateString(message.created_at, 'h:mm A') }}</span
             >
             <span v-else class="opacity-40 text-xs ml-1">{{
-              message.created_at | moment('MMM Do h:mm A')
+              formatDateString(message.created_at, 'MMM Do h:mm A')
             }}</span>
           </div>
           <div
             v-if="message.is_urgent"
-            class="
-              px-4
-              py-2
-              inline-block
-              bg-crisiscleanup-chat-red bg-opacity-40
-              text-crisiscleanup-dark-400
-              w-full
-            "
+            class="px-4 py-2 inline-block bg-crisiscleanup-chat-red bg-opacity-40 text-crisiscleanup-dark-400 w-full"
           >
             <div class="text-crisiscleanup-chat-red flex items-center">
               <ccu-icon
@@ -47,14 +40,7 @@
           </div>
           <div
             v-else
-            class="
-              px-4
-              py-2
-              inline-block
-              bg-crisiscleanup-chat-blue
-              text-black
-              w-full
-            "
+            class="px-4 py-2 inline-block bg-crisiscleanup-chat-blue text-black w-full"
           >
             {{ message.content }}
           </div>
@@ -87,23 +73,25 @@
 </template>
 
 <script>
-import { UserMixin } from '@/mixins';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
+import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
+import { ref } from 'vue';
+import { formatDateString } from '../../filters/index';
 
 export default {
   name: 'ChatMessage',
   components: { UserDetailsTooltip },
-  mixins: [UserMixin],
-  data() {
-    return {
-      showFavorite: false,
-    };
-  },
   props: {
     message: {
       type: Object,
       default: () => ({}),
     },
+  },
+  setup() {
+    const showFavorite = ref(false);
+    return {
+      showFavorite,
+      formatDateString,
+    };
   },
 };
 </script>

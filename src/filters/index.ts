@@ -1,7 +1,7 @@
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { RRule } from 'rrule';
 import _ from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import enums from '../store/modules/enums';
 import { colors as iconColors, templates } from '../icons/icons_templates';
 import Organization from '../models/Organization';
@@ -27,16 +27,28 @@ export function getStatusName(statusKey) {
   return status ? status.status_name_t : '';
 }
 
-export function getRecurrenceString(rule) {
+export function getRecurrenceString(rule: string) {
   return RRule.fromString(rule).toText();
 }
 
-export function getOrganizationName(id) {
+export function formatDateString(date: string, format: string) {
+  return moment(date).format(format);
+}
+
+export function formatRecurrence(date: string) {
+  return formatDateString(date, 'ddd MMMM Do YYYY [at] h:mm A');
+}
+
+export function momentFromNow(date: string) {
+  return moment(date).fromNow();
+}
+
+export function getOrganizationName(id: string) {
   const organization = Organization.find(id);
   return organization ? organization.name : '';
 }
 
-export function getStatusBadge(status) {
+export function getStatusBadge(status: string) {
   const statusDict = {
     open_unassigned: 'error',
     open_assigned: 'processing',

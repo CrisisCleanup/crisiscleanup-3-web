@@ -15,7 +15,7 @@
                 size="xs"
                 type="trash"
                 class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-                @click.native="$emit('removeImage', image.file, image.id)"
+                @click="$emit('removeImage', image.file, image.id)"
               />
             </div>
           </slot>
@@ -25,9 +25,8 @@
   </div>
 </template>
 <script>
-import 'viewerjs/dist/viewer.css';
-import _ from 'lodash';
 import { api as viewerApi } from 'v-viewer';
+import { computed } from 'vue';
 
 export default {
   name: 'ImageModal',
@@ -41,39 +40,35 @@ export default {
       default: false,
     },
   },
-  computed: {
-    images() {
-      return this.imageList.map((image) => {
+  setup(props) {
+    const images = computed(() => {
+      return props.imageList.map((image) => {
         return {
           src: image.small_thumbnail_url,
           'data-source': image.large_thumbnail_url,
         };
       });
-    },
-  },
-  data() {
-    return {
-      showModal: false,
-      numClicks: 0,
-      scale: 1,
-      selectedImage: '',
-      imageIndex: -1,
-    };
-  },
-  methods: {
-    appearModal(image, idx) {
-      const $viewer = viewerApi({
+    });
+    function appearModal(image, idx) {
+      viewerApi({
         options: {
           toolbar: true,
           url: 'data-source',
           initialViewIndex: idx,
         },
-        images: this.images,
+        images: images.value,
       });
-    },
+    }
+    return {
+      images,
+      appearModal,
+    };
   },
 };
 </script>
+
+<style src="viewerjs/dist/viewer.css"></style>
+
 <style scoped>
 .image-container:hover .image-close {
   display: flex;

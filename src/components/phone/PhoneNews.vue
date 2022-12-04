@@ -17,7 +17,7 @@
             />
             <img
               v-else
-              src="@/assets/cc-logo.svg"
+              src="../../assets/cc-logo.svg"
               class="w-20 h-20 mr-2"
               alt="crisis-cleanup-logo"
             />
@@ -39,30 +39,78 @@
 </template>
 
 <script>
-import { formatCmsItem } from '@/utils/helpers';
-import { DialogsMixin, UserMixin } from '@/mixins';
+import { formatCmsItem } from '../../utils/helpers';
+import { onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
+import useDialogs from '../../hooks/useDialogs';
+import CmsViewer from '../cms/CmsViewer.vue';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import axios from 'axios';
+import moment from 'moment';
 export default {
   name: 'PhoneNews',
-  mixins: [DialogsMixin, UserMixin],
-  data() {
-    return {
-      news: [],
-      unreadCount: 0,
-      newsInterval: undefined,
-      formatCmsItem,
-    };
-  },
-  created() {
-    this.newsInterval = setInterval(this.getNews, 10000);
-  },
-  beforeDestroy() {
-    if (this.newsInterval) {
-      clearInterval(this.newsInterval);
-      this.newsInterval = undefined;
+  setup(props, { emit }) {
+    const { component } = useDialogs();
+    const { currentUser } = useCurrentUser();
+
+    const newsInterval = ref(undefined);
+    const news = ref([]);
+    const unreadCount = ref(0);
+
+    async function getNews() {
+      if (currentUser.states[props.stateKey]) {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
+            props.cmsTag
+          }&publish_at__gt=${
+            this.currentUser.states[props.stateKey]
+          }&publish_at__lt=${moment().toISOString()}&limit=1`,
+        );
+        this.unreadCount = response.data.count;
+        emit('unreadCount', response.data.count);
+      }
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
+          props.cmsTag
+        }&sort=-publish_at&limit=10`,
+      );
+      news.value = response.data.results;
     }
-  },
-  async mounted() {
-    await this.getNews();
+    async function showDetails(newItem) {
+      await component({
+        title: formatCmsItem(newItem.title),
+        component: CmsViewer,
+        classes: 'w-full h-96 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          title: formatCmsItem(newItem.title),
+          content: formatCmsItem(newItem.content),
+          image: newItem.thumbnail_file?.blog_url,
+        },
+      });
+    }
+
+    onBeforeMount(() => {
+      newsInterval.value = setInterval(getNews, 10000);
+    });
+
+    onBeforeUnmount(() => {
+      if (newsInterval.value) {
+        clearInterval(newsInterval.value);
+        newsInterval.value = undefined;
+      }
+    });
+
+    onMounted(() => {
+      getNews();
+    });
+
+    return {
+      news,
+      unreadCount,
+      newsInterval,
+      formatCmsItem,
+      showDetails,
+    };
   },
   props: {
     cmsTag: {
@@ -72,38 +120,6 @@ export default {
     stateKey: {
       type: String,
       default: 'news_last_seen',
-    },
-  },
-  methods: {
-    async getNews() {
-      if (this.currentUser.states[this.stateKey]) {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${
-            this.cmsTag
-          }&publish_at__gt=${
-            this.currentUser.states[this.stateKey]
-          }&publish_at__lt=${this.$moment().toISOString()}&limit=1`,
-        );
-        this.unreadCount = response.data.count;
-        this.$emit('unreadCount', response.data.count);
-      }
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${this.cmsTag}&sort=-publish_at&limit=10`,
-      );
-      this.news = response.data.results;
-    },
-    async showDetails(newItem) {
-      await this.$component({
-        title: formatCmsItem(newItem.title),
-        component: 'CmsViewer',
-        classes: 'w-full h-96 overflow-auto p-3',
-        modalClasses: 'bg-white max-w-3xl shadow',
-        props: {
-          title: formatCmsItem(newItem.title),
-          content: formatCmsItem(newItem.content),
-          image: newItem.thumbnail_file?.blog_url,
-        },
-      });
     },
   },
 };

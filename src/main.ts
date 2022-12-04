@@ -41,12 +41,17 @@ import 'vue-select/dist/vue-select.css';
 import { Vue3Mq } from 'vue3-mq';
 
 // Popover
-import { Dropdown } from 'floating-vue';
+import { Dropdown, VTooltip, Menu } from 'floating-vue';
 import 'floating-vue/dist/style.css';
 
 // JSON
 import JsonViewer from 'vue-json-viewer';
 import BaseSelect from './components/BaseSelect.vue';
+import Spinner from './components/Spinner.vue';
+import BaseCheckbox from './components/BaseCheckbox.vue';
+import FormTree from './components/form/FormTree.vue';
+import Tab from './components/tabs/Tab.vue';
+import Tabs from './components/tabs/Tabs.vue';
 
 const getI18n = (messages = {}) => {
   return createI18n({
@@ -74,8 +79,16 @@ app.component('v-select', vSelect);
 app.component('authenticated-layout', Authenticated);
 app.component('form-select', FormSelect);
 app.component('base-select', BaseSelect);
+app.component('base-checkbox', BaseCheckbox);
 app.component('modal', Modal);
 app.component('v-popover', Dropdown);
+app.component('v-menu', Menu);
+app.component('spinner', Spinner);
+app.component('form-tree', FormTree);
+app.component('tabs', Tabs);
+app.component('tab', Tab);
+
+app.directive('tooltip', VTooltip);
 
 app.use(store);
 app.use(VueAxios, axios);

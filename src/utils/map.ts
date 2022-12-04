@@ -8,12 +8,14 @@ import {
 
 import * as L from 'leaflet';
 import 'leaflet-loading';
-import 'leaflet.gridlayer.googlemutant';
+// import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
-import { solveCollision } from '@/utils/easing';
-import { colors, templates } from '@/icons/icons_templates';
-import Worksite from '@/models/Worksite';
+import 'leaflet/dist/leaflet.css';
+
+import { solveCollision } from './easing';
+import { colors, templates } from '../icons/icons_templates';
+import Worksite from '../models/Worksite';
 // import { GlowFilter } from '@pixi/filter-glow';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;

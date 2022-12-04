@@ -30,12 +30,12 @@
             <span v-if="allWorksiteCount" class="font-thin">
               <span v-if="allWorksiteCount === filteredWorksiteCount">
                 {{ $t('casesVue.cases') }}
-                {{ allWorksiteCount | numeral('0,0') }}
+                {{ numeral(allWorksiteCount) }}
               </span>
               <span v-else>
                 {{ $t('casesVue.cases') }}
-                {{ filteredWorksiteCount | numeral('0,0') }} of
-                {{ allWorksiteCount | numeral('0,0') }}
+                {{ numeral(filteredWorksiteCount) }} of
+                {{ numeral(allWorksiteCount) }}
               </span>
             </span>
             <div class="flex justify-start w-auto">
@@ -79,7 +79,9 @@
                 @toggleHeatMap="toggleHeatMap"
               />
             </div>
-            <Loader v-if="loading || mapLoading" class="ml-10" />
+            <div v-if="loading || mapLoading" class="flex h-full items-center justify-center">
+              <font-awesome-icon size="xl" icon="spinner" spin/>
+            </div>
           </div>
           <div class="flex justify-end items-center w-full">
             <font-awesome-icon
@@ -103,7 +105,6 @@
           class="flex justify-center items-center"
         >
           <Slider
-            v-if="allWorksiteCount > 100"
             primary-color="#dadada"
             secondary-color="white"
             :value="sviSliderValue"
@@ -545,37 +546,36 @@ import {
   ref,
   watch,
   nextTick,
-} from '@vue/composition-api';
-import { useGetters, useMutations, useRouter, useState } from '@u3u/vue-hooks';
+} from 'vue';
 import { debounce } from 'lodash';
-import useHttp from '@/use/useHttp';
-import useToasted from '@/use/useToasted';
-import usei18n from '@/use/usei18n';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput.vue';
-import PhoneComponentButton from '@/components/phone/PhoneComponentButton.vue';
-import SimpleMap from '@/components/SimpleMap.vue';
-import Chat from '@/components/chat/Chat.vue';
-import WorksiteTable from '@/components/WorksiteTable.vue';
-import CaseHeader from '@/components/CaseHeader.vue';
-import Worksite from '@/models/Worksite';
-import CaseHistory from '@/pages/CaseHistory.vue';
-import CaseForm from '@/pages/CaseForm.vue';
-import { loadCasesCached } from '@/utils/worksite';
-import { averageGeolocation } from '@/utils/map';
-import WorksiteActions from '@/WorksiteActions.vue';
-import CaseView from '@/pages/CaseView.vue';
-import useDialogs from '@/use/useDialogs';
-import User from '@/models/User';
-import { forceFileDownload } from '@/utils/downloads';
-import { getErrorMessage } from '@/utils/errors';
-import Loader from '@/components/Loader.vue';
-import Incident from '@/models/Incident';
-import CaseFlag from '@/pages/CaseFlag.vue';
-import PhoneNews from '@/components/phone/PhoneNews.vue';
-import useWorksiteMap from '@/use/worksites/useWorksiteMap';
-import Slider from '@/components/Slider.vue';
-import WorksiteForm from '@/components/WorksiteForm.vue';
-import WorksiteView from '@/components/WorksiteView.vue';
+import WorksiteSearchInput from '../components/work/WorksiteSearchInput.vue';
+import PhoneComponentButton from '../components/phone/PhoneComponentButton.vue';
+import SimpleMap from '../components/SimpleMap.vue';
+import Chat from '../components/chat/Chat.vue';
+import WorksiteTable from '../components/work/WorksiteTable.vue';
+import CaseHeader from '../components/work/CaseHeader.vue';
+import Worksite from '../models/Worksite';
+import CaseHistory from '../components/work/CaseHistory.vue';
+import { loadCasesCached } from '../utils/worksite';
+import { averageGeolocation } from '../utils/map';
+import WorksiteActions from '../components/work/WorksiteActions.vue';
+import User from '../models/User';
+import { forceFileDownload } from '../utils/downloads';
+import { getErrorMessage } from '../utils/errors';
+import Incident from '../models/Incident';
+import CaseFlag from '../components/work/CaseFlag.vue';
+import PhoneNews from '../components/phone/PhoneNews.vue';
+import Slider from '../components/Slider.vue';
+import WorksiteForm from '../components/work/WorksiteForm.vue';
+import WorksiteView from '../components/work/WorksiteView.vue';
+import {useRoute, useRouter} from "vue-router";
+import {useToast} from "vue-toastification";
+import useDialogs from "../hooks/useDialogs";
+import {useI18n} from "vue-i18n";
+import {useStore} from "vuex";
+import useWorksiteMap, {MapUtils} from "../hooks/worksite/useWorksiteMap";
+import axios from "axios";
+import {Sprite} from "pixi.js";
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -587,10 +587,7 @@ export default defineComponent({
     Slider,
     PhoneNews,
     CaseFlag,
-    Loader,
-    CaseView,
     WorksiteActions,
-    CaseForm,
     CaseHistory,
     CaseHeader,
     WorksiteTable,
@@ -600,19 +597,20 @@ export default defineComponent({
     WorksiteSearchInput,
   },
   setup() {
-    const { $http } = useHttp();
-    const { route, router } = useRouter();
-    const { $toasted } = useToasted();
-    const { prompt, component, confirm } = useDialogs();
-    const { $t } = usei18n();
+    const router = useRouter();
+    const route = useRoute();
+    const $toasted = useToast();
+    const { prompt, component } = useDialogs();
+    const { t } = useI18n();
+    const store = useStore();
 
-    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
-    const { setCurrentIncidentId } = useMutations('incident', [
-      'setCurrentIncidentId',
-    ]);
+    const currentIncidentId = computed(
+        () => store.getters['incident/currentIncidentId'],
+    );
 
-    const { userId } = useGetters('auth', ['userId']);
-    const currentUser = computed(() => User.find(userId.value));
+    const currentUser = computed(() =>
+        User.find(User.store().getters['auth/userId']),
+    );
 
     const showingMap = ref<Boolean>(true);
     const showingTable = ref<Boolean>(false);
@@ -638,7 +636,7 @@ export default defineComponent({
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
-    let mapUtils;
+    let mapUtils: MapUtils | null;
     const unreadChatCount = ref(0);
     const unreadUrgentChatCount = ref(0);
     const unreadNewsCount = ref(0);
@@ -724,11 +722,11 @@ export default defineComponent({
 
     async function reloadMap() {
       if (mapUtils) {
-        mapUtils.removeLayer('temp_markers');
+        mapUtils?.removeLayer('temp_markers');
       }
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
-      mapUtils.reloadMap(
+      mapUtils?.reloadMap(
         allWorksites,
         markers.map((m) => m.id),
       );
@@ -753,8 +751,8 @@ export default defineComponent({
     };
 
     const searchCases = (search, incident) => {
-      return $http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
+      return axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
       );
     };
 
@@ -798,7 +796,7 @@ export default defineComponent({
 
     const jumpToCase = async (showPopup = true) => {
       showMap();
-      mapUtils.jumpToCase(worksite.value, showPopup);
+      mapUtils?.jumpToCase(worksite.value, showPopup);
     };
 
     function reloadTable() {
@@ -809,7 +807,7 @@ export default defineComponent({
     async function showUpdateStatusModal() {
       let status;
       const response = await component({
-        title: $t('actions.update_status'),
+        title: t('actions.update_status'),
         component: 'UpdateCaseStatus',
         classes: 'w-full h-48 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
@@ -823,7 +821,7 @@ export default defineComponent({
       if (response === 'ok' && status) {
         loading.value = true;
         const promises = [] as any;
-        const layer = mapUtils.getCurrentMarkerLayer();
+        const layer = mapUtils?.getCurrentMarkerLayer();
         const container = layer._pixiContainer;
 
         selectedTableItems.value.forEach((id) => {
@@ -846,7 +844,7 @@ export default defineComponent({
     async function showUnclaimModal() {
       let options;
       const response = await component({
-        title: $t('actions.unclaim_cases'),
+        title: t('actions.unclaim_cases'),
         component: 'UnclaimCases',
         classes: 'w-full h-48 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
@@ -879,15 +877,15 @@ export default defineComponent({
 
     function toggleHeatMap(points) {
       if (points) {
-        mapUtils.addHeatMap(points);
+        mapUtils?.addHeatMap(points);
       } else {
-        mapUtils.removeHeatMap();
+        mapUtils?.removeHeatMap();
       }
     }
 
-    function filterSvi(value) {
-      sviSliderValue.value = value;
-      const layer = mapUtils.getCurrentMarkerLayer();
+    function filterSvi(e) {
+      sviSliderValue.value = e.target.value;
+      const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer._pixiContainer;
       const sviList = container.children.map((marker) => {
         return {
@@ -898,10 +896,10 @@ export default defineComponent({
       sviList.sort((a, b) => {
         return (b.svi || 1) - (a.svi || 1);
       });
-      const count = Math.floor((sviList.length * Number(value)) / 100);
+      const count = Math.floor((sviList.length * Number(e.target.value)) / 100);
       const filteredSvi = sviList.slice(0, count);
       const minSvi = filteredSvi[filteredSvi.length - 1].svi;
-      container.children.forEach((markerSprite) => {
+      container.children.forEach((markerSprite: Sprite) => {
         markerSprite.visible = markerSprite.svi > minSvi;
       });
 
@@ -912,19 +910,19 @@ export default defineComponent({
     }
 
     function zoomIn() {
-      mapUtils.getMap().zoomIn();
+      mapUtils?.getMap().zoomIn();
     }
 
     function zoomOut() {
-      mapUtils.getMap().zoomOut();
+      mapUtils?.getMap().zoomOut();
     }
 
     function applyTeamGeoJson(data) {
-      mapUtils.applyTeamGeoJson(data.teamId, data.value, data.geom);
+      mapUtils?.applyTeamGeoJson(data.teamId, data.value, data.geom);
     }
 
     function applyLocation(data) {
-      mapUtils.applyLocation(data.locationId, data.value);
+      mapUtils?.applyLocation(data.locationId, data.value);
     }
 
     async function reloadCase() {
@@ -935,7 +933,7 @@ export default defineComponent({
     }
 
     function fitLocation(location) {
-      mapUtils.fitLocation(location);
+      mapUtils?.fitLocation(location);
     }
 
     function goToIncidentCenter() {
@@ -948,12 +946,10 @@ export default defineComponent({
         });
       } else {
         const center = averageGeolocation(
-          mapUtils
-            .getPixiContainer()
-            ?.children.map((marker) => [marker.x, marker.y]),
+          mapUtils?.getPixiContainer()?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          mapUtils.getMap().setView([center.latitude, center.longitude], 6);
+          mapUtils?.getMap().setView([center.latitude, center.longitude], 6);
         }
       }
     }
@@ -965,16 +961,14 @@ export default defineComponent({
 
       if (locationModels.length) {
         goToIncidentCenter();
-        mapUtils.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
+        mapUtils?.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
       } else {
         const center = averageGeolocation(
-          mapUtils
-            .getPixiContainer()
+          mapUtils?.getPixiContainer()
             ?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          mapUtils
-            .getMap()
+          mapUtils?.getMap()
             .setView(
               [center.latitude, center.longitude],
               INTERACTIVE_ZOOM_LEVEL,
@@ -994,22 +988,22 @@ export default defineComponent({
         file = await Worksite.api().printWorksite(worksite?.value?.id, '');
       } else {
         const result = await prompt({
-          title: $t('actions.print_case'),
-          content: $t('casesVue.please_claim_if_print'),
+          title: t('actions.print_case'),
+          content: t('casesVue.please_claim_if_print'),
           actions: {
             cancel: {
-              text: $t('actions.cancel'),
+              text: t('actions.cancel'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             printNoClaim: {
-              text: $t('actions.print_without_claiming'),
+              text: t('actions.print_without_claiming'),
               type: 'solid',
               buttonClass:
                 'border text-base p-2 px-4 mx-2 text-black border-primary-light',
             },
             claimAndPrint: {
-              text: $t('actions.claim_and_print'),
+              text: t('actions.claim_and_print'),
               type: 'solid',
               buttonClass:
                 'border text-base p-2 px-4 mx-2 text-black border-primary-light',
@@ -1022,7 +1016,7 @@ export default defineComponent({
         }
         if (result.key === 'printNoClaim') {
           if (!result.response) {
-            $toasted.error($t('casesVue.please_explain_why_no_claim'));
+            $toasted.error(t('casesVue.please_explain_why_no_claim'));
           } else {
             file = await Worksite.api().printWorksite(
               worksite?.value?.id,
@@ -1061,24 +1055,15 @@ export default defineComponent({
           };
         }
 
-        const response = await $http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/worksites_download/download_csv`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_download/download_csv`,
           {
             params,
             headers: { Accept: 'text/csv' },
             responseType: 'blob',
           },
         );
-        if (response.status === 202) {
-          await confirm({
-            title: $t('~~Download in progress'),
-            content: $t(
-              `~~Due to the large size of your download, we have queued it up for processing and it should be ready in a few mins, please go to the <a class="underline text-primary-dark" href="/downloads">Downloads page</a> to check if it is ready`
-            ),
-          });
-        } else {
-          forceFileDownload(response);
-        }
+        forceFileDownload(response);
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       } finally {
@@ -1088,7 +1073,7 @@ export default defineComponent({
 
     function selectCase(c) {
       if (c) {
-        setCurrentIncidentId(c.incident);
+        store.commit('incident/setCurrentIncidentId', c.incident)
         worksiteId.value = c.id;
       } else {
         worksiteId.value = null;
@@ -1103,7 +1088,7 @@ export default defineComponent({
     }
 
     async function addMarkerToMap(location) {
-      mapUtils.addMarkerToMap(location);
+      mapUtils?.addMarkerToMap(location);
       showMap();
     }
 
@@ -1145,12 +1130,12 @@ export default defineComponent({
     );
 
     onMounted(async () => {
-      if (route.value.params.incident_id) {
-        setCurrentIncidentId(route.value.params.incident_id);
+      if (route.params.incident_id) {
+        store.commit('incident/setCurrentIncidentId', route.params.incident_id)
       }
-      if (route.value.params.id) {
-        worksiteId.value = route.value.params.id;
-        if (route?.value?.meta?.id === 'work_case_edit') {
+      if (route.params.id) {
+        worksiteId.value = route.params.id;
+        if (route?.meta?.id === 'work_case_edit') {
           isEditing.value = true;
         } else {
           isViewing.value = true;
@@ -1159,6 +1144,7 @@ export default defineComponent({
       loadStatesForUser();
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
+
       mapUtils = useWorksiteMap(
         allWorksites,
         markers.map((m) => m.id),
@@ -1167,11 +1153,9 @@ export default defineComponent({
         },
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
-          if (allWorksites.length > 100) {
-            nextTick(() => {
-              filterSvi(sviSliderValue.value);
-            });
-          }
+          nextTick(() => {
+            filterSvi(sviSliderValue.value);
+          });
         },
       );
     });
@@ -1238,6 +1222,7 @@ export default defineComponent({
       unreadUrgentChatCount,
       unreadNewsCount,
       currentSearch,
+      numeral: (v) => v,
     };
   },
 });

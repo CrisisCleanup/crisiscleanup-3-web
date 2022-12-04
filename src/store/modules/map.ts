@@ -1,10 +1,12 @@
+import State from '@vuex-orm/core/dist/src/model/contracts/State';
+
 const mapState = {
   autocompleteToken: null,
 };
 
 // getters
 const getters = {
-  autocompleteToken: (state) => {
+  autocompleteToken: (state: State) => {
     return state.autocompleteToken;
   },
 };
@@ -14,7 +16,7 @@ const actions = {};
 
 // mutations
 const mutations = {
-  setAutocompleteToken(state, token) {
+  setAutocompleteToken(state: State, token: string) {
     state.autocompleteToken = token;
   },
 };

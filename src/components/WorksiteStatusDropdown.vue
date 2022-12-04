@@ -56,7 +56,7 @@
 <script>
 import { useStore } from 'vuex';
 import { getColorForStatus, getStatusName, getWorkTypeImage } from '../filters';
-import useWorktypeImages from '../hooks/useWorktypeImages';
+import useWorktypeImages from '../hooks/worksite/useWorktypeImages';
 import { computed, ref, nextTick, onMounted } from 'vue';
 
 export default {

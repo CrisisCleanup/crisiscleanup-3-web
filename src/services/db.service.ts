@@ -1,5 +1,6 @@
-const { openDB } = require('idb');
-const dbPromise = openDB('crisiscleanup', 3, {
+import { openDB } from 'idb';
+
+const dbPromise = openDB('crisiscleanup', 2, {
   upgrade(db, oldVersion) {
     if (oldVersion > 0) {
       db.deleteObjectStore('keyval');

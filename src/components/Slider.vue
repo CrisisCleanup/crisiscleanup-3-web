@@ -2,13 +2,7 @@
   <div class="flex flex-col" :style="[cssVars]">
     <div class="flex justify-between">
       <span
-        class="
-          text-crisiscleanup-grey-900 text-sm
-          mx-1
-          flex
-          items-center
-          justify-start
-        "
+        class="text-crisiscleanup-grey-900 text-sm mx-1 flex items-center justify-start"
       >
         {{ from }}
         <ccu-icon
@@ -31,12 +25,7 @@
         >
       </div>
       <span
-        class="
-          text-crisiscleanup-grey-900 text-sm
-          items-center
-          justify-start
-          mx-1
-        "
+        class="text-crisiscleanup-grey-900 text-sm items-center justify-start mx-1"
         >{{ to }}</span
       >
     </div>
@@ -56,6 +45,8 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+
 export default {
   name: 'Slider',
   props: {
@@ -113,21 +104,24 @@ export default {
       required: false,
     },
   },
-  methods: {
-    update(e) {
+  setup(props, { emit }) {
+    function update(e) {
       const { value } = e.target;
-      this.$emit('input', Number(value));
-    },
-  },
-  computed: {
-    cssVars() {
+      emit('input', Number(value));
+    }
+    const cssVars = computed(() => {
       return {
-        '--primary-color': this.primaryColor,
-        '--secondary-color': this.secondaryColor,
-        '--handle-size': this.handleSize,
-        '--track-size': this.trackSize,
+        '--primary-color': props.primaryColor,
+        '--secondary-color': props.secondaryColor,
+        '--handle-size': props.handleSize,
+        '--track-size': props.trackSize,
       };
-    },
+    });
+
+    return {
+      update,
+      cssVars,
+    };
   },
 };
 </script>

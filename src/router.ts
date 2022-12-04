@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from './pages/Dashboard.vue';
+import Work from './pages/Work.vue';
 import HomeRoutes from './pages/home/routes';
 import { store } from './store';
 import moment from 'moment';
@@ -17,6 +18,24 @@ const routes = [
     component: Dashboard,
     name: 'nav.dashboard',
     meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/incident/:incident_id/work',
+    component: Work,
+    name: 'nav.work',
+    meta: { id: 'work', layout: 'authenticated', noscroll: true },
+    children: [
+      {
+        path: ':id',
+        name: 'nav.work_view_case',
+        meta: { id: 'work_case_view', noscroll: true },
+      },
+      {
+        path: ':id/edit',
+        name: 'nav.work_edit_case',
+        meta: { id: 'work_case_edit', noscroll: true },
+      },
+    ],
   },
   ...HomeRoutes,
 ];

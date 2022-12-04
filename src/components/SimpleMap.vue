@@ -3,16 +3,7 @@
     <div
       v-if="mapLoading"
       style="z-index: 1001"
-      class="
-        absolute
-        top-0
-        left-0
-        right-0
-        bottom-0
-        flex
-        items-center
-        justify-center
-      "
+      class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
     >
       <spinner />
     </div>
@@ -34,14 +25,7 @@
               $emit('onZoomIn');
             }
           "
-          class="
-            w-8
-            h-8
-            border-crisiscleanup-dark-100 border-t border-l border-r
-            bg-white
-            shadow-xl
-            text-xl text-crisiscleanup-dark-400
-          "
+          class="w-8 h-8 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
         />
         <base-button
           text=""
@@ -55,19 +39,12 @@
               $emit('onZoomOut');
             }
           "
-          class="
-            w-8
-            h-8
-            border border-crisiscleanup-dark-100
-            bg-white
-            shadow-xl
-            text-xl text-crisiscleanup-dark-400
-          "
+          class="w-8 h-8 border border-crisiscleanup-dark-100 bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
         />
       </div>
       <base-button
         v-tooltip="{
-          content: this.$t('worksiteMap.zoom_to_make_interactive'),
+          content: $t('worksiteMap.zoom_to_make_interactive'),
           // show: showInteractivePopover,
           trigger: 'hover',
           classes: 'interactive-tooltip',
@@ -84,16 +61,7 @@
         "
         icon="tree"
         icon-size="lg"
-        class="
-          w-8
-          h-8
-          border
-          my-1
-          border-crisiscleanup-dark-100
-          bg-white
-          shadow-xl
-          text-crisiscleanup-dark-400
-        "
+        class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
       <base-button
         text=""
@@ -107,15 +75,7 @@
             $emit('onZoomIncidentCenter');
           }
         "
-        class="
-          w-8
-          h-8
-          border border-crisiscleanup-dark-100
-          my-1
-          bg-white
-          shadow-xl
-          text-crisiscleanup-dark-400
-        "
+        class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
     </div>
     <WorksiteLegend
@@ -126,7 +86,7 @@
   </div>
 </template>
 <script>
-import WorksiteLegend from '@/components/WorksiteLegend';
+import WorksiteLegend from '../components/WorksiteLegend.vue';
 export default {
   name: 'SimpleMap',
   components: { WorksiteLegend },

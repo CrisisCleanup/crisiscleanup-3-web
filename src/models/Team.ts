@@ -5,7 +5,7 @@ export default class Team extends Model {
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       name: this.string(''),
       notes: this.attr(null),
       users: this.attr([]),
@@ -23,6 +23,6 @@ export default class Team extends Model {
       getCasesArea(id, incident) {
         return this.get(`/teams/${id}/cases_area?incident=${incident}`);
       },
-    },
+    } as any,
   };
 }

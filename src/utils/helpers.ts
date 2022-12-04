@@ -1,3 +1,5 @@
+import { useI18n } from 'vue-i18n';
+
 /**
  * Convert rem to pixels.
  * @param rem
@@ -28,6 +30,6 @@ export function nFormatter(num) {
 
 export function formatCmsItem(text) {
   return text.replaceAll(/\{(.*?)\}/g, (m, translation) => {
-    return window.vue.$t(translation);
+    return useI18n().t(translation);
   });
 }

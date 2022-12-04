@@ -12,7 +12,7 @@
       >
       <slot
     /></base-text>
-    <template #popover>
+    <template #popper>
       <div class="tooltip-content">
         <div class="text-base" v-if="userItem">{{ userItem.full_name }}</div>
         <div class="text-xs" v-if="userItem">
@@ -36,33 +36,43 @@
 </template>
 
 <script>
-import VueTypes from 'vue-types';
-import { UserMixin } from '@/mixins';
-import User from '@/models/User';
+import User from '../../models/User';
+import { computed, onMounted, ref } from 'vue';
 
 export default {
   name: 'UserDetailsTooltip',
-  mixins: [UserMixin],
-  data() {
+  setup(props) {
+    const asyncUser = ref(null);
+    const userItem = computed(() => {
+      return User.find(this.user);
+    });
+    onMounted(() => {
+      const user = User.find(props.user);
+      m;
+      if (!user) {
+        User.api().get(`/users/${props.user}`, {});
+      }
+    });
     return {
-      asyncUser: null,
+      asyncUser,
+      userItem,
     };
   },
-  mounted() {
-    const user = this.getUser(this.user);
-    if (!user) {
-      User.api().get(`/users/${this.user}`, {});
-    }
-  },
   props: {
-    user: VueTypes.number,
-    nameClass: VueTypes.string.def('text-yellow-600'),
-    nameStyle: VueTypes.any,
-    dark: VueTypes.bool.def(true),
-  },
-  computed: {
-    userItem() {
-      return this.getUser(this.user);
+    user: {
+      type: Number,
+    },
+    nameClass: {
+      type: String,
+      default: 'text-yellow-600',
+    },
+    nameStyle: {
+      type: String,
+      default: '',
+    },
+    dark: {
+      type: Boolean,
+      default: true,
     },
   },
 };

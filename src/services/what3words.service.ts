@@ -1,12 +1,12 @@
 const BASE_URL = 'https://api.what3words.com/v3';
 
 const What3wordsService = {
-  getWords(lat, lng) {
+  getWords(lat: string, lng: string) {
     const url = new URL(`${BASE_URL}/convert-to-3wa`);
     const params = {
       coordinates: `${lat},${lng}`,
-      key: process.env.VUE_APP_WHAT_3_WORDS_API_KEY,
-    };
+      key: import.meta.env.VUE_APP_WHAT_3_WORDS_API_KEY,
+    } as Record<string, any>;
     Object.keys(params).forEach((key) =>
       url.searchParams.append(key, params[key]),
     );

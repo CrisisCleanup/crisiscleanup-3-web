@@ -78,9 +78,6 @@ export default defineComponent({
     });
 
     const dynamicComponent = computed(() => {
-      if (typeof props.component === 'string') {
-        return () => import(`../../components/${props.component}`);
-      }
       return props.component;
     });
 
@@ -99,8 +96,8 @@ export default defineComponent({
       default: '',
     },
     component: {
-      type: [String, Function],
-      default: '',
+      type: [Function],
+      default: () => {},
     },
     classes: {
       type: String,

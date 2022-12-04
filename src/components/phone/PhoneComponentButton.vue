@@ -28,7 +28,7 @@
           size="xs"
           type="cancel"
           class="phone-system-action__close-icon"
-          @click.native="() => (showComponent = false)"
+          @click="() => (showComponent = false)"
         />
       </div>
       <slot name="component"></slot>
@@ -37,26 +37,10 @@
 </template>
 
 <script>
-import { EventBus } from '@/event-bus';
+import { onBeforeMount, ref, watch } from 'vue';
+import useEmitter from '../../hooks/useEmitter';
 export default {
   name: 'PhoneComponentButton',
-  created() {
-    EventBus.$on('phone_component:close', () => {
-      this.showComponent = this.keepOpen;
-    });
-    EventBus.$on('phone_component:open', (name) => {
-      if (this.name === name) {
-        EventBus.$emit('phone_component:close');
-        this.showComponent = true;
-      }
-    });
-  },
-  data() {
-    return {
-      showComponent: false,
-      top: 0,
-    };
-  },
   props: {
     name: { type: String, default: null, required: true },
     icon: { type: String, default: null, required: false },
@@ -66,31 +50,51 @@ export default {
     iconSize: { type: String, default: null, required: false },
     keepOpen: { type: Boolean, default: false, required: false },
   },
-  methods: {
-    mounted() {
-      if (this.keepOpen) {
-        this.showComponent = true;
-      }
-    },
-    toggleComponent() {
-      if (this.keepOpen) {
-        this.showComponent = true;
+  setup(props, { emit }) {
+    const showComponent = ref(false);
+    const top = ref(0);
+    const { emitter } = useEmitter();
+
+    function toggleComponent() {
+      if (props.keepOpen) {
+        showComponent.value = true;
       } else {
-        const newState = !this.showComponent;
-        EventBus.$emit('phone_component:close');
-        this.showComponent = newState;
+        const newState = !showComponent.value;
+        emitter.emit('phone_component:close');
+        showComponent.value = newState;
       }
-    },
-  },
-  watch: {
-    showComponent(newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.$emit('open');
-        const el = this.$parent.$refs.phoneButtons;
-        const rect = el.getBoundingClientRect();
-        this.top = `${parseInt(rect.top + window.scrollY)}px`;
-      }
-    },
+    }
+
+    onBeforeMount(() => {
+      emitter.on('phone_component:close', () => {
+        showComponent.value = props.keepOpen;
+      });
+      emitter.on('phone_component:open', (name) => {
+        if (props.name === name) {
+          emitter.emit('phone_component:close');
+          showComponent.value = true;
+        }
+      });
+    });
+
+    watch(
+      () => showComponent.value,
+      (newValue, oldValue) => {
+        if (newValue && !oldValue) {
+          emit('open');
+          //TODO: Fix scrolling
+          // const el = this.$parent.$refs.phoneButtons;
+          // const rect = el.getBoundingClientRect();
+          // this.top = `${parseInt(rect.top + window.scrollY)}px`;
+        }
+      },
+    );
+
+    return {
+      top,
+      showComponent,
+      toggleComponent,
+    };
   },
 };
 </script>

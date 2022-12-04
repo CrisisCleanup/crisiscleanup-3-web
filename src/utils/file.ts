@@ -23,12 +23,11 @@ export async function uploadToS3({
   });
   formData.append('file', fileContents); // The file has be the last element
 
-  const response = await axios.post(presignedPostUrl.url, formData, {
+  const instance = axios.create();
+  delete instance.defaults.headers.common['Authorization'];
+
+  await instance.post(presignedPostUrl.url, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
-    transformRequest: (data, headers) => {
-      delete headers.common.Authorization;
-      return data;
-    },
   });
 
   return presignedPostUrl.filePath;
@@ -43,7 +42,7 @@ export async function uploadFile(formData) {
   formData.append('content_type', contentType);
 
   const result = await axios.post(
-    `${process.env.VUE_APP_API_BASE_URL}/files`,
+    `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
     formData,
     {
       headers: {

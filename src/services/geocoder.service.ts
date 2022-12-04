@@ -1,13 +1,14 @@
 /* global google */
 /* eslint-disable */
 
+import { store } from '../store';
+
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
-const GEOCODER = 'google';
-import store from '@/store';
+let GEOCODER: string = 'google';
 import * as parser from 'parse-address';
 
 export default {
-  getGooglePlaceDetails(placeId) {
+  getGooglePlaceDetails(placeId: string) {
     const sessionToken = store.getters['map/autocompleteToken'];
     return new Promise((resolve) => {
       const div = document.createElement('div');
@@ -43,7 +44,9 @@ export default {
       body: URLSearchParams,
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${process.env.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN}`,
+        Authorization: `Basic ${
+          import.meta.env.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN
+        }`,
       },
     })
       .then((resp) => resp.json())
@@ -93,7 +96,8 @@ export default {
           store.commit('map/setAutocompleteToken', sessionToken);
         }
         // Pass the token to the autocomplete service.
-        const autocompleteService = new google.maps.places.AutocompleteService();
+        const autocompleteService =
+          new google.maps.places.AutocompleteService();
         autocompleteService.getPlacePredictions(
           {
             input: text,

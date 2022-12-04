@@ -4,6 +4,8 @@
 </template>
 
 <script>
+import { computed, onMounted, ref, watch } from 'vue';
+
 export default {
   name: 'LightTab',
   props: {
@@ -12,28 +14,25 @@ export default {
     disabled: { type: Boolean, default: false },
   },
 
-  data() {
+  setup(props) {
+    const isActive = ref(false);
+
+    watch(props.selected, (newValue) => {
+      isActive.value = newValue;
+    });
+
+    const href = computed(() => {
+      return `#${props.name.toLowerCase().replace(/ /g, '-')}`;
+    });
+
+    onMounted(() => {
+      isActive.value = props.selected;
+    });
+
     return {
-      isActive: false,
+      isActive,
+      href,
     };
-  },
-
-  watch: {
-    selected: {
-      handler() {
-        this.isActive = this.selected;
-      },
-    },
-  },
-
-  computed: {
-    href() {
-      return `#${this.name.toLowerCase().replace(/ /g, '-')}`;
-    },
-  },
-
-  mounted() {
-    this.isActive = this.selected;
   },
 };
 </script>

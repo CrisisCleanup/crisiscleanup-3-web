@@ -11,6 +11,7 @@ import PhoneStatus from '../models/PhoneStatus';
 import WorksiteRequest from '../models/WorksiteRequest';
 import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
+import Team from '../models/Team';
 
 const database = new Database();
 database.register(User, {});
@@ -25,5 +26,6 @@ database.register(PhoneStatus, {});
 database.register(WorksiteRequest, {});
 database.register(Worksite, {});
 database.register(PhoneOutbound, {});
+database.register(Team, {});
 
 export default database;

@@ -45,10 +45,10 @@ import {
   PropType,
   ref,
   watch,
-} from '@vue/composition-api';
-import Table from '@/components/Table.vue';
-import { getQueryString } from '@/utils/urls';
-import useHttp from '@/use/useHttp';
+} from 'vue';
+import Table from '../components/Table.vue';
+import { getQueryString } from '../utils/urls';
+import axios from "axios";
 
 interface TablePagination {
   pageSize: number;
@@ -109,8 +109,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { $http } = useHttp();
-
     const defaultColumns = ref<any[]>([]);
     const data = ref<any[]>([]);
     const search = ref<string>('');
@@ -143,7 +141,7 @@ export default defineComponent({
       }
       const queryString = getQueryString(params);
 
-      const response = await $http.get(`${props.url}?${queryString}`);
+      const response = await axios.get(`${props.url}?${queryString}`);
       data.value = response.data.results;
       meta.value.pagination = {
         ...pagination,
@@ -176,13 +174,6 @@ export default defineComponent({
       getData,
       loading,
     };
-  },
-  watch: {
-    query: {
-      handler() {
-        throttle(this.getData, 1000)();
-      },
-    },
   },
 });
 </script>

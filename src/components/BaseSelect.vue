@@ -12,6 +12,7 @@
       :can-clear="clearable"
       :searchable="searchable"
       :label="label"
+      :value-prop="itemKey"
       :limit="limit"
       :mode="multiple ? 'multiple' : 'single'"
       :disabled="disabled"
@@ -146,19 +147,6 @@ export default {
     const currentHeight_ = ref(0.0);
     const floatDisplacement = ref(0.0);
     const selected = ref(null);
-    const options = computed(() =>
-      props.options.map((item) => {
-        let option = {
-          value: props.itemKey ? item[props.itemKey] : item,
-        };
-        if (props.itemKey) {
-          option = { ...option, ...item, name: item[props.label] };
-        } else {
-          option.name = item;
-        }
-        return option;
-      }),
-    );
 
     const inputIdSelector = computed(() => {
       const idSpec = props.floatLabel ? props.floatLabel : '';
@@ -280,7 +268,7 @@ export default {
 
     return {
       selected,
-      options,
+      // options,
       isInvalid,
       floatDisplacement,
       cancelText,

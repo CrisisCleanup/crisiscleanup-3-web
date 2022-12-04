@@ -40,9 +40,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
-import usei18n from '@/use/usei18n';
+import { defineComponent } from 'vue';
+import UserDetailsTooltip from '../components/user/DetailsTooltip.vue';
+import {useI18n} from "vue-i18n";
 export default defineComponent({
   name: 'EventTimeline',
   components: { UserDetailsTooltip },
@@ -53,15 +53,15 @@ export default defineComponent({
     },
   },
   setup() {
-    const { $t } = usei18n();
+    const { t } = useI18n();
     const getTranslation = (tag, attr) => {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [
           key,
-          key.endsWith('_t') ? $t(value as string) : value,
+          key.endsWith('_t') ? t(value as string) : value,
         ]),
       );
-      return $t(tag, translated_attrs);
+      return t(tag, translated_attrs);
     };
 
     return {
