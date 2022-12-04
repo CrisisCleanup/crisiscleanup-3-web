@@ -23,6 +23,7 @@
             <div v-for="option in result.options" :key="option">
               <div
                 v-if="result.label === 'Geocode'"
+                @click="() => $emit('selectedGeocode', option)"
                 class="flex flex-col sm:text-lg text-base p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
               >
                 <div>{{ option.description }}</div>
@@ -31,6 +32,7 @@
               <div
                 v-else
                 class="flex items-center p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+                @click="() => $emit('selectedExisting', option)"
               >
                 <div
                   class="mr-1 case-svg-container"

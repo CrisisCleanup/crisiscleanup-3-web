@@ -48,7 +48,6 @@ export default {
     });
     onMounted(() => {
       const user = User.find(props.user);
-      m;
       if (!user) {
         User.api().get(`/users/${props.user}`, {});
       }
