@@ -159,7 +159,7 @@
                 () => {
                   updateUserState({
                     [`chat_${selectedChat.id}_last_seen`]:
-                      $moment().toISOString(),
+                      moment().toISOString(),
                   });
                   unreadChatCount = 0;
                   unreadUrgentChatCount = 0;
@@ -240,7 +240,7 @@
               @open="
                 () => {
                   updateUserState({
-                    work_news_last_seen: $moment().toISOString(),
+                    work_news_last_seen: moment().toISOString(),
                   });
                   unreadNewsCount = 0;
                 }
@@ -576,6 +576,7 @@ import {useStore} from "vuex";
 import useWorksiteMap, {MapUtils} from "../hooks/worksite/useWorksiteMap";
 import axios from "axios";
 import {Sprite} from "pixi.js";
+import moment from 'moment';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -1223,6 +1224,7 @@ export default defineComponent({
       unreadNewsCount,
       currentSearch,
       numeral: (v) => v,
+      moment,
     };
   },
 });

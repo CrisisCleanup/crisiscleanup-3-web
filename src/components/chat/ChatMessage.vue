@@ -14,7 +14,7 @@
               :user="message.created_by"
             />
             <span
-              v-if="$moment(message.created_at).isSame($moment(), 'day')"
+              v-if="moment(message.created_at).isSame(moment(), 'day')"
               class="opacity-40 text-xs ml-1"
               :title="message.created_at"
               >{{ formatDateString(message.created_at, 'h:mm A') }}</span
@@ -76,6 +76,7 @@
 import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
 import { ref } from 'vue';
 import { formatDateString } from '../../filters/index';
+import moment from 'moment';
 
 export default {
   name: 'ChatMessage',
@@ -91,6 +92,7 @@ export default {
     return {
       showFavorite,
       formatDateString,
+      moment,
     };
   },
 };

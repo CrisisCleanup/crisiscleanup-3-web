@@ -153,4 +153,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.map-svg-container svg {
+  width: 18px;
+  height: 18px;
+}
+</style>

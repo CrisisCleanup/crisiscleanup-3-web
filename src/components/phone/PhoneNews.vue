@@ -62,7 +62,7 @@ export default {
           `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
             props.cmsTag
           }&publish_at__gt=${
-            this.currentUser.states[props.stateKey]
+            currentUser.states[props.stateKey]
           }&publish_at__lt=${moment().toISOString()}&limit=1`,
         );
         this.unreadCount = response.data.count;

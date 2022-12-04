@@ -192,7 +192,7 @@ export default {
         is_urgent: true,
       };
       if (currentUser.states[props.stateKey]) {
-        params.created_at__gte = currentUser.states[this.stateKey];
+        params.created_at__gte = currentUser.states[props.stateKey];
       }
       const queryString = getQueryString(params);
       const response = await axios.get(

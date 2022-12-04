@@ -1,10 +1,7 @@
 import { AuthService } from '../services/auth.service';
 
 export function useWebSockets(url, name, cb) {
-  const endpoint = import.meta?.env?.VITE_APP_API_BASE_URL?.replace(
-    'http',
-    'ws',
-  );
+  const endpoint = import.meta.env.VITE_APP_API_BASE_URL.replace('http', 'ws');
   let socket: WebSocket | null;
   let send;
 
@@ -39,7 +36,6 @@ export function useWebSockets(url, name, cb) {
     };
     return { socket, send: sendMessage };
   }
-
   const websocket = connect();
   send = websocket.send;
   socket = websocket.socket;
