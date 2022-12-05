@@ -174,6 +174,7 @@
           @input="(v) => updateWorksite(v, 'address')"
           @selectedExisting="onWorksiteSelect"
           @selectedGeocode="onGeocodeSelect"
+          use-geocoder
           class="w-full"
         />
       </div>
@@ -472,6 +473,7 @@ export default {
     const addAdditionalPhone = ref(false);
     const searchWorksitesNameResults = ref([]);
     const form = ref(null);
+    const worksiteImageSection = ref(null);
 
     const currentIncident = computed(() => {
       return Incident.find(props.incidentId);
@@ -971,7 +973,7 @@ export default {
             notesToSave.map((n) => Worksite.api().addNote(worksiteId, n)),
           );
           updatedFiles.value.forEach((file) => {
-            this.$refs.worksiteImageSection.saveToWorkSite(file, worksiteId);
+            worksiteImageSection.value.saveToWorkSite(file, worksiteId);
           });
           if (isHighPriority.value) {
             await Worksite.api().addFlag(worksiteId, {
@@ -1312,6 +1314,7 @@ export default {
       addAdditionalPhone,
       form,
       onRemoveFile,
+      worksiteImageSection,
     };
   },
 };

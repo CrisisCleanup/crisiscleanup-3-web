@@ -19,12 +19,48 @@ import Authenticated from './layouts/Authenticated.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { faSpinner, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSpinner,
+  faBars,
+  faTimes,
+  faChevronDown,
+  faChevronUp,
+  faCaretDown,
+  faCaretUp,
+  faEye,
+  faPlus,
+  faMinus,
+  faTree,
+  faSync,
+  faCaretLeft,
+  faCaretRight,
+  faMap,
+  faCamera,
+  faStreetView,
+  faSearchMinus,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
 import BaseIcon from './components/BaseIcon.vue';
 import { store } from './store';
 library.add(faSpinner);
 library.add(faBars);
 library.add(faTimes);
+library.add(faChevronDown);
+library.add(faChevronUp);
+library.add(faCaretDown);
+library.add(faCaretUp);
+library.add(faCaretLeft);
+library.add(faCaretRight);
+library.add(faEye);
+library.add(faPlus);
+library.add(faMinus);
+library.add(faTree);
+library.add(faSync);
+library.add(faMap);
+library.add(faCamera);
+library.add(faStreetView);
+library.add(faSearchMinus);
+library.add(faChevronRight);
 
 // Toast
 import Toast from 'vue-toastification';

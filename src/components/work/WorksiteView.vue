@@ -718,7 +718,7 @@ export default {
         if (e.response?.status === 404) {
           await $toasted.error(t('caseView.deleted_notice'));
         }
-        if (!this.incidentId) {
+        if (!props.incidentId) {
           await router.push(`/incident/${route.params.incident_id}/work`);
         } else {
           emit('onResetForm');

@@ -6,16 +6,17 @@
         @update:modelValue="worksitesSearch"
         @input.stop=""
         :size="size"
-        :icon="icon"
         :placeholder="placeholder"
         :required="required"
         :tooltip="tooltip"
+        @focus="isFocused = true"
+        @blur="onBlur"
       >
       </base-input>
 
       <div
-        class="absolute bg-white z-50 h-auto max-h-84 overflow-auto"
-        v-if="results.length > 0 && value.length > 0"
+        class="absolute bg-white z-50 h-auto max-h-84 overflow-auto min-w-84"
+        v-if="results.length > 0 && value.length > 0 && isFocused"
       >
         <div v-for="result in results" :key="result.label">
           <template v-if="result.options.length > 0"
@@ -71,9 +72,8 @@
 // import Highlighter from 'vue-highlight-words';
 // import Worksite from '../../models/Worksite';
 // import { getWorkTypeImage } from '../../filters';
-import Multiselect from '@vueform/multiselect';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import GeocoderService from '../../services/geocoder.service';
@@ -83,7 +83,7 @@ import { getWorkTypeImage } from '../../filters/index';
 
 export default {
   name: 'WorksiteSearchInput',
-  components: { BaseInput, Multiselect },
+  components: { BaseInput },
   props: {
     value: {
       type: String,
@@ -118,6 +118,9 @@ export default {
     skipValidation: {
       type: Boolean,
     },
+    useGeocoder: {
+      type: Boolean,
+    },
   },
   setup(props, { emit }) {
     const { currentUser } = useCurrentUser();
@@ -145,10 +148,19 @@ export default {
 
     const results = ref([]);
 
+    function onBlur() {
+      setTimeout(() => {
+        isFocused.value = false;
+      }, 200);
+    }
+
     async function worksitesSearch(value) {
       emit('input', value);
+      let geocode = [];
       const sites = await searchWorksites(value, currentIncidentId.value);
-      const geocode = await geocoderSearch(value);
+      if (props.useGeocoder) {
+        geocode = await geocoderSearch(value);
+      }
       results.value = [
         {
           label: 'Search',
@@ -162,6 +174,7 @@ export default {
     }
 
     const selected = ref('');
+    const isFocused = ref(false);
     const filteredOptions = ref([]);
     const timeout = ref(null);
     const debounceMilliseconds = ref(50);
@@ -251,12 +264,18 @@ export default {
       worksitesSearch,
       results,
       getWorkImage,
+      isFocused,
+      onBlur,
     };
   },
 };
 </script>
 
 <style>
+.autocomplete {
+  z-index: 1000;
+}
+
 .case-svg-container svg {
   width: 30px;
   height: 30px;
@@ -319,8 +338,8 @@ export default {
 }
 
 .autocomplete .icon-container {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: solid 1px #dadada;
   border-left: 0;
 }

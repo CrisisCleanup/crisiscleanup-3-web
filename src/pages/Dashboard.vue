@@ -876,16 +876,16 @@ export default defineComponent({
     }
     async function acceptRequest(id) {
       const result = await prompt({
-        title: this.$t('actions.approve_worksite_request'),
-        content: this.$t('dashboard.approve_worksite_request_reason'),
+        title: t('actions.approve_worksite_request'),
+        content: t('dashboard.approve_worksite_request_reason'),
       });
       await WorksiteRequest.api().acceptRequest(id, result);
       await getWorksiteRequests();
     }
     async function rejectRequest(id) {
       const result = await prompt({
-        title: this.$t('actions.reject_worksite_request'),
-        content: this.$t('dashboard.reject_worksite_request_reason'),
+        title: t('actions.reject_worksite_request'),
+        content: t('dashboard.reject_worksite_request_reason'),
       });
       await WorksiteRequest.api().rejectRequest(id, result);
       await getWorksiteRequests();

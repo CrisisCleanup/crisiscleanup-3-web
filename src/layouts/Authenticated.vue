@@ -1,5 +1,5 @@
 <template>
-  <div class="layout" v-if="!loading">
+  <div class="layout" v-if="!loading && currentIncident">
     <div
         class="sidebar h-full overflow-auto"
         :class="{ 'slide-over': slideOverVisible }"

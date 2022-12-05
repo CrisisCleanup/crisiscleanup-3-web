@@ -40,19 +40,11 @@
             </span>
             <div class="flex justify-start w-auto">
               <WorksiteSearchInput
-                width="300px"
+                :value="currentSearch"
                 icon="search"
-                :suggestions="[
-                  {
-                    name: 'worksites',
-                    data: searchWorksites || [],
-                    key: 'name',
-                  },
-                ]"
                 display-property="name"
                 :placeholder="$t('actions.search')"
                 size="medium"
-                class="mx-2 w-48"
                 @selectedExisting="
                   (w) => {
                     worksiteId = w.id;
@@ -64,10 +56,14 @@
                     }
                   }
                 "
-                @search="onSearch"
-                @clear="onSearch"
+                @input='(value) => {
+                  currentSearch = value;
+                }'
+                skip-validation
+                class="mx-4"
               />
               <WorksiteActions
+                v-if="currentIncidentId"
                 :current-incident-id="String(currentIncidentId)"
                 :inital-filters="filters"
                 :key="currentIncidentId"
@@ -751,30 +747,6 @@ export default defineComponent({
       updateUserState({});
     };
 
-    const searchCases = (search, incident) => {
-      return axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
-      );
-    };
-
-    const onSearch = debounce(
-      async function (search) {
-        currentSearch.value = search;
-        searchingWorksites.value = true;
-        if (!search) {
-          searchWorksites.value = [];
-        }
-        const searchData = await searchCases(search, currentIncidentId.value);
-        searchWorksites.value = search ? searchData.data.results : [];
-        searchingWorksites.value = false;
-      },
-      250,
-      {
-        leading: false,
-        trailing: true,
-      },
-    );
-
     const showingDetails = computed<Boolean>(() => {
       return showHistory.value || showFlags.value;
     });
@@ -1154,9 +1126,9 @@ export default defineComponent({
         },
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
-          nextTick(() => {
-            filterSvi(sviSliderValue.value);
-          });
+          // nextTick(() => {
+          //   filterSvi(sviSliderValue.value);
+          // });
         },
       );
     });
@@ -1169,7 +1141,6 @@ export default defineComponent({
       filteredWorksiteCount,
       isEditing,
       isViewing,
-      onSearch,
       searchWorksites,
       showingTable,
       selectedChat,

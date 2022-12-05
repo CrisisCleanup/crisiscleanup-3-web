@@ -325,6 +325,7 @@ import { useI18n } from 'vue-i18n';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import axios from 'axios';
 
 export default {
   name: 'CaseFlag',
@@ -476,10 +477,10 @@ export default {
           dataKey: 'results',
         },
       );
-      this.organizationsWithClaimsInArea =
+      organizationsWithClaimsInArea.value =
         organizationResults.entities.organizations;
 
-      const response = await this.$http.get(
+      const response = await axios.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
         }/incidents?fields=id,name,start_at&move_case=true&limit=200&ordering=-start_at`,

@@ -44,7 +44,7 @@ export default {
   setup(props) {
     const asyncUser = ref(null);
     const userItem = computed(() => {
-      return User.find(this.user);
+      return User.find(props.user);
     });
     onMounted(() => {
       const user = User.find(props.user);

@@ -5,6 +5,7 @@ import { Container } from 'pixi.js';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '../../utils/map';
 import Location from '../../models/Location';
 import useRenderedMarkers from './useRenderedMarkers';
+import { useI18n } from 'vue-i18n';
 
 export interface MapUtils {
   getMap: Function;
@@ -137,7 +138,7 @@ export default (
     container.visible = false;
     map.setView([markerLocation.lat, markerLocation.lng], 15);
     marker
-      .bindTooltip(window.vue.$t('casesVue.drag_pin_to_correct_location'), {
+      .bindTooltip(useI18n().t('casesVue.drag_pin_to_correct_location'), {
         direction: 'top',
       })
       .openTooltip();

@@ -65,7 +65,7 @@ export default {
             currentUser.states[props.stateKey]
           }&publish_at__lt=${moment().toISOString()}&limit=1`,
         );
-        this.unreadCount = response.data.count;
+        unreadCount.value = response.data.count;
         emit('unreadCount', response.data.count);
       }
       const response = await axios.get(
