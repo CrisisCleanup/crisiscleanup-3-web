@@ -20,12 +20,12 @@
       </section>
       <div class="form-field">
         <base-input
-          :value="worksite.phone1"
+          :model-value="worksite.phone1"
           selector="js-worksite-phone1"
           size="large"
           required
           :placeholder="$t('formLabels.phone1')"
-          @input="(v) => updateWorksite(v, 'phone1')"
+          @update:modelValue="(v) => updateWorksite(v, 'phone1')"
           @iconClicked="() => sendSms(worksite.phone1)"
           :fa-icon="
             currentIncident.auto_contact && worksite.id ? 'comment' : null
@@ -39,11 +39,11 @@
       </div>
       <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
         <base-input
-          :value="worksite.phone2"
+          :model-value="worksite.phone2"
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
-          @input="(v) => updateWorksite(v, 'phone2')"
+          @update:modelValue="(v) => updateWorksite(v, 'phone2')"
           @iconClicked="() => sendSms(worksite.phone2)"
           :fa-icon="
             currentIncident.auto_contact && worksite.id ? 'comment' : null
@@ -65,11 +65,11 @@
       />
       <div class="form-field">
         <base-input
-          :value="worksite.email"
+          :model-value="worksite.email"
           selector="js-worksite-email"
           size="large"
           :placeholder="$t('formLabels.email')"
-          @input="(v) => updateWorksite(v, 'email')"
+          @update:modelValue="(v) => updateWorksite(v, 'email')"
         />
       </div>
       <div class="form-field" v-if="currentIncident.auto_contact">
@@ -86,7 +86,7 @@
             size="large"
           />
         </span>
-        <form-select
+        <base-select
           :value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
@@ -147,7 +147,7 @@
         </div>
         <base-input
           v-else-if="shouldSelectOnMap"
-          :value="worksite.address"
+          :model-value="worksite.address"
           name="worksite.address"
           selector="js-worksite-address"
           size="large"
@@ -156,7 +156,7 @@
               ? $t('formLabels.address')
               : $t('caseView.full_address')
           "
-          @input="(v) => updateWorksite(v, 'address')"
+          @update:modelValue="(v) => updateWorksite(v, 'address')"
           required
         />
         <WorksiteSearchInput
@@ -181,56 +181,56 @@
       <template v-if="showAddressDetails">
         <div class="form-field">
           <base-input
-            :value="worksite.city"
+            :model-value="worksite.city"
             selector="js-worksite-city"
             size="large"
             :placeholder="$t('formLabels.city')"
             required
-            @input="(v) => updateWorksite(v, 'city')"
+            @update:modelValue="(v) => updateWorksite(v, 'city')"
           />
         </div>
         <div class="form-field">
           <base-input
-            :value="worksite.county"
+            :model-value="worksite.county"
             name="county"
             selector="js-worksite-county"
             size="large"
             :placeholder="$t('formLabels.county')"
             required
-            @input="(v) => updateWorksite(v, 'county')"
+            @update:modelValue="(v) => updateWorksite(v, 'county')"
           />
         </div>
         <div class="form-field">
           <base-input
             name="state"
-            :value="worksite.state"
+            :model-value="worksite.state"
             selector="js-worksite-state"
             size="large"
             :placeholder="$t('formLabels.state')"
             required
-            @input="(v) => updateWorksite(v, 'state')"
+            @update:modelValue="(v) => updateWorksite(v, 'state')"
           />
         </div>
         <div class="form-field">
           <base-input
             name="zip"
-            :value="worksite.postal_code"
+            :model-value="worksite.postal_code"
             selector="js-worksite-postal-code"
             size="large"
             :placeholder="$t('formLabels.postal_code')"
-            @input="(v) => updateWorksite(v, 'postal_code')"
+            @update:modelValue="(v) => updateWorksite(v, 'postal_code')"
             required
           />
         </div>
       </template>
       <div class="form-field">
         <base-input
-          :value="worksite.what3words"
+          :model-value="worksite.what3words"
           size="large"
           :placeholder="$t('formLabels.what3words')"
           :required="!worksite.location"
           disabled
-          @input="(v) => updateWorksite(v, 'what3words')"
+          @update:modelValue="(v) => updateWorksite(v, 'what3words')"
         />
 
         <div class="flex justify-around items-center p-2 text-gray-700">
@@ -379,6 +379,7 @@ import { useToast } from 'vue-toastification';
 import useDialogs from '../../hooks/useDialogs';
 import useEmitter from '../../hooks/useEmitter';
 import axios from 'axios';
+import BaseSelect from '../BaseSelect.vue';
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
   'formOptions.often',
@@ -389,6 +390,7 @@ const AUTO_CONTACT_FREQUENCY_OPTIONS = [
 export default {
   name: 'WorksiteForm',
   components: {
+    BaseSelect,
     WorksiteNotes,
     SectionHeading,
     WorksiteSearchInput,

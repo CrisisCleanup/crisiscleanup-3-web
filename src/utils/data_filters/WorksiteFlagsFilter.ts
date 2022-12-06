@@ -1,4 +1,5 @@
-import Filter from '@/utils/data_filters/Filter';
+import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
 
 export default class WorksiteFlagsFilter extends Filter {
   packFunction() {
@@ -29,9 +30,9 @@ export default class WorksiteFlagsFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = `${window.vue.$i18n.t(
-          'worksiteFilters.flag',
-        )}: ${window.vue.$i18n.t(key)}`;
+        labels[key] = `${useI18n().t('worksiteFilters.flag')}: ${useI18n().t(
+          key,
+        )}`;
       });
     return labels;
   }

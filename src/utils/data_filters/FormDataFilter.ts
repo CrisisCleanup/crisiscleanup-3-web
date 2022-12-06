@@ -1,8 +1,9 @@
-import Filter from '@/utils/data_filters/Filter';
+import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
 
 export default class FormDataFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed: Record<any, any> = {};
     const dataEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -23,19 +24,19 @@ export default class FormDataFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels: Record<any, any> = {};
     Object.entries(this.data)
       .filter(([, value]) => {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        const localeMessages = window.vue.$i18n.t(`formLabels.${key}`);
+        const localeMessages = useI18n().t(`formLabels.${key}`);
         labels[key] = `${localeMessages}`;
       });
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }

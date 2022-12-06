@@ -1,5 +1,6 @@
-import Filter from '@/utils/data_filters/Filter';
-import { getWorkTypeName } from '@/filters';
+import Filter from './Filter';
+import { getWorkTypeName } from '../../filters';
+import { useI18n } from 'vue-i18n';
 
 export default class WorksiteFieldsFilter extends Filter {
   packFunction() {
@@ -32,7 +33,7 @@ export default class WorksiteFieldsFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = `${window.vue.$i18n.t(
+        labels[key] = `${useI18n().t(
           'worksiteFilters.work_type',
         )}: ${getWorkTypeName(key)}`;
       });

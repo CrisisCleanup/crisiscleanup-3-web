@@ -1,9 +1,11 @@
-import Filter from '@/utils/data_filters/Filter';
+import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
+import User from '../../models/User';
 
 export default class UserInvitedByFilter extends Filter {
   packFunction() {
-    const packed = {};
-    const invitedByIds = Array.from(this.data).map((user) => user.id);
+    const packed: Record<any, any> = {};
+    const invitedByIds = Array.from(this.data).map((user: any) => user.id);
     if (invitedByIds.length) {
       packed.referring_user__in = invitedByIds.join(',');
     }
@@ -15,18 +17,18 @@ export default class UserInvitedByFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
-    Array.from(this.data).forEach((user) => {
+    const labels: Record<any, any> = {};
+    Array.from(this.data).forEach((user: any) => {
       const { id, full_name } = user;
-      labels[id] = window.vue.$i18n.t('userInvitedBy.invited_by', {
+      labels[id] = useI18n().t('userInvitedBy.invited_by', {
         full_name,
       });
     });
     return labels;
   }
 
-  removeField(identifier) {
-    Array.from(this.data).forEach((x) => {
+  removeField(identifier: string) {
+    Array.from(this.data).forEach((x: any) => {
       if (Number(x.id) === Number(identifier)) {
         this.data.delete(x);
       }

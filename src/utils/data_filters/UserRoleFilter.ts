@@ -1,9 +1,9 @@
-import Filter from '@/utils/data_filters/Filter';
-import Role from '@/models/Role';
+import Filter from './Filter';
+import Role from '../../models/Role';
 
 export default class UserRoleFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed: Record<any, any> = {};
     const filteredRoles = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -33,7 +33,7 @@ export default class UserRoleFilter extends Filter {
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }

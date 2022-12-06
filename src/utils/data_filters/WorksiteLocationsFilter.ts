@@ -1,9 +1,11 @@
-import Filter from '@/utils/data_filters/Filter';
-import User from '@/models/User';
+import Filter from './Filter';
+import User from '../../models/User';
+import { useI18n } from 'vue-i18n';
+import { store } from '../../store';
 
 export default class UserLocationsFilter extends Filter {
   packFunction() {
-    const currentUser = User.find(window.vue.$store.getters['auth/userId']);
+    const currentUser = User.find(store.getters['auth/userId']);
     const packed = {};
     if (this.data.organization_primary_location) {
       packed.organization_primary_location = currentUser.organization.id;

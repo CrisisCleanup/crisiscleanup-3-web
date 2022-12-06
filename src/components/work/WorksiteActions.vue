@@ -4,7 +4,7 @@
       <base-checkbox
         class="pb-2"
         :value="showingHeatMap"
-        @input="
+        @update:modelValue="
           showingHeatMap = $event;
           $emit('toggleHeatMap', $event ? pdas : null);
         "
@@ -23,7 +23,7 @@
         </div>
       </base-checkbox>
     </div>
-    <base-dropdown class-name="borderless">
+    <v-popover placement="bottom-start">
       <base-button
         slot="btn"
         variant="text"
@@ -34,443 +34,185 @@
         icon-size="medium"
         icon-classes="w-4"
       />
-      <template slot="body">
-        <ul class="text-base">
-          {{
-            $t('casesVue.standard_layers')
-          }}
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{
-                $t('locationTypes.boundary_political_us_state')
-              }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li v-for="state in usStates" :key="`${state.id}`">
-                    <base-checkbox
-                      :value="appliedLocations.has(state.id)"
-                      :ccu-event="
-                        appliedLocations.has(state.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyLocation(state.id, value);
-                        }
-                      "
-                      >{{ state.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{
-                $t('locationTypes.boundary_political_us_congress')
-              }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li v-for="district in districts" :key="district.id">
-                    <base-checkbox
-                      :value="appliedLocations.has(district.id)"
-                      :ccu-event="
-                        appliedLocations.has(district.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyLocation(district.id, value);
-                        }
-                      "
-                      >{{ district.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{
-                $t('locationTypes.boundary_political_us_county')
-              }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li v-for="county in counties" :key="`${county.id}`">
-                    <base-checkbox
-                      :value="appliedLocations.has(county.id)"
-                      @input="
-                        (value) => {
-                          applyLocation(county.id, value);
-                        }
-                      "
-                      :ccu-event="
-                        appliedLocations.has(county.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      >{{ county.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{ $t('casesVue.teams') }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li v-for="team in teams" :key="`${team.id}`">
-                    <base-checkbox
-                      :value="appliedLocations.has(team.id)"
-                      :ccu-event="
-                        appliedLocations.has(team.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyTeamGeoJson(team, value);
-                        }
-                      "
-                      >{{ team.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{ $t('casesVue.incident') }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li
-                    v-for="location in currentIncident.locationModels"
-                    :key="location.id"
-                  >
-                    <base-checkbox
-                      :value="appliedLocations.has(location.id)"
-                      @input="
-                        (value) => {
-                          applyLocation(location.id, value);
-                        }
-                      "
-                      :ccu-event="
-                        appliedLocations.has(location.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      >{{ location.name }}</base-checkbox
-                    >
-                  </li>
-                  <li
-                    v-if="
-                      currentOrganization &&
-                      currentOrganization.primary_location
-                    "
-                  >
-                    <base-checkbox
-                      :value="
-                        appliedLocations.has(
-                          currentOrganization.primary_location,
-                        )
-                      "
-                      :ccu-event="
-                        appliedLocations.has(
-                          currentOrganization.primary_location,
-                        )
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyLocation(
-                            currentOrganization.primary_location,
-                            value,
-                          );
-                        }
-                      "
-                      >{{ $t('casesVue.primary_response_area') }}</base-checkbox
-                    >
-                  </li>
-                  <li
-                    v-if="
-                      currentOrganization &&
-                      currentOrganization.secondary_location
-                    "
-                  >
-                    <base-checkbox
-                      :value="
-                        appliedLocations.has(
-                          currentOrganization.secondary_location,
-                        )
-                      "
-                      :ccu-event="
-                        appliedLocations.has(
-                          currentOrganization.secondary_location,
-                        )
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyLocation(
-                            currentOrganization.secondary_location,
-                            value,
-                          );
-                        }
-                      "
-                      >{{
-                        $t('casesVue.secondary_response_area')
-                      }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-          <li class="py-2">
-            <base-dropdown
-              :trigger="'hover'"
-              :role="'sublist'"
-              :align="'right'"
-            >
-              <template slot="btn">{{ $t('casesVue.my_layers') }}</template>
-              <template slot="body">
-                <ul class="h-64 overflow-auto">
-                  <li
-                    v-for="location in organizationLocations"
-                    :key="`${location.id}`"
-                  >
-                    <base-checkbox
-                      :value="appliedLocations.has(location.id)"
-                      :ccu-event="
-                        appliedLocations.has(location.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                      @input="
-                        (value) => {
-                          applyLocation(location.id, value);
-                        }
-                      "
-                      >{{ location.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </base-dropdown>
-          </li>
-        </ul>
-      </template>
-    </base-dropdown>
-    <v-popover placement="bottom-start">
-      <base-button
-        variant="text"
-        class="text-base font-thin mx-2"
-        :text="$t('casesVue.layers')"
-        :alt="$t('casesVue.layers')"
-        ccu-icon="layers"
-        icon-size="medium"
-        icon-classes="w-4"
-      />
 
       <template #popper>
-        <ul class="text-base">
+        <div class="px-4 py-1 font-bold">
           {{
             $t('casesVue.standard_layers')
           }}
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
+        </div>
+
+        <v-menu
+          placement="right-start" trigger="hover"
+
+          instant-move
+        >
+          <div class="menu-item">
+            {{
+              $t('locationTypes.boundary_political_us_state')
+            }}
+          </div>
+
+          <template #popper>
+            <v-menu
+              placement="right-start" trigger="hover"
+
+              instant-move
             >
-              {{
-                  $t('locationTypes.boundary_political_us_state')
-                }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li v-for="state in usStates" :key="`${state.id}`">
-                    <base-checkbox
-                        :value="appliedLocations.has(state.id)"
-                        :ccu-event="
+              <div class="locations-popover">
+                <div v-for="state in usStates" :key="`${state.id}`">
+                  <base-checkbox
+                    :value="appliedLocations.has(state.id)"
+                    :ccu-event="
                         appliedLocations.has(state.id)
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                        @input="
+                    @update:modelValue="
                         (value) => {
                           applyLocation(state.id, value);
                         }
                       "
-                    >{{ state.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
+                  >{{ state.name }}</base-checkbox
+                  >
+                </div>
+              </div>
+            </v-menu>
+          </template>
+        </v-menu>
+        <v-menu
+          placement="right-start" trigger="hover"
+
+          instant-move
+        >
+          <div class="menu-item">
+            {{
+              $t('locationTypes.boundary_political_us_congress')
+            }}
+          </div>
+
+          <template #popper>
+            <v-menu
+              placement="right-start" trigger="hover"
+
+              instant-move
             >
-              {{
-                  $t('locationTypes.boundary_political_us_congress')
-                }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li v-for="district in districts" :key="district.id">
-                    <base-checkbox
-                        :value="appliedLocations.has(district.id)"
-                        :ccu-event="
+              <div class="locations-popover">
+                <div v-for="district in districts" :key="`${district.id}`">
+                  <base-checkbox
+                    :value="appliedLocations.has(district.id)"
+                    :ccu-event="
                         appliedLocations.has(district.id)
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                        @input="
+                    @update:modelValue="
                         (value) => {
                           applyLocation(district.id, value);
                         }
                       "
-                    >{{ district.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
+                  >{{ district.name }}</base-checkbox
+                  >
+                </div>
+              </div>
+            </v-menu>
+          </template>
+        </v-menu>
+        <v-menu
+          placement="right-start" trigger="hover"
+
+          instant-move
+        >
+          <div class="menu-item">
+            {{
+              $t('locationTypes.boundary_political_us_county')
+            }}
+          </div>
+
+          <template #popper>
+            <v-menu
+              placement="right-start" trigger="hover"
+
+              instant-move
             >
-              {{
-                  $t('locationTypes.boundary_political_us_county')
-                }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li v-for="county in counties" :key="`${county.id}`">
-                    <base-checkbox
-                        :value="appliedLocations.has(county.id)"
-                        @input="
+              <div class="locations-popover">
+                <div v-for="county in counties" :key="`${county.id}`">
+                  <base-checkbox
+                    :value="appliedLocations.has(county.id)"
+                    @update:modelValue="
                         (value) => {
                           applyLocation(county.id, value);
                         }
                       "
-                        :ccu-event="
+                    :ccu-event="
                         appliedLocations.has(county.id)
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                    >{{ county.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
-            >
-              {{ $t('casesVue.teams') }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li v-for="team in teams" :key="`${team.id}`">
-                    <base-checkbox
-                        :value="appliedLocations.has(team.id)"
-                        :ccu-event="
-                        appliedLocations.has(team.id)
-                          ? 'user_ui-turn-off_layer'
-                          : 'user_ui-turn-on_layer'
-                      "
-                        @input="
-                        (value) => {
-                          applyTeamGeoJson(team, value);
-                        }
-                      "
-                    >{{ team.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
-            >
-              {{ $t('casesVue.incident') }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li
-                      v-for="location in currentIncident.locationModels"
-                      :key="location.id"
+                  >{{ county.name }}</base-checkbox
                   >
-                    <base-checkbox
-                        :value="appliedLocations.has(location.id)"
-                        @input="
+                </div>
+              </div>
+            </v-menu>
+          </template>
+        </v-menu>
+        <v-menu
+          placement="right-start" trigger="hover"
+
+          instant-move
+        >
+          <div class="menu-item">
+            {{
+              $t('casesVue.incident')
+            }}
+          </div>
+
+          <template #popper>
+            <v-menu
+              placement="right-start" trigger="hover"
+
+              instant-move
+            >
+              <div class="locations-popover">
+                <div
+                  v-for="location in currentIncident.locationModels"
+                  :key="location.id"
+                >
+                  <base-checkbox
+                    :value="appliedLocations.has(location.id)"
+                    @update:modelValue="
                         (value) => {
                           applyLocation(location.id, value);
                         }
                       "
-                        :ccu-event="
+                    :ccu-event="
                         appliedLocations.has(location.id)
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                    >{{ location.name }}</base-checkbox
-                    >
-                  </li>
-                  <li
-                      v-if="
+                  >{{ location.name }}</base-checkbox
+                  >
+                </div>
+                <div
+                  v-if="
                       currentOrganization &&
                       currentOrganization.primary_location
                     "
-                  >
-                    <base-checkbox
-                        :value="
+                >
+                  <base-checkbox
+                    :value="
                         appliedLocations.has(
                           currentOrganization.primary_location,
                         )
                       "
-                        :ccu-event="
+                    :ccu-event="
                         appliedLocations.has(
                           currentOrganization.primary_location,
                         )
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                        @input="
+                    @update:modelValue="
                         (value) => {
                           applyLocation(
                             currentOrganization.primary_location,
@@ -478,29 +220,29 @@
                           );
                         }
                       "
-                    >{{ $t('casesVue.primary_response_area') }}</base-checkbox
-                    >
-                  </li>
-                  <li
-                      v-if="
+                  >{{ $t('casesVue.primary_response_area') }}</base-checkbox
+                  >
+                </div>
+                <div
+                  v-if="
                       currentOrganization &&
                       currentOrganization.secondary_location
                     "
-                  >
-                    <base-checkbox
-                        :value="
+                >
+                  <base-checkbox
+                    :value="
                         appliedLocations.has(
                           currentOrganization.secondary_location,
                         )
                       "
-                        :ccu-event="
+                    :ccu-event="
                         appliedLocations.has(
                           currentOrganization.secondary_location,
                         )
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                        @input="
+                    @update:modelValue="
                         (value) => {
                           applyLocation(
                             currentOrganization.secondary_location,
@@ -508,47 +250,56 @@
                           );
                         }
                       "
-                    >{{
-                        $t('casesVue.secondary_response_area')
-                      }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-          <li class="py-2">
-            <v-popover
-                placement="right-start"
-                instant-move
-            >
-              {{ $t('casesVue.my_layers') }}
-              <template #popper>
-                <ul class="h-64 overflow-auto">
-                  <li
-                      v-for="location in organizationLocations"
-                      :key="`${location.id}`"
+                  >{{
+                      $t('casesVue.secondary_response_area')
+                    }}</base-checkbox
                   >
-                    <base-checkbox
-                        :value="appliedLocations.has(location.id)"
-                        :ccu-event="
+                </div>
+              </div>
+            </v-menu>
+          </template>
+        </v-menu>
+        <v-menu
+          placement="right-start" trigger="hover"
+
+          instant-move
+        >
+          <div class="menu-item">
+            {{
+              $t('casesVue.my_layers')
+            }}
+          </div>
+
+          <template #popper>
+            <v-menu
+              placement="right-start" trigger="hover"
+
+              instant-move
+            >
+              <div class="locations-popover">
+                <div
+                  v-for="location in organizationLocations"
+                  :key="`${location.id}`"
+                >
+                  <base-checkbox
+                    :value="appliedLocations.has(location.id)"
+                    :ccu-event="
                         appliedLocations.has(location.id)
                           ? 'user_ui-turn-off_layer'
                           : 'user_ui-turn-on_layer'
                       "
-                        @input="
+                    @update:modelValue="
                         (value) => {
                           applyLocation(location.id, value);
                         }
                       "
-                    >{{ location.name }}</base-checkbox
-                    >
-                  </li>
-                </ul>
-              </template>
-            </v-popover>
-          </li>
-        </ul>
+                  >{{ location.name }}</base-checkbox
+                  >
+                </div>
+              </div>
+            </v-menu>
+          </template>
+        </v-menu>
       </template>
     </v-popover>
     <base-button
@@ -802,4 +553,12 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.locations-popover {
+  @apply h-64 overflow-auto p-3 w-64
+}
+
+.menu-item {
+  @apply cursor-pointer px-4 py-2 hover:bg-crisiscleanup-light-grey
+}
+</style>

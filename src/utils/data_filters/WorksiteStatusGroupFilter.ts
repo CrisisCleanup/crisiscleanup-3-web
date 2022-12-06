@@ -1,11 +1,13 @@
-import Filter from '@/utils/data_filters/Filter';
-import { snakeToTitleCase } from '@/filters';
-import enums from '@/store/modules/enums';
-import User from '@/models/User';
+import Filter from './Filter';
+import { snakeToTitleCase } from '../../filters';
+import enums from '../../store/modules/enums';
+import User from '../../models/User';
+import { useI18n } from 'vue-i18n';
+import { store } from '../../store';
 
 export default class WorksiteStatusGroupFilter extends Filter {
   packFunction() {
-    const currentUser = User.find(window.vue.$store.getters['auth/userId']);
+    const currentUser = User.find(store.getters['auth/userId']);
     const packed = {};
     if (this.data.unclaimed) {
       packed.work_type__claimed_by__isnull = true;
@@ -57,7 +59,7 @@ export default class WorksiteStatusGroupFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = `${window.vue.$i18n.t(
+        labels[key] = `${useI18n().t(
           'worksiteFilters.status',
         )}: ${snakeToTitleCase(key)}`;
       });

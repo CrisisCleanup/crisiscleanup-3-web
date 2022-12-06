@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
-import Filter from '@/utils/data_filters/Filter';
+import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
 
 export default class WorksiteDatesFilter extends Filter {
   packFunction() {
@@ -31,22 +32,22 @@ export default class WorksiteDatesFilter extends Filter {
     return omitBy(
       {
         created_start: this.data.created_start
-          ? `${window.vue.$i18n.t('worksiteFilters.from')}: ${moment(
+          ? `${useI18n().t('worksiteFilters.from')}: ${moment(
               this.data.created_start,
             ).format('DD/MM/YYYY')}`
           : null,
         created_end: this.data.created_end
-          ? `${window.vue.$i18n.t('worksiteFilters.to')}: ${moment(
+          ? `${useI18n().t('worksiteFilters.to')}: ${moment(
               this.data.created_end,
             ).format('DD/MM/YYYY')}`
           : null,
         updated_start: this.data.updated_start
-          ? `${window.vue.$i18n.t('worksiteFilters.from')}: ${moment(
+          ? `${useI18n().t('worksiteFilters.from')}: ${moment(
               this.data.updated_start,
             ).format('DD/MM/YYYY')}`
           : null,
         updated_end: this.data.updated_end
-          ? `${window.vue.$i18n.t('worksiteFilters.to')}: ${moment(
+          ? `${useI18n().t('worksiteFilters.to')}: ${moment(
               this.data.updated_end,
             ).format('DD/MM/YYYY')}`
           : null,

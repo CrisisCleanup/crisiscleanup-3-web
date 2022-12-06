@@ -1,4 +1,5 @@
-import Filter from '@/utils/data_filters/Filter';
+import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
 
 export default class WorksiteMyTeamFilter extends Filter {
   packFunction() {
@@ -21,7 +22,7 @@ export default class WorksiteMyTeamFilter extends Filter {
       return {};
     }
     return {
-      my_team: window.vue.$i18n.t('worksiteFilters.my_team'),
+      my_team: useI18n().t('worksiteFilters.my_team'),
     };
   }
 

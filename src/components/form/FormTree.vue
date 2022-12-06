@@ -15,7 +15,7 @@
             :value="
               Boolean(dynamicFields[field.field_key]) || hasSelectedChildren
             "
-            @input="
+            @update:modelValue="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
                 updateChildren(field, value);
@@ -164,9 +164,9 @@
             text-area
             :disabled="false"
             :rows="4"
-            :value="dynamicFields[field.field_key]"
+            :model-value="dynamicFields[field.field_key]"
             :placeholder="field.placeholder_t || field.label_t"
-            @input="
+            @update:modelValue="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
               }
@@ -178,7 +178,7 @@
         <div :key="field.field_key" class="form-field flex items-center">
           <base-checkbox
             :value="dynamicFields[field.field_key]"
-            @input="
+            @update:modelValue="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
               }

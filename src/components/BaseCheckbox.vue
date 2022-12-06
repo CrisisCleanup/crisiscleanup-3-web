@@ -41,13 +41,13 @@ export default defineComponent({
     });
 
     function update(e) {
-      context.emit('input', e.target.checked);
+      context.emit('update:modelValue', e.target.checked);
       isInvalid.value = input?.value?.checkValidity() || false;
       // logEvent(props.ccuEvent);
     }
 
     function change(e) {
-      context.emit('change', e.target.checked);
+      context.emit('update:modelValue', e.target.checked);
       isInvalid.value = input?.value?.checkValidity() || false;
     }
 

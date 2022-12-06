@@ -1,5 +1,6 @@
-import Filter from '@/utils/data_filters/Filter';
-import { snakeToTitleCase } from '@/filters';
+import Filter from './Filter';
+import { snakeToTitleCase } from '../../filters';
+import { useI18n } from 'vue-i18n';
 
 export default class WorksiteMissingWorkTypeFilter extends Filter {
   packFunction() {
@@ -27,7 +28,7 @@ export default class WorksiteMissingWorkTypeFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = `${window.vue.$i18n.t(
+        labels[key] = `${useI18n().t(
           'worksiteFilters.status',
         )}: ${snakeToTitleCase(key)}`;
       });
