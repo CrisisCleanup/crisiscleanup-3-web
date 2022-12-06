@@ -12,7 +12,7 @@
       <template v-if="['h5'].includes(field.html_type)">
         <div class="form-field flex items-center justify-between">
           <base-checkbox
-            :value="
+            :model-value="
               Boolean(dynamicFields[field.field_key]) || hasSelectedChildren
             "
             @update:modelValue="
@@ -177,7 +177,7 @@
       <template v-if="field.html_type === 'checkbox'">
         <div :key="field.field_key" class="form-field flex items-center">
           <base-checkbox
-            :value="dynamicFields[field.field_key]"
+            :model-value="dynamicFields[field.field_key]"
             @update:modelValue="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });

@@ -3,7 +3,7 @@
     <slot></slot>
     <input
       type="checkbox"
-      :checked="value"
+      :checked="modelValue"
       ref="input"
       class="checkmark-input"
       :class="isInvalid ? 'checkmark-input-invalid' : ''"
@@ -58,7 +58,7 @@ export default defineComponent({
     };
   },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false,
     },

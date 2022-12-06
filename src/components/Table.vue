@@ -9,7 +9,7 @@
         v-if="enableSelection && $mq !== 'sm'"
         class="flex items-center p-2 border-b"
       >
-        <base-checkbox class="mb-5" @input="setAllChecked" />
+        <base-checkbox class="mb-5" @update:modelValue="setAllChecked" />
       </div>
       <div
         v-if="hasRowDetails && $mq !== 'sm'"
@@ -123,10 +123,10 @@
           class="flex items-center p-2 border-b"
         >
           <base-checkbox
-            :value="selectedItems.has(item.id)"
+            :model-value="selectedItems.has(item.id)"
             class="mb-5"
             data-cy="tableview_actionSelect"
-            @input="
+            @update:modelValue="
               (value) => {
                 setChecked(item, value);
               }

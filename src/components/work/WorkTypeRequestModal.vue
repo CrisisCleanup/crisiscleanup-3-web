@@ -53,8 +53,8 @@
       >
         <base-checkbox
           class="mb-3"
-          :value="requestedWorkTypes.has(work_type_to_request.work_type)"
-          @input="
+          :model-value="requestedWorkTypes.has(work_type_to_request.work_type)"
+          @update:modelValue="
             (value) => {
               setSelectedWorkTypeRequest(work_type_to_request.work_type, value);
             }

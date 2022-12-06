@@ -3,7 +3,7 @@
     <div class="mt-2" v-if="pdas && pdas.length > 0">
       <base-checkbox
         class="pb-2"
-        :value="showingHeatMap"
+        :model-value="showingHeatMap"
         @update:modelValue="
           showingHeatMap = $event;
           $emit('toggleHeatMap', $event ? pdas : null);
@@ -62,7 +62,7 @@
               <div class="locations-popover">
                 <div v-for="state in usStates" :key="`${state.id}`">
                   <base-checkbox
-                    :value="appliedLocations.has(state.id)"
+                    :model-value="appliedLocations.has(state.id)"
                     :ccu-event="
                         appliedLocations.has(state.id)
                           ? 'user_ui-turn-off_layer'
@@ -100,7 +100,7 @@
               <div class="locations-popover">
                 <div v-for="district in districts" :key="`${district.id}`">
                   <base-checkbox
-                    :value="appliedLocations.has(district.id)"
+                    :model-value="appliedLocations.has(district.id)"
                     :ccu-event="
                         appliedLocations.has(district.id)
                           ? 'user_ui-turn-off_layer'
@@ -138,7 +138,7 @@
               <div class="locations-popover">
                 <div v-for="county in counties" :key="`${county.id}`">
                   <base-checkbox
-                    :value="appliedLocations.has(county.id)"
+                    :model-value="appliedLocations.has(county.id)"
                     @update:modelValue="
                         (value) => {
                           applyLocation(county.id, value);
@@ -179,7 +179,7 @@
                   :key="location.id"
                 >
                   <base-checkbox
-                    :value="appliedLocations.has(location.id)"
+                    :model-value="appliedLocations.has(location.id)"
                     @update:modelValue="
                         (value) => {
                           applyLocation(location.id, value);
@@ -200,7 +200,7 @@
                     "
                 >
                   <base-checkbox
-                    :value="
+                    :model-value="
                         appliedLocations.has(
                           currentOrganization.primary_location,
                         )
@@ -230,7 +230,7 @@
                     "
                 >
                   <base-checkbox
-                    :value="
+                    :model-value="
                         appliedLocations.has(
                           currentOrganization.secondary_location,
                         )
@@ -282,7 +282,7 @@
                   :key="`${location.id}`"
                 >
                   <base-checkbox
-                    :value="appliedLocations.has(location.id)"
+                    :model-value="appliedLocations.has(location.id)"
                     :ccu-event="
                         appliedLocations.has(location.id)
                           ? 'user_ui-turn-off_layer'

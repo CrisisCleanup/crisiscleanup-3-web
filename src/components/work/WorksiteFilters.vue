@@ -206,8 +206,8 @@
               </div>
               <base-checkbox
                 class="block my-1"
-                :value="filters.statusGroups.data['open']"
-                @input="
+                :model-value="filters.statusGroups.data['open']"
+                @update:modelValue="
                   (value) => {
                     setOpenClosed(value, 'open');
                   }
@@ -216,8 +216,8 @@
               </base-checkbox>
               <base-checkbox
                 class="block my-1"
-                :value="filters.statusGroups.data['closed']"
-                @input="
+                :model-value="filters.statusGroups.data['closed']"
+                @update:modelValue="
                   (value) => {
                     setOpenClosed(value, 'closed');
                   }
@@ -237,8 +237,8 @@
               >
                 <base-checkbox
                   class="block my-1"
-                  :value="filters.statuses.data[status.status]"
-                  @input="
+                  :model-value="filters.statuses.data[status.status]"
+                  @update:modelValue="
                     (value) => {
                       filters.statuses.data[status.status] = value;
                       filters.statuses.data = {
@@ -260,8 +260,8 @@
                 v-for="flag in flagTypes"
                 :key="flag"
                 class="block my-1"
-                :value="filters.flags.data[flag]"
-                @input="
+                :model-value="filters.flags.data[flag]"
+                @update:modelValue="
                   (value) => {
                     filters.flags.data[flag] = value;
                     filters.flags.data = { ...filters.flags.data };
@@ -296,8 +296,8 @@
                 ]"
                 :key="data"
                 class="block my-1"
-                :value="filters.form_data.data[data]"
-                @input="
+                :model-value="filters.form_data.data[data]"
+                @update:modelValue="
                   (value) => {
                     filters.form_data.data[data] = value;
                     filters.form_data.data = { ...filters.form_data.data };
@@ -342,7 +342,7 @@
                             :key="option.value"
                             :span="8"
                           >
-                            <base-checkbox :value="option.value">
+                            <base-checkbox :model-value="option.value">
                               {{ option.name_t }}
                             </base-checkbox>
                           </div>
@@ -362,7 +362,7 @@
                             :key="option.value"
                             :span="8"
                           >
-                            <base-checkbox :value="option.value">
+                            <base-checkbox :model-value="option.value">
                               {{ option.name_t }}
                             </base-checkbox>
                           </div>
@@ -412,8 +412,8 @@
                 v-for="team in teams"
                 :key="`${team.id}`"
                 class="block my-1"
-                :value="filters.teams.data[team.id]"
-                @input="
+                :model-value="filters.teams.data[team.id]"
+                @update:modelValue="
                   (value) => {
                     filters.teams.data[team.id] = value;
                     filters.teams.data = { ...filters.teams.data };
@@ -453,8 +453,8 @@
                 <div v-for="location in locations" :key="`${location.id}`">
                   <base-checkbox
                     class="block my-1"
-                    :value="filters.locations.data[location.id]"
-                    @input="
+                    :model-value="filters.locations.data[location.id]"
+                    @update:modelValue="
                       (value) => {
                         filters.locations.data[location.id] = value;
                         filters.locations.data = {
