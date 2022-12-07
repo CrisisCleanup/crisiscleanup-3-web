@@ -3,6 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=16 <17",
+    "pnpm": "<8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CrisisCleanup/crisiscleanup-4-web.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
