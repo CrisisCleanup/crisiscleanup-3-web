@@ -12,6 +12,7 @@
     "url": "git://github.com/CrisisCleanup/crisiscleanup-4-web.git"
   },
   "scripts": {
+    "prepare": "is-ci || husky install",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
@@ -111,5 +112,14 @@
     "typescript": "*",
     "vite": "^3.1.0",
     "vue-tsc": "^0.40.4"
+  },
+  "lint-staged": {
+    "*.{vue,json,ts?(x)}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{y?(a)ml,?(m)js}": [
+      "prettier --write"
+    ]
   }
 }
