@@ -21,9 +21,11 @@
           class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey"
         >
           <template v-for="(filter, key) in filters">
-            <template v-for="(label, identifier) in filter.labels">
+            <template
+              v-for="(label, identifier) in filter.labels"
+              :key="key + identifier"
+            >
               <tag
-                :key="key + identifier"
                 closeable
                 class="m-1"
                 @closed="
@@ -246,7 +248,7 @@
                       };
                     }
                   "
-                  >{{ status.status | getStatusName }}
+                  >{{ getStatusName(status.status) }}
                 </base-checkbox>
               </div>
             </div>
@@ -327,8 +329,11 @@
                 />
               </div>
               <div v-if="expanded[f.key]">
-                <template v-for="field in getFieldsForType(f.key)">
-                  <div :key="field.field_key" class="border-b py-3">
+                <template
+                  :key="field.field_key"
+                  v-for="field in getFieldsForType(f.key)"
+                >
+                  <div class="border-b py-3">
                     <template v-if="field.html_type === 'select'">
                       <div class="font-bold">
                         {{ field.label_t }}
@@ -477,34 +482,25 @@
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
-                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :formatter="{
+                    date: 'YYYY-MM-DD',
+                    month: 'MMM',
+                  }"
                   :placeholder="$t('worksiteFilters.start_date')"
-                  v-model="filters.dates.data.created_start"
+                  v-model="filters.dates.data.created"
                 ></datepicker>
-                <datepicker
-                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
-                  wrapper-class="flex-grow"
-                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('worksiteFilters.end_date')"
-                  v-model="filters.dates.data.created_end"
-                ></datepicker>
-
                 <div class="my-1 text-base">
                   {{ $t('worksiteFilters.updated') }}
                 </div>
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
-                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :formatter="{
+                    date: 'YYYY-MM-DD',
+                    month: 'MMM',
+                  }"
                   :placeholder="$t('worksiteFilters.start_date')"
-                  v-model="filters.dates.data.updated_start"
-                ></datepicker>
-                <datepicker
-                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
-                  wrapper-class="flex-grow"
-                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('worksiteFilters.end_date')"
-                  v-model="filters.dates.data.updated_end"
+                  v-model="filters.dates.data.updated"
                 ></datepicker>
               </div>
             </div>
@@ -512,54 +508,54 @@
         </div>
       </div>
     </div>
-    <div
-      slot="footer"
-      class="flex items-center justify-center p-2 bg-white border-t"
-    >
-      <base-button
-        :text="$t('actions.cancel')"
-        :alt="$t('actions.cancel')"
-        size="medium"
-        class="m-1 border-2 border-black px-6 py-2"
-        :action="
-          () => {
-            $emit('closedFilters');
-          }
-        "
-      />
-      <base-button
-        :text="$t('actions.apply_filters')"
-        :alt="$t('actions.apply_filters')"
-        ccu-event="user_ui-turn-on_filter"
-        size="medium"
-        class="m-1 p-3 px-6"
-        variant="solid"
-        :action="updateFilters"
-      />
-    </div>
+    <template #footer>
+      <div class="flex items-center justify-center p-2 bg-white border-t">
+        <base-button
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+          size="medium"
+          class="m-1 border-2 border-black px-6 py-2"
+          :action="
+            () => {
+              $emit('closedFilters');
+            }
+          "
+        />
+        <base-button
+          :text="$t('actions.apply_filters')"
+          :alt="$t('actions.apply_filters')"
+          ccu-event="user_ui-turn-on_filter"
+          size="medium"
+          class="m-1 p-3 px-6"
+          variant="solid"
+          :action="updateFilters"
+        />
+      </div>
+    </template>
   </modal>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Team from '@/models/Team';
-import WorksiteFieldsFilter from '../utils/data_filters/WorksiteFieldsFilter';
-import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
-import FormDataFilter from '../utils/data_filters/FormDataFilter';
-import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
-import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
-import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
-import WorksiteMissingWorkTypeFilter from '../utils/data_filters/WorksiteMissingWorkTypeFilter';
-import WorksiteMyTeamFilter from '../utils/data_filters/WorksiteMyTeamFilter';
-import SurvivorFilter from '../utils/data_filters/SurvivorFilter';
-import WorksiteTeamsFilter from '../utils/data_filters/WorksiteTeamsFilter';
-// import { UserMixin } from '../mixins';
-import WorksiteDatesFilter from '@/utils/data_filters/WorksiteDatesFilter';
-import { ref } from 'vue';
+import { useStore } from 'vuex';
+import Team from '../../models/Team';
+import WorksiteFieldsFilter from '../../utils/data_filters/WorksiteFieldsFilter';
+import WorksiteFlagsFilter from '../../utils/data_filters/WorksiteFlagsFilter';
+import FormDataFilter from '../../utils/data_filters/FormDataFilter';
+import WorksiteStatusGroupFilter from '../../utils/data_filters/WorksiteStatusGroupFilter';
+import WorksiteStatusFilter from '../../utils/data_filters/WorksiteStatusFilter';
+import WorksiteLocationsFilter from '../../utils/data_filters/WorksiteLocationsFilter';
+import WorksiteMissingWorkTypeFilter from '../../utils/data_filters/WorksiteMissingWorkTypeFilter';
+import WorksiteMyTeamFilter from '../../utils/data_filters/WorksiteMyTeamFilter';
+import SurvivorFilter from '../../utils/data_filters/SurvivorFilter';
+import WorksiteTeamsFilter from '../../utils/data_filters/WorksiteTeamsFilter';
+import WorksiteDatesFilter from '../../utils/data_filters/WorksiteDatesFilter';
+import { computed, onMounted, ref, watch } from 'vue';
+import { getStatusName } from '../../filters/index';
+import LitepieDatepicker from 'litepie-datepicker';
 
 export default {
   name: 'WorksiteFilters',
-  // mixins: [UserMixin],
+  components: { datepicker: LitepieDatepicker },
   props: {
     incident: {
       type: Object,
@@ -583,224 +579,9 @@ export default {
       type: Boolean,
     },
   },
-  computed: {
-    incidentTypes() {
-      if (this.incident && this.incident.form_fields) {
-        const fieldsWithTypes = this.incident.form_fields.filter((field) => {
-          return Boolean(field.if_selected_then_work_type);
-        });
-
-        const types = new Set(
-          fieldsWithTypes.map((t) => t.if_selected_then_work_type),
-        );
-
-        return Array.from(types).map((workType) => {
-          return this.workTypes.find((type) => type.key === workType);
-        });
-      }
-      return [];
-    },
-    fieldsCount() {
-      return this.filters.fields.count;
-    },
-    statusCount() {
-      return this.filters.statuses.count;
-    },
-    statusGroupCount() {
-      return this.filters.statusGroups.count;
-    },
-    flagsCount() {
-      return this.filters.flags.count;
-    },
-    formDataCount() {
-      return this.filters.form_data.count;
-    },
-    locationsCount() {
-      return this.filters.locations.count;
-    },
-    missingWorkTypeCount() {
-      return this.filters.missingWorkType.count;
-    },
-    teamsCount() {
-      return this.filters.teams.count;
-    },
-    myTeamCount() {
-      return this.filters.my_team.count;
-    },
-    datesCount() {
-      return this.filters.dates.count;
-    },
-    survivorCount() {
-      return this.filters.survivors.count;
-    },
-    filtersCount() {
-      return (
-        this.fieldsCount +
-        this.statusCount +
-        this.statusGroupCount +
-        this.locationsCount +
-        this.flagsCount +
-        this.formDataCount +
-        this.missingWorkTypeCount +
-        this.teamsCount +
-        this.survivorCount +
-        this.datesCount +
-        this.myTeamCount
-      );
-    },
-    teams() {
-      return Team.all();
-    },
-    ...mapState('enums', ['statuses', 'workTypes']),
-    allStatuses() {
-      return this.statuses.map((status, index) => {
-        return {
-          ...status,
-          selectionKey: index + 1,
-        };
-      });
-    },
-  },
-  watch: {
-    currentFilters() {
-      this.filters = {
-        fields: new WorksiteFieldsFilter(
-          'fields',
-          (this.currentFilters.fields && this.currentFilters.fields.data) || {},
-        ),
-        statusGroups: new WorksiteStatusGroupFilter(
-          'statusGroups',
-          (this.currentFilters.statusGroups &&
-            this.currentFilters.statusGroups.data) ||
-            {},
-        ),
-        flags: new WorksiteFlagsFilter(
-          'flags',
-          (this.currentFilters.flags && this.currentFilters.flags.data) || {},
-        ),
-        form_data: new FormDataFilter(
-          'flags',
-          (this.currentFilters.form_data &&
-            this.currentFilters.form_data.data) ||
-            {},
-        ),
-        locations: new WorksiteLocationsFilter(
-          'locations',
-          (this.currentFilters.locations &&
-            this.currentFilters.locations.data) ||
-            {},
-        ),
-        statuses: new WorksiteStatusFilter(
-          'statuses',
-          (this.currentFilters.statuses && this.currentFilters.statuses.data) ||
-            {},
-        ),
-        my_team: new WorksiteMyTeamFilter(
-          'my_team',
-          (this.currentFilters.my_team && this.currentFilters.my_team.data) ||
-            {},
-        ),
-        dates: new WorksiteDatesFilter(
-          'dates',
-          (this.currentFilters.dates && this.currentFilters.dates.data) || {},
-        ),
-        survivors: new SurvivorFilter(
-          'survivors',
-          (this.currentFilters.survivors &&
-            this.currentFilters.survivors.data) ||
-            {},
-        ),
-        teams: new WorksiteTeamsFilter(
-          'teams',
-          (this.currentFilters.teams && this.currentFilters.teams.data) || {},
-        ),
-        missingWorkType: new WorksiteMissingWorkTypeFilter(
-          'missingWorkType',
-          (this.currentFilters.missingWorkType &&
-            this.currentFilters.missingWorkType.data) ||
-            {},
-        ),
-      };
-      this.$emit('updateFiltersCount', this.filtersCount);
-    },
-  },
-  methods: {
-    updateFilters() {
-      this.$emit('updatedFilters', {
-        filters: {
-          ...this.filters,
-        },
-        count: this.filtersCount,
-      });
-
-      // eslint-disable-next-line no-restricted-syntax
-      for (const [key, value] of Object.entries(this.filters.fields.data)) {
-        if (!value) {
-          this.expanded[key] = false;
-        }
-      }
-    },
-    /* eslint-enable no-restricted-syntax */
-    setOpenClosed(value, status) {
-      this.filters.statusGroups.data.open = false;
-      this.filters.statusGroups.data.closed = false;
-      if (value) {
-        this.filters.statusGroups.data[status] = value;
-      }
-      this.filters.statusGroups.data = {
-        ...this.filters.statusGroups.data,
-      };
-    },
-    expandSection(key) {
-      this.expanded[key] = !this.expanded[key];
-      this.expanded = { ...this.expanded };
-    },
-    setSubFields(workType, field, values) {
-      this.sub_fields[workType][field] = values;
-    },
-    getFieldsForType(workType) {
-      if (this.incident && this.incident.form_fields) {
-        return this.incident.form_fields.filter((field) => {
-          const parent = this.incident.form_fields.find((element) => {
-            return element.field_key === field.field_parent_key;
-          });
-
-          // eslint-disable-next-line camelcase
-          let { if_selected_then_work_type } = field;
-          if (parent) {
-            if_selected_then_work_type = parent.if_selected_then_work_type;
-          }
-          return if_selected_then_work_type === workType;
-        });
-      }
-      return [];
-    },
-    clearAllFilters() {
-      this.filters = {
-        fields: new WorksiteFieldsFilter('fields', {}),
-        statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
-        flags: new WorksiteFlagsFilter('flags', {}),
-        form_data: new FormDataFilter('form_data', {}),
-        statuses: new WorksiteStatusFilter('statuses', {}),
-        locations: new WorksiteLocationsFilter('locations', {}),
-        teams: new WorksiteTeamsFilter('teams', {}),
-        my_team: new WorksiteMyTeamFilter('my_team', {}),
-        dates: new WorksiteDatesFilter('dates', {}),
-        survivors: new SurvivorFilter('survivors', {}),
-        missingWorkType: new WorksiteMissingWorkTypeFilter(
-          'missingWorkType',
-          {},
-        ),
-      };
-    },
-  },
-  mounted() {
-    if (Object.keys(this.currentFilters).length === 0) {
-      this.clearAllFilters();
-    }
-  },
 
   setup(props, { emit }) {
+    const store = useStore();
     const filters = ref({
       fields: {},
       statuses: {},
@@ -827,11 +608,252 @@ export default {
       'flag.worksite_wrong_incident',
     ];
 
+    const incidentTypes = computed(() => {
+      if (props.incident && props.incident.form_fields) {
+        const fieldsWithTypes = props.incident.form_fields.filter((field) => {
+          return Boolean(field.if_selected_then_work_type);
+        });
+
+        const types = new Set(
+          fieldsWithTypes.map((t) => t.if_selected_then_work_type),
+        );
+
+        return Array.from(types).map((workType) => {
+          return store.getters['enums/workTypes'].find(
+            (type) => type.key === workType,
+          );
+        });
+      }
+      return [];
+    });
+    const fieldsCount = computed(() => {
+      return filters.value.fields.count;
+    });
+    const statusCount = computed(() => {
+      return filters.value.statuses.count;
+    });
+    const statusGroupCount = computed(() => {
+      return filters.value.statusGroups.count;
+    });
+    const flagsCount = computed(() => {
+      return filters.value.flags.count;
+    });
+    const formDataCount = computed(() => {
+      return filters.value.form_data.count;
+    });
+    const locationsCount = computed(() => {
+      return filters.value.locations.count;
+    });
+    const missingWorkTypeCount = computed(() => {
+      return filters.value.missingWorkType.count;
+    });
+    const teamsCount = computed(() => {
+      return filters.value.teams.count;
+    });
+    const myTeamCount = computed(() => {
+      return filters.value.my_team.count;
+    });
+    const datesCount = computed(() => {
+      return filters.value.dates.count;
+    });
+    const survivorCount = computed(() => {
+      return filters.value.survivors.count;
+    });
+    const teams = computed(() => {
+      return Team.all();
+    });
+    const filtersCount = computed(() => {
+      return (
+        fieldsCount.value +
+        statusCount.value +
+        statusGroupCount.value +
+        locationsCount.value +
+        flagsCount.value +
+        formDataCount.value +
+        missingWorkTypeCount.value +
+        teamsCount.value +
+        survivorCount.value +
+        datesCount.value +
+        myTeamCount.value
+      );
+    });
+    const allStatuses = computed(() => {
+      return store.getters['enums/statuses'].map((status, index) => {
+        return {
+          ...status,
+          selectionKey: index + 1,
+        };
+      });
+    });
+
+    watch(
+      () => props.currentFilters,
+      () => {
+        filters.value = {
+          fields: new WorksiteFieldsFilter(
+            'fields',
+            (props.currentFilters.fields && props.currentFilters.fields.data) ||
+              {},
+          ),
+          statusGroups: new WorksiteStatusGroupFilter(
+            'statusGroups',
+            (props.currentFilters.statusGroups &&
+              props.currentFilters.statusGroups.data) ||
+              {},
+          ),
+          flags: new WorksiteFlagsFilter(
+            'flags',
+            (props.currentFilters.flags && props.currentFilters.flags.data) ||
+              {},
+          ),
+          form_data: new FormDataFilter(
+            'flags',
+            (props.currentFilters.form_data &&
+              props.currentFilters.form_data.data) ||
+              {},
+          ),
+          locations: new WorksiteLocationsFilter(
+            'locations',
+            (props.currentFilters.locations &&
+              props.currentFilters.locations.data) ||
+              {},
+          ),
+          statuses: new WorksiteStatusFilter(
+            'statuses',
+            (props.currentFilters.statuses &&
+              props.currentFilters.statuses.data) ||
+              {},
+          ),
+          my_team: new WorksiteMyTeamFilter(
+            'my_team',
+            (props.currentFilters.my_team &&
+              props.currentFilters.my_team.data) ||
+              {},
+          ),
+          dates: new WorksiteDatesFilter(
+            'dates',
+            (props.currentFilters.dates && props.currentFilters.dates.data) ||
+              {},
+          ),
+          survivors: new SurvivorFilter(
+            'survivors',
+            (props.currentFilters.survivors &&
+              props.currentFilters.survivors.data) ||
+              {},
+          ),
+          teams: new WorksiteTeamsFilter(
+            'teams',
+            (props.currentFilters.teams && props.currentFilters.teams.data) ||
+              {},
+          ),
+          missingWorkType: new WorksiteMissingWorkTypeFilter(
+            'missingWorkType',
+            (props.currentFilters.missingWorkType &&
+              props.currentFilters.missingWorkType.data) ||
+              {},
+          ),
+        };
+        emit('updateFiltersCount', filtersCount.value);
+      },
+    );
+
+    function updateFilters() {
+      emit('updatedFilters', {
+        filters: {
+          ...filters.value,
+        },
+        count: filtersCount.value,
+      });
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [key, value] of Object.entries(filters.value.fields.data)) {
+        if (!value) {
+          expanded.value[key] = false;
+        }
+      }
+    }
+    function setOpenClosed(value, status) {
+      filters.value.statusGroups.data.open = false;
+      filters.value.statusGroups.data.closed = false;
+      if (value) {
+        filters.value.statusGroups.data[status] = value;
+      }
+      filters.value.statusGroups.data = {
+        ...filters.value.statusGroups.data,
+      };
+    }
+    function expandSection(key) {
+      expanded.value[key] = !expanded.value[key];
+      expanded.value = { ...expanded.value };
+    }
+    function getFieldsForType(workType) {
+      if (props.incident && props.incident.form_fields) {
+        return props.incident.form_fields.filter((field) => {
+          const parent = props.incident.form_fields.find((element) => {
+            return element.field_key === field.field_parent_key;
+          });
+
+          // eslint-disable-next-line camelcase
+          let { if_selected_then_work_type } = field;
+          if (parent) {
+            if_selected_then_work_type = parent.if_selected_then_work_type;
+          }
+          return if_selected_then_work_type === workType;
+        });
+      }
+      return [];
+    }
+    function clearAllFilters() {
+      filters.value = {
+        fields: new WorksiteFieldsFilter('fields', {}),
+        statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
+        flags: new WorksiteFlagsFilter('flags', {}),
+        form_data: new FormDataFilter('form_data', {}),
+        statuses: new WorksiteStatusFilter('statuses', {}),
+        locations: new WorksiteLocationsFilter('locations', {}),
+        teams: new WorksiteTeamsFilter('teams', {}),
+        my_team: new WorksiteMyTeamFilter('my_team', {}),
+        dates: new WorksiteDatesFilter('dates', {}),
+        survivors: new SurvivorFilter('survivors', {}),
+        missingWorkType: new WorksiteMissingWorkTypeFilter(
+          'missingWorkType',
+          {},
+        ),
+      };
+    }
+
+    onMounted(() => {
+      if (Object.keys(props.currentFilters).length === 0) {
+        clearAllFilters();
+      }
+    });
+
     return {
       filters,
       currentSection,
       expanded,
       flagTypes,
+      incidentTypes,
+      fieldsCount,
+      statusCount,
+      statusGroupCount,
+      flagsCount,
+      formDataCount,
+      locationsCount,
+      missingWorkTypeCount,
+      teamsCount,
+      myTeamCount,
+      datesCount,
+      survivorCount,
+      teams,
+      filtersCount,
+      allStatuses,
+      updateFilters,
+      setOpenClosed,
+      expandSection,
+      getFieldsForType,
+      clearAllFilters,
+      getStatusName,
     };
   },
 };

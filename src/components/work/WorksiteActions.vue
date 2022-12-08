@@ -321,16 +321,16 @@
         >{{ filtersCount }}</span
       >
     </base-button>
-<!--    <WorksiteFilters-->
-<!--      ref="worksiteFilter"-->
-<!--      :show="showingFilters"-->
-<!--      :current-filters="initalFilters"-->
-<!--      :incident="currentIncident"-->
-<!--      :locations="organizationLocations"-->
-<!--      @closedFilters="showingFilters = false"-->
-<!--      @updatedFilters="handleFilters"-->
-<!--      @updateFiltersCount="filtersCount = $event"-->
-<!--    />-->
+    <WorksiteFilters
+      ref="worksiteFilter"
+      :show="showingFilters"
+      :current-filters="initalFilters"
+      :incident="currentIncident"
+      :locations="organizationLocations"
+      @closedFilters="showingFilters = false"
+      @updatedFilters="handleFilters"
+      @updateFiltersCount="filtersCount = $event"
+    />
     <base-button
       class="text-base font-thin mx-2"
       ccu-icon="download"
@@ -350,7 +350,7 @@ import {
   ref,
   onMounted,
 } from 'vue';
-// import WorksiteFilters from '@/components/WorksiteFilters.vue';
+import WorksiteFilters from '../../components/work/WorksiteFilters.vue';
 import LocationType from '../../models/LocationType';
 import Team from '../../models/Team';
 import Incident from '../../models/Incident';
@@ -362,7 +362,7 @@ import axios from "axios";
 
 export default defineComponent({
   name: 'WorksiteActions',
-  // components: { WorksiteFilters },
+  components: { WorksiteFilters },
   setup(props, { emit }) {
     const store = useStore()
     const userId = computed(

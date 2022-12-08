@@ -505,7 +505,7 @@ export default {
   grid-area: sidebar;
   border: 1px solid #dfdfdf;
   display: none;
-  z-index: 10000;
+  z-index: 5000;
   background-color: #2d2d2d;
 }
 

@@ -10,6 +10,7 @@ import BaseButton from './components/BaseButton.vue';
 import BaseInput from './components/BaseInput.vue';
 import BaseText from './components/BaseText.vue';
 import Badge from './components/Badge.vue';
+import Tag from './components/Tag.vue';
 import FormSelect from './components/FormSelect.vue';
 import Modal from './components/Modal.vue';
 
@@ -111,6 +112,7 @@ app.component('base-button', BaseButton);
 app.component('base-input', BaseInput);
 app.component('base-text', BaseText);
 app.component('badge', Badge);
+app.component('tag', Tag);
 app.component('v-select', vSelect);
 app.component('authenticated-layout', Authenticated);
 app.component('form-select', FormSelect);

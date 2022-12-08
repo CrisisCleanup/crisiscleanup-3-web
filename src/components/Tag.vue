@@ -6,7 +6,7 @@
       size="xxs"
       class="mx-1"
       type="cancel"
-      @click.native="onClose"
+      @click="$emit('closed')"
     />
     <slot></slot>
   </div>
@@ -19,11 +19,6 @@ export default {
     closeable: {
       type: Boolean,
       default: false,
-    },
-  },
-  methods: {
-    onClose() {
-      this.$emit('closed');
     },
   },
 };
