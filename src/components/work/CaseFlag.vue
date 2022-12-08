@@ -4,7 +4,7 @@
     class="bg-white flex flex-col flex-grow justify-between p-3 main-container w-full"
   >
     <div class="w-full overflow-auto">
-      <form-select
+      <base-select
         v-model="currentFlag.reason_t"
         :options="flagTypes"
         :placeholder="$t('flag.choose_problem')"
@@ -113,7 +113,7 @@
           <p class="my-3">
             {{ $t('flag.choose_correct_incident') }}
           </p>
-          <form-select
+          <base-select
             v-model="newIncident"
             :options="incidents"
             searchable

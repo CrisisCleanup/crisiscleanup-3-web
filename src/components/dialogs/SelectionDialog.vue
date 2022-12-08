@@ -27,14 +27,14 @@
               {{ content }}
             </div>
             <div>
-              <form-select
+              <base-select
                 :placeholder="placeholder"
                 class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 :options="options"
                 v-model="response"
                 :label="label"
                 :item-key="itemKey"
-              ></form-select>
+              ></base-select>
             </div>
           </div>
 
@@ -50,7 +50,7 @@
                   }
                 "
               >
-                {{ $t("actions.ok") }}
+                {{ $t('actions.ok') }}
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
@@ -61,7 +61,7 @@
                   }
                 "
               >
-                {{ $t("actions.cancel") }}
+                {{ $t('actions.cancel') }}
               </base-button>
             </div>
           </div>
@@ -72,19 +72,19 @@
 </template>
 
 <script>
-import {closeDialog} from "vue3-promise-dialog";
-import {defineComponent, ref} from "vue";
+import { closeDialog } from 'vue3-promise-dialog';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: "SelectionDialog",
+  name: 'SelectionDialog',
   props: {
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     content: {
       type: String,
-      default: "",
+      default: '',
     },
     label: {
       type: String,
@@ -102,14 +102,14 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   setup() {
-    const response = ref('')
+    const response = ref('');
     return {
       response,
-      closeDialog
+      closeDialog,
     };
   },
 });

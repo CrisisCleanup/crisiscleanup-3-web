@@ -192,7 +192,7 @@
     >
       <div class="flex items-center mb-4 sm:mb-0">
         <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
-        <form-select
+        <base-select
           :model-value="pagination.pageSize"
           :options="pageSizes"
           :clearable="false"

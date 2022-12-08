@@ -6,7 +6,7 @@
           <div class="modal-header flex-shrink">
             <div class="title p-3 flex items-center justify-between border-b">
               <span class="text-base font-bold">{{
-                $t("adminOrganization.approve_or_reject")
+                $t('adminOrganization.approve_or_reject')
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
@@ -22,14 +22,14 @@
           </div>
 
           <div class="modal-body flex-grow p-3">
-            <form-select
+            <base-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
               :options="approveRejectReasons"
               v-model="response.reason"
               item-key="key"
               label="label"
-            ></form-select>
+            ></base-select>
             <base-input
               class="my-2"
               text-area
@@ -51,7 +51,7 @@
                   }
                 "
               >
-                {{ $t("actions.ok") }}
+                {{ $t('actions.ok') }}
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
@@ -62,7 +62,7 @@
                   }
                 "
               >
-                {{ $t("actions.cancel") }}
+                {{ $t('actions.cancel') }}
               </base-button>
             </div>
           </div>
@@ -73,51 +73,51 @@
 </template>
 
 <script>
-import {defineComponent, reactive} from "vue";
-import {closeDialog} from "vue3-promise-dialog";
-import {useI18n} from "vue-i18n";
+import { defineComponent, reactive } from 'vue';
+import { closeDialog } from 'vue3-promise-dialog';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
-  name: "OrganizationApprovalDialog",
+  name: 'OrganizationApprovalDialog',
   setup() {
     const { t } = useI18n();
 
     const response = reactive({
-      reason: "",
-      note: "",
-    })
-    
+      reason: '',
+      note: '',
+    });
+
     const approveRejectReasons = [
-      "approveRejectReasons.approve_none",
-      "approveRejectReasons.approve_public",
-      "approveRejectReasons.approve_preliminary",
-      "approveRejectReasons.approve_statistics",
-      "approveRejectReasons.approve_situational_awareness",
-      "approveRejectReasons.approve_coordination",
-      "approveRejectReasons.approve_ltr",
-      "approveRejectReasons.approve_recovery",
-      "approveRejectReasons.approve_academic",
-      "approveRejectReasons.approve_waiver",
-      "approveRejectReasons.reject_not_reputable",
-      "approveRejectReasons.reject_spam",
-      "approveRejectReasons.reject_contractor",
-      "approveRejectReasons.reject_duplicate",
-      "approveRejectReasons.reject_inactive",
-      "approveRejectReasons.reject_unresponsive",
-      "approveRejectReasons.reject_no_capacity",
-      "approveRejectReasons.reject_out_of_scope",
-      "approveRejectReasons.reject_survivor",
-      "approveRejectReasons.reject_volunteer",
-      "approveRejectReasons.reject_withdrawn",
+      'approveRejectReasons.approve_none',
+      'approveRejectReasons.approve_public',
+      'approveRejectReasons.approve_preliminary',
+      'approveRejectReasons.approve_statistics',
+      'approveRejectReasons.approve_situational_awareness',
+      'approveRejectReasons.approve_coordination',
+      'approveRejectReasons.approve_ltr',
+      'approveRejectReasons.approve_recovery',
+      'approveRejectReasons.approve_academic',
+      'approveRejectReasons.approve_waiver',
+      'approveRejectReasons.reject_not_reputable',
+      'approveRejectReasons.reject_spam',
+      'approveRejectReasons.reject_contractor',
+      'approveRejectReasons.reject_duplicate',
+      'approveRejectReasons.reject_inactive',
+      'approveRejectReasons.reject_unresponsive',
+      'approveRejectReasons.reject_no_capacity',
+      'approveRejectReasons.reject_out_of_scope',
+      'approveRejectReasons.reject_survivor',
+      'approveRejectReasons.reject_volunteer',
+      'approveRejectReasons.reject_withdrawn',
     ].map((key) => {
       return { key, label: t(key) };
-    })
-    
+    });
+
     return {
       approveRejectReasons,
       response,
-      closeDialog
-    }
+      closeDialog,
+    };
   },
 });
 </script>
