@@ -45,6 +45,8 @@
     "@turf/turf": "^6.5.0",
     "@vitejs/plugin-vue-jsx": "^2.1.1",
     "@vueform/multiselect": "^2.5.7",
+    "@vueuse/core": "^9.6.0",
+    "@vueuse/integrations": "^9.6.0",
     "@vuex-orm/core": "^0.36.4",
     "@vuex-orm/plugin-axios": "^0.9.4",
     "axios": "^1.1.3",
