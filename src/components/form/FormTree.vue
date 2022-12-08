@@ -134,9 +134,9 @@
         <div class="form-field">
           <div class="mb-1">{{ field.label_t }}</div>
           <RecurringSchedule
-            :value="dynamicFields[field.field_key] || field.recur_default"
+            :model-value="dynamicFields[field.field_key] || field.recur_default"
             :is-default="!dynamicFields[field.field_key]"
-            @input="
+            @update:modelValue="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
               }
@@ -222,7 +222,7 @@
 </template>
 <script>
 import SectionHeading from '../../components/work/SectionHeading.vue';
-// import RecurringSchedule from '../../components/RecurringSchedule';
+import RecurringSchedule from '../../components/RecurringSchedule.vue';
 import Incident from '../../models/Incident';
 import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown.vue';
 import { computed, onMounted, ref } from 'vue';
@@ -254,7 +254,7 @@ export default {
     BaseSelect,
     WorksiteStatusDropdown,
     SectionHeading,
-    // RecurringSchedule,
+    RecurringSchedule,
   },
   name: 'FormTree',
   setup(props, { emit }) {

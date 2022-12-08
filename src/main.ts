@@ -40,6 +40,7 @@ import {
   faStreetView,
   faSearchMinus,
   faChevronRight,
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import BaseIcon from './components/BaseIcon.vue';
 import { store } from './store';
@@ -62,6 +63,7 @@ library.add(faCamera);
 library.add(faStreetView);
 library.add(faSearchMinus);
 library.add(faChevronRight);
+library.add(faChevronLeft);
 
 // Toast
 import Toast from 'vue-toastification';
@@ -89,6 +91,8 @@ import BaseCheckbox from './components/BaseCheckbox.vue';
 import FormTree from './components/form/FormTree.vue';
 import Tab from './components/tabs/Tab.vue';
 import Tabs from './components/tabs/Tabs.vue';
+import BaseRadio from './components/BaseRadio.vue';
+import Unauthenticated from './layouts/Unauthenticated.vue';
 
 const getI18n = (messages = {}) => {
   return createI18n({
@@ -111,10 +115,12 @@ app.component('ccu-icon', BaseIcon);
 app.component('base-button', BaseButton);
 app.component('base-input', BaseInput);
 app.component('base-text', BaseText);
+app.component('base-radio', BaseRadio);
 app.component('badge', Badge);
 app.component('tag', Tag);
 app.component('v-select', vSelect);
 app.component('authenticated-layout', Authenticated);
+app.component('unauthenticated-layout', Unauthenticated);
 app.component('form-select', FormSelect);
 app.component('base-select', BaseSelect);
 app.component('base-checkbox', BaseCheckbox);

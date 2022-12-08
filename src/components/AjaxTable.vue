@@ -30,7 +30,7 @@
       @rowClick="(payload) => $emit('rowClick', payload)"
       @selectionChanged="(payload) => $emit('selectionChanged', payload)"
     >
-      <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
+      <template v-for="(_, slot) of $slots" v-slot:[slot]="scope"
         ><slot :name="slot" v-bind="scope"
       /></template>
     </Table>

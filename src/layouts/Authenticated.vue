@@ -165,32 +165,11 @@ export default {
         text: t("nav.work"),
       },
       {
-        key: "cases",
-        to: `/incident/${currentIncidentId.value}/cases/new`,
-      },
-      {
         key: "phone",
         icon: "phone",
         text: t("nav.phone"),
         to: "/phone",
         // disabled: !context.root.$can || !context.root.$can('phone_agent'),
-      },
-      {
-        key: "caller",
-        icon: "phone",
-        text: t("nav.phone_beta"),
-        to: "/caller",
-        disabled: true,
-      },
-      {
-        key: "connect_first",
-        icon: "phone",
-        text: t("nav.phone_alpha"),
-        to: "/connect_first",
-        // disabled:
-        //     !context.root.$can ||
-        //     !context.root.$can('phone_agent') ||
-        //     !context.root.$can('beta_feature.connect_first_integration'),
       },
       {
         key: "my_organization",

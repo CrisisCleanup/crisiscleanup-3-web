@@ -175,15 +175,15 @@
                 class="mr-10"
                 name="Yes"
                 label="Yes"
-                :value="radioValue"
-                @change="radioValue = $event"
+                :model-value="radioValue"
+                @update:modelValue="radioValue = $event"
               />
               <base-radio
                 class="mr-10"
                 name="No"
                 label="No"
-                :value="radioValue"
-                @change="radioValue = $event"
+                :model-value="radioValue"
+                @update:modelValue="radioValue = $event"
               />
             </div>
           </div>
@@ -240,15 +240,15 @@
               class="mr-10"
               name="Yes"
               label="Yes"
-              :value="radioValue"
-              @change="radioValue = $event"
+              :model-value="radioValue"
+              @update:modelValue="radioValue = $event"
             />
             <base-radio
               class="mr-10"
               name="No"
               label="No"
-              :value="radioValue"
-              @change="radioValue = $event"
+              :model-value="radioValue"
+              @update:modelValue="radioValue = $event"
             />
           </div>
           <p class="my-3">

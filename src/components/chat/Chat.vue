@@ -89,7 +89,7 @@ import { isEqual } from 'lodash/lang';
 import ChatMessage from '../../components/chat/ChatMessage.vue';
 import { getQueryString } from '../../utils/urls';
 import { getErrorMessage } from '../../utils/errors';
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref} from 'vue';
 import axios from 'axios';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import User from '../../models/User';
@@ -117,7 +117,7 @@ export default {
     const favorites = ref([]);
     const urgent = ref(false);
     const loadingMessages = ref(false);
-    const send = ref(() => {});
+    let sendToWebsocket;
     const messagesBox = ref(null);
     const { currentUser } = useCurrentUser();
     const $toasted = useToast();
@@ -201,7 +201,7 @@ export default {
       emit('unreadUrgentCount', response.data.count);
     }
     function sendMessage() {
-      send.value({
+      sendToWebsocket({
         content: currentMessage.value,
         is_urgent: urgent.value,
       });
@@ -239,33 +239,37 @@ export default {
       emit('focusNewsTab');
     }
 
+    onBeforeMount(() => {
+      const { socket, send } = useWebSockets(
+          `/ws/chat/${props.chat.id}`,
+          'chat',
+          (data) => {
+            messages.value = [data, ...messages.value];
+            if (data.created_by !== currentUser.id) {
+              if (data.is_urgent) {
+                emit('onNewUrgentMessage');
+              } else {
+                emit('onNewMessage');
+              }
+            }
+
+            nextTick(() => {
+              if (messagesBox.value) {
+                messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
+              }
+            });
+          },
+      );
+
+      socket.value = socket;
+      sendToWebsocket = send;
+    })
+
     onMounted(async () => {
       await getUnreadMessagesCount();
       await getUnreadUrgentMessagesCount();
       await getMessages();
       await getFavorites();
-      const { socket, send } = useWebSockets(
-        `/ws/chat/${props.chat.id}`,
-        'chat',
-        (data) => {
-          messages.value = [data, ...messages.value];
-          if (data.created_by !== currentUser.id) {
-            if (data.is_urgent) {
-              emit('onNewUrgentMessage');
-            } else {
-              emit('onNewMessage');
-            }
-          }
-
-          nextTick(() => {
-            if (messagesBox.value) {
-              messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
-            }
-          });
-        },
-      );
-      socket.value = socket;
-      send.value = send;
     });
 
     onBeforeUnmount(() => {
@@ -278,7 +282,6 @@ export default {
       favorites,
       currentMessage,
       urgent,
-      send,
       loadingMessages,
       sortedMessages,
       messagesBox,

@@ -3,9 +3,11 @@
     <input
       v-model="radioButtonValue"
       type="radio"
-      :value="label"
+      :model-value="label"
       :name="name"
-      :class="{ checked: type === 'boolean' ? value : label === value }"
+      :class="{
+        checked: type === 'boolean' ? modelValue : label === modelValue,
+      }"
     />
     <span :class="labelClass">
       <slot>
@@ -16,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed } from 'vue';
 export default defineComponent({
   name: 'BaseRadio',
   props: {
@@ -24,7 +26,7 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -41,14 +43,14 @@ export default defineComponent({
       default: 'text',
     },
   },
-  setup(props, context) {
+  setup(props, { emit }) {
     const radioButtonValue = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set() {
-        context.emit('input', props.label);
-        context.emit('change', props.label);
+        emit('update:modelValue', props.label);
+        emit('change', props.label);
       },
     });
     return {
