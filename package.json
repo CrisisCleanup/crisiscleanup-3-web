@@ -119,7 +119,8 @@
     "tailwindcss": "^3.2.1",
     "typescript": "*",
     "vite": "^3.1.0",
-    "vue-tsc": "^0.40.4"
+    "vue-tsc": "^0.40.4",
+    "xo": "^0.53.1"
   },
   "lint-staged": {
     "*.{vue,json,ts?(x)}": [
