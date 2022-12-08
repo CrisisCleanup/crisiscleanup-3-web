@@ -124,11 +124,18 @@
   },
   "lint-staged": {
     "*.{vue,json,ts?(x)}": [
-      "eslint --fix",
-      "prettier --write"
+      "xo --fix",
+      "xo --prettier"
     ],
     "*.{y?(a)ml,?(m)js}": [
-      "prettier --write"
+      "xo --prettier"
+    ]
+  },
+  "xo": {
+    "prettier": true,
+    "envs": [
+      "browser",
+      "es2022"
     ]
   }
 }
