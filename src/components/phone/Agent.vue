@@ -26,7 +26,7 @@
             size="small"
             class="mx-1"
             :alt="$t('actions.edit')"
-            @click.native="editingAgent = true"
+            @click="editingAgent = true"
           />
         </div>
       </div>
@@ -60,7 +60,7 @@
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
       <ccu-icon
-        @click.native="$phoneService.hangup"
+        @click="$phoneService.hangup"
         v-if="(isOnCall || caller) && isOutboundCall"
         size="lg"
         class="ml-2"
@@ -72,18 +72,42 @@
 </template>
 
 <script>
-import { ConnectFirstMixin } from '@/mixins';
-import LanguageTag from '@/components/tags/LanguageTag';
-import EditAgentModal from '@/components/phone/EditAgentModal';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
+import LanguageTag from '../../components/tags/LanguageTag.vue';
+import EditAgentModal from '../../components/phone/EditAgentModal.vue';
+import PhoneIndicator from '../../components/phone/PhoneIndicator.vue';
+import { computed, ref } from 'vue';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import { useStore } from 'vuex';
 
 export default {
   name: 'Agent',
   components: { PhoneIndicator, EditAgentModal, LanguageTag },
-  mixins: [ConnectFirstMixin],
-  data() {
+  setup(props, context) {
+    const editingAgent = ref(false);
+    const { currentUser } = useCurrentUser();
+    const store = useStore();
+    const phoneService = computed(() => store.getters['phone/phoneService']);
+    const {
+      languages,
+      isOnCall,
+      caller,
+      isNotTakingCalls,
+      setAway,
+      loginPhone,
+      isOutboundCall,
+    } = useConnectFirst(context);
     return {
-      editingAgent: false,
+      editingAgent,
+      languages,
+      currentUser,
+      isOnCall,
+      caller,
+      isNotTakingCalls,
+      setAway,
+      loginPhone,
+      isOutboundCall,
+      hangup: phoneService.value.hangup,
     };
   },
 };

@@ -29,10 +29,7 @@
       </base-text>
     </div>
 
-    <div
-      v-if="caller"
-      class="flex items-start justify-between w-full py-1 px-2"
-    >
+    <div class="flex items-start justify-between w-full py-1 px-2">
       <div class="flex items-center">
         <base-text variant="h2">
           {{ caller.dnis }}
@@ -48,7 +45,7 @@
         {{
           `${caller.number_of_inbound_calls} ${$t(
             'phoneDashboard.calls',
-          )} | ${$moment().diff($moment(caller.created_at), 'days')} ${$t(
+          )} | ${moment().diff(moment(caller.created_at), 'days')} ${$t(
             'phoneDashboard.days',
           )}`
         }}
@@ -57,25 +54,11 @@
     <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
     <div class="flex overflow-x-auto overflow-y-hidden w-full">
       <div
-        class="
-          cursor-pointer
-          bg-crisiscleanup-light-grey
-          p-1
-          flex-grow-0 flex-shrink-0
-          w-32
-          h-24
-          m-1
-        "
+        class="cursor-pointer bg-crisiscleanup-light-grey p-1 flex-grow-0 flex-shrink-0 w-32 h-24 m-1"
         @click="() => setCase(null)"
         :class="Boolean(caseId) ? '' : 'border'"
       >
         <div class="flex flex-col items-center justify-center h-full">
-          <!--          <ccu-icon-->
-          <!--            :alt="$t('actions.create_new')"-->
-          <!--            type="add-orange"-->
-          <!--            size="xl"-->
-          <!--            class="pb-1"-->
-          <!--          />-->
           <base-text variant="h3" class="text-crisiscleanup-dark-400"
             >{{ $t('phoneDashboard.new_case') }}
           </base-text>
@@ -106,7 +89,7 @@
       </div>
     </div>
     <ccu-icon
-      @click.native="$phoneService.hangup"
+      @click="hangup"
       v-if="(isOnCall || caller) && isOutboundCall"
       size="lg"
       class="ml-2"
@@ -114,95 +97,135 @@
     ></ccu-icon>
   </div>
 </template>
-<script>
+<script lang="ts">
 import * as Sentry from '@sentry/browser';
-import { ConnectFirstMixin, WorksitesMixin } from '@/mixins';
-import useScripts from '@/use/phone/useScripts';
-import Worksite from '@/models/Worksite';
+import useScripts from '../../hooks/phone/useScripts';
+import Worksite from '../../models/Worksite';
+import { computed, ref, watch } from 'vue';
+import useWorktypeImages from '../../hooks/worksite/useWorktypeImages';
+import useConnectFirst from '../../hooks/useConnectFirst.js';
+import { useStore } from 'vuex';
+import moment from 'moment';
+import useCurrentUser from "../../hooks/useCurrentUser";
+import {useToast} from "vue-toastification";
+import {useI18n} from "vue-i18n";
+import {store} from "../../store";
 
 export default {
   name: 'ActiveCall',
-  mixins: [ConnectFirstMixin, WorksitesMixin],
   props: {
     caseId: {
       type: Number,
       default: null,
     },
   },
-  data() {
-    return {
-      cards: [],
-      connectingTimeout: null,
-    };
-  },
-  methods: {
-    getSVG(worktype) {
-      return this.getWorktypeSVG(worktype);
-    },
-    setCase(caseObject) {
-      this.$emit('setCase', caseObject);
-    },
-  },
-  watch: {
-    call(newValue) {
-      if (newValue && newValue.worksite) {
-        const c = Worksite.find(newValue.worksite);
-        this.cards = [
-          {
-            name: c.name,
-            caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
-            address: c.short_address,
-            state: c.state,
-            worktype: Worksite.getWorkType(c.work_types),
-            fullAddress: c.full_address,
-            id: c.id,
-            type: c.case_number ? 'worksite' : 'pda',
-            incident: c.incident,
-            updated_at: c.updated_at,
-          },
-        ];
-      }
-    },
-    isTransitioning: {
-      immediate: true,
-      handler(newValue) {
-        if (newValue) {
-          const startedConnecting = this.$moment().toISOString();
-          this.connectingTimeout = setTimeout(() => {
-            const context = {
-              user: this.currentUser.$toJson(),
-              caller: this.caller,
-              callState: this.callState,
-              isInboundCall: this.isInboundCall,
-              isOutboundCall: this.isOutboundCall,
-              startedConnecting,
-              connectingTimedOut: this.$moment().toISOString(),
-            };
-            Sentry.setContext('call_info', context);
-            Sentry.captureException(
-              'Call is stuck connecting state for 45 seconds',
-            );
-            this.$toasted.error(this.$t('phoneDashboard.could_not_connect'));
-            this.setPotentialFailedCall(this.call);
-            this.$phoneService.hangup();
-          }, 45000);
-        } else {
-          clearTimeout(this.connectingTimeout);
-        }
-      },
-    },
-  },
-  computed: {
-    isConnecting() {
-      return this.isTransitioning || (this.isTakingCalls && !this.isOnCall);
-    },
-    scripts() {
+  setup(props, context) {
+    const store = useStore();
+    const { getWorktypeSVG } = useWorktypeImages();
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
+    const { t } = useI18n();
+    const phoneService = computed(() => store.getters['phone/phoneService']);
+
+    const {
+      isTakingCalls,
+      isTransitioning,
+      isOnCall,
+      callType,
+      call,
+      caller,
+      callState,
+      isInboundCall,
+      isOutboundCall
+    } =
+      useConnectFirst(context);
+    const currentIncident = store.getters['incident/currentIncidentId'];
+    const cards = ref([]);
+    const connectingTimeout = ref(null);
+    function getSVG(worktype) {
+      return getWorktypeSVG(worktype);
+    }
+    function setCase(caseObject) {
+      context.emit('setCase', caseObject);
+    }
+
+    const scripts = computed(() => {
       return useScripts({
-        callType: this.callType,
-        incident: this.currentIncident,
-        recentWorksite: this.cards[0],
+        callType: callType.value,
+        incident: currentIncident,
+        recentWorksite: cards.value[0],
       });
-    },
+    });
+
+    watch(
+      () => call.value,
+      (newValue) => {
+        if (newValue && newValue.worksite) {
+          const c: Worksite = Worksite.find(newValue.worksite);
+          cards.value = [
+            {
+              name: c.name,
+              caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
+              address: c.short_address,
+              state: c.state,
+              worktype: Worksite.getWorkType(c.work_types),
+              fullAddress: c.full_address,
+              id: c.id,
+              type: c.case_number ? 'worksite' : 'pda',
+              incident: c.incident,
+              updated_at: c.updated_at,
+            },
+          ] as any;
+        }
+
+      },
+    );
+
+    watch(
+        () => isTransitioning.value,
+        (newValue) => {
+          if (newValue) {
+            const startedConnecting = moment().toISOString();
+            connectingTimeout.value = setTimeout(() => {
+              const context = {
+                user: currentUser?.$toJson(),
+                caller: caller.value,
+                callState: callState.value,
+                isInboundCall: isInboundCall.value,
+                isOutboundCall: isOutboundCall.value,
+                startedConnecting,
+                connectingTimedOut: moment().toISOString(),
+              };
+              Sentry.setContext('call_info', context);
+              Sentry.captureException(
+                  'Call is stuck connecting state for 45 seconds',
+              );
+              $toasted.error(t('phoneDashboard.could_not_connect'));
+            }, 45000);
+          } else {
+            clearTimeout(connectingTimeout.value);
+          }
+        },
+    );
+
+    const isConnecting = computed(() => {
+      return isTransitioning.value || (isTakingCalls.value && !isOnCall.value);
+    });
+
+    return {
+      cards,
+      connectingTimeout,
+      getSVG,
+      setCase,
+      scripts,
+      isConnecting,
+      isOnCall,
+      isInboundCall,
+      isOutboundCall,
+      caller,
+      moment,
+      hangup: phoneService.value.hangup
+    };
   },
 };
 </script>

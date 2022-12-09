@@ -4,9 +4,12 @@
     :closeable="true"
     @close="$emit('cancel')"
   >
-    <div slot="header" class="text-lg border-b p-3">
-      {{ $t('editAgentModal.update_agent') }}
-    </div>
+    <template #header>
+      <div class="text-lg border-b p-3">
+        {{ $t('editAgentModal.update_agent') }}
+      </div>
+    </template>
+
     <div class="p-5">
       <div class="section flex flex-col justify-around">
         <!-- Phone # -->
@@ -14,11 +17,11 @@
           {{ $t('editAgentModal.phone_number') }}
         </base-text>
         <base-input
-          :value="phoneNumber"
+          :model-value="phoneNumber"
           size="medium"
           placeholder="+1 (000) 000-0000"
           :validator="validatePhoneNumber"
-          @input="(value) => (phoneNumber = value)"
+          @update:modelValue="(value) => (phoneNumber = value)"
         />
       </div>
       <div class="section flex flex-col">
@@ -40,69 +43,78 @@
         />
       </div>
     </div>
-    <div slot="footer" class="flex p-3 my-6 justify-center mb-3 footer">
-      <base-button
-        variant="solid"
-        size="large"
-        :action="() => updateUserNeeded()"
-        >{{ $t('actions.save') }}</base-button
-      >
-    </div>
+    <template #footer>
+      <div class="flex p-3 my-6 justify-center mb-3 footer">
+        <base-button variant="solid" size="large" :action="updateUserNeeded">{{
+          $t('actions.save')
+        }}</base-button>
+      </div>
+    </template>
   </modal>
 </template>
 
 <script>
-import {
-  LangMixin,
-  UserMixin,
-  ValidateMixin,
-  ConnectFirstMixin,
-} from '@/mixins';
-import Language from '@/models/Language';
+import Language from '../../models/Language';
+import { computed, onMounted, ref } from 'vue';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import { useToast } from 'vue-toastification';
+import useValidation from '../../hooks/useValidation';
 
 export default {
   name: 'EditAgentModal',
-  mixins: [UserMixin, LangMixin, ValidateMixin, ConnectFirstMixin],
-  data() {
-    return {
-      number: '',
-      languages: [],
-      phoneNumber: '',
-    };
-  },
-  mounted() {
-    this.phoneNumber = this.currentUser.mobile;
-    this.languages = this.currentUser.languages.map((l) => l.id);
-  },
-  methods: {
-    async updateUserNeeded() {
-      if (this.phoneNumber) {
-        await this.updateUser(this.phoneNumber, 'mobile');
+  setup(props, context) {
+    const number = ref('');
+    const languages = ref([]);
+    const phoneNumber = ref('');
+    const { currentUser, updateCurrentUser, saveCurrentUser } =
+      useCurrentUser();
+    const { loadAgent } = useConnectFirst(context);
+    const { validatePhoneNumber } = useValidation(context);
+    const $toasted = useToast();
+
+    async function updateUserNeeded() {
+      if (phoneNumber.value) {
+        await updateCurrentUser(phoneNumber.value, 'mobile');
       }
-      if (this.languages.length >= 1) {
-        this.updateUser(null, 'primary_language');
-        this.updateUser(null, 'secondary_language');
-        const [primary_language, secondary_language] = this.languages;
-        this.updateUser(primary_language, 'primary_language');
-        this.updateUser(secondary_language, 'secondary_language');
+      if (languages.value.length >= 1) {
+        await updateCurrentUser(null, 'primary_language');
+        await updateCurrentUser(null, 'secondary_language');
+        const [primary_language, secondary_language] = languages.value;
+        await updateCurrentUser(primary_language, 'primary_language');
+        await updateCurrentUser(secondary_language, 'secondary_language');
       }
       try {
-        await this.saveUser();
-        await this.loadAgent();
-        this.$emit('cancel');
+        await saveCurrentUser();
+        await loadAgent();
+        context.emit('cancel');
       } catch (e) {
-        this.$log.error('Failed to save user', e);
-        this.$toasted.error(e);
+        // this.$log.error('Failed to save user', e);
+        $toasted.error(e);
       }
-    },
-  },
-  computed: {
-    supportedLanguages() {
+    }
+
+    const supportedLanguages = computed(() => {
       const languages = Language.all();
       const ids = [2, 7];
       return languages.filter((l) => ids.includes(l.id));
-    },
+    });
+
+    onMounted(() => {
+      phoneNumber.value = currentUser.mobile;
+      languages.value = currentUser.languages.map((l) => l.id);
+    });
+
+    return {
+      number,
+      languages,
+      phoneNumber,
+      updateUserNeeded,
+      validatePhoneNumber,
+      supportedLanguages,
+    };
   },
+  mounted() {},
 };
 </script>
 

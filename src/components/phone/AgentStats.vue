@@ -19,13 +19,13 @@
         <div class="flex p-2 items-center text-sm">
           {{ $t('phoneDashboard.total_login_time') }}
           <div class="opacity-40 ml-1">
-            {{ (agentStats.totalLoginTime || 0) | formatSeconds }}
+            {{ formatSeconds(agentStats.totalLoginTime || 0) }}
           </div>
         </div>
         <div class="flex p-2 items-center text-sm">
           {{ $t('phoneDashboard.total_call_time') }}
           <div class="opacity-40 ml-1">
-            {{ (agentStats.totalTalkTime || 0) | formatSeconds }}
+            {{ formatSeconds(agentStats.totalTalkTime || 0) }}
           </div>
         </div>
       </div>
@@ -34,11 +34,14 @@
 </template>
 
 <script>
-import { ConnectFirstMixin } from '@/mixins';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import { formatSeconds } from '../../filters/index';
 
 export default {
   name: 'AgentStats',
-  mixins: [ConnectFirstMixin],
+  setup(props, context) {
+    return { ...useConnectFirst(context), formatSeconds };
+  },
 };
 </script>
 

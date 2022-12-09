@@ -10,7 +10,7 @@
             :class="showingMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
             ccu-event="user_ui-view-map"
-            @click.native="toggleView('showingMap')"
+            @click="toggleView('showingMap')"
             data-cy="cases.mapButton"
           />
           <ccu-icon
@@ -20,7 +20,7 @@
             :class="showingTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
             ccu-event="user_ui-view-table"
-            @click.native="toggleView('showingTable')"
+            @click="toggleView('showingTable')"
             data-cy="cases.tableButton"
           />
         </div>
@@ -83,20 +83,6 @@
                 </div>
               </template>
               <template v-slot:component>
-                <div
-                  class="bg-red-500 mt-6 text-white p-1.5"
-                  v-if="potentialFailedCall"
-                >
-                  {{
-                    $t('phoneDashboard.ended_early')
-                  }}
-                  <base-button
-                    :action="retryFailedCall"
-                    variant="solid"
-                    class="px-2 text-black mt-1"
-                    :text="$t('phoneDashboard.try_again')"
-                  />
-                </div>
                 <tabs :details="false" ref="tabs" @mounted="setTabs">
                   <tab :name="$t('phoneDashboard.active_call')">
                     <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
@@ -140,31 +126,11 @@
             >
               <template v-slot:button>
                 <div
-                  class="
-                    w-full
-                    h-full
-                    flex
-                    items-center
-                    justify-center
-                    relative
-                  "
+                  class="w-full h-full flex items-center justify-center relative"
                 >
                   <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-black
-                        bg-primary-light
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
                       >{{ unreadChatCount }}</span
                     >
                   </div>
@@ -173,20 +139,7 @@
                     class="absolute top-0 right-0 my-1 -mx-1"
                   >
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-red-100
-                        bg-red-600
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadUrgentChatCount }}</span
                     >
                   </div>
@@ -220,31 +173,11 @@
             >
               <template v-slot:button>
                 <div
-                  class="
-                    w-full
-                    h-full
-                    flex
-                    items-center
-                    justify-center
-                    relative
-                  "
+                  class="w-full h-full flex items-center justify-center relative"
                 >
                   <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-red-100
-                        bg-red-600
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadNewsCount }}</span
                     >
                   </div>
@@ -482,7 +415,7 @@ import SimpleMap from '@/components/SimpleMap';
 import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
 import Chat from '@/components/chat/Chat';
-import PhoneNews from '@/components/phone/PhoneNews';
+import PhoneNews from '@/../../../../../../experiments/crisiscleanup-4-web/src/components/phone/PhoneNews';
 import PhoneToolBar from '@/pages/phone/PhoneToolBar';
 import ActiveCall from '@/components/phone/ActiveCall';
 import UpdateStatus from '@/components/phone/UpdateStatus';
@@ -643,11 +576,10 @@ export default {
       const { chatGroups } = this;
       const [group] = chatGroups;
       this.selectedChat = group;
-
-      this.mapLoading = true;
+      const markers = await this.getWorksites();
       this.mapUtils = useWorksiteMap(
-        [],
-        [],
+        markers,
+        markers.map((m) => m.id),
         (m) => {
           this.onSelectMarker(m);
         },
@@ -711,7 +643,6 @@ export default {
         await this.$toasted.success(this.$t('phoneDashboard.update_success'));
         this.clearCall();
         this.clearCase();
-        this.setPotentialFailedCall(null);
         await this.loadAgent();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -780,15 +711,12 @@ export default {
       this.isEditing = true;
       this.worksiteId = marker.id;
     },
-    async getWorksites(incidentId) {
-      const iid =
-        incidentId ??
-        this.currentIncidentId ??
-        this.currentUser?.states?.incident;
-      if (iid === null || iid === undefined) return [];
+    async getWorksites() {
+      this.mapLoading = true;
       const response = await loadCasesCached({
-        incident: iid,
+        incident: this.currentIncidentId,
       });
+      this.mapLoading = false;
       this.allWorksiteCount = response.results.length;
       return response.results;
     },
@@ -832,16 +760,6 @@ export default {
       // open the active call PhoneComponentButton
       EventBus.$emit('phone_component:open', 'news');
     },
-    async retryFailedCall() {
-      if (this.potentialFailedCall) {
-        const { phone_number } = this.potentialFailedCall;
-        if (this.call) {
-          await this.completeCall({ status: 23, notes: '' });
-        }
-        await this.$phoneService.changeState('WORKING');
-        await this.dialManualOutbound(phone_number);
-      }
-    },
   },
   watch: {
     worksiteId(newValue, oldValue) {
@@ -866,24 +784,15 @@ export default {
         this.tabs.selectTab(this.$refs.statusTab);
       }
     },
-    currentIncidentId: {
-      immediate: true,
-      handler(newValue) {
-        if (newValue === null || newValue === undefined) return;
-        this.mapLoading = true;
-        this.getWorksites(newValue)
-          .then((results) => {
-            this.mapUtils.reloadMap(
-              results,
-              results.map((w) => w.id),
-            );
-            this.allWorksiteCount = results.length;
-            this.mapLoading = false;
-          })
-          .catch((err) => {
-            this.$log.error('failed to reload map:', err);
-          });
-      },
+    currentIncidentId(value) {
+      if (value) {
+        this.getWorksites().then((markers) => {
+          this.mapUtils.reloadMap(
+            markers,
+            markers.map((m) => m.id),
+          );
+        });
+      }
     },
   },
 };

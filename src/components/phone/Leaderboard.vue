@@ -39,7 +39,7 @@
             </div>
             <div class="info--org" v-if="rank.user.organization">
               <base-text :style="{ lineHeight: '16px' }" variant="h4" regular>
-                {{ rank.user.organization.name | truncate(28) }}
+                {{ truncate(rank.user.organization.name, 28) }}
               </base-text>
             </div>
             <div
@@ -56,7 +56,7 @@
               variant="h4"
               regular
             >
-              {{ rank.state_at | moment('from', 'now') }}
+              {{ momentFromNow(rank.state_at) }}
             </base-text>
           </div>
         </div>
@@ -72,7 +72,7 @@
             :key="m"
           >
             <base-text variant="h1" semi-bold>
-              {{ rank[m] | padStart(2, '0') }}
+              {{ padStart(rank[m], 2, '0') }}
             </base-text>
           </div>
         </div>
@@ -103,13 +103,25 @@
 </template>
 
 <script>
-import User from '@/models/User';
-import Avatar from '@/components/Avatar';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
-import LanguageTag from '@/components/tags/LanguageTag';
-import TitledCard from '@/components/cards/TitledCard';
-import { useWebSockets } from '@/use/useWebSockets';
-import { EventBus } from '@/event-bus';
+import User from '../../models/User';
+import Avatar from '../../components/Avatar.vue';
+import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
+import LanguageTag from '../../components/tags/LanguageTag.vue';
+import TitledCard from '../../components/cards/TitledCard.vue';
+import { useWebSockets } from '../../hooks/useWebSockets';
+import useEmitter from '../../hooks/useEmitter';
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
+import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+import { momentFromNow } from '../../filters/index';
+import { padStart, truncate } from 'lodash';
 
 const LEADERBOARD_RESOLUTIONS = Object.freeze({
   DAILY: 'daily',
@@ -128,65 +140,50 @@ const AGENT_STATES = Object.freeze({
 export default {
   name: 'Leaderboard',
   components: { TitledCard, LanguageTag, UserDetailsTooltip, Avatar },
-  data() {
-    return {
-      leaderboard: [],
-      previous: null,
-      next: null,
-      resolution: LEADERBOARD_RESOLUTIONS.DAILY,
-      nameTextStyle: {
-        lineHeight: '1rem',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      },
-      socket: null,
-      agentStats: null,
+  setup() {
+    const { emitter } = useEmitter();
+    const { t } = useI18n();
+    const leaderboard = ref([]);
+    const previous = ref(null);
+    const next = ref(null);
+    const resolution = ref(LEADERBOARD_RESOLUTIONS.DAILY);
+    const socket = ref(null);
+    const agentStats = ref(null);
+    const nameTextStyle = {
+      lineHeight: '1rem',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     };
-  },
-  async created() {
-    const { socket } = useWebSockets(
-      '/ws/phone_stats',
-      'phone_stats',
-      (data) => {
-        this.agentStats = data;
-      },
-    );
-    this.socket = socket;
-  },
-  async mounted() {
-    await this.loadLeaderboard(this.resolution);
-  },
-  unmounted() {
-    this.socket.close();
-  },
-  methods: {
-    async loadLeaderboard(resolution, url) {
-      this.resolution = resolution;
-      const { data } = await this.$http.get(
+
+    async function loadLeaderboard(resolution, url) {
+      resolution.value = resolution;
+      const { data } = await axios.get(
         url ||
-          `${process.env.VUE_APP_API_BASE_URL}/phone/leaderboard?resolution=${resolution}`,
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/phone/leaderboard?resolution=${resolution.value}`,
       );
 
-      const leaderboard = data.results || data;
-      this.next = data.next;
-      this.previous = data.previous;
+      const lb = data.results || data;
+      next.value = data.next;
+      previous.value = data.previous;
 
-      await this.getUsers(leaderboard.map((ranking) => ranking.user));
-      this.leaderboard = leaderboard;
-      this.leaderboard.forEach((ranking) => {
-        ranking.user = this.getUser(ranking.user);
+      await getUsers(lb.map((ranking) => ranking.user));
+      leaderboard.value = lb;
+      leaderboard.value.forEach((ranking) => {
+        ranking.user = getUser(ranking.user);
       });
-      this.buildLeaderboard();
-    },
-    async getUsers(userIds) {
+      buildLeaderboard();
+    }
+    async function getUsers(userIds) {
       await User.api().get(`/users?id__in=${userIds.join(',')}`, {
         dataKey: 'results',
       });
-    },
-    buildLeaderboard() {
-      this.leaderboard.forEach((ranking) => {
-        if (this.agentStats) {
-          const agentState = this.agentStats.find(
+    }
+    function buildLeaderboard() {
+      leaderboard.value.forEach((ranking) => {
+        if (agentStats.value) {
+          const agentState = agentStats.value.find(
             (u) => String(u.user) === String(ranking.user.id),
           );
           ranking.state =
@@ -195,52 +192,90 @@ export default {
         }
         ranking.total = ranking.inbound_calls + ranking.outbound_calls;
       });
-      this.leaderboard.sort((a, b) => b.total - a.total);
-      this.leaderboard = [...this.leaderboard];
-    },
-    getLanguageTags(locale) {
+      leaderboard.value.sort((a, b) => b.total - a.total);
+      leaderboard.value = [...leaderboard.value];
+    }
+    function getLanguageTags(locale) {
       return locale.split('#');
-    },
-    getUser(id) {
+    }
+    function getUser(id) {
       return User.find(id);
-    },
-    async onDropdownUpdate(value) {
-      await this.loadLeaderboard(value);
-    },
-  },
-  computed: {
-    dropdownProps() {
+    }
+    async function onDropdownUpdate(value) {
+      await loadLeaderboard(value);
+    }
+
+    onBeforeMount(() => {
+      const { socket } = useWebSockets(
+        '/ws/phone_stats',
+        'phone_stats',
+        (data) => {
+          agentStats.value = data;
+        },
+      );
+      socket.value = socket;
+    });
+
+    onMounted(async () => {
+      await loadLeaderboard(resolution.value);
+    });
+
+    onBeforeUnmount(() => {
+      socket.value.close();
+    });
+
+    const dropdownProps = computed(() => {
       return {
         label: 'name',
         itemKey: 'key',
-        value: this.resolution,
+        value: resolution.value,
         options: [
           {
             key: LEADERBOARD_RESOLUTIONS.DAILY,
-            name: this.$t('phoneDashboard.today'),
+            name: t('phoneDashboard.today'),
           },
           {
             key: LEADERBOARD_RESOLUTIONS.WEEKLY,
-            name: this.$t('phoneDashboard.this_week'),
+            name: t('phoneDashboard.this_week'),
           },
           {
             key: LEADERBOARD_RESOLUTIONS.ALL_TIME,
-            name: this.$t('phoneDashboard.all_time'),
+            name: t('phoneDashboard.all_time'),
           },
         ],
       };
-    },
-  },
-  watch: {
-    agentStats(agents) {
-      this.buildLeaderboard();
-      if (agents) {
-        EventBus.$emit(
-          'phone:agents_online',
-          agents.filter((agent) => agent.state === 'AVAILABLE').length,
-        );
-      }
-    },
+    });
+
+    watch(
+      () => agentStats.value,
+      (agents) => {
+        buildLeaderboard();
+        if (agents) {
+          emitter.emit(
+            'phone:agents_online',
+            agents.filter((agent) => agent.state === 'AVAILABLE').length,
+          );
+        }
+      },
+    );
+
+    return {
+      leaderboard,
+      previous,
+      next,
+      resolution,
+      nameTextStyle,
+      socket,
+      agentStats,
+      loadLeaderboard,
+      getUsers,
+      onDropdownUpdate,
+      getLanguageTags,
+      dropdownProps,
+      momentFromNow,
+      padStart,
+      truncate,
+    };
   },
 };
 </script>

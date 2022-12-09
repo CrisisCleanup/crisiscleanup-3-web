@@ -94,7 +94,7 @@ export default {
     const svgContainer = ref(null);
     const store = useStore();
 
-    const { getWorktypeSVG, getWorktypeColors } = useWorktypeImages();
+    const { getWorktypeSVG } = useWorktypeImages();
     const statuses = computed(() => store.getters['enums/statuses']);
     const displayStatuses = computed(() => {
       return statuses.value

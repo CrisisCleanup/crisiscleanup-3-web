@@ -245,6 +245,7 @@ export default function useConnectFirst(context: { emit: Function }) {
     outgoingCall,
     stats,
     agentStats,
+    languages,
     callHistory,
     isTakingCalls,
     isNotTakingCalls,
@@ -265,5 +266,6 @@ export default function useConnectFirst(context: { emit: Function }) {
       store.commit('phone/setGeneralStats', stats),
     clearCall: () => store.commit('phone/clearCall'),
     resetState: () => store.commit('phone/resetState'),
+    loginPhone,
   };
 }

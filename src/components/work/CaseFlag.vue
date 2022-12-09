@@ -50,60 +50,62 @@
               <span class="text-yellow-600 tooltip-target cursor-pointer">{{
                 organization.name
               }}</span>
-              <div slot="popover">
-                <base-text
-                  variant="h2"
-                  v-if="organization.incident_primary_contacts.length"
-                  >{{ $t('flag.incident_primary_contacts') }}</base-text
-                >
-                <div
-                  v-for="contact in organization.incident_primary_contacts"
-                  :key="contact.email"
-                  class="pb-1"
-                >
-                  <div class="text-base">
-                    {{ contact.first_name }} {{ contact.last_name }}
+              <template #popper>
+                <div>
+                  <base-text
+                    variant="h2"
+                    v-if="organization.incident_primary_contacts.length"
+                    >{{ $t('flag.incident_primary_contacts') }}</base-text
+                  >
+                  <div
+                    v-for="contact in organization.incident_primary_contacts"
+                    :key="contact.email"
+                    class="pb-1"
+                  >
+                    <div class="text-base">
+                      {{ contact.first_name }} {{ contact.last_name }}
+                    </div>
+                    <div class="mt-2">
+                      <font-awesome-icon icon="envelope" />
+                      <a :href="`mailto:${contact.email}`" class="ml-1">{{
+                        contact.email
+                      }}</a>
+                    </div>
+                    <div v-if="contact.mobile">
+                      <font-awesome-icon icon="phone" />
+                      <a :href="`tel:${contact.mobile}`" class="ml-1">{{
+                        contact.mobile
+                      }}</a>
+                    </div>
                   </div>
-                  <div class="mt-2">
-                    <font-awesome-icon icon="envelope" />
-                    <a :href="`mailto:${contact.email}`" class="ml-1">{{
-                      contact.email
-                    }}</a>
-                  </div>
-                  <div v-if="contact.mobile">
-                    <font-awesome-icon icon="phone" />
-                    <a :href="`tel:${contact.mobile}`" class="ml-1">{{
-                      contact.mobile
-                    }}</a>
+                  <base-text
+                    variant="h2"
+                    v-if="organization.primary_contacts.length"
+                    >{{ $t('flag.primary_contacts') }}</base-text
+                  >
+                  <div
+                    v-for="contact in organization.primary_contacts"
+                    :key="contact.email"
+                    class="pb-1"
+                  >
+                    <div class="text-base">
+                      {{ contact.first_name }} {{ contact.last_name }}
+                    </div>
+                    <div class="mt-2">
+                      <font-awesome-icon icon="envelope" />
+                      <a :href="`mailto:${contact.email}`" class="ml-1">{{
+                        contact.email
+                      }}</a>
+                    </div>
+                    <div v-if="contact.mobile">
+                      <font-awesome-icon icon="phone" />
+                      <a :href="`tel:${contact.mobile}`" class="ml-1">{{
+                        contact.mobile
+                      }}</a>
+                    </div>
                   </div>
                 </div>
-                <base-text
-                  variant="h2"
-                  v-if="organization.primary_contacts.length"
-                  >{{ $t('flag.primary_contacts') }}</base-text
-                >
-                <div
-                  v-for="contact in organization.primary_contacts"
-                  :key="contact.email"
-                  class="pb-1"
-                >
-                  <div class="text-base">
-                    {{ contact.first_name }} {{ contact.last_name }}
-                  </div>
-                  <div class="mt-2">
-                    <font-awesome-icon icon="envelope" />
-                    <a :href="`mailto:${contact.email}`" class="ml-1">{{
-                      contact.email
-                    }}</a>
-                  </div>
-                  <div v-if="contact.mobile">
-                    <font-awesome-icon icon="phone" />
-                    <a :href="`tel:${contact.mobile}`" class="ml-1">{{
-                      contact.mobile
-                    }}</a>
-                  </div>
-                </div>
-              </div>
+              </template>
             </v-popover>
           </div>
         </div>

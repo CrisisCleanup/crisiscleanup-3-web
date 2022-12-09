@@ -13,7 +13,7 @@
           <slot name="dropdown">
             <div v-if="hasDropdown" class="card__dropdown mx-3">
               <form-select
-                ref="dropdown"
+                ref="drop"
                 :style="{
                   minWidth: `${dropdownWidth_}px`,
                   flexWrap: 'nowrap',
@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import VueTypes from 'vue-types';
 import _ from 'lodash';
 import Card from './Card.vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 
 export default {
   name: 'TitledCard',
@@ -54,36 +54,45 @@ export default {
     Card,
   },
   props: {
-    title: VueTypes.string,
-    loading: VueTypes.bool.def(false),
-    dropdown: VueTypes.object.def({}),
-  },
-  data() {
-    return {
-      dropdownWidth_: 0,
-    };
-  },
-  mounted() {
-    this.$nextTick(() => this.calcDropdownWidth());
-  },
-  computed: {
-    hasDropdown() {
-      return !_.isEmpty(this.dropdown);
+    title: {
+      type: String,
+      default: '',
+    },
+    loading: {
+      type: Boolean,
+    },
+    dropdown: {
+      type: Object,
+      default: () => ({}),
     },
   },
-  methods: {
-    calcDropdownWidth() {
-      if (!this.$refs.dropdown) return;
-      const elWidth = this.$refs.dropdown.$el.clientWidth;
+  setup(props) {
+    const dropdownWidth_ = ref(0);
+    const drop = ref(null);
+    function calcDropdownWidth() {
+      if (!drop.value) return;
+      const elWidth = drop.value.$el.clientWidth;
       if (elWidth) {
         this.dropdownWidth_ = elWidth;
-        const container = this.$refs.dropdown.$el.querySelector(
-          '.vs__selected-options',
-        );
+        const container = drop.value.$el.querySelector('.vs__selected-options');
         container.style.flexWrap = 'nowrap';
         container.style.flexDirection = 'row-reverse';
       }
-    },
+    }
+
+    const hasDropdown = computed(() => {
+      return !_.isEmpty(props.dropdown);
+    });
+
+    onMounted(() => {
+      nextTick(() => calcDropdownWidth());
+    });
+    return {
+      dropdownWidth_,
+      drop,
+      calcDropdownWidth,
+      hasDropdown,
+    };
   },
 };
 </script>
