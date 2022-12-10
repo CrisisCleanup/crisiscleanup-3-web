@@ -13,7 +13,7 @@
   },
   "scripts": {
     "prepare": "is-ci || husky install",
-    "dev": "vite",
+    "dev": "vite --port 8080",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "xo \"**/*.{vue,json,ts?(x)}\"",
