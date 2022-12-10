@@ -26,6 +26,7 @@ specifiers:
   '@vitejs/plugin-vue': ^3.1.0
   '@vitejs/plugin-vue-jsx': ^2.1.1
   '@vitest/coverage-c8': ^0.25.7
+  '@vue/test-utils': ^2.2.6
   '@vueform/multiselect': ^2.5.7
   '@vueuse/core': ^9.6.0
   '@vueuse/integrations': ^9.6.0
@@ -178,6 +179,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.45.0_yv3nvntfnealqm77uomj2fi4ki
   '@vitejs/plugin-vue': 3.1.2_vite@3.1.8+vue@3.2.41
   '@vitest/coverage-c8': 0.25.7_sass@1.56.1
+  '@vue/test-utils': 2.2.6_vue@3.2.41
   autoprefixer: 10.4.12_postcss@8.4.18
   eslint: 8.22.0
   eslint-config-prettier: 8.5.0_eslint@8.22.0
@@ -3020,6 +3022,14 @@ packages:
 
   /@vue/shared/3.2.41:
     resolution: {integrity: sha512-W9mfWLHmJhkfAmV+7gDjcHeAWALQtgGT3JErxULl0oz6R6+3ug91I7IErs93eCFhPCZPHBs4QJS7YWEV7A3sxw==}
+
+  /@vue/test-utils/2.2.6_vue@3.2.41:
+    resolution: {integrity: sha512-64zHtJZdG7V/U2L0j/z3Pt5bSygccI3xs+Kl7LB73AZK4MQ8WONJhqDQPK8leUFFA9CmmoJygeky7zcl2hX10A==}
+    peerDependencies:
+      vue: ^3.0.1
+    dependencies:
+      vue: 3.2.41
+    dev: true
 
   /@vueform/multiselect/2.5.7:
     resolution: {integrity: sha512-a3aPVzaRw455YFD7PHxQfoTstgHYUpsWfOBOh4wyBxPeJPsQGFyctbqrrRpTqt45s6PXgxhcY+dO6+R8Uxgeaw==}

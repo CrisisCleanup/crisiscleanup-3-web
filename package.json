@@ -106,6 +106,7 @@
     "@typescript-eslint/parser": ">=5.0.0 <6.0.0",
     "@vitejs/plugin-vue": "^3.1.0",
     "@vitest/coverage-c8": "^0.25.7",
+    "@vue/test-utils": "^2.2.6",
     "autoprefixer": "^10.4.12",
     "eslint": "8.22.0",
     "eslint-config-prettier": "^8.5.0",
