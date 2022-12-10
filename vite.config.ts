@@ -42,6 +42,8 @@ export default defineConfig(async ({ command }) => {
   configs.push({
     test: {
       include: ['test/**/*.test.ts', 'test/**/*.spec.ts'],
+      globals: true,
+      environment: 'happy-dom',
       deps: {
         inline: ['@vue', '@vueuse'],
       },
