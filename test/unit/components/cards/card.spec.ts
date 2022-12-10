@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import Card from '@/components/cards/Card.vue';
 
-describe('TheCounter.vue', () => {
+describe('Card', () => {
   it('should render', () => {
     const wrapper = mount(Card, {
       slots: {
