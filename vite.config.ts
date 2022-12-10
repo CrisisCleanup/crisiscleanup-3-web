@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { UserConfig } from 'vite';
 import _ from 'lodash';
+import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 
@@ -30,6 +31,22 @@ export default defineConfig(async ({ command }) => {
       plugins: vitePlugins,
     },
   );
+
+  if (command === 'build') {
+    // Do something
+  } else {
+    // Do something else
+  }
+
+  // Vitest config
+  configs.push({
+    test: {
+      include: ['test/**/*.test.ts', 'test/**/*.spec.ts'],
+      deps: {
+        inline: ['@vue', '@vueuse'],
+      },
+    },
+  });
 
   return _.merge({}, ...configs) as UserConfig;
 });
