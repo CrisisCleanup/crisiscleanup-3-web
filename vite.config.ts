@@ -45,6 +45,10 @@ export default defineConfig(async ({ command }) => {
       deps: {
         inline: ['@vue', '@vueuse'],
       },
+      coverage: {
+        provider: 'c8',
+        reporter: ['text', 'json', 'html'],
+      },
     },
   });
 
