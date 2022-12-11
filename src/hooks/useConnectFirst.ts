@@ -1,5 +1,5 @@
 import { store } from '../store';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
 import User from '../models/User';
 import PhoneStatus from '../models/PhoneStatus';
@@ -10,6 +10,7 @@ import { parsePhoneNumber } from 'libphonenumber-js';
 import { getErrorMessage } from '../utils/errors';
 import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
+import usePhoneService from './phone/usePhoneService';
 
 export default function useConnectFirst(context: { emit: Function }) {
   const $toasted = useToast();
@@ -51,7 +52,7 @@ export default function useConnectFirst(context: { emit: Function }) {
   const stats = computed(() => store.getters['phone/stats']);
   const agentStats = computed(() => store.getters['phone/agentStats']);
   const callHistory = computed(() => store.getters['phone/callHistory']);
-  const phoneService = computed(() => store.getters['phone/phoneService']);
+  const phoneService = reactive(usePhoneService());
 
   const setCallHistory = (callHistory: any) =>
     store.commit('phone/setCallHistory', callHistory);
@@ -64,13 +65,13 @@ export default function useConnectFirst(context: { emit: Function }) {
     store.commit('phone/setCurrentCall', call);
 
   async function setAvailable() {
-    return phoneService.value.changeState('AVAILABLE');
+    return phoneService.changeState('AVAILABLE');
   }
   async function setWorking() {
-    return phoneService.value.changeState('WORKING');
+    return phoneService.changeState('WORKING');
   }
   async function setAway() {
-    return phoneService.value.changeState('AWAY');
+    return phoneService.changeState('AWAY');
   }
 
   async function loadAgent() {
@@ -80,16 +81,16 @@ export default function useConnectFirst(context: { emit: Function }) {
       );
       currentAgent.value = data;
     } catch (e) {
-      const { data } = await phoneService.value.createAgent();
+      const { data } = await phoneService.createAgent();
       currentAgent.value = data;
     }
   }
 
   async function logoutPhone() {
-    // await phoneService.value.changeState('AWAY');
+    // await phoneService.changeState('AWAY');
     const agent_id = currentAgent?.value?.agent_id;
     if (agent_id) {
-      await phoneService.value.logout(agent_id);
+      await phoneService.logout(agent_id);
     }
     await loadAgent();
   }
@@ -106,23 +107,23 @@ export default function useConnectFirst(context: { emit: Function }) {
       return;
     }
 
-    if (!phoneService.value.loggedInAgentId) {
-      const password = import.meta.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
+    if (!phoneService.loggedInAgentId) {
+      const password = import.meta.env.VITE_APP_PHONE_DEFAULT_PASSWORD;
 
       if (!currentAgent?.value?.agent_username) {
-        const { data } = await phoneService.value.createAgent();
+        const { data } = await phoneService.createAgent();
         currentAgent.value = data;
       }
 
       try {
-        phoneService.value.username = currentAgent?.value?.agent_username;
-        phoneService.value.password = password;
-        phoneService.value.agent_id = currentAgent?.value?.agent_id;
-        if (!phoneService.value.cf) {
-          const result = await phoneService.value.getAccessToken();
-          phoneService.value.initPhoneService(result.accessToken);
+        phoneService.username = currentAgent?.value?.agent_username;
+        phoneService.password = password;
+        phoneService.agent_id = currentAgent?.value?.agent_id;
+        if (!phoneService.cf) {
+          const result = await phoneService.getAccessToken();
+          phoneService.initPhoneService(result.accessToken);
         }
-        await phoneService.value.login(
+        await phoneService.login(
           currentAgent?.value?.agent_username,
           password,
           status,
@@ -140,17 +141,15 @@ export default function useConnectFirst(context: { emit: Function }) {
       await setWorking();
       context.emit('onLoggedIn');
     }
-    phoneService.value
-      .apiUpdateStats(phoneService.value.loggedInAgentId)
-      .catch(() => {});
+    phoneService.apiUpdateStats(phoneService.loggedInAgentId).catch(() => {});
   }
 
   async function logoutByPhoneNumber() {
     if (currentUser?.value?.mobile) {
       const parsedNumber = parsePhoneNumber(currentUser?.value?.mobile, 'US');
       await Promise.all(
-        phoneService.value.queueIds.map((queueId: string) =>
-          phoneService.value
+        phoneService.queueIds.map((queueId: string) =>
+          phoneService
             .apiLoginsByPhone(
               parsedNumber.formatNational().replace(/[^\d.]/g, ''),
               queueId,
@@ -159,10 +158,10 @@ export default function useConnectFirst(context: { emit: Function }) {
               if (data.length) {
                 await Promise.all(
                   data.map((login: any) =>
-                    phoneService.value.apiLogoutAgent(login.agentId),
+                    phoneService.apiLogoutAgent(login.agentId),
                   ),
                 );
-                phoneService.value.initPhoneService();
+                phoneService.initPhoneService();
               }
               return null;
             })
@@ -185,7 +184,7 @@ export default function useConnectFirst(context: { emit: Function }) {
     setOutgoingCall(outbound);
     setCurrentCall(outbound);
     setCaller(caller);
-    await phoneService.value.dial(
+    await phoneService.dial(
       number,
       currentIncident?.value?.active_phone_number,
     );

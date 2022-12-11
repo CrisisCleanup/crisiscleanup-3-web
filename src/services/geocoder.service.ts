@@ -45,7 +45,7 @@ export default {
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
         Authorization: `Basic ${
-          import.meta.env.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN
+          import.meta.env.VITE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN
         }`,
       },
     })

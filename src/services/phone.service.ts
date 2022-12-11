@@ -7,10 +7,10 @@ import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
-  2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
-  6: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-  7: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-  76: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+  2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
+  6: import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
+  7: import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
+  76: import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
 };
 
 // const Log = Logger({
@@ -38,8 +38,8 @@ export default class PhoneService {
     this.store = store;
     this.queueIds = Array.from(
       new Set([
-        import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
-        import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+        import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
+        import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
       ]),
     );
     let socketDest;
@@ -119,7 +119,7 @@ export default class PhoneService {
         null,
         true,
       );
-      return import.meta.env.VUE_APP_PHONE_DEFAULT_USERNAME;
+      return import.meta.env.VITE_APP_PHONE_DEFAULT_USERNAME;
     }
   }
 
@@ -275,8 +275,8 @@ export default class PhoneService {
   }
 
   login(
-    username = import.meta.env.VUE_APP_PHONE_DEFAULT_USERNAME,
-    password = import.meta.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
+    username = import.meta.env.VITE_APP_PHONE_DEFAULT_USERNAME,
+    password = import.meta.env.VITE_APP_PHONE_DEFAULT_PASSWORD,
     state = 'AVAILABLE',
     agentId = null,
   ) {
@@ -405,7 +405,7 @@ export default class PhoneService {
         } else {
           this.cf.manualOutdial(
             destination,
-            callerId || import.meta.env.VUE_APP_DEFAULT_CALLER_ID,
+            callerId || import.meta.env.VITE_APP_DEFAULT_CALLER_ID,
           );
           resolve(true);
         }

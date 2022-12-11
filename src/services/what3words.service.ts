@@ -5,7 +5,7 @@ const What3wordsService = {
     const url = new URL(`${BASE_URL}/convert-to-3wa`);
     const params = {
       coordinates: `${lat},${lng}`,
-      key: import.meta.env.VUE_APP_WHAT_3_WORDS_API_KEY,
+      key: import.meta.env.VITE_APP_WHAT_3_WORDS_API_KEY,
     } as Record<string, any>;
     Object.keys(params).forEach((key) =>
       url.searchParams.append(key, params[key]),

@@ -86,16 +86,23 @@
 <script>
 import { uniqWith } from 'lodash/array';
 import { isEqual } from 'lodash/lang';
-import ChatMessage from '../../components/chat/ChatMessage.vue';
-import { getQueryString } from '../../utils/urls';
-import { getErrorMessage } from '../../utils/errors';
-import {computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref} from 'vue';
+import {
+  computed,
+  nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from 'vue';
 import axios from 'axios';
-import useCurrentUser from '../../hooks/useCurrentUser';
-import User from '../../models/User';
 import moment from 'moment';
 import { useToast } from 'vue-toastification';
+import { getQueryString } from '../../utils/urls';
+import { getErrorMessage } from '../../utils/errors';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import User from '../../models/User';
 import { useWebSockets } from '../../hooks/useWebSockets';
+import ChatMessage from './ChatMessage.vue';
 
 export default {
   name: 'Chat',
@@ -131,7 +138,7 @@ export default {
     function handleWheel() {
       if (
         messagesBox.value.scrollTop === 0 &&
-        sortedMessages.value.length &&
+        sortedMessages.value.length > 0 &&
         !loadingMessages.value
       ) {
         getMessages(sortedMessages.value[0].created_at, false);
@@ -139,14 +146,14 @@ export default {
     }
     async function getMessages(before = null, scroll = true) {
       loadingMessages.value = true;
-      const params = {
+      const parameters = {
         message_group: props.chat.id,
         limit: 5,
       };
-      if (before && messages.value.length) {
-        params.created_at__lte = before;
+      if (before && messages.value.length > 0) {
+        parameters.created_at__lte = before;
       }
-      const queryString = getQueryString(params);
+      const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
@@ -170,15 +177,15 @@ export default {
     }
     async function getUnreadMessagesCount() {
       loadingMessages.value = true;
-      const params = {
+      const parameters = {
         message_group: props.chat.id,
         limit: 1,
         is_urgent: false,
       };
       if (currentUser.states[props.stateKey]) {
-        params.created_at__gte = currentUser.states[props.stateKey];
+        parameters.created_at__gte = currentUser.states[props.stateKey];
       }
-      const queryString = getQueryString(params);
+      const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
@@ -186,15 +193,15 @@ export default {
     }
     async function getUnreadUrgentMessagesCount() {
       loadingMessages.value = true;
-      const params = {
+      const parameters = {
         message_group: props.chat.id,
         limit: 1,
         is_urgent: true,
       };
       if (currentUser.states[props.stateKey]) {
-        params.created_at__gte = currentUser.states[props.stateKey];
+        parameters.created_at__gte = currentUser.states[props.stateKey];
       }
-      const queryString = getQueryString(params);
+      const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
@@ -240,30 +247,30 @@ export default {
     }
 
     onBeforeMount(() => {
-      const { socket, send } = useWebSockets(
-          `/ws/chat/${props.chat.id}`,
-          'chat',
-          (data) => {
-            messages.value = [data, ...messages.value];
-            if (data.created_by !== currentUser.id) {
-              if (data.is_urgent) {
-                emit('onNewUrgentMessage');
-              } else {
-                emit('onNewMessage');
-              }
+      const { socket: s, send } = useWebSockets(
+        `/ws/chat/${props.chat.id}`,
+        'chat',
+        (data) => {
+          messages.value = [data, ...messages.value];
+          if (data.created_by !== currentUser.id) {
+            if (data.is_urgent) {
+              emit('onNewUrgentMessage');
+            } else {
+              emit('onNewMessage');
             }
+          }
 
-            nextTick(() => {
-              if (messagesBox.value) {
-                messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
-              }
-            });
-          },
+          nextTick(() => {
+            if (messagesBox.value) {
+              messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
+            }
+          });
+        },
       );
 
-      socket.value = socket;
+      socket.value = s;
       sendToWebsocket = send;
-    })
+    });
 
     onMounted(async () => {
       await getUnreadMessagesCount();

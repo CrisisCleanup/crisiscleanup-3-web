@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from './pages/Dashboard.vue';
 import Work from './pages/Work.vue';
 import HomeRoutes from './pages/home/routes';
+import PhoneRoutes from './pages/phone/routes';
 import { store } from './store';
 import moment from 'moment';
 
@@ -38,6 +39,7 @@ const routes = [
     ],
   },
   ...HomeRoutes,
+  ...PhoneRoutes,
 ];
 
 const router = createRouter({

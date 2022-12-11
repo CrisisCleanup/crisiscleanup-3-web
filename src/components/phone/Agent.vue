@@ -72,13 +72,14 @@
 </template>
 
 <script>
-import LanguageTag from '../../components/tags/LanguageTag.vue';
-import EditAgentModal from '../../components/phone/EditAgentModal.vue';
-import PhoneIndicator from '../../components/phone/PhoneIndicator.vue';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
+import LanguageTag from '../tags/LanguageTag.vue';
 import useConnectFirst from '../../hooks/useConnectFirst';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import { useStore } from 'vuex';
+import EditAgentModal from './EditAgentModal.vue';
+import PhoneIndicator from './PhoneIndicator.vue';
+import usePhoneService from '@/hooks/phone/usePhoneService';
 
 export default {
   name: 'Agent',
@@ -87,7 +88,7 @@ export default {
     const editingAgent = ref(false);
     const { currentUser } = useCurrentUser();
     const store = useStore();
-    const phoneService = computed(() => store.getters['phone/phoneService']);
+    const phoneService = reactive(usePhoneService());
     const {
       languages,
       isOnCall,
@@ -107,7 +108,7 @@ export default {
       setAway,
       loginPhone,
       isOutboundCall,
-      hangup: phoneService.value.hangup,
+      hangup: phoneService.hangup,
     };
   },
 };

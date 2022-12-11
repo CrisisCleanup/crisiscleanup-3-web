@@ -17,16 +17,7 @@
       />
       <input
         type="text"
-        class="
-          h-8
-          p-1
-          border
-          bg-white
-          text-sm
-          placeholder-crisiscleanup-dark-200
-          outline-none
-          col-span-2
-        "
+        class="h-8 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
         size="large"
         v-model="phoneNumber"
         :placeholder="$t('phoneDashboard.phone_number')"
@@ -43,7 +34,9 @@
 </template>
 
 <script>
-import { EventBus } from '@/event-bus';
+import useEmitter from '../../hooks/useEmitter';
+import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
 
 export default {
   name: 'ManualDialer',
@@ -53,15 +46,17 @@ export default {
       default: false,
     },
   },
-  created() {
-    EventBus.$on('dialer:set_phone_number', (phone) => {
-      this.phoneNumber = phone;
+  setup() {
+    const { emitter } = useEmitter();
+    const { t } = useI18n();
+
+    const phoneNumber = ref(null);
+    emitter.on('dialer:set_phone_number', (phone) => {
+      phoneNumber.value = phone;
     });
-  },
-  data() {
     return {
-      countryCode: this.$t('+1'),
-      phoneNumber: null,
+      countryCode: t('+1'),
+      phoneNumber,
     };
   },
 };

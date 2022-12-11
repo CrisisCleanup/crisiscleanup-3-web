@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-between">
+  <div v-if="caller" class="flex flex-col items-center justify-between">
     <div
       class="px-2 py-1 w-full text-white bg-crisiscleanup-lightblue-800"
       v-if="isConnecting"
@@ -101,15 +101,16 @@
 import * as Sentry from '@sentry/browser';
 import useScripts from '../../hooks/phone/useScripts';
 import Worksite from '../../models/Worksite';
-import { computed, ref, watch } from 'vue';
+import {computed, reactive, ref, watch} from 'vue';
 import useWorktypeImages from '../../hooks/worksite/useWorktypeImages';
-import useConnectFirst from '../../hooks/useConnectFirst.js';
+import useConnectFirst from '../../hooks/useConnectFirst';
 import { useStore } from 'vuex';
 import moment from 'moment';
 import useCurrentUser from "../../hooks/useCurrentUser";
 import {useToast} from "vue-toastification";
 import {useI18n} from "vue-i18n";
 import {store} from "../../store";
+import usePhoneService from "../../hooks/phone/usePhoneService";
 
 export default {
   name: 'ActiveCall',
@@ -125,7 +126,7 @@ export default {
     const { currentUser } = useCurrentUser();
     const $toasted = useToast();
     const { t } = useI18n();
-    const phoneService = computed(() => store.getters['phone/phoneService']);
+    const phoneService = reactive(usePhoneService());
 
     const {
       isTakingCalls,
@@ -224,7 +225,7 @@ export default {
       isOutboundCall,
       caller,
       moment,
-      hangup: phoneService.value.hangup
+      hangup: phoneService.hangup
     };
   },
 };

@@ -1,5 +1,4 @@
 import State from '@vuex-orm/core/dist/src/model/contracts/State';
-import PhoneService from '../../services/phone.service';
 
 const AppState = {
   user: {},
@@ -15,7 +14,6 @@ const AppState = {
   callType: null,
   languages: [],
   callHistory: [],
-  phoneService: new PhoneService(),
 };
 
 // getters
@@ -53,7 +51,6 @@ const getters = {
     return state.callState === 'TRANSITION';
   },
   getLanguages: (state: State) => state.languages,
-  phoneService: (state: State) => state.phoneService as PhoneService,
 };
 
 // actions

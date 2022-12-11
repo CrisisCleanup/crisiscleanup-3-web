@@ -103,13 +103,6 @@
 </template>
 
 <script>
-import User from '../../models/User';
-import Avatar from '../../components/Avatar.vue';
-import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
-import LanguageTag from '../../components/tags/LanguageTag.vue';
-import TitledCard from '../../components/cards/TitledCard.vue';
-import { useWebSockets } from '../../hooks/useWebSockets';
-import useEmitter from '../../hooks/useEmitter';
 import {
   computed,
   onBeforeMount,
@@ -120,8 +113,15 @@ import {
 } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
-import { momentFromNow } from '../../filters/index';
 import { padStart, truncate } from 'lodash';
+import User from '../../models/User';
+import Avatar from '../Avatar.vue';
+import UserDetailsTooltip from '../user/DetailsTooltip.vue';
+import LanguageTag from '../tags/LanguageTag.vue';
+import TitledCard from '../cards/TitledCard.vue';
+import { useWebSockets } from '../../hooks/useWebSockets';
+import useEmitter from '../../hooks/useEmitter';
+import { momentFromNow } from '../../filters/index';
 
 const LEADERBOARD_RESOLUTIONS = Object.freeze({
   DAILY: 'daily',
@@ -155,8 +155,8 @@ export default {
       whiteSpace: 'nowrap',
     };
 
-    async function loadLeaderboard(resolution, url) {
-      resolution.value = resolution;
+    async function loadLeaderboard(r, url) {
+      resolution.value = r;
       const { data } = await axios.get(
         url ||
           `${
@@ -170,9 +170,9 @@ export default {
 
       await getUsers(lb.map((ranking) => ranking.user));
       leaderboard.value = lb;
-      leaderboard.value.forEach((ranking) => {
+      for (const ranking of leaderboard.value) {
         ranking.user = getUser(ranking.user);
-      });
+      }
       buildLeaderboard();
     }
     async function getUsers(userIds) {
@@ -181,7 +181,7 @@ export default {
       });
     }
     function buildLeaderboard() {
-      leaderboard.value.forEach((ranking) => {
+      for (const ranking of leaderboard.value) {
         if (agentStats.value) {
           const agentState = agentStats.value.find(
             (u) => String(u.user) === String(ranking.user.id),
@@ -191,7 +191,7 @@ export default {
           ranking.state_at = agentState ? agentState.state_at : null;
         }
         ranking.total = ranking.inbound_calls + ranking.outbound_calls;
-      });
+      }
       leaderboard.value.sort((a, b) => b.total - a.total);
       leaderboard.value = [...leaderboard.value];
     }
@@ -206,14 +206,14 @@ export default {
     }
 
     onBeforeMount(() => {
-      const { socket } = useWebSockets(
+      const { socket: s } = useWebSockets(
         '/ws/phone_stats',
         'phone_stats',
         (data) => {
           agentStats.value = data;
         },
       );
-      socket.value = socket;
+      socket.value = s;
     });
 
     onMounted(async () => {

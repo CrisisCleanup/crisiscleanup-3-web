@@ -27,27 +27,24 @@
         <span v-if="allWorksiteCount" class="font-thin">
           <span>
             {{ $t('casesVue.cases') }}
-            {{ allWorksiteCount | numeral('0,0') }}
+            {{ allWorksiteCount }}
           </span>
         </span>
         <div class="flex justify-start w-auto">
           <WorksiteSearchInput
-            width="300px"
+            :value="search"
             icon="search"
-            :suggestions="[
-              {
-                name: 'worksites',
-                data: searchWorksites || [],
-                key: 'name',
-              },
-            ]"
             display-property="name"
             :placeholder="$t('actions.search')"
             size="medium"
-            class="mx-2 w-full"
             @selectedExisting="onSelectExistingWorksite"
-            @search="onSearch"
-            @clear="onSearch"
+            @input="
+              (value) => {
+                search = value;
+              }
+            "
+            skip-validation
+            class="mx-2 w-full"
           />
         </div>
         <div
@@ -75,14 +72,16 @@
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--caller"
             >
-              <template v-slot:button>
-                <div class="w-full h-full relative">
+              <template #button>
+                <div
+                  class="w-full h-full relative flex items-center justify-center"
+                >
                   <PhoneIndicator class="w-full h-full" />
                   <!-- add invisible layer over svg to allow pointer events / onClicks -->
                   <span class="absolute inset-0 bg-transparent"></span>
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <tabs :details="false" ref="tabs" @mounted="setTabs">
                   <tab :name="$t('phoneDashboard.active_call')">
                     <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
@@ -101,7 +100,7 @@
               icon-size="small"
               icon-class="bg-black p-1"
             >
-              <template v-slot:component>
+              <template #component>
                 <ManualDialer
                   class="p-2"
                   style="z-index: 1002"
@@ -117,14 +116,14 @@
               @open="
                 () => {
                   updateUserState({
-                    chat_last_seen: $moment().toISOString(),
+                    chat_last_seen: moment().toISOString(),
                   });
                   unreadChatCount = 0;
                   unreadUrgentChatCount = 0;
                 }
               "
             >
-              <template v-slot:button>
+              <template #button>
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
@@ -146,7 +145,7 @@
                   <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <Chat
                   v-if="selectedChat"
                   @unreadCount="unreadChatCount = $event"
@@ -165,13 +164,13 @@
               @open="
                 () => {
                   updateUserState({
-                    news_last_seen: $moment().toISOString(),
+                    news_last_seen: moment().toISOString(),
                   });
                   unreadNewsCount = 0;
                 }
               "
             >
-              <template v-slot:button>
+              <template #button>
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
@@ -184,7 +183,7 @@
                   <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <PhoneNews @unreadCount="unreadNewsCount = $event" />
               </template>
             </PhoneComponentButton>
@@ -197,15 +196,15 @@
               icon-size="large"
               icon-class="p-1"
             >
-              <template v-slot:component>
-                <CallHistory
-                  :calls="callHistory"
-                  @rowClick="
-                    ({ mobile }) => {
-                      setManualOutbound(mobile);
-                    }
-                  "
-                />
+              <template #component>
+                <!--                <CallHistory-->
+                <!--                  :calls="callHistory"-->
+                <!--                  @rowClick="-->
+                <!--                    ({ mobile }) => {-->
+                <!--                      setManualOutbound(mobile);-->
+                <!--                    }-->
+                <!--                  "-->
+                <!--                />-->
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -213,14 +212,14 @@
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--stats"
             >
-              <template v-slot:button>
+              <template #button>
                 <div class="w-full h-full flex items-center justify-center">
                   <div class="text-xl">
                     {{ callsWaiting }}
                   </div>
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <GeneralStats
                   @onRemainingCallbacks="remainingCallbacks = $event"
                   @onRemainingCalldowns="remainingCalldowns = $event"
@@ -235,12 +234,12 @@
               icon-size="medium"
               icon-class="p-1"
             >
-              <template v-slot:button>
+              <template #button>
                 <div class="w-full h-full flex items-center justify-center">
                   <ccu-icon :fa="true" type="users" class="p-1" size="medium" />
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <Leaderboard class="h-full" />
               </template>
             </PhoneComponentButton>
@@ -252,7 +251,7 @@
               icon-size="small"
               icon-class="p-1"
             >
-              <template v-slot:component>
+              <template #component>
                 <div class="flex items-center justify-center p-3">
                   <base-button
                     size="medium"
@@ -296,7 +295,7 @@
                       )
                     "
                   />
-                  {{ work_type.work_type | getWorkTypeName }}
+                  {{ getWorkTypeName(work_type.work_type) }}
                 </div>
               </div>
             </template>
@@ -304,7 +303,7 @@
         </div>
       </div>
     </div>
-    <div class="phone-system__form">
+    <div class="phone-system__form h-full min-h-0">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -356,13 +355,13 @@
         <span class="text-base">{{ $t('actions.history') }}</span>
         <div></div>
       </div>
-      <div class="phone-system__form-body">
+      <div class="h-auto min-h-0">
         <CaseHistory
           v-if="showHistory"
           :incident-id="currentIncidentId"
           :worksite-id="worksiteId"
         ></CaseHistory>
-        <case-form
+        <WorksiteForm
           v-else
           ref="worksiteForm"
           :incident-id="String(currentIncidentId)"
@@ -395,33 +394,47 @@
 </template>
 
 <script>
-import { debounce } from 'lodash';
-import CaseForm from '@/pages/CaseForm';
-import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
-import ManualDialer from '@/components/phone/ManualDialer';
-import { ConnectFirstMixin, DialogsMixin, UserMixin } from '@/mixins';
-import AjaxTable from '@/components/AjaxTable';
-import { formatNationalNumber, getColorForStatus } from '@/filters';
-import CaseHeader from '@/components/CaseHeader';
-import Worksite from '@/models/Worksite';
-import CaseHistory from '@/pages/CaseHistory';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
-import { getErrorMessage } from '@/utils/errors';
-import PhoneOutbound from '@/models/PhoneOutbound';
-import { EventBus } from '@/event-bus';
-import GeneralStats from '@/components/phone/GeneralStats';
-import CallHistory from '@/components/phone/Widgets/CallHistory';
-import SimpleMap from '@/components/SimpleMap';
-import Leaderboard from '@/components/phone/Leaderboard';
-import Incident from '@/models/Incident';
-import Chat from '@/components/chat/Chat';
-import PhoneNews from '@/../../../../../../experiments/crisiscleanup-4-web/src/components/phone/PhoneNews';
-import PhoneToolBar from '@/pages/phone/PhoneToolBar';
-import ActiveCall from '@/components/phone/ActiveCall';
-import UpdateStatus from '@/components/phone/UpdateStatus';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
-import { loadCasesCached } from '@/utils/worksite';
-import useWorksiteMap from '@/use/worksites/useWorksiteMap';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import { useStore } from 'vuex';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import moment from 'moment';
+import PhoneComponentButton from '../../components/phone/PhoneComponentButton.vue';
+import ManualDialer from '../../components/phone/ManualDialer.vue';
+import AjaxTable from '../../components/AjaxTable.vue';
+import {
+  formatNationalNumber,
+  getColorForStatus,
+  getWorkTypeName,
+} from '../../filters';
+import CaseHeader from '../../components/work/CaseHeader.vue';
+import Worksite from '../../models/Worksite';
+import CaseHistory from '../../components/work/CaseHistory.vue';
+import WorksiteSearchInput from '../../components/work/WorksiteSearchInput.vue';
+import { getErrorMessage } from '../../utils/errors';
+import PhoneOutbound from '../../models/PhoneOutbound';
+import useEmitter from '../../hooks/useEmitter';
+import GeneralStats from '../../components/phone/GeneralStats.vue';
+import CallHistory from '../../components/phone/CallHistory.vue';
+import SimpleMap from '../../components/SimpleMap.vue';
+import Leaderboard from '../../components/phone/Leaderboard.vue';
+import Incident from '../../models/Incident';
+import Chat from '../../components/chat/Chat.vue';
+import ActiveCall from '../../components/phone/ActiveCall.vue';
+import UpdateStatus from '../../components/phone/UpdateStatus.vue';
+import PhoneIndicator from '../../components/phone/PhoneIndicator.vue';
+import { loadCasesCached } from '../../utils/worksite';
+import useWorksiteMap from '../../hooks/worksite/useWorksiteMap';
+import PhoneToolBar from '../../components/phone/PhoneToolBar.vue';
+import PhoneNews from '../../components/phone/PhoneNews.vue';
+import useDialogs from '../../hooks/useDialogs';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import User from '../../models/User';
+import WorksiteForm from '../../components/work/WorksiteForm.vue';
+import usePhoneService from '@/hooks/phone/usePhoneService';
 
 export default {
   name: 'PhoneSystem',
@@ -442,172 +455,165 @@ export default {
     AjaxTable,
     ManualDialer,
     PhoneComponentButton,
-    CaseForm,
+    WorksiteForm,
   },
-  mixins: [ConnectFirstMixin, DialogsMixin, UserMixin],
-  data() {
-    return {
-      imageUrl: '',
-      numClicks: 0,
-      scale: 1,
-      worksiteId: null,
-      isEditing: false,
-      mapLoading: false,
-      map: null,
-      hover: false,
-      showingMap: true,
-      showingTable: false,
-      allWorksiteCount: 0,
-      getColorForStatus,
-      viewCase: false,
-      showHistory: false,
-      showFlags: false,
-      searchWorksites: [],
-      chatGroups: [],
-      selectedChat: null,
-      searchingWorksites: false,
-      dialing: false,
-      serveOutbounds: true,
-      tabs: null,
-      showMobileMap: false,
-      remainingCallbacks: 0,
-      remainingCalldowns: 0,
-      unreadNewsCount: 0,
-      unreadChatCount: 0,
-      unreadUrgentChatCount: 0,
-      mapUtils: null,
-    };
-  },
-  async mounted() {
-    if (this.currentUser.isAdmin) {
-      this.serveOutbounds = false;
-    }
-    await this.init();
-  },
-  computed: {
-    prefillData() {
-      if (this.caller?.dnis) {
+  setup(props, context) {
+    const { t } = useI18n();
+    const $toasted = useToast();
+    const { confirm } = useDialogs();
+    const { emitter } = useEmitter();
+    const router = useRouter();
+    const store = useStore();
+    const { currentUser } = useCurrentUser();
+    const phoneService = reactive(usePhoneService());
+
+    const imageUrl = ref('');
+    const numberClicks = ref(0);
+    const scale = ref(1);
+    const worksiteId = ref(null);
+    const isEditing = ref(false);
+    const mapLoading = ref(false);
+    const map = ref(null);
+    const hover = ref(false);
+    const showingMap = ref(true);
+    const showingTable = ref(false);
+    const allWorksiteCount = ref(0);
+    const viewCase = ref(false);
+    const showHistory = ref(false);
+    const showFlags = ref(false);
+    const searchWorksites = ref([]);
+    const chatGroups = ref([]);
+    const selectedChat = ref(null);
+    const searchingWorksites = ref(false);
+    const dialing = ref(false);
+    const serveOutbounds = ref(true);
+    const tabs = ref(null);
+    const showMobileMap = ref(false);
+    const remainingCallbacks = ref(0);
+    const remainingCalldowns = ref(0);
+    const unreadNewsCount = ref(0);
+    const unreadChatCount = ref(0);
+    const unreadUrgentChatCount = ref(0);
+    const search = ref('');
+    const mapUtils = ref(null);
+    const worksiteForm = ref(null);
+    const statusTab = ref(null);
+    const connectFirst = useConnectFirst(context);
+
+    const {
+      isOnCall,
+      caller,
+      stats,
+      currentIncidentId,
+      call,
+      clearCall,
+      loadAgent,
+      setWorking,
+      dialNextOutbound,
+      setAvailable,
+      setGeneralStats,
+      setCurrentIncidentId,
+    } = connectFirst;
+
+    const prefillData = computed(function () {
+      if (caller.value?.dnis) {
         return {
-          phone1: this.caller?.dnis,
+          phone1: caller.value?.dnis,
         };
       }
       return {};
-    },
-    callsWaiting() {
+    });
+    const callsWaiting = computed(function () {
       return (
-        Number(this.stats.inQueue || 0) +
-        Number(this.stats.active || 0) +
-        Number(this.remainingCallbacks || 0) +
-        Number(this.remainingCalldowns || 0)
+        Number(stats.value.inQueue || 0) +
+        Number(stats.value.active || 0) +
+        Number(remainingCallbacks.value || 0) +
+        Number(remainingCallbacks.value || 0)
       );
-    },
-    showingDetails() {
-      return this.showHistory || this.showFlags;
-    },
-    tableUrl() {
-      return `${process.env.VUE_APP_API_BASE_URL}/worksites`;
-    },
-    worksiteQuery() {
+    });
+    const showingDetails = computed(function () {
+      return showHistory.value || showFlags.value;
+    });
+    const tableUrl = computed(
+      () => `${import.meta.env.VITE_APP_API_BASE_URL}/worksites`,
+    );
+    const worksiteQuery = computed(function () {
       return {
-        incident: this.currentIncidentId,
+        incident: currentIncidentId.value,
       };
-    },
-    columns() {
-      return [
-        {
-          title: this.$t('casesVue.number_abbrev'),
-          dataIndex: 'case_number',
-          key: 'case_number',
-          sortKey: 'id',
-          width: '0.5fr',
-          sortable: true,
-        },
-        {
-          title: this.$t('casesVue.work_type'),
-          dataIndex: 'work_types',
-          key: 'work_types',
-          scopedSlots: { customRender: 'work_types' },
-          width: '1.5fr',
-        },
-        {
-          title: this.$t('casesVue.name'),
-          dataIndex: 'name',
-          key: 'name',
-          width: '1.5fr',
-          sortable: true,
-        },
-        {
-          title: this.$t('casesVue.full_address'),
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-          title: this.$t('casesVue.city'),
-          dataIndex: 'city',
-          key: 'city',
-          sortable: true,
-        },
-        {
-          title: this.$t('casesVue.county_parish'),
-          dataIndex: 'county',
-          key: 'county',
-          sortable: true,
-        },
-      ];
-    },
-    worksite() {
-      if (this.worksiteId) {
-        return Worksite.find(this.worksiteId);
+    });
+    const columns = [
+      {
+        title: t('casesVue.number_abbrev'),
+        dataIndex: 'case_number',
+        key: 'case_number',
+        sortKey: 'id',
+        width: '0.5fr',
+        sortable: true,
+      },
+      {
+        title: t('casesVue.work_type'),
+        dataIndex: 'work_types',
+        key: 'work_types',
+        scopedSlots: { customRender: 'work_types' },
+        width: '1.5fr',
+      },
+      {
+        title: t('casesVue.name'),
+        dataIndex: 'name',
+        key: 'name',
+        width: '1.5fr',
+        sortable: true,
+      },
+      {
+        title: t('casesVue.full_address'),
+        dataIndex: 'address',
+        key: 'address',
+      },
+      {
+        title: t('casesVue.city'),
+        dataIndex: 'city',
+        key: 'city',
+        sortable: true,
+      },
+      {
+        title: t('casesVue.county_parish'),
+        dataIndex: 'county',
+        key: 'county',
+        sortable: true,
+      },
+    ];
+    const worksite = computed(function () {
+      if (worksiteId.value) {
+        return Worksite.find(worksiteId.value);
       }
       return null;
-    },
-    incidentsWithActivePhones() {
-      return Incident.query()
-        .where('active_phone_number', (number) => Boolean(number))
-        .get();
-    },
-  },
-  methods: {
-    async init() {
-      this.$phoneService.apiGetQueueStats().then((response) => {
-        this.setGeneralStats({ ...response.data });
-      });
-      await this.getChatGroups();
-      const { chatGroups } = this;
-      const [group] = chatGroups;
-      this.selectedChat = group;
-      const markers = await this.getWorksites();
-      this.mapUtils = useWorksiteMap(
-        markers,
-        markers.map((m) => m.id),
-        (m) => {
-          this.onSelectMarker(m);
-        },
-        () => {},
-        true,
-      );
-    },
-    getIncidentPhoneNumbers(incident) {
+    });
+    const incidentsWithActivePhones = computed(() =>
+      Incident.query().where('active_phone_number', Boolean).get(),
+    );
+
+    function getIncidentPhoneNumbers(incident) {
       if (Array.isArray(incident.active_phone_number)) {
         return incident.active_phone_number
           .map((number) => formatNationalNumber(String(number)))
           .join(', ');
       }
       return formatNationalNumber(String(incident.active_phone_number));
-    },
-    async completeCall({ status, notes }) {
-      if (this.$refs.worksiteForm.dirtyFields.size) {
-        const result = await this.$confirm({
-          title: this.$t('phoneDashboard.complete_call'),
-          content: this.$t('phoneDashboard.unsaved_changes_error'),
+    }
+    async function completeCall({ status, notes }) {
+      if (worksiteForm.value.dirtyFields.size > 0) {
+        const result = await confirm({
+          title: t('phoneDashboard.complete_call'),
+          content: t('phoneDashboard.unsaved_changes_error'),
           actions: {
             no: {
-              text: this.$t('actions.do_not_save'),
+              text: t('actions.do_not_save'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             yes: {
-              text: this.$t('actions.continue'),
+              text: t('actions.continue'),
               type: 'solid',
             },
           },
@@ -618,182 +624,270 @@ export default {
       }
 
       try {
-        if (this.$phoneService.callInfo.callType === 'OUTBOUND' && status) {
-          await PhoneOutbound.api().updateStatus(this.call.id, {
+        if (phoneService.callInfo.callType === 'OUTBOUND' && status) {
+          await PhoneOutbound.api().updateStatus(call.value.id, {
             statusId: status,
-            worksiteId: this.worksiteId,
+            worksiteId: worksiteId.value,
             notes,
           });
         }
 
-        if (this.$phoneService.callInfo.callType === 'INBOUND') {
+        if (phoneService.callInfo.callType === 'INBOUND') {
           let data = {
             status,
             notes,
           };
-          if (this.worksiteId) {
-            data = { ...data, cases: [this.worksiteId] };
+          if (worksiteId.value) {
+            data = { ...data, cases: [worksiteId.value] };
           }
-          await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
+          await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/phone_inbound/${
+              this.call.id
+            }/update_status`,
             data,
           );
         }
 
-        await this.$toasted.success(this.$t('phoneDashboard.update_success'));
-        this.clearCall();
-        this.clearCase();
-        await this.loadAgent();
+        await $toasted.success(t('phoneDashboard.update_success'));
+        clearCall();
+        clearCase();
+        await loadAgent();
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    setManualOutbound(phone) {
-      EventBus.$emit('phone_component:open', 'dialer');
-      EventBus.$emit('dialer:set_phone_number', formatNationalNumber(phone));
-    },
-    clearCase() {
-      this.worksiteId = null;
-      this.isEditing = false;
-    },
-    setTabs(tabs) {
-      this.tabs = tabs;
-    },
-    toggleView(view) {
-      this.showingMap = false;
-      this.showingTable = false;
-      this[view] = true;
-    },
-    onSelectExistingWorksite(worksite) {
+    }
+    function setManualOutbound(phone) {
+      emitter.emit('phone_component:open', 'dialer');
+      emitter.emit('dialer:set_phone_number', formatNationalNumber(phone));
+    }
+    function clearCase() {
+      worksiteId.value = null;
+      isEditing.value = false;
+    }
+    function setTabs(t) {
+      tabs.value = t;
+    }
+    function toggleView(view) {
+      showingMap.value = false;
+      showingTable.value = false;
+      [view].value = true;
+    }
+    function onSelectExistingWorksite(worksite) {
       // only show worksite on map if on map view
-      if (this.showingMap && !this.showingTable) {
+      if (showingMap.value && !showingTable.value) {
         console.log('pushing worksite to map', worksite);
-        this.$router.push({
+        router.push({
           query: { showOnMap: true },
         });
       } else {
-        this.$router.push({
+        router.push({
           query: {}, // clear query params
         });
       }
-      this.worksiteId = worksite.id;
-      this.isEditing = true;
-    },
-    onSearch: debounce(
-      async function (search) {
-        this.searchingWorksites = true;
-        if (!search) {
-          this.searchWorksites = [];
-        }
-        const searchData = await this.search(search, this.currentIncidentId);
-        this.searchWorksites = search ? searchData.data.results : [];
-        this.searchingWorksites = false;
-      },
-      250,
-      {
-        leading: false,
-        trailing: true,
-      },
-    ),
-    search(search, incident) {
-      return this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
-      );
-    },
-    async addMarkerToMap(location) {
-      this.mapUtils.addMarkerToMap(location);
-    },
-    async jumpToCase() {
+      worksiteId.value = worksite.id;
+      isEditing.value = true;
+    }
+    async function addMarkerToMap(location) {
+      mapUtils.value.addMarkerToMap(location);
+    }
+    async function jumpToCase() {
       this.toggleView('showingMap');
-      this.mapUtils.jumpToCase(this.worksite, true);
-    },
-    onSelectMarker(marker) {
-      this.isEditing = true;
-      this.worksiteId = marker.id;
-    },
-    async getWorksites() {
-      this.mapLoading = true;
+      mapUtils.value.jumpToCase(this.worksite, true);
+    }
+    function onSelectMarker(marker) {
+      isEditing.value = true;
+      worksiteId.value = marker.id;
+    }
+    async function getWorksites() {
+      mapLoading.value = true;
       const response = await loadCasesCached({
-        incident: this.currentIncidentId,
+        incident: currentIncidentId.value,
       });
-      this.mapLoading = false;
-      this.allWorksiteCount = response.results.length;
+      mapLoading.value = false;
+      allWorksiteCount.value = response.results.length;
       return response.results;
-    },
-    async onLoggedIn() {
+    }
+    async function onLoggedIn() {
       if (
         this.serveOutbounds &&
-        Number(this.stats.inQueue || this.stats.routing || 0) === 0
+        Number(stats.value.inQueue || stats.value.routing || 0) === 0
       ) {
-        if (this.remainingCallbacks + this.remainingCalldowns > 0) {
-          await this.setWorking();
+        if (remainingCallbacks.value + remainingCalldowns.value > 0) {
+          await setWorking();
         }
-        await this.dialNextOutbound();
+        await dialNextOutbound();
       } else {
-        await this.setAvailable();
+        await setAvailable();
       }
-    },
-    onToggleOutbounds(value) {
-      this.serveOutbounds = value;
-    },
-    selectCase(worksite) {
+    }
+    function onToggleOutbounds(value) {
+      serveOutbounds.value = value;
+    }
+    function selectCase(worksite) {
       if (worksite) {
-        this.setCurrentIncidentId(worksite.incident);
-        this.worksiteId = worksite.id;
+        setCurrentIncidentId(worksite.incident);
+        worksiteId.value = worksite.id;
       } else {
-        this.worksiteId = null;
+        worksiteId.value = null;
       }
-    },
-    async getChatGroups() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_groups`,
+    }
+    async function getChatGroups() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups`,
         {
           params: {
             channel: 'phone',
           },
         },
       );
-      this.chatGroups = response.data.results;
-    },
-    focusNewsTab() {
-      EventBus.$emit('phone_component:close');
+      chatGroups.value = response.data.results;
+    }
+    function focusNewsTab() {
+      emitter.emit('phone_component:close');
       // open the active call PhoneComponentButton
-      EventBus.$emit('phone_component:open', 'news');
-    },
-  },
-  watch: {
-    worksiteId(newValue, oldValue) {
-      if (oldValue !== newValue) {
-        this.showMobileMap = false;
+      emitter.emit('phone_component:open', 'news');
+    }
+    async function init() {
+      phoneService.apiGetQueueStats().then((response) => {
+        setGeneralStats({ ...response.data });
+      });
+      await getChatGroups();
+      const [group] = chatGroups.value;
+      selectedChat.value = group;
+      const markers = await getWorksites();
+      mapUtils.value = useWorksiteMap(
+        markers,
+        markers.map((m) => m.id),
+        (m) => {
+          onSelectMarker(m);
+        },
+        () => {},
+        false,
+      );
+    }
+
+    watch(
+      () => worksiteId.value,
+      (newValue, oldValue) => {
+        if (oldValue !== newValue) {
+          showMobileMap.value = false;
+        }
+      },
+    );
+
+    watch(
+      () => caller.value,
+      (oldValue, newValue) => {
+        if (!oldValue && newValue) {
+          emitter.emit('phone_component:close');
+          // open the active call PhoneComponentButton
+          emitter.emit('phone_component:open', 'caller');
+        }
+      },
+    );
+
+    watch(
+      () => call.value,
+      (oldValue, newValue) => {
+        if (!oldValue && newValue) {
+          emitter.emit('phone_component:open', 'agent');
+        }
+      },
+    );
+
+    watch(
+      () => isOnCall.value,
+      (oldValue, newValue) => {
+        if (oldValue && !newValue) {
+          tabs.value.selectTab(statusTab.value);
+        }
+      },
+    );
+
+    watch(
+      () => currentIncidentId.value,
+      (value) => {
+        if (value) {
+          getWorksites().then((markers) => {
+            mapUtils.value.reloadMap(
+              markers,
+              markers.map((m) => m.id),
+            );
+          });
+        }
+      },
+    );
+
+    onMounted(async () => {
+      if (currentUser.isAdmin) {
+        serveOutbounds.value = false;
       }
-    },
-    caller(newValue, oldValue) {
-      if (!oldValue && newValue) {
-        EventBus.$emit('phone_component:close');
-        // open the active call PhoneComponentButton
-        EventBus.$emit('phone_component:open', 'caller');
-      }
-    },
-    call(newValue, oldValue) {
-      if (!oldValue && newValue) {
-        EventBus.$emit('phone_component:open', 'agent');
-      }
-    },
-    isOnCall(newValue, oldValue) {
-      if (oldValue && !newValue) {
-        this.tabs.selectTab(this.$refs.statusTab);
-      }
-    },
-    currentIncidentId(value) {
-      if (value) {
-        this.getWorksites().then((markers) => {
-          this.mapUtils.reloadMap(
-            markers,
-            markers.map((m) => m.id),
-          );
-        });
-      }
-    },
+      await init();
+    });
+
+    return {
+      imageUrl,
+      numClicks: numberClicks,
+      scale,
+      worksiteId,
+      isEditing,
+      mapLoading,
+      map,
+      hover,
+      showingMap,
+      showingTable,
+      allWorksiteCount,
+      viewCase,
+      showHistory,
+      showFlags,
+      searchWorksites,
+      chatGroups,
+      selectedChat,
+      searchingWorksites,
+      dialing,
+      serveOutbounds,
+      tabs,
+      showMobileMap,
+      remainingCallbacks,
+      remainingCalldowns,
+      unreadNewsCount,
+      unreadChatCount,
+      unreadUrgentChatCount,
+      mapUtils,
+      getColorForStatus,
+      prefillData,
+      callsWaiting,
+      showingDetails,
+      tableUrl,
+      worksiteQuery,
+      columns,
+      worksite,
+      incidentsWithActivePhones,
+      worksiteForm,
+      statusTab,
+      ...connectFirst,
+      init,
+      getIncidentPhoneNumbers,
+      completeCall,
+      setManualOutbound,
+      clearCase,
+      setTabs,
+      toggleView,
+      onSelectExistingWorksite,
+      search,
+      addMarkerToMap,
+      jumpToCase,
+      onSelectMarker,
+      getWorksites,
+      onLoggedIn,
+      onToggleOutbounds,
+      selectCase,
+      getChatGroups,
+      focusNewsTab,
+      getWorkTypeName,
+      updateUserState: User.api().updateUserState,
+      moment,
+    };
   },
 };
 </script>

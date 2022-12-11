@@ -5,11 +5,14 @@
 
 import { computed } from 'vue';
 import { wrap } from '../../utils/wrap';
-import { theme } from '../../../tailwind.config.cjs';
+import * as config from 'tailwind.config';
 import Incident from '../../models/Incident';
 import Worksite from '../../models/Worksite';
 import { useI18n } from 'vue-i18n';
 import useCurrentUser from '../useCurrentUser';
+import moment from 'moment';
+
+const { theme } = config;
 
 const CallType = Object.freeze({
   INBOUND: 'INBOUND',
@@ -85,7 +88,7 @@ export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
           name: currentUser.first_name,
           incidentType: _incident.value ? _incident.value.incident_type : '',
           timeAgo: _recentWorksite.value
-            ? window.vue.$moment(_recentWorksite.value.updated_at).fromNow()
+            ? moment(_recentWorksite.value.updated_at).fromNow()
             : '',
         },
       ),

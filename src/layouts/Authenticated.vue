@@ -38,7 +38,7 @@
       />
     </div>
     <div class="main">
-      <div class="h-full overflow-scroll">
+      <div class="h-full overflow-auto">
         <slot/>
       </div>
     </div>

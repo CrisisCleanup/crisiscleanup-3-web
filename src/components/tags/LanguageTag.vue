@@ -6,7 +6,7 @@
 
 <script>
 import Language from '../../models/Language';
-import { theme } from '../../../tailwind.config';
+import * as config from 'tailwind.config';
 import { computed, onMounted, ref } from 'vue';
 
 export default {
@@ -22,6 +22,7 @@ export default {
     },
   },
   setup(props) {
+    const { theme } = config;
     const language = ref(null);
     const styles = computed(() => {
       if (!language.value) {
