@@ -19,7 +19,7 @@
     "lint": "xo \"**/*.{vue,json,ts?(x)}\"",
     "lint:fix": "xo --fix \"**/*.{vue,json,ts?(x)}\"",
     "lint:errors": "pnpm run lint --quiet",
-    "lint:format": "pnpm run lint:fix --cache && nr format",
+    "lint:format": "pnpm run lint:fix && pnpm run format",
     "format": "xo --prettier \"**/*.{vue,ts?(x),json,y?(a)ml}\"",
     "clean": "pnpm dlx rimraf dist \"**/coverage\"",
     "repair:clean-modules": "pnpm dlx rimraf node_modules",
@@ -137,13 +137,6 @@
     ],
     "*.{y?(a)ml,?(m)js}": [
       "xo --prettier"
-    ]
-  },
-  "xo": {
-    "prettier": true,
-    "envs": [
-      "browser",
-      "es2022"
     ]
   }
 }
