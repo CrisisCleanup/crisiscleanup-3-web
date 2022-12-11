@@ -2,7 +2,7 @@ import { AuthService } from '../services/auth.service';
 
 export function useWebSockets(url, name, cb) {
   const endpoint = import.meta.env.VITE_APP_API_BASE_URL.replace('http', 'ws');
-  let socket: WebSocket | null;
+  let socket: WebSocket | undefined;
   let send;
 
   function connect() {
@@ -10,21 +10,24 @@ export function useWebSockets(url, name, cb) {
       `${endpoint}${url}?bearer=${AuthService.getToken()}`,
     );
 
-    const sendMessage = (msg: Record<any, any>) => {
-      socket?.send(JSON.stringify(msg));
+    const sendMessage = (message: Record<any, any>) => {
+      socket?.send(JSON.stringify(message));
     };
 
     socket.onmessage = (e) => {
       cb(JSON.parse(e.data));
     };
-    socket.onopen = (e) => {
-      // window.vue.$log.debug(`open connection with ${name} socket`, e);
-    };
+
+    socket.addEventListener('open', (e) => {
+      // Window.vue.$log.debug(`open connection with ${name} socket`, e);
+    });
+
     socket.onerror = (e) => {
-      // window.vue.$log.error(`error in connection with ${name} socket`, e);
+      // Window.vue.$log.error(`error in connection with ${name} socket`, e);
     };
-    socket.onclose = (e) => {
-      // window.vue.$log.error(
+
+    socket.addEventListener('close', (e) => {
+      // Window.vue.$log.error(
       //   `closed connection with ${name} socket. Attempting reconnect in 1 second`,
       //   e,
       // );
@@ -33,9 +36,11 @@ export function useWebSockets(url, name, cb) {
         send = websocket.send;
         socket = websocket.socket;
       }, 1000);
-    };
+    });
+
     return { socket, send: sendMessage };
   }
+
   const websocket = connect();
   send = websocket.send;
   socket = websocket.socket;

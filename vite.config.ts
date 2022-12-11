@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { defineConfig } from 'vite';
 import type { UserConfig } from 'vite';
 import _ from 'lodash';
@@ -6,7 +7,6 @@ import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcssConfig from './postcss.config.cjs';
-import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ command }) => {
@@ -23,7 +23,7 @@ export default defineConfig(async ({ command }) => {
       define: {
         __VUE_PROD_DEVTOOLS__: true,
       },
-      // css: {
+      // Css: {
       //   postcss: {
       //     plugins: postcssConfig.plugins,
       //   },

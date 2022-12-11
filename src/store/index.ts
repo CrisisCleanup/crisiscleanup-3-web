@@ -1,21 +1,21 @@
 import { createStore } from 'vuex';
+import VuexORM from '@vuex-orm/core';
+import VuexORMAxios from '@vuex-orm/plugin-axios';
+import axios from 'axios';
+import { AuthService } from '../services/auth.service';
 import auth from './modules/auth';
 import incident from './modules/incident';
 
-import VuexORM from '@vuex-orm/core';
-import VuexORMAxios from '@vuex-orm/plugin-axios';
 import database from './database';
 import acl from './modules/acl';
 import enums from './modules/enums';
 import locale from './modules/locale';
 import loading from './modules/loading';
 import events from './modules/events';
-import axios from 'axios';
-import { AuthService } from '../services/auth.service';
 
-// import events from './modules/events';
+// Import events from './modules/events';
 import phone from './modules/phone';
-// import rc from './modules/rc';
+// Import rc from './modules/rc';
 // import socket from './modules/socket';
 // import ui from './modules/ui';
 import map from './modules/map';
@@ -39,11 +39,11 @@ export const store = createStore({
     loading,
     locale,
     enums,
-    // rc,
+    // Rc,
     // socket,
     phone,
     map,
-    // ui,
+    // Ui,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,

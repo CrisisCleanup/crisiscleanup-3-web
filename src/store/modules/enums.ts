@@ -1,4 +1,4 @@
-import State from "@vuex-orm/core/dist/src/model/contracts/State";
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 
 const AppState = {
   statuses: [],
@@ -8,25 +8,25 @@ const AppState = {
   portal: null,
 };
 
-// getters
+// Getters
 const getters = {
   statuses: (state: State) => state.statuses,
   workTypes: (state: State) => state.workTypes,
   portal: (state: State) => state.portal,
   phases: (state: State) => state.phases,
   locationTypes: (state: State) => state.locationTypes,
-  workTypeCommercialValues: (state: State) => {
+  workTypeCommercialValues(state: State) {
     return Object.assign(
       {},
-      ...state.workTypes.map((s: any) => ({ [s.key]: s.commercial_value }))
+      ...state.workTypes.map((s: any) => ({ [s.key]: s.commercial_value })),
     );
   },
 };
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setStatuses(state: State, statuses: any[]) {
     state.statuses = statuses;

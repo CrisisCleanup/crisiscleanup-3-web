@@ -1,6 +1,6 @@
-import Filter from './Filter';
-import { snakeToTitleCase } from '../../filters';
 import { useI18n } from 'vue-i18n';
+import { snakeToTitleCase } from '../../filters';
+import Filter from './Filter';
 
 export default class WorksiteStatusFilter extends Filter {
   packFunction() {
@@ -8,11 +8,12 @@ export default class WorksiteStatusFilter extends Filter {
     const statusEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (statusEntries.length) {
+    if (statusEntries.length > 0) {
       packed.work_type__status__in = statusEntries
         .map(([status]) => status)
         .join(',');
     }
+
     return packed;
   }
 
@@ -20,6 +21,7 @@ export default class WorksiteStatusFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const statusEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -28,15 +30,14 @@ export default class WorksiteStatusFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        labels[key] = `${useI18n().t(
-          'worksiteFilters.status',
-        )}: ${snakeToTitleCase(key)}`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      labels[key] = `${useI18n().t(
+        'worksiteFilters.status',
+      )}: ${snakeToTitleCase(key)}`;
+    }
+
     return labels;
   }
 

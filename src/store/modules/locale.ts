@@ -1,16 +1,16 @@
-import State from "@vuex-orm/core/dist/src/model/contracts/State";
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 
 const AppState = {
   language: null,
 };
 
-// getters
+// Getters
 const getters = {};
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setLanguage(state: State, language: any) {
     state.language = language;

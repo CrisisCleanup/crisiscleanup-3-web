@@ -1,5 +1,5 @@
-import Filter from './Filter';
 import Role from '../../models/Role';
+import Filter from './Filter';
 
 export default class UserRoleFilter extends Filter {
   packFunction() {
@@ -7,9 +7,10 @@ export default class UserRoleFilter extends Filter {
     const filteredRoles = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (filteredRoles.length) {
+    if (filteredRoles.length > 0) {
       packed.role = filteredRoles.map(([roleId]) => roleId).join(',');
     }
+
     return packed;
   }
 
@@ -22,14 +23,13 @@ export default class UserRoleFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        const { id, name_t } = Role.find(key);
-        labels[id] = name_t;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      const { id, name_t } = Role.find(key);
+      labels[id] = name_t;
+    }
+
     return labels;
   }
 

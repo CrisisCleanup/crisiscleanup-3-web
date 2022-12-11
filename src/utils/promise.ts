@@ -1,11 +1,11 @@
-import { zipObject } from "lodash";
-import moment from "moment";
-import axios from "axios";
-import { StorageService } from "../services/storage.service";
+import { zipObject } from 'lodash';
+import moment from 'moment';
+import axios from 'axios';
+import { StorageService } from '../services/storage.service';
 
 export async function hash(hashOfPromises: Record<string, Promise<any>>) {
   const keys = Object.keys(hashOfPromises);
-  const promises = keys.map((key) => hashOfPromises[key]);
+  const promises = keys.map(async (key) => hashOfPromises[key]);
   const values = await Promise.all(promises);
 
   return zipObject(keys, values);
@@ -29,7 +29,7 @@ export const cachedGet = async (url: string, config: any, key: string) => {
 
   StorageService.setItem(`enums:${key}`, {
     httpResponse: response,
-    nextAttempt: moment().add(7, "days").toISOString(),
+    nextAttempt: moment().add(7, 'days').toISOString(),
   });
 
   return response;

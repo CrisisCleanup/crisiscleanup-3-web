@@ -8,13 +8,15 @@ export default function useValidation() {
     } catch {
       return { newValue: value, valid: false };
     }
+
     try {
       parsePhoneNumber(newValue, 'US');
-    } catch (e) {
-      if (e instanceof ParseError) {
+    } catch (error) {
+      if (error instanceof ParseError) {
         return { newValue, valid: false };
       }
     }
+
     return { newValue, valid: true };
   }
 

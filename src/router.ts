@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import moment from 'moment';
 import Dashboard from './pages/Dashboard.vue';
 import Work from './pages/Work.vue';
 import HomeRoutes from './pages/home/routes';
 import PhoneRoutes from './pages/phone/routes';
 import { store } from './store';
-import moment from 'moment';
 
 const routes = [
   { path: '/', component: Dashboard, name: 'Home' },
@@ -44,7 +44,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes, // short for `routes: routes`
+  routes, // Short for `routes: routes`
 });
 
 router.beforeEach((to, from, next) => {
@@ -63,6 +63,7 @@ router.beforeEach((to, from, next) => {
       next({ name: 'nav.dashboard' });
       return;
     }
+
     next();
   } else {
     if (store.getters['auth/isLoggedIn']) {
@@ -71,14 +72,17 @@ router.beforeEach((to, from, next) => {
         next({ name: 'nav.request_access', query: { orphan: true } });
         return;
       }
+
       if (store.getters['auth/isOrganizationInactive']) {
         next({ name: 'nav.login' });
         // $toasted.error(t('info.login_org_inactive'));
         return;
       }
+
       next();
       return;
     }
+
     const loginpath = window.location.pathname;
     next({ name: 'nav.login', query: { from: loginpath } });
   }

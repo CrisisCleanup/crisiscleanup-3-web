@@ -37,6 +37,7 @@ export default (map, markers, visibleMarkerIds) => {
           sprite.zIndex = 0;
           sprite.alpha = 0.3;
         }
+
         sprite.svi = marker.svi;
         sprite.work_types = marker.work_types;
         sprite.updated_at = marker.updated_at;
@@ -53,6 +54,7 @@ export default (map, markers, visibleMarkerIds) => {
           textureMap[fillColor] = Texture.from(svg);
           texture = textureMap[fillColor];
         }
+
         sprite.texture = texture;
         sprite.visible = true;
         sprite.color = fillColor;
@@ -81,8 +83,8 @@ export default (map, markers, visibleMarkerIds) => {
   function calculateKdBushIndex() {
     points = markers.map(function (marker) {
       return {
-        x: parseFloat(marker.location.coordinates[1]),
-        y: parseFloat(marker.location.coordinates[0]),
+        x: Number.parseFloat(marker.location.coordinates[1]),
+        y: Number.parseFloat(marker.location.coordinates[0]),
         id: marker.id,
         case_number: marker.case_number,
       };
@@ -120,14 +122,15 @@ export default (map, markers, visibleMarkerIds) => {
     if (map.getZoom() < INTERACTIVE_ZOOM_LEVEL) {
       return null;
     }
+
     const results = kdBushIndex
       ?.within(latlng.lat, latlng.lng, 5)
       .map((id) => points[id]);
     let minDist = Number.MAX_VALUE;
     let minpxDist = 0;
     let minDistItem = null;
-    if (results.length) {
-      results.forEach((d) => {
+    if (results.length > 0) {
+      for (const d of results) {
         const mouseCursor = turf.point([latlng.lng, latlng.lat]);
         const toPoint = turf.point([d.y, d.x]);
 
@@ -138,23 +141,24 @@ export default (map, markers, visibleMarkerIds) => {
           minDistItem = d;
           minpxDist = pxDist;
         }
-      });
+      }
     }
 
     if (minpxDist < 25) {
       return minDistItem;
     }
+
     return null;
   }
 
   calculateKdBushIndex();
-  markers.forEach((marker, i) => {
+  for (const [i, marker] of markers.entries()) {
     try {
       renderMarkerSprite(marker, i);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
-  });
+  }
 
   return {
     workTypes,

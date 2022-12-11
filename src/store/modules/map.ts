@@ -1,20 +1,20 @@
-import State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 
 const mapState = {
   autocompleteToken: null,
 };
 
-// getters
+// Getters
 const getters = {
-  autocompleteToken: (state: State) => {
+  autocompleteToken(state: State) {
     return state.autocompleteToken;
   },
 };
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setAutocompleteToken(state: State, token: string) {
     state.autocompleteToken = token;

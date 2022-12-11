@@ -1,9 +1,9 @@
-import Filter from './Filter';
+import { useI18n } from 'vue-i18n';
 import { snakeToTitleCase } from '../../filters';
 import enums from '../../store/modules/enums';
 import User from '../../models/User';
-import { useI18n } from 'vue-i18n';
 import { store } from '../../store';
+import Filter from './Filter';
 
 export default class WorksiteStatusGroupFilter extends Filter {
   packFunction() {
@@ -39,6 +39,7 @@ export default class WorksiteStatusGroupFilter extends Filter {
         .map((status) => status.status)
         .join(',');
     }
+
     return packed;
   }
 
@@ -46,6 +47,7 @@ export default class WorksiteStatusGroupFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const statusGroupEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -54,15 +56,14 @@ export default class WorksiteStatusGroupFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        labels[key] = `${useI18n().t(
-          'worksiteFilters.status',
-        )}: ${snakeToTitleCase(key)}`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      labels[key] = `${useI18n().t(
+        'worksiteFilters.status',
+      )}: ${snakeToTitleCase(key)}`;
+    }
+
     return labels;
   }
 

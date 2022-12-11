@@ -8,11 +8,11 @@ import Organization from '../models/Organization';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
-  // ref: https://gist.github.com/kkiernan/91298079d34f0f832054
+  // Ref: https://gist.github.com/kkiernan/91298079d34f0f832054
   return value
     .split('_')
     .map(function (item) {
-      return item.charAt(0).toUpperCase() + item.substring(1);
+      return item.charAt(0).toUpperCase() + item.slice(1);
     })
     .join(' ');
 }
@@ -105,6 +105,7 @@ export const getWorkTypeImage = (workType) => {
       .replaceAll('{{strokeColor}}', svgColors.strokeColor)
       .replaceAll('{{multiple}}', '');
   }
+
   return '';
 };
 
@@ -151,5 +152,6 @@ export const formatNationalNumber = (mobile) => {
   if (_number) {
     return _number.formatNational();
   }
+
   return mobile;
 };

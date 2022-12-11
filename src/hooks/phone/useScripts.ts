@@ -4,13 +4,13 @@
  */
 
 import { computed } from 'vue';
-import { wrap } from '../../utils/wrap';
 import * as config from 'tailwind.config';
-import Incident from '../../models/Incident';
-import Worksite from '../../models/Worksite';
 import { useI18n } from 'vue-i18n';
-import useCurrentUser from '../useCurrentUser';
 import moment from 'moment';
+import { wrap } from '../../utils/wrap';
+import type Incident from '../../models/Incident';
+import type Worksite from '../../models/Worksite';
+import useCurrentUser from '../useCurrentUser';
 
 const { theme } = config;
 
@@ -26,11 +26,11 @@ const Scripts = Object.freeze({
   [CallType.CALLDOWN]: 'phoneDashboard.calldown_script',
 });
 
-interface UseScriptsProps {
+type UseScriptsProps = {
   callType: typeof CallType;
   incident: typeof Incident;
   recentWorksite?: typeof Worksite;
-}
+};
 
 export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   const _callType = wrap(callType);
@@ -44,7 +44,7 @@ export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   };
 
   const scriptHeaders = {
-    // note: translated later, no $t here.
+    // Note: translated later, no $t here.
     [CallType.INBOUND]: [
       'phoneDashboard.inbound_description',
       'phoneDashboard.inbound_call_parenthesis',

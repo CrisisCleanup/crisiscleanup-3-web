@@ -8,15 +8,15 @@ import {
 
 import * as L from 'leaflet';
 import 'leaflet-loading';
-// import 'leaflet.gridlayer.googlemutant';
+// Import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
 
-import { solveCollision } from './easing';
 import { colors, templates } from '../icons/icons_templates';
 import Worksite from '../models/Worksite';
-// import { GlowFilter } from '@pixi/filter-glow';
+import { solveCollision } from './easing';
+// Import { GlowFilter } from '@pixi/filter-glow';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -53,15 +53,15 @@ export const getGoogleMapsLocation = (url) => {
  *
  * @url http://stackoverflow.com/a/14231286/538646
  */
-/* eslint-disable no-restricted-syntax */
+
 export function averageGeolocation(coords) {
   if (coords.length === 1) {
     return coords[0];
   }
 
-  let x = 0.0;
-  let y = 0.0;
-  let z = 0.0;
+  let x = 0;
+  let y = 0;
+  let z = 0;
 
   for (const coord of coords) {
     const latitude = (coord[0] * Math.PI) / 180;
@@ -106,8 +106,8 @@ export function getWorksiteLayer(
 
   const layer = (function () {
     let firstDraw = true;
-    let prevZoom;
-    let prevCenter;
+    let previousZoom;
+    let previousCenter;
     const markerSprites = [];
     let frame = null;
     const doubleBuffering =
@@ -121,6 +121,7 @@ export function getWorksiteLayer(
           cancelAnimationFrame(frame);
           frame = null;
         }
+
         const container = utils.getContainer();
         container.sortableChildren = true;
         const renderer = utils.getRenderer();
@@ -128,12 +129,13 @@ export function getWorksiteLayer(
         const scale = utils.getScale();
         const invScale = 0.75 / scale;
         if (firstDraw) {
-          prevZoom = zoom;
-          prevCenter = center;
-          worksites.forEach(function (marker) {
+          previousZoom = zoom;
+          previousCenter = center;
+          for (const marker of worksites) {
             if (marker.work_types.length === 0) {
-              return;
+              continue;
             }
+
             const coords = project([
               marker.location.coordinates[1],
               marker.location.coordinates[0],
@@ -147,6 +149,7 @@ export function getWorksiteLayer(
             } else {
               markerSprite.zIndex = 2;
             }
+
             const workType =
               marker.key_work_type ||
               Worksite.getWorkType(
@@ -158,6 +161,7 @@ export function getWorksiteLayer(
             if (context.displayedWorkTypes) {
               context.displayedWorkTypes[workType?.work_type] = true;
             }
+
             displayedWorkTypes[workType?.work_type] = true;
 
             const colorsKey = `${workType.status}_${
@@ -172,6 +176,7 @@ export function getWorksiteLayer(
               } else {
                 strokeColor = 'white';
               }
+
               const svg = worksiteTemplate
                 .replaceAll('{{fillColor}}', fillColor)
                 .replaceAll('{{strokeColor}}', strokeColor)
@@ -181,12 +186,13 @@ export function getWorksiteLayer(
                 );
               markerSprite.texture = Texture.from(svg);
             }
+
             markerSprite.x = coords.x;
             markerSprite.y = coords.y;
             markerSprite.x0 = coords.x;
             markerSprite.y0 = coords.y;
             markerSprite.anchor.set(0.5, 0.5);
-            // markerSprite.alpha = getOpacity(marker.updated_at);
+            // MarkerSprite.alpha = getOpacity(marker.updated_at);
             container.addChild(markerSprite);
             markerSprites.push(markerSprite);
             markerSprite.legend = marker.city || marker.label;
@@ -203,8 +209,9 @@ export function getWorksiteLayer(
             markerSprite.active_work_type = workType;
             markerSprite.colorsKey = colorsKey;
             markerSprite.id = marker.id;
-            // markerSprite.alpha = getOpacity(marker.updated_at);
-          });
+            // MarkerSprite.alpha = getOpacity(marker.updated_at);
+          }
+
           context.displayedWorkTypes = { ...context.displayedWorkTypes };
           context.$emit('onAvailableWorkTypes', displayedWorkTypes);
 
@@ -218,11 +225,13 @@ export function getWorksiteLayer(
               });
             }
           }
+
           const findMarker = (ll) => {
             const currentMap = utils.getMap() || context.map;
             if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL || !interactive) {
               return null;
             }
+
             const layerPoint = project(ll);
             const quadTree = quadTrees[currentMap.getZoom()];
             let marker;
@@ -230,7 +239,7 @@ export function getWorksiteLayer(
               const { rMax } = quadTree;
               let found = false;
               quadTree.visit(function (quad, x1, y1, x2, y2) {
-                if (!quad.length) {
+                if (quad.length === 0) {
                   const dx = quad.data.x - layerPoint.x;
                   const dy = quad.data.y - layerPoint.y;
                   const r = quad.data.scale.x * 16;
@@ -239,6 +248,7 @@ export function getWorksiteLayer(
                     found = true;
                   }
                 }
+
                 return (
                   found ||
                   x1 > layerPoint.x + rMax ||
@@ -250,6 +260,7 @@ export function getWorksiteLayer(
             } catch {
               return null;
             }
+
             return marker;
           };
 
@@ -266,10 +277,11 @@ export function getWorksiteLayer(
                 map.closePopup();
               }
 
-              if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL) {
-                if (context.enableInteractiveTooltip) {
-                  context.enableInteractiveTooltip();
-                }
+              if (
+                currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL &&
+                context.enableInteractiveTooltip
+              ) {
+                context.enableInteractiveTooltip();
               }
             });
 
@@ -288,9 +300,10 @@ export function getWorksiteLayer(
             );
           }
         }
-        if (firstDraw || prevZoom !== zoom || prevCenter !== center) {
+
+        if (firstDraw || previousZoom !== zoom || previousCenter !== center) {
           context.$emit('mapMoved', map.getBounds());
-          markerSprites.forEach(function (markerSprite) {
+          for (const markerSprite of markerSprites) {
             if (zoom >= INTERACTIVE_ZOOM_LEVEL && interactive) {
               if (
                 utils
@@ -311,21 +324,22 @@ export function getWorksiteLayer(
 
                 let detailedTemplate =
                   templates[workType.work_type] || templates.unknown;
-                const isHighPriority = Boolean(
-                  markerSprite.flags.filter((flag) => flag.is_high_priority)
-                    .length,
+                const isHighPriority = markerSprite.flags.some(
+                  (flag) => flag.is_high_priority,
                 );
                 if (markerSprite.favorite_id) {
                   detailedTemplate = templates.favorite;
                 } else if (isHighPriority) {
                   detailedTemplate = templates.important;
                 }
+
                 if (spriteColors) {
                   let { fillColor } = spriteColors;
                   const { strokeColor } = spriteColors;
                   if (markerSprite.filtered) {
                     fillColor = 'white';
                   }
+
                   const typeSvg = detailedTemplate
                     .replaceAll('{{fillColor}}', fillColor)
                     .replaceAll('{{strokeColor}}', strokeColor)
@@ -347,6 +361,7 @@ export function getWorksiteLayer(
                 } else {
                   strokeColor = 'white';
                 }
+
                 const template = templates.circle;
                 const typeSvg = template
                   .replaceAll('{{fillColor}}', fillColor)
@@ -359,13 +374,14 @@ export function getWorksiteLayer(
                 markerSprite.texture = Texture.from(typeSvg);
               }
             }
+
             if (firstDraw) {
               markerSprite.scale.set(invScale);
             } else {
               markerSprite.currentScale = markerSprite.scale.x;
               markerSprite.targetScale = invScale;
             }
-          });
+          }
         }
 
         let start = null;
@@ -377,24 +393,26 @@ export function getWorksiteLayer(
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          markerSprites.forEach(function (markerSprite) {
+          for (const markerSprite of markerSprites) {
             markerSprite.scale.set(
               markerSprite.currentScale +
                 lambda * (markerSprite.targetScale - markerSprite.currentScale),
             );
-          });
+          }
+
           renderer.render(container);
           if (progress < delta) {
             frame = requestAnimationFrame(animate);
           }
         }
 
-        if (!firstDraw && prevZoom !== zoom) {
+        if (!firstDraw && previousZoom !== zoom) {
           frame = requestAnimationFrame(animate);
         }
+
         firstDraw = false;
-        prevZoom = zoom;
-        prevCenter = center;
+        previousZoom = zoom;
+        previousCenter = center;
         renderer.render(container);
       },
       pixiContainer,
@@ -414,38 +432,39 @@ export function getMarkerLayer(markers, map, context) {
 
   const layer = (function () {
     let firstDraw = true;
-    // let prevCenter;
+    // Let prevCenter;
     let frame = null;
     const doubleBuffering =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
       function (utils) {
         const zoom = utils.getMap().getZoom();
-        // const center = utils.getMap().getCenter();
+        // Const center = utils.getMap().getCenter();
         if (frame) {
           cancelAnimationFrame(frame);
           frame = null;
         }
+
         const container = utils.getContainer();
         const renderer = utils.getRenderer();
         const scale = utils.getScale();
         const invScale = 0.75 / scale;
         if (firstDraw) {
-          // prevZoom = zoom;
+          // PrevZoom = zoom;
           // prevCenter = center;
         }
 
         let start = null;
         const delta = 250;
 
-        container.children.forEach(function (markerSprite) {
+        for (const markerSprite of container.children) {
           if (firstDraw) {
             markerSprite.scale.set(invScale);
           } else {
             markerSprite.currentScale = markerSprite.scale.x;
             markerSprite.targetScale = invScale;
           }
-        });
+        }
 
         function animate(timestamp) {
           if (start === null) start = timestamp;
@@ -453,18 +472,20 @@ export function getMarkerLayer(markers, map, context) {
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          container.children.forEach(function (markerSprite) {
+          for (const markerSprite of container.children) {
             if (zoom >= INTERACTIVE_ZOOM_LEVEL) {
               markerSprite.texture =
                 markerSprite.detailedTexture || markerSprite.basicTexture;
             } else {
               markerSprite.texture = markerSprite.basicTexture;
             }
+
             markerSprite.scale.set(
               markerSprite.currentScale +
                 lambda * (markerSprite.targetScale - markerSprite.currentScale),
             );
-          });
+          }
+
           renderer.render(container);
           if (progress < delta) {
             frame = requestAnimationFrame(animate);
@@ -474,6 +495,7 @@ export function getMarkerLayer(markers, map, context) {
         if (!firstDraw) {
           frame = requestAnimationFrame(animate);
         }
+
         firstDraw = false;
         renderer.render(container);
       },
@@ -493,36 +515,38 @@ export function getLiveLayer() {
 
   const layer = (function () {
     let firstDraw = true;
-    let prevZoom;
-    // let prevCenter;
+    let previousZoom;
+    // Let prevCenter;
     let frame = null;
     const doubleBuffering =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
       function (utils) {
         const zoom = utils.getMap().getZoom();
-        // const center = utils.getMap().getCenter();
+        // Const center = utils.getMap().getCenter();
         if (frame) {
           cancelAnimationFrame(frame);
           frame = null;
         }
+
         const container = utils.getContainer();
         const renderer = utils.getRenderer();
         const scale = utils.getScale();
         const invScale = 0.75 / scale;
         if (firstDraw) {
-          prevZoom = zoom;
-          // prevCenter = center;
+          previousZoom = zoom;
+          // PrevCenter = center;
         }
-        container.children.forEach(function (markerSprite) {
-          // if (!markerSprite.type === 'line') return;
+
+        for (const markerSprite of container.children) {
+          // If (!markerSprite.type === 'line') return;
           if (firstDraw) {
             markerSprite.scale.set(invScale);
           } else {
             markerSprite.currentScale = markerSprite.scale.x;
             markerSprite.targetScale = invScale;
           }
-        });
+        }
 
         let start = null;
         const delta = 250;
@@ -532,10 +556,12 @@ export function getLiveLayer() {
             cancelAnimationFrame(markerSprite.frame);
             markerSprite.frame = null;
           }
+
           if (markerSprite.currentPoint === 0) {
             markerSprite.clear();
-            // markerSprite.filters = [new GlowFilter({ distance: 12, outerStrength: 1, color: 0x61d5f8})];
+            // MarkerSprite.filters = [new GlowFilter({ distance: 12, outerStrength: 1, color: 0x61d5f8})];
           }
+
           const lineColor = pixiUtils.string2hex(markerSprite.color);
           markerSprite.lineStyle(2.5 / scale, lineColor);
           markerSprite.currentPoint++;
@@ -545,11 +571,13 @@ export function getLiveLayer() {
               setTimeout(() => {
                 markerSprite.texture.destroy();
                 markerSprite.clear();
-                container.removeChild(markerSprite);
+                markerSprite.remove();
               }, 3000);
             }
+
             return;
           }
+
           markerSprite.moveTo(
             markerSprite.wayPoints[markerSprite.currentPoint - 1].x,
             markerSprite.wayPoints[markerSprite.currentPoint - 1].y,
@@ -576,11 +604,12 @@ export function getLiveLayer() {
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          container.children.forEach(function (markerSprite) {
+          for (const markerSprite of container.children) {
             if (markerSprite.type === 'line') {
-              if (zoom !== prevZoom) {
+              if (zoom !== previousZoom) {
                 markerSprite.clear();
               }
+
               createLineAnimation(markerSprite);
               markerSprite.frame = requestAnimationFrame(animate);
             } else {
@@ -590,7 +619,7 @@ export function getLiveLayer() {
                   setTimeout(() => {
                     markerSprite.texture.destroy();
                     markerSprite.clear();
-                    container.removeChild(markerSprite);
+                    markerSprite.remove();
                   }, 3000);
                 }
               } else if (markerSprite.type === 'patient') {
@@ -601,13 +630,15 @@ export function getLiveLayer() {
                   markerSprite.texture = markerSprite.basicTexture;
                 }
               }
+
               markerSprite.scale.set(
                 markerSprite.currentScale +
                   lambda *
                     (markerSprite.targetScale - markerSprite.currentScale),
               );
             }
-          });
+          }
+
           renderer.render(container);
           if (progress < delta) {
             frame = requestAnimationFrame(animate);
@@ -617,9 +648,10 @@ export function getLiveLayer() {
         if (!firstDraw) {
           frame = requestAnimationFrame(animate);
         }
+
         firstDraw = false;
-        prevZoom = zoom;
-        // prevCenter = center;
+        previousZoom = zoom;
+        // PrevCenter = center;
         renderer.render(container);
       },
       pixiContainer,
@@ -646,6 +678,7 @@ export function calcWaypoints(vertices) {
       waypoints.push({ x, y });
     }
   }
+
   return waypoints;
 }
 
@@ -661,7 +694,7 @@ function getCubicBezierXYatPercent(
   endPt,
   percent,
 ) {
-  // cubic helper formula
+  // Cubic helper formula
   function CubicN(T, a, b, c, d) {
     const t2 = T * T;
     const t3 = t2 * T;
@@ -691,7 +724,7 @@ export function findBezierPoints(b) {
   let lastPt = b[0];
   const tests = 25;
   for (let t = 0; t <= tests; t++) {
-    // calc another point along the curve
+    // Calc another point along the curve
     const pt = getCubicBezierXYatPercent(
       startPt,
       controlPt1,
@@ -699,16 +732,17 @@ export function findBezierPoints(b) {
       endPt,
       t / tests,
     );
-    // add the pt if it's not already in the pts[] array
+    // Add the pt if it's not already in the pts[] array
     const dx = pt.x - lastPt.x;
     const dy = pt.y - lastPt.y;
     const d = Math.sqrt(dx * dx + dy * dy);
-    const dInt = parseInt(d);
+    const dInt = Number.parseInt(d);
     if (dInt > 0 || t === tests) {
       lastPt = pt;
       pts.push(pt);
     }
   }
+
   return pts;
 }
 

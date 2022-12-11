@@ -1,28 +1,28 @@
-import axios from "axios";
-import moment from "moment";
-import * as Sentry from "@sentry/browser";
-import { AuthService } from "../../services/auth.service";
-import State from "@vuex-orm/core/dist/src/model/contracts/State";
-import { ActionContext } from "vuex";
-import User from "../../models/User";
+import axios from 'axios';
+import moment from 'moment';
+import * as Sentry from '@sentry/browser';
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import { type ActionContext } from 'vuex';
+import { AuthService } from '../../services/auth.service';
+import type User from '../../models/User';
 
 const AuthState = {
   user: AuthService.getUser(),
   showLoginModal: false,
 };
 
-// getters
+// Getters
 const getters = {
-  isLoggedIn: (state: State) => {
+  isLoggedIn(state: State) {
     return state.user && AuthService.getExpiry().isAfter(moment());
   },
-  isOrphan: (state: State) => {
+  isOrphan(state: State) {
     return state.user && !state.user.user_claims.organization;
   },
-  isOrganizationInactive: (state: State) => {
+  isOrganizationInactive(state: State) {
     return state.user && !state.user.user_claims.organization?.is_active;
   },
-  isAdmin: (state: State) => {
+  isAdmin(state: State) {
     return state.user && state.user.user_claims.active_roles.includes(1);
   },
   userId: (state: State) => (state.user ? state.user.user_claims.id : null),
@@ -31,30 +31,30 @@ const getters = {
   showLoginModal: (state: State) => state.showLoginModal,
 };
 
-// actions
+// Actions
 const actions = {
   async login(
     { commit }: ActionContext<any, any>,
-    { email, password }: Record<string, string>
+    { email, password }: Record<string, string>,
   ) {
     const response = await axios.post(
       `${import.meta.env.VITE_APP_API_BASE_URL}/api-token-auth`,
       {
         email,
         password,
-      }
+      },
     );
-    commit("setUser", response.data);
+    commit('setUser', response.data);
     return response;
   },
 
   logout({ commit }: ActionContext<any, any>) {
-    commit("setUser", null);
-    // window.location.reload();
+    commit('setUser', null);
+    // Window.location.reload();
   },
 };
 
-// mutations
+// Mutations
 const mutations = {
   setUser(state: State, user: User) {
     state.user = user;

@@ -1,5 +1,5 @@
-import Filter from './Filter';
 import { useI18n } from 'vue-i18n';
+import Filter from './Filter';
 
 export default class WorksiteFlagsFilter extends Filter {
   packFunction() {
@@ -7,9 +7,10 @@ export default class WorksiteFlagsFilter extends Filter {
     const flagEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (flagEntries.length) {
+    if (flagEntries.length > 0) {
       packed.flags = flagEntries.map(([flag]) => flag).join(',');
     }
+
     return packed;
   }
 
@@ -17,6 +18,7 @@ export default class WorksiteFlagsFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const flagEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -25,15 +27,14 @@ export default class WorksiteFlagsFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        labels[key] = `${useI18n().t('worksiteFilters.flag')}: ${useI18n().t(
-          key,
-        )}`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      labels[key] = `${useI18n().t('worksiteFilters.flag')}: ${useI18n().t(
+        key,
+      )}`;
+    }
+
     return labels;
   }
 

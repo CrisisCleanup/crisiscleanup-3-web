@@ -3,21 +3,21 @@
  * CrisisCleanup Base Vuex-ORM model.
  */
 
-import { Model } from "@vuex-orm/core";
-import _ from "lodash";
-import { QueryResult } from "aws-sdk/clients/kendra";
+import { Model } from '@vuex-orm/core';
+import _ from 'lodash';
+import { QueryResult } from 'aws-sdk/clients/kendra';
 
-interface BaseFieldsT {
+type BaseFieldsT = {
   id: number;
   invalidated_at?: Date;
   created_at: Date;
   updated_at: Date;
   created_by: number;
   updated_by: number;
-}
+};
 
 export default class CCUModel<T> extends Model {
-  // static historyFields = {
+  // Static historyFields = {
   //   invalidated_at: this.attr('', (value) => Date.parse(value)),
   //   created_at: this.attr('', (value) => Date.parse(value)),
   //   updated_at: this.attr('', (value) => Date.parse(value)),
@@ -28,13 +28,13 @@ export default class CCUModel<T> extends Model {
   static baseFields = (omit: string[] = []): BaseFieldsT =>
     _.omit(
       {
-        // id: this.number(''),
+        // Id: this.number(''),
         // ...this.historyFields,
       },
-      omit
+      omit,
     );
 
-  static entity: string = "";
+  static entity = '';
 
   /**
    * Fetch and store item(s) by id.
@@ -42,19 +42,20 @@ export default class CCUModel<T> extends Model {
    * @param save - save item to database.
    * @returns {T}
    */
-  static fetchById(
+  static async fetchById(
     id: number | number[] | string | string[],
-    save: boolean = true
+    save = true,
   ) {
-    if (typeof id === "number" || typeof id === "string") {
+    if (typeof id === 'number' || typeof id === 'string') {
       return this.api().get(`/${this.entity}/${id}`, { save });
     }
+
     return this.api().get(`/${this.entity}`, {
       params: {
-        id__in: id.join(","),
+        id__in: id.join(','),
         limit: id.length,
       },
-      dataKey: "results",
+      dataKey: 'results',
       save,
     });
   }
@@ -65,19 +66,21 @@ export default class CCUModel<T> extends Model {
    * @param save - save item to database.
    * @returns {T}
    */
-  static async fetchOrFindId(id: number | number[], save: boolean = true) {
+  static async fetchOrFindId(id: number | number[], save = true) {
     const _ids = _.castArray(id);
-    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ""));
+    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ''));
     const resolvedIds = ids.filter((itemId) =>
-      this.query().whereId(itemId).exists()
+      this.query().whereId(itemId).exists(),
     );
     const unresolved = _.difference(ids, resolvedIds);
     if (!_.isEmpty(unresolved)) {
       await this.fetchById(unresolved, save);
     }
+
     if (!_.isArray(id)) {
       return this.find(id);
     }
+
     return ids.map((itemId) => this.find(itemId));
   }
 
@@ -87,17 +90,12 @@ export default class CCUModel<T> extends Model {
    * @param dataKey - data key to use.
    * @returns {Promise<Instance<CCUModel extends {new(...args: any[]): infer R} ? R : any>[]>}
    */
-  static async fetchAll(
-    params?: {
-      [key: string]: string;
-    },
-    dataKey?: string
-  ) {
-    const _dataKey = dataKey || "results";
-    const _params = params || {};
+  static async fetchAll(parameters?: Record<string, string>, dataKey?: string) {
+    const _dataKey = dataKey || 'results';
+    const _parameters = parameters || {};
     await this.api().get(`/${this.entity}`, {
       dataKey: _dataKey,
-      params: _params,
+      params: _parameters,
     });
     return this.query().all();
   }

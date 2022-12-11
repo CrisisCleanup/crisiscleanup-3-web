@@ -6,19 +6,19 @@ import MessageResponseDialog from '../components/dialogs/MessageResponseDialog.v
 import SelectionDialog from '../components/dialogs/SelectionDialog.vue';
 
 async function component(props: any) {
-  return await openDialog(ComponentDialog, props);
+  return openDialog(ComponentDialog, props);
 }
 
 async function confirm(props: any) {
-  return await openDialog(MessageBox, props);
+  return openDialog(MessageBox, props);
 }
 
 async function prompt(props: any) {
-  return await openDialog(MessageResponseDialog, props);
+  return openDialog(MessageResponseDialog, props);
 }
 
 async function selection(props: any) {
-  return await openDialog(SelectionDialog, props);
+  return openDialog(SelectionDialog, props);
 }
 
 export default () => {

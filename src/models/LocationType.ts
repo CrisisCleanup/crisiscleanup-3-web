@@ -1,7 +1,7 @@
-import { Model } from "@vuex-orm/core";
+import { Model } from '@vuex-orm/core';
 
 export default class LocationType extends Model {
-  static entity = "location_types";
+  static entity = 'location_types';
 
   id!: string;
 

@@ -4,7 +4,7 @@ import { getErrorMessage } from '../utils/errors';
 
 export default function useCurrentUser() {
   const currentUser = User.find(store.getters['auth/userId']);
-  const updateCurrentUser = (value: any, key: string) => {
+  const updateCurrentUser = async (value: any, key: string) => {
     return User.update({
       where: currentUser?.id,
       data: {
@@ -12,6 +12,7 @@ export default function useCurrentUser() {
       },
     });
   };
+
   const saveCurrentUser = async () => {
     try {
       await User.api().patch(`/users/${currentUser?.id}`, {

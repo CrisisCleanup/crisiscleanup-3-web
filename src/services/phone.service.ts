@@ -1,10 +1,10 @@
 import AgentLibrary from 'cf-agent-library';
-import { store } from '../store';
-// import Logger from '@/utils/log';
-import User from '../models/User';
-import Incident from '../models/Incident';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
+import { store } from '../store';
+// Import Logger from '@/utils/log';
+import User from '../models/User';
+import Incident from '../models/Incident';
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
   2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
@@ -13,18 +13,18 @@ const LANGUAGE_ID_MAPPING: Record<any, any> = {
   76: import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
 };
 
-// const Log = Logger({
+// Const Log = Logger({
 //   name: 'phoneLegacy',
 // });
 export default class PhoneService {
   store!: any;
-  loggedInAgentId: string | null;
-  agent_id: string | null;
+  loggedInAgentId: string | undefined;
+  agent_id: string | undefined;
   callInfo: any;
   queueIds: any;
-  username: string | null;
-  password: string | null;
-  cf: AgentLibrary | null;
+  username: string | undefined;
+  password: string | undefined;
+  cf: AgentLibrary | undefined;
 
   constructor() {
     this.loggedInAgentId = null;
@@ -36,18 +36,17 @@ export default class PhoneService {
 
   initPhoneService(accessToken = null) {
     this.store = store;
-    this.queueIds = Array.from(
-      new Set([
+    this.queueIds = [
+      ...new Set([
         import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
         import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
       ]),
-    );
+    ];
     let socketDest;
-    if (accessToken && this.agent_id) {
-      socketDest = `wss://c01-con.vacd.biz:8080/?access_token=${accessToken}&agent_id=${this.agent_id}`;
-    } else {
-      socketDest = `wss://c01-con.vacd.biz:8080/`;
-    }
+    socketDest =
+      accessToken && this.agent_id
+        ? `wss://c01-con.vacd.biz:8080/?access_token=${accessToken}&agent_id=${this.agent_id}`
+        : `wss://c01-con.vacd.biz:8080/`;
     this.cf = new AgentLibrary({
       // Caution, this is prod
       socketDest, // 'ws://d01-test.cf.dev:8080',
@@ -57,14 +56,14 @@ export default class PhoneService {
         newCallNotification: this.onNewCall.bind(this),
         addSessionNotification: this.onNewSession.bind(this),
         endCallNotification: this.endCallFunction.bind(this),
-        // agentStats: this.onGetStatsAgent.bind(this),
+        // AgentStats: this.onGetStatsAgent.bind(this),
         agentDailyStats: this.onGetStatsAgentDaily.bind(this),
         queueStats: this.onQueueStats.bind(this),
       },
     });
   }
 
-  async apiLogoutAgent(agentId: string | null) {
+  async apiLogoutAgent(agentId: string | undefined) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -73,7 +72,7 @@ export default class PhoneService {
     );
   }
 
-  async apiUpdateStats(agentId: string | null) {
+  async apiUpdateStats(agentId: string | undefined) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -111,7 +110,7 @@ export default class PhoneService {
         }/connect_first/agents/${agentId}`,
       );
       return response.data.username;
-    } catch (e) {
+    } catch {
       await User.api().updateUserState(
         {
           currentAgentId: null,
@@ -137,17 +136,17 @@ export default class PhoneService {
       );
       this.store.commit('phone/setIncomingCall', response.data);
 
-      const availableIncidentIds = Incident.all().map(
-        (incident) => incident.id,
+      const availableIncidentIds = new Set(
+        Incident.all().map((incident) => incident.id),
       );
       const incidentsToRequest = response.data.incident_id.filter(
         (id: string) => {
-          return !availableIncidentIds.includes(id);
+          return !availableIncidentIds.has(id);
         },
       );
       try {
         await Promise.all(
-          incidentsToRequest.map((id: string) => {
+          incidentsToRequest.map(async (id: string) => {
             return axios.post(
               `${import.meta.env.VITE_APP_API_BASE_URL}/incident_requests`,
               {
@@ -167,7 +166,7 @@ export default class PhoneService {
           'incident/setCurrentIncidentId',
           response.data.incident_id[0],
         );
-      } catch (error) {
+      } catch {
         // Log.debug('Error requesting incident access: ', error);
       }
     } else if (info.callType === 'OUTBOUND') {
@@ -184,7 +183,7 @@ export default class PhoneService {
     this.store.commit('phone/setCaller', caller);
   }
 
-  getAccessToken() {
+  async getAccessToken() {
     const myHeaders = new Headers();
     myHeaders.append('accept', '*/*');
     myHeaders.append('accept-language', 'en-US,en;q=0.9,es;q=0.8,es-MX;q=0.7');
@@ -206,8 +205,10 @@ export default class PhoneService {
       'https://engage.ringcentral.com/api/auth/login/agent',
       requestOptions,
     )
-      .then((response) => response.json())
-      .catch((error) => console.log('error', error));
+      .then(async (response) => response.json())
+      .catch((error) => {
+        console.log('error', error);
+      });
   }
 
   onCloseFunction() {
@@ -236,6 +237,7 @@ export default class PhoneService {
         );
         this.store.commit('phone/setOutgoingCall', null);
       }
+
       await Incident.api().get(
         '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
         {
@@ -258,6 +260,7 @@ export default class PhoneService {
       this.store.commit('phone/setIncomingCall', null);
       this.store.commit('phone/setOutgoingCall', null);
     }
+
     this.changeState('AWAY').then(() => {});
     this.apiUpdateStats(this.loggedInAgentId).catch(() => {});
   }
@@ -274,7 +277,7 @@ export default class PhoneService {
     this.store.commit('phone/setGeneralStats', { ...info.totals });
   }
 
-  login(
+  async login(
     username = import.meta.env.VITE_APP_PHONE_DEFAULT_USERNAME,
     password = import.meta.env.VITE_APP_PHONE_DEFAULT_PASSWORD,
     state = 'AVAILABLE',
@@ -290,6 +293,7 @@ export default class PhoneService {
           useI18n().t('phoneDashboard.please_set_valid_phone_number'),
         );
       }
+
       this.cf.loginAgent(
         username,
         password,
@@ -299,6 +303,7 @@ export default class PhoneService {
             reject(new Error(useI18n().t('phoneDashboard.phone_no_log_in')));
             return;
           }
+
           this.loggedInAgentId = data.agentSettings?.agentId;
 
           const queueIds = [];
@@ -344,8 +349,12 @@ export default class PhoneService {
               } else {
                 // Log.debug('AgentLibrary successfully logged in');
                 this.changeState(state)
-                  .then(() => resolve(state))
-                  .catch(() => reject());
+                  .then(() => {
+                    resolve(state);
+                  })
+                  .catch(() => {
+                    reject();
+                  });
               }
             },
           );
@@ -358,7 +367,7 @@ export default class PhoneService {
     });
   }
 
-  logout(agentId = null) {
+  async logout(agentId = null) {
     return new Promise((resolve) => {
       this.cf.logoutAgent(agentId || this.loggedInAgentId, (data: any) => {
         // Log.debug('logged out agent', data);
@@ -368,7 +377,7 @@ export default class PhoneService {
     });
   }
 
-  changeState(newState: any) {
+  async changeState(newState: any) {
     return new Promise((resolve) => {
       let state = newState;
       this.cf.setAgentState(newState, null, (setAgentStateResponse: any) => {
@@ -383,7 +392,7 @@ export default class PhoneService {
         }
 
         this.store.commit('phone/setState', state);
-        // window.vue.$log.debug(
+        // Window.vue.$log.debug(
         //   'Set agent state response',
         //   setAgentStateResponse,
         // );
@@ -392,7 +401,7 @@ export default class PhoneService {
     });
   }
 
-  dial(destination: string, callerId = null) {
+  async dial(destination: string, callerId = null) {
     return new Promise((resolve) => {
       this.cf.offhookInit((offhookInitResponse: any) => {
         // Log.debug('Offhook init response', offhookInitResponse);
@@ -413,14 +422,16 @@ export default class PhoneService {
     });
   }
 
-  hangup() {
+  async hangup() {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
       // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
       // Log.debug(this.store.callstate);
       this.cf.offhookTerm((offhookTermResponse: any) => {
         // Log.debug('Offhook term response', offhookTermResponse);
-        this.changeState('AWAY').then(() => resolve(true));
+        this.changeState('AWAY').then(() => {
+          resolve(true);
+        });
       });
     });
   }

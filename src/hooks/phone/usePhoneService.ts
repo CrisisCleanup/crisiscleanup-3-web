@@ -1,7 +1,7 @@
 import PhoneService from '../../services/phone.service';
 
 export default (function () {
-  let instance: PhoneService = new PhoneService();
+  const instance: PhoneService = new PhoneService();
 
   return () => {
     return instance;

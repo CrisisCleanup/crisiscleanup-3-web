@@ -1,7 +1,8 @@
-export function getQueryString(params) {
-  return Object.keys(params)
+export function getQueryString(parameters) {
+  return Object.keys(parameters)
     .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(parameters[key])}`,
     )
-    .join("&");
+    .join('&');
 }

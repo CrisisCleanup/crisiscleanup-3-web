@@ -1,13 +1,13 @@
 import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
-import { Container } from 'pixi.js';
+import { type Container } from 'pixi.js';
+import { useI18n } from 'vue-i18n';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '../../utils/map';
 import Location from '../../models/Location';
 import useRenderedMarkers from './useRenderedMarkers';
-import { useI18n } from 'vue-i18n';
 
-export interface MapUtils {
+export type MapUtils = {
   getMap: Function;
   getPixiContainer: Function;
   getCurrentMarkerLayer: Function;
@@ -21,7 +21,7 @@ export interface MapUtils {
   addHeatMap: Function;
   removeHeatMap: Function;
   loadMarker: Function | undefined;
-}
+};
 
 export default (
   markers,
@@ -34,8 +34,8 @@ export default (
   const map = L.map('map', {
     zoomControl: false,
   }).fitBounds([
-    [17.644022027872726, -122.78314470293876],
-    [50.792047064406866, -69.87298845293874],
+    [17.644_022_027_872_726, -122.783_144_702_938_76],
+    [50.792_047_064_406_866, -69.872_988_452_938_74],
   ]);
   if (useGoogleMaps) {
     L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
@@ -55,6 +55,7 @@ export default (
       }
     });
   };
+
   function setupMap(worksiteMarkers, visibleIds) {
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
@@ -75,7 +76,7 @@ export default (
     map.on(
       'mousemove',
       L.Util.throttle((e) => {
-        const marker = findMarker(e.latlng) as any;
+        const marker = findMarker(e.latlng);
         if (marker) {
           L.DomUtil.addClass(worksiteLayer._container, 'cursor-pointer');
           worksiteLayer._container.setAttribute('title', marker.case_number);
@@ -101,7 +102,7 @@ export default (
     return map;
   }
 
-  function getPixiContainer(): Container | null {
+  function getPixiContainer(): Container | undefined {
     let container = null;
     map.eachLayer((layer) => {
       if (layer.key === 'marker_layer') {
@@ -180,6 +181,7 @@ export default (
           map.closePopup();
         }, 5000);
       }
+
       setTimeout(() => {
         container.visible = true;
         map.panBy([1, 0]);
@@ -246,7 +248,7 @@ export default (
     removeLayer('heat_layer');
   }
 
-  let mapUtils: MapUtils = {
+  const mapUtils: MapUtils = {
     getMap,
     getPixiContainer,
     getCurrentMarkerLayer,

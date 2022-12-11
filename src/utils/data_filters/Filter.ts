@@ -21,16 +21,15 @@ export default class Filter {
     throw new Error(useI18n().t('info.error_get_filter_labels'));
   }
 
-  // eslint-disable-next-line no-unused-vars
   removeField(identifier: string) {
     throw new Error(useI18n().t('info.error_remove_field'));
   }
 
   get count() {
-    return this.getCount();
+    this.getCount();
   }
 
   get labels() {
-    return this.getFilterLabels();
+    this.getFilterLabels();
   }
 }

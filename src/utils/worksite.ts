@@ -15,8 +15,8 @@ const loadCases = async (query) => {
 };
 
 const loadCasesCached = async (query) => {
-  const hashCode = (str) =>
-    str
+  const hashCode = (string_) =>
+    string_
       .split('')
       // eslint-disable-next-line no-bitwise
       .reduce((s, c) => (Math.imul(31, s) + c.charCodeAt(0)) | 0, 0);
@@ -38,7 +38,7 @@ const loadCasesCached = async (query) => {
       return cachedCases;
     }
 
-    response.data.results.forEach((element) => {
+    for (const element of response.data.results) {
       const itemIndex = cachedCases.results.findIndex(
         (o) => o.id === element.id,
       );
@@ -47,7 +47,7 @@ const loadCasesCached = async (query) => {
       } else {
         cachedCases.results.push(element);
       }
-    });
+    }
 
     cachedCases.count = cachedCases.results.length;
 
@@ -58,6 +58,7 @@ const loadCasesCached = async (query) => {
     );
     return cachedCases;
   }
+
   const response = await axios.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_all`,
     {

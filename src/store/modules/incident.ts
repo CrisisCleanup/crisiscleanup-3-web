@@ -1,11 +1,11 @@
-import Incident from "../../models/Incident";
-import State from "@vuex-orm/core/dist/src/model/contracts/State";
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import Incident from '../../models/Incident';
 
 const AppState = {
   currentIncidentId: null,
 };
 
-// getters
+// Getters
 const getters = {
   currentIncidentId: (state: State) => state.currentIncidentId,
 
@@ -13,14 +13,14 @@ const getters = {
     state.currentIncidentId ? Incident.find(state.currentIncidentId) : null,
 };
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setCurrentIncidentId(state: State, currentIncidentId: string) {
     state.currentIncidentId = currentIncidentId
-      ? parseInt(currentIncidentId)
+      ? Number.parseInt(currentIncidentId)
       : currentIncidentId;
   },
 };

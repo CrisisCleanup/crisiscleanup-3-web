@@ -1,6 +1,6 @@
-import Filter from './Filter';
-import Team from '../../models/Team';
 import { useI18n } from 'vue-i18n';
+import Team from '../../models/Team';
+import Filter from './Filter';
 
 export default class WorksiteTeamsFilter extends Filter {
   packFunction() {
@@ -8,9 +8,10 @@ export default class WorksiteTeamsFilter extends Filter {
     const teamsEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (teamsEntries.length) {
+    if (teamsEntries.length > 0) {
       packed.teams = teamsEntries.map(([status]) => status).join(',');
     }
+
     return packed;
   }
 
@@ -18,6 +19,7 @@ export default class WorksiteTeamsFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const teamsEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -26,15 +28,14 @@ export default class WorksiteTeamsFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        labels[key] = `${useI18n().t('worksiteFilters.teams')}: ${
-          Team.find(key).name
-        }`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      labels[key] = `${useI18n().t('worksiteFilters.teams')}: ${
+        Team.find(key).name
+      }`;
+    }
+
     return labels;
   }
 

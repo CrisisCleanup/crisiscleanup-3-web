@@ -1,12 +1,12 @@
-import { store } from '../store';
 import { computed, onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
-import User from '../models/User';
-import PhoneStatus from '../models/PhoneStatus';
-import Incident from '../models/Incident';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
 import { parsePhoneNumber } from 'libphonenumber-js';
+import User from '../models/User';
+import PhoneStatus from '../models/PhoneStatus';
+import Incident from '../models/Incident';
+import { store } from '../store';
 import { getErrorMessage } from '../utils/errors';
 import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
@@ -16,8 +16,8 @@ export default function useConnectFirst(context: { emit: Function }) {
   const $toasted = useToast();
   const { t } = useI18n();
 
-  let currentAgent = ref<any>(null);
-  let dialing = ref(false);
+  const currentAgent = ref<any>(null);
+  const dialing = ref(false);
 
   const currentUser = computed(() =>
     User.find(User.store().getters['auth/userId']),
@@ -54,22 +54,34 @@ export default function useConnectFirst(context: { emit: Function }) {
   const callHistory = computed(() => store.getters['phone/callHistory']);
   const phoneService = reactive(usePhoneService());
 
-  const setCallHistory = (callHistory: any) =>
+  const setCallHistory = (callHistory: any) => {
     store.commit('phone/setCallHistory', callHistory);
-  const setCallType = (callType: any) =>
+  };
+
+  const setCallType = (callType: any) => {
     store.commit('phone/setCallType', callType);
-  const setCaller = (caller: any) => store.commit('phone/setCaller', caller);
-  const setOutgoingCall = (call: any) =>
+  };
+
+  const setCaller = (caller: any) => {
+    store.commit('phone/setCaller', caller);
+  };
+
+  const setOutgoingCall = (call: any) => {
     store.commit('phone/setOutgoingCall', call);
-  const setCurrentCall = (call: any) =>
+  };
+
+  const setCurrentCall = (call: any) => {
     store.commit('phone/setCurrentCall', call);
+  };
 
   async function setAvailable() {
     return phoneService.changeState('AVAILABLE');
   }
+
   async function setWorking() {
     return phoneService.changeState('WORKING');
   }
+
   async function setAway() {
     return phoneService.changeState('AWAY');
   }
@@ -80,18 +92,19 @@ export default function useConnectFirst(context: { emit: Function }) {
         `${import.meta.env.VITE_APP_API_BASE_URL}/phone_agents/me`,
       );
       currentAgent.value = data;
-    } catch (e) {
+    } catch {
       const { data } = await phoneService.createAgent();
       currentAgent.value = data;
     }
   }
 
   async function logoutPhone() {
-    // await phoneService.changeState('AWAY');
+    // Await phoneService.changeState('AWAY');
     const agent_id = currentAgent?.value?.agent_id;
     if (agent_id) {
       await phoneService.logout(agent_id);
     }
+
     await loadAgent();
   }
 
@@ -123,6 +136,7 @@ export default function useConnectFirst(context: { emit: Function }) {
           const result = await phoneService.getAccessToken();
           phoneService.initPhoneService(result.accessToken);
         }
+
         await phoneService.login(
           currentAgent?.value?.agent_username,
           password,
@@ -130,8 +144,8 @@ export default function useConnectFirst(context: { emit: Function }) {
           currentAgent?.value?.agent_id,
         );
         context.emit('onLoggedIn');
-      } catch (e) {
-        // this.$log.debug(e);
+      } catch {
+        // This.$log.debug(e);
         if (retry) {
           await logoutPhone();
           await loginPhone(false, status);
@@ -141,6 +155,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       await setWorking();
       context.emit('onLoggedIn');
     }
+
     phoneService.apiUpdateStats(phoneService.loggedInAgentId).catch(() => {});
   }
 
@@ -148,21 +163,22 @@ export default function useConnectFirst(context: { emit: Function }) {
     if (currentUser?.value?.mobile) {
       const parsedNumber = parsePhoneNumber(currentUser?.value?.mobile, 'US');
       await Promise.all(
-        phoneService.queueIds.map((queueId: string) =>
+        phoneService.queueIds.map(async (queueId: string) =>
           phoneService
             .apiLoginsByPhone(
               parsedNumber.formatNational().replace(/[^\d.]/g, ''),
               queueId,
             )
             .then(async ({ data }: any) => {
-              if (data.length) {
+              if (data.length > 0) {
                 await Promise.all(
-                  data.map((login: any) =>
+                  data.map(async (login: any) =>
                     phoneService.apiLogoutAgent(login.agentId),
                   ),
                 );
                 phoneService.initPhoneService();
               }
+
               return null;
             })
             .catch(() => {}),
@@ -180,6 +196,7 @@ export default function useConnectFirst(context: { emit: Function }) {
     if (callType !== 'CALLDOWN') {
       callType = 'OUTBOUND';
     }
+
     setCallType(callType);
     setOutgoingCall(outbound);
     setCurrentCall(outbound);
@@ -189,6 +206,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       currentIncident?.value?.active_phone_number,
     );
   }
+
   async function dialManualOutbound(number: string) {
     await loginPhone(true, 'WORKING');
     dialing.value = true;
@@ -206,6 +224,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       dialing.value = false;
     }
   }
+
   async function dialNextOutbound() {
     dialing.value = true;
     try {
@@ -215,6 +234,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       if (outbound.worksite) {
         await Worksite.api().fetch(outbound.worksite);
       }
+
       await createOutboundCall(outbound, outbound.phone_number);
     } finally {
       dialing.value = false;
@@ -252,19 +272,29 @@ export default function useConnectFirst(context: { emit: Function }) {
     isTransitioning,
     isInboundCall,
     isOutboundCall,
-    setCurrentIncidentId: (id: string) =>
-      store.commit('incident/setCurrentIncidentId', id),
+    setCurrentIncidentId(id: string) {
+      store.commit('incident/setCurrentIncidentId', id);
+    },
     setOutgoingCall,
-    setIncomingCall: (call: any) => store.commit('phone/setIncomingCall', call),
+    setIncomingCall(call: any) {
+      store.commit('phone/setIncomingCall', call);
+    },
     setCurrentCall,
     setCaller,
-    setState: (state: any) => store.commit('phone/setState', state),
+    setState(state: any) {
+      store.commit('phone/setState', state);
+    },
     setCallType,
     setCallHistory,
-    setGeneralStats: (stats: any) =>
-      store.commit('phone/setGeneralStats', stats),
-    clearCall: () => store.commit('phone/clearCall'),
-    resetState: () => store.commit('phone/resetState'),
+    setGeneralStats(stats: any) {
+      store.commit('phone/setGeneralStats', stats);
+    },
+    clearCall() {
+      store.commit('phone/clearCall');
+    },
+    resetState() {
+      store.commit('phone/resetState');
+    },
     loginPhone,
   };
 }

@@ -6,6 +6,7 @@ const getWorktypeColors = (worktype: any) => {
   }`;
   return colors[colorsKey] || colors.open_assigned_unclaimed;
 };
+
 const getWorktypeSVG = (worktype: any, size = 53) => {
   const template = templates[worktype.work_type] || templates.unknown;
   const { fillColor, strokeColor } = getWorktypeColors(worktype);

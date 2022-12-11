@@ -51,7 +51,7 @@ import { store } from './store';
 // Toast
 import 'vue-toastification/dist/index.css';
 
-// i18n
+// I18n
 import { AuthService } from './services/auth.service';
 
 import 'vue-select/dist/vue-select.css';

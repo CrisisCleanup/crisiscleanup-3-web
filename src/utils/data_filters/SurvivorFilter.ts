@@ -1,5 +1,5 @@
-import Filter from './Filter';
 import { useI18n } from 'vue-i18n';
+import Filter from './Filter';
 
 export default class SurvivorFilter extends Filter {
   packFunction() {
@@ -7,6 +7,7 @@ export default class SurvivorFilter extends Filter {
     if (this.data.member_of_my_organization) {
       packed.member_of_my_organization = this.data.member_of_my_organization;
     }
+
     return packed;
   }
 
@@ -14,6 +15,7 @@ export default class SurvivorFilter extends Filter {
     if (!this.data.member_of_my_organization) {
       return 0;
     }
+
     return 1;
   }
 
@@ -21,6 +23,7 @@ export default class SurvivorFilter extends Filter {
     if (!this.data.member_of_my_organization) {
       return {};
     }
+
     return {
       my_team: useI18n().t('actions.member_of_my_org'),
     };

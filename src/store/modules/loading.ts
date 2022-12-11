@@ -1,16 +1,16 @@
-import State from "@vuex-orm/core/dist/src/model/contracts/State";
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 
 const AppState = {
   worksitesLoading: false,
 };
 
-// getters
+// Getters
 const getters = {};
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setWorksitesLoading(state: State, worksitesLoading: boolean) {
     state.worksitesLoading = worksitesLoading;

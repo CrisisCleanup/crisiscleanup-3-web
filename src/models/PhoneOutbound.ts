@@ -1,5 +1,5 @@
 import { isArray, isNil, omitBy } from 'lodash';
-import {Model} from "@vuex-orm/core";
+import { Model } from '@vuex-orm/core';
 
 export default class PhoneOutbound extends Model {
   static entity = 'phone_outbound';
@@ -41,7 +41,7 @@ export default class PhoneOutbound extends Model {
   }
 
   async skipOutbound() {
-    // @ts-ignore
+    // @ts-expect-error
     await this.api().post(`/phone_outbound/${this.id}/unlock`, {
       skipped: true,
     });
@@ -65,12 +65,15 @@ export default class PhoneOutbound extends Model {
         if (agentId) {
           queryUrl = `${queryUrl}&agent=${agentId}`;
         }
+
         if (useCalldowns) {
           queryUrl = `${queryUrl}&use_calldowns=1`;
         }
+
         if (isManual) {
           queryUrl = `${queryUrl}&manual=1`;
         }
+
         const phoneOutbound = await this.get(queryUrl);
         const {
           response: { data },

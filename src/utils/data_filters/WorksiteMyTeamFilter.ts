@@ -1,5 +1,5 @@
-import Filter from './Filter';
 import { useI18n } from 'vue-i18n';
+import Filter from './Filter';
 
 export default class WorksiteMyTeamFilter extends Filter {
   packFunction() {
@@ -7,6 +7,7 @@ export default class WorksiteMyTeamFilter extends Filter {
     if (this.data.my_team) {
       packed.my_team = this.data.my_team;
     }
+
     return packed;
   }
 
@@ -14,6 +15,7 @@ export default class WorksiteMyTeamFilter extends Filter {
     if (!this.data.my_team) {
       return 0;
     }
+
     return 1;
   }
 
@@ -21,6 +23,7 @@ export default class WorksiteMyTeamFilter extends Filter {
     if (!this.data.my_team) {
       return {};
     }
+
     return {
       my_team: useI18n().t('worksiteFilters.my_team'),
     };

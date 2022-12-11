@@ -1,4 +1,4 @@
-import State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 
 const AppState = {
   user: {},
@@ -16,7 +16,7 @@ const AppState = {
   callHistory: [],
 };
 
-// getters
+// Getters
 const getters = {
   callState: (state: State) => state.callState,
   callType: (state: State) => state.callType,
@@ -29,34 +29,34 @@ const getters = {
   callHistory: (state: State) => state.callHistory,
   getUser: (state: State) => state.user,
   getGateway: (state: State) => state.gateway,
-  isTakingCalls: (state: State) => {
+  isTakingCalls(state: State) {
     return state.callState !== 'AWAY';
   },
-  isNotTakingCalls: (state: State) => {
+  isNotTakingCalls(state: State) {
     return !(state.callState !== 'AWAY');
   },
-  isOnCall: (state: State) => {
+  isOnCall(state: State) {
     return (
       state.callState === 'ENGAGED-INBOUND' ||
       state.callState === 'ENGAGED-OUTBOUND'
     );
   },
-  isInboundCall: (state: State) => {
+  isInboundCall(state: State) {
     return state.callState === 'ENGAGED-INBOUND';
   },
-  isOutboundCall: (state: State) => {
+  isOutboundCall(state: State) {
     return state.callState === 'ENGAGED-OUTBOUND';
   },
-  isTransitioning: (state: State) => {
+  isTransitioning(state: State) {
     return state.callState === 'TRANSITION';
   },
   getLanguages: (state: State) => state.languages,
 };
 
-// actions
+// Actions
 const actions = {};
 
-// mutations
+// Mutations
 const mutations = {
   setUser(state: State, user: any) {
     state.user = user;

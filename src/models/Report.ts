@@ -1,9 +1,9 @@
-import { Model } from "@vuex-orm/core";
-import moment from "moment";
-import Role from "./Role";
+import { Model } from '@vuex-orm/core';
+import moment from 'moment';
+import Role from './Role';
 
 export default class Report extends Model {
-  static entity = "reports";
+  static entity = 'reports';
 
   id!: string;
 
@@ -13,7 +13,7 @@ export default class Report extends Model {
 
   static fields() {
     return {
-      id: this.attr(""),
+      id: this.attr(''),
       name_t: this.attr(null),
       description_t: this.attr(null),
       report_key: this.attr(null),
@@ -42,7 +42,7 @@ export default class Report extends Model {
             file,
             type_t: type,
           },
-          { save: false }
+          { save: false },
         );
       },
       deleteFile(id: string, file: any) {
@@ -51,7 +51,7 @@ export default class Report extends Model {
           {
             data: { file },
           },
-          { save: false }
+          { save: false },
         );
       },
     } as any,

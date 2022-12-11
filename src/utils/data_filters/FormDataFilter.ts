@@ -1,5 +1,5 @@
-import Filter from './Filter';
 import { useI18n } from 'vue-i18n';
+import Filter from './Filter';
 
 export default class FormDataFilter extends Filter {
   packFunction() {
@@ -7,9 +7,10 @@ export default class FormDataFilter extends Filter {
     const dataEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (dataEntries.length) {
+    if (dataEntries.length > 0) {
       packed.form_data = dataEntries.map(([data]) => `${data}:true`).join(',');
     }
+
     return packed;
   }
 
@@ -17,6 +18,7 @@ export default class FormDataFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const dataEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -25,14 +27,13 @@ export default class FormDataFilter extends Filter {
 
   getFilterLabels() {
     const labels: Record<any, any> = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        const localeMessages = useI18n().t(`formLabels.${key}`);
-        labels[key] = `${localeMessages}`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      const localeMessages = useI18n().t(`formLabels.${key}`);
+      labels[key] = `${localeMessages}`;
+    }
+
     return labels;
   }
 

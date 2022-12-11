@@ -1,10 +1,10 @@
-import moment from "moment";
-import Location from "../models/Location";
-import CCUModel from "./model";
-import { DISASTER_ICONS } from "../constants";
+import moment from 'moment';
+import { DISASTER_ICONS } from '../constants';
+import Location from './Location';
+import CCUModel from './model';
 
 export default class Incident extends CCUModel<Incident> {
-  static entity = "incidents";
+  static entity = 'incidents';
 
   id!: string;
 
@@ -26,8 +26,8 @@ export default class Incident extends CCUModel<Incident> {
 
   static fields() {
     return {
-      id: this.attr(""),
-      case_label: this.string(""),
+      id: this.attr(''),
+      case_label: this.string(''),
       form_fields: this.attr(null),
       geofence: this.attr(null),
       short_name: this.attr(null),
@@ -48,13 +48,14 @@ export default class Incident extends CCUModel<Incident> {
   static getIncidentImage(incidentType: string) {
     if (incidentType) {
       try {
-        const incidentKey = incidentType.replace("_", "-");
+        const incidentKey = incidentType.replace('_', '-');
         return DISASTER_ICONS[incidentKey];
-      } catch (e) {
-        console.log(e);
-        // window.vue.$log.error(e);
+      } catch (error) {
+        console.log(error);
+        // Window.vue.$log.error(e);
       }
     }
+
     return null;
   }
 
@@ -66,6 +67,7 @@ export default class Incident extends CCUModel<Incident> {
     if (this.start_at) {
       return moment(this.start_at);
     }
+
     return null;
   }
 
@@ -78,16 +80,18 @@ export default class Incident extends CCUModel<Incident> {
     if (this.form_fields) {
       return this.form_fields[0].phase;
     }
+
     return null;
   }
 
   get friendlyName() {
     if (this.short_name) {
       return this.short_name
-        .split("_")
+        .split('_')
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" ");
+        .join(' ');
     }
+
     return this.name;
   }
 
@@ -95,20 +99,21 @@ export default class Incident extends CCUModel<Incident> {
     actions: {
       async fetchById(id: string) {
         const incident = await this.get(
-          `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color,locations,turn_on_release,created_work_types,auto_contact,active_phone_number`
+          `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color,locations,turn_on_release,created_work_types,auto_contact,active_phone_number`,
         );
 
-        if (incident.response.data.locations.length) {
+        if (incident.response.data.locations.length > 0) {
           const locationIds = incident.response.data.locations.map(
-            (location: any) => location.location
+            (location: any) => location.location,
           );
           await Location.api().get(
-            `/locations?id__in=${locationIds.join(",")}`,
+            `/locations?id__in=${locationIds.join(',')}`,
             {
-              dataKey: "results",
-            }
+              dataKey: 'results',
+            },
           );
         }
+
         return incident;
       },
       addLocation(id: string, location: Location) {
@@ -117,7 +122,7 @@ export default class Incident extends CCUModel<Incident> {
           {
             location,
           },
-          { save: false }
+          { save: false },
         );
       },
       removeLocation(id: string, location: Location) {
@@ -128,7 +133,7 @@ export default class Incident extends CCUModel<Incident> {
               location,
             },
           },
-          { save: false }
+          { save: false },
         );
       },
     } as any,

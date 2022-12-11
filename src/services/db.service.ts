@@ -5,14 +5,15 @@ const dbPromise = openDB('crisiscleanup', 2, {
     if (oldVersion > 0) {
       db.deleteObjectStore('keyval');
     }
+
     db.createObjectStore('keyval');
   },
 });
 
 const DbService = {
-  async setItem(key, val) {
+  async setItem(key, value) {
     const idbpDatabase = await dbPromise;
-    return idbpDatabase.put('keyval', val, key);
+    return idbpDatabase.put('keyval', value, key);
   },
   async getItem(key) {
     const idbpDatabase = await dbPromise;
@@ -20,10 +21,11 @@ const DbService = {
     if (entry) {
       try {
         return JSON.parse(entry);
-      } catch (e) {
+      } catch {
         return entry;
       }
     }
+
     return null;
   },
 };

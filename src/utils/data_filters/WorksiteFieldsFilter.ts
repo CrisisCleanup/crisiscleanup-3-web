@@ -1,6 +1,6 @@
-import Filter from './Filter';
-import { getWorkTypeName } from '../../filters';
 import { useI18n } from 'vue-i18n';
+import { getWorkTypeName } from '../../filters';
+import Filter from './Filter';
 
 export default class WorksiteFieldsFilter extends Filter {
   packFunction() {
@@ -8,11 +8,12 @@ export default class WorksiteFieldsFilter extends Filter {
     const workTypeEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
-    if (workTypeEntries.length) {
+    if (workTypeEntries.length > 0) {
       packed.work_type__work_type__in = workTypeEntries
         .map(([workType]) => workType)
         .join(',');
     }
+
     return packed;
   }
 
@@ -20,6 +21,7 @@ export default class WorksiteFieldsFilter extends Filter {
     if (!this.data) {
       return 0;
     }
+
     const filteredFields = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -28,15 +30,14 @@ export default class WorksiteFieldsFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Object.entries(this.data)
-      .filter(([, value]) => {
-        return Boolean(value);
-      })
-      .forEach(([key]) => {
-        labels[key] = `${useI18n().t(
-          'worksiteFilters.work_type',
-        )}: ${getWorkTypeName(key)}`;
-      });
+    for (const [key] of Object.entries(this.data).filter(([, value]) => {
+      return Boolean(value);
+    })) {
+      labels[key] = `${useI18n().t(
+        'worksiteFilters.work_type',
+      )}: ${getWorkTypeName(key)}`;
+    }
+
     return labels;
   }
 

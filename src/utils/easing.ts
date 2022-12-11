@@ -2,7 +2,7 @@ import { quadtree } from 'd3-quadtree';
 import { Sprite } from 'pixi.js';
 
 export function solveCollision(circles, options) {
-  const opts = options || {};
+  const options_ = options || {};
   const tree = quadtree()
     .x(function (d) {
       return d.xp;
@@ -10,12 +10,12 @@ export function solveCollision(circles, options) {
     .y(function (d) {
       return d.yp;
     });
-  if (opts.extent !== undefined) tree.extent(opts.extent);
+  if (options_.extent !== undefined) tree.extent(options_.extent);
   let rMax = 0;
-  circles.forEach(function (circle) {
+  for (const circle of circles) {
     circle.xp = circle.x0;
     circle.yp = circle.y0;
-    if (opts.r0 !== undefined) circle.r0 = opts.r0;
+    if (options_.r0 !== undefined) circle.r0 = options_.r0;
     circle.r = circle.r0;
     circle.xMin = circle.x0 - circle.r0;
     circle.xMax = circle.x0 + circle.r0;
@@ -43,6 +43,7 @@ export function solveCollision(circles, options) {
             c1 = d;
             c2 = node;
           }
+
           const r1 = c1.r;
           const r2 = c2.r;
           const alpha = (r1 + r2 + delta) / 4;
@@ -63,6 +64,7 @@ export function solveCollision(circles, options) {
             if (lambda1 > 1) console.log(lambda1);
             lambda2 = 1;
           }
+
           c1.r *= lambda1;
           c2.r *= lambda2;
           c1.xp += (lambda1 - 1) * r1 * u1;
@@ -79,8 +81,9 @@ export function solveCollision(circles, options) {
           c2.yMax = c2.yp + c2.r;
         }
       }
+
       return function (quad, x1, y1, x2, y2) {
-        if (!quad.length) {
+        if (quad.length === 0) {
           do {
             if (
               quad.data !== d &&
@@ -93,6 +96,7 @@ export function solveCollision(circles, options) {
             }
           } while (quad === quad.next);
         }
+
         return (
           x1 > d.xMax + rMax ||
           x2 + rMax < d.xMin ||
@@ -101,21 +105,24 @@ export function solveCollision(circles, options) {
         );
       };
     }
+
     tree.visit(collide(circle));
     rMax = Math.max(rMax, circle.r);
     tree.add(circle);
-  });
-  if (opts.zoom !== undefined) {
-    circles.forEach(function (circle) {
+  }
+
+  if (options_.zoom !== undefined) {
+    for (const circle of circles) {
       circle.cache = circle.cache || {};
-      circle.cache[opts.zoom] = {
+      circle.cache[options_.zoom] = {
         x: circle.xp,
         y: circle.yp,
         r: circle.r,
       };
-    });
+    }
   }
-  const ret = quadtree()
+
+  const returnValue = quadtree()
     .x(function (d) {
       return d.xp;
     })
@@ -123,20 +130,22 @@ export function solveCollision(circles, options) {
       return d.yp;
     });
   let rMax2 = 0;
-  circles.forEach(function (circle) {
-    ret.add(circle);
+  for (const circle of circles) {
+    returnValue.add(circle);
     rMax2 = Math.max(rMax2, circle.r);
-  });
-  ret.rMax = rMax2;
-  return ret;
+  }
+
+  returnValue.rMax = rMax2;
+  return returnValue;
 }
+
 export function drawPoint(graphics, x, y, r, lineWidth, lineColor, fillColor) {
   graphics.clear();
   graphics.lineStyle(lineWidth, lineColor, 1);
   graphics.beginFill(fillColor, 0.5);
   graphics.x = x;
   graphics.y = y;
-  graphics.drawCircle(0, 0, r); // radius
+  graphics.drawCircle(0, 0, r); // Radius
   graphics.endFill();
 }
 
@@ -163,7 +172,7 @@ export function findMarker(layerPoint, quad, zoom) {
   let marker;
   let found = false;
   quadTree.visit((qd, x1, y1, x2, y2) => {
-    if (!qd.length) {
+    if (qd.length === 0) {
       const dx = qd.data.x - layerPoint.x;
       const dy = qd.data.y - layerPoint.y;
       const r = qd.data.scale.x * 8; // 16;
@@ -172,6 +181,7 @@ export function findMarker(layerPoint, quad, zoom) {
         found = true;
       }
     }
+
     return (
       found ||
       x1 > layerPoint.x + maxR ||

@@ -1,11 +1,11 @@
 import moment from 'moment';
 import Bowser from 'bowser';
 import * as Sentry from '@sentry/browser';
-import { AuthService } from '../services/auth.service';
-import Language from '../models/Language';
-import Role from '../models/Role';
 import { useRouter } from 'vue-router';
 import { Model } from '@vuex-orm/core';
+import { AuthService } from '../services/auth.service';
+import Language from './Language';
+import Role from './Role';
 
 export default class User extends Model {
   static entity = 'users';
@@ -82,24 +82,26 @@ export default class User extends Model {
   }
 
   get hasProfilePicture() {
-    if (this.files && this.files.length) {
+    if (this.files && this.files.length > 0) {
       const profilePictures = this.files.filter(
         (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
       return profilePictures.length;
     }
+
     return false;
   }
 
   get profilePictureUrl() {
-    if (this.files && this.files.length) {
+    if (this.files && this.files.length > 0) {
       const profilePictures = this.files.filter(
         (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
-      if (profilePictures.length) {
+      if (profilePictures.length > 0) {
         return profilePictures[0].large_thumbnail_url;
       }
     }
+
     return `https://avatars.dicebear.com/api/bottts/${this.full_name}.svg`;
   }
 
@@ -116,9 +118,11 @@ export default class User extends Model {
     if (this.primary_language) {
       languageList.push(Language.find(this.primary_language));
     }
+
     if (this.secondary_language) {
       languageList.push(Language.find(this.secondary_language));
     }
+
     return languageList;
   }
 
@@ -129,6 +133,7 @@ export default class User extends Model {
     if (this.preferences && this.preferences.notification_settings) {
       return this.preferences.notification_settings;
     }
+
     return settings;
   }
 
@@ -160,9 +165,11 @@ export default class User extends Model {
     ) {
       return this.states.incidents[incidentId];
     }
+
     if (fallback) {
       return this.states;
     }
+
     return null;
   }
 
@@ -185,6 +192,7 @@ export default class User extends Model {
         if (organization) {
           data.organization = organization;
         }
+
         return this.post(`/invitations`, data, { save: false });
       },
       acceptInvite({
@@ -283,9 +291,10 @@ export default class User extends Model {
             [currentIncident]: incidentStates,
           };
         }
+
         updatedStates = {
           ...updatedStates,
-          ...{ incidents: updatedIncidentStates },
+          incidents: updatedIncidentStates,
           userAgent: Bowser.parse(window.navigator.userAgent),
         };
         await User.update({
@@ -314,6 +323,7 @@ export default class User extends Model {
         if (!currentUser) {
           return;
         }
+
         const newPreferences = {
           ...currentUser.preferences,
           ...preferences,

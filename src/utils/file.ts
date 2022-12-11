@@ -18,13 +18,14 @@ export async function uploadToS3({
   presignedPostUrl: PresignedPostUrlResponse;
 }) {
   const formData = new FormData();
-  Object.entries(presignedPostUrl.fields).forEach(([k, v]) => {
+  for (const [k, v] of Object.entries(presignedPostUrl.fields)) {
     formData.append(k, v);
-  });
+  }
+
   formData.append('file', fileContents); // The file has be the last element
 
   const instance = axios.create();
-  delete instance.defaults.headers.common['Authorization'];
+  delete instance.defaults.headers.common.Authorization;
 
   await instance.post(presignedPostUrl.url, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
