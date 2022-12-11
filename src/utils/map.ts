@@ -16,6 +16,7 @@ import 'leaflet/dist/leaflet.css';
 import { colors, templates } from '../icons/icons_templates';
 import Worksite from '../models/Worksite';
 import { solveCollision } from './easing';
+import { PixiUtils } from './types/map';
 // Import { GlowFilter } from '@pixi/filter-glow';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
@@ -35,9 +36,9 @@ export const googleMapsLayer =
 export const mapAttribution =
   '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
-export const getGoogleMapsLocation = (url) => {
+export const getGoogleMapsLocation = (url: string) => {
   const regex = new RegExp('@(.*),(.*),');
-  const match = url.match(regex);
+  const match = url.match(regex) || [0, 0];
   const latitude = Number(match[1]);
   const longitude = Number(match[2]);
 
@@ -54,7 +55,7 @@ export const getGoogleMapsLocation = (url) => {
  * @url http://stackoverflow.com/a/14231286/538646
  */
 
-export function averageGeolocation(coords) {
+export function averageGeolocation(coords: number[][]) {
   if (coords.length === 1) {
     return coords[0];
   }
@@ -93,351 +94,21 @@ PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   16,
 );
 
-export function getWorksiteLayer(
-  worksites,
-  map,
-  context,
-  interactive = true,
-  filtered = null,
+export function getMarkerLayer(
+  markers: Worksite[],
+  map: L.Map,
+  context: Record<string, any>,
 ) {
-  const pixiContainer = new Container();
-  context.pixiContainer = pixiContainer;
-  context.$emit('setContainer', pixiContainer);
-
-  const layer = (function () {
-    let firstDraw = true;
-    let previousZoom;
-    let previousCenter;
-    const markerSprites = [];
-    let frame = null;
-    const doubleBuffering =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    return L.pixiOverlay(
-      function (utils) {
-        const displayedWorkTypes = {};
-        const zoom = utils.getMap().getZoom();
-        const center = utils.getMap().getCenter();
-        if (frame) {
-          cancelAnimationFrame(frame);
-          frame = null;
-        }
-
-        const container = utils.getContainer();
-        container.sortableChildren = true;
-        const renderer = utils.getRenderer();
-        const project = utils.latLngToLayerPoint;
-        const scale = utils.getScale();
-        const invScale = 0.75 / scale;
-        if (firstDraw) {
-          previousZoom = zoom;
-          previousCenter = center;
-          for (const marker of worksites) {
-            if (marker.work_types.length === 0) {
-              continue;
-            }
-
-            const coords = project([
-              marker.location.coordinates[1],
-              marker.location.coordinates[0],
-            ]);
-
-            const markerSprite = new Sprite();
-            markerSprite.filtered = filtered && !filtered.has(marker.id);
-            if (markerSprite.filtered) {
-              markerSprite.zIndex = 0;
-              markerSprite.alpha = 0.3;
-            } else {
-              markerSprite.zIndex = 2;
-            }
-
-            const workType =
-              marker.key_work_type ||
-              Worksite.getWorkType(
-                marker.work_types,
-                context.currentFilters,
-                context.currentUser && context.currentUser.organization,
-              );
-
-            if (context.displayedWorkTypes) {
-              context.displayedWorkTypes[workType?.work_type] = true;
-            }
-
-            displayedWorkTypes[workType?.work_type] = true;
-
-            const colorsKey = `${workType.status}_${
-              workType.claimed_by ? 'claimed' : 'unclaimed'
-            }`;
-            const worksiteTemplate = templates.circle;
-            const spriteColors = colors[colorsKey];
-            if (spriteColors) {
-              let { fillColor, strokeColor } = spriteColors;
-              if (markerSprite.filtered) {
-                fillColor = 'white';
-              } else {
-                strokeColor = 'white';
-              }
-
-              const svg = worksiteTemplate
-                .replaceAll('{{fillColor}}', fillColor)
-                .replaceAll('{{strokeColor}}', strokeColor)
-                .replaceAll(
-                  '{{multiple}}',
-                  marker.work_types.length > 1 ? templates.plus : '',
-                );
-              markerSprite.texture = Texture.from(svg);
-            }
-
-            markerSprite.x = coords.x;
-            markerSprite.y = coords.y;
-            markerSprite.x0 = coords.x;
-            markerSprite.y0 = coords.y;
-            markerSprite.anchor.set(0.5, 0.5);
-            // MarkerSprite.alpha = getOpacity(marker.updated_at);
-            container.addChild(markerSprite);
-            markerSprites.push(markerSprite);
-            markerSprite.legend = marker.city || marker.label;
-            markerSprite.location = marker.location;
-            markerSprite.name = marker.name;
-            markerSprite.address = marker.address;
-            markerSprite.flags = marker.flags || [];
-            markerSprite.favorite_id = marker.favorite_id;
-            markerSprite.case_number = marker.case_number;
-            markerSprite.svi = marker.svi;
-            markerSprite.created_at = marker.created_at;
-            markerSprite.updated_at = marker.updated_at;
-            markerSprite.work_types = marker.work_types;
-            markerSprite.active_work_type = workType;
-            markerSprite.colorsKey = colorsKey;
-            markerSprite.id = marker.id;
-            // MarkerSprite.alpha = getOpacity(marker.updated_at);
-          }
-
-          context.displayedWorkTypes = { ...context.displayedWorkTypes };
-          context.$emit('onAvailableWorkTypes', displayedWorkTypes);
-
-          const quadTrees = {};
-          if (interactive) {
-            for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {
-              const rInit = (z <= 7 ? 16 : 24) / utils.getScale(z);
-              quadTrees[z] = solveCollision(markerSprites, {
-                r0: rInit,
-                zoom: z,
-              });
-            }
-          }
-
-          const findMarker = (ll) => {
-            const currentMap = utils.getMap() || context.map;
-            if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL || !interactive) {
-              return null;
-            }
-
-            const layerPoint = project(ll);
-            const quadTree = quadTrees[currentMap.getZoom()];
-            let marker;
-            try {
-              const { rMax } = quadTree;
-              let found = false;
-              quadTree.visit(function (quad, x1, y1, x2, y2) {
-                if (quad.length === 0) {
-                  const dx = quad.data.x - layerPoint.x;
-                  const dy = quad.data.y - layerPoint.y;
-                  const r = quad.data.scale.x * 16;
-                  if (dx * dx + dy * dy <= r * r) {
-                    marker = quad.data;
-                    found = true;
-                  }
-                }
-
-                return (
-                  found ||
-                  x1 > layerPoint.x + rMax ||
-                  x2 + rMax < layerPoint.x ||
-                  y1 > layerPoint.y + rMax ||
-                  y2 + rMax < layerPoint.y
-                );
-              });
-            } catch {
-              return null;
-            }
-
-            return marker;
-          };
-
-          if (interactive) {
-            map.on('click', function (e) {
-              const currentMap = utils.getMap() || context.map;
-              const marker = findMarker(e.latlng);
-              if (marker) {
-                context.$emit('onSelectmarker', marker);
-                if (context.onSelectMarker) {
-                  context.onSelectMarker(marker);
-                }
-              } else {
-                map.closePopup();
-              }
-
-              if (
-                currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL &&
-                context.enableInteractiveTooltip
-              ) {
-                context.enableInteractiveTooltip();
-              }
-            });
-
-            map.on(
-              'mousemove',
-              L.Util.throttle((e) => {
-                const marker = findMarker(e.latlng);
-                if (marker) {
-                  L.DomUtil.addClass(this._container, 'cursor-pointer');
-                  this._container.setAttribute('title', marker.case_number);
-                } else {
-                  L.DomUtil.removeClass(this._container, 'cursor-pointer');
-                  this._container.setAttribute('title', '');
-                }
-              }, 32),
-            );
-          }
-        }
-
-        if (firstDraw || previousZoom !== zoom || previousCenter !== center) {
-          context.$emit('mapMoved', map.getBounds());
-          for (const markerSprite of markerSprites) {
-            if (zoom >= INTERACTIVE_ZOOM_LEVEL && interactive) {
-              if (
-                utils
-                  .getMap()
-                  .getBounds()
-                  .contains([
-                    markerSprite.location.coordinates[1],
-                    markerSprite.location.coordinates[0],
-                  ])
-              ) {
-                const workType = markerSprite.active_work_type;
-
-                const colorsKey = `${workType.status}_${
-                  workType.claimed_by ? 'claimed' : 'unclaimed'
-                }`;
-
-                const spriteColors = colors[colorsKey];
-
-                let detailedTemplate =
-                  templates[workType.work_type] || templates.unknown;
-                const isHighPriority = markerSprite.flags.some(
-                  (flag) => flag.is_high_priority,
-                );
-                if (markerSprite.favorite_id) {
-                  detailedTemplate = templates.favorite;
-                } else if (isHighPriority) {
-                  detailedTemplate = templates.important;
-                }
-
-                if (spriteColors) {
-                  let { fillColor } = spriteColors;
-                  const { strokeColor } = spriteColors;
-                  if (markerSprite.filtered) {
-                    fillColor = 'white';
-                  }
-
-                  const typeSvg = detailedTemplate
-                    .replaceAll('{{fillColor}}', fillColor)
-                    .replaceAll('{{strokeColor}}', strokeColor)
-                    .replaceAll(
-                      '{{multiple}}',
-                      markerSprite.work_types.length > 1 ? templates.plus : '',
-                    );
-
-                  markerSprite.texture = Texture.from(typeSvg);
-                }
-              }
-            } else {
-              const { colorsKey } = markerSprite;
-              const spriteColors = colors[colorsKey];
-              if (spriteColors) {
-                let { fillColor, strokeColor } = spriteColors;
-                if (markerSprite.filtered) {
-                  fillColor = 'white';
-                } else {
-                  strokeColor = 'white';
-                }
-
-                const template = templates.circle;
-                const typeSvg = template
-                  .replaceAll('{{fillColor}}', fillColor)
-                  .replaceAll('{{strokeColor}}', strokeColor)
-                  .replaceAll(
-                    '{{multiple}}',
-                    markerSprite.work_types.length > 1 ? templates.plus : '',
-                  );
-
-                markerSprite.texture = Texture.from(typeSvg);
-              }
-            }
-
-            if (firstDraw) {
-              markerSprite.scale.set(invScale);
-            } else {
-              markerSprite.currentScale = markerSprite.scale.x;
-              markerSprite.targetScale = invScale;
-            }
-          }
-        }
-
-        let start = null;
-        const delta = 250;
-
-        function animate(timestamp) {
-          if (start === null) start = timestamp;
-          const progress = timestamp - start;
-          let lambda = progress / delta;
-          if (lambda > 1) lambda = 1;
-          lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          for (const markerSprite of markerSprites) {
-            markerSprite.scale.set(
-              markerSprite.currentScale +
-                lambda * (markerSprite.targetScale - markerSprite.currentScale),
-            );
-          }
-
-          renderer.render(container);
-          if (progress < delta) {
-            frame = requestAnimationFrame(animate);
-          }
-        }
-
-        if (!firstDraw && previousZoom !== zoom) {
-          frame = requestAnimationFrame(animate);
-        }
-
-        firstDraw = false;
-        previousZoom = zoom;
-        previousCenter = center;
-        renderer.render(container);
-      },
-      pixiContainer,
-      {
-        doubleBuffering,
-        destroyInteractionManager: true,
-      },
-    );
-  })();
-  layer.key = 'worksite_layer';
-  return layer;
-}
-
-export function getMarkerLayer(markers, map, context) {
   const pixiContainer = new Container();
   context.pixiContainer = pixiContainer;
 
   const layer = (function () {
     let firstDraw = true;
     // Let prevCenter;
-    let frame = null;
-    const doubleBuffering =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    let frame: number | null = null;
+    const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
-      function (utils) {
+      function (utils: PixiUtils) {
         const zoom = utils.getMap().getZoom();
         // Const center = utils.getMap().getCenter();
         if (frame) {
@@ -454,7 +125,7 @@ export function getMarkerLayer(markers, map, context) {
           // prevCenter = center;
         }
 
-        let start = null;
+        let start: number | null = null;
         const delta = 250;
 
         for (const markerSprite of container.children) {
@@ -466,7 +137,7 @@ export function getMarkerLayer(markers, map, context) {
           }
         }
 
-        function animate(timestamp) {
+        function animate(timestamp: number) {
           if (start === null) start = timestamp;
           const progress = timestamp - start;
           let lambda = progress / delta;
@@ -515,13 +186,12 @@ export function getLiveLayer() {
 
   const layer = (function () {
     let firstDraw = true;
-    let previousZoom;
+    let previousZoom: any;
     // Let prevCenter;
-    let frame = null;
-    const doubleBuffering =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    let frame: number | null = null;
+    const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
-      function (utils) {
+      function (utils: PixiUtils) {
         const zoom = utils.getMap().getZoom();
         // Const center = utils.getMap().getCenter();
         if (frame) {
@@ -548,10 +218,13 @@ export function getLiveLayer() {
           }
         }
 
-        let start = null;
+        let start: number | null = null;
         const delta = 250;
 
-        function createLineAnimation(markerSprite, type = 'arc') {
+        function createLineAnimation(
+          markerSprite: Sprite & Record<string, any>,
+          type = 'arc',
+        ) {
           if (markerSprite.frame) {
             cancelAnimationFrame(markerSprite.frame);
             markerSprite.frame = null;
@@ -598,7 +271,7 @@ export function getLiveLayer() {
           }
         }
 
-        function animate(timestamp) {
+        function animate(timestamp: number) {
           if (start === null) start = timestamp;
           const progress = timestamp - start;
           let lambda = progress / delta;
@@ -665,7 +338,7 @@ export function getLiveLayer() {
   return layer;
 }
 
-export function calcWaypoints(vertices) {
+export function calcWaypoints(vertices: string | any[]) {
   const waypoints = [];
   for (let i = 1; i < vertices.length; i++) {
     const pt0 = vertices[i - 1];
@@ -682,20 +355,20 @@ export function calcWaypoints(vertices) {
   return waypoints;
 }
 
-export function degreesToRadians(degrees) {
+export function degreesToRadians(degrees: number) {
   const pi = Math.PI;
   return degrees * (pi / 180);
 }
 
 function getCubicBezierXYatPercent(
-  startPt,
-  controlPt1,
-  controlPt2,
-  endPt,
-  percent,
+  startPt: { x: any; y: any },
+  controlPt1: { x: any; y: any },
+  controlPt2: { x: any; y: any },
+  endPt: { x: any; y: any },
+  percent: number,
 ) {
   // Cubic helper formula
-  function CubicN(T, a, b, c, d) {
+  function CubicN(T: number, a: number, b: number, c: number, d: number) {
     const t2 = T * T;
     const t3 = t2 * T;
     return (
@@ -715,7 +388,7 @@ function getCubicBezierXYatPercent(
   };
 }
 
-export function findBezierPoints(b) {
+export function findBezierPoints(b: any[]) {
   const startPt = b[0];
   const controlPt1 = b[1];
   const controlPt2 = b[2];
@@ -736,7 +409,7 @@ export function findBezierPoints(b) {
     const dx = pt.x - lastPt.x;
     const dy = pt.y - lastPt.y;
     const d = Math.sqrt(dx * dx + dy * dy);
-    const dInt = Number.parseInt(d);
+    const dInt = Number.parseInt(String(d));
     if (dInt > 0 || t === tests) {
       lastPt = pt;
       pts.push(pt);
@@ -746,6 +419,6 @@ export function findBezierPoints(b) {
   return pts;
 }
 
-export function randomIntFromInterval(min, max) {
+export function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
