@@ -35,34 +35,37 @@
         }}</base-text>
         <draggable
           v-model="team.users"
+          item-key="id"
           :options="{ group: 'people' }"
           @start="drag = true"
           @end="drag = false"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
         >
-          <div
-            v-for="user in team.users"
-            :key="`${user.id}`"
-            class="border-b pt-2 bg-white"
-            style="display: grid; grid-template-columns: 25px max-content 1fr"
-          >
-            <div class="handle" style="width: 15px; margin-top: 2px">
-              <ccu-icon
-                icon-classes="cursor-move"
-                :alt="$t('actions.drag')"
-                size="medium"
-                type="drag"
+          <template #item="{ element: user }">
+            <div
+              v-for="user in team.users"
+              :key="`${user.id}`"
+              class="border-b pt-2 bg-white"
+              style="display: grid; grid-template-columns: 25px max-content 1fr"
+            >
+              <div class="handle" style="width: 15px; margin-top: 2px">
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
+                />
+              </div>
+              <Avatar
+                :initials="user.first_name"
+                :url="user.profilePictureUrl"
+                class="mr-2"
+                size="xsmall"
               />
+              <span>{{ user.full_name }}</span>
             </div>
-            <Avatar
-              :initials="user.first_name"
-              :url="user.profilePictureUrl"
-              class="mr-2"
-              size="xsmall"
-            />
-            <span>{{ user.full_name }}</span>
-          </div>
+          </template>
         </draggable>
         <base-button
           class="my-3 text-primary-dark underline"
@@ -81,53 +84,54 @@
         }}</base-text>
         <draggable
           v-model="teamWorksites"
+          item-key="id"
           :options="{ group: 'cases' }"
           @start="drag = true"
           @end="drag = false"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
         >
-          <div
-            v-for="worksite in teamWorksites"
-            :key="`${worksite.id}`"
-            class="border-b py-3 px-3 bg-white"
-            style="
-              display: grid;
-              grid-template-columns: 25px max-content 1fr 1fr 1fr;
-              grid-gap: 10px;
-            "
-          >
-            <div class="handle" style="width: 15px; margin-top: 2px">
-              <ccu-icon
-                icon-classes="cursor-move"
-                :alt="$t('actions.drag')"
-                size="medium"
-                type="drag"
-              />
-            </div>
-            <span>{{ worksite.case_number }}</span>
-            <div class="flex flex-wrap w-full">
-              <div
-                v-for="work_type in worksite.work_types"
-                :key="`${work_type.id}`"
-                class="mx-1"
-              >
-                <WorksiteStatusDropdown
-                  class="block"
-                  :current-work-type="work_type"
-                  use-icon
-                  hide-name
-                  @input="
-                    (value) => {
-                      statusValueChange(value, work_type, worksite.id);
-                    }
-                  "
+          <template #item="{ element: worksite }">
+            <div
+              class="border-b py-3 px-3 bg-white"
+              style="
+                display: grid;
+                grid-template-columns: 25px max-content 1fr 1fr 1fr;
+                grid-gap: 10px;
+              "
+            >
+              <div class="handle" style="width: 15px; margin-top: 2px">
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
                 />
               </div>
+              <span>{{ worksite.case_number }}</span>
+              <div class="flex flex-wrap w-full">
+                <div
+                  v-for="work_type in worksite.work_types"
+                  :key="`${work_type.id}`"
+                  class="mx-1"
+                >
+                  <WorksiteStatusDropdown
+                    class="block"
+                    :current-work-type="work_type"
+                    use-icon
+                    hide-name
+                    @input="
+                      (value) => {
+                        statusValueChange(value, work_type, worksite.id);
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <span>{{ worksite.name }}</span>
+              <span>{{ worksite.full_address }}</span>
             </div>
-            <span>{{ worksite.name }}</span>
-            <span>{{ worksite.full_address }}</span>
-          </div>
+          </template>
         </draggable>
         <base-button
           class="my-3 text-primary-dark underline"
@@ -178,34 +182,38 @@
           ></base-input>
           <draggable
             v-model="usersList"
+            item-key="id"
             :options="{ group: 'people' }"
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
             class="h-96 overflow-scroll"
           >
-            <div
-              v-for="user in usersList"
-              :key="`${user.id}`"
-              class="border-t last:border-b pt-2 bg-white"
-              style="display: grid; grid-template-columns: 25px max-content 1fr"
-            >
-              <div class="handle" style="width: 15px; margin-top: 2px">
-                <ccu-icon
-                  icon-classes="cursor-move"
-                  :alt="$t('actions.drag')"
-                  size="medium"
-                  type="drag"
+            <template #item="{ element: user }">
+              <div
+                class="border-t last:border-b pt-2 bg-white"
+                style="
+                  display: grid;
+                  grid-template-columns: 25px max-content 1fr;
+                "
+              >
+                <div class="handle" style="width: 15px; margin-top: 2px">
+                  <ccu-icon
+                    icon-classes="cursor-move"
+                    :alt="$t('actions.drag')"
+                    size="medium"
+                    type="drag"
+                  />
+                </div>
+                <Avatar
+                  :initials="user.first_name"
+                  :url="user.profilePictureUrl"
+                  class="mr-2"
+                  size="xsmall"
                 />
+                <span>{{ user.full_name }}</span>
               </div>
-              <Avatar
-                :initials="user.first_name"
-                :url="user.profilePictureUrl"
-                class="mr-2"
-                size="xsmall"
-              />
-              <span>{{ user.full_name }}</span>
-            </div>
+            </template>
           </draggable>
         </template>
         <template v-if="view === 'cases'">
@@ -222,53 +230,54 @@
           ></base-input>
           <draggable
             v-model="worksites"
+            item-key="id"
             :options="{ group: 'cases' }"
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
             class="h-96 overflow-scroll"
           >
-            <div
-              v-for="worksite in worksites"
-              :key="`${worksite.id}`"
-              class="border-t last:border-b py-3 px-3 bg-white"
-              style="
-                display: grid;
-                grid-template-columns: 25px max-content 1fr 1fr 1fr;
-                grid-gap: 10px;
-              "
-            >
-              <div class="handle" style="width: 15px; margin-top: 2px">
-                <ccu-icon
-                  icon-classes="cursor-move"
-                  :alt="$t('actions.drag')"
-                  size="medium"
-                  type="drag"
-                />
-              </div>
-              <span>{{ worksite.case_number }}</span>
-              <div class="flex flex-wrap w-full">
-                <div
-                  v-for="work_type in worksite.work_types"
-                  :key="`${work_type.id}`"
-                  class="mx-1"
-                >
-                  <WorksiteStatusDropdown
-                    class="block"
-                    :current-work-type="work_type"
-                    use-icon
-                    hide-name
-                    @input="
-                      (value) => {
-                        statusValueChange(value, work_type, worksite.id);
-                      }
-                    "
+            <template #item="{ element: worksite }">
+              <div
+                class="border-t last:border-b py-3 px-3 bg-white"
+                style="
+                  display: grid;
+                  grid-template-columns: 25px max-content 1fr 1fr 1fr;
+                  grid-gap: 10px;
+                "
+              >
+                <div class="handle" style="width: 15px; margin-top: 2px">
+                  <ccu-icon
+                    icon-classes="cursor-move"
+                    :alt="$t('actions.drag')"
+                    size="medium"
+                    type="drag"
                   />
                 </div>
+                <span>{{ worksite.case_number }}</span>
+                <div class="flex flex-wrap w-full">
+                  <div
+                    v-for="work_type in worksite.work_types"
+                    :key="`${work_type.id}`"
+                    class="mx-1"
+                  >
+                    <WorksiteStatusDropdown
+                      class="block"
+                      :current-work-type="work_type"
+                      use-icon
+                      hide-name
+                      @input="
+                        (value) => {
+                          statusValueChange(value, work_type, worksite.id);
+                        }
+                      "
+                    />
+                  </div>
+                </div>
+                <span>{{ worksite.name }}</span>
+                <span>{{ worksite.full_address }}</span>
               </div>
-              <span>{{ worksite.name }}</span>
-              <span>{{ worksite.full_address }}</span>
-            </div>
+            </template>
           </draggable>
         </template>
       </div>
