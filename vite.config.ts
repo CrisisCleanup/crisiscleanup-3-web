@@ -5,7 +5,6 @@ import _ from 'lodash';
 import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import postcssConfig from './postcss.config.cjs';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ command }) => {
@@ -21,11 +20,6 @@ export default defineConfig(async ({ command }) => {
     {
       define: {
         __VUE_PROD_DEVTOOLS__: true,
-      },
-      css: {
-        postcss: {
-          plugins: postcssConfig.plugins,
-        },
       },
       resolve: {
         alias: {
