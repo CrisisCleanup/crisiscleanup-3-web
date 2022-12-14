@@ -6,18 +6,17 @@
     <base-text class="my-1">{{
       $t('phoneDashboard.manual_dial_hidden_caller_id')
     }}</base-text>
-    <div class="grid grid-cols-3 my-1">
-      <form-select
+    <div class="grid grid-cols-4 my-1">
+      <base-select
         v-model="countryCode"
         :options="[$t('+1')]"
         indicator-icon="caret-down"
-        select-classes="h-8 border bg-white text-sm"
-        class="col-span-1 text-sm"
+        class="col-span-2 text-sm"
         :placeholder="$t('phoneDashboard.code')"
       />
       <input
         type="text"
-        class="h-8 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
+        class="h-10 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
         size="large"
         v-model="phoneNumber"
         :placeholder="$t('phoneDashboard.phone_number')"
@@ -34,9 +33,9 @@
 </template>
 
 <script>
-import useEmitter from '../../hooks/useEmitter';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
+import useEmitter from '../../hooks/useEmitter';
 
 export default {
   name: 'ManualDialer',

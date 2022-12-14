@@ -12,7 +12,7 @@
         <div class="right">
           <slot name="dropdown">
             <div v-if="hasDropdown" class="card__dropdown mx-3">
-              <form-select
+              <base-select
                 ref="drop"
                 :style="{
                   minWidth: `${dropdownWidth_}px`,
@@ -21,7 +21,7 @@
                 :searchable="false"
                 :clearable="false"
                 @resize="calcDropdownWidth"
-                @input="(payload) => $emit('update:dropdown', payload)"
+                @update:modelValue="(payload) => $emit('update:dropdown', payload)"
                 v-bind="dropdown"
               >
                 <template #selected-option="{ option }">
@@ -33,7 +33,7 @@
                     {{ option[dropdown.label] }}
                   </base-text>
                 </template>
-              </form-select>
+              </base-select>
             </div>
           </slot>
         </div>
@@ -45,8 +45,8 @@
 
 <script>
 import _ from 'lodash';
-import Card from './Card.vue';
 import { computed, nextTick, onMounted, ref } from 'vue';
+import Card from './Card.vue';
 
 export default {
   name: 'TitledCard',
@@ -67,13 +67,13 @@ export default {
     },
   },
   setup(props) {
-    const dropdownWidth_ = ref(0);
+    const dropdownWidth_ = ref(200);
     const drop = ref(null);
     function calcDropdownWidth() {
       if (!drop.value) return;
-      const elWidth = drop.value.$el.clientWidth;
-      if (elWidth) {
-        this.dropdownWidth_ = elWidth;
+      const elementWidth = drop.value.$el.clientWidth;
+      if (elementWidth) {
+        dropdownWidth_.value = elementWidth;
         const container = drop.value.$el.querySelector('.vs__selected-options');
         container.style.flexWrap = 'nowrap';
         container.style.flexDirection = 'row-reverse';

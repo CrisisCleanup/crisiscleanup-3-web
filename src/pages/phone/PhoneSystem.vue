@@ -375,7 +375,7 @@
             (worksite) => {
               worksiteId = worksite.id;
               isEditing = true;
-              tabs.value.selectTab(statusTab.value.index);
+              switchToStatusTab();
             }
           "
           @closeWorksite="clearCase"
@@ -748,6 +748,11 @@ export default {
       // open the active call PhoneComponentButton
       emitter.emit('phone_component:open', 'news');
     }
+
+    const switchToStatusTab = () => {
+      tabs.value.selectTab(statusTab.value.index);
+    }
+
     async function init() {
       phoneService.apiGetQueueStats().then((response) => {
         setGeneralStats({ ...response.data });
@@ -800,7 +805,7 @@ export default {
       () => isOnCall.value,
       (oldValue, newValue) => {
         if (oldValue && !newValue) {
-          tabs.value.selectTab(statusTab.value.index);
+          switchToStatusTab();
         }
       },
     );
@@ -827,6 +832,7 @@ export default {
     });
 
     return {
+      switchToStatusTab,
       imageUrl,
       numClicks: numberClicks,
       scale,
