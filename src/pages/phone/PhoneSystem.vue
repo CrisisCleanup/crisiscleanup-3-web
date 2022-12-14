@@ -375,7 +375,7 @@
             (worksite) => {
               worksiteId = worksite.id;
               isEditing = true;
-              tabs.selectTab(this.$refs.statusTab);
+              tabs.value.selectTab(statusTab.value.index);
             }
           "
           @closeWorksite="clearCase"
@@ -800,7 +800,7 @@ export default {
       () => isOnCall.value,
       (oldValue, newValue) => {
         if (oldValue && !newValue) {
-          tabs.value.selectTab(statusTab.value);
+          tabs.value.selectTab(statusTab.value.index);
         }
       },
     );
