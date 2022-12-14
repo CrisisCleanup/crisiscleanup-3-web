@@ -1,12 +1,13 @@
 import User from '../models/User';
 import { store } from '../store';
 import { getErrorMessage } from '../utils/errors';
+import { computed } from 'vue';
 
 export default function useCurrentUser() {
-  const currentUser = User.find(store.getters['auth/userId']);
+  const currentUser = computed(() => User.find(store.getters['auth/userId']));
   const updateCurrentUser = async (value: any, key: string) => {
     return User.update({
-      where: currentUser?.id,
+      where: currentUser.value?.id,
       data: {
         [key]: value,
       },
@@ -15,10 +16,10 @@ export default function useCurrentUser() {
 
   const saveCurrentUser = async () => {
     try {
-      await User.api().patch(`/users/${currentUser?.id}`, {
-        ...currentUser?.$toJson(),
-        preferences: currentUser?.preferences,
-        states: currentUser?.states,
+      await User.api().patch(`/users/${currentUser.value?.id}`, {
+        ...User.find(currentUser.value?.id)?.$toJson(),
+        preferences: currentUser.value?.preferences,
+        states: currentUser.value?.states,
       });
     } catch (error) {
       throw getErrorMessage(error);
@@ -26,7 +27,7 @@ export default function useCurrentUser() {
   };
 
   return {
-    currentUser,
+    currentUser: currentUser.value,
     updateCurrentUser,
     saveCurrentUser,
   };

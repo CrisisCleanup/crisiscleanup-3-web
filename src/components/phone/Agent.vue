@@ -60,7 +60,7 @@
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
       <ccu-icon
-        @click="$phoneService.hangup"
+        @click="hangup"
         v-if="(isOnCall || caller) && isOutboundCall"
         size="lg"
         class="ml-2"

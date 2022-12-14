@@ -13,11 +13,8 @@ import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
 
-import { colors, templates } from '../icons/icons_templates';
 import Worksite from '../models/Worksite';
-import { solveCollision } from './easing';
 import { PixiUtils } from './types/map';
-// Import { GlowFilter } from '@pixi/filter-glow';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 

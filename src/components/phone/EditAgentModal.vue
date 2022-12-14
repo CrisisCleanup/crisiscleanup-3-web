@@ -29,9 +29,9 @@
           {{ $t('editAgentModal.languages') }}
         </base-text>
         <!-- Language -->
-        <form-select
+        <base-select
           class="flex-grow border border-crisiscleanup-dark-100"
-          :value="languages"
+          :model-value="languages"
           multiple
           :options="supportedLanguages"
           item-key="id"
@@ -39,26 +39,29 @@
           size="large"
           select-classes="bg-white border text-xs p-1 profile-select"
           :limit="2"
-          @input="(value) => (languages = value)"
+          @update:modelValue="(value) => (languages = value)"
         />
       </div>
     </div>
     <template #footer>
       <div class="flex p-3 my-6 justify-center mb-3 footer">
-        <base-button variant="solid" size="large" :action="updateUserNeeded">{{
-          $t('actions.save')
-        }}</base-button>
+        <base-button
+          variant="solid"
+          size="large"
+          :action="() => updateUserNeeded()"
+          >{{ $t('actions.save') }}</base-button
+        >
       </div>
     </template>
   </modal>
 </template>
 
 <script>
-import Language from '../../models/Language';
 import { computed, onMounted, ref } from 'vue';
+import { useToast } from 'vue-toastification';
+import Language from '../../models/Language';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useConnectFirst from '../../hooks/useConnectFirst';
-import { useToast } from 'vue-toastification';
 import useValidation from '../../hooks/useValidation';
 
 export default {
@@ -77,7 +80,7 @@ export default {
       if (phoneNumber.value) {
         await updateCurrentUser(phoneNumber.value, 'mobile');
       }
-      if (languages.value.length >= 1) {
+      if (languages.value.length > 0) {
         await updateCurrentUser(null, 'primary_language');
         await updateCurrentUser(null, 'secondary_language');
         const [primary_language, secondary_language] = languages.value;
@@ -88,16 +91,16 @@ export default {
         await saveCurrentUser();
         await loadAgent();
         context.emit('cancel');
-      } catch (e) {
+      } catch (error) {
         // this.$log.error('Failed to save user', e);
-        $toasted.error(e);
+        $toasted.error(error);
       }
     }
 
     const supportedLanguages = computed(() => {
       const languages = Language.all();
-      const ids = [2, 7];
-      return languages.filter((l) => ids.includes(l.id));
+      const ids = new Set([2, 7]);
+      return languages.filter((l) => ids.has(l.id));
     });
 
     onMounted(() => {

@@ -513,6 +513,7 @@ export default {
       setAvailable,
       setGeneralStats,
       setCurrentIncidentId,
+      dialManualOutbound,
     } = connectFirst;
 
     const prefillData = computed(function () {
@@ -642,7 +643,7 @@ export default {
           }
           await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/phone_inbound/${
-              this.call.id
+              call.value.id
             }/update_status`,
             data,
           );
@@ -691,8 +692,8 @@ export default {
       mapUtils.value.addMarkerToMap(location);
     }
     async function jumpToCase() {
-      this.toggleView('showingMap');
-      mapUtils.value.jumpToCase(this.worksite, true);
+      toggleView('showingMap');
+      mapUtils.value.jumpToCase(worksite.value, true);
     }
     function onSelectMarker(marker) {
       isEditing.value = true;
@@ -709,7 +710,7 @@ export default {
     }
     async function onLoggedIn() {
       if (
-        this.serveOutbounds &&
+        serveOutbounds.value &&
         Number(stats.value.inQueue || stats.value.routing || 0) === 0
       ) {
         if (remainingCallbacks.value + remainingCalldowns.value > 0) {

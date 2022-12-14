@@ -272,6 +272,7 @@ export default function useConnectFirst(context: { emit: Function }) {
     isTransitioning,
     isInboundCall,
     isOutboundCall,
+    dialManualOutbound,
     setCurrentIncidentId(id: string) {
       store.commit('incident/setCurrentIncidentId', id);
     },
