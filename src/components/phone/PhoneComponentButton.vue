@@ -39,6 +39,7 @@
 <script>
 import { onBeforeMount, ref, watch } from 'vue';
 import useEmitter from '../../hooks/useEmitter';
+
 export default {
   name: 'PhoneComponentButton',
   props: {

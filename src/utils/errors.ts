@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import { useI18n } from 'vue-i18n';
+import { i18n } from '../main';
 
 export function getErrorMessage(error: any) {
   if (!error.response || !error.response.status) {
@@ -7,7 +7,7 @@ export function getErrorMessage(error: any) {
     // If (window.vue.$log) {
     //   window.vue.$log.debug(error);
     // }
-    return useI18n().t('info.unknown_error');
+    return i18n.global.t('info.unknown_error');
   }
 
   if (error.response.status === 500) {
@@ -15,7 +15,7 @@ export function getErrorMessage(error: any) {
     // If (window.vue.$log) {
     //   window.vue.$log.debug(error);
     // }
-    return useI18n().t('info.error_500');
+    return i18n.global.t('info.error_500');
   }
 
   const message = Array.isArray(error.response.data.errors[0])

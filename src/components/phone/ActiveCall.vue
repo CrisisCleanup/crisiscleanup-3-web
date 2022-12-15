@@ -128,6 +128,10 @@ export default {
     const { t } = useI18n();
     const phoneService = reactive(usePhoneService());
 
+    const hangup = () => {
+      phoneService.hangup()
+    }
+
     const {
       isTakingCalls,
       isTransitioning,
@@ -225,7 +229,7 @@ export default {
       isOutboundCall,
       caller,
       moment,
-      hangup: phoneService.hangup
+      hangup,
     };
   },
 };

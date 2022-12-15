@@ -2,10 +2,10 @@ import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
 import { type Container } from 'pixi.js';
-import { useI18n } from 'vue-i18n';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '../../utils/map';
 import Location from '../../models/Location';
 import useRenderedMarkers from './useRenderedMarkers';
+import { i18n } from '../../main';
 
 export type MapUtils = {
   getMap: Function;
@@ -139,7 +139,7 @@ export default (
     container.visible = false;
     map.setView([markerLocation.lat, markerLocation.lng], 15);
     marker
-      .bindTooltip(useI18n().t('casesVue.drag_pin_to_correct_location'), {
+      .bindTooltip(i18n.global.t('casesVue.drag_pin_to_correct_location'), {
         direction: 'top',
       })
       .openTooltip();

@@ -5,6 +5,7 @@ import moment from 'moment';
 import enums from '../store/modules/enums';
 import { colors as iconColors, templates } from '../icons/icons_templates';
 import Organization from '../models/Organization';
+import momentWithDurations from 'moment-duration-format';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
@@ -120,9 +121,9 @@ export const secondsToHm = (seconds) => {
 };
 
 export const formatSeconds = (seconds) => {
-  return moment.duration(seconds, 's').format('hh:mm:ss', {
-    trim: false,
-  });
+  return moment
+    .utc(moment.duration(seconds, 's').asMilliseconds())
+    .format('hh:mm:ss');
 };
 
 export const capitalize = (value) => {

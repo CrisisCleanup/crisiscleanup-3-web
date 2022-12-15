@@ -26,6 +26,7 @@ import {
   faChevronRight,
   faChevronLeft,
   faUsers,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
 import { createI18n } from 'vue-i18n';
@@ -95,6 +96,7 @@ library.add(faSearchMinus);
 library.add(faChevronRight);
 library.add(faChevronLeft);
 library.add(faUsers);
+library.add(faStar);
 
 const getI18n = (messages = {}) => {
   return createI18n({
@@ -105,6 +107,8 @@ const getI18n = (messages = {}) => {
     messages,
   });
 };
+
+export const i18n = getI18n();
 
 if (AuthService.getUser()) {
   axios.defaults.withCredentials = true;
@@ -140,7 +144,7 @@ app.use(store);
 app.use(VueAxios, axios);
 app.use(Vue3Mq);
 app.use(router);
-app.use(getI18n());
+app.use(i18n);
 app.use(Toast, {});
 app.use(JsonViewer);
 app.config.devtools = true;

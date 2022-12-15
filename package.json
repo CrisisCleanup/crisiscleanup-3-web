@@ -79,6 +79,7 @@
     "lodash": "^4.17.21",
     "mitt": "^3.0.0",
     "moment": "^2.29.4",
+    "moment-duration-format": "^2.3.2",
     "parse-address": "^1.1.2",
     "pixi-filters": "^5.0.0",
     "pixi.js": "^6.5.8",

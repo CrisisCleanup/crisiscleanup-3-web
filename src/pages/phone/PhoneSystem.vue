@@ -83,7 +83,7 @@
               </template>
               <template #component>
                 <tabs :details="false" ref="tabs" @mounted="setTabs">
-                  <tab :name="$t('phoneDashboard.active_call')">
+                  <tab :name="$t('phoneDashboard.active_call')" ref="callTab">
                     <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
                   </tab>
                   <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
@@ -197,14 +197,14 @@
               icon-class="p-1"
             >
               <template #component>
-                <!--                <CallHistory-->
-                <!--                  :calls="callHistory"-->
-                <!--                  @rowClick="-->
-                <!--                    ({ mobile }) => {-->
-                <!--                      setManualOutbound(mobile);-->
-                <!--                    }-->
-                <!--                  "-->
-                <!--                />-->
+                <CallHistory
+                  :calls="callHistory"
+                  @rowClick="
+                    ({ mobile }) => {
+                      setManualOutbound(mobile);
+                    }
+                  "
+                />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -498,6 +498,7 @@ export default {
     const mapUtils = ref(null);
     const worksiteForm = ref(null);
     const statusTab = ref(null);
+    const callTab = ref(null);
     const connectFirst = useConnectFirst(context);
 
     const {
@@ -513,7 +514,6 @@ export default {
       setAvailable,
       setGeneralStats,
       setCurrentIncidentId,
-      dialManualOutbound,
     } = connectFirst;
 
     const prefillData = computed(function () {
@@ -751,7 +751,11 @@ export default {
 
     const switchToStatusTab = () => {
       tabs.value.selectTab(statusTab.value.index);
-    }
+    };
+
+    const switchToCallTab = () => {
+      tabs.value.selectTab(callTab.value.index);
+    };
 
     async function init() {
       phoneService.apiGetQueueStats().then((response) => {
@@ -796,7 +800,8 @@ export default {
       () => call.value,
       (oldValue, newValue) => {
         if (!oldValue && newValue) {
-          emitter.emit('phone_component:open', 'agent');
+          emitter.emit('phone_component:open', 'caller');
+          // switchToCallTab();
         }
       },
     );
@@ -805,7 +810,7 @@ export default {
       () => isOnCall.value,
       (oldValue, newValue) => {
         if (oldValue && !newValue) {
-          switchToStatusTab();
+          // switchToStatusTab();
         }
       },
     );
@@ -872,6 +877,7 @@ export default {
       incidentsWithActivePhones,
       worksiteForm,
       statusTab,
+      callTab,
       ...connectFirst,
       init,
       getIncidentPhoneNumbers,

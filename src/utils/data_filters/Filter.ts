@@ -1,4 +1,4 @@
-import { useI18n } from 'vue-i18n';
+import { i18n } from '../../main';
 
 export default class Filter {
   name: string;
@@ -10,19 +10,19 @@ export default class Filter {
   }
 
   packFunction() {
-    throw new Error(useI18n().t('info.error_pack_function'));
+    throw new Error(i18n.global.t('info.error_pack_function'));
   }
 
   getCount() {
-    throw new Error(useI18n().t('info.error_get_count'));
+    throw new Error(i18n.global.t('info.error_get_count'));
   }
 
   getFilterLabels() {
-    throw new Error(useI18n().t('info.error_get_filter_labels'));
+    throw new Error(i18n.global.t('info.error_get_filter_labels'));
   }
 
   removeField(identifier: string) {
-    throw new Error(useI18n().t('info.error_remove_field'));
+    throw new Error(i18n.global.t('info.error_remove_field'));
   }
 
   get count() {

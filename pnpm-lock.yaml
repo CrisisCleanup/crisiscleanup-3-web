@@ -73,6 +73,7 @@ specifiers:
   lodash: ^4.17.21
   mitt: ^3.0.0
   moment: ^2.29.4
+  moment-duration-format: ^2.3.2
   parse-address: ^1.1.2
   pixi-filters: ^5.0.0
   pixi.js: ^6.5.8
@@ -153,6 +154,7 @@ dependencies:
   lodash: 4.17.21
   mitt: 3.0.0
   moment: 2.29.4
+  moment-duration-format: 2.3.2
   parse-address: 1.1.2
   pixi-filters: 5.0.0_pn32dkfqmirf6csgmr3emjmlxm
   pixi.js: 6.5.8
@@ -6179,6 +6181,10 @@ packages:
 
   /mitt/3.0.0:
     resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
+    dev: false
+
+  /moment-duration-format/2.3.2:
+    resolution: {integrity: sha512-cBMXjSW+fjOb4tyaVHuaVE/A5TqkukDWiOfxxAjY+PEqmmBQlLwn+8OzwPiG3brouXKY5Un4pBjAeB6UToXHaQ==}
     dev: false
 
   /moment/2.29.4:

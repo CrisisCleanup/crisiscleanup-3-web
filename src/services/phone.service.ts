@@ -1,10 +1,9 @@
 import AgentLibrary from 'cf-agent-library';
 import axios from 'axios';
-import { useI18n } from 'vue-i18n';
 import { store } from '../store';
-// Import Logger from '@/utils/log';
 import User from '../models/User';
 import Incident from '../models/Incident';
+import { i18n } from '../main';
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
   2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
@@ -290,7 +289,7 @@ export default class PhoneService {
     return new Promise((resolve, reject) => {
       if (!currentUser?.mobile) {
         throw new Error(
-          useI18n().t('phoneDashboard.please_set_valid_phone_number'),
+          i18n.global.t('phoneDashboard.please_set_valid_phone_number'),
         );
       }
 
@@ -300,7 +299,7 @@ export default class PhoneService {
         async (data: any) => {
           // Log.debug('Logged in agent', data);
           if (data.status === 'FAILURE') {
-            reject(new Error(useI18n().t('phoneDashboard.phone_no_log_in')));
+            reject(new Error(i18n.global.t('phoneDashboard.phone_no_log_in')));
             return;
           }
 

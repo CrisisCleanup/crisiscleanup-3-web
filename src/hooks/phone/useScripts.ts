@@ -5,12 +5,12 @@
 
 import { computed } from 'vue';
 import * as config from 'tailwind.config';
-import { useI18n } from 'vue-i18n';
 import moment from 'moment';
 import { wrap } from '../../utils/wrap';
 import type Incident from '../../models/Incident';
 import type Worksite from '../../models/Worksite';
 import useCurrentUser from '../useCurrentUser';
+import { i18n } from '../../main';
 
 const { theme } = config;
 
@@ -82,7 +82,7 @@ export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   const currentScript = computed(
     () =>
       currentUser &&
-      useI18n().t(
+      i18n.global.t(
         Scripts[_callType.value ? _callType.value : CallType.INBOUND],
         {
           name: currentUser.first_name,
