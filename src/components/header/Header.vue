@@ -36,7 +36,7 @@
               </div>
             </template>
           </BaseSelect>
-          <div class="flex ml-2 font-bold">
+          <div class="flex ml-2 font-bold mt-2">
             <span>{{ $t($route.name) }}</span>
           </div>
         </div>
@@ -73,10 +73,9 @@
 </template>
 
 <script>
-import DisasterIcon from '../DisasterIcon.vue';
-import UserProfileMenu from '../header/UserProfileMenu.vue';
-// import RedeployRequest from '@/pages/RedeployRequest';
 import { ref } from 'vue';
+import DisasterIcon from '../DisasterIcon.vue';
+// import RedeployRequest from '@/pages/RedeployRequest';
 import BaseSelect from '../BaseSelect.vue';
 import useDialogs from '../../hooks/useDialogs';
 import JsonWrapper from '../JsonWrapper.vue';
@@ -84,6 +83,7 @@ import useAcl from '../../hooks/useAcl';
 import PhoneIndicator from '../phone/PhoneIndicator.vue';
 import RedeployRequest from '../modals/RedeployRequest.vue';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import UserProfileMenu from './UserProfileMenu.vue';
 
 export default {
   name: 'Header',

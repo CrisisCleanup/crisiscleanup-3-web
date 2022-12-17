@@ -1,12 +1,25 @@
 import { Model } from '@vuex-orm/core';
 import moment from 'moment';
+import User from './User';
 
 export default class InvitationRequest extends Model {
   static entity = 'invitation_requests';
 
+  id!: string;
+  email!: string;
+  first_name!: string;
+  last_name!: string;
+  invitation_token!: string;
+  mobile!: User;
+  requested_to!: string;
+  requested_to_organization!: string;
+  requested_at!: string;
+  approved_at!: string;
+  rejected_at!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       email: this.string(''),
       first_name: this.string(''),
       last_name: this.string(''),
@@ -33,7 +46,7 @@ export default class InvitationRequest extends Model {
 
   static apiConfig = {
     actions: {
-      acceptInvitationRequest(request) {
+      acceptInvitationRequest(request: InvitationRequest) {
         return this.post(
           `/invitation_requests/${request.id}/approve`,
           {
@@ -42,7 +55,7 @@ export default class InvitationRequest extends Model {
           { save: false },
         );
       },
-      rejectInvitationRequest(request) {
+      rejectInvitationRequest(request: InvitationRequest) {
         return this.post(
           `/invitation_requests/${request.id}/reject`,
           {
@@ -51,6 +64,6 @@ export default class InvitationRequest extends Model {
           { save: false },
         );
       },
-    },
+    } as any,
   };
 }

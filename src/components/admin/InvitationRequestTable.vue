@@ -38,9 +38,11 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import User from '@/models/User';
-import InvitationRequest from '@/models/InvitationRequest';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import Table from '../Table.vue';
+import InvitationRequest from '../../models/InvitationRequest';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 export default {
   name: 'InvitationRequestTable',
@@ -58,46 +60,49 @@ export default {
     },
     loading: Boolean,
   },
-  methods: {
-    async acceptInvitationRequest(request) {
+  setup(props, { emit }) {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
+
+    async function loadAllInvitationRequests() {
+      await InvitationRequest.api().get(`/invitation_requests`, {
+        dataKey: 'results',
+      });
+    }
+
+    async function acceptInvitationRequest(request) {
       await InvitationRequest.api().acceptInvitationRequest(request);
-      await this.loadAllInvitationRequests();
-      await this.$toasted.success(
-        this.$t('invitationsVue.invitation_request_accepted'),
-      );
-      this.$emit('reload');
-    },
-    async rejectInvitationRequest(request) {
+      await loadAllInvitationRequests();
+      await $toasted.success(t('invitationsVue.invitation_request_accepted'));
+      emit('reload');
+    }
+    async function rejectInvitationRequest(request) {
       await InvitationRequest.api().rejectInvitationRequest(request);
-      await this.loadAllInvitationRequests();
-      await this.$toasted.success(
-        this.$t('invitationsVue.invitation_request_declined'),
-      );
-      this.$emit('reload');
-    },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  data() {
+      await loadAllInvitationRequests();
+      await $toasted.success(t('invitationsVue.invitation_request_declined'));
+      emit('reload');
+    }
+
     return {
+      currentUser,
+      acceptInvitationRequest,
+      rejectInvitationRequest,
       columns: [
         {
-          title: this.$t('invitationTables.id'),
+          title: t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('invitationTables.email'),
+          title: t('invitationTables.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.full_name'),
+          title: t('invitationTables.full_name'),
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1fr',
@@ -106,25 +111,25 @@ export default {
           },
         },
         {
-          title: this.$t('invitationTables.mobile'),
+          title: t('invitationTables.mobile'),
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.requested_to'),
+          title: t('invitationTables.requested_to'),
           dataIndex: 'requested_to',
           key: 'requested_to',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.organization'),
+          title: t('invitationTables.organization'),
           dataIndex: 'requested_to_organization',
           key: 'requested_to_organization',
           width: '2fr',
         },
         {
-          title: this.$t(''),
+          title: t(''),
           dataIndex: 'actions',
           key: 'actions',
           width: '2fr',

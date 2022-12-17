@@ -4,6 +4,7 @@ import ComponentDialog from '../components/dialogs/ComponentDialog.vue';
 import MessageBox from '../components/dialogs/MessageBox.vue';
 import MessageResponseDialog from '../components/dialogs/MessageResponseDialog.vue';
 import SelectionDialog from '../components/dialogs/SelectionDialog.vue';
+import OrganizationApprovalDialog from '../components/dialogs/OrganizationApprovalDialog.vue';
 
 async function component(props: any) {
   return openDialog(ComponentDialog, props);
@@ -21,11 +22,16 @@ async function selection(props: any) {
   return openDialog(SelectionDialog, props);
 }
 
+async function organizationApproval(props: any) {
+  return openDialog(OrganizationApprovalDialog, props);
+}
+
 export default () => {
   return {
     confirm,
     prompt,
     selection,
     component,
+    organizationApproval,
   };
 };

@@ -6,36 +6,44 @@
     :pagination="meta.pagination"
     :loading="loading"
     @change="$emit('change', $event)"
-    enable-pagination
+    @rowClick="showContacts"
   >
     <template #statuses="slotProps">
-      <div class="w-full flex items-center">
+      <div class="w-full flex items-center text-primary-dark">
         <font-awesome-icon
-          class="mx-1 text-primary-dark"
+          class="mx-1"
           size="lg"
           icon="check-circle"
           v-if="slotProps.item.profile_completed"
         />
         <badge
           v-if="slotProps.item.is_verified"
-          :title="$t('adminOrganization.org_verified')"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
+          :title="$t('adminOrganization.org_verified')"
           >V</badge
         >
         <badge
           v-if="slotProps.item.is_active"
-          :title="$t('adminOrganization.org_active')"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
+          :title="$t('adminOrganization.org_active')"
           >A</badge
         >
       </div>
     </template>
+    <template #incidents="slotProps">
+      <div
+        v-if="slotProps.item.incidents.length > 0"
+        class="w-full flex items-center"
+      >
+        {{ getIncidentName(slotProps.item.incidents[0]) }}
+      </div>
+    </template>
     <template #actions="slotProps">
-      <div class="flex mr-2 w-full items-center">
+      <div class="flex mr-2 justify-end w-full items-center">
         <base-button
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
@@ -47,7 +55,6 @@
               approveOrganization(slotProps.item.id);
             }
           "
-          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
         />
         <base-button
           :text="$t('actions.reject')"
@@ -60,7 +67,6 @@
               rejectOrganization(slotProps.item.id);
             }
           "
-          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
         />
         <base-link
           v-if="currentUser && currentUser.isAdmin"
@@ -71,27 +77,20 @@
         >
       </div>
     </template>
-    <template #approved_roles="slotProps">
-      {{ getHighestRole(slotProps.item.approved_roles) }}
-    </template>
-    <template #approved_incidents="slotProps">
-      {{ slotProps.item.approved_incidents.length }}
-    </template>
   </Table>
 </template>
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import Table from '../Table.vue';
 import Organization from '../../models/Organization';
-import { cachedGet } from '../../utils/promise';
-import useCurrentUser from '../../hooks/useCurrentUser';
-import useDialogs from '../../hooks/useDialogs';
+import Incident from '../../models/Incident';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import useDialogs from '@/hooks/useDialogs';
 
 export default {
-  name: 'OrganizationsTable',
+  name: 'OrganizationApprovalTable',
   components: { Table },
   props: {
     organizations: {
@@ -109,16 +108,8 @@ export default {
   setup(props, { emit }) {
     const { t } = useI18n();
     const { currentUser } = useCurrentUser();
-    const { organizationApproval } = useDialogs();
-    const organizationRoles = ref([]);
+    const { confirm, prompt } = useDialogs();
 
-    function getHighestRole(roles) {
-      if (roles.length > 0) {
-        return organizationRoles.value.find((role) => roles.includes(role.id))
-          .name_t;
-      }
-      return '';
-    }
     async function getOrganizationContacts(organizationId) {
       const response = await axios.get(
         `${
@@ -127,10 +118,28 @@ export default {
       );
       return response.data.results;
     }
+    function getIncidentName(id) {
+      const incident = Incident.find((element) => id(element));
+      return incident && incident.name;
+    }
+    async function showContacts(organization) {
+      const contacts = await getOrganizationContacts(organization.id);
+      const contact = contacts.length > 0 ? contacts[0] : null;
+      await confirm({
+        title: t('adminOrganization.organization_contact'),
+        content: `
+          <div>${contact.first_name} ${contact.last_name}</div>
+          <div>${contact.title ?? ''}</div>
+          <div>${contact.email}</div>
+          <div>${contact.mobile}</div>
+          </p>
+        `,
+      });
+    }
     async function approveOrganization(organizationId) {
-      const result = await organizationApproval({
+      const result = await prompt({
         title: t('actions.approve_organization'),
-        content: t('orgTable.give_approve_reason'),
+        content: t('orgApprovalTable.give_approve_reason'),
       });
       if (result) {
         await Organization.api().approve(organizationId, result.reason);
@@ -138,9 +147,9 @@ export default {
       }
     }
     async function rejectOrganization(organizationId) {
-      const result = await organizationApproval({
+      const result = await prompt({
         title: t('actions.reject_organization'),
-        content: t('orgTable.give_reject_reason'),
+        content: t('orgApprovalTable.give_reject_reason'),
       });
       if (result) {
         await Organization.api().reject(
@@ -152,58 +161,54 @@ export default {
       }
     }
 
-    onMounted(async () => {
-      const organizationRolesResponse = await cachedGet(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/organization_roles`,
-        {},
-        'organizations_roles',
-      );
-      organizationRoles.value = organizationRolesResponse.data.results;
-    });
-
     return {
       currentUser,
-      organizationRoles,
-      getHighestRole,
+      getIncidentName,
+      showContacts,
       approveOrganization,
       rejectOrganization,
-      getOrganizationContacts,
       columns: [
         {
-          title: t('orgTable.id'),
+          title: t('ID'),
           dataIndex: 'id',
           key: 'id',
-          width: '5%',
+          width: '75px',
         },
         {
-          title: t('orgTable.name'),
+          title: t('orgApprovalTable.name'),
           dataIndex: 'name',
           key: 'name',
-          width: '30%',
+          width: '1.5fr',
         },
         {
           title: t('orgApprovalTable.org_statuses'),
           dataIndex: 'statuses',
           key: 'statuses',
-          width: '15%',
+          width: '0.75fr',
         },
         {
-          title: t('orgTable.approved_roles'),
-          dataIndex: 'approved_roles',
-          key: 'approved_roles',
-          width: '15%',
+          title: t('orgApprovalTable.website'),
+          dataIndex: 'url',
+          key: 'url',
+          width: '1fr',
         },
         {
-          title: t('orgTable.approved_incidents'),
-          dataIndex: 'approved_incidents',
-          key: 'approved_incidents',
-          width: '15%',
+          title: t('adminOrganization.admin_notes'),
+          dataIndex: 'admin_notes',
+          key: 'admin_notes',
+          width: '2fr',
+        },
+        {
+          title: t('incidentApprovalTable.incident'),
+          dataIndex: 'incidents',
+          key: 'incidents',
+          width: '1fr',
         },
         {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: '20%',
+          width: '1.5fr',
         },
       ],
     };

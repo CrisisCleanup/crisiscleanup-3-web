@@ -78,6 +78,7 @@ import Tab from './components/tabs/Tab.vue';
 import Tabs from './components/tabs/Tabs.vue';
 import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
+import BaseLink from './components/BaseLink.vue';
 
 library.add(faSpinner);
 library.add(faBars);
@@ -125,6 +126,7 @@ app.component('ccu-icon', BaseIcon);
 app.component('base-button', BaseButton);
 app.component('base-input', BaseInput);
 app.component('base-text', BaseText);
+app.component('base-link', BaseLink);
 app.component('base-radio', BaseRadio);
 app.component('badge', Badge);
 app.component('tag', Tag);

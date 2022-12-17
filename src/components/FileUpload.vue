@@ -8,19 +8,19 @@
       :title="$t('fileUpload.upload_file')"
     >
       <div class="flex flex-col items-center p-3">
-        <form-select
-          :value="selectedModel"
+        <base-select
+          :model-value="selectedModel"
           :options="Object.keys(fileAwareModels)"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @input="(value) => (selectedModel = value)"
+          @update:modelValue="(value) => (selectedModel = value)"
           :placeholder="$t('fileUpload.select_entity')"
         />
 
-        <form-select
-          :value="uploadType"
+        <base-select
+          :model-value="uploadType"
           :options="fileTypes"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @input="(value) => (uploadType = value)"
+          @update:modelValue="(value) => (uploadType = value)"
           item-key="value"
           label="name_t"
           :placeholder="$t('fileUpload.select_file_type')"
@@ -33,14 +33,14 @@
           class="bg-white h-12 mb-3 w-full"
         />
 
-        <form-select
+        <base-select
           v-if="selectedModel === 'Report'"
-          :value="entityId"
+          :model-value="entityId"
           :options="reports"
           item-key="id"
           label="name_t"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @input="(value) => (entityId = value)"
+          @update:modelValue="(value) => (entityId = value)"
           :placeholder="$t('fileUpload.select_report')"
         />
 
@@ -52,7 +52,7 @@
           @files="handleFileUpload"
         >
           <template v-if="uploading">
-            <Loader />
+            <font-awesome-icon size="xl" icon="spinner" spin />
           </template>
         </DragDrop>
       </div>
@@ -72,21 +72,16 @@
 </template>
 
 <script lang="ts">
-import {
-  ref,
-  defineComponent,
-  onMounted,
-  computed,
-} from '@vue/composition-api';
-import DragDrop from './DragDrop.vue';
+import { ref, defineComponent, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
 import { getErrorMessage } from '../utils/errors';
 import Report from '../models/Report';
 import Organization from '../models/Organization';
+import DragDrop from './DragDrop.vue';
 import OrganizationSearchInput from './OrganizationSearchInput.vue';
-import Loader from './Loader.vue';
-import usei18n from '@/use/usei18n';
-import useHttp from '@/use/useHttp';
-import useToasted from '@/use/useToasted';
+import BaseSelect from './BaseSelect.vue';
 
 const FILE_TYPES = [
   'fileTypes.logo',
@@ -109,11 +104,10 @@ const FILE_TYPES = [
 
 export default defineComponent({
   name: 'FileUpload',
-  components: { Loader, OrganizationSearchInput, DragDrop },
+  components: { BaseSelect, OrganizationSearchInput, DragDrop },
   setup() {
-    const { $t } = usei18n();
-    const { $http } = useHttp();
-    const { $toasted } = useToasted();
+    const { t } = useI18n();
+    const $toasted = useToast();
 
     const uploading = ref(false);
     const showingUploadModal = ref(false);
@@ -124,7 +118,7 @@ export default defineComponent({
     const fileTypes = FILE_TYPES.map((key) => {
       return {
         value: key,
-        name_t: $t(key),
+        name_t: t(key),
       };
     });
 
@@ -146,8 +140,8 @@ export default defineComponent({
       formData.append('type_t', uploadType.value);
       uploading.value = true;
       try {
-        const result = await $http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
+        const result = await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
           formData,
           {
             headers: {
@@ -160,7 +154,7 @@ export default defineComponent({
         await fileAwareModels.value[selectedModel.value]
           .api()
           .addFile(entityId.value?.id, file);
-        await $toasted.success($t('info.upload_file_successful'));
+        await $toasted.success(t('info.upload_file_successful'));
         entityId.value = null;
       } catch (error) {
         await $toasted.error(getErrorMessage(error));

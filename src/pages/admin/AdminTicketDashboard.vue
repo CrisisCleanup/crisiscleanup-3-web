@@ -20,27 +20,37 @@
 </template>
 
 <script>
-import { makeTableColumns } from '@/utils/table';
-import Table from '@/components/Table';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import { makeTableColumns } from '../../utils/table';
+import Table from '../../components/Table.vue';
 
 export default {
   name: 'TicketDashboard',
   components: { Table },
-  data() {
-    return {
-      tickets: [],
-    };
-  },
-  async mounted() {
-    await this.getTickets();
-  },
-  methods: {
-    async getTickets() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
+  setup() {
+    const tickets = ref([]);
+    const columns = makeTableColumns([
+      ['id', '5%', 'Id'],
+      ['requester_id', '15%', 'Requester Id'],
+      ['created_at', '20%', 'Created'],
+      ['description', '50%', 'Description'],
+      ['via', '5%', 'Via'],
+      ['url', '5%', ''],
+    ]);
+    for (const column of columns) {
+      column.titleClass = 'small-font';
+      column.class = 'small-font';
+    }
+
+    async function getTickets() {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/zendesk/search?query=status<solved`,
       );
       const { results } = response.data;
-      this.tickets = results.map((result) => {
+      tickets.value = results.map((result) => {
         return {
           id: result.id,
           description: result.description,
@@ -50,27 +60,19 @@ export default {
           requester_id: result.requester_id,
         };
       });
-      return this.tickets;
-    },
-  },
-  computed: {
-    ticketTable() {
-      const columns = makeTableColumns([
-        ['id', '5%', 'Id'],
-        ['requester_id', '15%', 'Requester Id'],
-        ['created_at', '20%', 'Created'],
-        ['description', '50%', 'Description'],
-        ['via', '5%', 'Via'],
-        ['url', '5%', ''],
-      ]);
-      columns.forEach((column) => {
-        column.titleClass = 'small-font';
-        column.class = 'small-font';
-      });
-      return {
+      return tickets.value;
+    }
+
+    onMounted(() => {
+      getTickets();
+    });
+
+    return {
+      ticketTable: {
         columns,
-      };
-    },
+      },
+      tickets,
+    };
   },
 };
 </script>

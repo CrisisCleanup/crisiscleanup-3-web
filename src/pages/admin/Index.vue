@@ -14,9 +14,9 @@ export default {
       reactive({
         key: 'nav.admin_dashboard',
       }),
-      reactive({
-        key: 'nav.admin_events',
-      }),
+      // reactive({
+      //   key: 'nav.admin_events',
+      // }),
       reactive({
         key: 'nav.admin_event_stream',
       }),

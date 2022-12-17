@@ -39,7 +39,7 @@
     </template>
     <template #organization="slotProps">
       <base-link
-        v-if="currentUser && currentUser.isAdmin"
+        v-if="currentUser && currentUser.isAdmin && slotProps.item.organization"
         :href="`/admin/organization/${slotProps.item.organization.id}`"
         text-variant="bodysm"
         class="px-2"
@@ -51,16 +51,17 @@
 
 <script>
 import axios from 'axios';
-import { mapMutations } from 'vuex';
-import Table from '@/components/Table';
-import User from '@/models/User';
-import Role from '@/models/Role';
-import { DialogsMixin } from '@/mixins';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+import Table from '../Table.vue';
+import Role from '../../models/Role';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import useDialogs from '../../hooks/useDialogs';
+import AdminEventStream from './AdminEventStream.vue';
 
 export default {
   name: 'UsersTable',
   components: { Table },
-  mixins: [DialogsMixin],
   props: {
     users: {
       type: Array,
@@ -74,37 +75,36 @@ export default {
     },
     loading: Boolean,
   },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  methods: {
-    ...mapMutations('auth', ['setUser']),
-    getHighestRole(roles) {
+  setup() {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
+    const { component } = useDialogs();
+    const store = useStore();
+
+    function getHighestRole(roles) {
       const query = Role.query()
         .whereIdIn(roles)
         .orderBy('level', 'desc')
         .get();
-      if (query.length) {
+      if (query.length > 0) {
         return query[0].name_t;
       }
       return '';
-    },
-    async loginAs(userId) {
+    }
+    async function loginAs(userId) {
       const response = await axios.post(
-        `${process.env.VUE_APP_API_BASE_URL}/admins/users/login_as`,
+        `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
         {
           user: userId,
         },
       );
-      this.setUser(response.data);
+      store.commit('auth/setUser', response.data);
       window.location.reload();
-    },
-    async showUserEvents(user) {
-      await this.$component({
+    }
+    async function showUserEvents(user) {
+      await component({
         title: `Events for User ${user.id}: ${user.first_name} ${user.last_name} ${user.email}`,
-        component: 'AdminEventStream',
+        component: AdminEventStream,
         classes: 'w-full h-96 overflow-auto',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
@@ -112,62 +112,65 @@ export default {
           limit: 200,
         },
       });
-    },
-  },
-  data() {
+    }
+
     return {
+      currentUser,
+      getHighestRole,
+      loginAs,
+      showUserEvents,
       columns: [
         {
-          title: this.$t('userTable.id'),
+          title: t('userTable.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('userTable.email'),
+          title: t('userTable.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1.5fr',
         },
         {
-          title: this.$t('userTable.first_name'),
+          title: t('userTable.first_name'),
           dataIndex: 'first_name',
           key: 'first_name',
           width: '1fr',
         },
         {
-          title: this.$t('userTable.last_name'),
+          title: t('userTable.last_name'),
           dataIndex: 'last_name',
           key: 'last_name',
           width: '1fr',
         },
         {
-          title: this.$t('userTable.mobile'),
+          title: t('userTable.mobile'),
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: this.$t('userTable.organization'),
+          title: t('userTable.organization'),
           dataIndex: 'organization',
           key: 'organization',
           subKey: 'name',
           width: '2fr',
         },
         {
-          title: this.$t('userTable.active_roles'),
+          title: t('userTable.active_roles'),
           dataIndex: 'active_roles',
           key: 'active_roles',
           width: '1fr',
         },
         {
-          title: this.$t('userTable.last_sign_in_at'),
+          title: t('userTable.last_sign_in_at'),
           dataIndex: 'last_sign_in_at',
           key: 'last_sign_in_at',
           width: '1fr',
         },
         {
-          title: this.$t('userTable.sign_in_count'),
+          title: t('userTable.sign_in_count'),
           dataIndex: 'sign_in_count',
           key: 'sign_in_count',
           width: '0.5fr',

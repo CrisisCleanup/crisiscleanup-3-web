@@ -1,12 +1,22 @@
 import { Model } from '@vuex-orm/core';
 import moment from 'moment';
+import User from './User';
 
 export default class Invitation extends Model {
   static entity = 'invitations';
 
+  id!: string;
+  invitee_email!: string;
+  invitation_token!: string;
+  expires_at!: string;
+  created_at!: string;
+  invited_by!: User;
+  existing_user!: string;
+  organization!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       invitee_email: this.string(''),
       invitation_token: this.attr(null),
       expires_at: this.attr(null),
@@ -37,16 +47,16 @@ export default class Invitation extends Model {
 
   static apiConfig = {
     actions: {
-      resendInvitation(invitation) {
+      resendInvitation(invitation: Invitation) {
         return this.post(
           `/invitations/${invitation.id}/resend`,
           {},
           { save: false },
         );
       },
-      fetchById(id) {
+      fetchById(id: string) {
         return this.get(`/invitations/${id}`);
       },
-    },
+    } as any,
   };
 }

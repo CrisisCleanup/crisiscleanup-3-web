@@ -44,9 +44,12 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import User from '@/models/User';
-import Invitation from '@/models/Invitation';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import moment from 'moment';
+import Table from '../Table.vue';
+import Invitation from '../../models/Invitation';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default {
   name: 'InvitationTable',
@@ -64,36 +67,42 @@ export default {
     },
     loading: Boolean,
   },
-  methods: {
-    async resendInvitation(invitation) {
+  setup(props, { emit }) {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
+
+    async function loadAllInvitations() {
+      await Invitation.api().get(`/invitations`, {
+        dataKey: 'results',
+      });
+    }
+
+    async function resendInvitation(invitation) {
       await Invitation.api().resendInvitation(invitation);
-      await this.loadAllInvitations();
-      await this.$toasted.success(this.$t('invitationsVue.invitation_resent'));
-      this.$emit('reload');
-    },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  data() {
+      await loadAllInvitations();
+      await $toasted.success(t('invitationsVue.invitation_resent'));
+      emit('reload');
+    }
+
     return {
+      currentUser,
+      resendInvitation,
       columns: [
         {
-          title: this.$t('invitationTables.id'),
+          title: t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('invitationTables.email'),
+          title: t('invitationTables.email'),
           dataIndex: 'invitee_email',
           key: 'invitee_email',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.invited_by'),
+          title: t('invitationTables.invited_by'),
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
@@ -102,28 +111,28 @@ export default {
           },
         },
         {
-          title: this.$t('invitationTables.activation_link'),
+          title: t('invitationTables.activation_link'),
           dataIndex: 'invitation_token',
           key: 'invitation_token',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.organization'),
+          title: t('invitationTables.organization'),
           dataIndex: 'organization',
           key: 'organization',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.expiration_date'),
+          title: t('invitationTables.expiration_date'),
           dataIndex: 'expires_at',
           key: 'expires_at',
           width: '1fr',
           transformer: (expires_at) => {
-            return this.$moment(expires_at).format('L');
+            return moment(expires_at).format('L');
           },
         },
         {
-          title: this.$t(''),
+          title: t(''),
           dataIndex: 'actions',
           key: 'actions',
           width: '1fr',

@@ -21,8 +21,9 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import User from '@/models/User';
+import { useI18n } from 'vue-i18n';
+import Table from '../Table.vue';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 export default {
   name: 'GhostUsersTable',
@@ -40,52 +41,50 @@ export default {
     },
     loading: Boolean,
   },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  data() {
+  setup() {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
     return {
+      currentUser,
       columns: [
         {
-          title: this.$t('ghostUserTable.id'),
+          title: t('ghostUserTable.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('ghostUserTable.email'),
+          title: t('ghostUserTable.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1.5fr',
         },
         {
-          title: this.$t('ghostUserTable.first_name'),
+          title: t('ghostUserTable.first_name'),
           dataIndex: 'first_name',
           key: 'first_name',
           width: '1fr',
         },
         {
-          title: this.$t('ghostUserTable.last_name'),
+          title: t('ghostUserTable.last_name'),
           dataIndex: 'last_name',
           key: 'last_name',
           width: '1.5fr',
         },
         {
-          title: this.$t('ghostUserTable.mobile'),
+          title: t('ghostUserTable.mobile'),
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: this.$t('ghostUserTable.organization'),
+          title: t('ghostUserTable.organization'),
           dataIndex: 'organization_name',
           key: 'organization_name',
           width: '2fr',
         },
         {
-          title: this.$t('ghostUserTable.associated_user'),
+          title: t('ghostUserTable.associated_user'),
           dataIndex: 'associated_user',
           key: 'associated_user',
           width: '1fr',
