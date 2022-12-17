@@ -4,6 +4,10 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTagsInput from '@sipec/vue3-tags-input';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 import {
   faSpinner,
   faBars,
@@ -124,6 +128,7 @@ app.component('base-text', BaseText);
 app.component('base-radio', BaseRadio);
 app.component('badge', Badge);
 app.component('tag', Tag);
+app.component('tag-input', VueTagsInput);
 app.component('v-select', vSelect);
 app.component('authenticated-layout', Authenticated);
 app.component('unauthenticated-layout', Unauthenticated);
@@ -137,6 +142,7 @@ app.component('spinner', Spinner);
 app.component('form-tree', FormTree);
 app.component('tabs', Tabs);
 app.component('tab', Tab);
+app.component('datepicker', Datepicker);
 
 app.directive('tooltip', VTooltip);
 

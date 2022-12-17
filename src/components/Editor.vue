@@ -15,25 +15,24 @@ import Quill from 'quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
-import { getErrorMessage } from '@/utils/errors';
-import usei18n from '@/use/usei18n';
-import useHttp from '@/use/useHttp';
-import useToasted from '@/use/useToasted';
+import { ref, defineComponent, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
+import { getErrorMessage } from '../utils/errors';
 
 export default defineComponent({
   name: 'Editor',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
   },
 
   setup(props, context) {
-    const { $t } = usei18n();
-    const { $http } = useHttp();
-    const { $toasted } = useToasted();
+    const { t } = useI18n();
+    const $toasted = useToast();
 
     const uploading = ref(false);
     const quillEditor = ref<Quill | null>(null);
@@ -50,8 +49,8 @@ export default defineComponent({
       formData.append('type_t', 'fileTypes.other_file');
       uploading.value = true;
       try {
-        const result = await $http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
+        const result = await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
           formData,
           {
             headers: {
@@ -60,9 +59,9 @@ export default defineComponent({
             },
           },
         );
-        await $toasted.success($t('info.upload_file_successful'));
-        document.getElementsByClassName(
-          'ql-editor',
+        await $toasted.success(t('info.upload_file_successful'));
+        document.querySelectorAll(
+          '.ql-editor',
         )[0].innerHTML += `<img src="${result.data.blog_url}" alt="${result.data.filename}"/>`;
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -73,7 +72,7 @@ export default defineComponent({
     function update() {
       if (quillEditor.value) {
         context.emit(
-          'input',
+          'update:modelValue',
           quillEditor.value.getText() ? quillEditor.value.root.innerHTML : '',
         );
       }
@@ -106,7 +105,7 @@ export default defineComponent({
         placeholder: 'Type something in here!',
       });
 
-      quillEditor.value.root.innerHTML = props.value;
+      quillEditor.value.root.innerHTML = props.modelValue;
       quillEditor.value.getModule('toolbar').addHandler('image', () => {
         document?.getElementById('getFile')?.click();
       });

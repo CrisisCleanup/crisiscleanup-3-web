@@ -1,6 +1,6 @@
 <template>
   <div class="page h-full w-full">
-    <div ref="tabBar" :class="`page__tabbar border-t border-gray-300`">
+    <div ref="tabBar" :class="`page__tabbar border-t border-gray-300 flex`">
       <div
         v-for="(t, idx) in state.tabs"
         :class="`page__tab page__tab--${idx} page__tab--${
@@ -24,9 +24,8 @@
 </template>
 
 <script lang="ts">
-import VueTypes from 'vue-types';
-import { ref } from '@vue/composition-api';
-import useTabs from '@/use/useTabs';
+import { ref } from 'vue';
+import useTabs from '../../hooks/useTabs';
 
 /**
  * PageTabBar
@@ -36,15 +35,11 @@ import useTabs from '@/use/useTabs';
 export default {
   name: 'PageTabBar',
   props: {
-    tabs: VueTypes.arrayOf(
-      VueTypes.shape({
-        key: VueTypes.string.isRequired,
-        title: VueTypes.string,
-        route: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-      }),
-    ),
+    tabs: {
+      type: Array,
+    },
   },
-  setup({ tabs }) {
+  setup(props) {
     const tabBar = ref(null);
     const tabSelector = ref(null);
     return {
@@ -54,7 +49,7 @@ export default {
         tabContainer: tabBar,
         tabSelector,
         useRoutes: true,
-        tabs,
+        tabs: props.tabs,
       }),
     };
   },
@@ -101,7 +96,7 @@ $tab-x-pad: calc(theme('spacing.5') * 4);
     transition: transform 300ms easeInOutCirc;
   }
   &__body {
-    @apply pt-8;
+    @apply pt-16;
   }
 }
 </style>

@@ -28,17 +28,15 @@
           {{ $t('inviteTeammates.invite_teammates_instructions') }}
         </div>
         <div class="mb-4">
-          <Multiselect
-            :model-value="emails"
-            @update:modelValue="(v) => (emails = v)"
-            mode="tags"
-            ref="multiselect"
-            create-option
-            :show-options="false"
-            searchable
-            @paste="handlePaste"
-            :add-option-on="['enter', 'space', 'tab', ';', ',']"
-          ></Multiselect>
+          <tag-input
+            v-model="emails"
+            v-model:tags="usersToInvite"
+            :placeholder="$t('usersVue.emails')"
+            :validation="validation"
+            :add-on-key="[13, 32, ',']"
+            :separators="[';', ',', ', ']"
+            @tags-changed="(newTags) => (usersToInvite = newTags)"
+          />
         </div>
         <div v-if="isAdmin || currentOrganization.affiliates.length > 1">
           <OrganizationSearchInput
@@ -73,15 +71,16 @@
 </template>
 <script>
 import _ from 'lodash';
-import User from '../../models/User';
-import Organization from '../../models/Organization';
-import OrganizationSearchInput from '../../components/OrganizationSearchInput.vue';
-import { getErrorMessage } from '../../utils/errors';
 import Multiselect from '@vueform/multiselect';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import { computed, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
+import { createTags } from '@sipec/vue3-tags-input';
+import User from '../../models/User';
+import Organization from '../../models/Organization';
+import OrganizationSearchInput from '../OrganizationSearchInput.vue';
+import { getErrorMessage } from '../../utils/errors';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
@@ -101,11 +100,12 @@ export default {
     const validation = [
       {
         classes: 'email',
-        rule: /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
+        rule: /[\w.!#$%&’*+/=?^`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*/,
         disableAdd: true,
       },
     ];
-    const emails = ref([]);
+    const emails = ref('');
+    const usersToInvite = ref([]);
     const multiselect = ref(null);
     const showInviteModal = ref(false);
     const selectedOrganization = ref(null);
@@ -114,8 +114,6 @@ export default {
     const currentOrganization = computed(() =>
       Organization.find(currentUser?.organization?.id),
     );
-
-    function handlePaste() {}
 
     async function onOrganizationSearch(value) {
       const results = await Organization.api().get(
@@ -127,21 +125,29 @@ export default {
       organizationResults.value = results.entities.organizations;
     }
     async function inviteUsers() {
+      let tags = _.defaultTo([...usersToInvite.value], []);
       try {
-        // TODO: Fix paste
-        if (_.isEmpty(emails.value)) {
+        if (emails.value) {
+          const emailList = emails.value.match(EMAIL_REGEX);
+          let extTags = _.attempt(createTags, emailList);
+          if (_.isError(extTags)) {
+            extTags = [];
+          }
+          tags = _.uniqBy([...tags, ...extTags], 'text');
+        }
+        if (_.isEmpty(tags)) {
           await $toasted.error(t('inviteTeammates.provide_valid_email'));
           return;
         }
-        // const emails = tags.map((value) => value.text);
+        const emails = tags.map((value) => value.text);
         await Promise.all(
-          emails.value.map((email) =>
+          emails.map((email) =>
             User.api().inviteUser(email, selectedOrganization.value),
           ),
         );
         await $toasted.success(t('inviteTeammates.invites_sent_success'));
         showInviteModal.value = false;
-        emails.value = [];
+        usersToInvite.value = [];
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
@@ -158,7 +164,7 @@ export default {
       organizationResults,
       inviteUsers,
       multiselect,
-      handlePaste,
+      usersToInvite,
     };
   },
 };
@@ -167,9 +173,5 @@ export default {
 <style>
 .vue-tags-input {
   @apply h-8 w-108 mb-2;
-}
-
-.vue-tags-input .ti-input {
-  @apply h-8;
 }
 </style>

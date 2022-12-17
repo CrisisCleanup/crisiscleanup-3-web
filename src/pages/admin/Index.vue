@@ -1,14 +1,14 @@
 <template>
-  <PageLayout :tabs="tabs" />
+  <PageTabBar :tabs="tabs" />
 </template>
 
 <script>
-import { reactive } from '@vue/composition-api';
-import PageLayout from '@/layouts/page/Page.vue';
+import { reactive } from 'vue';
+import PageTabBar from '../../layouts/page/PageTabBar.vue';
 
 export default {
   name: 'AdminPage',
-  components: { PageLayout },
+  components: { PageTabBar },
   setup() {
     const tabs = reactive([
       reactive({
@@ -31,9 +31,6 @@ export default {
       }),
       reactive({
         key: 'nav.incident_wizard',
-      }),
-      reactive({
-        key: 'nav.localizations',
       }),
     ]);
     return { tabs };

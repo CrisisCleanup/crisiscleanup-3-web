@@ -2,12 +2,12 @@
   <div>
     <div class="flex items-center justify-between">
       <base-input
-        :value="search"
+        :model-value="search"
         v-if="enableSearch"
         icon="search"
         class="w-72 mx-4"
         :placeholder="$t('info.search_items')"
-        @input="
+        @update:modelValue="
           (value) => {
             search = value;
             meta.pagination.page = 1;

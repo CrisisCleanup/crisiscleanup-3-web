@@ -5,6 +5,7 @@ import Work from './pages/Work.vue';
 import HomeRoutes from './pages/home/routes';
 import PhoneRoutes from './pages/phone/routes';
 import { store } from './store';
+import AdminRoutes from './pages/admin/routes';
 
 const routes = [
   { path: '/', component: Dashboard, name: 'Home' },
@@ -40,6 +41,7 @@ const routes = [
   },
   ...HomeRoutes,
   ...PhoneRoutes,
+  ...AdminRoutes,
 ];
 
 const router = createRouter({
