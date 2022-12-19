@@ -55,7 +55,9 @@
                 <input
                   class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
                   :value="entry.volunteers"
-                  @input="currentTimeEdit.volunteers = $event.target.value"
+                  @update:modelValue="
+                    currentTimeEdit.volunteers = $event.target.value
+                  "
                 />
               </div>
               <div v-else>
@@ -67,7 +69,9 @@
                 <input
                   class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
                   :value="entry.seconds / 3600"
-                  @input="currentTimeEdit.seconds = $event.target.value * 3600"
+                  @update:modelValue="
+                    currentTimeEdit.seconds = $event.target.value * 3600
+                  "
                 />
               </div>
               <div v-else>
@@ -118,13 +122,13 @@
   </section>
 </template>
 <script>
-import Worksite from '../../models/Worksite';
-import { getErrorMessage } from '../../utils/errors';
 import { computed, ref } from 'vue';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment';
 import { useToast } from 'vue-toastification';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import { getErrorMessage } from '../../utils/errors';
+import Worksite from '../../models/Worksite';
 import { secondsToHm } from '../../filters/index';
 
 export default {
@@ -162,12 +166,12 @@ export default {
           (type) => type.created_by_org !== currentUser.organization.id,
         );
       }
-      const volunteers = time.reduce((total, obj) => {
-        return total + obj.volunteers;
+      const volunteers = time.reduce((total, object) => {
+        return total + object.volunteers;
       }, 0);
 
-      const seconds = time.reduce((total, obj) => {
-        return total + obj.seconds;
+      const seconds = time.reduce((total, object) => {
+        return total + object.seconds;
       }, 0);
 
       return {

@@ -19,5 +19,7 @@ module.exports = {
     project: ['tsconfig.json'],
   },
   plugins: ['vue', '@typescript-eslint'],
-  rules: {},
+  rules: {
+    'import/extensions': 0
+  },
 };

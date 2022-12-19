@@ -12,6 +12,9 @@ import WorksiteRequest from '../models/WorksiteRequest';
 import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
 import Team from '../models/Team';
+import Invitation from '../models/Invitation';
+import InvitationRequest from '../models/InvitationRequest';
+import Layer from '../models/Layer';
 
 const database = new Database();
 database.register(User, {});
@@ -27,5 +30,8 @@ database.register(WorksiteRequest, {});
 database.register(Worksite, {});
 database.register(PhoneOutbound, {});
 database.register(Team, {});
+database.register(Layer, {});
+database.register(InvitationRequest, {});
+database.register(Invitation, {});
 
 export default database;

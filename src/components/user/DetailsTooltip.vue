@@ -1,6 +1,6 @@
 <template>
   <v-popover
-    :popover-class="['popover', dark && 'dark']"
+    :popper-class="['popover', dark && 'dark']"
     trigger="click"
     popover-inner-class="popover-inner max-w-sm"
   >
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import User from '../../models/User';
 import { computed, onMounted, ref } from 'vue';
+import User from '../../models/User';
 
 export default {
   name: 'UserDetailsTooltip',

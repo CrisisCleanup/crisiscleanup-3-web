@@ -87,10 +87,12 @@
           />
         </span>
         <base-select
-          :value="worksite.auto_contact_frequency_t"
+          :model-value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
-          @input="(v) => updateWorksite(v, 'auto_contact_frequency_t')"
+          @update:modelValue="
+            (v) => updateWorksite(v, 'auto_contact_frequency_t')
+          "
           select-classes="h-12 border"
           item-key="value"
           label="name_t"
@@ -362,6 +364,9 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { sortBy, uniqueId } from 'lodash';
 import moment from 'moment';
 import * as turf from '@turf/turf';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
 import GeocoderService from '../../services/geocoder.service';
 import Worksite from '../../models/Worksite';
 import { StorageService } from '../../services/storage.service';
@@ -369,17 +374,14 @@ import { What3wordsService } from '../../services/what3words.service';
 import { buildForm, groupBy, nest } from '../../utils/form';
 import { getErrorMessage } from '../../utils/errors';
 import Incident from '../../models/Incident';
-import WorksiteImageSection from '../../components/work/WorksiteImageSection.vue';
-import WorksiteReportSection from '../../components/work/WorksiteReportSection.vue';
-import WorksiteSearchInput from '../../components/work/WorksiteSearchInput.vue';
-import SectionHeading from '../../components/work/SectionHeading.vue';
-import WorksiteNotes from '../../components/work/WorksiteNotes.vue';
-import { useI18n } from 'vue-i18n';
-import { useToast } from 'vue-toastification';
 import useDialogs from '../../hooks/useDialogs';
 import useEmitter from '../../hooks/useEmitter';
-import axios from 'axios';
 import BaseSelect from '../BaseSelect.vue';
+import WorksiteImageSection from './WorksiteImageSection.vue';
+import WorksiteReportSection from './WorksiteReportSection.vue';
+import WorksiteSearchInput from './WorksiteSearchInput.vue';
+import SectionHeading from './SectionHeading.vue';
+import WorksiteNotes from './WorksiteNotes.vue';
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
   'formOptions.often',
@@ -445,7 +447,7 @@ export default {
       },
     );
     const advancedAddressFields = ['city', 'county', 'state', 'postal_code'];
-    const fieldToErrorMsgMap = {
+    const fieldToErrorMessageMap = {
       name: t('caseForm.name_required'),
       phone1: t('caseForm.phone_required'),
       address: t('caseForm.address_required'),
@@ -464,7 +466,7 @@ export default {
     const potentialIncidents = ref([]);
     const location = ref(null);
     const currentNote = ref('');
-    const errorStr = ref('');
+    const errorString = ref('');
     const isHighPriority = ref(false);
     const isFavorite = ref(false);
     const searchWorksitesResults = ref([]);
@@ -575,9 +577,8 @@ export default {
           'state',
           'postal_code',
         ];
-        geocodeKeys.forEach((key) =>
-          updateWorksite(geocode.address_components[key], key),
-        );
+        for (const key of geocodeKeys)
+          updateWorksite(geocode.address_components[key], key);
       }
       updateWorksite(
         {
@@ -596,7 +597,7 @@ export default {
       if (props.worksiteId) {
         try {
           await Worksite.api().fetch(props.worksiteId, props.incidentId);
-        } catch (e) {
+        } catch {
           emit('clearWorksite');
           return;
         }
@@ -631,9 +632,9 @@ export default {
       }
       dynamicFields.value = worksite.value.form_data.reduce(function (
         map,
-        obj,
+        object,
       ) {
-        map[obj.field_key] = obj.field_value;
+        map[object.field_key] = object.field_value;
         return map;
       },
       {});
@@ -703,9 +704,8 @@ export default {
         const values = nonEmptyKeys.map((key) => worksite.value[key]);
         const address = values.join(', ');
         const geocode = await GeocoderService.getPlaceDetails(address);
-        geocodeKeys.forEach((key) =>
-          updateWorksite(geocode.address_components[key], key),
-        );
+        for (const key of geocodeKeys)
+          updateWorksite(geocode.address_components[key], key);
         const { lat, lng } = geocode.location;
         updateWorksite(
           {
@@ -721,12 +721,12 @@ export default {
     }
 
     function checkGeocodeLocation({ lat, lng }) {
-      if (!currentIncident.value.locationModels.length) {
+      if (currentIncident.value.locationModels.length === 0) {
         return true;
       }
       let isWithinBounds = false;
 
-      currentIncident.value.locationModels.forEach((l) => {
+      for (const l of currentIncident.value.locationModels) {
         const geojsonFeature = {
           type: 'Feature',
           properties: l.attr,
@@ -747,7 +747,7 @@ export default {
         if (intersects) {
           isWithinBounds = true;
         }
-      });
+      }
       return isWithinBounds;
     }
 
@@ -808,9 +808,8 @@ export default {
     async function updateWorksiteFields(geocode) {
       const { lat, lng } = geocode.location;
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach((key) =>
-        updateWorksite(geocode.address_components[key], key),
-      );
+      for (const key of geocodeKeys)
+        updateWorksite(geocode.address_components[key], key);
 
       updateWorksite(
         {
@@ -841,7 +840,7 @@ export default {
         'location',
         'what3words',
       ];
-      geocodeKeys.forEach((key) => updateWorksite('', key));
+      for (const key of geocodeKeys) updateWorksite('', key);
       emit('clearMarkers');
       shouldSelectOnMap.value = false;
       addressSet.value = false;
@@ -852,8 +851,8 @@ export default {
     }
 
     async function saveWorksite(reload = true) {
-      const validationErrors = Object.entries(fieldToErrorMsgMap).reduce(
-        (errors, [field, errorMsg]) => {
+      const validationErrors = Object.entries(fieldToErrorMessageMap).reduce(
+        (errors, [field, errorMessage]) => {
           if (!worksite.value[field]) {
             // enable select on map to show hidden advanced fields
             if (
@@ -862,7 +861,7 @@ export default {
             ) {
               shouldSelectOnMap.value = true;
             }
-            errors.push(errorMsg);
+            errors.push(errorMessage);
           }
           return errors;
         },
@@ -876,7 +875,7 @@ export default {
         if (!isAddressValid.value) {
           $toasted.error(t('caseForm.no_lat_lon_error'));
         }
-        validationErrors.forEach((e) => $toasted.error(e));
+        for (const e of validationErrors) $toasted.error(e);
         return;
       }
       if (props.beforeSave) {
@@ -920,10 +919,9 @@ export default {
       const anyWorkTypes = currentIncident.value.form_fields
         .map(
           (field) =>
-            // eslint-disable-next-line camelcase
             field.if_selected_then_work_type && fieldData[field.field_key],
         )
-        .some((x) => x);
+        .some(Boolean);
       if (!anyWorkTypes) {
         await $toasted.error(t('caseForm.select_work_type_error'));
         return;
@@ -974,9 +972,9 @@ export default {
           await Promise.all(
             notesToSave.map((n) => Worksite.api().addNote(worksiteId, n)),
           );
-          updatedFiles.value.forEach((file) => {
+          for (const file of updatedFiles.value) {
             worksiteImageSection.value.saveToWorkSite(file, worksiteId);
-          });
+          }
           if (isHighPriority.value) {
             await Worksite.api().addFlag(worksiteId, {
               reason_t: 'flag.worksite_high_priority',
@@ -1186,8 +1184,8 @@ export default {
           (pos) => {
             resolve(pos);
           },
-          (err) => {
-            reject(err);
+          (error) => {
+            reject(error);
           },
         );
       });
@@ -1208,9 +1206,9 @@ export default {
         const { latitude, longitude } = location.value.coords;
         const geocode = await geocodeWorksite(latitude, longitude);
         emit('geocoded', geocode.location);
-      } catch (e) {
+      } catch (error) {
         gettingLocation.value = false;
-        errorStr.value = e.message;
+        errorString.value = error.message;
       }
     }
 
@@ -1261,7 +1259,7 @@ export default {
       fieldsArray,
       worksiteAddress,
       isAddressValid,
-      fieldToErrorMsgMap,
+      fieldToErrorMsgMap: fieldToErrorMessageMap,
       shouldSelectOnMap,
       isWrongLocation,
       hideDetailedAddressFields,
@@ -1305,7 +1303,7 @@ export default {
       showOverlayMap,
       getLocation,
       toggleSelectOnMap,
-      errorStr,
+      errorStr: errorString,
       locateMe,
       searchWorksitesNameResults,
       updateWorksite,

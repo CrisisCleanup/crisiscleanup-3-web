@@ -1,9 +1,5 @@
 <template>
-  <v-popover
-    popover-class="popover menu"
-    placement="bottom-end"
-    class="text-xs"
-  >
+  <v-popover popper-class="popover menu" placement="bottom-end" class="text-xs">
     <div
       class="badge-holder rounded-lg"
       :class="size === 'sm' ? 'px-1' : 'px-2'"
@@ -55,9 +51,9 @@
 
 <script>
 import { useStore } from 'vuex';
+import { computed, ref, nextTick, onMounted } from 'vue';
 import { getColorForStatus, getStatusName, getWorkTypeImage } from '../filters';
 import useWorktypeImages from '../hooks/worksite/useWorktypeImages';
-import { computed, ref, nextTick, onMounted } from 'vue';
 
 export default {
   name: 'WorksiteStatusDropdown',

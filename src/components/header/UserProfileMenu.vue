@@ -4,7 +4,7 @@
     :class="invert && '--invert'"
   >
     <v-popover
-      popover-class="menu-popover"
+      popper-class="menu-popover"
       placement="bottom-end"
       data-cy="auth.userprofile"
     >
@@ -48,8 +48,8 @@
   </div>
 </template>
 <script>
-import Avatar from '../../components/Avatar.vue';
 import { computed } from 'vue';
+import Avatar from '../Avatar.vue';
 
 export default {
   name: 'UserProfileMenu',

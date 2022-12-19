@@ -5,7 +5,7 @@ export default class Layer extends Model {
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       title: this.string(''),
       type: this.attr(null),
       description: this.string(''),
@@ -16,9 +16,9 @@ export default class Layer extends Model {
 
   static apiConfig = {
     actions: {
-      fetchById(id) {
+      fetchById(id: string) {
         return this.get(`/layers/${id}`);
       },
-    },
+    } as any,
   };
 }

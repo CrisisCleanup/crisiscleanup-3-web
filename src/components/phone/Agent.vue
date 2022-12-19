@@ -56,7 +56,7 @@
       <base-checkbox
         v-if="currentUser.isAdmin"
         class="p-0.5 ml-3"
-        @input="$emit('onToggleOutbounds', $event)"
+        @update:modelValue="$emit('onToggleOutbounds', $event)"
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
       <ccu-icon

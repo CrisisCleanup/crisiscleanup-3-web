@@ -6,6 +6,7 @@ specifiers:
   '@fortawesome/free-regular-svg-icons': ^6.2.0
   '@fortawesome/free-solid-svg-icons': ^6.2.0
   '@fortawesome/vue-fontawesome': ^3.0.1
+  '@geoman-io/leaflet-geoman-free': ^2.13.1
   '@pixi/constants': 6.5.8
   '@pixi/core': ^6.5.8
   '@pixi/extensions': 6.5.8
@@ -39,6 +40,7 @@ specifiers:
   bowser: ^2.11.0
   browser-acl: ^1.0.2
   cf-agent-library: git+https://git@github.com/CrisisCleanup/cf-agent-library.git
+  circle-to-polygon: ^2.2.0
   color: ^4.2.3
   d3: ^7.0.0
   d3-array: ^2.8.0
@@ -112,6 +114,7 @@ dependencies:
   '@fortawesome/free-regular-svg-icons': 6.2.0
   '@fortawesome/free-solid-svg-icons': 6.2.0
   '@fortawesome/vue-fontawesome': 3.0.1_lteq7vqmz6gtgcgatkvrcm56su
+  '@geoman-io/leaflet-geoman-free': 2.13.1_leaflet@1.9.3
   '@pixi/constants': 6.5.8
   '@pixi/core': 6.5.8_plvhmba5imzl5ocyxvgulib4y4
   '@pixi/extensions': 6.5.8
@@ -136,6 +139,7 @@ dependencies:
   bowser: 2.11.0
   browser-acl: 1.0.2
   cf-agent-library: github.com/CrisisCleanup/cf-agent-library/f1953ec15ff69d7750d8071a729859daaf3f0739
+  circle-to-polygon: 2.2.0
   color: 4.2.3
   d3: 7.6.1
   d3-array: 2.12.1
@@ -612,6 +616,20 @@ packages:
     dependencies:
       '@fortawesome/fontawesome-svg-core': 6.2.0
       vue: 3.2.41
+    dev: false
+
+  /@geoman-io/leaflet-geoman-free/2.13.1_leaflet@1.9.3:
+    resolution: {integrity: sha512-csTmg0JJegXRfwGpNXQ9wy1Y1wha8AcrxhvaVFGm3xrhpPG8l3wouMZvO91PN8ZthG3xpZtfDnUQF+7Pm4mwXQ==}
+    peerDependencies:
+      leaflet: ^1.2.0
+    dependencies:
+      '@turf/boolean-contains': 6.5.0
+      '@turf/kinks': 6.5.0
+      '@turf/line-intersect': 6.5.0
+      '@turf/line-split': 6.5.0
+      leaflet: 1.9.3
+      lodash: 4.17.21
+      polygon-clipping: 0.15.3
     dev: false
 
   /@humanwhocodes/config-array/0.10.7:
@@ -3509,6 +3527,10 @@ packages:
     resolution: {integrity: sha512-2CpRNYmImPx+RXKLq6jko/L07phmS9I02TyqkcNU20GCF/GgaWvc58hPtjxDX8lPpkdwc9sNh72V9k00S7ezog==}
     engines: {node: '>=8'}
     dev: true
+
+  /circle-to-polygon/2.2.0:
+    resolution: {integrity: sha512-yC9/bw6P0YmV2/oxm4DLrSgrzHhbz9H+vgUScmSFN5KilR/KFGVRbUi9a0mIYPsXK44HvnysVVi/iIysRJVvNw==}
+    dev: false
 
   /clean-regexp/1.0.0:
     resolution: {integrity: sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==}

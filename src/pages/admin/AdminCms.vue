@@ -132,7 +132,7 @@
         <div class="px-4 py-2">
           <base-checkbox
             class="pb-2"
-            @input="
+            @update:modelValue="
               (value) => {
                 if (value) {
                   query = { ...query, is_active: true };

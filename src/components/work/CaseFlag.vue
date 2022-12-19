@@ -46,7 +46,7 @@
             v-for="organization in organizationsWithClaimsInArea"
             :key="`${organization.id}`"
           >
-            <v-popover popover-class="contact-popover" placement="top-end">
+            <v-popover popper-class="contact-popover" placement="top-end">
               <span class="text-yellow-600 tooltip-target cursor-pointer">{{
                 organization.name
               }}</span>
@@ -54,7 +54,7 @@
                 <div>
                   <base-text
                     variant="h2"
-                    v-if="organization.incident_primary_contacts.length"
+                    v-if="organization.incident_primary_contacts.length > 0"
                     >{{ $t('flag.incident_primary_contacts') }}</base-text
                   >
                   <div
@@ -80,7 +80,7 @@
                   </div>
                   <base-text
                     variant="h2"
-                    v-if="organization.primary_contacts.length"
+                    v-if="organization.primary_contacts.length > 0"
                     >{{ $t('flag.primary_contacts') }}</base-text
                   >
                   <div
@@ -316,18 +316,18 @@
 
 <script>
 import { orderBy } from 'lodash';
+import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
 import Worksite from '../../models/Worksite';
-import OrganizationSearchInput from '../../components/OrganizationSearchInput.vue';
+import OrganizationSearchInput from '../OrganizationSearchInput.vue';
 import Organization from '../../models/Organization';
 import { getGoogleMapsLocation } from '../../utils/map';
 import GeocoderService from '../../services/geocoder.service';
 import { What3wordsService } from '../../services/what3words.service';
-import { onMounted, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import { useRoute, useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import axios from 'axios';
 
 export default {
   name: 'CaseFlag',
@@ -462,7 +462,7 @@ export default {
           props.worksiteId || route.params.id,
           props.incidentId || route.params.incident_id,
         );
-      } catch (e) {
+      } catch {
         await router.push(
           `/incident/${props.incidentId || route.params.incident_id}/cases/new`,
         );

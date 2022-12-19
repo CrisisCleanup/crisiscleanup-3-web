@@ -90,8 +90,8 @@
             <base-input
               v-else
               :placeholder="column.title"
-              :value="columnSearch[column.key]"
-              @input="
+              :model-value="columnSearch[column.key]"
+              @update:modelValue="
                 (value) => {
                   columnSearch[column.key] = value;
                   onSearch();
@@ -182,7 +182,10 @@
           <slot name="rowDetails" :item="item"></slot>
         </div>
       </div>
-      <div v-if="!data.length" class="p-2 text-crisiscleanup-grey-700 italic">
+      <div
+        v-if="data.length === 0"
+        class="p-2 text-crisiscleanup-grey-700 italic"
+      >
         {{ $t('info.no_items_found') }}
       </div>
     </div>
@@ -251,9 +254,9 @@
 
 <script>
 // import { EventsMixin } from '@/mixins';
-import { exportCSVFile } from '../utils/downloads';
 import { computed, ref } from 'vue';
 import { useMq } from 'vue3-mq';
+import { exportCSVFile } from '../utils/downloads';
 
 export default {
   name: 'Table',
@@ -339,12 +342,12 @@ export default {
     const paginationTriggers = computed(() => {
       const currentPage = props.pagination.current;
       const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
-      const pagintationTriggersArray = Array(visiblePagesCount - 1).fill(0);
+      const pagintationTriggersArray = Array.from({
+        length: visiblePagesCount - 1,
+      }).fill(0);
 
       if (pageCount.value < visiblePagesCount) {
-        return Array(pageCount.value)
-          .fill(0)
-          .map((_, index) => index + 1);
+        return new Array(pageCount.value).fill(0).map((_, index) => index + 1);
       }
 
       if (currentPage <= visiblePagesThreshold + 1) {
@@ -443,14 +446,17 @@ export default {
     function pageChangeHandle(value) {
       let newPage;
       switch (value) {
-        case 'next':
+        case 'next': {
           newPage = props.pagination.current + 1;
           break;
-        case 'previous':
+        }
+        case 'previous': {
           newPage = props.pagination.current - 1;
           break;
-        default:
+        }
+        default: {
           newPage = value;
+        }
       }
       const columnSearch = { ...props.columnSearch };
 
@@ -482,11 +488,7 @@ export default {
       const columnSearch = { ...props.columnSearch };
       const sorter = { ...props.sorter };
       sorter.key = key;
-      if (sorter.direction === 'asc') {
-        sorter.direction = 'desc';
-      } else {
-        sorter.direction = 'asc';
-      }
+      sorter.direction = sorter.direction === 'asc' ? 'desc' : 'asc';
 
       const pagination = {
         ...props.pagination,
@@ -529,15 +531,15 @@ export default {
       const headersColumns = props.columns.filter((column) =>
         Boolean(column.title),
       );
-      headersColumns.forEach((column) => {
+      for (const column of headersColumns) {
         headers[column.key] = column.title;
-      });
+      }
 
-      const data = props.data.map((obj) => {
+      const data = props.data.map((object) => {
         const response = {};
-        headersColumns.forEach((column) => {
-          response[column.key] = obj[column.key];
-        });
+        for (const column of headersColumns) {
+          response[column.key] = object[column.key];
+        }
         return response;
       });
       exportCSVFile(headers, data, 'export');

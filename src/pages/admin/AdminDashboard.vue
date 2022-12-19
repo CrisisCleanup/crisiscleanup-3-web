@@ -2,11 +2,11 @@
   <div class="flex flex-col">
     <div class="flex flex-col items-center justify-between">
       <base-input
-        :value="globalSearch"
+        :model-value="globalSearch"
         icon="search"
         class="w-full mx-4"
         :placeholder="$t('actions.search_everywhere')"
-        @input="
+        @update:modelValue="
           (value) => {
             globalSearch = value;
             throttle(reloadDashBoard, 1000)();
@@ -77,11 +77,11 @@
             {{ $t('adminDashboard.organizations') }}
           </span>
           <base-input
-            :value="organizations.search"
+            :model-value="organizations.search"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
-            @input="
+            @update:modelValue="
               (value) => {
                 organizations.search = value;
                 throttle(getOrganizations, 1000)();
@@ -115,11 +115,11 @@
             {{ $t('adminDashboard.users') }}
           </span>
           <base-input
-            :value="users.search"
+            :model-value="users.search"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
-            @input="
+            @update:modelValue="
               (value) => {
                 users.search = value;
                 throttle(getUsers, 1000)();
@@ -153,11 +153,11 @@
             {{ $t('adminDashboard.ghost_users') }}
           </span>
           <base-input
-            :value="ghostUsers.search"
+            :model-value="ghostUsers.search"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
-            @input="
+            @update:modelValue="
               (value) => {
                 ghostUsers.search = value;
                 throttle(getGhostUsers, 1000)();
@@ -191,11 +191,11 @@
             {{ $t('adminDashboard.invitation_requests') }}
           </span>
           <base-input
-            :value="invitationRequests.search"
+            :model-value="invitationRequests.search"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
-            @input="
+            @update:modelValue="
               (value) => {
                 invitationRequests.search = value;
                 throttle(getInvitationRequests, 1000)();
@@ -229,11 +229,11 @@
             {{ $t('adminDashboard.invitations') }}
           </span>
           <base-input
-            :value="invitations.search"
+            :model-value="invitations.search"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
-            @input="
+            @update:modelValue="
               (value) => {
                 invitations.search = value;
                 throttle(getInvitations, 1000)();

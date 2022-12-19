@@ -1,0 +1,838 @@
+<template>
+  <div style="display: grid; grid-template-rows: auto 1fr">
+    <div class="h-16 flex items-center w-full p-2" style="z-index: 10000">
+      <Multiselect
+        :placeholder="$t('locationTool.search_several_area_types')"
+        label="name"
+        :filter-results="false"
+        :min-chars="1"
+        :resolve-on-load="false"
+        :delay="0"
+        :searchable="true"
+        value-prop="id"
+        @update:modelValue="
+          (value) => {
+            onLocationSelected(value);
+          }
+        "
+        :options="onLocationSearch"
+      >
+        <template v-slot:option="{ option }">
+          <div
+            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+          >
+            <span>{{ option.name }}</span>
+            <span class="text-crisiscleanup-grey-700">{{
+              option.location_type.name_t
+            }}</span>
+          </div>
+        </template>
+      </Multiselect>
+
+      <base-select
+        :model-value="currentLocationType"
+        :options="locationTypes"
+        item-key="id"
+        label="name_t"
+        class="ml-3 w-1/3"
+        :required="true"
+        searchable
+        :placeholder="$t('locationVue.location_type')"
+        @update:modelValue="
+          (type) => {
+            currentLocationType = type;
+          }
+        "
+      />
+    </div>
+    <div class="layers-tool flex-grow relative map-item">
+      <div
+        ref="buttons"
+        class="absolute w-full h-8 ml-4 mt-4 flex"
+        style="z-index: 1001"
+      >
+        <div class="flex mr-4">
+          <MapButton
+            button-class="border bg-white"
+            icon="map-undo"
+            :disabled="!canUndo"
+            :title="$t('actions.undo')"
+            @click="
+              () => {
+                undo();
+                applyCurrentLayer();
+              }
+            "
+            ccu-event="user_ui-draw-undo"
+          />
+          <MapButton
+            button-class="border bg-white"
+            icon="map-redo"
+            :disabled="!canRedo"
+            :title="$t('actions.redo')"
+            @click="
+              () => {
+                redo();
+                applyCurrentLayer();
+              }
+            "
+          />
+        </div>
+        <div class="flex">
+          <MapButton
+            button-class="border bg-white"
+            icon="map-rect"
+            :title="$t('locationTool.draw_rectangle')"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
+            :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
+            :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
+            @changed="
+              (event) => {
+                handleMapEvent(event, 'Rectangle');
+              }
+            "
+            @click="() => enableDraw('Rectangle')"
+          />
+          <MapButton
+            button-class="border bg-white"
+            :title="$t('locationTool.draw_polygon')"
+            icon="map-poly"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
+            :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
+            :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
+            @changed="
+              (event) => {
+                handleMapEvent(event, 'Polygon');
+              }
+            "
+            @click="() => enableDraw('Polygon')"
+          />
+          <MapButton
+            button-class="border bg-white"
+            :title="$t('locationTool.draw_circle')"
+            icon="map-circle"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
+            :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
+            :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
+            @changed="
+              (event) => {
+                handleMapEvent(event, 'Circle');
+              }
+            "
+            @click="() => enableDraw('Circle')"
+          />
+          <MapButton
+            v-if="currentPolygon"
+            button-class="border bg-white"
+            :title="$t('locationTool.grow_shrink')"
+            icon="map-buffer"
+            :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
+            :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
+            @click="enableBuffer"
+          />
+          <MapButton
+            button-class="border bg-white"
+            icon="map-sweep"
+            :title="$t('locationTool.clear_drawing')"
+            @click="clearAll"
+          />
+        </div>
+        <base-button
+          class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
+          style="height: 37px"
+          :text="$t('locationTool.upload_layer_plus')"
+          :action="
+            () => {
+              showingUploadModal = true;
+            }
+          "
+        />
+        <modal
+          v-if="showingUploadModal"
+          modal-classes="bg-white w-3/4 shadow"
+          :title="$t('locationTool.upload_layer')"
+          @cancel="showingUploadModal = false"
+        >
+          <div class="flex items-center justify-center w-full">
+            <LayerUploadTool
+              :key="currentLayerUpload"
+              class="flex w-full justify-center items-center"
+              @addedLayer="
+                (layer) => {
+                  currentLayerUpload = layer;
+                }
+              "
+            />
+          </div>
+          <div class="text-center" v-if="currentLayerUpload">
+            {{ $t('Selected Location:') }} {{ currentLayerUpload[0].name }}
+          </div>
+          <div slot="footer" class="p-3 flex items-center justify-center">
+            <base-button
+              :action="
+                () => {
+                  showingUploadModal = false;
+                }
+              "
+              :text="$t('actions.cancel')"
+              variant="outline"
+              class="ml-2 p-3 px-6 text-xs"
+            />
+            <base-button
+              variant="solid"
+              :action="applyCurrentLayerUpload"
+              :text="$t('actions.apply')"
+              class="ml-2 p-3 px-6 text-xs"
+            />
+          </div>
+        </modal>
+        <div
+          v-if="incident || organization"
+          class="bg-white p-1 border ml-5 flex items-center justify-center"
+          style="height: 37px"
+        >
+          <base-checkbox
+            :disabled="worksitesLoading"
+            @update:modelVaule="toggleWorksites"
+          >
+            {{ $t('locationTool.show_cases') }}
+          </base-checkbox>
+        </div>
+        <div
+          v-if="organization"
+          class="bg-white p-1 border ml-5 flex items-center justify-center"
+          style="height: 37px"
+        >
+          <base-checkbox @update:modelVaule="toggleIncidents">
+            {{ $t('locationTool.show_incidents') }}
+          </base-checkbox>
+        </div>
+      </div>
+      <div id="map" class="h-full"></div>
+    </div>
+    <div
+      v-show="showingPopup"
+      ref="popup"
+      class="popup-content flex flex-col items-center justify-center w-40"
+    >
+      <div
+        v-if="currentDraw === 'Buffer'"
+        class="flex flex-col items-center justify-center"
+      >
+        {{ $t('locationTool.expand_or_contract') }}
+        <div class="my-1 flex flex-col items-center">
+          <input
+            v-model="currentBufferDistance"
+            type="range"
+            min="-100"
+            max="100"
+            step="1"
+          />
+          <div class="pr-2">
+            {{ currentBufferDistance }} {{ $t('locationTool.miles') }}
+          </div>
+        </div>
+        <base-button
+          :text="$t('actions.save')"
+          variant="solid"
+          class="flex-grow px-3 py-1 my-1"
+          :action="
+            () => {
+              handleMapEvent('buffer', 'Buffer');
+            }
+          "
+        />
+      </div>
+      <div v-else>
+        {{ bufferedLayer && bufferedLayer.name }}
+        <div class="flex text-primary-dark">
+          <base-button
+            :text="$t('actions.add')"
+            ccu-event="user_ui-draw-add"
+            :action="
+              () => {
+                handleMapEvent('add', 'Location');
+              }
+            "
+            type="bare"
+            class="text-xs p-1"
+          />
+          <base-button
+            :text="$t('actions.subtract')"
+            ccu-event="user_ui-draw-subtract"
+            :action="
+              () => {
+                handleMapEvent('exclude', 'Location');
+              }
+            "
+            type="bare"
+            class="text-xs p-1"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import '@geoman-io/leaflet-geoman-free';
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+import * as circleToPolygon from 'circle-to-polygon';
+import * as turf from '@turf/turf';
+import { useStore } from 'vuex';
+import { throttle, cloneDeep } from 'lodash';
+import { useRefHistory } from '@vueuse/core';
+import {
+  reactive,
+  toRefs,
+  ref,
+  computed,
+  watch,
+  nextTick,
+  onMounted,
+} from 'vue';
+import axios from 'axios';
+import Multiselect from '@vueform/multiselect';
+import { getQueryString } from '../../utils/urls';
+import Location from '../../models/Location';
+import Organization from '../../models/Organization';
+import LocationType from '../../models/LocationType';
+import LayerUploadTool from './LayerUploadTool.vue';
+import MapButton from './MapButton.vue';
+import { getMarkerLayer, mapAttribution, mapTileLayer } from '@/utils/map';
+import useCurrentUser from '@/hooks/useCurrentUser';
+
+export default {
+  name: 'LocationTool',
+  components: { LayerUploadTool, MapButton, Multiselect },
+  props: {
+    locations: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+    incident: {
+      type: Number,
+      default: null,
+    },
+    organization: {
+      type: Number,
+      default: null,
+    },
+  },
+  setup(props, { emit }) {
+    const { currentUser } = useCurrentUser();
+    const store = useStore();
+
+    const currentPolygon = ref(null);
+    const popup = ref(null);
+    const buttons = ref(null);
+    const state = reactive({
+      currentLayerUpload: null,
+      showingUploadModal: false,
+      locationSearch: '',
+      currentDraw: null,
+      bufferedLayer: null,
+      worksiteLayer: null,
+      incidentLayer: new L.LayerGroup(),
+      workingLayer: null,
+      showingPopup: false,
+      locationResults: [],
+      completedOptions: {
+        color: 'orange',
+        fillColor: 'orange',
+        weight: '2',
+      },
+      bufferedOptions: {
+        color: 'orange',
+        fillColor: 'orange',
+        dashArray: [5, 5],
+        weight: '1',
+      },
+      incidentOptions: {
+        dashArray: [5, 5],
+        weight: '1',
+      },
+      map: null,
+      currentLocationType: null,
+      currentBufferDistance: 0,
+      markers: [],
+      worksitesLoading: false,
+    });
+
+    const stateRefs = toRefs(state);
+
+    const { history, undo, redo } = useRefHistory(currentPolygon, {
+      dump: (poly) => {
+        if (poly) {
+          const [currentPolygonLayer] = poly.getLayers();
+          return currentPolygonLayer.toGeoJSON();
+        }
+        return null;
+      },
+      parse: (geojson) => {
+        return L.geoJson(geojson, stateRefs.completedOptions.value);
+      },
+    });
+    const locationTypes = computed(() => store.getters['enums/locationTypes']);
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
+    );
+
+    function clearAll() {
+      currentPolygon.value = null;
+      applyCurrentLayer();
+      stateRefs.map.value.pm.disableDraw();
+      stateRefs.currentDraw.value = null;
+    }
+    function reset() {
+      clearAll();
+      toggleWorksites(false);
+      toggleIncidents(false);
+    }
+    function toggleWorksites(value) {
+      if (value) {
+        stateRefs.worksiteLayer.value.addTo(stateRefs.map.value);
+        nextTick(() => {
+          stateRefs.map.value.panBy([1, 0]);
+        });
+      } else if (stateRefs.worksiteLayer.value) {
+        stateRefs.map.value.removeLayer(stateRefs.worksiteLayer.value);
+      }
+    }
+    function toggleIncidents(value) {
+      if (value) {
+        stateRefs.incidentLayer.value.addTo(stateRefs.map.value);
+        nextTick(() => {
+          stateRefs.map.value.panBy([1, 0]);
+        });
+      } else if (stateRefs.incidentLayer.value) {
+        stateRefs.map.value.removeLayer(stateRefs.incidentLayer.value);
+      }
+    }
+    async function getIncidentLocations(incidents) {
+      // stateRefs.incidentLayer.value = new L.LayerGroup();
+      const incidentLocations = [];
+      for (const incident of incidents) {
+        for (const item of incident.locations) {
+          incidentLocations.push(item.location);
+        }
+      }
+      if (incidentLocations.length > 0) {
+        const results = await Location.api().get(
+          `/locations?id__in=${incidentLocations.join(',')}`,
+          {
+            dataKey: 'results',
+          },
+        );
+        const { locations } = results.entities;
+        for (const location of locations) {
+          const geojsonFeature = {
+            type: 'Feature',
+            properties: location.attr,
+            geometry: location.poly || location.geom || location.point,
+          };
+          const geojsonLayer = L.geoJSON(
+            geojsonFeature,
+            stateRefs.incidentOptions.value,
+          );
+          const [layer] = geojsonLayer.getLayers();
+          layer.type = 'Incident';
+          layer.addTo(stateRefs.incidentLayer.value);
+        }
+      }
+    }
+    async function getWorksites({ organization, incident }) {
+      stateRefs.worksitesLoading.value = true;
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_all`,
+        {
+          params: {
+            incident,
+            work_type__claimed_by: organization,
+          },
+        },
+      );
+      stateRefs.markers.value = response.data.results;
+      stateRefs.worksiteLayer.value = getMarkerLayer(
+        stateRefs.markers.value,
+        stateRefs.map.value,
+        {},
+      );
+      stateRefs.worksitesLoading.value = false;
+    }
+    function applyCurrentLayer(closePopup = true) {
+      stateRefs.map.value.eachLayer((layer) => {
+        if (layer instanceof L.Popup && !closePopup) {
+          return;
+        }
+
+        if (
+          layer instanceof L.TileLayer ||
+          layer instanceof L.SVG ||
+          layer === stateRefs.worksiteLayer.value ||
+          layer === stateRefs.incidentLayer.value ||
+          stateRefs.incidentLayer.value.hasLayer(layer)
+        ) {
+          return;
+        }
+        stateRefs.map.value.removeLayer(layer);
+      });
+      if (currentPolygon.value) {
+        stateRefs.map.value.addLayer(currentPolygon.value);
+      }
+    }
+    function applyCurrentLayerUpload() {
+      stateRefs.showingUploadModal.value = false;
+      onLocationSelected(
+        { id: stateRefs.currentLayerUpload.value[0].id },
+        true,
+      );
+      // this.checkpoint();
+    }
+    function enableBuffer() {
+      drawBuffer();
+      showPopup();
+    }
+    function drawBuffer() {
+      if (stateRefs.bufferedLayer.value) {
+        stateRefs.bufferedLayer.value.removeFrom(stateRefs.map.value);
+      }
+      stateRefs.currentDraw.value = 'Buffer';
+      const [currentPolygonLayer] = currentPolygon.value.getLayers();
+      const currentPolygonGeoJSON = currentPolygonLayer.toGeoJSON();
+      const newPoly = turf.buffer(
+        currentPolygonGeoJSON,
+        stateRefs.currentBufferDistance.value,
+        {
+          units: 'miles',
+        },
+      );
+      [stateRefs.bufferedLayer.value] = L.geoJson(
+        newPoly,
+        stateRefs.bufferedOptions.value,
+      ).getLayers();
+      stateRefs.bufferedLayer.value.addTo(stateRefs.map.value);
+    }
+    function handleMapEvent(event, type) {
+      if (event === 'cancel') {
+        stateRefs.map.value.pm.disableDraw(type);
+        stateRefs.currentDraw.value = null;
+        applyCurrentLayer();
+      }
+
+      if (event === 'add') {
+        stateRefs.map.value.pm.disableDraw(type);
+        stateRefs.currentDraw.value = null;
+        if (!stateRefs.bufferedLayer.value) return;
+        // this.checkpoint();
+        if (currentPolygon.value) {
+          const layers = currentPolygon.value.getLayers();
+          const [currentPolygonLayer] = layers;
+          const currentPolygonLayerGeoJSON = currentPolygonLayer.toGeoJSON();
+          const newPolygon = stateRefs.bufferedLayer.value.toGeoJSON();
+          const newPoly = turf.union(currentPolygonLayerGeoJSON, newPolygon);
+          currentPolygon.value = newPoly
+            ? L.geoJson(newPoly, stateRefs.completedOptions.value)
+            : null;
+        } else {
+          currentPolygon.value = L.geoJson(
+            stateRefs.bufferedLayer.value.toGeoJSON(),
+            stateRefs.completedOptions.value,
+          );
+        }
+        applyCurrentLayer();
+      }
+
+      if (event === 'exclude') {
+        stateRefs.map.value.pm.disableDraw(type);
+        stateRefs.currentDraw.value = null;
+        if (!stateRefs.bufferedLayer.value) return;
+        // this.checkpoint();
+        if (currentPolygon.value) {
+          const [currentPolygonLayer] = currentPolygon.value.getLayers();
+          const currentPolygonLayerGeoJSON = currentPolygonLayer.toGeoJSON();
+          const newPolygon = stateRefs.bufferedLayer.value.toGeoJSON();
+          const newPoly = turf.difference(
+            currentPolygonLayerGeoJSON,
+            newPolygon,
+          );
+          currentPolygon.value = newPoly
+            ? L.geoJson(newPoly, stateRefs.completedOptions.value)
+            : null;
+        }
+        applyCurrentLayer();
+      }
+
+      if (event === 'buffer') {
+        stateRefs.map.value.pm.disableDraw(type);
+        stateRefs.currentDraw.value = null;
+        if (!stateRefs.bufferedLayer.value) return;
+        // this.checkpoint();
+        currentPolygon.value = L.geoJSON(
+          stateRefs.bufferedLayer.value.toGeoJSON(),
+          stateRefs.completedOptions.value,
+        );
+        applyCurrentLayer();
+      }
+    }
+    function enableDraw(type) {
+      stateRefs.map.value.pm.disableDraw(type);
+      stateRefs.currentDraw.value = null;
+      applyCurrentLayer();
+
+      const options = {
+        snappable: true,
+        templineStyle: stateRefs.bufferedOptions.value,
+
+        hintlineStyle: stateRefs.bufferedOptions.value,
+        pathOptions: stateRefs.bufferedOptions.value,
+      };
+
+      // enable drawing mode for shape - e.g. Poly, Line, Circle, etc
+      // Add this slight pan to re-render map
+      stateRefs.currentDraw.value = type;
+      setTimeout(() => {
+        stateRefs.map.value.pm.enableDraw(type, options);
+      }, 200);
+    }
+
+    function showPopup(center) {
+      const p = L.popup({
+        closeOnClick: false,
+        maxWidth: 'auto',
+      });
+      stateRefs.showingPopup.value = true;
+      p.setLatLng(
+        center || stateRefs.bufferedLayer.value.getBounds().getCenter(),
+      )
+        .setContent(popup.value)
+        .openOn(stateRefs.map.value);
+      stateRefs.map.value.on('popupclose', () => {
+        applyCurrentLayer(false);
+        stateRefs.map.value.pm.disableDraw();
+        stateRefs.currentDraw.value = null;
+      });
+    }
+    async function onLocationSelected(selected, fit = false) {
+      applyCurrentLayer();
+      await Location.api().fetchById(selected);
+      const location = Location.find(selected);
+      const geojsonFeature = {
+        type: 'Feature',
+        properties: location.attr,
+        geometry: location.poly || location.geom || location.point,
+      };
+      const geojsonLayer = L.geoJSON(
+        geojsonFeature,
+        stateRefs.bufferedOptions.value,
+      );
+      [stateRefs.bufferedLayer.value] = geojsonLayer.getLayers();
+      stateRefs.bufferedLayer.value.name = location.name;
+      stateRefs.bufferedLayer.value.addTo(stateRefs.map.value);
+      if (fit) {
+        stateRefs.map.value.fitBounds(
+          stateRefs.bufferedLayer.value.getBounds(),
+        );
+      }
+      showPopup();
+    }
+
+    async function onLocationLoaded(locationId) {
+      await Location.api().fetchById(locationId);
+      const location = Location.find(locationId);
+      const geojsonFeature = {
+        type: 'Feature',
+        properties: location.attr,
+        geometry: location.poly || location.geom || location.point,
+      };
+      currentPolygon.value = L.geoJSON(
+        geojsonFeature,
+        stateRefs.completedOptions.value,
+      );
+      currentPolygon.value.addTo(stateRefs.map.value);
+      stateRefs.map.value.fitBounds(currentPolygon.value.getBounds());
+    }
+
+    async function onLocationSearch(value) {
+      const parameters = {
+        search: value,
+        limit: 10,
+        fields: 'id,name,type',
+      };
+      if (stateRefs.currentLocationType.value) {
+        parameters.type = stateRefs.currentLocationType.value;
+      }
+
+      const queryString = getQueryString(parameters);
+      const results = await Location.api().get(`/locations?${queryString}`, {
+        dataKey: 'results',
+      });
+      return results.entities.locations;
+    }
+
+    watch(currentPolygon.value, (newValue) => {
+      emit('changed', newValue);
+    });
+
+    watch(stateRefs.currentBufferDistance, (newValue) => {
+      drawBuffer();
+    });
+
+    watch(props.incident, (newValue) => {
+      if (newValue) {
+        getWorksites({ organization: null, incident: newValue });
+      }
+      toggleWorksites(false);
+    });
+
+    watch(props.organization, (newValue) => {
+      if (newValue) {
+        getWorksites({ organization: newValue, incident: null });
+      }
+      const incidents = Organization.find(newValue).incident_list;
+      getIncidentLocations(incidents);
+      toggleWorksites(false);
+      toggleIncidents(false);
+      stateRefs.incidentLayer.value = new L.LayerGroup();
+    });
+
+    onMounted(async () => {
+      const leafletMap = L.map('map', {
+        zoomControl: false,
+      }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 5);
+
+      L.tileLayer(mapTileLayer, {
+        // tileSize: 512,
+        // zoomOffset: -1,
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      }).addTo(leafletMap);
+
+      // L.DomEvent.on(buttons.value, 'click', function (ev) {
+      //   L.DomEvent.stopPropagation(ev);
+      // });
+
+      leafletMap.on('keydown', (e) => {
+        if (e.originalEvent.keyCode === 13) {
+          const newPoly = turf.lineToPolygon(
+            stateRefs.workingLayer.value.toGeoJSON(),
+          );
+          // this.$log.debug(newPoly);
+          currentPolygon.value = L.geoJson(
+            newPoly,
+            stateRefs.completedOptions.value,
+          );
+          applyCurrentLayer();
+          stateRefs.map.value.pm.disableDraw();
+          stateRefs.currentDraw.value = null;
+        }
+        if (e.originalEvent.keyCode === 27) {
+          applyCurrentLayer(false);
+          stateRefs.map.value.pm.disableDraw();
+          stateRefs.currentDraw.value = null;
+        }
+      });
+
+      leafletMap.on('pm:drawstart', ({ workingLayer }) => {
+        stateRefs.workingLayer.value = workingLayer;
+        workingLayer.on('pm:snap', () => {
+          document.querySelector('.leaflet-tooltip').style.backgroundColor =
+            '#13E768';
+        });
+
+        workingLayer.on('pm:unsnap', () => {
+          document.querySelector('.leaflet-tooltip').style.backgroundColor = '';
+        });
+      });
+
+      leafletMap.on('pm:create', (e) => {
+        const { layer } = e;
+        let newLayer = L.geoJSON(layer.toGeoJSON());
+
+        if (layer instanceof L.Circle) {
+          const radius = e.layer.getRadius();
+          const { coordinates } = e.layer.toGeoJSON().geometry;
+          const numberOfEdges = 64;
+          const geometry = circleToPolygon(coordinates, radius, numberOfEdges);
+          const geojsonFeature = {
+            type: 'Feature',
+            properties: {},
+            geometry,
+          };
+          newLayer = L.geoJSON(geojsonFeature);
+        }
+
+        [stateRefs.bufferedLayer.value] = newLayer.getLayers();
+        nextTick(() => {
+          showPopup(layer.getBounds().getCenter());
+        });
+        // this.logEvent('user_ui-draw');
+      });
+
+      stateRefs.map.value = leafletMap;
+
+      if (props.locations && props.locations.length > 0) {
+        const locationPromises = [];
+        for (const location of props.locations) {
+          locationPromises.push(onLocationLoaded(location));
+        }
+        await Promise.all(locationPromises);
+      }
+      await LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      });
+
+      if (props.incident) {
+        getWorksites({ organization: null, incident: props.incident });
+      } else if (props.organization) {
+        getWorksites({ organization: props.organization, incident: null });
+        const incidents = Organization.find(props.organization).incident_list;
+        getIncidentLocations(incidents);
+      }
+      // this.checkpoint();
+    });
+
+    return {
+      ...stateRefs,
+      locationTypes,
+      currentIncidentId,
+      history,
+      undo,
+      redo,
+      throttle,
+      currentUser,
+      popup,
+      applyCurrentLayerUpload,
+      enableBuffer,
+      handleMapEvent,
+      enableDraw,
+      onLocationSearch,
+      onLocationSelected,
+      applyCurrentLayer,
+      currentPolygon,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.select__container {
+  @apply w-full;
+}
+
+.map-item {
+  position: relative;
+  min-height: 400px;
+}
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .map-item {
+    min-height: 200px;
+  }
+}
+</style>

@@ -112,8 +112,8 @@ export default {
         return;
       }
       const formData = new FormData();
-      formData.append('file', this.fileList[0]);
-      formData.append('type', this.uploadType);
+      formData.append('file', fileList[0]);
+      formData.append('type', uploadType.value);
       if (ignoreDuplicates.value) {
         formData.append('skip_duplicate_check', true);
       }
