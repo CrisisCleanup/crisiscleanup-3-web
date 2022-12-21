@@ -1,0 +1,31 @@
+# Original Author: Braden Mars <bradenmars@bradenmars.me>
+name: Get Versions
+
+on:
+  workflow_call:
+    outputs:
+      # add as needed.
+      PNPM_VERSION:
+        value: ${{ jobs.resolve.outputs.PNPM_VERSION }}
+      NODE_VERSION:
+        value: ${{ jobs.resolve.outputs.NODE_VERSION }}
+
+jobs:
+  resolve:
+    name: Resolve Versions
+    runs-on: ubuntu-latest
+    outputs:
+      # add as needed from .tool-versions.
+      PNPM_VERSION: ${{ steps.tools.outputs.PNPM_VERSION }}
+      NODE_VERSION: ${{ steps.tools.outputs.NODEJS_VERSION }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: tools
+        shell: bash
+        run: |
+          (while read -r line; do
+              read -r tool vers <<<"$line"
+              key=$(tr '[:lower:]' '[:upper:]' <<<"$tool")
+              echo "${key}_VERSION=${vers}"
+              echo "::set-output name=${key}_VERSION::${vers}"
+          done)<.tool-versions
