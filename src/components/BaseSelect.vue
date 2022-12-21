@@ -8,6 +8,7 @@
           $emit('update:modelValue', v);
         }
       "
+      :required="required"
       :options="options"
       :can-clear="clearable"
       :searchable="searchable"
@@ -26,6 +27,7 @@
         search: selectClasses,
         container: containerClasses,
       }"
+      ref="input"
     >
       <template #singlelabel="{ value }">
         <slot name="selected-option" :option="value" />
@@ -143,9 +145,9 @@ export default {
     const isFloated_ = ref(false);
     const isEmpty_ = ref(false);
     const isInvalid = ref(false);
-    const baseHeight_ = ref(0.0);
-    const currentHeight_ = ref(0.0);
-    const floatDisplacement = ref(0.0);
+    const baseHeight_ = ref(0);
+    const currentHeight_ = ref(0);
+    const floatDisplacement = ref(0);
     const selected = ref(null);
 
     const inputIdSelector = computed(() => {
@@ -158,7 +160,7 @@ export default {
     });
 
     const heightMultiplier = computed(() => {
-      if (currentHeight_.value === 0.0) return 1;
+      if (currentHeight_.value === 0) return 1;
       return currentHeight_.value / baseHeight_.value;
     });
 
@@ -200,10 +202,8 @@ export default {
           ),
         );
       }
-      if (props.required) {
-        if (input.value.checkValidity()) {
-          isInvalid.value = false;
-        }
+      if (props.required && inputRef.value.checkValidity()) {
+        isInvalid.value = false;
       }
     }
 
@@ -220,13 +220,13 @@ export default {
         inputLabel.value.classList.add('focused');
       }
       nextTick(() => {
-        const items = [].slice.call(
+        const items = Array.prototype.slice.call(
           document.querySelectorAll('.vs__dropdown-option'),
         );
 
-        items.forEach((item) => {
+        for (const item of items) {
           item.classList.remove('vs__dropdown-option--highlight');
-        });
+        }
 
         const selected = items.find((item) => {
           if (props.modelValue) {
@@ -252,7 +252,7 @@ export default {
 
     onMounted(() => {
       if (props.required) {
-        input.value.addEventListener(
+        inputRef.value.addEventListener(
           'invalid',
           () => {
             isInvalid.value = true;

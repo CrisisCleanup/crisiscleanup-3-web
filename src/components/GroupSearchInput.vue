@@ -1,43 +1,44 @@
 <template>
-  <autocomplete
-    icon="search"
-    :suggestions="groupResults"
-    :size="size"
-    display-property="name"
-    placeholder="Groups"
-    clear-on-selected
-    @selected="
+  <Multiselect
+    :placeholder="$t('Group (optional)')"
+    label="name"
+    :filter-results="false"
+    :min-chars="1"
+    :resolve-on-load="false"
+    :delay="0"
+    :searchable="true"
+    :object="true"
+    value-prop="id"
+    @update:modelValue="
       (value) => {
-        $emit('selectedGroup', value);
+        $emit('update:modelValue', value);
       }
     "
-    @search="onGroupSearch"
+    :model-value="modelValue"
+    :options="onGroupSearch"
   >
-    <template #result="slotProps" v-if="isAdmin">
+    <template v-slot:option="{ option }" v-if="isAdmin">
       <div
-        class="
-          flex
-          justify-between
-          text-sm
-          p-1
-          cursor-pointer
-          hover:bg-crisiscleanup-light-grey
-          border-b
-        "
+        class="flex justify-between text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
       >
-        <span
-          >{{ slotProps.suggestion.item.id }} -
-          {{ slotProps.suggestion.item.name }}</span
-        >
+        <span>{{ option.id }} - {{ option.name }}</span>
       </div>
     </template>
-  </autocomplete>
+  </Multiselect>
 </template>
 <script>
+import axios from 'axios';
+import Multiselect from '@vueform/multiselect';
 import { getQueryString } from '../utils/urls';
+
 export default {
   name: 'GroupSearchInput',
+  components: { Multiselect },
   props: {
+    modelValue: {
+      type: Object,
+      default: null,
+    },
     size: {
       type: String,
       default: null,
@@ -51,26 +52,27 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      groupResults: [],
-    };
-  },
-  methods: {
-    async onGroupSearch(value) {
-      this.$emit('input', value);
+  setup(props, { emit }) {
+    async function onGroupSearch(value) {
+      emit('input', value);
 
-      const params = {
+      const parameters = {
         fields: 'id,name',
         limit: '10',
         search: value,
       };
 
-      const results = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/groups?${getQueryString(params)}`,
+      const results = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/groups?${getQueryString(
+          parameters,
+        )}`,
       );
-      this.groupResults = results.data.results;
-    },
+      return results.data.results;
+    }
+
+    return {
+      onGroupSearch,
+    };
   },
 };
 </script>

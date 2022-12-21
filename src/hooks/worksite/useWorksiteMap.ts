@@ -21,6 +21,8 @@ export type MapUtils = {
   addHeatMap: Function;
   removeHeatMap: Function;
   loadMarker: Function | undefined;
+  hideMarkers: Function | undefined;
+  showMarkers: Function | undefined;
 };
 
 export default (
@@ -248,6 +250,22 @@ export default (
     removeLayer('heat_layer');
   }
 
+  function hideMarkers() {
+    const currentMarkerLayer = getCurrentMarkerLayer();
+    if (currentMarkerLayer) {
+      currentMarkerLayer._pixiContainer.visible = false;
+      map.panBy([1, 0]);
+    }
+  }
+
+  function showMarkers() {
+    const currentMarkerLayer = getCurrentMarkerLayer();
+    if (currentMarkerLayer) {
+      currentMarkerLayer._pixiContainer.visible = true;
+      map.panBy([1, 0]);
+    }
+  }
+
   const mapUtils: MapUtils = {
     getMap,
     getPixiContainer,
@@ -262,6 +280,8 @@ export default (
     addHeatMap,
     removeHeatMap,
     loadMarker,
+    hideMarkers,
+    showMarkers,
   };
   return mapUtils;
 };

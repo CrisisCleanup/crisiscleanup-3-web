@@ -35,7 +35,6 @@
         item-key="id"
         label="name_t"
         class="ml-3 w-1/3"
-        :required="true"
         searchable
         :placeholder="$t('locationVue.location_type')"
         @update:modelValue="
@@ -193,7 +192,7 @@
         >
           <base-checkbox
             :disabled="worksitesLoading"
-            @update:modelVaule="toggleWorksites"
+            @update:modelValue="toggleWorksites"
           >
             {{ $t('locationTool.show_cases') }}
           </base-checkbox>
@@ -299,10 +298,12 @@ import { getQueryString } from '../../utils/urls';
 import Location from '../../models/Location';
 import Organization from '../../models/Organization';
 import LocationType from '../../models/LocationType';
+import useWorksiteMap from '../../hooks/worksite/useWorksiteMap';
 import LayerUploadTool from './LayerUploadTool.vue';
 import MapButton from './MapButton.vue';
 import { getMarkerLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import useRenderedMarkers from '@/hooks/worksite/useRenderedMarkers';
 
 export default {
   name: 'LocationTool',
@@ -328,6 +329,7 @@ export default {
     const store = useStore();
 
     const currentPolygon = ref(null);
+    let mapUtils;
     const popup = ref(null);
     const buttons = ref(null);
     const state = reactive({
@@ -395,12 +397,9 @@ export default {
     }
     function toggleWorksites(value) {
       if (value) {
-        stateRefs.worksiteLayer.value.addTo(stateRefs.map.value);
-        nextTick(() => {
-          stateRefs.map.value.panBy([1, 0]);
-        });
-      } else if (stateRefs.worksiteLayer.value) {
-        stateRefs.map.value.removeLayer(stateRefs.worksiteLayer.value);
+        mapUtils.showMarkers();
+      } else {
+        mapUtils.hideMarkers();
       }
     }
     function toggleIncidents(value) {
@@ -414,7 +413,7 @@ export default {
       }
     }
     async function getIncidentLocations(incidents) {
-      // stateRefs.incidentLayer.value = new L.LayerGroup();
+      stateRefs.incidentLayer.value = new L.LayerGroup();
       const incidentLocations = [];
       for (const incident of incidents) {
         for (const item of incident.locations) {
@@ -456,12 +455,11 @@ export default {
           },
         },
       );
-      stateRefs.markers.value = response.data.results;
-      stateRefs.worksiteLayer.value = getMarkerLayer(
-        stateRefs.markers.value,
-        stateRefs.map.value,
-        {},
+      mapUtils?.reloadMap(
+        response.data.results,
+        response.data.results.map((m) => m.id),
       );
+      mapUtils.hideMarkers();
       stateRefs.worksitesLoading.value = false;
     }
     function applyCurrentLayer(closePopup = true) {
@@ -473,7 +471,7 @@ export default {
         if (
           layer instanceof L.TileLayer ||
           layer instanceof L.SVG ||
-          layer === stateRefs.worksiteLayer.value ||
+          layer.key === 'marker_layer' ||
           layer === stateRefs.incidentLayer.value ||
           stateRefs.incidentLayer.value.hasLayer(layer)
         ) {
@@ -483,6 +481,7 @@ export default {
       });
       if (currentPolygon.value) {
         stateRefs.map.value.addLayer(currentPolygon.value);
+        emit('changed', currentPolygon.value);
       }
     }
     function applyCurrentLayerUpload() {
@@ -701,18 +700,14 @@ export default {
     });
 
     onMounted(async () => {
-      const leafletMap = L.map('map', {
-        zoomControl: false,
-      }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 5);
-
-      L.tileLayer(mapTileLayer, {
-        // tileSize: 512,
-        // zoomOffset: -1,
-        attribution: mapAttribution,
-        detectRetina: false,
-        maxZoom: 18,
-        noWrap: false,
-      }).addTo(leafletMap);
+      mapUtils = useWorksiteMap(
+        [],
+        [],
+        () => {},
+        () => {},
+      );
+      const leafletMap = mapUtils.getMap();
+      leafletMap.setView([35.746_512_259_918_5, -96.411_509_631_256_56], 5);
 
       // L.DomEvent.on(buttons.value, 'click', function (ev) {
       //   L.DomEvent.stopPropagation(ev);
@@ -784,18 +779,27 @@ export default {
         }
         await Promise.all(locationPromises);
       }
-      await LocationType.api().get('/location_types', {
-        dataKey: 'results',
-      });
 
       if (props.incident) {
-        getWorksites({ organization: null, incident: props.incident });
+        getWorksites({ organization: null, incident: props.incident }).then(
+          () => {},
+        );
       } else if (props.organization) {
-        getWorksites({ organization: props.organization, incident: null });
-        const incidents = Organization.find(props.organization).incident_list;
-        getIncidentLocations(incidents);
+        getWorksites({
+          organization: props.organization,
+          incident: null,
+        }).then(() => {});
+        Organization.api()
+          .get(`/organizations?id__in=${[props.organization].join(',')}`, {
+            dataKey: 'results',
+          })
+          .then(() => {
+            const incidents = Organization.find(
+              props.organization,
+            ).incident_list;
+            getIncidentLocations(incidents).then(() => {});
+          });
       }
-      // this.checkpoint();
     });
 
     return {
@@ -816,6 +820,8 @@ export default {
       onLocationSelected,
       applyCurrentLayer,
       currentPolygon,
+      toggleWorksites,
+      toggleIncidents,
     };
   },
 };

@@ -1,9 +1,9 @@
 import AdminEventStream from '../../components/admin/AdminEventStream.vue';
+import AdminOrganization from './AdminOrganization.vue';
 import AdminPage from './Index.vue';
 import AdminCms from './AdminCms.vue';
 import AdminDashboard from './AdminDashboard.vue';
 import AdminTicketDashboard from './AdminTicketDashboard.vue';
-// import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
 // import AdminEvents from '@/pages/admin/AdminEvents.vue';
 // import AdminCosts from '@/pages/admin/AdminCosts.vue';
 // import AdminCms from '@/pages/admin/AdminCms';
@@ -24,11 +24,11 @@ const routes = [
         component: AdminDashboard,
         alias: '',
       },
-      // {
-      //   path: 'organization/:organization_id',
-      //   name: 'nav.admin_organization',
-      //   component: AdminOrganization,
-      // },
+      {
+        path: 'organization/:organization_id',
+        name: 'nav.admin_organization',
+        component: AdminOrganization,
+      },
       // {
       //   path: 'events',
       //   name: 'nav.admin_events',

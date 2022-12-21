@@ -21,30 +21,30 @@
   </Multiselect>
 </template>
 <script>
+import Multiselect from '@vueform/multiselect';
 import Organization from '../models/Organization';
 import { getQueryString } from '../utils/urls';
-import Multiselect from '@vueform/multiselect';
 
 export default {
   name: 'OrganizationSearchInput',
   setup(props) {
     async function onOrganizationSearch(value) {
-      const params = {
+      const parameters = {
         fields: 'id,name',
         limit: '10',
         search: value,
       };
 
       if (!props.includeInactive) {
-        params.is_active = true;
+        parameters.is_active = true;
       }
 
       if (props.allowedOrganizationIds.length > 0 && !props.isAdmin) {
-        params.id__in = props.allowedOrganizationIds.join(',');
+        parameters.id__in = props.allowedOrganizationIds.join(',');
       }
 
       const results = await Organization.api().get(
-        `/organizations?${getQueryString(params)}`,
+        `/organizations?${getQueryString(parameters)}`,
         {
           headers: {
             Authorization: null,

@@ -17,7 +17,7 @@
                 :alt="$t('actions.cancel')"
                 size="xs"
                 type="cancel"
-                @click.native="
+                @click="
                   () => {
                     closeDialog('cancel');
                   }
@@ -62,9 +62,9 @@
 </template>
 
 <script>
-import useEmitter from '../../hooks/useEmitter';
 import { computed, defineComponent } from 'vue';
 import { closeDialog } from 'vue3-promise-dialog';
+import useEmitter from '../../hooks/useEmitter';
 
 export default defineComponent({
   name: 'ComponentDialog',
