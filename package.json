@@ -14,7 +14,8 @@
   "scripts": {
     "prepare": "is-ci || husky install",
     "dev": "vite --port 8080",
-    "build": "pnpm run typecheck && vite build",
+    "build": "pnpm run typecheck && pnpm run build:app",
+    "build:app": "vite build",
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "lint": "xo \"**/*.{vue,json,ts?(x)}\"",
