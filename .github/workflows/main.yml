@@ -12,14 +12,20 @@ on:
       - master
 
 jobs:
+  versions:
+    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/get-versions.yml@master
+
   lint:
     runs-on: ubuntu-latest
+    needs: [versions]
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
       - name: Install
@@ -30,12 +36,15 @@ jobs:
 
   type-check:
     runs-on: ubuntu-latest
+    needs: [versions]
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
       - name: Install
@@ -46,12 +55,15 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: [versions]
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
       - run: pnpm install
@@ -59,6 +71,7 @@ jobs:
 
   test-e2e:
     runs-on: ubuntu-latest
+    needs: [versions]
     if: false
     steps:
       - uses: actions/checkout@v3
@@ -69,10 +82,12 @@ jobs:
           key: cypress-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
       - run: pnpm install
