@@ -1,132 +1,88 @@
-name: CrisisCleanup
+name: Main
 
 on:
-  workflow_dispatch:
-  create:
-  release:
-    types: [published]
-  pull_request:
-    paths:
-      - '*.json'
-      - 'yarn.lock'
-      - '**/**.js'
-      - '**/**.vue'
-      - '**/**.js.snap'
-      - '.github/workflows/*'
   push:
     branches:
+      - main
       - master
-      - develop
-    tags:
-      - 'v**'
-    paths:
-      - '*.json'
-      - 'yarn.lock'
-      - '**/**.js'
-      - '**/**.vue'
-      - '**/**.js.snap'
-      - '.github/workflows/*'
-      - 'vue.config.js'
 
-env:
-  VUE_APP_WHAT_3_WORDS_API_KEY: ${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
-  VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
-  VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
-  VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
-  VUE_APP_PHONE_DEFAULT_USERNAME: 'english'
-  VUE_APP_PHONE_DEFAULT_PASSWORD: 'volunteer'
-  VUE_APP_ENGLISH_PHONE_GATEWAY: '216961'
-  VUE_APP_SPANISH_PHONE_GATEWAY: '216962'
-  VUE_APP_DEFAULT_CALLER_ID: '2722003211'
-  VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
-  VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
-  VUE_APP_WS_URL: 'wss://socket.dev.crisiscleanup.io'
-  VUE_APP_PORTAL_KEY: 'crisiscleanup_demo'
-  VUE_APP_AWS_CCP_REGION: 'us-east-1'
-  VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
-  VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
-  VUE_APP_CCP_INSTANCE: 87fbcad4-9f58-4153-84e8-d5b7202693e8
-  VUE_APP_AWS_CCP_URL: https://ccudev.awsapps.com/connect/ccp-v2/
-  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  SENTRY_PROPERTIES: sentry.properties
-  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  CI: 1
-  CYPRESS_INSTALL_BINARY: 0
+  pull_request:
+    branches:
+      - main
+      - master
 
 jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Run Tests
-        run: yarn test:unit
-
-      - name: Upload Coverage
-        uses: coverallsapp/github-action@v1.1.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
   lint:
-    name: Run Linter
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
-          cache: 'yarn'
+          node-version: 16.x
+          cache: pnpm
 
-      - name: Install Dependencies
-        run: yarn install
+      - name: Install
+        run: pnpm install
 
-      - name: Run Linter
-        run: yarn lint
+      - name: Lint
+        run: pnpm run lint
 
-  deploy:
-    name: Deploy Site
+  type-check:
     runs-on: ubuntu-latest
-    needs: [test, lint]
-    if: "github.event_name != 'pull_request'"
     steps:
-      - uses: actions/checkout@v2
-
-
-      - name: Invoke Development Deploy
-        if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"
-        uses: benc-uk/workflow-dispatch@v1
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          workflow: Deploy
-          token: ${{ secrets.GHCR_PAT }}
-          inputs: '{ "stage": "development" }'
+          node-version: 16.x
+          cache: pnpm
 
-      - name: Invoke Staging Deploy
-        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
-        uses: benc-uk/workflow-dispatch@v1
+      - name: Install
+        run: pnpm install
+
+      - name: Type check
+        run: pnpm run typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          workflow: Deploy
-          token: ${{ secrets.GHCR_PAT }}
-          inputs: '{ "stage": "staging" }'
+          node-version: 16.x
+          cache: pnpm
 
-      - name: Invoke Production Deploy
-        if: "github.event_name == 'release'"
-        uses: benc-uk/workflow-dispatch@v1
+      - run: pnpm install
+      - run: pnpm run test:unit
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
-          workflow: Deploy
-          token: ${{ secrets.GHCR_PAT }}
-          inputs: '{ "stage": "production" }'
+          path: |
+            ~/.cache
+          key: cypress-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
+      - uses: pnpm/action-setup@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: pnpm
+
+      - run: pnpm install
+
+      - name: Cypress PNPM Patch
+        run: cp pnpm-lock.yaml package-lock.json
+
+      - name: Cypress
+        uses: cypress-io/github-action@v4
+        with:
+          install-command: echo
+          build: pnpm run build
+          start: pnpm run test:e2e
