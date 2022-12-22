@@ -252,13 +252,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import { EventsMixin } from '@/mixins';
-import { computed, ref } from 'vue';
+import { computed, ref, defineComponent } from 'vue';
 import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 
-export default {
+export default defineComponent({
   name: 'Table',
   // mixins: [EventsMixin], TODO: Events Mixin
   props: {
@@ -575,7 +575,7 @@ export default {
       handleColumnAction,
     };
   },
-};
+});
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>
