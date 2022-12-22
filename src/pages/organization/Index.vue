@@ -5,7 +5,7 @@
     >
       <template v-for="r in routes">
         <router-link
-          v-if="r.isActive"
+          v-if="!r.isDisabled"
           :key="`myorg-nav-${r.name}`"
           :to="`/organization/${r.name}`"
           class="flex w-48 justify-center mx-2 cursor-pointer"
@@ -25,60 +25,67 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'Organization',
   setup(props) {
     const route = useRoute();
-    const isInvitationsActive = computed(() => {
-      return route.meta.id === 'invitations';
-    });
 
-    const routeDefaults = {
-      class: {
-        'router-link': true,
-        'router-link-active': isInvitationsActive.value,
-      },
-      isActive: true,
-    };
-
-    const routes = reactive(
-      [
+    const _routes = computed(() => {
+      return [
         {
           name: 'invitations',
           key: 'invitation_management',
+          isActive: route.name === 'invitations',
         },
         {
           name: 'users',
           key: 'user_management',
+          isActive: route.name === 'users',
         },
         {
           name: 'teams',
           key: 'team_management',
+          isActive: route.name === 'teams',
         },
         {
           name: 'profile',
           key: 'organization_profile',
+          isActive: route.name === 'profile',
         },
         {
           name: 'affiliates',
           key: 'affiliated_orgs',
+          isActive: route.name === 'affiliates',
         },
         {
           name: 'layers',
           key: 'layer_library',
+          isActive: route.name === 'layers',
         },
       ].map((r) => ({
-        ...routeDefaults,
+        isDisabled: false,
+        class: {
+          'router-link': true,
+          'router-link-active': false,
+        },
         ...r,
-      })),
-    );
+      }));
+    });
+
+    const routes = computed(() => {
+      return _routes.value.map((r) => {
+        if (r.isActive) {
+          r.class['router-link-active'] = true;
+        }
+        return r;
+      });
+    });
 
     return {
       routes,
-      isInvitationsActive,
     };
   },
 });
