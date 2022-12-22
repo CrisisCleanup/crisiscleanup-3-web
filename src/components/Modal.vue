@@ -62,7 +62,7 @@
                     }
                   "
                 >
-                  {{ $t("actions.ok") }}
+                  {{ $t('actions.ok') }}
                 </base-button>
               </div>
             </slot>
@@ -73,9 +73,11 @@
   </transition>
 </template>
 
-<script>
-export default {
-  name: "Modal",
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'Modal',
   props: {
     modalClasses: {
       type: null,
@@ -91,17 +93,17 @@ export default {
     },
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     closeable: {
       type: Boolean,
       default: false,
     },
   },
-};
+});
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;
