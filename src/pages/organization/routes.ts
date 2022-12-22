@@ -1,13 +1,19 @@
-import Affiliates from '@/pages/organization/Affiliates.vue';
+// Import Affiliates from '@/pages/organization/Affiliates.vue';
+import { h } from 'vue';
 import Organization from '@/pages/organization/Index.vue';
 import Invitations from '@/pages/organization/Invitations.vue';
-import Layers from '@/pages/organization/Layers.vue';
-import OrganizationProfile from '@/pages/organization/Profile.vue';
-import Users from '@/pages/organization/Users.vue';
-import UserView from '@/pages/organization/UserView.vue';
-import Teams from '@/pages/organization/Teams.vue';
-import TeamDetail from '@/pages/organization/TeamDetail.vue';
+// Import Layers from '@/pages/organization/Layers.vue';
+// import OrganizationProfile from '@/pages/organization/Profile.vue';
+// import Users from '@/pages/organization/Users.vue';
+// import UserView from '@/pages/organization/UserView.vue';
+// import Teams from '@/pages/organization/Teams.vue';
+// import TeamDetail from '@/pages/organization/TeamDetail.vue';
 
+const mockComponent = (title: string, content: string) => ({
+  name: title,
+  render: () =>
+    h('div', { class: 'mock-component' }, [h('h1', title), h('p', content)]),
+});
 export const routes = [
   {
     path: '/organization',
@@ -28,12 +34,14 @@ export const routes = [
       },
       {
         path: 'users',
-        component: Users,
+        // Component: Users,
+        component: mockComponent('Users', 'Users'),
         name: 'nav.organization_users',
         children: [
           {
             path: ':user_id',
-            component: UserView,
+            // Component: UserView,
+            component: mockComponent('UserView', 'UserView'),
             name: 'nav.organization_users',
             meta: { id: 'user_detail' },
           },
@@ -41,22 +49,26 @@ export const routes = [
       },
       {
         path: 'affiliates',
-        component: Affiliates,
+        // Component: Affiliates,
+        component: mockComponent('Affiliates', 'Affiliates'),
         name: 'nav.organization_affiliates',
       },
       {
         path: 'profile',
-        component: OrganizationProfile,
+        // Component: OrganizationProfile,
+        component: mockComponent('OrganizationProfile', 'OrganizationProfile'),
         name: 'nav.organization_profile',
       },
       {
         path: 'teams',
-        component: Teams,
+        // Component: Teams,
+        component: mockComponent('Teams', 'Teams'),
         name: 'nav.organization_teams',
         children: [
           {
             path: ':team_id',
-            component: TeamDetail,
+            // Component: TeamDetail,
+            component: mockComponent('TeamDetail', 'TeamDetail'),
             name: 'nav.organization_team_detail',
             meta: { id: 'team_detail' },
           },
@@ -64,7 +76,8 @@ export const routes = [
       },
       {
         path: 'layers',
-        component: Layers,
+        // Component: Layers,
+        component: mockComponent('Layers', 'Layers'),
         name: 'nav.organization_layers',
       },
     ],
