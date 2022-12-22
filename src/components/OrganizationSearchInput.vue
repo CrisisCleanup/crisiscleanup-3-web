@@ -8,28 +8,49 @@
     :delay="0"
     :searchable="true"
     value-prop="id"
+    :options="onOrganizationSearch"
     @update:modelValue="
       (value) => {
         $emit('selectedOrganization', value);
       }
     "
-    :options="onOrganizationSearch"
   >
-    <template v-slot:option="{ option }" v-if="isAdmin">
+    <template v-if="isAdmin" #option="{ option }">
       <span>{{ option.id }} - {{ option.name }}</span>
     </template>
   </Multiselect>
 </template>
-<script>
-import Multiselect from '@vueform/multiselect';
-import Organization from '../models/Organization';
-import { getQueryString } from '../utils/urls';
 
-export default {
+<script lang="ts">
+import Multiselect from '@vueform/multiselect';
+import { defineComponent } from 'vue';
+import Organization from '@/models/Organization';
+import { getQueryString } from '@/utils/urls';
+
+export default defineComponent({
   name: 'OrganizationSearchInput',
+  components: { Multiselect },
+  props: {
+    size: {
+      type: String,
+      default: null,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    includeInactive: {
+      type: Boolean,
+      default: false,
+    },
+    allowedOrganizationIds: {
+      type: Array,
+      default: () => [],
+    },
+  },
   setup(props) {
-    async function onOrganizationSearch(value) {
-      const parameters = {
+    async function onOrganizationSearch(value: string) {
+      const parameters: Record<string, unknown> = {
         fields: 'id,name',
         limit: '10',
         search: value,
@@ -53,31 +74,14 @@ export default {
         },
       );
 
-      return results.entities.organizations;
+      return results.entities?.organizations || [];
     }
 
     return {
       onOrganizationSearch,
     };
   },
-  props: {
-    size: {
-      type: String,
-      default: null,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    includeInactive: {
-      type: Boolean,
-      default: false,
-    },
-    allowedOrganizationIds: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  components: { Multiselect },
-};
+});
 </script>
+
+<style lang="postcss" scoped></style>
