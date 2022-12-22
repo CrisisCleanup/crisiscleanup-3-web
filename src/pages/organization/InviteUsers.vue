@@ -30,7 +30,7 @@
         <div>
           <tag-input
             v-model="emails"
-            :tags.sync="usersToInvite"
+            v-model:tags="usersToInvite"
             :placeholder="$t('usersVue.emails')"
             :validation="validation"
             :add-on-key="[13, 32, ',']"
@@ -40,46 +40,51 @@
         </div>
         <div v-if="isAdmin || currentOrganization.affiliates.length > 1">
           <OrganizationSearchInput
-            @selectedOrganization="selectedOrganization = $event.id"
             class="w-108"
             :allowed-organization-ids="currentOrganization.affiliates"
             :is-admin="isAdmin"
+            @selectedOrganization="selectedOrganization = $event.id"
           />
         </div>
       </div>
-      <div slot="footer" class="p-3 flex justify-end">
-        <base-button
-          :text="$t('actions.cancel')"
-          :alt="$t('actions.cancel')"
-          class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
-          :action="
-            () => {
-              showInviteModal = false;
-            }
-          "
-        />
-        <base-button
-          variant="solid"
-          :action="() => inviteUsers()"
-          :text="$t('actions.submit_invites')"
-          :alt="$t('actions.submit_invites')"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-      </div>
+      <template #footer>
+        <div class="p-3 flex justify-end">
+          <base-button
+            :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
+            class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+            :action="() => (showInviteModal = false)"
+          />
+          <base-button
+            variant="solid"
+            :action="() => inviteUsers()"
+            :text="$t('actions.submit_invites')"
+            :alt="$t('actions.submit_invites')"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+        </div>
+      </template>
     </modal>
   </div>
 </template>
-<script>
-import { createTags } from '@johmun/vue-tags-input';
+
+<script lang="ts">
+import type { TagInputData } from '@sipec/vue3-tags-input';
+import { createTags } from '@sipec/vue3-tags-input';
+import { computed, defineComponent, ref } from 'vue';
 import _ from 'lodash';
+import { useStore } from 'vuex';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import type { Collection } from '@vuex-orm/core';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
-import OrganizationSearchInput from '@/components/OrganizationSearchInput';
-import { getErrorMessage } from '../../utils/errors';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
+import { getErrorMessage } from '@/utils/errors';
 
 const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
-export default {
+export default defineComponent({
   name: 'InviteUsers',
   components: { OrganizationSearchInput },
   props: {
@@ -88,77 +93,92 @@ export default {
       default: false,
     },
   },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    currentOrganization() {
-      return Organization.find(this.currentUser?.organization.id);
-    },
-  },
-  data() {
-    return {
-      emails: '',
-      usersToInvite: [],
-      showInviteModal: false,
-      selectedOrganization: null,
-      organizationResults: [],
-      validation: [
-        {
-          classes: 'email',
-          rule: /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
-          disableAdd: true,
-        },
-      ],
-    };
-  },
-  methods: {
-    async onOrganizationSearch(value) {
+  setup(props) {
+    const store = useStore();
+    const { t } = useI18n();
+    const $toasted = useToast();
+
+    const emails = ref('');
+    const usersToInvite = ref([]);
+    const showInviteModal = ref(false);
+    const selectedOrganization = ref(null);
+    const organizationResults = ref<
+      unknown[] | Collection<Organization> | undefined
+    >([]);
+    const validation = ref([
+      {
+        classes: 'email',
+        rule: /[\w.!#$%&’*+/=?^`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*/,
+        disableAdd: true,
+      },
+    ]);
+
+    const currentUser = computed(() => {
+      // eslint-disable-next-line unicorn/no-array-callback-reference
+      return User.find(store.getters['auth/userId']);
+    });
+    const currentOrganization = computed(() => {
+      // eslint-disable-next-line unicorn/no-array-callback-reference
+      return Organization.find(currentUser.value?.organization.id);
+    });
+
+    async function onOrganizationSearch(value: string) {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
-        {
-          dataKey: 'results',
-        },
+        { dataKey: 'results' },
       );
-      this.organizationResults = results.entities.organizations;
-    },
-    async inviteUsers() {
-      let tags = _.defaultTo(this.usersToInvite.slice(), []);
+      organizationResults.value = results.entities?.organizations;
+    }
+
+    async function inviteUsers() {
+      let tags: TagInputData[] = _.defaultTo([...usersToInvite.value], []);
       try {
-        if (this.emails) {
-          const emailList = this.emails.match(EMAIL_REGEX);
+        if (emails.value) {
+          const emailList = emails.value.match(EMAIL_REGEX);
           let extTags = _.attempt(createTags, emailList);
           if (_.isError(extTags)) {
             extTags = [];
           }
-          tags = _.uniqBy(tags.concat(extTags), 'text');
+          console.log('extTags', extTags);
+          console.log('tags', tags);
+          tags = _.uniqBy([...tags, ...extTags], 'text');
+          console.log('tags', tags);
         }
         if (_.isEmpty(tags)) {
-          await this.$toasted.error(
-            this.$t('inviteTeammates.provide_valid_email'),
-          );
+          await $toasted.error(t('inviteTeammates.provide_valid_email'));
           return;
         }
-        const emails = tags.map((value) => value.text);
+        const _emails = tags.map((value) => value.text);
         await Promise.all(
-          emails.map((email) =>
-            User.api().inviteUser(email, this.selectedOrganization),
+          _emails.map((email) =>
+            User.api().inviteUser(email, selectedOrganization.value),
           ),
         );
-        await this.$toasted.success(
-          this.$t('inviteTeammates.invites_sent_success'),
-        );
-        this.showInviteModal = false;
-        this.usersToInvite = [];
+        await $toasted.success(t('inviteTeammates.invites_sent_success'));
+        showInviteModal.value = false;
+        usersToInvite.value = [];
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
+    }
+
+    return {
+      currentUser,
+      currentOrganization,
+      emails,
+      usersToInvite,
+      showInviteModal,
+      selectedOrganization,
+      organizationResults,
+      validation,
+      onOrganizationSearch,
+      inviteUsers,
+    };
   },
-};
+});
 </script>
 
-<style>
+<style lang="postcss" scoped>
 .vue-tags-input {
   @apply h-8 w-108 mb-2;
 }
