@@ -34,6 +34,10 @@ module.exports = {
   },
   plugins: ['vue', '@typescript-eslint'],
   rules: {
-    'import/extensions': 0
+    'import/extensions': 0,
+    'import/no-anonymous-default-export': 0,
+    'unicorn/filename-case': 0,
+    'unicorn/prevent-abbreviations': 0,
+    'unicorn/no-array-reduce': 0,
   },
 };
