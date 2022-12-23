@@ -108,7 +108,6 @@ import User from '@/models/User';
 import Role from '@/models/Role';
 import { getErrorMessage } from '@/utils/errors';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
-import CCUModel from '@/models/model';
 
 export default defineComponent({
   name: 'UserView',

@@ -4,9 +4,9 @@ import Organization from '@/pages/organization/Index.vue';
 import Invitations from '@/pages/organization/Invitations.vue';
 // Import Layers from '@/pages/organization/Layers.vue';
 // import OrganizationProfile from '@/pages/organization/Profile.vue';
-// import Users from '@/pages/organization/Users.vue';
-// import UserView from '@/pages/organization/UserView.vue';
-// import Teams from '@/pages/organization/Teams.vue';
+import Users from '@/pages/organization/Users.vue';
+import UserView from '@/pages/organization/UserView.vue';
+// Import Teams from '@/pages/organization/Teams.vue';
 // import TeamDetail from '@/pages/organization/TeamDetail.vue';
 
 const mockComponent = (title: string, content: string) => ({
@@ -34,14 +34,12 @@ export const routes = [
       },
       {
         path: 'users',
-        // Component: Users,
-        component: mockComponent('Users', 'Users'),
+        component: Users,
         name: 'nav.organization_users',
         children: [
           {
             path: ':user_id',
-            // Component: UserView,
-            component: mockComponent('UserView', 'UserView'),
+            component: UserView,
             name: 'nav.organization_users',
             meta: { id: 'user_detail' },
           },
