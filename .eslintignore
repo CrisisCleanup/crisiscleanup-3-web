@@ -6,3 +6,4 @@ node_modules
 **/coverage/**
 coverage
 pnpm-debug.log
+**/auto-imports.d.ts

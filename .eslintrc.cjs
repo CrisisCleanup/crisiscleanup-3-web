@@ -12,6 +12,8 @@ module.exports = {
     'plugin:prettier/recommended',
     // show eslint errors/warnings in the editor
     path.join(__dirname, 'node_modules/xo/config/plugins.cjs'),
+    // for unplugin-auto-import
+    './.eslintrc-auto-import.json',
   ],
   overrides: [],
   // See: https://eslint.vuejs.org/user-guide/#how-to-use-a-custom-parser

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import autoImport from 'unplugin-auto-import/vite';
 import postcssConfig from './postcss.config.cjs';
 
 export default defineConfig(async ({ command }) => {
@@ -13,6 +14,20 @@ export default defineConfig(async ({ command }) => {
       reactivityTransform: true,
     }),
     vueJsx(),
+    // https://github.com/antfu/unplugin-auto-import
+    autoImport({
+      imports: ['vue', 'vue-router', 'vue-i18n', 'vue/macros', '@vueuse/core'],
+      dts: 'src/auto-imports.d.ts',
+      dirs: ['src/stores'],
+      vueTemplate: true,
+      // Generate corresponding .eslintrc-auto-import.json file.
+      // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals
+      eslintrc: {
+        enabled: true,
+        filepath: './.eslintrc-auto-import.json',
+        globalsPropValue: true,
+      },
+    }),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
