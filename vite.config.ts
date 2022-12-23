@@ -6,6 +6,8 @@ import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import autoImport from 'unplugin-auto-import/vite';
+import inspect from 'vite-plugin-inspect';
+import inspector from 'vite-plugin-vue-inspector';
 import postcssConfig from './postcss.config.cjs';
 
 export default defineConfig(async ({ command }) => {
@@ -28,6 +30,12 @@ export default defineConfig(async ({ command }) => {
         globalsPropValue: true,
       },
     }),
+    // https://github.com/antfu/vite-plugin-inspect
+    // Visit http://localhost:3333/__inspect/ to see the inspector
+    inspect(),
+    // https://github.com/webfansplz/vite-plugin-vue-inspector
+    // Press Meta+Shift to see the inspector
+    inspector(),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
