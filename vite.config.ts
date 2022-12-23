@@ -1,5 +1,4 @@
 import { fileURLToPath } from 'node:url';
-import path from 'node:path';
 import { defineConfig } from 'vite';
 import type { UserConfig } from 'vite';
 import _ from 'lodash';
@@ -8,7 +7,6 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcssConfig from './postcss.config.cjs';
 
-// https://vitejs.dev/config/
 export default defineConfig(async ({ command }) => {
   const vitePlugins = [
     vue({
@@ -20,9 +18,6 @@ export default defineConfig(async ({ command }) => {
   const configs: Array<Partial<UserConfig>> = [];
   configs.push(
     {
-      define: {
-        __VUE_PROD_DEVTOOLS__: true,
-      },
       // Css: {
       //   postcss: {
       //     plugins: postcssConfig.plugins,
@@ -34,7 +29,9 @@ export default defineConfig(async ({ command }) => {
       resolve: {
         alias: {
           '@': fileURLToPath(new URL('src', import.meta.url)),
-          'tailwind.config': path.resolve(__dirname, 'tailwind.config.cjs'),
+          'tailwind.config': fileURLToPath(
+            new URL('tailwind.config.cjs', import.meta.url),
+          ),
         },
       },
     },
