@@ -44,6 +44,7 @@ module.exports = {
       },
     ],
     "@typescript-eslint/consistent-type-imports": "warn",
+    'n/file-extension-in-import': 'off',
     'import/extensions': 0,
     'import/no-anonymous-default-export': 0,
     'unicorn/filename-case': 0,
