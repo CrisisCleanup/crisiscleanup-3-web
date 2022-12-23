@@ -11,9 +11,10 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import User from '@/models/User';
-export default {
+
+export default defineComponent({
   name: 'UserSearchInput',
   props: {
     placeholder: {
@@ -22,26 +23,26 @@ export default {
       required: false,
     },
   },
-  data() {
-    return { userResults: [] };
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  methods: {
-    async onUserSearch(value) {
+  setup(props) {
+    const store = useStore();
+    const userResults = ref<unknown[]>([]);
+    // eslint-disable-next-line unicorn/no-array-callback-reference
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+
+    async function onUserSearch(value: string) {
       const results = await User.api().get(
-        `/users?search=${value}&limit=10&&organization=${this.currentUser.organization.id}`,
-        {
-          dataKey: 'results',
-        },
+        `/users?search=${value}&limit=10&&organization=${currentUser.organization.id}`,
+        { dataKey: 'results' },
       );
-      this.userResults = results.entities.users;
-    },
+      userResults.value = results.entities?.users || [];
+    }
+
+    return {
+      userResults,
+      onUserSearch,
+    };
   },
-};
+});
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>
