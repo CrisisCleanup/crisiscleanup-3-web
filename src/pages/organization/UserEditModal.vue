@@ -60,67 +60,61 @@
         <UserRolesSelect :user="user" />
       </div>
     </div>
-    <div slot="footer" class="p-3 flex justify-end">
-      <base-button
-        :text="$t('actions.cancel')"
-        :alt="$t('actions.cancel')"
-        class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
-        :action="
-          () => {
-            $emit('close');
-          }
-        "
-      />
-      <base-button
-        variant="solid"
-        :action="saveUser"
-        :text="$t('actions.save')"
-        :alt="$t('actions.save')"
-        class="ml-2 p-3 px-6 text-xs"
-      />
-    </div>
+    <template #footer>
+      <div class="p-3 flex justify-end">
+        <base-button
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+          class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+          :action="
+            () => {
+              $emit('close');
+            }
+          "
+        />
+        <base-button
+          variant="solid"
+          :action="saveUser"
+          :text="$t('actions.save')"
+          :alt="$t('actions.save')"
+          class="ml-2 p-3 px-6 text-xs"
+        />
+      </div>
+    </template>
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import User from '@/models/User';
-import Role from '@/models/Role';
-import UserRolesSelect from '@/components/UserRolesSelect';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
-export default {
+export default defineComponent({
   name: 'UserEditModal',
   components: { UserRolesSelect },
   props: {
     user: {
       type: Object,
-      default: () => {
-        return {};
-      },
+      required: true,
+      default: () => ({}),
     },
   },
-  methods: {
-    updateUser(value, key) {
-      const { user } = this;
+  setup(props, { emit }) {
+    function updateUser(value: unknown, key: string) {
       User.update({
-        where: user.id,
-        data: {
-          [key]: value,
-        },
+        where: props.user.id,
+        data: { [key]: value },
       });
-    },
-    saveUser() {
-      this.$emit('save');
-    },
+    }
+    function saveUser() {
+      emit('save');
+    }
+
+    return {
+      updateUser,
+      saveUser,
+    };
   },
-  computed: {
-    roles() {
-      return Role.all();
-    },
-    userRoles() {
-      return Role.query().whereIdIn(this.user.roles).get();
-    },
-  },
-};
+});
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>
