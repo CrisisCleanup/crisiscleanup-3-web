@@ -18,7 +18,14 @@ export default defineConfig(async ({ command }) => {
     vueJsx(),
     // https://github.com/antfu/unplugin-auto-import
     autoImport({
-      imports: ['vue', 'vue-router', 'vue-i18n', 'vue/macros', '@vueuse/core'],
+      imports: [
+        'vue',
+        'vue-router',
+        'vue-i18n',
+        'vue/macros',
+        'vuex',
+        '@vueuse/core',
+      ],
       dts: 'src/auto-imports.d.ts',
       dirs: ['src/stores'],
       vueTemplate: true,
