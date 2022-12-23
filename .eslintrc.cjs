@@ -15,7 +15,6 @@ module.exports = {
     // for unplugin-auto-import
     './.eslintrc-auto-import.json',
   ],
-  overrides: [],
   // See: https://eslint.vuejs.org/user-guide/#how-to-use-a-custom-parser
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -53,4 +52,13 @@ module.exports = {
     'unicorn/prevent-abbreviations': 0,
     'unicorn/no-array-reduce': 0,
   },
+  overrides: [
+    {
+      files: ['*.vue'],
+      rules: {
+        'vue/multi-word-component-names': 'warn',
+        'vue/no-reserved-component-names': 'warn',
+      },
+    },
+  ],
 };
