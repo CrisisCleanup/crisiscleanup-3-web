@@ -6,7 +6,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 
 import {
   faSpinner,
@@ -121,30 +120,30 @@ if (AuthService.getUser()) {
 }
 
 const app = createApp(App);
-app.component('font-awesome-icon', FontAwesomeIcon);
-app.component('ccu-icon', BaseIcon);
-app.component('base-button', BaseButton);
-app.component('base-input', BaseInput);
-app.component('base-text', BaseText);
-app.component('base-link', BaseLink);
-app.component('base-radio', BaseRadio);
-app.component('badge', Badge);
-app.component('tag', Tag);
-app.component('tag-input', VueTagsInput);
-app.component('v-select', vSelect);
-app.component('authenticated-layout', Authenticated);
-app.component('unauthenticated-layout', Unauthenticated);
-app.component('form-select', FormSelect);
-app.component('base-select', BaseSelect);
-app.component('base-checkbox', BaseCheckbox);
-app.component('modal', Modal);
-app.component('v-popover', Dropdown);
-app.component('v-menu', Menu);
-app.component('spinner', Spinner);
-app.component('form-tree', FormTree);
-app.component('tabs', Tabs);
-app.component('tab', Tab);
-app.component('datepicker', Datepicker);
+app.component('FontAwesomeIcon', FontAwesomeIcon);
+app.component('CcuIcon', BaseIcon);
+app.component('BaseButton', BaseButton);
+app.component('BaseInput', BaseInput);
+app.component('BaseText', BaseText);
+app.component('BaseLink', BaseLink);
+app.component('BaseRadio', BaseRadio);
+app.component('Badge', Badge);
+app.component('Tag', Tag);
+app.component('TagInput', VueTagsInput);
+app.component('VSelect', vSelect);
+app.component('AuthenticatedLayout', Authenticated);
+app.component('UnauthenticatedLayout', Unauthenticated);
+app.component('FormSelect', FormSelect);
+app.component('BaseSelect', BaseSelect);
+app.component('BaseCheckbox', BaseCheckbox);
+app.component('Modal', Modal);
+app.component('VPopover', Dropdown);
+app.component('VMenu', Menu);
+app.component('Spinner', Spinner);
+app.component('FormTree', FormTree);
+app.component('Tabs', Tabs);
+app.component('Tab', Tab);
+app.component('Datepicker', Datepicker);
 
 app.directive('tooltip', VTooltip);
 

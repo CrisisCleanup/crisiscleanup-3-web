@@ -6,8 +6,8 @@ import AdminDashboard from './AdminDashboard.vue';
 import AdminTicketDashboard from './AdminTicketDashboard.vue';
 // import AdminEvents from '@/pages/admin/AdminEvents.vue';
 // import AdminCosts from '@/pages/admin/AdminCosts.vue';
-// import AdminCms from '@/pages/admin/AdminCms';
-// import AdminIncidentWizard from '@/pages/admin/AdminIncidentWizard';
+import AdminIncidentWizard from './AdminIncidentWizard.vue';
+
 const routes = [
   {
     path: '/admin',
@@ -54,16 +54,16 @@ const routes = [
         name: 'nav.cms',
         component: AdminCms,
       },
-      // {
-      //   path: 'incident_wizard',
-      //   name: 'nav.incident_wizard',
-      //   component: AdminIncidentWizard,
-      // },
-      // {
-      //   path: 'incident_wizard/:incident_id',
-      //   name: 'nav.incident_wizard_detail',
-      //   component: AdminIncidentWizard,
-      // },
+      {
+        path: 'incident_wizard',
+        name: 'nav.incident_wizard',
+        component: AdminIncidentWizard,
+      },
+      {
+        path: 'incident_wizard/:incident_id',
+        name: 'nav.incident_wizard_detail',
+        component: AdminIncidentWizard,
+      },
     ],
   },
 ];

@@ -2,58 +2,36 @@
   <form class="p-4">
     <div class="form-row flex w-full">
       <FloatingInput
+        v-model="currentIncident.name"
         class="mr-2 w-3/4 sm:w-full"
         :placeholder="$t('incidentBuilder.incident_name')"
-        v-model="currentIncident.name"
         required
       />
     </div>
     <div class="form-row flex flex-col sm:flex-row w-full">
       <FloatingInput
-        class="mr-2 w-3/4 sm:w-full"
-        :placeholder="$t('incidentBuilder.incident_short_name')"
         v-model="currentIncident.short_name"
+        class="mr-2 w-1/2"
+        :placeholder="$t('incidentBuilder.incident_short_name')"
         required
       />
-      <form-select
+      <base-select
         v-model="currentIncident.timezone"
         :options="timezoneNames"
-        class="w-3/4 sm:w-44 mt-0.5"
+        class="w-1/2 mt-0.5"
         :placeholder="$t('incidentBuilder.timezone')"
         searchable
-        select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
+        select-classes="bg-white outline-none w-full h-12"
       />
     </div>
     <div class="form-row flex">
-      <vc-date-picker
-        :key="currentIncident.start_at"
+      <datepicker
         v-model="currentIncident.start_at"
-        mode="dateTime"
         :timezone="currentIncident.timezone"
-        :popover="{ placement: 'bottom', visibility: 'click' }"
-      >
-        <template v-slot="{ inputValue, inputEvents }">
-          <input
-            class="
-              h-12
-              p-1
-              border border-crisiscleanup-dark-100
-              bg-white
-              text-sm
-              placeholder-crisiscleanup-dark-200
-              outline-none
-              col-span-2
-              mr-2
-              flex-1
-              text-base
-              px-3
-            "
-            :placeholder="$t('actions.start')"
-            :value="inputValue"
-            v-on="inputEvents"
-          />
-        </template>
-      </vc-date-picker>
+        auto-apply
+        format="yyyy-MM-dd"
+        class="h-12 mr-2"
+      ></datepicker>
       <base-button
         :text="$t('actions.start_now')"
         class="min-w-max px-3"
@@ -66,12 +44,12 @@
       />
     </div>
     <div class="form-row">
-      <form-select
+      <base-select
         v-model="currentIncident.incident_type"
         :options="incidentTypeOptions"
         searchable
         class="bg-white"
-        select-classes="w-3/4 sm:w-full h-12 border border-crisiscleanup-dark-100"
+        select-classes="w-3/4 sm:w-full h-12 outline-none"
         item-key="value"
         label="name_t"
         :placeholder="$t('incidentBuilder.incident_type')"
@@ -109,77 +87,52 @@
           size="small"
           type="trash"
           class="ml-2"
-          @click.native="$emit('onDeleteAniIncident', aniIncident.id)"
+          @click="$emit('onDeleteAniIncident', aniIncident.id)"
         />
       </div>
     </div>
 
     <template v-if="currentAni.use_hotline">
       <div class="form-row flex w-full">
-        <form-select
-          :value="currentAni.anis"
-          :options="aniList"
+        <base-select
           :key="aniList"
+          :model-value="currentAni.anis"
+          :options="aniList"
           searchable
           multiple
           class="bg-white flex-grow mr-2"
           item-key="id"
           label="number"
-          @input="
+          :placeholder="$t('incidentBuilder.phone_numbers')"
+          @update:modelValue="
             (value) => {
               currentAni.anis = [];
               currentAni.anis = [...value];
             }
           "
-          select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
-          :placeholder="$t('incidentBuilder.phone_numbers')"
         />
-        <form-select
+        <base-select
           v-model="currentAni.timezone"
           :options="timezoneNames"
           class="w-44"
           :placeholder="$t('incidentBuilder.timezone')"
           searchable
-          select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
         />
         <ccu-icon
           :alt="$t('incidentBuilder.add_ani')"
           type="active"
           size="medium"
           class="ml-3 min-w-max"
-          @click.native="addNewAni"
+          @click="addNewAni"
         />
       </div>
       <div class="form-row flex">
-        <vc-date-picker
-          :key="currentAni.start_at"
+        <datepicker
           v-model="currentAni.start_at"
-          mode="dateTime"
           :timezone="currentAni.timezone"
-          :popover="{ placement: 'bottom', visibility: 'click' }"
-        >
-          <template v-slot="{ inputValue, inputEvents }">
-            <input
-              class="
-                h-12
-                p-1
-                border border-crisiscleanup-dark-100
-                bg-white
-                text-sm
-                placeholder-crisiscleanup-dark-200
-                outline-none
-                col-span-2
-                mr-2
-                flex-1
-                text-base
-                px-3
-              "
-              :placeholder="$t('actions.start')"
-              :value="inputValue"
-              v-on="inputEvents"
-            />
-          </template>
-        </vc-date-picker>
+          auto-apply
+          format="yyyy-MM-dd"
+        ></datepicker>
         <base-button
           :text="$t('actions.start_now')"
           class="min-w-max px-3"
@@ -192,45 +145,28 @@
         />
       </div>
       <div class="form-row flex">
-        <vc-date-picker
-          :key="currentAni.end_at"
+        <datepicker
           v-model="currentAni.end_at"
-          mode="dateTime"
           :timezone="currentAni.timezone"
-          :popover="{ placement: 'bottom', visibility: 'click' }"
-        >
-          <template v-slot="{ inputValue, inputEvents }">
-            <input
-              class="
-                h-12
-                p-1
-                border border-crisiscleanup-dark-100
-                bg-white
-                text-sm
-                placeholder-crisiscleanup-dark-200
-                outline-none
-                col-span-2
-                mr-2
-                flex-1
-                text-base
-                px-3
-              "
-              :placeholder="$t('actions.end')"
-              :value="inputValue"
-              v-on="inputEvents"
-            />
-          </template>
-        </vc-date-picker>
+          auto-apply
+          format="yyyy-MM-dd"
+        ></datepicker>
       </div>
     </template>
   </form>
 </template>
 <script>
 import { parsePhoneNumber } from 'libphonenumber-js';
-import FloatingInput from '@/components/FloatingInput';
+import axios from 'axios';
+import { onMounted, ref, watch } from 'vue';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import moment from 'moment-timezone';
+import { cloneDeep } from 'lodash';
+import FloatingInput from '@/components/FloatingInput.vue';
 import { formatNationalNumber } from '@/filters';
-import { DialogsMixin } from '@/mixins';
 import { getErrorMessage } from '@/utils/errors';
+import useDialogs from '@/hooks/useDialogs';
 
 const INCIDENT_TYPES = [
   'contaminated_water',
@@ -239,7 +175,6 @@ const INCIDENT_TYPES = [
   'flood',
   'hurricane',
   'flood_tornado_wind',
-  'ice_storm',
   'wind',
   'tornado',
   'mudslide',
@@ -255,29 +190,6 @@ const INCIDENT_TYPES = [
 export default {
   name: 'IncidentForm',
   components: { FloatingInput },
-  mixins: [DialogsMixin],
-  data() {
-    return {
-      currentIncident: {
-        name: '',
-        short_name: '',
-        timezone: '',
-        incident_type: '',
-        is_archived: false,
-        turn_on_release: false,
-        auto_contact: true,
-        start_at: null,
-      },
-      currentAni: {
-        anis: [],
-        start_at: null,
-        end_at: null,
-        timezone: '',
-        use_hotline: false,
-      },
-      aniList: [],
-    };
-  },
   props: {
     incident: {
       type: Object,
@@ -288,91 +200,117 @@ export default {
       default: () => [],
     },
   },
-  async mounted() {
-    if (this.incident) {
-      this.currentIncident = { ...this.incident };
-      if (this.aniIncidents.length > 0) {
-        this.currentAni.use_hotline = true;
-        this.currentAni = { ...this.currentAni };
-      }
-    }
-    const aniResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/ani?limit=200`,
-    );
-    this.aniList = aniResponse.data.results.map((ani) => {
+  setup(props, { emit }) {
+    const { prompt } = useDialogs();
+    const $toasted = useToast();
+    const { t } = useI18n();
+
+    const incidentTypeOptions = INCIDENT_TYPES.map((key) => {
       return {
-        id: ani.id,
-        number: formatNationalNumber(String(ani.ani)),
+        value: key,
+        name_t: t(`incidentTypes.${key}`),
       };
     });
-  },
-  methods: {
-    async addNewAni() {
-      const result = await this.$prompt({
-        title: this.$t('incidentBuilder.add_new_ani'),
-        content: this.$t('incidentBuilder.enter_new_ani'),
+
+    const timezoneNames = moment.tz.names();
+
+    const currentIncident = ref({
+      name: '',
+      short_name: '',
+      timezone: '',
+      incident_type: '',
+      is_archived: false,
+      turn_on_release: false,
+      auto_contact: true,
+      start_at: null,
+    });
+    const currentAni = ref({
+      anis: [],
+      start_at: null,
+      end_at: null,
+      timezone: '',
+      use_hotline: false,
+    });
+    const aniList = ref([]);
+
+    async function addNewAni() {
+      const result = await prompt({
+        title: t('incidentBuilder.add_new_ani'),
+        content: t('incidentBuilder.enter_new_ani'),
       });
 
       if (result) {
         let parsedPhoneNumber;
         try {
           parsedPhoneNumber = parsePhoneNumber(result);
-        } catch (e) {
-          await this.$toasted.error(e.message);
+        } catch (error) {
+          await $toasted.error(error.message);
           return;
         }
         try {
-          const { data } = await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/ani`,
+          const { data } = await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/ani`,
             {
               ani: parsedPhoneNumber.nationalNumber,
               area_code: parsedPhoneNumber.nationalNumber.slice(0, 3),
             },
           );
 
-          this.aniList = [
+          aniList.value = [
             {
               id: data.id,
               number: formatNationalNumber(String(data.ani)),
             },
-            ...this.aniList,
+            ...aniList.value,
           ];
-          this.currentAni.anis = [data.id, ...this.currentAni.anis];
+          currentAni.value.anis = [data.id, ...currentAni.value.anis];
         } catch (error) {
-          await this.$toasted.error(getErrorMessage(error));
+          await $toasted.error(getErrorMessage(error));
         }
       }
-    },
-  },
-  watch: {
-    currentIncident: {
-      handler(value) {
-        this.$emit('onIncidentChange', value);
+    }
+
+    watch(
+      () => cloneDeep(currentIncident.value),
+      (value) => {
+        emit('onIncidentChange', value);
       },
-      deep: true,
-      immediate: true,
-    },
-    currentAni: {
-      handler(value) {
-        this.$emit('onAniChange', value);
+    );
+
+    watch(
+      () => cloneDeep(currentAni.value),
+      (value) => {
+        emit('onAniChange', value);
       },
-      deep: true,
-      immediate: true,
-    },
-  },
-  computed: {
-    timezoneNames() {
-      const moment = require('moment-timezone');
-      return moment.tz.names();
-    },
-    incidentTypeOptions() {
-      return INCIDENT_TYPES.map((key) => {
+    );
+
+    onMounted(async () => {
+      if (props.incident) {
+        currentIncident.value = { ...props.incident };
+        if (props.aniIncidents.length > 0) {
+          currentAni.value.use_hotline = true;
+          currentAni.value = { ...currentAni.value };
+        }
+      }
+      const aniResponse = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/ani?limit=200`,
+      );
+      aniList.value = aniResponse.data.results.map((ani) => {
         return {
-          value: key,
-          name_t: this.$t(`incidentTypes.${key}`),
+          id: ani.id,
+          number: formatNationalNumber(String(ani.ani)),
         };
       });
-    },
+    });
+
+    return {
+      currentIncident,
+      currentAni,
+      aniList,
+      addNewAni,
+      incidentTypeOptions,
+      timezoneNames,
+    };
   },
 };
 </script>

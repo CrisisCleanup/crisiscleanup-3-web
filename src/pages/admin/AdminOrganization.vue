@@ -715,7 +715,6 @@ export default {
     DragDrop,
     CapabilityGrid,
     GroupSearchInput,
-    LocationTool,
   },
   setup() {
     const { t } = useI18n();

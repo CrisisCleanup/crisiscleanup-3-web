@@ -20,14 +20,7 @@
             <div class="flex">
               <div v-if="!logoUrl">
                 <DragDrop
-                  class="
-                    w-full
-                    sm:w-84
-                    h-16
-                    text-center
-                    mr-6
-                    border border-dashed
-                  "
+                  class="w-full sm:w-84 h-16 text-center mr-6 border border-dashed"
                   container-class="flex-row items-center justify-center"
                   :choose-title="$t('profileOrg.upload_org_logo')"
                   :drag-title="$t('profileOrg.logo_specs')"
@@ -134,12 +127,7 @@
             <form-select
               :placeholder="$t('profileOrg.organization_type')"
               select-classes="h-12"
-              class="
-                w-full
-                sm:w-84
-                flex-grow
-                border border-crisiscleanup-dark-100
-              "
+              class="w-full sm:w-84 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
               item-key="key"
@@ -174,7 +162,7 @@
               class="py-1"
             >
               <template v-for="contact in organization.primary_contacts">
-                <span class="inline-block" :key="contact.id">
+                <span :key="contact.id" class="inline-block">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
                 <div :key="contact.email">
@@ -188,8 +176,8 @@
                 </div>
                 <div :key="`phone:${contact.id}`">
                   <a
-                    :href="`tel:${contact.mobile}`"
                     v-show="contact.mobile"
+                    :href="`tel:${contact.mobile}`"
                     :title="contact.mobile"
                     :alt="contact.mobile"
                   >
@@ -212,9 +200,9 @@
             </div>
 
             <UserSearchInput
+              :key="JSON.stringify(organization.primary_contacts)"
               class="h-12 w-full sm:w-84"
               :placeholder="$t('profileOrg.add_primary_contacts')"
-              :key="JSON.stringify(organization.primary_contacts)"
               @selectedUser="
                 (user) => {
                   makePrimaryContact(user);
@@ -287,9 +275,9 @@
           }}</base-text>
         </template>
         <Capability
+          :key="JSON.stringify(organizationCapabilities)"
           class="px-5 py-3"
           :organization-capabilities="organizationCapabilities"
-          :key="JSON.stringify(organizationCapabilities)"
           @updated="
             (matrix) => {
               updatedOrganizationCapabilitiesMatrix = matrix;
@@ -452,15 +440,7 @@
     </div>
     <div class="w-full bg-white shadow mt-6 mb-32">
       <div
-        class="
-          border-b
-          px-4
-          py-2
-          font-semibold
-          flex
-          justify-between
-          items-center
-        "
+        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
         {{ $t('profileOrg.custom_materials') }}
         <base-button
@@ -477,23 +457,14 @@
         </div>
         <textarea
           :value="currentOrganization.custom_ops_message"
+          :placeholder="$t('profileOrg.add_work_order_instructions')"
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
             (event) => {
               updateOrganization(event.target.value, 'custom_ops_message');
             }
-          "
-          :placeholder="$t('profileOrg.add_work_order_instructions')"
-          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
-          rows="4"
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-1
-            resize-none
-            w-full
-            sm:w-72
           "
         />
       </div>
@@ -553,23 +524,14 @@
         </DragDrop>
         <textarea
           :value="currentOrganization.custom_legal_tos"
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
+          :placeholder="$t('profileOrg.add_tos_text')"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
             (event) => {
               updateOrganization(event.target.value, 'custom_legal_tos');
             }
-          "
-          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
-          :placeholder="$t('profileOrg.add_tos_text')"
-          rows="4"
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-1
-            resize-none
-            w-full
-            sm:w-72
           "
         />
       </div>
@@ -629,6 +591,10 @@
         </DragDrop>
         <textarea
           :value="currentOrganization.custom_legal_survivor_waiver"
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
+          :placeholder="$t('profileOrg.add_survivor_waiver_text')"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
             (event) => {
               updateOrganization(
@@ -636,19 +602,6 @@
                 'custom_legal_survivor_waiver',
               );
             }
-          "
-          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
-          :placeholder="$t('profileOrg.add_survivor_waiver_text')"
-          rows="4"
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-1
-            resize-none
-            w-full
-            sm:w-72
           "
         />
       </div>
@@ -658,6 +611,9 @@
 
 <script>
 import * as L from 'leaflet';
+import DragDrop from '../../components/DragDrop.vue';
+import LocationTool from '../../components/LocationTool';
+import { mapTileLayer } from '../../utils/map';
 import Organization from '@/models/Organization';
 import Role from '@/models/Role';
 import UserRole from '@/models/UserRole';
@@ -668,13 +624,10 @@ import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
 import LocationType from '@/models/LocationType';
 import { ValidateMixin, CapabilityMixin } from '@/mixins';
-import FloatingInput from '@/components/FloatingInput';
+import FloatingInput from '@/components/FloatingInput.vue';
 import Card from '@/components/cards/Card';
 import Capability from '@/pages/unauthenticated/Capability';
 import RequestRedeploy from '@/components/RequestRedeploy';
-import DragDrop from '../../components/DragDrop';
-import LocationTool from '../../components/LocationTool';
-import { mapTileLayer } from '../../utils/map';
 
 export default {
   name: 'Profile',
@@ -750,18 +703,18 @@ export default {
       return [];
     },
     logoUrl() {
-      if (this.currentOrganization.files.length) {
+      if (this.currentOrganization.files.length > 0) {
         const logos = this.currentOrganization.files.filter(
           (file) => file.file_type_t === 'fileTypes.logo',
         );
-        if (logos.length) {
+        if (logos.length > 0) {
           return logos[0].small_thumbnail_url;
         }
       }
       return '';
     },
     termsOfService() {
-      if (this.currentOrganization.files.length) {
+      if (this.currentOrganization.files.length > 0) {
         return this.currentOrganization.files.find(
           (file) => file.file_type_t === 'fileTypes.terms_of_service',
         );
@@ -769,7 +722,7 @@ export default {
       return null;
     },
     liabilityWaiver() {
-      if (this.currentOrganization.files.length) {
+      if (this.currentOrganization.files.length > 0) {
         return this.currentOrganization.files.find(
           (file) => file.file_type_t === 'fileTypes.liability_waiver',
         );
@@ -780,10 +733,10 @@ export default {
   async mounted() {
     this.primaryLocationMap = L.map('primary-location', {
       zoomControl: false,
-    }).setView([35.7465122599185, -96.41150963125656], 3);
+    }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 3);
     this.secondaryLocationMap = L.map('secondary-location', {
       zoomControl: false,
-    }).setView([35.7465122599185, -96.41150963125656], 3);
+    }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 3);
     this.createTileLayer().addTo(this.primaryLocationMap);
     this.createTileLayer().addTo(this.secondaryLocationMap);
     await this.reloadMaps();
@@ -895,12 +848,23 @@ export default {
         geometry = feature.geometry;
       }
 
-      if (geometry.type === 'Point') {
-        location.point = geometry;
-      } else if (geometry.type === 'Polygon') {
-        location.poly = geometry;
-      } else if (geometry.type === 'MultiPolygon') {
-        location.geom = geometry;
+      switch (geometry.type) {
+        case 'Point': {
+          location.point = geometry;
+
+          break;
+        }
+        case 'Polygon': {
+          location.poly = geometry;
+
+          break;
+        }
+        case 'MultiPolygon': {
+          location.geom = geometry;
+
+          break;
+        }
+        // No default
       }
 
       try {
@@ -916,8 +880,8 @@ export default {
         );
         await this.reloadMaps();
         this.settingLocation = '';
-      } catch (e) {
-        this.$log.error(e);
+      } catch (error) {
+        this.$log.error(error);
       } finally {
         this.loading = false;
       }

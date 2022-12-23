@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { computed, inject, onBeforeMount, ref, watch } from 'vue';
+
 export default {
   name: 'Step',
   props: {
@@ -12,29 +14,29 @@ export default {
     disabled: { type: Boolean, default: false },
   },
 
-  data() {
-    return {
-      isActive: false,
-      isCompleted: false,
-    };
-  },
+  setup(props) {
+    const index = ref(0);
+    const isActive = ref(false);
 
-  watch: {
-    selected: {
-      handler() {
-        this.isActive = this.selected;
+    const href = computed(() => {
+      return `#${props.name.toLowerCase().replace(/ /g, '-')}`;
+    });
+
+    const steps = inject('StepsProvider');
+
+    watch(
+      () => steps.selectedIndex,
+      () => {
+        isActive.value = index.value === steps.selectedIndex;
       },
-    },
-  },
+    );
 
-  computed: {
-    href() {
-      return `#${this.name.toLowerCase().replace(/ /g, '-')}`;
-    },
-  },
-
-  mounted() {
-    this.isActive = this.selected;
+    onBeforeMount(() => {
+      index.value = steps.count;
+      steps.count++;
+      isActive.value = index.value === steps.selectedIndex;
+    });
+    return { index, isActive, href };
   },
 };
 </script>

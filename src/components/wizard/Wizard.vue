@@ -4,30 +4,21 @@
       <div class="flex items-center h-full justify-evenly bg-white">
         <div
           v-for="(step, index) in steps"
-          :key="step.name"
+          :key="step.props.name"
           :class="{
-            'is-active': step.isActive,
-            disabled: step.disabled,
+            'is-active': index === selectedIndex,
+            disabled: step.props.disabled,
             [stepClasses]: true,
-            [stepActiveClasses]: step.isActive,
+            [stepActiveClasses]: index === selectedIndex,
             [stepDefaultClasses]: true,
           }"
           class="cursor-pointer flex items-center"
-          @click="goToStep(step, index)"
+          @click="goToStep(index)"
         >
           <div
-            class="
-              mr-1
-              w-5
-              h-5
-              bg-primary-light
-              text-black text-xs
-              px-1.5
-              pt-1
-              rounded-full
-            "
+            class="mr-1 w-5 h-5 bg-primary-light text-black text-xs px-1.5 pt-1 rounded-full"
           >
-            <div v-if="step.isCompleted">
+            <div v-if="completedSteps.has(selectedIndex)">
               <ccu-icon
                 :alt="$t('incidentBuilder.completed')"
                 type="completed"
@@ -36,7 +27,7 @@
             </div>
             <div v-else>{{ index + 1 }}</div>
           </div>
-          <div>{{ step.name }}</div>
+          <div>{{ step.props.name }}</div>
           <hr
             v-if="index + 1 !== steps.length"
             class="w-12 ml-12 border-t-4 border-dotted"
@@ -49,7 +40,9 @@
       <div v-show="!loading">
         <slot></slot>
       </div>
-      <Loader v-if="loading" :loading="true" class="h-full" />
+      <div v-if="loading" class="flex h-full items-center justify-center">
+        <font-awesome-icon size="xl" icon="spinner" spin />
+      </div>
     </div>
 
     <div class="p-6 h-12 bg-white flex items-center justify-between">
@@ -65,20 +58,33 @@
         :text="isLast ? $t('Done') : $t('actions.save_next')"
         :alt="isLast ? $t('Done') : $t('actions.save_next')"
         variant="solid"
-        class="p-2 w-24"
+        class="p-2"
         :action="nextStep"
       />
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import type { VNode } from 'vue';
+import {
+  computed,
+  onBeforeMount,
+  onMounted,
+  provide,
+  reactive,
+  toRefs,
+} from 'vue';
+import { useToast } from 'vue-toastification';
 import { getErrorMessage } from '@/utils/errors';
-import Loader from '@/components/Loader';
 
+interface StepProps {
+  name: string;
+  disabled: boolean;
+  onSave: Function;
+}
 export default {
   name: 'Wizard',
-  components: { Loader },
   props: {
     stepDefaultClasses: {
       type: String,
@@ -101,74 +107,96 @@ export default {
       default: false,
     },
   },
-  data() {
-    return { steps: [] };
-  },
 
-  mounted() {
-    this.steps = [...this.$children].filter(
-      (child) => child.$options._componentTag === 'Step',
-    );
-    this.steps[0].isActive = true;
-    this.$emit('mounted', this);
-  },
-  computed: {
-    isFirst() {
-      if (this.steps.length > 0) {
-        return this.steps[0].isActive === true;
+  setup(_, { slots, emit }) {
+    const $toasted = useToast();
+
+    const state = reactive({
+      selectedIndex: 0,
+      steps: [] as VNode<StepProps>[],
+      count: 0,
+      completedSteps: new Set(),
+    });
+
+    provide('StepsProvider', state);
+
+    const selectStep = (i: number) => {
+      state.selectedIndex = i;
+      emit('stepSelected', state.steps[i].props.name);
+    };
+
+    function goToStep(index: number) {
+      if (state.selectedIndex >= index || state.completedSteps.has(index)) {
+        selectStep(index);
+      }
+    }
+
+    onBeforeMount(() => {
+      if (slots.default) {
+        state.steps = slots
+          .default()
+          .filter((child: any) => child.type.name === 'Step');
+      }
+    });
+
+    onMounted(() => {
+      selectStep(0);
+      emit('mounted', this);
+    });
+
+    const isFirst = computed(() => {
+      if (state.steps.length > 0) {
+        return state.selectedIndex === 0;
       }
       return false;
-    },
-    isLast() {
-      if (this.steps.length > 0) {
-        return this.steps[this.steps.length - 1].isActive === true;
+    });
+
+    const isLast = computed(() => {
+      if (state.steps.length > 0) {
+        return state.selectedIndex === state.steps.length - 1;
       }
       return false;
-    },
-    currentStepIndex() {
-      return this.steps.findIndex((step) => step.isActive);
-    },
-    currentStep() {
-      return this.steps[this.currentStepIndex];
-    },
-  },
-  methods: {
-    selectStep(selectedStep) {
-      if (selectedStep.disabled) {
-        return;
-      }
-      this.steps.forEach((step) => {
-        step.isActive = step.name === selectedStep.name;
-      });
-      this.$emit('stepSelected', selectedStep.name);
-    },
-    async nextStep() {
+    });
+
+    const currentStep = computed(() => {
+      return state.steps[state.selectedIndex];
+    });
+
+    async function nextStep() {
       try {
-        await this.currentStep.onSave();
+        const onSave = currentStep?.value?.props['on-save'];
+        if (onSave) {
+          await onSave();
+        }
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
         return;
       }
-      this.currentStep.isCompleted = true;
-      for (let i = 0; i < this.steps.length; i++) {
-        if (this.steps[i].isActive === true) {
-          this.selectStep(this.steps[i + 1]);
+      state.completedSteps.add(state.selectedIndex);
+      for (let i = 0; i < state.steps.length; i++) {
+        if (i === state.selectedIndex) {
+          selectStep(i + 1);
           break;
         }
       }
-    },
-    async previousStep() {
-      for (let i = 0; i < this.steps.length; i++) {
-        if (this.steps[i].isActive === true) {
-          this.selectStep(this.steps[i - 1]);
+    }
+    async function previousStep() {
+      for (let i = 0; i < state.steps.length; i++) {
+        if (i === state.selectedIndex) {
+          selectStep(i - 1);
         }
       }
-    },
-    goToStep(step, index) {
-      if (this.currentStepIndex >= index || this.steps[index - 1].isCompleted) {
-        this.selectStep(step);
-      }
-    },
+    }
+
+    return {
+      ...toRefs(state),
+      goToStep,
+      isFirst,
+      isLast,
+      currentStep,
+      nextStep,
+      previousStep,
+    };
   },
 };
 </script>

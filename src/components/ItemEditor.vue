@@ -1,13 +1,13 @@
 <template>
   <div class="p-4 h-108 overflow-auto">
-    <template v-for="prop in Object.keys(currentObject)">
-      <div :key="prop">
+    <template v-for="prop in Object.keys(currentObject)" :key="prop">
+      <div>
         <div>{{ prop }}</div>
         <pre
           contenteditable="true"
           class="my-editor"
           @input="({ target }) => updateProperty(prop, target.innerHTML)"
-          v-html="beautify(JSON.stringify(currentObject[prop]))"
+          v-html="prettyFormat(JSON.stringify(currentObject[prop]))"
         ></pre>
       </div>
     </template>
@@ -15,66 +15,72 @@
 </template>
 
 <script>
-const beautify = require('js-beautify').js; // import the styles somewhere
+import { format as prettyFormat } from 'pretty-format';
+import { onMounted, ref } from 'vue';
 
 export default {
   name: 'ItemEditor',
-  mounted() {
-    this.currentObject = this.mergeObjects(this.item, this.initialObject);
-    Object.keys(this.currentObject).forEach((key) => {
-      this.updateProperty(key, this.currentObject[key]);
-    });
-    delete this.currentObject.children;
-  },
   props: {
     item: {
       type: Object,
       default: () => ({}),
     },
   },
-  data() {
-    return {
-      beautify,
-      currentObject: {},
-      initialObject: {
-        values: null,
-        is_required: false,
-        is_read_only: false,
-        list_order: 0,
-        field_key: '',
-        field_parent_key: null,
-        if_selected_then_work_type: null,
-        phase: 4,
-      },
-    };
-  },
-  methods: {
-    mergeObjects(obj1, obj2) {
+  setup(props, { emit }) {
+    const currentObject = ref({});
+    const initialObject = ref({
+      values: null,
+      is_required: false,
+      is_read_only: false,
+      list_order: 0,
+      field_key: '',
+      field_parent_key: null,
+      if_selected_then_work_type: null,
+      phase: 4,
+    });
+
+    function mergeObjects(object1, object2) {
       const common = (a, b) => {
         const result = {};
 
-        Object.keys(b).forEach((key) => {
+        for (const key of Object.keys(b)) {
           result[key] = a[key] ?? b[key];
-        });
+        }
 
         return result;
       };
 
-      return common(obj1, obj2);
-    },
-    updateProperty(prop, value) {
+      return common(object1, object2);
+    }
+    function updateProperty(prop, value) {
       try {
-        this.currentObject[prop] = JSON.parse(value);
-        this.$emit('update', {
-          field_key: this.item.field_key,
+        currentObject.value[prop] = JSON.parse(value);
+        emit('update', {
+          field_key: props.item.field_key,
           prop,
           value: JSON.parse(value),
         });
-      } catch (e) {
-        const currentValue = this.currentObject[prop];
-        this.currentObject[prop] = currentValue;
+      } catch {
+        const currentValue = currentObject.value[prop];
+        currentObject.value[prop] = currentValue;
       }
-    },
+    }
+
+    onMounted(() => {
+      currentObject.value = mergeObjects(props.item, initialObject.value);
+      for (const key of Object.keys(currentObject.value)) {
+        updateProperty(key, currentObject.value[key]);
+      }
+      delete currentObject.value.children;
+    });
+
+    return {
+      prettyFormat,
+      currentObject,
+      initialObject,
+      mergeObjects,
+      updateProperty,
+    };
   },
 };
 </script>

@@ -10,20 +10,20 @@
         :delay="0"
         :searchable="true"
         value-prop="id"
+        :options="onLocationSearch"
         @update:modelValue="
           (value) => {
             onLocationSelected(value);
           }
         "
-        :options="onLocationSearch"
       >
-        <template v-slot:option="{ option }">
+        <template #option="{ option }">
           <div
             class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
           >
             <span>{{ option.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{
-              option.location_type.name_t
+              option.location_type && option.location_type.name_t
             }}</span>
           </div>
         </template>
@@ -56,13 +56,13 @@
             icon="map-undo"
             :disabled="!canUndo"
             :title="$t('actions.undo')"
+            ccu-event="user_ui-draw-undo"
             @click="
               () => {
                 undo();
                 applyCurrentLayer();
               }
             "
-            ccu-event="user_ui-draw-undo"
           />
           <MapButton
             button-class="border bg-white"
@@ -163,7 +163,7 @@
               "
             />
           </div>
-          <div class="text-center" v-if="currentLayerUpload">
+          <div v-if="currentLayerUpload" class="text-center">
             {{ $t('Selected Location:') }} {{ currentLayerUpload[0].name }}
           </div>
           <div slot="footer" class="p-3 flex items-center justify-center">
@@ -700,6 +700,9 @@ export default {
     });
 
     onMounted(async () => {
+      LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      });
       mapUtils = useWorksiteMap(
         [],
         [],
