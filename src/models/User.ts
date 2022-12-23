@@ -3,6 +3,7 @@ import Bowser from 'bowser';
 import * as Sentry from '@sentry/browser';
 import { useRouter } from 'vue-router';
 import { Model } from '@vuex-orm/core';
+import type { Config } from '@vuex-orm/plugin-axios';
 import { AuthService } from '../services/auth.service';
 import Language from './Language';
 import Role from './Role';
@@ -173,7 +174,7 @@ export default class User extends Model {
     return null;
   }
 
-  static apiConfig = {
+  static apiConfig: Config = {
     actions: {
       login(email: string, password: string) {
         return this.post(
@@ -346,6 +347,6 @@ export default class User extends Model {
           accepted_terms_timestamp: moment().toISOString(),
         });
       },
-    } as any,
+    },
   };
 }
