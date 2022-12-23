@@ -3,68 +3,71 @@
     :key="user.id"
     class="w-64 border border-crisiscleanup-dark-100"
     :value="selectedRoles"
-    @changed="requestUserRole"
     multiple
     :options="roles"
     item-key="id"
     label="name_t"
     size="large"
     select-classes="bg-white border text-xs role-select p-1"
+    @changed="requestUserRole"
   >
     <template #selected-option="{ option }">
       {{ getRoleText(option) }}
     </template>
   </form-select>
 </template>
-<script>
-import VueTypes from 'vue-types';
-import { mapMutations } from 'vuex';
+
+<script lang="ts">
+import type { PropType } from 'vue';
+import type { Collection } from '@vuex-orm/core';
 import Role from '@/models/Role';
 import UserRole from '@/models/UserRole';
 import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'UserRolesSelect',
-  data() {
-    return {
-      userRoles: [],
-    };
+  props: {
+    user: {
+      type: Object as PropType<User>,
+      required: true,
+    },
   },
-  async mounted() {
-    this.userRoles = await this.getUserRoles();
-  },
-  computed: {
-    roles() {
+  setup(props) {
+    const { t } = useI18n();
+    const router = useRouter();
+    const mutations = mapMutations('auth', ['setAcl']);
+    const userRoles = ref<Collection<UserRole>>([]);
+
+    const roles = computed(() => {
       return Role.all();
-    },
-    selectedRoles() {
-      return this.userRoles.map((userRole) => userRole.role);
-    },
-  },
-  methods: {
-    ...mapMutations('auth', ['setAcl']),
-    async getUserRoles() {
+    });
+    const selectedRoles = computed(() => {
+      return userRoles.value.map((userRole) => userRole.role);
+    });
+
+    onMounted(async () => {
+      userRoles.value = await getUserRoles();
+    });
+
+    async function getUserRoles() {
       const results = await UserRole.api().get(
-        `/user_roles?user=${this.user.id}`,
-        {
-          dataKey: 'results',
-        },
+        `/user_roles?user=${props.user.id}`,
+        { dataKey: 'results' },
       );
-      const { user_roles } = results.entities;
-      return user_roles || [];
-    },
-    getRoleText(option) {
+      return (results.entities?.user_roles || []) as Collection<UserRole>;
+    }
+    function getRoleText(option: Role) {
       let text = option.name_t;
-      const currentUserRole = this.userRoles.find(
-        (ur) => ur.user_role === option.id,
+      const currentUserRole = userRoles.value.find(
+        (ur: UserRole) => ur.user_role === option.id,
       );
       if (currentUserRole && !currentUserRole.isApproved) {
-        text = `${text} (${this.$t('userRolesSelect.pending')})`;
+        text = `${text} (${t('userRolesSelect.pending')})`;
       }
       return text;
-    },
-    async requestUserRole(role) {
-      const currentUserRole = this.userRoles.find(
+    }
+    async function requestUserRole(role: unknown[]) {
+      const currentUserRole = userRoles.value.find(
         (ur) => ur.user_role === role[0],
       );
       if (currentUserRole) {
@@ -73,17 +76,25 @@ export default {
       } else {
         await UserRole.api().post(`/user_roles`, {
           user_role: role[0],
-          user: this.user.id,
+          user: props.user.id,
         });
       }
 
-      this.userRoles = await this.getUserRoles();
+      userRoles.value = await getUserRoles();
       await User.api().get('/users/me', {});
-      this.setAcl(this.$router);
-    },
+      mutations.setAcl(router);
+    }
+
+    return {
+      userRoles,
+      roles,
+      selectedRoles,
+      getUserRoles,
+      getRoleText,
+      requestUserRole,
+    };
   },
-  props: {
-    user: VueTypes.object.required,
-  },
-};
+});
 </script>
+
+<style lang="postcss" scoped></style>
