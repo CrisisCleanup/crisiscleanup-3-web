@@ -1,14 +1,40 @@
-# editorconfig.org
-
 root = true
 
 [*]
 charset = utf-8
 end_of_line = lf
-insert_final_newline = true
+indent_size = 4
 indent_style = space
-indent_size = 2
+insert_final_newline = true
+max_line_length = 120
+tab_width = 4
 trim_trailing_whitespace = true
 
-[*.md]
-trim_trailing_whitespace = false
+[*.scss]
+indent_size = 2
+
+[*.vue]
+indent_size = 2
+tab_width = 2
+
+[{*.ats,*.cts,*.mts,*.sample,*.ts}]
+indent_size = 2
+tab_width = 2
+
+[{*.bash,*.sh,*.zsh}]
+indent_size = 2
+tab_width = 2
+
+[{*.cjs,*.js}]
+indent_size = 2
+tab_width = 2
+
+[{*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,jest.config}]
+indent_size = 2
+
+[{*.htm,*.html,*.ng,*.sht,*.shtm,*.shtml}]
+indent_size = 2
+tab_width = 2
+
+[{*.yaml,*.yml}]
+indent_size = 2
