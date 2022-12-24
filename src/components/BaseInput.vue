@@ -17,14 +17,13 @@
       :hidden="hidden"
       :pattern="pattern"
       :autocomplete="autocomplete"
-      :readonly="readonly"
+      :rows="rows"
       @input="update"
       @change="change"
       @blur="$emit('blur', $event)"
       @focus="$emit('focus', $event)"
       @keyup.enter="$emit('enter')"
       @invalid="isInvalid = true"
-      :rows="rows"
     />
     <div
       v-if="breakGlass && !glassBroken && !hidden"
@@ -231,7 +230,7 @@ export default defineComponent({
       large: props.size === 'large',
       medium: props.size === 'medium',
       small: props.size === 'small',
-      base: !props.size,
+      base: props.size === 0,
       'has-icon': Boolean(props.icon),
       'has-tooltip': Boolean(props.tooltip),
       invalid: Boolean(isInvalid.value),

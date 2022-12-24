@@ -93,6 +93,7 @@ import Header from '../components/header/Header.vue';
 import CompletedTransferModal from '../components/modals/CompletedTransferModal.vue';
 import { AuthService } from '../services/auth.service';
 import LoginForm from '../components/LoginForm.vue';
+import useSetupLanguage from '@/hooks/useSetupLanguage';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -238,41 +239,7 @@ export default {
       ).matches;
     };
 
-    const setupLanguage = async () => {
-      let currentLanguage = detectBrowserLanguage();
-      if (
-        currentUser?.value?.primary_language ||
-        currentUser?.value?.secondary_language
-      ) {
-        const userLanguage =
-          Language.find(currentUser?.value?.primary_language) ||
-          Language.find(currentUser?.value?.secondary_language);
-
-        if (userLanguage) {
-          currentLanguage = userLanguage.subtag;
-        }
-      }
-
-      store.commit('locale/setLanguage', currentLanguage);
-      if (currentLanguage !== locale.value) {
-        try {
-          const data = await i18nService.getLanguage(currentLanguage);
-          const { translations } = data;
-          if (size(translations) > 0) {
-            setLocaleMessage(currentLanguage, translations);
-            locale.value = currentLanguage;
-            axios.defaults.headers.common['Accept-Language'] = currentLanguage;
-            const htmlHtmlElement = document.querySelector('html');
-            if (htmlHtmlElement) {
-              htmlHtmlElement.setAttribute('lang', currentLanguage);
-            }
-          }
-        } catch {
-          // $log.error(e);
-        }
-      }
-      moment.locale(currentLanguage.split('-')[0]);
-    };
+    const { setupLanguage } = useSetupLanguage(currentUser.value);
 
     const acceptTermsAndConditions = async () => {
       await User.api().acceptTerms();

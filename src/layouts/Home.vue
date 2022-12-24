@@ -1,6 +1,9 @@
 <template>
   <div class="home-grid">
-    <div class="side m-8 flex flex-col justify-between">
+    <div
+      :key="Object.keys(messages)"
+      class="side m-8 flex flex-col justify-between"
+    >
       <div class="grid--logo logo w-48">
         <a href="/">
           <img src="../assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
@@ -25,7 +28,24 @@
           </router-link>
         </span>
       </div>
-      <div></div>
+      <div>
+        <div class="grid--actions mb-4">
+          <base-text
+            font="display"
+            variant="h2"
+            :weight="300"
+            class="text-crisiscleanup-dark-500"
+            >{{ $t('publicNav.relief_orgs_only') }}</base-text
+          >
+          <base-button
+            variant="solid"
+            size="large"
+            :action="() => $router.push('/register')"
+          >
+            {{ $t('actions.register') }}
+          </base-button>
+        </div>
+      </div>
     </div>
     <div class="top"></div>
     <div class="main">
@@ -36,58 +56,65 @@
 </template>
 
 <script>
-import { reactive } from "vue";
-import { useI18n } from "vue-i18n";
+import { onBeforeMount, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
+import useSetupLanguage from '@/hooks/useSetupLanguage';
 
 export default {
-  name: "Home",
+  name: 'Home',
   setup() {
-    const { t } = useI18n();
+    const { t, messages } = useI18n();
+    const { setupLanguage } = useSetupLanguage();
+
+    onBeforeMount(async () => {
+      await setupLanguage();
+    });
 
     const defaultRoutes = [
       {
-        key: "home",
-        route: "/login",
+        key: 'home',
+        route: '/login',
       },
       {
-        key: "aboutUs",
-        route: "/about",
+        key: 'aboutUs',
+        route: '/about',
       },
       {
-        key: "blog",
-        route: "http://blog.crisiscleanup.org",
+        key: 'blog',
+        route: 'http://blog.crisiscleanup.org',
         external: true,
       },
       {
-        key: "map",
-        route: "/map",
+        key: 'map',
+        route: '/map',
       },
       {
-        key: "training",
-        route: "/training",
+        key: 'training',
+        route: '/training',
       },
       {
-        key: "survivor",
-        route: "/survivor",
+        key: 'survivor',
+        route: '/survivor',
       },
       {
-        key: "contact",
-        route: "https://crisiscleanup.zendesk.com/hc/en-us/requests/new",
+        key: 'contact',
+        route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
         external: true,
       },
     ];
     const lang = reactive({
-      home: t("publicNav.home"),
-      aboutUs: t("publicNav.about_us"),
-      blog: t("publicNav.blog"),
-      map: t("publicNav.map"),
-      training: t("publicNav.training"),
-      survivor: t("publicNav.survivor"),
-      contact: t("publicNav.contact"),
+      home: t('publicNav.home'),
+      aboutUs: t('publicNav.about_us'),
+      blog: t('publicNav.blog'),
+      map: t('publicNav.map'),
+      training: t('publicNav.training'),
+      survivor: t('publicNav.survivor'),
+      contact: t('publicNav.contact'),
     });
     return {
       routes: defaultRoutes,
       lang,
+      messages,
     };
   },
 };
@@ -119,10 +146,10 @@ export default {
   /*grid-auto-rows: 1fr;*/
   /*grid-auto-flow: row;*/
   grid-template-areas:
-    "side top top"
-    "side main main"
-    "side main main"
-    "side bottom bottom";
+    'side top top'
+    'side main main'
+    'side main main'
+    'side bottom bottom';
   padding-bottom: env(safe-area-inset-bottom);
 }
 </style>

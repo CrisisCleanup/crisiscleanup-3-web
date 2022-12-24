@@ -7,7 +7,7 @@ const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default (map, markers, visibleMarkerIds) => {
   const textureMap = {};
-  let workTypes = {};
+  let workTypes: Record<string, any> = {};
   let points = [];
   let kdBushIndex: KDBush = null;
 
@@ -17,7 +17,7 @@ export default (map, markers, visibleMarkerIds) => {
         const markerTemplate = templates.circle;
         let sprite = new Sprite() as any;
 
-        const workType = marker.key_work_type;
+        const workType = marker.key_work_type || marker.work_types[0];
         const colorsKey = `${workType.status}_${
           workType.claimed_by ? 'claimed' : 'unclaimed'
         }`;
@@ -87,6 +87,8 @@ export default (map, markers, visibleMarkerIds) => {
         y: Number.parseFloat(marker.location.coordinates[0]),
         id: marker.id,
         case_number: marker.case_number,
+        address: marker.address,
+        work_types: marker.work_types,
       };
     });
 

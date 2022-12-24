@@ -1,9 +1,9 @@
 <template>
   <div>
     <div
+      v-if="showingLegend"
       style="z-index: 1001"
       class="legend absolute legend-landscape bottom-0 w-72 bg-white border-2 p-2"
-      v-if="showingLegend"
     >
       <div class="flex items-center justify-between">
         <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
@@ -56,9 +56,9 @@
       </div>
     </div>
     <div
+      v-else
       style="z-index: 1001"
       class="legend absolute legend-landscape bottom-0 w-16 bg-white border-2 p-2 flex justify-center"
-      v-else
     >
       <font-awesome-icon
         icon="plus"
@@ -73,9 +73,9 @@
 
 <script>
 import { computed, ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { colors, templates } from '../icons/icons_templates';
 import User from '../models/User';
-import { useI18n } from 'vue-i18n';
 import useCurrentUser from '../hooks/useCurrentUser';
 import { getWorkTypeName } from '../filters/index';
 
@@ -137,7 +137,9 @@ export default {
     }
 
     onMounted(() => {
-      showingLegend.value = currentUser.states.showingLegend;
+      showingLegend.value = currentUser
+        ? currentUser.states.showingLegend
+        : true;
     });
 
     return {

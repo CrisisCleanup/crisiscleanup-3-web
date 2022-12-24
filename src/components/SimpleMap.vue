@@ -79,14 +79,15 @@
       />
     </div>
     <WorksiteLegend
-      :available-work-types="availableWorkTypes"
+      v-if="showZoomButtons || showLegend"
       :key="availableWorkTypes"
-      v-if="showZoomButtons"
+      :available-work-types="availableWorkTypes"
     />
   </div>
 </template>
 <script>
-import WorksiteLegend from '../components/WorksiteLegend.vue';
+import WorksiteLegend from './WorksiteLegend.vue';
+
 export default {
   name: 'SimpleMap',
   components: { WorksiteLegend },
@@ -95,6 +96,9 @@ export default {
       type: Boolean,
     },
     showZoomButtons: {
+      type: Boolean,
+    },
+    showLegend: {
       type: Boolean,
     },
     availableWorkTypes: {
