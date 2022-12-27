@@ -3,7 +3,7 @@ import { Model } from '@vuex-orm/core';
 export default class Role extends Model {
   static entity = 'roles';
 
-  id!: string;
+  id!: number;
   name_t!: string;
   description_t!: string;
   is_active!: boolean;
