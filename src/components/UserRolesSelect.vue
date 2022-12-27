@@ -1,20 +1,23 @@
 <template>
-  <form-select
+  <base-select
     :key="user.id"
-    class="w-64 border border-crisiscleanup-dark-100"
-    :value="selectedRoles"
+    v-model="selectedRoleIds"
+    class="border border-crisiscleanup-dark-100"
     multiple
+    searchable
+    mode="tags"
     :options="roles"
     item-key="id"
     label="name_t"
     size="large"
+    :loading="selectInputLoading"
     select-classes="bg-white border text-xs role-select p-1"
-    @changed="requestUserRole"
+    @changed="updateUserRoles"
   >
     <template #selected-option="{ option }">
       {{ getRoleText(option) }}
     </template>
-  </form-select>
+  </base-select>
 </template>
 
 <script lang="ts">
@@ -34,26 +37,30 @@ export default defineComponent({
   },
   setup(props) {
     const { t } = useI18n();
-    const router = useRouter();
-    const mutations = mapMutations('auth', ['setAcl']);
+    const selectInputLoading = ref(false);
     const userRoles = ref<Collection<UserRole>>([]);
+    const selectedRoleIds = ref<number[]>([]);
 
     const roles = computed(() => {
       return Role.all();
     });
-    const selectedRoles = computed(() => {
-      return userRoles.value.map((userRole) => userRole.role);
-    });
 
     onMounted(async () => {
-      userRoles.value = await getUserRoles();
+      await updateUserRoleData();
     });
 
+    async function updateUserRoleData() {
+      userRoles.value = await getUserRoles();
+      selectedRoleIds.value = userRoles.value
+        .map((userRole) => userRole.role?.id)
+        .filter(Boolean) as number[];
+    }
     async function getUserRoles() {
       const results = await UserRole.api().get(
         `/user_roles?user=${props.user.id}`,
         { dataKey: 'results' },
       );
+      console.log('results', results);
       return (results.entities?.user_roles || []) as Collection<UserRole>;
     }
     function getRoleText(option: Role) {
@@ -66,32 +73,56 @@ export default defineComponent({
       }
       return text;
     }
-    async function requestUserRole(role: unknown[]) {
-      const currentUserRole = userRoles.value.find(
-        (ur) => ur.user_role === role[0],
+
+    async function updateUserRoles(roleIds: number[]) {
+      const currentRoles = userRoles.value;
+      const rolesToAdd = roleIds.filter(
+        (id) => id && !currentRoles.map((ur) => ur.role?.id).includes(id),
       );
-      if (currentUserRole) {
-        // This is the deletion_case case
-        await UserRole.api().delete(`/user_roles/${currentUserRole.id}`, {});
-      } else {
-        await UserRole.api().post(`/user_roles`, {
-          user_role: role[0],
-          user: props.user.id,
+      const rolesToRemove = currentRoles
+        .map((ur) => ur.role?.id)
+        .filter((id) => id && !roleIds.includes(id));
+      const payload: {
+        method: 'post' | 'delete';
+        url: string;
+        data: Record<string, unknown>;
+      }[] = [];
+      for (const roleId of rolesToAdd) {
+        payload.push({
+          method: 'post',
+          url: '/user_roles',
+          data: {
+            user_role: roleId,
+            user: props.user.id,
+          },
         });
       }
-
-      userRoles.value = await getUserRoles();
-      await User.api().get('/users/me', {});
-      mutations.setAcl(router);
+      for (const roleId of rolesToRemove) {
+        payload.push({
+          method: 'delete',
+          url: `/user_roles/${
+            currentRoles.find((ur) => ur.role?.id === roleId)?.id
+          }`,
+          data: {},
+        });
+      }
+      console.log('payload', payload);
+      selectInputLoading.value = true;
+      await Promise.all(
+        payload.map((p) => UserRole.api()[p.method](p.url, p.data)),
+      );
+      await updateUserRoleData();
+      selectInputLoading.value = false;
     }
 
     return {
+      selectInputLoading,
       userRoles,
       roles,
-      selectedRoles,
+      selectedRoleIds,
       getUserRoles,
       getRoleText,
-      requestUserRole,
+      updateUserRoles,
     };
   },
 });
