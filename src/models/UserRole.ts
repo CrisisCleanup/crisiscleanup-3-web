@@ -6,7 +6,7 @@ import type User from './User';
 export default class UserRole extends Model {
   static entity = 'user_roles';
 
-  id!: string;
+  id!: number;
   user_role!: string;
   user!: User;
   approve_rejected_notes!: string;
