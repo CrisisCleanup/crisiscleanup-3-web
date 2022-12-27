@@ -70,6 +70,9 @@ import { useI18n } from "vue-i18n";
 import { computed, onMounted, ref, nextTick, defineComponent, h } from "vue";
 import { kebabCase, isEmpty as empty, xor } from "lodash";
 
+/**
+ * @deprecated Use `BaseSelect` instead
+ */
 export default defineComponent({
   name: "FormSelect",
   props: {
