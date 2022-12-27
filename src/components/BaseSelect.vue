@@ -195,13 +195,10 @@ export default {
       }
       if (props.multiple) {
         const current = props.modelValue || [];
-        emit(
-          'changed',
-          xor(
-            value,
-            current.map((item) => (props.itemKey ? item[props.itemKey] : item)),
-          ),
-        );
+        const currentValues = current
+          .map((item) => (props.itemKey ? item[props.itemKey] : item))
+          .filter(Boolean);
+        emit('changed', xor(value, currentValues));
       }
       if (props.required && inputRef.value.checkValidity()) {
         isInvalid.value = false;
