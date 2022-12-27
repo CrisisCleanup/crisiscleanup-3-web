@@ -44,10 +44,12 @@ module.exports = {
         trailingUnderscore: 'allow',
       },
     ],
-    "@typescript-eslint/consistent-type-imports": "warn",
+    '@typescript-eslint/consistent-type-imports': 'warn',
     'n/file-extension-in-import': 'off',
     'import/extensions': 0,
     'import/no-anonymous-default-export': 0,
+    // This rule is giving false positives on VueX find methods
+    'unicorn/no-array-callback-reference': 0,
     'unicorn/filename-case': 0,
     'unicorn/prevent-abbreviations': 0,
     'unicorn/no-array-reduce': 0,
