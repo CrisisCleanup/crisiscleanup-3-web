@@ -7,8 +7,9 @@ import type { Config } from '@vuex-orm/plugin-axios';
 import { AuthService } from '../services/auth.service';
 import Language from './Language';
 import Role from './Role';
+import CCUModel from '@/models/model';
 
-export default class User extends Model {
+export default class User extends CCUModel<User> {
   static entity = 'users';
 
   id!: string;
