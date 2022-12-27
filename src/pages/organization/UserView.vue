@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full flex flex-col">
+  <div v-if="selectedUser" class="h-full w-full flex flex-col">
     <div class="flex justify-between border-b px-3 py-1">
       <div class="font-semibold flex justify-between items-center h-16">
         {{ selectedUser.full_name }}
@@ -129,9 +129,7 @@ export default defineComponent({
 
     onMounted(async () => {
       // TODO: CCU base model needs to be fixed to avoid doing this
-      await (User as typeof User & Record<string, any>).fetchOrFindId(
-        route.params.user_id,
-      );
+      await User.find(route.params.user_id);
     });
 
     async function saveUser() {
