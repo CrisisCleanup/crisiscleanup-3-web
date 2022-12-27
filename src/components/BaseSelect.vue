@@ -28,6 +28,7 @@
         container: containerClasses,
       }"
       ref="input"
+      v-bind="$attrs"
     >
       <template #singlelabel="{ value }">
         <slot name="selected-option" :option="value" />
