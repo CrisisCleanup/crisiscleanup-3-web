@@ -7,6 +7,7 @@ import PhoneRoutes from './pages/phone/routes';
 import { store } from './store';
 import AdminRoutes from './pages/admin/routes';
 import OrganizationRoutes from './pages/organization/routes';
+import UnauthenticatedRoutes from './pages/unauthenticated/routes';
 
 const routes = [
   { path: '/', component: Dashboard, name: 'Home' },
@@ -44,6 +45,7 @@ const routes = [
   ...PhoneRoutes,
   ...AdminRoutes,
   ...OrganizationRoutes,
+  ...UnauthenticatedRoutes,
 ];
 
 const router = createRouter({

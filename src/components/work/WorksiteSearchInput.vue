@@ -3,20 +3,20 @@
     <div class="relative w-full">
       <base-input
         :model-value="value"
-        @update:modelValue="worksitesSearch"
-        @input.stop=""
         :size="size"
         :placeholder="placeholder"
         :required="required"
         :tooltip="tooltip"
+        @update:modelValue="worksitesSearch"
+        @input.stop=""
         @focus="isFocused = true"
         @blur="onBlur"
       >
       </base-input>
 
       <div
-        class="absolute bg-white z-50 h-auto max-h-84 overflow-auto min-w-84"
         v-if="results.length > 0 && value.length > 0 && isFocused"
+        class="absolute bg-white z-50 h-auto max-h-84 overflow-auto min-w-84"
       >
         <div v-for="result in results" :key="result.label">
           <template v-if="result.options.length > 0"
@@ -24,8 +24,8 @@
             <div v-for="option in result.options" :key="option">
               <div
                 v-if="result.label === 'Geocode'"
-                @click="() => $emit('selectedGeocode', option)"
                 class="flex flex-col sm:text-lg text-base p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+                @click="() => $emit('selectedGeocode', option)"
               >
                 <div>{{ option.description }}</div>
               </div>
@@ -72,10 +72,10 @@
 // import Highlighter from 'vue-highlight-words';
 // import Worksite from '../../models/Worksite';
 // import { getWorkTypeImage } from '../../filters';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import { computed, nextTick, ref } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
+import useCurrentUser from '../../hooks/useCurrentUser';
 import GeocoderService from '../../services/geocoder.service';
 import BaseInput from '../BaseInput.vue';
 import Worksite from '../../models/Worksite';
@@ -121,6 +121,10 @@ export default {
     useGeocoder: {
       type: Boolean,
     },
+    useWorksites: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props, { emit }) {
     const { currentUser } = useCurrentUser();
@@ -157,14 +161,18 @@ export default {
     async function worksitesSearch(value) {
       emit('input', value);
       let geocode = [];
-      const sites = await searchWorksites(value, currentIncidentId.value);
+      let worksites = [];
+      if (props.useWorksites) {
+        const sites = await searchWorksites(value, currentIncidentId.value);
+        worksites = sites.data.results;
+      }
       if (props.useGeocoder) {
         geocode = await geocoderSearch(value);
       }
       results.value = [
         {
           label: 'Search',
-          options: sites.data.results,
+          options: worksites,
         },
         {
           label: 'Geocode',

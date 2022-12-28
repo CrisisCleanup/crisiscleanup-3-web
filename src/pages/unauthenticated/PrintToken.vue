@@ -1,181 +1,176 @@
 <template>
-  <HomeLayout>
-    <template #grid-overlay>
-      <div class="grid--overlay homegrid-backdrop" />
-    </template>
-    <template #grid-overlay>
-      <div class="grid--top">
-        <div class="text-5xl">
-          {{ $t('printToken.thank_you_for_helping') }}
-        </div>
-        <div class="text-2xl font-light">
-          <div>
-            {{ $t('printToken.case_number') }}:
-            {{ printToken.case_number }}
-          </div>
-          <div>
-            {{ $t('printToken.resident_name') }}:
-            {{ printToken.case_name }}
-          </div>
-          <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
-        </div>
+  <Home>
+    <div class="grid--top">
+      <div class="text-5xl">
+        {{ $t('printToken.thank_you_for_helping') }}
       </div>
-    </template>
-    <template #grid-content>
-      <div class="grid--main">
-        <Loader :loading="loading">
-          <template #content>
-            <div class="w-2/3 sm:w-screen">
-              <div class="flex">
-                <div
-                  v-for="work_type in printToken.work_types"
-                  :key="`${work_type.id}`"
-                  class="mx-1"
-                >
-                  <span class="text-sm">
-                    {{ work_type.work_type | getWorkTypeName }}
-                  </span>
-                  <WorksiteStatusDropdown
-                    class="block text-xl"
-                    :current-work-type="work_type"
-                    use-icon
-                    @input="
-                      (value) => {
-                        work_type.status = value;
-                      }
-                    "
-                  />
-                </div>
-              </div>
-              <form class="w-120 flex flex-col" autocomplete="off" ref="form">
-                <span class="text-sm">{{ $t('printToken.notes') }}</span>
-                <textarea
-                  v-model="printToken.status_notes"
-                  rows="3"
-                  class="
-                    text-base
-                    border border-crisiscleanup-dark-100
-                    placeholder-crisiscleanup-dark-200
-                    outline-none
-                    p-2
-                    resize-none
-                  "
-                />
-
-                <span class="text-sm">{{
-                  $t('printToken.num_volunteers')
-                }}</span>
-                <base-input
-                  type="number"
-                  v-model="printToken.number_of_volunteers"
-                />
-
-                <span class="text-sm">{{
-                  $t('printToken.hours_per_volunteer')
-                }}</span>
-                <base-input
-                  pattern="^\d*(\.\d{0,2})?$"
-                  v-model="printToken.hours_per_volunteer"
-                />
-
-                <span class="text-sm">{{ $t('printToken.your_email') }}</span>
-                <base-input type="email" v-model="printToken.email" />
-
-                <div>
-                  <base-text>{{ $t('printToken.photos') }}</base-text>
-                  <WorksiteImageSection
-                    :worksite="printToken"
-                    :key="printToken.files"
-                    :is-print-token="true"
-                    @photosChanged="reloadFiles"
-                  />
-                </div>
-              </form>
-              <base-button
-                variant="solid"
-                :action="save"
-                class="my-2 font-light p-5 w-120"
-                :text="$t('actions.save')"
-                :alt="$t('actions.save')"
-              />
-            </div>
-          </template>
-        </Loader>
+      <div class="text-2xl font-light">
+        <div>
+          {{ $t('printToken.case_number') }}:
+          {{ printToken.case_number }}
+        </div>
+        <div>
+          {{ $t('printToken.resident_name') }}:
+          {{ printToken.case_name }}
+        </div>
+        <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
       </div>
-    </template>
-  </HomeLayout>
+    </div>
+    <div class="grid--main">
+      <div v-if="loading" class="flex h-screen items-center justify-center">
+        <font-awesome-icon size="xl" icon="spinner" spin />
+      </div>
+      <div v-else class="w-2/3 sm:w-screen">
+        <div class="flex">
+          <div
+            v-for="work_type in printToken.work_types"
+            :key="`${work_type.id}`"
+            class="mx-1"
+          >
+            <span class="text-sm">
+              {{ getWorkTypeName(work_type.work_type) }}
+            </span>
+            <WorksiteStatusDropdown
+              class="block text-xl"
+              :current-work-type="work_type"
+              use-icon
+              @input="
+                (value) => {
+                  work_type.status = value;
+                }
+              "
+            />
+          </div>
+        </div>
+        <form ref="form" class="w-120 flex flex-col" autocomplete="off">
+          <span class="text-sm">{{ $t('printToken.notes') }}</span>
+          <textarea
+            v-model="printToken.status_notes"
+            rows="3"
+            class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
+          />
+
+          <span class="text-sm">{{ $t('printToken.num_volunteers') }}</span>
+          <base-input v-model="printToken.number_of_volunteers" type="number" />
+
+          <span class="text-sm">{{
+            $t('printToken.hours_per_volunteer')
+          }}</span>
+          <base-input
+            v-model="printToken.hours_per_volunteer"
+            pattern="^\d*(\.\d{0,2})?$"
+          />
+
+          <span class="text-sm">{{ $t('printToken.your_email') }}</span>
+          <base-input v-model="printToken.email" type="email" />
+
+          <div>
+            <base-text>{{ $t('printToken.photos') }}</base-text>
+            <WorksiteImageSection
+              :key="printToken.files"
+              :worksite="printToken"
+              :is-print-token="true"
+              @photosChanged="reloadFiles"
+            />
+          </div>
+        </form>
+        <base-button
+          variant="solid"
+          :action="save"
+          class="my-2 font-light p-5 w-120"
+          :text="$t('actions.save')"
+          :alt="$t('actions.save')"
+        />
+      </div>
+    </div>
+  </Home>
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
-import Loader from '../../components/Loader';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown.vue';
 import { getErrorMessage } from '../../utils/errors';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
+import Home from '@/layouts/Home.vue';
+import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
+import { getWorkTypeName } from '@/filters/index';
 
 export default {
+  name: 'PrintToken',
   components: {
     WorksiteImageSection,
-    HomeLayout,
+    Home,
     WorksiteStatusDropdown,
-    Loader,
   },
-  name: 'PrintToken',
-  async mounted() {
-    await this.getPrintToken();
-  },
-  computed: {
-    fullAddress() {
-      const { address, city, state, postal_code: postalCode } = this.printToken;
+  setup() {
+    const route = useRoute();
+    const $toasted = useToast();
+    const { t } = useI18n();
+
+    const printToken = ref({});
+    const loading = ref(false);
+
+    const fullAddress = computed(() => {
+      const {
+        address,
+        city,
+        state,
+        postal_code: postalCode,
+      } = printToken.value;
       return `${address}, ${city}, ${state} ${postalCode}`;
-    },
-  },
-  methods: {
-    async reloadFiles() {
+    });
+
+    async function reloadFiles() {
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/print_tokens/${
+            route.params.token
+          }`,
           {
             headers: {
               Authorization: null,
             },
           },
         );
-        this.printToken.files = response.data.files;
+        printToken.value.files = response.data.files;
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-        this.$log.debug(error);
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    async getPrintToken() {
-      this.loading = true;
+    }
+    async function getPrintToken() {
+      loading.value = true;
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/print_tokens/${
+            route.params.token
+          }`,
           {
             headers: {
               Authorization: null,
             },
           },
         );
-        this.printToken = response.data;
+        printToken.value = response.data;
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-        this.$log.debug(error);
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    async save() {
+    }
+    async function save() {
       try {
         const data = {
-          ...this.printToken,
+          ...printToken.value,
         };
-        data.work_types.forEach((workType) => {
+        for (const workType of data.work_types) {
           delete workType.work_type;
-        });
-        await this.$http.patch(
-          `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+        }
+        await axios.patch(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/print_tokens/${
+            route.params.token
+          }`,
           data,
           {
             headers: {
@@ -183,17 +178,24 @@ export default {
             },
           },
         );
-        await this.getPrintToken();
-        await this.$toasted.success(this.$t('printToken.success_update_case'));
+        await getPrintToken();
+        await $toasted.success(t('printToken.success_update_case'));
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-  },
-  data() {
+    }
+
+    onMounted(async () => {
+      await getPrintToken();
+    });
+
     return {
-      printToken: {},
-      loading: false,
+      printToken,
+      loading,
+      getWorkTypeName,
+      fullAddress,
+      save,
+      reloadFiles,
     };
   },
 };
