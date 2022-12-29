@@ -160,6 +160,7 @@ export default {
   name: 'Affiliates',
   components: { Table },
   setup(props) {
+    const store = useStore();
     const { t } = useI18n();
     const showingAffiliateModal = ref(false);
     const organizationResults = ref<Array<Organization>>([]);
@@ -199,7 +200,7 @@ export default {
       ]);
 
       const affiliates = computed(() => Affiliate.all());
-      const currentUser = computed(() => User.find(this.$store.getters['auth/userId']));
+      const currentUser = computed(() => User.find(store.getters['auth/userId']));
 
       const getAffiliateRequests = async () => {
       loading.value = true;
@@ -222,13 +223,13 @@ export default {
     }
     const acceptAffiliation = async (request) => {
       await Affiliate.api().acceptRequest(request);
-      await this.getAffiliateRequests();
+      await getAffiliateRequests();
     }
     const sendAffiliateRequest = async (organization) => {
       await Affiliate.api().post('/organization_affiliate_requests', {
         affiliate: organization.id,
       });
-      await this.getAffiliateRequests();
+      await getAffiliateRequests();
     }
     const removeAffiliation = async (affiliate) => {
       await Affiliate.api().delete(
@@ -237,7 +238,7 @@ export default {
           delete: affiliate.id,
         },
       );
-      await this.getAffiliateRequests();
+      await getAffiliateRequests();
     }
     const onOrganizationSearch = async (value) => {
       const results = await Organization.api().get(
@@ -246,7 +247,7 @@ export default {
           dataKey: 'results',
         },
       );
-      this.organizationResults = results.entities.organizations;
+      organizationResults = results.entities.organizations;
     }
 
     onMounted(async () => {
