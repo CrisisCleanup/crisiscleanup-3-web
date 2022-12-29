@@ -151,40 +151,41 @@
 </template>
 
 <script>
+import { onMounted } from 'vue';
 import Affiliate from '@/models/Affiliate';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 export default {
   name: 'Affiliates',
   components: { Table },
-  data() {
-    return {
-      showingAffiliateModal: false,
-      organizationResults: [],
-      selectedAffiliate: null,
-      loading: false,
-      currentRequestsColumns: [
+  setup(props) {
+    const { t } = useI18n();
+    const showingAffiliateModal = ref(false);
+    const organizationResults = ref<Array<Organization>>([]);
+      const selectedAffiliate = ref<Affiliate>(null);
+      const loading = ref(false);
+      const currentRequestsColumns = ref([
         {
-          title: this.$t('affiliatesVue.affiliate'),
+          title: t('affiliatesVue.affiliate'),
           dataIndex: 'affiliate_organization',
           key: 'name',
           width: '2fr',
         },
         {
-          title: this.$t('affiliatesVue.type'),
+          title: t('affiliatesVue.type'),
           dataIndex: 'type_t',
           key: 'type_t',
           width: '1fr',
         },
         {
-          title: this.$t('affiliatesVue.status'),
+          title: t('affiliatesVue.status'),
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
         },
         {
-          title: this.$t('affiliatesVue.members'),
+          title: t('affiliatesVue.members'),
           dataIndex: 'user_count',
           key: 'user_count',
           width: '1fr',
@@ -195,23 +196,13 @@ export default {
           key: 'actions',
           width: '3fr',
         },
-      ],
-    };
-  },
-  computed: {
-    affiliates() {
-      return Affiliate.all();
-    },
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  async mounted() {
-    await this.getAffiliateRequests();
-  },
-  methods: {
-    async getAffiliateRequests() {
-      this.loading = true;
+      ]);
+
+      const affiliates = computed(() => Affiliate.all());
+      const currentUser = computed(() => User.find(this.$store.getters['auth/userId']));
+
+      const getAffiliateRequests = async () => {
+      loading.value = true;
       await Affiliate.api().get('/organization_affiliate_requests', {
         dataKey: 'results',
       });
@@ -223,23 +214,23 @@ export default {
           dataKey: 'results',
         },
       );
-      this.loading = false;
-    },
-    async rejectAffiliation(request) {
+      loading.value = false;
+    }
+    const rejectAffiliation = async (request) => {
       await Affiliate.api().rejectRequest(request);
-      await this.getAffiliateRequests();
-    },
-    async acceptAffiliation(request) {
+      await getAffiliateRequests();
+    }
+    const acceptAffiliation = async (request) => {
       await Affiliate.api().acceptRequest(request);
       await this.getAffiliateRequests();
-    },
-    async sendAffiliateRequest(organization) {
+    }
+    const sendAffiliateRequest = async (organization) => {
       await Affiliate.api().post('/organization_affiliate_requests', {
         affiliate: organization.id,
       });
       await this.getAffiliateRequests();
-    },
-    async removeAffiliation(affiliate) {
+    }
+    const removeAffiliation = async (affiliate) => {
       await Affiliate.api().delete(
         `/organization_affiliate_requests/${affiliate.id}`,
         {
@@ -247,8 +238,8 @@ export default {
         },
       );
       await this.getAffiliateRequests();
-    },
-    async onOrganizationSearch(value) {
+    }
+    const onOrganizationSearch = async (value) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
@@ -256,7 +247,27 @@ export default {
         },
       );
       this.organizationResults = results.entities.organizations;
-    },
+    }
+
+    onMounted(async () => {
+      await getAffiliateRequests();
+    });
+    
+    return {
+      showingAffiliateModal,
+      organizationResults,
+      selectedAffiliate,
+      loading,
+      currentRequestsColumns,
+      affiliates,
+      currentUser,
+      getAffiliateRequests,
+      rejectAffiliation,
+      acceptAffiliation,
+      sendAffiliateRequest,
+      removeAffiliation,
+      onOrganizationSearch,
+    };
   },
 };
 </script>
