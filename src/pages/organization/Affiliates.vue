@@ -36,7 +36,7 @@
               :placeholder="$t('affiliatesVue.search_for_organization')"
               clear-on-selected
               @selected="
-                (value) => {
+                (value: Affiliate) => {
                   selectedAffiliate = value;
                 }
               "
@@ -85,18 +85,18 @@
         :loading="loading"
       >
         <template #name="slotProps">
-          {{ slotProps.item.affiliate_organization.name }}
+          {{ slotProps.item.affiliate_organization?.name }}
         </template>
         <template #type_t="slotProps">
-          {{ $t(slotProps.item.affiliate_organization.type_t) }}
+          {{ $t(slotProps.item.affiliate_organization?.type_t) }}
         </template>
         <template #user_count="slotProps">
           <div class="text-center">
-            {{ slotProps.item.affiliate_organization.user_count }} member(s)
+            {{ slotProps.item.affiliate_organization?.user_count }} member(s)
           </div>
         </template>
         <template #actions="slotProps">
-          <div class="flex mr-2 items-center justify-center w-full">
+          <div v-if="currentUser" class="flex mr-2 items-center justify-center w-full">
             <base-button
               v-if="
                 slotProps.item.approved_by ||
@@ -150,12 +150,12 @@
   </div>
 </template>
 
-<script>
-import { onMounted } from 'vue';
+<script lang="ts">
 import Affiliate from '@/models/Affiliate';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import Table from '@/components/Table.vue';
+import { Collection, Model } from '@vuex-orm/core';
 export default {
   name: 'Affiliates',
   components: { Table },
@@ -163,8 +163,8 @@ export default {
     const store = useStore();
     const { t } = useI18n();
     const showingAffiliateModal = ref(false);
-    const organizationResults = ref<Array<Organization>>([]);
-      const selectedAffiliate = ref<Affiliate>(null);
+    const organizationResults = ref<Collection<Model>>();
+      const selectedAffiliate = ref<Affiliate | null>(null);
       const loading = ref(false);
       const currentRequestsColumns = ref([
         {
@@ -217,21 +217,21 @@ export default {
       );
       loading.value = false;
     }
-    const rejectAffiliation = async (request) => {
+    const rejectAffiliation = async (request: Affiliate) => {
       await Affiliate.api().rejectRequest(request);
       await getAffiliateRequests();
     }
-    const acceptAffiliation = async (request) => {
+    const acceptAffiliation = async (request: Affiliate) => {
       await Affiliate.api().acceptRequest(request);
       await getAffiliateRequests();
     }
-    const sendAffiliateRequest = async (organization) => {
+    const sendAffiliateRequest = async (organization: Affiliate | null) => {
       await Affiliate.api().post('/organization_affiliate_requests', {
-        affiliate: organization.id,
+        affiliate: organization?.id,
       });
       await getAffiliateRequests();
     }
-    const removeAffiliation = async (affiliate) => {
+    const removeAffiliation = async (affiliate: Affiliate) => {
       await Affiliate.api().delete(
         `/organization_affiliate_requests/${affiliate.id}`,
         {
@@ -240,14 +240,14 @@ export default {
       );
       await getAffiliateRequests();
     }
-    const onOrganizationSearch = async (value) => {
+    const onOrganizationSearch = async (value: string) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
           dataKey: 'results',
         },
       );
-      organizationResults = results.entities.organizations;
+      organizationResults.value = results.entities?.organizations || [];
     }
 
     onMounted(async () => {
@@ -273,4 +273,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>
