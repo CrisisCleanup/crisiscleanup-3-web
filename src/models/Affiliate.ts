@@ -1,12 +1,20 @@
 import { Model } from '@vuex-orm/core';
+import { type Config } from '@vuex-orm/plugin-axios';
 import Organization from './Organization';
+import type User from './User';
 
 export default class Affiliate extends Model {
   static entity = 'organization_affiliate_requests';
 
+  id!: number;
+  organization!: Organization;
+  affiliate!: string | number;
+  approved_by!: User;
+  rejected_by!: User;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       organization: this.attr(null),
       affiliate: this.attr(null),
       approved_by: this.attr(null),
@@ -22,7 +30,7 @@ export default class Affiliate extends Model {
     return this.approved_by ? 'Affiliated' : 'Pending';
   }
 
-  static apiConfig = {
+  static apiConfig: Config = {
     actions: {
       acceptRequest(request) {
         return this.post(
