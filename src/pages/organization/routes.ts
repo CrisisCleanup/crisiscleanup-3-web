@@ -1,5 +1,5 @@
-// Import Affiliates from '@/pages/organization/Affiliates.vue';
 import { h } from 'vue';
+import Affiliates from '@/pages/organization/Affiliates.vue';
 import Organization from '@/pages/organization/Index.vue';
 import Invitations from '@/pages/organization/Invitations.vue';
 // Import Layers from '@/pages/organization/Layers.vue';
@@ -47,9 +47,9 @@ export const routes = [
       },
       {
         path: 'affiliates',
-        // Component: Affiliates,
-        component: mockComponent('Affiliates', 'Affiliates'),
+        component: Affiliates,
         name: 'nav.organization_affiliates',
+        meta: { id: 'affiliates' },
       },
       {
         path: 'profile',
