@@ -27,21 +27,7 @@
             <div class="font-xs my-2">
               {{ $t('affiliatesVue.request_affiliate') }}
             </div>
-            <autocomplete
-              class="form-field"
-              icon="search"
-              :suggestions="organizationResults"
-              display-property="name"
-              size="large"
-              :placeholder="$t('affiliatesVue.search_for_organization')"
-              clear-on-selected
-              @selected="
-                (value: Affiliate) => {
-                  selectedAffiliate = value;
-                }
-              "
-              @search="onOrganizationSearch"
-            />
+            <OrganizationSearchInputVue v-model="selectedAffiliate" />
             <div class="my-3">
               <div class="font-xs my-2">
                 {{ $t('affiliatesVue.request_reason') }}
@@ -85,14 +71,14 @@
         :loading="loading"
       >
         <template #name="slotProps">
-          {{ slotProps.item.affiliate_organization?.name }}
+          {{ slotProps.item.affiliate_organization?.name ?? '' }}
         </template>
         <template #type_t="slotProps">
-          {{ $t(slotProps.item.affiliate_organization?.type_t) }}
+          {{ $t(slotProps.item.affiliate_organization?.type_t ?? '') }}
         </template>
         <template #user_count="slotProps">
           <div class="text-center">
-            {{ slotProps.item.affiliate_organization?.user_count }} member(s)
+            {{ slotProps.item.affiliate_organization?.user_count ?? '' }} member(s)
           </div>
         </template>
         <template #actions="slotProps">
@@ -156,9 +142,10 @@ import Organization from '@/models/Organization';
 import User from '@/models/User';
 import Table from '@/components/Table.vue';
 import { Collection, Model } from '@vuex-orm/core';
+import OrganizationSearchInputVue from '@/components/OrganizationSearchInput.vue';
 export default {
   name: 'Affiliates',
-  components: { Table },
+  components: { Table, OrganizationSearchInputVue },
   setup(props) {
     const store = useStore();
     const { t } = useI18n();
