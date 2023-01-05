@@ -6,10 +6,14 @@ export default class Location extends Model {
 
   id!: string;
   type!: string;
-  attr!: Record<string, any>;
+  name!: string;
+  notes!: string;
+  shared!: string;
   geom!: string;
   poly!: string;
+  attr!: Record<string, any>;
   point!: string;
+  joins!: string;
 
   static fields() {
     return {

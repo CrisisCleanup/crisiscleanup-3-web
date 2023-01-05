@@ -2,7 +2,7 @@ import { h } from 'vue';
 import Affiliates from '@/pages/organization/Affiliates.vue';
 import Organization from '@/pages/organization/Index.vue';
 import Invitations from '@/pages/organization/Invitations.vue';
-// Import Layers from '@/pages/organization/Layers.vue';
+import Layers from '@/pages/organization/Layers.vue';
 // import OrganizationProfile from '@/pages/organization/Profile.vue';
 import Users from '@/pages/organization/Users.vue';
 import UserView from '@/pages/organization/UserView.vue';
@@ -74,8 +74,7 @@ export const routes = [
       },
       {
         path: 'layers',
-        // Component: Layers,
-        component: mockComponent('Layers', 'Layers'),
+        component: Layers,
         name: 'nav.organization_layers',
       },
     ],

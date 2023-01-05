@@ -7,6 +7,9 @@ export default class LocationType extends Model {
 
   key!: string;
 
+  name_t!: string;
+  description_t!: string;
+
   static fields() {
     return {
       id: this.attr(null),
