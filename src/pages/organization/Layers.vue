@@ -12,7 +12,7 @@
             @input="getLocations"
           ></base-input>
           <div class="flex w-full">
-            <form-select
+            <base-select
               v-model="locationTypeFilter"
               :options="locationTypes"
               class="w-full sm:w-64 border border-crisiscleanup-dark-100"
@@ -67,7 +67,7 @@ export default {
 
     const currentUser = computed(() => User.find(store.getters['auth/userId']));
     const locationTypes = computed(() => LocationType.all());
-    const locationTypeFilter = ref(null);
+    const locationTypeFilter = ref();
     const currentSearch = ref<string>('');
     const locationsLoading = ref<Boolean>(false);
     const locations = ref<Array<Location>>([]);
@@ -82,7 +82,7 @@ export default {
 
     const getLocations = async () => {
       locationsLoading.value = true;
-      const params = {
+      const params: Record<string, any> = {
         created_by__organization: currentUser.value?.organization.id,
         type__isnull: false,
         fields: 'id,name,type,shared',
@@ -90,15 +90,15 @@ export default {
           locationsMeta.value.pagination.pageSize *
           (locationsMeta.value.pagination.page - 1),
         limit: locationsMeta.value.pagination.pageSize,
-        search: '',
-        type: null,
       };
-      if (currentSearch) {
+      if (currentSearch.value) {
         params.search = currentSearch.value;
       }
-      if (locationTypeFilter) {
+      if (locationTypeFilter.value) {
         params.type = locationTypeFilter.value;
+        console.log(locationTypeFilter.value);
       }
+      console.log('test');
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
         {

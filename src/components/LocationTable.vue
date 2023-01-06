@@ -40,7 +40,7 @@
     </Table>
   </template>
   
-  <script>
+  <script lang="ts">
   import Table from '@/components/Table.vue';
   import LocationType from '@/models/LocationType';
   export default {
@@ -59,28 +59,23 @@
       },
       loading: Boolean,
     },
-    methods: {
-      getLocationType(type) {
-        return LocationType.find(type).name_t;
-      },
-    },
-    data() {
-      return {
-        columns: [
+    setup(props) {
+      const { t } = useI18n();
+      const columns = ref([
           {
-            title: this.$t('locationTable.name'),
+            title: t('locationTable.name'),
             dataIndex: 'name',
             key: 'name',
             width: '1.5fr',
           },
           {
-            title: this.$t('locationTable.type'),
+            title: t('locationTable.type'),
             dataIndex: 'type',
             key: 'type',
             width: '1.5fr',
           },
           {
-            title: this.$t('locationTable.shared'),
+            title: t('locationTable.shared'),
             dataIndex: 'shared',
             key: 'shared',
           },
@@ -96,7 +91,13 @@
             key: 'actions',
             width: '0.5fr',
           },
-        ],
+        ]);
+        const getLocationType = (type: string) => {
+          return LocationType.find(type)?.name_t;
+        }
+      return {
+        columns,
+        getLocationType
       };
     },
   };
