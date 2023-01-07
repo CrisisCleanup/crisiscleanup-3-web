@@ -4,6 +4,7 @@ import About from '@/pages/home/About.vue';
 import Training from '@/pages/home/Training.vue';
 import Survivor from '@/pages/home/Survivor.vue';
 import Map from '@/pages/home/Map.vue';
+import RequestPasswordReset from '@/pages/home/RequestPasswordReset.vue';
 
 export default [
   {
@@ -40,6 +41,12 @@ export default [
     path: '/map',
     component: Map,
     name: 'nav.map',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/password/new',
+    component: RequestPasswordReset,
+    name: 'nav.request_password_reset',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];

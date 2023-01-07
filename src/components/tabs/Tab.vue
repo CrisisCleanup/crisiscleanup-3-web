@@ -1,5 +1,5 @@
 <template>
-  <div class="tab" v-show="isActive">
+  <div v-show="isActive" class="tab">
     <slot></slot>
   </div>
 </template>
@@ -9,7 +9,12 @@ import { onBeforeMount, ref, watch, inject, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Tab',
-  setup() {
+  props: {
+    name: { required: true, type: String },
+    selected: { type: Boolean },
+    disabled: { type: Boolean, default: false },
+  },
+  setup(props) {
     const index = ref(0);
     const isActive = ref(false);
 
@@ -19,6 +24,13 @@ export default defineComponent({
       () => tabs.selectedIndex,
       () => {
         isActive.value = index.value === tabs.selectedIndex;
+      },
+    );
+
+    watch(
+      () => props.selected,
+      () => {
+        tabs.selectedIndex = index;
       },
     );
 

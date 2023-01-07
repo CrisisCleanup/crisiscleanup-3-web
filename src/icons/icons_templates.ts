@@ -1,140 +1,140 @@
 /* eslint-disable */
-const colors: Record<string, { fillColor: string; strokeColor: string }> = {
+const colors = {
   open_unassigned_unclaimed: {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
   open_unassigned_claimed: {
-    fillColor: "#fab92e",
-    strokeColor: "#f79820",
+    fillColor: '#fab92e',
+    strokeColor: '#f79820',
   },
   open_assigned_unclaimed: {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
   open_assigned_claimed: {
-    fillColor: "#f0f032",
-    strokeColor: "#85863f",
+    fillColor: '#f0f032',
+    strokeColor: '#85863f',
   },
-  "open_partially-completed_unclaimed": {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+  'open_partially-completed_unclaimed': {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
-  "open_partially-completed_claimed": {
-    fillColor: "#0054bb",
-    strokeColor: "#0054bb",
+  'open_partially-completed_claimed': {
+    fillColor: '#0054bb',
+    strokeColor: '#0054bb',
   },
-  "open_needs-follow-up_unclaimed": {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+  'open_needs-follow-up_unclaimed': {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
-  "open_needs-follow-up_claimed": {
-    fillColor: "#ea51eb",
-    strokeColor: "#e018e1",
+  'open_needs-follow-up_claimed': {
+    fillColor: '#ea51eb',
+    strokeColor: '#e018e1',
   },
   open_unresponsive_unclaimed: {
-    fillColor: "#7F7F7F",
-    strokeColor: "#5d5d5d",
+    fillColor: '#7F7F7F',
+    strokeColor: '#5d5d5d',
   },
   open_unresponsive_claimed: {
-    fillColor: "#7F7F7F",
-    strokeColor: "#5d5d5d",
+    fillColor: '#7F7F7F',
+    strokeColor: '#5d5d5d',
   },
   closed_completed_unclaimed: {
-    fillColor: "#0FA355",
-    strokeColor: "#09a34f",
+    fillColor: '#0FA355',
+    strokeColor: '#09a34f',
   },
   closed_completed_claimed: {
-    fillColor: "#0FA355",
-    strokeColor: "#09a34f",
+    fillColor: '#0FA355',
+    strokeColor: '#09a34f',
   },
   closed_incomplete_unclaimed: {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   closed_incomplete_claimed: {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_out-of-scope_unclaimed": {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+  'closed_out-of-scope_unclaimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
-  "closed_out-of-scope_claimed": {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+  'closed_out-of-scope_claimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
-  "closed_done-by-others_unclaimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_done-by-others_unclaimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_done-by-others_claimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_done-by-others_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_no-help-wanted_unclaimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_no-help-wanted_unclaimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_no-help-wanted_claimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_no-help-wanted_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_partially-completed_unclaimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_partially-completed_unclaimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_partially-completed_claimed": {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+  'closed_partially-completed_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   closed_duplicate_unclaimed: {
-    fillColor: "#7F7F7F",
-    strokeColor: "#7F7F7F",
+    fillColor: '#7F7F7F',
+    strokeColor: '#7F7F7F',
   },
   closed_duplicate_claimed: {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
-  "closed_marked-for-deletion_unclaimed": {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+  'closed_marked-for-deletion_unclaimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
-  "closed_marked-for-deletion_claimed": {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+  'closed_marked-for-deletion_claimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
   closed_rejected_unclaimed: {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
   closed_rejected_claimed: {
-    fillColor: "#1D1D1D",
-    strokeColor: "#1D1D1D",
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
   need_unfilled_unclaimed: {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
   need_unfilled_claimed: {
-    fillColor: "#fab92e",
-    strokeColor: "#f79820",
+    fillColor: '#fab92e',
+    strokeColor: '#f79820',
   },
   need_filled_unclaimed: {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   need_filled_claimed: {
-    fillColor: "#82D78C",
-    strokeColor: "#82D78C",
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   need_overdue_unclaimed: {
-    fillColor: "#d0021b",
-    strokeColor: "#e30001",
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
   },
   need_overdue_claimed: {
-    fillColor: "#ea51eb",
-    strokeColor: "#e018e1",
+    fillColor: '#ea51eb',
+    strokeColor: '#e018e1',
   },
 };
 
@@ -934,13 +934,28 @@ const sandbagging = `<svg width="54" height="31" viewBox="0 0 54 31" fill="none"
     <path d="M26.4294 21.3364C26.6751 20.7314 25.0289 19.5215 16.4788 19.5215C8.37083 20.4289 5.79104 19.9752 4.68542 20.4289C3.57979 20.8826 1 23.1512 1 24.9661M1 24.9661C1 26.781 2.10563 30.4108 3.94833 30.4108C5.4225 30.4108 19.0585 30.4108 25.6923 30.4108C26.4294 30.4108 27.535 30.4108 26.7979 29.0496C26.4294 28.369 25.3238 25.4198 24.5867 24.9661C23.997 24.6031 8.61653 25.1174 1 24.9661Z" stroke="{{fillColor}}" stroke-width="0.75"/>{{multiple}}
 </svg>`;
 
-const templates: Record<string, string> = {
+const chimney_capping = `<svg width="120" height="55" viewBox="0 0 1200 1200" fill="{{fillColor}}" stroke="{{strokeColor}}" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path d="m1103.8 421.69c-16.531-10.051-37.07-10.902-54.375-2.25l-949.12 474.56c-7.2383 3.3438-13.426 8.6094-17.891 15.219-4.4609 6.6094-7.0273 14.316-7.4219 22.281v62.25c0.96094 12.488 6.7852 24.098 16.215 32.336 9.4336 8.2422 21.719 12.449 34.223 11.727h949.12c12.504 0.72266 24.789-3.4844 34.223-11.727 9.4297-8.2383 15.254-19.848 16.215-32.336v-536.06c-0.21094-14.898-8.2617-28.582-21.188-36z"/>
+    <path d="m354.38 725.06 125.62-62.812v-60.562h-125.62z"/>
+    <path d="m845.62 337.5h-151.88v75h151.88z"/>
+    <path d="m922.5 256.31v-50.062c0-11.688-4.6406-22.895-12.906-31.156-8.2617-8.2656-19.469-12.906-31.156-12.906h-556.88c-11.688 0-22.895 4.6406-31.156 12.906-8.2656 8.2617-12.906 19.469-12.906 31.156v50.625c0.24609 11.523 4.9961 22.492 13.234 30.551 8.2344 8.0625 19.301 12.578 30.828 12.574h556.88c11.621 0 22.773-4.5898 31.023-12.773 8.2539-8.1836 12.941-19.293 13.039-30.914z"/>
+    <path d="m480 337.5h-125.62v75h125.62z"/>
+    <path d="m517.5 337.88h138.75v75.75h-138.75z"/>
+    <path d="m517.5 601.69v41.812s83.812-41.625 83.812-42-82.125 0-83.812 0.1875z"/>
+    <path d="m845.62 479.44v-28.312h-226.88v113.06h57.375z"/>
+    <path d="m581.25 451.12h-226.88v112.5h226.88z"/>
+  </g>{{multiple}}
+</svg>`;
+
+const templates = {
   circle,
   orb,
   plus,
   ash,
   animal_services,
   catchment_gutters,
+  chimney_capping,
   construction_consultation,
   core_relief_items,
   debris,

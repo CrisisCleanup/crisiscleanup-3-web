@@ -1,5 +1,5 @@
 <template>
-  <div class="pewpew__nav">
+  <div class="pewpew__nav h-full">
     <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
       <img
         v-if="colorMode === 'dark'"
@@ -53,23 +53,31 @@
 
 <script>
 import _ from 'lodash';
-import { mapGetters } from 'vuex';
-import { UserMixin } from '@/mixins';
-import { HomeNavigation } from '@/components/home/SideNav.vue';
-import { FooterNavigation } from '@/components/home/Footer.vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+import useNavigation from '@/hooks/useNavigation';
+import useAcl from '@/hooks/useAcl';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default {
   name: 'PewPewNavBar',
-  mixins: [UserMixin],
   props: {
     colorMode: {
       type: String,
       required: true,
     },
   },
-  computed: {
-    ...mapGetters('incident', ['currentIncident']),
-    publicRoutes() {
+  setup(props) {
+    const store = useStore();
+    const { $can } = useAcl();
+    const { t } = useI18n();
+    const isLoggedIn = computed(() => store.getters['auth/isLoggedIn']);
+
+    const currentIncidentId = store.getters['incident/currentIncidentId'];
+    const { currentUser } = useCurrentUser();
+
+    const { HomeNavigation, FooterNavigation } = useNavigation();
+    const publicRoutes = computed(() => {
       const _homeSideRoutes = _.keyBy(HomeNavigation, 'key');
       const _homeFooterRoutes = _.keyBy(FooterNavigation, 'key');
       const homeRoutes = { ..._homeSideRoutes, ..._homeFooterRoutes };
@@ -81,20 +89,21 @@ export default {
         terms: homeRoutes.terms,
         privacy: homeRoutes.privacy,
       };
-    },
-    routes() {
+    });
+
+    const routes = computed(() => {
       return {
         dashboard: {},
         cases: {
           route: {
             name: 'nav.new_case',
             params: {
-              incidentId: this.currentIncident && this.currentIncident.id,
+              incidentId: currentIncidentId,
             },
           },
         },
         phone: {
-          disabled: !this.$can || !this.$can('phone_agent'),
+          disabled: !$can || !$can('phone_agent'),
         },
         organization: {
           title: 'nav.my_organization',
@@ -104,14 +113,19 @@ export default {
         reports: {},
         training: { icon: { type: 'info', invertColor: true } },
         admin: {
-          disabled: !(this.currentUser && this.currentUser.isAdmin),
+          disabled: !(currentUser && currentUser.isAdmin),
           route: { name: 'nav.admin_dashboard' },
         },
       };
-    },
-    navRoutes() {
-      const _routeDefs = this.isLoggedIn ? this.routes : this.publicRoutes;
-      const _routeRootKey = this.isLoggedIn ? 'nav' : 'publicNav';
+    });
+
+    const navRoutes = computed(() => {
+      const _routeDefs = store.getters['auth/isLoggedIn']
+        ? routes.value
+        : publicRoutes.value;
+      const _routeRootKey = store.getters['auth/isLoggedIn']
+        ? 'nav'
+        : 'publicNav';
       return _.map(_routeDefs, (value, key) => {
         const { icon, disabled, title, route, external } = value;
         if (disabled === true) return false;
@@ -124,9 +138,9 @@ export default {
           }
         }
         const routeName = `${_routeRootKey}.${key}`;
-        let _title = this.$t(routeName);
+        let _title = t(routeName);
         if (!_.isNil(title)) {
-          _title = this.$t(title);
+          _title = t(title);
         }
         let routeProps = route;
         if (!external && _.isNil(route)) {
@@ -140,7 +154,15 @@ export default {
           routeProps,
         };
       });
-    },
+    });
+
+    return {
+      currentIncidentId,
+      publicRoutes,
+      routes,
+      navRoutes,
+      isLoggedIn,
+    };
   },
 };
 </script>

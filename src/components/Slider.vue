@@ -19,8 +19,8 @@
       </span>
       <div>
         <span
-          class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
           v-if="title"
+          class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
           >{{ title }}</span
         >
       </div>
@@ -34,11 +34,12 @@
         class="range-slider__range flex-auto"
         :class="[sliderClass, { activated: value < max }]"
         type="range"
-        @input="update"
         :value="value"
         :min="min"
         :max="max"
         :step="step"
+        @input="update"
+        @input.stop=""
       />
     </div>
   </div>

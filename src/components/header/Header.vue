@@ -58,8 +58,8 @@
         </div>
 
         <UserProfileMenu
-          @auth:logout="() => $emit('auth:logout')"
           class="header-item"
+          @auth:logout="() => $emit('auth:logout')"
         />
       </div>
     </div>
@@ -74,6 +74,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import DisasterIcon from '../DisasterIcon.vue';
 // import RedeployRequest from '@/pages/RedeployRequest';
 import BaseSelect from '../BaseSelect.vue';
@@ -107,6 +108,7 @@ export default {
   setup() {
     const { component } = useDialogs();
     const { $can } = useAcl();
+    const { t } = useI18n();
     const { currentUser } = useCurrentUser();
     async function showCurrentUser() {
       await component({
@@ -123,6 +125,9 @@ export default {
       $can,
       showRedeployModal,
       showCurrentUser,
+      $t: (text) => {
+        return text ? t(text) : null;
+      },
     };
   },
 };

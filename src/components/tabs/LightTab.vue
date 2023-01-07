@@ -1,40 +1,48 @@
 <template>
-  <!-- Lightweight alternative of Tab.vue which uses v-if to unmount child components when not active -->
-  <div v-if="isActive"><slot></slot></div>
+  <div v-if="isActive" class="tab">
+    <slot></slot>
+  </div>
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from 'vue';
+import { onBeforeMount, ref, watch, inject, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'LightTab',
   props: {
     name: { required: true, type: String },
     selected: { type: Boolean },
     disabled: { type: Boolean, default: false },
   },
-
   setup(props) {
+    const index = ref(0);
     const isActive = ref(false);
 
-    watch(props.selected, (newValue) => {
-      isActive.value = newValue;
-    });
+    const tabs = inject('TabsProvider');
 
-    const href = computed(() => {
-      return `#${props.name.toLowerCase().replace(/ /g, '-')}`;
-    });
+    watch(
+      () => tabs.selectedIndex,
+      () => {
+        isActive.value = index.value === tabs.selectedIndex;
+      },
+    );
 
-    onMounted(() => {
-      isActive.value = props.selected;
-    });
+    watch(
+      () => props.selected,
+      () => {
+        debugger;
+        tabs.selectedIndex = index;
+      },
+    );
 
-    return {
-      isActive,
-      href,
-    };
+    onBeforeMount(() => {
+      index.value = tabs.count;
+      tabs.count++;
+      isActive.value = index.value === tabs.selectedIndex;
+    });
+    return { index, isActive };
   },
-};
+});
 </script>
 
 <style scoped></style>

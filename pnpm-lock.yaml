@@ -62,6 +62,7 @@ specifiers:
   eslint-plugin-vue: ^9.8.0
   floating-vue: 2.0.0-beta.20
   happy-dom: ^8.1.1
+  hex-to-rgba: ^2.0.1
   husky: ^8.0.2
   idb: ^7.1.1
   is-ci: ^3.0.1
@@ -81,6 +82,7 @@ specifiers:
   moment: ^2.29.4
   moment-duration-format: ^2.3.2
   moment-timezone: ^0.5.40
+  nearest-color: ^0.4.4
   parse-address: ^1.1.2
   pixi-filters: ^5.0.0
   pixi.js: ^6.5.8
@@ -160,6 +162,7 @@ dependencies:
   dayjs: 1.11.7
   detect-browser-language: 0.0.2
   floating-vue: 2.0.0-beta.20_vue@3.2.41
+  hex-to-rgba: 2.0.1
   idb: 7.1.1
   jwt-decode: 3.1.2
   kdbush: 3.0.0
@@ -176,6 +179,7 @@ dependencies:
   moment: 2.29.4
   moment-duration-format: 2.3.2
   moment-timezone: 0.5.40
+  nearest-color: 0.4.4
   parse-address: 1.1.2
   pixi-filters: 5.0.0_pn32dkfqmirf6csgmr3emjmlxm
   pixi.js: 6.5.8
@@ -5450,6 +5454,10 @@ packages:
     hasBin: true
     dev: true
 
+  /hex-to-rgba/2.0.1:
+    resolution: {integrity: sha512-5XqPJBpsEUMsseJUi2w2Hl7cHFFi3+OO10M2pzAvKB1zL6fc+koGMhmBqoDOCB4GemiRM/zvDMRIhVw6EkB8dQ==}
+    dev: false
+
   /highlight-words-core/1.2.2:
     resolution: {integrity: sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==}
     dev: false
@@ -6294,6 +6302,10 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
+
+  /nearest-color/0.4.4:
+    resolution: {integrity: sha512-orhcaIORC10tf41Ld2wwlcC+FaAavHG87JHWB3eHH5p7v2k9Tzym2XNEZzLAm5YJwGv6Q38WWc7SOb+Qfu/4NQ==}
+    dev: false
 
   /node-fetch/2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}

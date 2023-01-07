@@ -15,6 +15,7 @@ import Team from '../models/Team';
 import Invitation from '../models/Invitation';
 import InvitationRequest from '../models/InvitationRequest';
 import Layer from '../models/Layer';
+import PasswordResetRequest from '../models/PasswordResetRequest';
 import UserRole from '@/models/UserRole';
 
 const database = new Database();
@@ -35,5 +36,6 @@ database.register(Layer, {});
 database.register(InvitationRequest, {});
 database.register(Invitation, {});
 database.register(UserRole, {});
+database.register(PasswordResetRequest, {});
 
 export default database;

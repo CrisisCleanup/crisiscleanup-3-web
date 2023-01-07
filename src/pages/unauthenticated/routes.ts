@@ -1,19 +1,19 @@
 // import EmbedMap from '@/pages/unauthenticated/EmbedMap';
-// import InvitationSignup from './InvitationSignup.vue';
+import InvitationSignup from './InvitationSignup.vue';
 // import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
 import Survivors from './Survivors.vue';
-// import ResetPassword from './ResetPassword';
-// import PewPew from './PewPew';
-// import DownForMaintenance from './DownForMaintenance.vue';
+import ResetPassword from './ResetPassword.vue';
+import PewPew from './PewPew.vue';
+import DownForMaintenance from './DownForMaintenance.vue';
 
 const routes = [
-  // {
-  //   path: '/invitation_token/:token',
-  //   component: InvitationSignup,
-  //   name: 'nav.invitation_token',
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
+  {
+    path: '/invitation_token/:token',
+    component: InvitationSignup,
+    name: 'nav.invitation_token',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
   {
     path: '/print_token/:token',
     component: PrintToken,
@@ -38,41 +38,41 @@ const routes = [
   //   name: 'nav.map_embed',
   //   meta: { layout: 'unauthenticated', noAuth: true },
   // },
-  // {
-  //   path: '/password/reset/:token',
-  //   component: ResetPassword,
-  //   name: 'nav.reset_password',
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
-  // {
-  //   path: '/pew-pew',
-  //   component: PewPew,
-  //   name: 'nav.pew',
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
+  {
+    path: '/password/reset/:token',
+    component: ResetPassword,
+    name: 'nav.reset_password',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/pew-pew',
+    component: PewPew,
+    name: 'nav.pew',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
   // {
   //   path: '/live',
   //   component: PewPew,
   //   name: 'nav.pew',
   //   meta: { layout: 'unauthenticated', noAuth: true },
   // },
-  // {
-  //   path: '/donate',
-  //   redirect: () => {
-  //     window.location.href = 'https://www.paypal.com/paypalme/crisiscleanup';
-  //   },
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
-  // {
-  //   path: '/maintenance',
-  //   // component: () =>
-  //   //   import(
-  //   //     /* webpackChunkName: "down-for-maintenance" */ './DownForMaintenance.vue'
-  //   //   ),
-  //   component: DownForMaintenance,
-  //   name: 'nav.site_maintenance',
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
+  {
+    path: '/donate',
+    redirect: () => {
+      window.location.href = 'https://www.paypal.com/paypalme/crisiscleanup';
+    },
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/maintenance',
+    // component: () =>
+    //   import(
+    //     /* webpackChunkName: "down-for-maintenance" */ './DownForMaintenance.vue'
+    //   ),
+    component: DownForMaintenance,
+    name: 'nav.site_maintenance',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
 ];
 
 export default routes;

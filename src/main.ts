@@ -30,6 +30,8 @@ import {
   faChevronLeft,
   faUsers,
   faStar,
+  faPlay,
+  faPause,
 } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
 import { createI18n } from 'vue-i18n';
@@ -101,12 +103,14 @@ library.add(faChevronRight);
 library.add(faChevronLeft);
 library.add(faUsers);
 library.add(faStar);
+library.add(faPlay);
+library.add(faPause);
 
 const getI18n = (messages = {}) => {
   return createI18n({
     legacy: false,
     formatFallbackMessages: true,
-    silentFallbackWarn: true,
+    silentFallbackWarn: false,
     locale: 'en',
     messages,
   });

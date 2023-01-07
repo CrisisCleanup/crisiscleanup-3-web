@@ -1,32 +1,34 @@
+import * as config from 'tailwind.config';
+import * as nearestColor from 'nearest-color';
+
+const { theme } = config;
+
 export const getNearestColor = (value, overrideColors) => {
-  const colors = overrideColors || require('tailwindcss/defaultTheme').colors;
+  const colors = overrideColors || theme.extend.colors;
   const flattenObject = (obj, sep = '-') =>
     Object.assign(
       {},
       ...(function _flatten(o, p = '') {
-        return [].concat(
-          ...Object.keys(o)
-            .filter((k) => k.toLowerCase() !== 'transparent')
-            .filter((k) => k.toLowerCase() !== 'current')
-            .map((k) =>
-              typeof o[k] === 'object'
-                ? _flatten(o[k], k + sep)
-                : {
-                    [(p + k).replace(`${sep}default`, '')]: o[k]
-                      .replace(' ', '')
-                      .toLowerCase(),
-                  },
-            ),
-        );
+        return Object.keys(o)
+          .filter((k) => k.toLowerCase() !== 'transparent')
+          .filter((k) => k.toLowerCase() !== 'current')
+          .flatMap((k) =>
+            typeof o[k] === 'object'
+              ? _flatten(o[k], k + sep)
+              : {
+                  [(p + k).replace(`${sep}default`, '')]: o[k]
+                    .replace(' ', '')
+                    .toLowerCase(),
+                },
+          );
       })(obj),
     );
-  const findNearestColor = require('nearest-color').from(flattenObject(colors));
+  const findNearestColor = nearestColor.from(flattenObject(colors));
   return findNearestColor(value);
 };
 
 export const stringToColor = (stringInput) => {
   const h = [...stringInput].reduce((acc, char) => {
-    // eslint-disable-next-line no-bitwise
     return char.charCodeAt(0) + ((acc << 2) - acc);
   }, 0);
   const s = 95;

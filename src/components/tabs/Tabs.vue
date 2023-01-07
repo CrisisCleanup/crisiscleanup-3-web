@@ -1,18 +1,18 @@
 <template>
   <div class="tabs">
-    <ul class="tabs-header flex items-center h-full w-auto">
+    <ul class="tabs-header flex h-full w-auto">
       <li
-          v-for="(tab, index) in tabs"
-          :key="index"
-          @click="selectTab(index)"
-          :class="{
-            'is-active': index === selectedIndex,
-            disabled: tab.disabled,
-            [tabClasses]: true,
-            [tabActiveClasses]: index === selectedIndex,
-            [tabDefaultClasses]: true,
-          }"
-          class="tab cursor-pointer"
+        v-for="(tab, index) in tabs"
+        :key="index"
+        :class="{
+          'is-active': index === selectedIndex,
+          disabled: tab.disabled,
+          [tabClasses]: true,
+          [tabActiveClasses]: index === selectedIndex,
+          [tabDefaultClasses]: true,
+        }"
+        class="tab cursor-pointer"
+        @click="selectTab(index)"
       >
         {{ tab.props.name }}
       </li>
@@ -22,7 +22,15 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, provide, onMounted, onBeforeMount, toRefs, VNode} from "vue";
+import type { VNode } from 'vue';
+import {
+  defineComponent,
+  reactive,
+  provide,
+  onMounted,
+  onBeforeMount,
+  toRefs,
+} from 'vue';
 
 interface TabProps {
   name: string;
@@ -30,7 +38,7 @@ interface TabProps {
 }
 
 export default defineComponent({
-  name: "Tabs",
+  name: 'Tabs',
   props: {
     classes: {
       type: String,
@@ -57,22 +65,28 @@ export default defineComponent({
       default: true,
     },
   },
-  setup(_, {slots}) {
+  setup(_, { slots, emit }) {
     const state = reactive({
       selectedIndex: 0,
       tabs: [] as VNode<TabProps>[],
-      count: 0
+      count: 0,
     });
 
-    provide("TabsProvider", state);
+    provide('TabsProvider', state);
 
     const selectTab = (i: number) => {
       state.selectedIndex = i;
+      emit('tabSelected', state.tabs[i]);
     };
 
     onBeforeMount(() => {
       if (slots.default) {
-        state.tabs = slots.default().filter((child) => child.type.name === "Tab");
+        state.tabs = slots
+          .default()
+          .filter(
+            (child) =>
+              child.type.name === 'Tab' || child.type.name === 'LightTab',
+          );
       }
     });
 
@@ -80,7 +94,7 @@ export default defineComponent({
       selectTab(0);
     });
 
-    return {...toRefs(state), selectTab};
-  }
+    return { ...toRefs(state), selectTab };
+  },
 });
 </script>

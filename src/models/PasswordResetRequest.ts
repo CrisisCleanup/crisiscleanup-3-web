@@ -4,9 +4,13 @@ import moment from 'moment';
 export default class PasswordResetRequest extends Model {
   static entity = 'password_reset_requests';
 
+  id!: string;
+  requested_at!: string;
+  expires_at!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       email: this.string(''),
       requested_at: this.attr(null),
       expires_at: this.attr(null),
@@ -32,7 +36,7 @@ export default class PasswordResetRequest extends Model {
 
   static apiConfig = {
     actions: {
-      reset(token, password) {
+      reset(token: string, password: string) {
         return this.post(
           `/password_reset_requests/${token}/reset`,
           {
@@ -42,6 +46,6 @@ export default class PasswordResetRequest extends Model {
           { save: false },
         );
       },
-    },
+    } as any,
   };
 }

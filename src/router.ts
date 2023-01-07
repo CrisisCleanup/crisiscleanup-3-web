@@ -8,6 +8,7 @@ import { store } from './store';
 import AdminRoutes from './pages/admin/routes';
 import OrganizationRoutes from './pages/organization/routes';
 import UnauthenticatedRoutes from './pages/unauthenticated/routes';
+import useSetupLanguage from '@/hooks/useSetupLanguage';
 
 const routes = [
   { path: '/', component: Dashboard, name: 'Home' },
@@ -53,7 +54,9 @@ const router = createRouter({
   routes, // Short for `routes: routes`
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  const { setupLanguage } = useSetupLanguage();
+  await setupLanguage();
   store.commit('events/addEvent', {
     event_key: 'user_ui-read_page',
     created_at: moment().toISOString(),

@@ -1,15 +1,6 @@
 <template>
   <section
-    class="
-      w-full
-      h-full
-      text-center
-      flex flex-col
-      justify-center
-      items-center
-      gap-6
-      p-6
-    "
+    class="w-full h-full text-center flex flex-col justify-center items-center gap-6 p-6"
   >
     <div class="text-5xl">We&rsquo;ll be back soon</div>
     <div class="w-full md:w-2/3 text-2xl">
@@ -28,8 +19,6 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from '@vue/composition-api';
-
 export default {
   name: 'DownForMaintenance',
   setup() {
