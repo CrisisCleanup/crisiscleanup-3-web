@@ -7,11 +7,19 @@
     :resolve-on-load="false"
     :delay="0"
     :searchable="true"
+    :object="true"
+    :create-option="allowNew"
+    :add-option-on="['enter', 'tab']"
     value-prop="id"
     :options="onOrganizationSearch"
     @update:modelValue="
       (value) => {
-        $emit('selectedOrganization', value);
+        // TODO: Is there a way to do this without the click?
+        if (Number.isInteger(value.id)) {
+          $emit('selectedOrganization', value);
+        } else {
+          $emit('input', value.name);
+        }
       }
     "
   >
@@ -46,6 +54,10 @@ export default defineComponent({
     allowedOrganizationIds: {
       type: Array,
       default: () => [],
+    },
+    allowNew: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props) {

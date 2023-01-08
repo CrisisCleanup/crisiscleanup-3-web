@@ -5,6 +5,10 @@ import Training from '@/pages/home/Training.vue';
 import Survivor from '@/pages/home/Survivor.vue';
 import Map from '@/pages/home/Map.vue';
 import RequestPasswordReset from '@/pages/home/RequestPasswordReset.vue';
+import Contributions from '@/pages/home/Contributions.vue';
+import Privacy from '@/pages/home/Privacy.vue';
+import Terms from '@/pages/home/Terms.vue';
+import RegisterOrganization from '@/pages/home/RegisterOrganization.vue';
 
 export default [
   {
@@ -47,6 +51,30 @@ export default [
     path: '/password/new',
     component: RequestPasswordReset,
     name: 'nav.request_password_reset',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/contributions',
+    component: Contributions,
+    name: 'nav.contributions',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/privacy',
+    component: Privacy,
+    name: 'nav.privacy',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/terms',
+    component: Terms,
+    name: 'nav.terms',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/register',
+    component: RegisterOrganization,
+    name: 'nav.register',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];

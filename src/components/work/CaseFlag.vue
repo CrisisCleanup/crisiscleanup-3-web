@@ -53,8 +53,8 @@
               <template #popper>
                 <div>
                   <base-text
-                    variant="h2"
                     v-if="organization.incident_primary_contacts.length > 0"
+                    variant="h2"
                     >{{ $t('flag.incident_primary_contacts') }}</base-text
                   >
                   <div
@@ -79,8 +79,8 @@
                     </div>
                   </div>
                   <base-text
-                    variant="h2"
                     v-if="organization.primary_contacts.length > 0"
+                    variant="h2"
                     >{{ $t('flag.primary_contacts') }}</base-text
                   >
                   <div
@@ -199,7 +199,7 @@
             @selectedOrganization="
               (value) => {
                 selectedOrganizations = new Set(
-                  selectedOrganizations.add(value),
+                  selectedOrganizations.add(value.id),
                 );
               }
             "
@@ -331,6 +331,7 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 
 export default {
   name: 'CaseFlag',
+  components: { OrganizationSearchInput },
   props: {
     worksiteId: {
       type: String,
@@ -341,7 +342,6 @@ export default {
       default: null,
     },
   },
-  components: { OrganizationSearchInput },
 
   setup(props, { emit }) {
     const { t } = useI18n();
