@@ -36,7 +36,7 @@
       <div class="grid grid-cols-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('pewPew.type') | upper }}
+            {{ $t('pewPew.type') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.type_description'),
@@ -58,7 +58,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('pewPew.role') | upper }}
+            {{ $t('pewPew.role') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.role_description'),
@@ -82,7 +82,7 @@
       <div class="grid grid-cols-4 gap-1 mt-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.incidents') | upper }}
+            {{ $t('pewPew.incidents') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.incidents_description'),
@@ -98,7 +98,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.cases') | upper }}
+            {{ $t('pewPew.cases') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.cases_description'),
@@ -114,7 +114,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.calls') | upper }}
+            {{ $t('pewPew.calls') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.call_description'),
@@ -130,7 +130,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.value') | upper }}
+            {{ $t('pewPew.value') }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.value_description'),
@@ -150,7 +150,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isIncidentHidden = !isIncidentHidden"
       >
-        <span>{{ $t('pewPew.incidents') | upper }}</span>
+        <span>{{ $t('pewPew.incidents') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isIncidentHidden ? 'rotate-0' : 'rotate-180'"
@@ -213,7 +213,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isCapabilityHidden = !isCapabilityHidden"
       >
-        <span>{{ $t('pewPew.capabilities') | upper }}</span>
+        <span>{{ $t('pewPew.capabilities') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"
@@ -241,12 +241,14 @@
 
 <script>
 import _ from 'lodash';
+import { useI18n } from 'vue-i18n';
+import { reactive, toRefs } from 'vue';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
-import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import { nFormatter } from '@/utils/helpers';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import { cachedGet } from '@/utils/promise';
+import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
 
 export default {
   name: 'OrganizationActivityModal',
@@ -273,25 +275,26 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
+  emits: ['close'],
+  setup(props, { emit }) {
+    const { t } = useI18n();
+
+    const state = reactive({
       isIncidentHidden: true,
       isCapabilityHidden: true,
       nFormatter,
       capabilities: [],
       roles: [],
+    });
+
+    const helpTooltipAttrs = {
+      invertColor: true,
+      alt: t('actions.help_alt'),
+      type: 'help',
+      size: 'medium',
     };
-  },
-  computed: {
-    helpTooltipAttrs() {
-      return {
-        invertColor: true,
-        alt: this.$t('actions.help_alt'),
-        type: 'help',
-        size: 'medium',
-      };
-    },
-    incidentTable() {
+
+    const incidentTable = computed(() => {
       const columns = makeTableColumns([
         ['name', '40%'],
         ['reported_count', '20%', 'Cases'],
@@ -311,63 +314,77 @@ export default {
       return {
         columns,
       };
-    },
-  },
-  async mounted() {
-    const capabilities = await cachedGet(
-      `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
-      {},
-      'organization_capabilities',
-    );
-    this.capabilities = capabilities.data.results;
+    });
 
-    const roles = await cachedGet(
-      `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
-      {},
-      'organizations_roles',
-    );
-    this.roles = roles.data.results;
-  },
-  methods: {
-    getTotalValue() {
+    function getTotalValue() {
       return _.sumBy(
-        this.generalInfo.statistics,
+        props.generalInfo.statistics,
         (stat) => stat.commercial_value || 0,
       );
-    },
-    getTotalCalls() {
-      return _.sumBy(this.generalInfo.statistics, (stat) => stat.calls || 0);
-    },
-    getTotalCases() {
+    }
+    function getTotalCalls() {
+      return _.sumBy(props.generalInfo.statistics, (stat) => stat.calls || 0);
+    }
+    function getTotalCases() {
       return _.sumBy(
-        this.generalInfo.statistics,
+        props.generalInfo.statistics,
         (stat) =>
           (stat.reported_count || 0) +
           ((stat.claimed_count || 0) - (stat.closed_count || 0)) +
           (stat.closed_count || 0),
       );
-    },
-    getRoleNames(roleIds) {
+    }
+    function getRoleNames(roleIds) {
       return _.join(
         _.map(
           roleIds,
-          (id) => _.find(this.roles, (role) => role.id === id).name_t,
+          (id) => _.find(state.roles, (role) => role.id === id).name_t,
         ),
         ', ',
       );
-    },
-    closeModalAndResetState() {
-      this.$emit('close');
-      this.isIncidentHidden = true;
-      this.isCapabilityHidden = true;
-    },
-    isDataEmpty(data) {
+    }
+    function closeModalAndResetState() {
+      emit('close');
+      state.isIncidentHidden = true;
+      state.isCapabilityHidden = true;
+    }
+    function isDataEmpty(data) {
       return (
         (data.reported_count || 0) <= 0 &&
         (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
         (data.closed_count || 0) <= 0
       );
-    },
+    }
+
+    onMounted(async () => {
+      const capabilities = await cachedGet(
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/organization_capabilities?limit=200`,
+        {},
+        'organization_capabilities',
+      );
+      state.capabilities = capabilities.data.results;
+
+      const roles = await cachedGet(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/organization_roles`,
+        {},
+        'organizations_roles',
+      );
+      state.roles = roles.data.results;
+    });
+
+    return {
+      ...toRefs(state),
+      incidentTable,
+      helpTooltipAttrs,
+      getTotalValue,
+      getTotalCalls,
+      getTotalCases,
+      getRoleNames,
+      closeModalAndResetState,
+      isDataEmpty,
+    };
   },
 };
 </script>

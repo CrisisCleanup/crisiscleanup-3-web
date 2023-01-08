@@ -5,12 +5,12 @@
       class="w-full absolute top-0 right-0 flex justify-center transform transition duration-500"
       style="z-index: 1002"
     >
-      <!--      <OrganizationActivityModal-->
-      <!--        :is-loading="isOrgActivityModalLoading"-->
-      <!--        :general-info="orgInfo.generalInfo"-->
-      <!--        :styles="overlayStyles"-->
-      <!--        @close="isOrgActivityModalHidden = true"-->
-      <!--      />-->
+      <OrganizationActivityModal
+        :is-loading="isOrgActivityModalLoading"
+        :general-info="orgInfo.generalInfo"
+        :styles="overlayStyles"
+        @close="isOrgActivityModalHidden = true"
+      />
     </div>
     <Table
       :columns="orgTable.columns"
@@ -82,10 +82,11 @@ import { getQueryString } from '@/utils/urls';
 import earthGlobe from '@/assets/icons/earth-globe.svg';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
 import Table from '@/components/Table.vue';
+import OrganizationActivityModal from '@/components/live/OrganizationActivityModal.vue';
 
 export default {
   name: 'LiveOrganizationTable',
-  components: { CaseDonutChart, Table },
+  components: { OrganizationActivityModal, CaseDonutChart, Table },
   props: {
     organizations: {
       type: Array,
@@ -106,7 +107,7 @@ export default {
   },
   setup(props) {
     const isOrgActivityModalLoading = ref(false);
-    const isOrgActivityModalHidden = ref(false);
+    const isOrgActivityModalHidden = ref(true);
 
     const orgInfo = reactive({
       generalInfo: {},

@@ -1,10 +1,11 @@
 <template>
-  <div ref="chart"></div>
+  <div :id="chartId" ref="chart"></div>
 </template>
 
 <script>
 import { reactive, onMounted } from 'vue';
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 export default {
   name: 'CaseDonutChart',
@@ -16,6 +17,11 @@ export default {
         claimedCases: 50,
         completedCases: 30,
       }),
+    },
+    chartId: {
+      type: String,
+      default: `d3-chart-${_.uniqueId()}`,
+      required: false,
     },
   },
   setup(props) {
