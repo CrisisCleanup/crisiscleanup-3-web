@@ -38,7 +38,7 @@ const makeColumn = ([
  * @param cols - Array of columns to make.
  * @returns {Array<ColumnT>}
  */
-const makeTableColumns = (cols: string[]): ColumnT[] =>
+const makeTableColumns = (cols: string[][]): ColumnT[] =>
   cols.map((c) => makeColumn(c));
 
 export { makeTableColumns };

@@ -7,6 +7,7 @@ import AdminTicketDashboard from '@/pages/admin/AdminTicketDashboard.vue';
 import AdminCosts from '@/pages/admin/AdminCosts.vue';
 import AdminCms from '@/pages/admin/AdminCms';
 import AdminIncidentWizard from '@/pages/admin/AdminIncidentWizard';
+import AdminLocalizations from '@/pages/admin/AdminLocalizations';
 const routes = [
   {
     path: '/admin',
@@ -62,6 +63,11 @@ const routes = [
         path: 'incident_wizard/:incident_id',
         name: 'nav.incident_wizard_detail',
         component: AdminIncidentWizard,
+      },
+      {
+        path: 'localizations',
+        name: 'nav.localizations',
+        component: AdminLocalizations,
       },
     ],
   },
