@@ -1,7 +1,7 @@
 <template>
   <div class="grid h-full grid-rows-2 p-4">
-    <div class="grid grid-cols-2 h-1/2 gap-5">
-      <div>
+    <div class="grid grid-cols-3 h-1/2 gap-5">
+      <div class="col-span-1">
         <div class="mb-1 flex items-center justify-between">
           <div
             v-if="currentLocalization && currentLocalization.id"
@@ -12,12 +12,20 @@
           <div v-else class="text-xl font-semibold mb-3">
             {{ $t('~~New Localization') }}
           </div>
-          <base-button
-            :action="saveLocalization"
-            variant="solid"
-            class="px-2 py-1"
-            >{{ $t('~~Save') }}</base-button
-          >
+          <div class="flex items-center gap-2">
+            <base-button
+              :action="saveLocalization"
+              variant="solid"
+              class="px-2 py-1"
+              >{{ $t('~~Save') }}
+            </base-button>
+            <base-button
+              :action="saveAndClear"
+              variant="solid"
+              class="px-2 py-1"
+              >{{ $t('~~Save and Clear') }}
+            </base-button>
+          </div>
         </div>
         <base-input
           v-model="currentLocalization.group"
@@ -38,15 +46,24 @@
           {{ $t('~~Available in frontend') }}
         </base-checkbox>
       </div>
-      <div>
+      <div class="col-span-2">
         <div class="mb-3 flex items-center justify-between">
           <span class="text-xl font-semibold">{{ $t('~~Text Items') }}</span>
-          <base-button
-            :action="addNewText"
-            variant="outline"
-            class="px-2 py-1"
-            >{{ $t('~~Add new') }}</base-button
-          >
+          <div class="flex items-center gap-2">
+            <base-button
+              :action="addNewText"
+              variant="outline"
+              class="px-2 py-1"
+              >{{ $t('~~Add new') }}
+            </base-button>
+            <base-button
+              v-if="!currentLocalization.id"
+              :action="autoTranslate"
+              variant="outline"
+              class="px-2 py-1"
+              >{{ $t('~~Generate Translations') }}
+            </base-button>
+          </div>
         </div>
         <div
           v-for="text in localizationTexts"
@@ -145,6 +162,7 @@ import useToasted from '@/use/useToasted';
 import useHttp from '@/use/useHttp';
 import useDialogs from '@/use/useDialogs';
 import CmsViewer from '@/components/CmsViewer.vue';
+import useTranslation from '@/use/useTranslation';
 
 interface Localization {
   id?: string;
@@ -171,6 +189,7 @@ export default defineComponent({
     const { component } = useDialogs();
 
     const { $toasted } = useToasted();
+    const { translate } = useTranslation();
 
     const tableUrl = `${process.env.VUE_APP_API_BASE_URL}/admins/localizations`;
     const columns = makeTableColumns([
@@ -282,11 +301,61 @@ export default defineComponent({
           response = await $http.post(tableUrl, currentLocalization.value);
         }
         currentLocalization.value = response.data;
+        await saveLocalizationTexts();
+        await $toasted.success('~~Success');
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
+        throw error;
       }
-      await saveLocalizationTexts();
-      await $toasted.success('~~Success');
+    }
+
+    async function autoTranslate() {
+      const englishLanguage = Language.query().where('subtag', 'en-US').first();
+      const englishLocalization = localizationTexts.value.find(
+        (i) => i.language === englishLanguage?.id,
+      );
+
+      if (englishLocalization) {
+        localizationTexts.value = [englishLocalization];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const lang of Language.all()) {
+          if (lang.id === englishLanguage?.id) {
+            continue;
+          }
+          translate(englishLocalization.text, 'en-US', lang.subtag).then(
+            (translation) => {
+              localizationTexts.value.push({
+                localization: '',
+                text: translation,
+                language: lang.id,
+              });
+            },
+          );
+        }
+      } else {
+        await $toasted.error('English translation required for generation');
+      }
+    }
+
+    async function saveAndClear() {
+      try {
+        await saveLocalization();
+        currentLocalization.value = {
+          group: '',
+          label: '',
+          group_label: '',
+          is_front_end: true,
+        };
+        localizationTexts.value = [
+          {
+            localization: '',
+            text: '',
+            language: '',
+          },
+        ];
+      } catch {
+        /* empty */
+      }
     }
 
     function addNewText() {
@@ -310,6 +379,8 @@ export default defineComponent({
       deleteLocalizationText,
       editLocalizationTextAdvanced,
       previewLocalizationText,
+      saveAndClear,
+      autoTranslate,
     };
   },
 });
