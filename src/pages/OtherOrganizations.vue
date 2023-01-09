@@ -1,16 +1,7 @@
 <template>
   <div class="p-10">
     <div
-      class="
-        sm:w-3/5
-        border-primary-dark
-        h-20
-        border-2
-        my-4
-        flex
-        items-center
-        p-2
-      "
+      class="sm:w-3/5 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
     >
       <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
       <div>
@@ -24,16 +15,11 @@
     </div>
 
     <base-input
-      :value="organizations.search"
+      v-model="organizations.search"
       icon="search"
       class="sm:w-84 my-2"
       :placeholder="$t('actions.search')"
-      @input="
-        (value) => {
-          organizations.search = value;
-          throttle(getOrganizations, 1000)();
-        }
-      "
+      @input="onSearchInput"
     ></base-input>
 
     <Table
@@ -60,8 +46,11 @@
                 grid-column-gap: 10px;
               "
             >
-              <template v-for="contact in slotProps.item.primary_contacts">
-                <div :key="contact.email" class="my-1">
+              <template
+                v-for="contact in slotProps.item.primary_contacts"
+                :key="contact.email"
+              >
+                <div class="my-1">
                   <strong class="font-bold"
                     >{{ contact.first_name }} {{ contact.last_name }}</strong
                   >
@@ -81,15 +70,16 @@
           >
             <base-text
               variant="h2"
-              v-if="slotProps.item.incident_primary_contacts.length"
+              v-if="slotProps.item.incident_primary_contacts.length > 0"
             >
               {{ $t('otherOrganizations.incident_primary_contacts') }}
             </base-text>
             <div>
               <template
                 v-for="contact in slotProps.item.incident_primary_contacts"
+                :key="contact.email"
               >
-                <div :key="contact.email">
+                <div>
                   <strong class="font-bold"
                     >{{ contact.first_name }} {{ contact.last_name }}</strong
                   >
@@ -109,17 +99,25 @@
               getHighestRole(slotProps.item.approved_roles).name_t
             }}</span>
           </base-text>
-          <div slot="popover">
-            <div class="text-base">
-              {{ getHighestRole(slotProps.item.approved_roles).data_access_t }}
+          <template #popper>
+            <div>
+              <div class="text-base">
+                {{
+                  getHighestRole(slotProps.item.approved_roles).data_access_t
+                }}
+              </div>
+              <div class="text-xs mb-2">
+                {{
+                  getHighestRole(slotProps.item.approved_roles).description_t
+                }}
+              </div>
+              <div class="text-xs">
+                {{
+                  getHighestRole(slotProps.item.approved_roles).limitations_t
+                }}
+              </div>
             </div>
-            <div class="text-xs mb-2">
-              {{ getHighestRole(slotProps.item.approved_roles).description_t }}
-            </div>
-            <div class="text-xs">
-              {{ getHighestRole(slotProps.item.approved_roles).limitations_t }}
-            </div>
-          </div>
+          </template>
         </v-popover>
       </template>
       <template #overdue_count="slotProps">
@@ -130,9 +128,7 @@
               $router.push(
                 `/incident/${currentIncidentId}/cases/new?showTable=true&work_type__claimed_by=${
                   slotProps.item.id
-                }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${$moment()
-                  .subtract(6, 'd')
-                  .toISOString()}`,
+                }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${createdAtLteFilter}`,
               );
             }
           "
@@ -144,188 +140,212 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
 import { throttle } from 'lodash';
-import Table from '@/components/Table';
-import User from '@/models/User';
-import { getQueryString } from '../utils/urls';
+import moment from 'moment';
+import axios from 'axios';
 import enums from '../store/modules/enums';
+import Table from '@/components/Table.vue';
+import { getQueryString } from '@/utils/urls';
 import { cachedGet } from '@/utils/promise';
+import type Role from '@/models/Role';
 
-export default {
+export default defineComponent({
   name: 'OtherOrganizations',
   components: { Table },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    columns() {
-      return [
-        {
-          title: this.$t('otherOrganizations.name'),
-          dataIndex: 'name',
-          key: 'name',
-          width: this.isLandscape() ? '2fr' : '350px',
-        },
-        {
-          title: this.$t('otherOrganizations.access_level'),
-          dataIndex: 'approved_roles',
-          key: 'approved_roles',
-          width: '150px',
-        },
-        {
-          title: this.$t('otherOrganizations.incidents'),
-          dataIndex: 'incident_count',
-          key: 'incident_count',
-          transformer: (item) => {
-            return item || 0;
-          },
-          class: 'justify-center',
-          headerClass: 'justify-center',
-        },
-        {
-          title: this.$t('otherOrganizations.cases_reported'),
-          dataIndex: 'reported_count',
-          key: 'reported_count',
-          transformer: (item) => {
-            return item || 0;
-          },
-          class: 'justify-center',
-          headerClass: 'justify-center',
-        },
-        {
-          title: this.$t('otherOrganizations.cases_claimed'),
-          dataIndex: 'claimed_count',
-          key: 'claimed_count',
-          transformer: (item) => {
-            return item || 0;
-          },
-          class: 'justify-center',
-          headerClass: 'justify-center',
-        },
-        {
-          title: this.$t('otherOrganizations.cases_closed'),
-          dataIndex: 'closed_count',
-          key: 'closed_count',
-          transformer: (item) => {
-            return item || 0;
-          },
-          class: 'justify-center',
-          headerClass: 'justify-center',
-        },
-        {
-          title: this.$t('otherOrganizations.cases_overdue'),
-          dataIndex: 'overdue_count',
-          key: 'overdue_count',
-          class: 'justify-center',
-          headerClass: 'justify-center',
-        },
-        {
-          title: this.$t('otherOrganizations.last_login'),
-          dataIndex: 'last_login',
-          key: 'last_login',
-          class: 'justify-center',
-          headerClass: 'justify-center',
-          width: '150px',
-          transformer: (item) => {
-            return this.$moment(item).fromNow();
-          },
-        },
-      ];
-    },
-    ...mapState('incident', ['currentIncidentId']),
-  },
-  async mounted() {
-    const organizationRolesResponse = await cachedGet(
-      `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
-      {},
-      'organizations_roles',
-    );
-    this.organizationRoles = organizationRolesResponse.data.results;
+  setup(props) {
+    const store = useStore();
+    const { t } = useI18n();
 
-    await this.getOrganizations(this.organizations.meta);
-  },
-  methods: {
-    isLandscape() {
+    const loading = ref(false);
+    const organizations = reactive({
+      data: [],
+      meta: {
+        pagination: {
+          pageSize: 50,
+          page: 1,
+          current: 1,
+        },
+      },
+      search: '',
+      visible: true,
+    });
+    const organizationRoles = ref<Role[]>([]);
+    const createdAtLteFilter = moment().subtract(6, 'd').toISOString();
+
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
+    );
+    const currentUser = computed(() => store.getters['auth/userId']);
+    const columns = computed(() => [
+      {
+        title: t('otherOrganizations.name'),
+        dataIndex: 'name',
+        key: 'name',
+        width: isLandscape() ? '2fr' : '350px',
+      },
+      {
+        title: t('otherOrganizations.access_level'),
+        dataIndex: 'approved_roles',
+        key: 'approved_roles',
+        width: '150px',
+      },
+      {
+        title: t('otherOrganizations.incidents'),
+        dataIndex: 'incident_count',
+        key: 'incident_count',
+        transformer: (item: number) => {
+          return item || 0;
+        },
+        class: 'justify-center',
+        headerClass: 'justify-center',
+      },
+      {
+        title: t('otherOrganizations.cases_reported'),
+        dataIndex: 'reported_count',
+        key: 'reported_count',
+        transformer: (item: number) => {
+          return item || 0;
+        },
+        class: 'justify-center',
+        headerClass: 'justify-center',
+      },
+      {
+        title: t('otherOrganizations.cases_claimed'),
+        dataIndex: 'claimed_count',
+        key: 'claimed_count',
+        transformer: (item: number) => {
+          return item || 0;
+        },
+        class: 'justify-center',
+        headerClass: 'justify-center',
+      },
+      {
+        title: t('otherOrganizations.cases_closed'),
+        dataIndex: 'closed_count',
+        key: 'closed_count',
+        transformer: (item: number) => {
+          return item || 0;
+        },
+        class: 'justify-center',
+        headerClass: 'justify-center',
+      },
+      {
+        title: t('otherOrganizations.cases_overdue'),
+        dataIndex: 'overdue_count',
+        key: 'overdue_count',
+        class: 'justify-center',
+        headerClass: 'justify-center',
+      },
+      {
+        title: t('otherOrganizations.last_login'),
+        dataIndex: 'last_login',
+        key: 'last_login',
+        class: 'justify-center',
+        headerClass: 'justify-center',
+        width: '150px',
+        transformer: (item: Date) => {
+          return moment(item).fromNow();
+        },
+      },
+    ]);
+
+    onMounted(async () => {
+      const organizationRolesResponse = await cachedGet(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/organization_roles`,
+        {},
+        'organizations_roles',
+      );
+      organizationRoles.value = organizationRolesResponse.data.results;
+
+      await getOrganizations(organizations.meta);
+    });
+
+    function isLandscape() {
       return window.matchMedia(
         'only screen and (max-device-width: 1223px) and (orientation: landscape)',
       ).matches;
-    },
-    async getOrganizations(data = {}) {
-      this.loading = true;
-      const pagination = data.pagination || this.organizations.meta.pagination;
-      const params = {
+    }
+    async function getOrganizations(data: Record<string, any> = {}) {
+      loading.value = true;
+      const pagination = data.pagination || organizations.meta.pagination;
+      const params: Record<string, unknown> = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
       };
-      if (this.organizations.search) {
-        params.search = this.organizations.search;
+      if (organizations.search) {
+        params.search = organizations.search;
       }
       const queryString = getQueryString(params);
 
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.currentIncidentId}/organizations?${queryString}`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${
+          currentIncidentId.value
+        }/organizations?${queryString}`,
       );
-      this.organizations.data = response.data.results;
+      organizations.data = response.data.results;
       const newPagination = {
         ...pagination,
         total: response.data.count,
       };
-      this.organizations.meta = {
+      organizations.meta = {
         pagination: newPagination,
       };
-      this.loading = false;
-    },
-    getOpenStatuses() {
-      enums.state.statuses.filter((status) => status.primary_state === 'open');
-      const openStatuses = enums.state.statuses.filter(
-        (status) => status.primary_state === 'open',
+      loading.value = false;
+    }
+    function getOpenStatuses() {
+      enums.state.statuses.filter(
+        (status: Record<string, unknown>) => status.primary_state === 'open',
       );
-      return openStatuses.map((status) => status.status).join(',');
-    },
-    async getOrganizationContacts(organizationId) {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/ghost_users?organization=${organizationId}`,
+      const openStatuses = enums.state.statuses.filter(
+        (status: Record<string, unknown>) => status.primary_state === 'open',
+      );
+      return openStatuses
+        .map((status: Record<string, unknown>) => status.status)
+        .join(',');
+    }
+    async function getOrganizationContacts(organizationId: number) {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/ghost_users?organization=${organizationId}`,
       );
       return response.data.results;
-    },
-    getHighestRole(roles) {
-      if (roles.length) {
-        return this.organizationRoles.filter((role) =>
-          roles.includes(role.id),
-        )[0];
+    }
+    function getHighestRole(roles: number[]) {
+      if (roles.length > 0) {
+        return organizationRoles.value.find((role) => roles.includes(role.id));
       }
       return {};
-    },
-  },
-  data() {
+    }
+    function onSearchInput() {
+      throttle(getOrganizations, 1000)();
+    }
+
     return {
+      loading,
+      organizations,
+      columns,
+      organizationRoles,
+      currentIncidentId,
+      currentUser,
       throttle,
-      loading: false,
-      organizations: {
-        data: [],
-        meta: {
-          pagination: {
-            pageSize: 50,
-            page: 1,
-            current: 1,
-          },
-        },
-        search: '',
-        visible: true,
-      },
-      organizationRoles: [],
+      createdAtLteFilter,
+      isLandscape,
+      getOrganizations,
+      getOpenStatuses,
+      getOrganizationContacts,
+      getHighestRole,
+      onSearchInput,
     };
   },
-};
+});
 </script>
 
-<style>
+<style lang="postcss" scoped>
 .org-role-popover {
   @apply bg-black text-white p-3 outline-none;
   width: 230px;
   z-index: 1000;
 }
 </style>
-
