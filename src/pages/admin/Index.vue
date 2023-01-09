@@ -32,6 +32,9 @@ export default {
       reactive({
         key: 'nav.incident_wizard',
       }),
+      reactive({
+        key: 'nav.localizations',
+      }),
     ]);
     return { tabs };
   },
