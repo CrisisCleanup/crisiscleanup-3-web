@@ -9,6 +9,7 @@ import AdminRoutes from './pages/admin/routes';
 import OrganizationRoutes from './pages/organization/routes';
 import UnauthenticatedRoutes from './pages/unauthenticated/routes';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
+import OtherOrganizations from '@/pages/OtherOrganizations.vue';
 
 const routes = [
   { path: '/', component: Dashboard, name: 'Home' },
@@ -41,6 +42,12 @@ const routes = [
         meta: { id: 'work_case_edit', noscroll: true },
       },
     ],
+  },
+  {
+    path: '/other_organizations',
+    component: OtherOrganizations,
+    name: 'nav.other_organizations',
+    meta: { layout: 'authenticated' },
   },
   ...HomeRoutes,
   ...PhoneRoutes,
