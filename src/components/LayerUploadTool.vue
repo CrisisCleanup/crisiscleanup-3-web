@@ -178,33 +178,35 @@
     </div>
   </template>
   
-  <script>
+  <script lang="ts">
   import Layer from '@/models/Layer';
   import DragDrop from '@/components/DragDrop.vue';
   import LocationType from '@/models/LocationType';
   import { getErrorMessage } from '../utils/errors';
+  import { useToast } from 'vue-toastification';
+  import axios from 'axios';
   export default {
     name: 'LayerUploadTool',
     components: { DragDrop },
-    data() {
-      return {
-        file: '',
-        shapefileStructure: null,
-        fileList: [],
-        loading: false,
-        shapefileInfo: {},
-      };
-    },
-    computed: {
-      locationTypes() {
+    setup(props, ctx) {
+      const $toasted = useToast();
+      const { t } = useI18n();
+      const $http = axios;
+      const file = ref('');
+      const shapefileStructure = ref<Record<string, any>>();
+      const fileList = ref<FileList>();
+      const loading = ref<boolean>(false);
+      const shapefileInfo = ref({});
+
+      const locationTypes = () => {
         return LocationType.all();
-      },
-      shapefiles() {
-        if (!this.shapefileStructure) {
+      };
+      const shapefiles = () => {
+        if (!shapefileStructure.value) {
           return [];
         }
-        return Object.keys(this.shapefileStructure).map((item) => {
-          const { count, fields, sample } = this.shapefileStructure[item];
+        return Object.keys(shapefileStructure.value).map((item) => {
+          const { count, fields, sample } = shapefileStructure.value![item];
           return {
             filename: item,
             count,
@@ -212,46 +214,38 @@
             sample,
           };
         });
-      },
-    },
-    async mounted() {
-      await LocationType.api().get('/location_types', {
-        dataKey: 'results',
-    });
-    await Layer.api().get('/layers', {
-      dataKey: 'results',
-    });
-  },
-  methods: {
-    customSample(filename) {
-      let returnString = this.shapefileInfo[filename].shapefileCustomName;
+      };
+
+      const customSample = (filename: string) => {
+      let returnString = shapefileInfo.value[filename].shapefileCustomName;
       const matches =
-        this.shapefileInfo[filename].shapefileCustomName.match(/{.+?}/g);
+        shapefileInfo.value[filename].shapefileCustomName.match(/{.+?}/g);
       if (matches) {
         const replaceArray = matches.map((match) =>
           match.replace('{', '').replace('}', ''),
         );
         for (let i = 0; i <= replaceArray.length - 1; i++) {
-          if (this.shapefileStructure[filename].sample[replaceArray[i]]) {
+          if (shapefileStructure.value[filename].sample[replaceArray[i]]) {
             returnString = returnString.replace(
               `{${replaceArray[i]}}`,
-              this.shapefileStructure[filename].sample[replaceArray[i]],
+              shapefileStructure.value[filename].sample[replaceArray[i]],
             );
           }
         }
       }
       return returnString;
-    },
-    async handleFileUpload(fileList) {
-      this.fileList = fileList;
-      if (this.fileList.length === 0) {
+    }
+
+    const handleFileUpload = async (files: FileList) => {
+      fileList.value = files;
+      if (fileList.value.length === 0) {
         return;
       }
-      this.file = this.fileList[0].originFileObj;
+      file.value = fileList.value[0].originFileObj;
       const formData = new FormData();
-      formData.append('file', this.fileList[0]);
-      this.loading = true;
-      const result = await this.$http.post(
+      formData.append('file', fileList.value[0]);
+      loading.value = true;
+      const result = await $http.post(
         `${process.env.VUE_APP_API_BASE_URL}/inspect_shapefile`,
         formData,
         {
@@ -261,35 +255,49 @@
           },
         },
       );
-      this.loading = false;
-      this.shapefileStructure = result.data;
-      Object.keys(this.shapefileStructure).forEach((key) => {
-        this.shapefileInfo[key] = { showingSampleModal: false };
+      loading.value = false;
+      shapefileStructure.value = result.data;
+      Object.keys(shapefileStructure.value).forEach((key) => {
+        shapefileInfo.value[key] = { showingSampleModal: false };
       });
-    },
-    async uploadShapefile(filename) {
-      if (!this.validateUpload(filename)) {
+    }
+
+      
+
+      const validateUpload = (filename: string) => {
+      if (
+        !shapefileInfo.value[filename].shapefileCustomName &&
+        !shapefileInfo.value[filename].shapefileKey
+      ) {
+        $toasted.error(t('layersVue.please_provide_name'));
+        return false;
+      }
+      return true;
+    }
+
+      const uploadShapefile = async (filename: string) => {
+      if (validateUpload(filename)) {
         return;
       }
       const formData = new FormData();
-      formData.append('file', this.fileList[0]);
-      formData.append('key', this.shapefileInfo[filename].shapefileKey);
-      formData.append('note_key', this.shapefileInfo[filename].shapefileKey);
-      formData.append('type', this.shapefileInfo[filename].shapefileType);
+      formData.append('file', fileList.value[0]);
+      formData.append('key', shapefileInfo.value[filename].shapefileKey);
+      formData.append('note_key', shapefileInfo.value[filename].shapefileKey);
+      formData.append('type', shapefileInfo.value[filename].shapefileType);
       formData.append('filename', filename);
-      formData.append('shared', this.shapefileAccess || 'shared');
+      formData.append('shared', shapefileAccess || 'shared');
       formData.append(
         'combine_locations',
-        this.shapefileInfo[filename].combineLocations || false,
+        shapefileInfo.value[filename].combineLocations || false,
       );
-      if (this.shapefileInfo[filename].shapefileCustomName) {
+      if (shapefileInfo.value[filename].shapefileCustomName) {
         formData.append(
           'name_template',
-          this.shapefileInfo[filename].shapefileCustomName,
+          shapefileInfo.value[filename].shapefileCustomName,
         );
       }
       try {
-        const results = await this.$http.post(
+        const results = await $http.post(
           `${process.env.VUE_APP_API_BASE_URL}/upload_shapefile`,
           formData,
           {
@@ -299,23 +307,35 @@
             },
           },
         );
-        this.$emit('addedLayer', results.data);
-        await this.$toasted.success(this.$t('layersVue.successful_upload'));
+        ctx.emit('addedLayer', results.data);
+        await $toasted.success(t('layersVue.successful_upload'));
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
+    }
+    onMounted(async () => {
+        await LocationType.api().get('/location_types', {
+          dataKey: 'results',
+        });
+        await Layer.api().get('/layers', {
+          dataKey: 'results',
+        });
+      });
+
+      return {
+        file,
+        shapefileStructure,
+        fileList,
+        loading,
+        shapefileInfo,
+        locationTypes,
+        shapefiles,
+        customSample,
+        handleFileUpload,
+        uploadShapefile,
+        validateUpload,
+      };
     },
-    validateUpload(filename) {
-      if (
-        !this.shapefileInfo[filename].shapefileCustomName &&
-        !this.shapefileInfo[filename].shapefileKey
-      ) {
-        this.$toasted.error(this.$t('layersVue.please_provide_name'));
-        return false;
-      }
-      return true;
-    },
-  },
 };
 </script>
 
