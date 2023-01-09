@@ -246,7 +246,7 @@
       formData.append('file', fileList.value[0]);
       loading.value = true;
       const result = await $http.post(
-        `${process.env.VUE_APP_API_BASE_URL}/inspect_shapefile`,
+        `${import.meta.env.VITE_APP_API_BASE_URL}/inspect_shapefile`,
         formData,
         {
           headers: {
@@ -298,7 +298,7 @@
       }
       try {
         const results = await $http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/upload_shapefile`,
+          `${import.meta.env.VITE_APP_API_BASE_URL}/upload_shapefile`,
           formData,
           {
             headers: {
