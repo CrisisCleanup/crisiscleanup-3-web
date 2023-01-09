@@ -128,7 +128,7 @@
               $router.push(
                 `/incident/${currentIncidentId}/cases/new?showTable=true&work_type__claimed_by=${
                   slotProps.item.id
-                }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${createdAtLteFilter}`,
+                }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${getCreatedAtLteFilter()}`,
               );
             }
           "
@@ -171,7 +171,6 @@ export default defineComponent({
       visible: true,
     });
     const organizationRoles = ref<Role[]>([]);
-    const createdAtLteFilter = moment().subtract(6, 'd').toISOString();
 
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'],
@@ -261,6 +260,7 @@ export default defineComponent({
       await getOrganizations(organizations.meta);
     });
 
+    const getCreatedAtLteFilter = () => moment().subtract(6, 'd').toISOString();
     function isLandscape() {
       return window.matchMedia(
         'only screen and (max-device-width: 1223px) and (orientation: landscape)',
@@ -330,7 +330,7 @@ export default defineComponent({
       currentIncidentId,
       currentUser,
       throttle,
-      createdAtLteFilter,
+      getCreatedAtLteFilter,
       isLandscape,
       getOrganizations,
       getOpenStatuses,
