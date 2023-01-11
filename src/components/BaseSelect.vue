@@ -1,13 +1,8 @@
 <template>
   <div>
     <Multiselect
+      ref="input"
       :value="modelValue"
-      @input="
-        (v) => {
-          onInput(v);
-          $emit('update:modelValue', v);
-        }
-      "
       :required="required"
       :options="options"
       :can-clear="clearable"
@@ -15,20 +10,33 @@
       :label="label"
       :value-prop="itemKey"
       :limit="limit"
-      :mode="multiple ? 'multiple' : 'single'"
+      :mode="multiple ? 'tags' : 'single'"
       :disabled="disabled"
       class="form-select text-base"
+      :resolve-on-load="false"
+      :delay="typeof options === 'function' ? 0 : undefined"
+      :filter-results="typeof options === 'function' ? false : undefined"
       :class="[
         isInvalid && !modelValue ? 'invalid' : '',
         floatLabel ? 'py-2 pt-3' : '',
       ]"
       :placeholder="placeholder"
       :classes="{
-        search: selectClasses,
+        search: `${selectClasses} px-1`,
         container: containerClasses,
+        optionSelected: 'text-white bg-crisiscleanup-dark-200',
+        optionPointed: 'text-gray-800 bg-crisiscleanup-dark-100',
+        optionSelectedPointed:
+          'text-white bg-crisiscleanup-dark-200 opacity-90',
+        tag: 'text-xs bg-white py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1 border border-crisiscleanup-dark-100',
       }"
-      ref="input"
       v-bind="$attrs"
+      @input="
+        (v) => {
+          onInput(v);
+          $emit('update:modelValue', v);
+        }
+      "
     >
       <template #singlelabel="{ value }">
         <slot name="selected-option" :option="value" />
@@ -43,9 +51,9 @@
       </template>
     </Multiselect>
     <label
-      :style="isFloated && floatStyle"
       v-if="floatLabel"
       ref="inputLabel"
+      :style="isFloated && floatStyle"
       for="select-id"
     >
       <slot name="float-label" v-bind="{ isFloated }">
@@ -97,7 +105,7 @@ export default {
         'border relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none',
     },
     options: {
-      type: Array,
+      type: [Array, Function],
       default: () => {
         return [];
       },

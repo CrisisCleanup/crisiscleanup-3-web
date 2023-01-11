@@ -2,51 +2,48 @@
   <div class="p-1">
     <div class="text-base">{{ $t('reports.filters') }}</div>
     <div class="grid grid-cols-3 gap-3">
-      <template v-for="input in inputs">
+      <template v-for="input in inputs" :key="input">
         <div v-if="input.filter === 'timerange'" :key="input" class="my-1">
-          <litepie-datepicker
+          <datepicker
             v-model="filters[input.field]"
-            :formatter="{
-              date: 'YYYY-MM-DD',
-              month: 'MMM',
-            }"
+            range
+            auto-apply
+            format="yyyy-MM-dd"
           />
         </div>
         <div v-if="input.filter === 'organizations'" :key="input" class="my-1">
-          <form-select
+          <base-select
+            v-model="filters[input.field]"
             searchable
             multiple
-            :key="input"
-            v-model="filters[input.field]"
             item-key="id"
             label="name"
             :placeholder="$t('reports.organizations_optional')"
-            :options="organizations"
-            select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
+            :options="onOrganizationSearch"
+            select-classes="bg-white outline-none w-full h-12"
           />
         </div>
         <div v-if="input.filter === 'work_types'" :key="input" class="my-1">
-          <form-select
-            :key="input"
+          <base-select
             v-model="filters[input.field]"
+            searchable
             multiple
             item-key="key"
             label="name_t"
             :placeholder="$t('reports.filter_by_work_type')"
             :options="filteredWorkTypes"
-            select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
+            select-classes="bg-white outline-none w-full h-12"
           />
         </div>
         <div v-if="input.filter === 'location'" :key="input" class="my-1">
-          <form-select
-            searchable
-            :key="input"
+          <base-select
             v-model="filters[input.field]"
+            searchable
             item-key="id"
             label="name"
             :placeholder="$t('locationTool.search_several_area_types')"
-            :options="locations"
-            select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
+            :options="onLocationSearch"
+            select-classes="bg-white outline-none w-full h-12"
           />
         </div>
       </template>
@@ -75,33 +72,37 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, computed } from '@vue/composition-api';
-import { useGetters, useRouter, useState } from '@u3u/vue-hooks';
+import { onMounted, ref, computed } from 'vue';
 import moment from 'moment';
-import LitepieDatepicker from 'vue2-litepie-datepicker';
+import { useStore } from 'vuex';
 import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import { getQueryString } from '@/utils/urls';
+import Incident from '@/models/Incident';
 
 export default {
   name: 'ReportFilters',
-  components: {
-    LitepieDatepicker,
-  },
   props: {
     inputs: {
       type: Array,
       default: () => [],
     },
   },
+  emits: ['onFilter', 'onCSV', 'onPrint'],
   setup(props, { emit }) {
-    const { workTypes } = useGetters('enums', ['workTypes']);
-    const { currentIncident } = useGetters('incident', ['currentIncident']);
+    const store = useStore();
+    const workTypes = store.getters['enums/workTypes'];
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
+    );
     const filters = ref<any>({});
     const locations = ref<any[]>([]);
     const organizations = ref<any[]>([]);
-    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
-    const { route, router } = useRouter();
+    const currentIncident = computed(() => {
+      return Incident.find(currentIncidentId.value);
+    });
+    const router = useRouter();
+    const route = useRoute();
 
     const queryParmToFilter = (queryParam, filterType) => {
       if (filterType === 'timerange') {
@@ -113,7 +114,7 @@ export default {
 
     const buildQuery = () => {
       const query = {};
-      Object.keys(filters.value).forEach((key) => {
+      for (const key of Object.keys(filters.value)) {
         if (filters.value[key] === null) {
           query[key] = filters.value[key];
         } else if (
@@ -127,13 +128,13 @@ export default {
         } else {
           query[key] = filters.value[key];
         }
-      });
+      }
       return query;
     };
 
     const applyFilters = () => {
       const query = buildQuery();
-      // eslint-disable-next-line no-restricted-syntax
+
       for (const key in query) {
         if (query[key] === null || query[key] === undefined) {
           delete query[key];
@@ -143,27 +144,28 @@ export default {
       emit('onFilter', query);
     };
 
-    props.inputs?.forEach((input) => {
-      if (input.filter === 'timerange') {
-        filters.value[input.field] = [
-          moment(currentIncident.value.start_at).toDate(),
-          new Date(),
-        ];
-      }
+    if (props.inputs)
+      for (const input of props.inputs) {
+        if (input.filter === 'timerange') {
+          filters.value[input.field] = [
+            moment(currentIncident.value.start_at).toDate(),
+            new Date(),
+          ];
+        }
 
-      let runReport = false;
-      if (route.value.query[input.field]) {
-        runReport = true;
-        filters.value[input.field] = queryParmToFilter(
-          route.value.query[input.field],
-          input.filter,
-        );
-      }
+        let runReport = false;
+        if (route.query[input.field]) {
+          runReport = true;
+          filters.value[input.field] = queryParmToFilter(
+            route.query[input.field],
+            input.filter,
+          );
+        }
 
-      if (runReport) {
-        applyFilters();
+        if (runReport) {
+          applyFilters();
+        }
       }
-    });
 
     const downloadCSV = () => {
       const query = buildQuery();
@@ -180,7 +182,7 @@ export default {
         type__key__in:
           'boundary_political_us_county,boundary_political_us_state,boundary_political_us_city,boundary_political_us_zip_code,boundary_political_us_fema_region',
         incident_area: currentIncidentId.value,
-        limit: 2000,
+        limit: 10,
         sort: 'name',
       };
 
@@ -188,13 +190,13 @@ export default {
       const results = await Location.api().get(`/locations?${queryString}`, {
         dataKey: 'results',
       });
-      locations.value = results.response.data.results;
+      return results.response.data.results;
     };
 
     const onOrganizationSearch = async () => {
       const params = {
         incident: currentIncidentId.value,
-        limit: 500,
+        limit: 10,
         fields: 'id,name',
         sort: 'name',
       };
@@ -206,22 +208,22 @@ export default {
           dataKey: 'results',
         },
       );
-      organizations.value = results.response.data.results;
+      return results.response.data.results;
     };
 
     const filteredWorkTypes = computed(() => {
       return (
         currentIncident.value.created_work_types &&
-        workTypes.value.filter((wt) =>
+        workTypes.filter((wt) =>
           currentIncident.value.created_work_types.includes(wt.key),
         )
       );
     });
 
-    onMounted(async () => {
-      await onLocationSearch();
-      await onOrganizationSearch();
-    });
+    // onMounted(async () => {
+    //   onLocationSearch().then(() => {});
+    //   onOrganizationSearch().then(() => {});
+    // });
 
     return {
       filters,
@@ -231,6 +233,8 @@ export default {
       applyFilters,
       downloadCSV,
       printReport,
+      onOrganizationSearch,
+      onLocationSearch,
     };
   },
 };

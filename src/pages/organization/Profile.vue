@@ -745,7 +745,9 @@ export default {
   methods: {
     async getOrganizationCapabilities() {
       const organizationCapabilities = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/organization_organizations_capabilities`,
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/organization_organizations_capabilities`,
       );
       this.organizationCapabilities = organizationCapabilities.data.results;
     },
@@ -918,7 +920,7 @@ export default {
       this.uploading = true;
       try {
         const result = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
           formData,
           {
             headers: {

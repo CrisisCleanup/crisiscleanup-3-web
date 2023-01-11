@@ -2,8 +2,8 @@
   <div class="bg-white h-full h-84">
     <div class="flex justify-between">
       <div
-        class="font-semibold flex justify-between items-center h-12 px-3"
         v-if="team"
+        class="font-semibold flex justify-between items-center h-12 px-3"
       >
         {{ team.name }}
       </div>
@@ -34,7 +34,7 @@
         />
       </div>
     </div>
-    <tabs class="w-full" ref="tabs">
+    <tabs ref="tabs" class="w-full">
       <tab :name="`${$t('teams.manage_users')} (${allTeamUsers.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
@@ -93,12 +93,12 @@
             ]"
             :data="allTeamUsers"
             enable-selection
+            :body-style="{ height: '300px' }"
             @selectionChanged="
               (selectedItems) => {
                 selectedUsers = Array.from(selectedItems);
               }
             "
-            :body-style="{ height: '300px' }"
           >
             <template #name="slotProps">
               <div class="flex items-center">
@@ -136,14 +136,10 @@
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
+                  <template #body>
                     <ul class="overflow-auto w-40">
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                       >
                         <font-awesome-icon icon="envelope"></font-awesome-icon>
                         <a :href="`mailto:${slotProps.item.email}`">{{
@@ -151,11 +147,7 @@
                         }}</a>
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                       >
                         <font-awesome-icon icon="user"></font-awesome-icon>
                         <a :href="`/organization/users/${slotProps.item.id}`">
@@ -163,11 +155,7 @@
                         </a>
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                         @click="
                           () => {
                             moveToDifferentTeam(slotProps.item.id);
@@ -178,11 +166,7 @@
                         {{ $t('teams.move_to_another_team') }}
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                         @click="
                           () => {
                             removeFromTeam(slotProps.item.id);
@@ -234,8 +218,8 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
-            @click.native="toggleView('showingWorksiteMap')"
             data-cy="cases.mapButton"
+            @click.native="toggleView('showingWorksiteMap')"
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
@@ -243,8 +227,8 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
-            @click.native="toggleView('showingWorksiteTable')"
             data-cy="cases.tableButton"
+            @click.native="toggleView('showingWorksiteTable')"
           />
         </div>
         <div class="mt-2">
@@ -349,14 +333,10 @@
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
+                  <template #body>
                     <ul class="overflow-auto w-40">
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                         @click="
                           () => {
                             removeWorksiteFromTeam(slotProps.item.id);
@@ -395,8 +375,8 @@
       v-if="showAddMembersModal"
       :title="$t('teams.add_members')"
       closeable
-      @close="showAddMembersModal = false"
       modal-classes="max-w-xl"
+      @close="showAddMembersModal = false"
     >
       <div class="px-5 py-2">
         <div class="py-2">
@@ -466,8 +446,8 @@
       v-if="showAddCasesModal"
       :title="$t('teams.assign_cases')"
       closeable
-      @close="showAddCasesModal = false"
       modal-classes="max-w-4xl"
+      @close="showAddCasesModal = false"
     >
       <div class="flex">
         <div class="w-1/3">
@@ -566,8 +546,8 @@
       v-if="showRenameModal"
       closeable
       :title="$t('actions.rename_team')"
-      @close="renameTeam"
       modal-classes="max-w-xl"
+      @close="renameTeam"
     >
       <base-input
         v-model="team.name"
@@ -581,9 +561,6 @@
 <script>
 import { mapState } from 'vuex';
 import * as L from 'leaflet';
-import Team from '@/models/Team';
-import Worksite from '@/models/Worksite';
-import { UserMixin, DialogsMixin } from '@/mixins';
 import Avatar from '../../components/Avatar';
 import { getColorForStatus } from '../../filters';
 import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
@@ -591,27 +568,14 @@ import { getErrorMessage } from '../../utils/errors';
 import WorkTypeMap from '../../components/WorkTypeMap';
 import { getQueryString } from '../../utils/urls';
 import Table from '../../components/Table';
+import { UserMixin, DialogsMixin } from '@/mixins';
+import Worksite from '@/models/Worksite';
+import Team from '@/models/Team';
 
 export default {
   name: 'TeamDetail',
   components: { Table, WorkTypeMap, WorksiteStatusDropdown, Avatar },
   mixins: [UserMixin, DialogsMixin],
-  async mounted() {
-    await Team.api().get(`/teams/${this.$route.params.team_id}`);
-    const feature = await Team.api().getCasesArea(
-      this.$route.params.team_id,
-      this.currentIncidentId,
-    );
-    const geojsonFeature = {
-      type: 'Feature',
-      properties: {},
-      geometry: feature.response.data,
-    };
-    this.caseArea = L.geoJSON(geojsonFeature, {
-      weight: '1',
-    });
-    await this.getClaimedWorksites();
-  },
   props: {
     workTypes: {
       type: Array,
@@ -656,6 +620,22 @@ export default {
       this.onCaseSearch();
     },
   },
+  async mounted() {
+    await Team.api().get(`/teams/${this.$route.params.team_id}`);
+    const feature = await Team.api().getCasesArea(
+      this.$route.params.team_id,
+      this.currentIncidentId,
+    );
+    const geojsonFeature = {
+      type: 'Feature',
+      properties: {},
+      geometry: feature.response.data,
+    };
+    this.caseArea = L.geoJSON(geojsonFeature, {
+      weight: '1',
+    });
+    await this.getClaimedWorksites();
+  },
   methods: {
     async renameTeam() {
       Team.update({
@@ -688,8 +668,8 @@ export default {
       this.worksites = results.entities.worksites;
     },
     onUserSearch() {
-      this.userResults = Array.from(
-        this.users.filter((user) => {
+      this.userResults = [
+        ...this.users.filter((user) => {
           return (
             user.full_name
               .toLowerCase()
@@ -697,11 +677,11 @@ export default {
             user.email.toLowerCase().includes(this.currentSearch.toLowerCase())
           );
         }),
-      );
+      ];
     },
     onCaseSearch() {
-      this.caseResults = Array.from(
-        this.workTypes.filter((c) => {
+      this.caseResults = [
+        ...this.workTypes.filter((c) => {
           return (
             c.case_number
               .toLowerCase()
@@ -711,13 +691,13 @@ export default {
               .includes(this.currentCaseSearch.toLowerCase())
           );
         }),
-      );
+      ];
     },
     async addUsers() {
       Team.update({
         where: this.team.id,
         data: {
-          users: Array.from(new Set([...this.team.users, ...this.usersToAdd])),
+          users: [...new Set([...this.team.users, ...this.usersToAdd])],
         },
       });
 
@@ -746,11 +726,13 @@ export default {
       return data;
     },
     async addCases() {
-      if (this.casesToAdd.length) {
+      if (this.casesToAdd.length > 0) {
         await Promise.all(
           this.casesToAdd.map((c) =>
             this.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+              `${
+                import.meta.env.VITE_APP_API_BASE_URL
+              }/worksite_work_types_teams`,
               {
                 team: this.team.id,
                 worksite_work_type: c,
@@ -779,17 +761,23 @@ export default {
     async removeWorksiteFromTeam(worksiteId) {
       const worksite = await this.getWorksite(worksiteId);
 
-      const ids = worksite.work_types
-        .filter((type) => type.claimed_by === this.currentUser.organization.id)
-        .map((wt) => wt.id);
+      const ids = new Set(
+        worksite.work_types
+          .filter(
+            (type) => type.claimed_by === this.currentUser.organization.id,
+          )
+          .map((wt) => wt.id),
+      );
 
       const workTypesToDelete = this.team.assigned_work_types.filter((awt) =>
-        ids.includes(awt.id),
+        ids.has(awt.id),
       );
       await Promise.all(
         workTypesToDelete.map((wt) => {
           return this.$http.delete(
-            `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams/${wt.id}`,
+            `${
+              import.meta.env.VITE_APP_API_BASE_URL
+            }/worksite_work_types_teams/${wt.id}`,
             {
               data: { team: this.team.id },
             },

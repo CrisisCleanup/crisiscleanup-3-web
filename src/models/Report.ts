@@ -7,6 +7,7 @@ export default class Report extends Model {
 
   id!: string;
 
+  name_t!: string;
   paid_for_statement!: string;
 
   created_at!: string;

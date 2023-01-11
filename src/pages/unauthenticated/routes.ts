@@ -50,12 +50,12 @@ const routes = [
     name: 'nav.pew',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
-  // {
-  //   path: '/live',
-  //   component: PewPew,
-  //   name: 'nav.pew',
-  //   meta: { layout: 'unauthenticated', noAuth: true },
-  // },
+  {
+    path: '/live',
+    component: PewPew,
+    name: 'nav.live',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
   {
     path: '/donate',
     redirect: () => {

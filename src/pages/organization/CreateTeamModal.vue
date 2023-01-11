@@ -7,19 +7,10 @@
     <div style="display: grid; grid-template-columns: 50% 50%" class="p-2">
       <div class="p-2 flex flex-col justify-between items-start w-full">
         <input
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-2
-            my-2
-            resize-none
-            w-108
-          "
+          v-model="team.name"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
           :required="true"
           type="search"
-          v-model="team.name"
           :placeholder="$t('teams.team_name')"
         />
         <base-button
@@ -37,10 +28,10 @@
           v-model="team.users"
           item-key="id"
           :options="{ group: 'people' }"
-          @start="drag = true"
-          @end="drag = false"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
+          @start="drag = true"
+          @end="drag = false"
         >
           <template #item="{ element: user }">
             <div
@@ -86,10 +77,10 @@
           v-model="teamWorksites"
           item-key="id"
           :options="{ group: 'cases' }"
-          @start="drag = true"
-          @end="drag = false"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
+          @start="drag = true"
+          @end="drag = false"
         >
           <template #item="{ element: worksite }">
             <div
@@ -184,10 +175,10 @@
             v-model="usersList"
             item-key="id"
             :options="{ group: 'people' }"
-            @start="drag = true"
-            @end="drag = false"
             handle=".handle"
             class="h-96 overflow-scroll"
+            @start="drag = true"
+            @end="drag = false"
           >
             <template #item="{ element: user }">
               <div
@@ -232,10 +223,10 @@
             v-model="worksites"
             item-key="id"
             :options="{ group: 'cases' }"
-            @start="drag = true"
-            @end="drag = false"
             handle=".handle"
             class="h-96 overflow-scroll"
+            @start="drag = true"
+            @end="drag = false"
           >
             <template #item="{ element: worksite }">
               <div
@@ -295,14 +286,14 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator';
 import { mapState } from 'vuex';
-import Team from '@/models/Team';
-import Worksite from '@/models/Worksite';
-import { UserMixin } from '@/mixins';
 import Avatar from '../../components/Avatar';
 import { getColorForStatus } from '../../filters';
 import { getErrorMessage } from '../../utils/errors';
 import { getQueryString } from '../../utils/urls';
 import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
+import { UserMixin } from '@/mixins';
+import Worksite from '@/models/Worksite';
+import Team from '@/models/Team';
 
 export default {
   name: 'CreateTeamModal',
@@ -322,12 +313,6 @@ export default {
       default: () => [],
     },
   },
-  async mounted() {
-    this.usersList = Array.from(this.users);
-    this.caseList = Array.from(this.cases);
-    await this.getClaimedWorksites();
-    // this.team.name = `Team ${this.teams.length + 1}`;
-  },
   data() {
     return {
       getColorForStatus,
@@ -344,6 +329,12 @@ export default {
       teamWorksites: [],
       worksites: [],
     };
+  },
+  async mounted() {
+    this.usersList = [...this.users];
+    this.caseList = [...this.cases];
+    await this.getClaimedWorksites();
+    // this.team.name = `Team ${this.teams.length + 1}`;
   },
   computed: {
     ...mapState('incident', ['currentIncidentId']),
@@ -388,14 +379,16 @@ export default {
           users: this.team.users.map((u) => u.id),
         });
         const [team] = await teamResult.entities.teams;
-        if (this.teamWorksites.length) {
+        if (this.teamWorksites.length > 0) {
           const promises = [];
-          this.teamWorksites.forEach((w) =>
-            w.work_types.forEach((wt) => {
+          for (const w of this.teamWorksites)
+            for (const wt of w.work_types) {
               if (wt.claimed_by === this.currentUser.organization.id) {
                 promises.push(
                   this.$http.post(
-                    `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+                    `${
+                      import.meta.env.VITE_APP_API_BASE_URL
+                    }/worksite_work_types_teams`,
                     {
                       team: team.id,
                       worksite_work_type: wt.id,
@@ -403,8 +396,8 @@ export default {
                   ),
                 );
               }
-            }),
-          );
+            }
+
           await Promise.all(promises);
         }
         this.$emit('saved');
@@ -414,8 +407,8 @@ export default {
       }
     },
     onSearch() {
-      this.usersList = Array.from(
-        this.users.filter((user) => {
+      this.usersList = [
+        ...this.users.filter((user) => {
           return (
             user.full_name
               .toLowerCase()
@@ -423,11 +416,11 @@ export default {
             user.email.toLowerCase().includes(this.currentSearch.toLowerCase())
           );
         }),
-      );
+      ];
     },
     onCaseSearch() {
-      this.caseList = Array.from(
-        this.cases.filter((c) => {
+      this.caseList = [
+        ...this.cases.filter((c) => {
           return (
             c.case_number
               .toLowerCase()
@@ -437,7 +430,7 @@ export default {
               .includes(this.currentCaseSearch.toLowerCase())
           );
         }),
-      );
+      ];
     },
     generateTeamName() {
       this.team.name = uniqueNamesGenerator({

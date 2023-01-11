@@ -8,6 +8,7 @@ import Organization from '../models/Organization';
 import Report from '../models/Report';
 import Role from '../models/Role';
 import PhoneStatus from '../models/PhoneStatus';
+import EventLog from '../models/EventLog';
 import WorksiteRequest from '../models/WorksiteRequest';
 import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
@@ -39,5 +40,6 @@ database.register(Invitation, {});
 database.register(UserRole, {});
 database.register(Affiliate, {});
 database.register(PasswordResetRequest, {});
+database.register(EventLog, {});
 
 export default database;

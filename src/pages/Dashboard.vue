@@ -257,8 +257,8 @@
             size="medium"
             :text="$t('dashboard.inbound_requests')"
             :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
-            @click.native="pendingView = 'inbound'"
             variant="text"
+            @click.native="pendingView = 'inbound'"
           />
 
           <base-button
@@ -266,8 +266,8 @@
             size="medium"
             :text="$t('dashboard.outbound_requests')"
             :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
-            @click.native="pendingView = 'outbound'"
             variant="text"
+            @click.native="pendingView = 'outbound'"
           />
 
           <base-button
@@ -275,8 +275,8 @@
             size="medium"
             :text="$t('dashboard.archived_requests')"
             :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
-            @click.native="pendingView = 'archived'"
             variant="text"
+            @click.native="pendingView = 'archived'"
           />
         </div>
         <div class="p-4">
@@ -399,23 +399,23 @@ import {
   watch,
   onMounted,
 } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { useRouter, useRoute } from 'vue-router';
 import { colors } from '../icons/icons_templates';
 import {
   getColorForStatus,
   getWorkTypeImage,
   getWorkTypeName,
 } from '../filters/index';
-import { useI18n } from 'vue-i18n';
 import User from '../models/User';
 import Incident from '../models/Incident';
-import { useStore } from 'vuex';
 import WorksiteRequest from '../models/WorksiteRequest';
 import Worksite from '../models/Worksite';
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
 import { forceFileDownload } from '../utils/downloads';
 import { getErrorMessage } from '../utils/errors';
-import { useRouter, useRoute } from 'vue-router';
 import { getQueryString } from '../utils/urls';
 import Table from '../components/Table.vue';
 import WorksiteStatusDropdown from '../components/WorksiteStatusDropdown.vue';
@@ -564,12 +564,12 @@ export default defineComponent({
         searchSelect: true,
         getSelectValues: (data) => {
           const values = {};
-          if (data && data.length) {
-            data.forEach((item) => {
-              item.work_types.forEach((wt) => {
+          if (data && data.length > 0) {
+            for (const item of data) {
+              for (const wt of item.work_types) {
                 values[wt.work_type] = true;
-              });
-            });
+              }
+            }
             return Object.keys(values).map((key) => {
               return {
                 value: key,
@@ -685,14 +685,14 @@ export default defineComponent({
         query.orderBy(sorter.value.key, sorter.value.direction);
       }
 
-      if (Object.keys(columnSearch.value).length) {
-        Object.entries(columnSearch.value).forEach(([key, value]) => {
+      if (Object.keys(columnSearch.value).length > 0) {
+        for (const [key, value] of Object.entries(columnSearch.value)) {
           if (value) {
             query.where(key, (prop) =>
               JSON.stringify(prop).toLowerCase().includes(value.toLowerCase()),
             );
           }
-        });
+        }
       }
 
       return query.get();
@@ -743,7 +743,7 @@ export default defineComponent({
       reportWidgets.value = response.data.results;
 
       const widgetPromises = [];
-      reportWidgets.value.forEach((widget) => {
+      for (const widget of reportWidgets.value) {
         widgetPromises.push(
           axios.get(
             `${import.meta.env.VITE_APP_API_BASE_URL}/report_widgets/${
@@ -757,12 +757,12 @@ export default defineComponent({
             },
           ),
         );
-      });
+      }
       Promise.all(widgetPromises).then((results) => {
         const graphData = {};
-        results.forEach(({ data }) => {
+        for (const { data } of results) {
           graphData[data.key] = transformWidgetData(data);
-        });
+        }
         widgetsData.value = graphData;
       });
     }

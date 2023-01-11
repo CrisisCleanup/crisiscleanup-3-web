@@ -5,16 +5,21 @@ export default class EventLog extends Model {
 
   static fields() {
     return {
-      attr: this.attr(),
-      incident: this.attr(),
-      url: this.attr(),
-      event_key: this.attr(),
+      attr: this.attr(''),
+      incident: this.attr(''),
+      url: this.attr(''),
+      event_key: this.attr({}),
     };
   }
 
   static apiConfig = {
     actions: {
-      create(key, incident, url, attr) {
+      create(
+        key: string,
+        incident: string,
+        url: string,
+        attr: Record<string, any>,
+      ) {
         return this.post(
           `/event_logs`,
           {
@@ -26,6 +31,6 @@ export default class EventLog extends Model {
           { save: false },
         );
       },
-    },
+    } as any,
   };
 }

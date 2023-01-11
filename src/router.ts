@@ -10,13 +10,20 @@ import OrganizationRoutes from './pages/organization/routes';
 import UnauthenticatedRoutes from './pages/unauthenticated/routes';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import OtherOrganizations from '@/pages/OtherOrganizations.vue';
+import Reports from '@/pages/admin/Reports.vue';
+import Report from '@/pages/admin/Report.vue';
 
 const routes = [
-  { path: '/', component: Dashboard, name: 'Home' },
+  {
+    path: '/',
+    component: Dashboard,
+    name: 'nav.dashboard_home',
+    meta: { layout: 'authenticated' },
+  },
   {
     path: '/dashboard',
     component: Dashboard,
-    name: 'nav.dashboard',
+    name: 'nav.dashboard_no_incident',
     meta: { layout: 'authenticated' },
   },
   {
@@ -42,6 +49,18 @@ const routes = [
         meta: { id: 'work_case_edit', noscroll: true },
       },
     ],
+  },
+  {
+    path: '/reports',
+    component: Reports,
+    name: 'nav.reports',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/report/:id',
+    component: Report,
+    name: 'nav.report',
+    meta: { layout: 'authenticated' },
   },
   {
     path: '/other_organizations',

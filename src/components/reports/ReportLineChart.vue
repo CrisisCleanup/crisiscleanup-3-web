@@ -3,10 +3,9 @@
 </template>
 
 <script>
-import { onMounted } from '@vue/composition-api';
+import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import moment from 'moment';
-import usei18n from '@/use/usei18n';
 
 export default {
   name: 'ReportLineChart',
@@ -33,7 +32,7 @@ export default {
     },
   },
   setup(props) {
-    const { $t } = usei18n();
+    const { t } = useI18n();
     let formatter = new Intl.NumberFormat('en-US', {
       maximumFractionDigits: 1,
       minimumFractionDigits: 0,
@@ -103,9 +102,9 @@ export default {
             Object.keys(chartData[0]).filter((key) => key !== props.groupBy),
           );
 
-          chartData.forEach(function (d) {
+          for (const d of chartData) {
             d[props.groupBy] = parseDate(d[props.groupBy]);
-          });
+          }
 
           chartData.sort(function (a, b) {
             return a[props.groupBy] - b[props.groupBy];
@@ -162,7 +161,7 @@ export default {
             .attr('text-anchor', 'start')
             .attr('x', width / 2)
             .attr('y', height + margin.bottom / 2)
-            .text($t(props.displayOptions.axes.x.name));
+            .text(t(props.displayOptions.axes.x.name));
 
           svg
             .append('text')
@@ -172,7 +171,7 @@ export default {
             .attr('x', -height / 2 - 80)
             .attr('dy', '.75em')
             .attr('transform', 'rotate(-90)')
-            .text($t(props.displayOptions.axes.y.name));
+            .text(t(props.displayOptions.axes.y.name));
 
           svg
             .append('text')
@@ -180,7 +179,7 @@ export default {
             .attr('y', 0 - margin.top / 2)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
-            .text($t(`reports.${props.reportName}`));
+            .text(t(`reports.${props.reportName}`));
 
           svg
             .append('text')
@@ -188,7 +187,7 @@ export default {
             .attr('y', height + margin.bottom - 50)
             .attr('text-anchor', 'middle')
             .style('font-size', '15px')
-            .html($t(`reports.paid_for_statement`));
+            .html(t(`reports.paid_for_statement`));
 
           //* * Hover line & invisible rect
           const hoverLineGroup = svg.append('g').attr('class', 'hover-line');
@@ -219,11 +218,11 @@ export default {
             const i = bisect(metricsData[0].values, timeStamp);
 
             let displaytext = '';
-            metricsData.forEach((metric) => {
-              displaytext += `${$t(
+            for (const metric of metricsData) {
+              displaytext += `${t(
                 `reports.${props.reportName}.${metric.name}`,
               )}: ${formatter.format(metric.values[i].amount)}\n`;
-            });
+            }
 
             hoverLine
               .attr('x1', mouseX)
@@ -235,7 +234,7 @@ export default {
               .style('left', `${mouseX + 60}px`)
               .style('top', `${mouseY}px`)
               .text(
-                `${$t(`reports.${props.reportName}.${props.groupBy}`)} ${moment(
+                `${t(`reports.${props.reportName}.${props.groupBy}`)} ${moment(
                   timeStamp,
                 ).format('ddd MMMM Do YYYY')}\n${displaytext}`,
               );
@@ -289,7 +288,7 @@ export default {
             .attr('x', 3)
             .attr('dy', '.35em')
             .text(function (d) {
-              return $t(`reports.${props.reportName}.${d.name}`);
+              return t(`reports.${props.reportName}.${d.name}`);
             });
         }
 
