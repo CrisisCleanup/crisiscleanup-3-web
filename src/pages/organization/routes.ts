@@ -6,8 +6,8 @@ import Layers from '@/pages/organization/Layers.vue';
 // import OrganizationProfile from '@/pages/organization/Profile.vue';
 import Users from '@/pages/organization/Users.vue';
 import UserView from '@/pages/organization/UserView.vue';
-// Import Teams from '@/pages/organization/Teams.vue';
-// import TeamDetail from '@/pages/organization/TeamDetail.vue';
+import Teams from '@/pages/organization/Teams.vue';
+import TeamDetail from '@/pages/organization/TeamDetail.vue';
 
 const mockComponent = (title: string, content: string) => ({
   name: title,
@@ -59,18 +59,16 @@ export const routes = [
       },
       {
         path: 'teams',
-        // Component: Teams,
-        component: mockComponent('Teams', 'Teams'),
+        component: Teams,
         name: 'nav.organization_teams',
-        children: [
-          {
-            path: ':team_id',
-            // Component: TeamDetail,
-            component: mockComponent('TeamDetail', 'TeamDetail'),
-            name: 'nav.organization_team_detail',
-            meta: { id: 'team_detail' },
-          },
-        ],
+        // Children: [
+        //   {
+        //     path: ':team_id',
+        //     component: TeamDetail,
+        //     name: 'nav.organization_team_detail',
+        //     meta: { id: 'team_detail' },
+        //   },
+        // ],
       },
       {
         path: 'layers',

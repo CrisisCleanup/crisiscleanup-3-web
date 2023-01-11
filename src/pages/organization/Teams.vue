@@ -57,7 +57,7 @@
             <div class="flex justify-between items-center">
               <base-text>{{ team.name }}</base-text>
               <base-text
-                >{{ getAssignedWorkTypes(team).length }}
+                >{{ getAssignedWorkTypes(team)?.length }}
                 {{ $t('teams.cases_assigned') }}
               </base-text>
             </div>
@@ -81,14 +81,14 @@
       </div>
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
-          <router-view
+          <!-- <router-view
             v-show="teams && teams.length"
             :work-types="claimedWorktypes"
             :users="usersWithoutTeams"
             :teams="teams"
             :key="$route.params.team_id"
             @reload="getData"
-          ></router-view>
+          ></router-view> -->
         </div>
       </div>
     </div>
@@ -105,102 +105,37 @@
 
 <script>
 import { mapState } from 'vuex';
-import { UserMixin } from '@/mixins';
 import User from '@/models/User';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
-import Avatar from '../../components/Avatar';
-import CreateTeamModal from './CreateTeamModal';
+import Avatar from '@/components/Avatar.vue';
+import CreateTeamModal from './CreateTeamModal.vue';
 import { getQueryString } from '../../utils/urls';
 import enums from '../../store/modules/enums';
 
 export default {
   name: 'Teams',
   components: { CreateTeamModal, Avatar },
-  mixins: [UserMixin],
-
-  methods: {
-    async onSearch() {
-      await this.getTeams();
-    },
-    async getTeams() {
-      const results = await Team.api().get(
-        `/teams?search=${this.currentSearch || ''}&limit=500&incident=${
-          this.currentIncidentId
-        }`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.teams = results.entities.teams;
-    },
-    getAssignedWorkTypes(team) {
-      return this.claimedWorktypes.filter((wt) => {
-        return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
-      });
-    },
-    getCaseCompletion(team) {
-      const workTypes = this.getAssignedWorkTypes(team);
-      if (workTypes && workTypes.length) {
-        return Number(
-          (workTypes.filter((wt) => Boolean(wt.completed)).length /
-            workTypes.length) *
-            100,
-        ).toFixed(0);
-      }
-      return 0;
-    },
-    async getClaimedWorksites() {
-      const params = {
-        incident: this.currentIncidentId,
-        work_type__claimed_by: this.currentUser.organization.id,
-        limit: 500,
-        fields:
-          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
-      };
-
-      Worksite.api().get(`/worksites?${getQueryString(params)}`, {
-        dataKey: 'results',
-      });
-    },
-    async getData() {
-      const results = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&limit=500`,
-        {
-          dataKey: 'results',
-        },
-      );
-      const usersWithoutTeamsResults = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&no_team_incident=${this.currentIncidentId}&limit=500`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.users = results.entities.users;
-      this.usersWithoutTeams = usersWithoutTeamsResults.entities.users;
-      await this.getTeams();
-      await this.getClaimedWorksites();
-    },
-  },
-  data() {
-    return {
-      currentSearch: '',
-      creatingTeam: false,
-      users: [],
-      usersWithoutTeams: [],
-      teams: [],
-    };
-  },
-  computed: {
-    claimedWorktypes() {
+  setup() {
+    const store = useStore();
+    const currentSearch = ref('');
+    const creatingTeam = ref(false);
+    const users = ref([]);
+    const usersWithoutTeams = ref([]);
+    const teams = ref([]);
+    
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
+    const statuses = computed(() => store.getters['enums']);
+    const claimedWorktypes = computed(() => {
       const query = Worksite.query().where((worksite) => {
         if (
           worksite.work_types &&
-          this.currentIncidentId === worksite.incident
+          currentIncidentId.value === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
             (workType) =>
-              workType.claimed_by === this.currentUser.organization.id,
+              workType.claimed_by === currentUser.value.organization.id,
           );
           return Boolean(claimed);
         }
@@ -210,7 +145,7 @@ export default {
       const workTypes = [];
       worksites.forEach((w) => {
         w.work_types.forEach((wt) => {
-          if (wt.claimed_by === this.currentUser.organization.id) {
+          if (wt.claimed_by === currentUser.value.organization.id) {
             const closedStatuses = enums.state.statuses.filter(
               (status) => status.primary_state === 'closed',
             );
@@ -230,19 +165,100 @@ export default {
         });
       });
       return workTypes;
-    },
-    ...mapState('incident', ['currentIncidentId']),
-    ...mapState('enums', ['statuses']),
-  },
-  watch: {
-    currentIncidentId(newState, oldState) {
+    });
+
+    const getUser = (id) => {
+      return User.find(id)
+    };
+    const getTeams = async () => {
+      const results = await Team.api().get(
+        `/teams?search=${currentSearch.value || ''}&limit=500&incident=${
+          currentIncidentId.value
+        }`,
+        {
+          dataKey: 'results',
+        },
+      );
+      teams.value = results.entities.teams;
+    }
+    const getAssignedWorkTypes = async (team) => {
+      return claimedWorktypes.value.filter((wt) => {
+        return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
+      });
+    }
+    const getCaseCompletion = (team) => {
+      const workTypes = getAssignedWorkTypes(team);
+      if (workTypes && workTypes.length) {
+        return Number(
+          (workTypes.filter((wt) => Boolean(wt.completed)).length /
+            workTypes.length) *
+            100,
+        ).toFixed(0);
+      }
+      return 0;
+    }
+    const getClaimedWorksites = async () => {
+      const params = {
+        incident: currentIncidentId.value,
+        work_type__claimed_by: currentUser.value.organization.id,
+        limit: 500,
+        fields:
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
+      };
+
+      Worksite.api().get(`/worksites?${getQueryString(params)}`, {
+        dataKey: 'results',
+      });
+    }
+
+    const getData = async () => {
+      const results = await User.api().get(
+        `/users?organization=${currentUser.value.organization.id}&limit=500`,
+        {
+          dataKey: 'results',
+        },
+      );
+      const usersWithoutTeamsResults = await User.api().get(
+        `/users?organization=${currentUser.value.organization.id}&no_team_incident=${currentIncidentId.value}&limit=500`,
+        {
+          dataKey: 'results',
+        },
+      );
+      users.value = results.entities.users;
+      usersWithoutTeams.value = usersWithoutTeamsResults.entities.users;
+      await getTeams();
+      await getClaimedWorksites();
+    }
+
+    const onSearch = async () => {
+      await getTeams();
+    }
+
+    watch(currentIncidentId, (newState, oldState) => {
       if (String(newState) !== String(oldState)) {
         this.getData().then(() => {});
       }
-    },
-  },
-  async mounted() {
-    await this.getData();
+    })
+
+    onMounted(async () => {
+      await getData();
+    });
+    return {
+      getTeams,
+      getUser,
+      getData,
+      onSearch,
+      getAssignedWorkTypes,
+      getCaseCompletion,
+      getClaimedWorksites,
+      currentSearch,
+      creatingTeam,
+      users,
+      usersWithoutTeams,
+      teams,
+      currentUser,
+      claimedWorktypes,
+    };
   },
 };
 </script>
