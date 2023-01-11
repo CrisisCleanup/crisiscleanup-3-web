@@ -103,6 +103,7 @@
           class="flex justify-center items-center"
         >
           <Slider
+            v-if="allWorksiteCount > 100"
             primary-color="#dadada"
             secondary-color="white"
             :value="sviSliderValue"
@@ -1157,9 +1158,11 @@ export default defineComponent({
         },
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
-          nextTick(() => {
-            filterSvi(sviSliderValue.value);
-          });
+          if (allWorksites.length > 100) {
+            nextTick(() => {
+              filterSvi(sviSliderValue.value);
+            });
+          }
         },
       );
     });
