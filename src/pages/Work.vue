@@ -13,8 +13,8 @@
                 :class="showingMap ? 'filter-yellow' : 'filter-gray'"
                 type="map"
                 ccu-event="user_ui-view-map"
-                @click.native="() => showMap(true)"
                 data-cy="cases.mapButton"
+                @click="() => showMap(true)"
               />
               <ccu-icon
                 :alt="$t('casesVue.table_view')"
@@ -23,8 +23,8 @@
                 :class="showingTable ? 'filter-yellow' : 'filter-gray'"
                 type="table"
                 ccu-event="user_ui-view-table"
-                @click.native="showTable"
                 data-cy="cases.tableButton"
+                @click="showTable"
               />
             </div>
             <span v-if="allWorksiteCount" class="font-thin">
@@ -45,6 +45,8 @@
                 display-property="name"
                 :placeholder="$t('actions.search')"
                 size="medium"
+                skip-validation
+                class="mx-4"
                 @selectedExisting="
                   (w) => {
                     worksiteId = w.id;
@@ -56,17 +58,17 @@
                     }
                   }
                 "
-                @input='(value) => {
-                  currentSearch = value;
-                }'
-                skip-validation
-                class="mx-4"
+                @input="
+                  (value) => {
+                    currentSearch = value;
+                  }
+                "
               />
               <WorksiteActions
                 v-if="currentIncidentId"
+                :key="currentIncidentId"
                 :current-incident-id="String(currentIncidentId)"
                 :inital-filters="filters"
-                :key="currentIncidentId"
                 @updatedQuery="onUpdateQuery"
                 @updatedFilters="onUpdateFilters"
                 @applyLocation="applyLocation"
@@ -75,24 +77,19 @@
                 @toggleHeatMap="toggleHeatMap"
               />
             </div>
-            <div v-if="loading || mapLoading" class="flex h-full items-center justify-center">
-              <font-awesome-icon size="xl" icon="spinner" spin/>
+            <div
+              v-if="loading || mapLoading"
+              class="flex h-full items-center justify-center"
+            >
+              <font-awesome-icon size="xl" icon="spinner" spin />
             </div>
           </div>
           <div class="flex justify-end items-center w-full">
             <font-awesome-icon
-              @click="collapsedUtilityBar = !collapsedUtilityBar"
               :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
-              class="
-                rounded-full
-                border
-                p-1
-                mx-1
-                mb-1
-                cursor-pointer
-                justify-end
-              "
+              class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
               size="xl"
+              @click="collapsedUtilityBar = !collapsedUtilityBar"
             />
           </div>
         </div>
@@ -104,13 +101,13 @@
             primary-color="#dadada"
             secondary-color="white"
             :value="sviSliderValue"
-            @input="filterSvi"
             :from="$t('svi.most_vulnerable')"
             :to="$t('svi.everyone')"
             :from-tooltip="$t(`svi.svi_more_info_link`)"
             handle-size="12px"
             track-size="8px"
             slider-class="w-64"
+            @input="filterSvi"
           />
         </div>
       </div>
@@ -119,32 +116,21 @@
           <SimpleMap
             :map-loading="mapLoading"
             show-zoom-buttons
+            :available-work-types="availableWorkTypes"
             @onZoomIn="zoomIn"
             @onZoomOut="zoomOut"
             @onZoomIncidentCenter="goToIncidentCenter"
             @onZoomInteractive="goToInteractive"
-            :available-work-types="availableWorkTypes"
           />
-          <div class="work-page__actions" ref="phoneButtons">
+          <div ref="phoneButtons" class="work-page__actions">
             <div
-              class="
-                w-full
-                h-full
-                flex
-                items-center
-                justify-center
-                relative
-                p-0.5
-                mt-1
-                bg-white
-                cursor-pointer
-              "
+              class="w-full h-full flex items-center justify-center relative p-0.5 mt-1 bg-white cursor-pointer"
             >
               <font-awesome-icon
-                @click="collapsedForm = !collapsedForm"
                 :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
                 class="px-0.5 py-2 ml-1.5"
                 size="large"
+                @click="collapsedForm = !collapsedForm"
               />
             </div>
             <PhoneComponentButton
@@ -162,33 +148,13 @@
                 }
               "
             >
-              <template v-slot:button>
+              <template #button>
                 <div
-                  class="
-                    w-full
-                    h-full
-                    flex
-                    items-center
-                    justify-center
-                    relative
-                  "
+                  class="w-full h-full flex items-center justify-center relative"
                 >
                   <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-black
-                        bg-primary-light
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
                       >{{ unreadChatCount }}</span
                     >
                   </div>
@@ -197,35 +163,22 @@
                     class="absolute top-0 right-0 my-1 -mx-1"
                   >
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-red-100
-                        bg-red-600
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadUrgentChatCount }}</span
                     >
                   </div>
                   <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <Chat
                   v-if="selectedChat"
                   :chat="selectedChat"
+                  :state-key="`chat_${selectedChat.id}_last_seen`"
                   @unreadCount="unreadChatCount = $event"
                   @unreadUrgentCount="unreadUrgentChatCount = $event"
                   @onNewMessage="unreadChatCount += 1"
                   @onNewUrgentMessage="unreadUrgentChatCount += 1"
-                  :state-key="`chat_${selectedChat.id}_last_seen`"
                 />
               </template>
             </PhoneComponentButton>
@@ -242,44 +195,24 @@
                 }
               "
             >
-              <template v-slot:button>
+              <template #button>
                 <div
-                  class="
-                    w-full
-                    h-full
-                    flex
-                    items-center
-                    justify-center
-                    relative
-                  "
+                  class="w-full h-full flex items-center justify-center relative"
                 >
                   <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
                     <span
-                      class="
-                        inline-flex
-                        items-center
-                        justify-center
-                        px-1
-                        py-0.5
-                        mr-2
-                        text-xs
-                        font-bold
-                        leading-none
-                        text-red-100
-                        bg-red-600
-                        rounded-full
-                      "
+                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadNewsCount }}</span
                     >
                   </div>
                   <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
-              <template v-slot:component>
+              <template #component>
                 <PhoneNews
-                  @unreadCount="unreadNewsCount = $event"
                   :cms-tag="'work-news'"
                   state-key="work_news_last_seen"
+                  @unreadCount="unreadNewsCount = $event"
                 />
               </template>
             </PhoneComponentButton>
@@ -392,15 +325,8 @@
       />
       <div v-else class="work-page__form-header">
         <div
-          @click.native="() => clearCase()"
-          class="
-            flex
-            h-full
-            items-center
-            cursor-pointer
-            border-b-2 border-primary-light
-            p-3
-          "
+          class="flex h-full items-center cursor-pointer border-b-2 border-primary-light p-3"
+          @click="() => clearCase()"
         >
           <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
           <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
@@ -450,10 +376,10 @@
             }
           "
         />
-        <span class="text-base" v-if="showHistory">{{
+        <span v-if="showHistory" class="text-base">{{
           $t('actions.history')
         }}</span>
-        <span class="text-base" v-if="showFlags">{{ $t('actions.flag') }}</span>
+        <span v-if="showFlags" class="text-base">{{ $t('actions.flag') }}</span>
         <div></div>
       </div>
       <div class="h-auto min-h-0">
@@ -476,9 +402,9 @@
         ></CaseFlag>
         <WorksiteView
           v-else-if="isViewing"
+          :key="worksiteId"
           :worksite-id="worksiteId"
           :incident-id="String(currentIncidentId)"
-          :key="worksiteId"
           :top-height="300"
           @reloadCase="reloadMap"
           @closeWorksite="clearCase"
@@ -494,11 +420,12 @@
         <WorksiteForm
           v-else
           ref="worksiteForm"
+          :key="worksiteId"
           :incident-id="String(currentIncidentId)"
           :worksite-id="worksiteId"
-          :key="worksiteId"
-          @jumpToCase="jumpToCase"
           :is-editing="isEditing"
+          class="border shadow"
+          @jumpToCase="jumpToCase"
           @savedWorksite="
             (w) => {
               if (!isEditing) {
@@ -517,7 +444,6 @@
             }
           "
           @closeWorksite="clearCase"
-          class="border shadow"
           @navigateToWorksite="
             (id) => {
               worksiteId = id;
@@ -544,6 +470,13 @@ import {
   nextTick,
 } from 'vue';
 import { debounce } from 'lodash';
+import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import axios from 'axios';
+import type { Sprite } from 'pixi.js';
+import moment from 'moment';
 import WorksiteSearchInput from '../components/work/WorksiteSearchInput.vue';
 import PhoneComponentButton from '../components/phone/PhoneComponentButton.vue';
 import SimpleMap from '../components/SimpleMap.vue';
@@ -564,15 +497,10 @@ import PhoneNews from '../components/phone/PhoneNews.vue';
 import Slider from '../components/Slider.vue';
 import WorksiteForm from '../components/work/WorksiteForm.vue';
 import WorksiteView from '../components/work/WorksiteView.vue';
-import {useRoute, useRouter} from "vue-router";
-import {useToast} from "vue-toastification";
-import useDialogs from "../hooks/useDialogs";
-import {useI18n} from "vue-i18n";
-import {useStore} from "vuex";
-import useWorksiteMap, {MapUtils} from "../hooks/worksite/useWorksiteMap";
-import axios from "axios";
-import {Sprite} from "pixi.js";
-import moment from 'moment';
+import useDialogs from '../hooks/useDialogs';
+import type { MapUtils } from '../hooks/worksite/useWorksiteMap';
+import useWorksiteMap from '../hooks/worksite/useWorksiteMap';
+import UnclaimCases from '@/components/UnclaimCases.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -602,27 +530,27 @@ export default defineComponent({
     const store = useStore();
 
     const currentIncidentId = computed(
-        () => store.getters['incident/currentIncidentId'],
+      () => store.getters['incident/currentIncidentId'],
     );
 
     const currentUser = computed(() =>
-        User.find(User.store().getters['auth/userId']),
+      User.find(User.store().getters['auth/userId']),
     );
 
-    const showingMap = ref<Boolean>(true);
-    const showingTable = ref<Boolean>(false);
-    const showHistory = ref<Boolean>(false);
-    const showFlags = ref<Boolean>(false);
-    const showMobileMap = ref<Boolean>(false);
-    const isEditing = ref<Boolean>(false);
-    const isViewing = ref<Boolean>(false);
-    const searchingWorksites = ref<Boolean>(false);
-    const mapLoading = ref<Boolean>(false);
-    const collapsedForm = ref<Boolean>(false);
-    const collapsedUtilityBar = ref<Boolean>(false);
-    const loading = ref<Boolean>(false);
-    const allWorksiteCount = ref<Number>(0);
-    const filteredWorksiteCount = ref<Number>(0);
+    const showingMap = ref<boolean>(true);
+    const showingTable = ref<boolean>(false);
+    const showHistory = ref<boolean>(false);
+    const showFlags = ref<boolean>(false);
+    const showMobileMap = ref<boolean>(false);
+    const isEditing = ref<boolean>(false);
+    const isViewing = ref<boolean>(false);
+    const searchingWorksites = ref<boolean>(false);
+    const mapLoading = ref<boolean>(false);
+    const collapsedForm = ref<boolean>(false);
+    const collapsedUtilityBar = ref<boolean>(false);
+    const loading = ref<boolean>(false);
+    const allWorksiteCount = ref<number>(0);
+    const filteredWorksiteCount = ref<number>(0);
     const searchWorksites = ref<any[]>([]);
     const currentSearch = ref<string>('');
     const worksiteId = ref<any>(null);
@@ -666,7 +594,7 @@ export default defineComponent({
       }
     }
 
-    function updateUserState(incomingData) {
+    function updateUserState(incomingData: Record<string, any>) {
       let data = incomingData;
       if (!data) {
         data = {};
@@ -725,7 +653,7 @@ export default defineComponent({
       const markers = await getWorksites();
       mapUtils?.reloadMap(
         allWorksites,
-        markers.map((m) => m.id),
+        markers.map((m: Worksite) => m.id),
       );
       updateUserState({});
     }
@@ -747,7 +675,7 @@ export default defineComponent({
       updateUserState({});
     };
 
-    const showingDetails = computed<Boolean>(() => {
+    const showingDetails = computed<boolean>(() => {
       return showHistory.value || showFlags.value;
     });
 
@@ -785,7 +713,7 @@ export default defineComponent({
         classes: 'w-full h-48 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {
-          updatedStatus: (payload) => {
+          updatedStatus: (payload: string) => {
             status = payload;
           },
         },
@@ -797,17 +725,17 @@ export default defineComponent({
         const layer = mapUtils?.getCurrentMarkerLayer();
         const container = layer._pixiContainer;
 
-        selectedTableItems.value.forEach((id) => {
-          const sprite = container.children.find((w) => {
+        for (const id of selectedTableItems.value) {
+          const sprite = container.children.find((w: Sprite & Worksite) => {
             return Number(w.id) === Number(id);
           });
 
-          sprite.work_types.forEach((workType) => {
+          for (const workType of sprite.work_types) {
             promises.push(
               Worksite.api().updateWorkTypeStatus(workType.id, status),
             );
-          });
-        });
+          }
+        }
         await Promise.allSettled(promises);
       }
       loading.value = false;
@@ -815,17 +743,17 @@ export default defineComponent({
     }
 
     async function showUnclaimModal() {
-      let options;
+      let options: Record<string, boolean> | null = null;
       const response = await component({
         title: t('actions.unclaim_cases'),
-        component: 'UnclaimCases',
+        component: UnclaimCases,
         classes: 'w-full h-48 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
           selectedTableItems,
         },
         listeners: {
-          onUnclaimSelect: (payload) => {
+          onUnclaimSelect: (payload: Record<string, boolean>) => {
             options = payload;
           },
         },
@@ -833,7 +761,7 @@ export default defineComponent({
 
       if (response === 'ok' && options) {
         const promises = [] as any;
-        selectedTableItems.value.forEach((id) => {
+        for (const id of selectedTableItems.value) {
           promises.push(
             Worksite.api().unclaimWorksite(
               id,
@@ -841,7 +769,7 @@ export default defineComponent({
               options?.updateStatusOnUnclaim ? 'open_unassigned' : null,
             ),
           );
-        });
+        }
         await Promise.allSettled(promises);
       }
       loading.value = false;
@@ -913,13 +841,15 @@ export default defineComponent({
       const { locationModels } = Incident.find(
         currentIncidentId.value,
       ) as Incident;
-      if (locationModels.length) {
-        locationModels.forEach((location) => {
+      if (locationModels.length > 0) {
+        for (const location of locationModels) {
           fitLocation(location);
-        });
+        }
       } else {
         const center = averageGeolocation(
-          mapUtils?.getPixiContainer()?.children.map((marker) => [marker.x, marker.y]),
+          mapUtils
+            ?.getPixiContainer()
+            ?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
           mapUtils?.getMap().setView([center.latitude, center.longitude], 6);
@@ -932,16 +862,18 @@ export default defineComponent({
         currentIncidentId.value,
       ) as Incident;
 
-      if (locationModels.length) {
+      if (locationModels.length > 0) {
         goToIncidentCenter();
         mapUtils?.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
       } else {
         const center = averageGeolocation(
-          mapUtils?.getPixiContainer()
+          mapUtils
+            ?.getPixiContainer()
             ?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          mapUtils?.getMap()
+          mapUtils
+            ?.getMap()
             .setView(
               [center.latitude, center.longitude],
               INTERACTIVE_ZOOM_LEVEL,
@@ -1007,7 +939,7 @@ export default defineComponent({
 
     async function printSelectedWorksites() {
       const file = await Worksite.api().downloadWorksite(
-        Array.from(selectedTableItems.value),
+        [...selectedTableItems.value],
         'application/pdf',
       );
       forceFileDownload(file.response);
@@ -1029,7 +961,9 @@ export default defineComponent({
         }
 
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_download/download_csv`,
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/worksites_download/download_csv`,
           {
             params,
             headers: { Accept: 'text/csv' },
@@ -1046,7 +980,7 @@ export default defineComponent({
 
     function selectCase(c) {
       if (c) {
-        store.commit('incident/setCurrentIncidentId', c.incident)
+        store.commit('incident/setCurrentIncidentId', c.incident);
         worksiteId.value = c.id;
       } else {
         worksiteId.value = null;
@@ -1104,7 +1038,7 @@ export default defineComponent({
 
     onMounted(async () => {
       if (route.params.incident_id) {
-        store.commit('incident/setCurrentIncidentId', route.params.incident_id)
+        store.commit('incident/setCurrentIncidentId', route.params.incident_id);
       }
       if (route.params.id) {
         worksiteId.value = route.params.id;

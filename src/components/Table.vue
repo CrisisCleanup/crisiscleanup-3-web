@@ -91,13 +91,13 @@
               v-else
               :placeholder="column.title"
               :model-value="columnSearch[column.key]"
+              input-style="width: 100%"
               @update:modelValue="
                 (value) => {
                   columnSearch[column.key] = value;
                   onSearch();
                 }
               "
-              input-style="width: 100%"
             ></base-input>
           </template>
         </div>
@@ -199,6 +199,7 @@
           :model-value="pagination.pageSize"
           :options="pageSizes"
           :clearable="false"
+          class="w-32"
           select-classes="sm:w-24 bg-white border vue-select-up"
           @update:modelValue="onSelectPageSize"
         />
@@ -218,7 +219,7 @@
             class="mr-3 text-base"
           />
           <div>
-            <template :key="trigger" v-for="trigger in paginationTriggers">
+            <template v-for="trigger in paginationTriggers" :key="trigger">
               <span
                 :class="{
                   'rounded-full border px-3 py-1 bg-white shadow-inner':
@@ -320,7 +321,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const mq = useMq();
 
-    const pagesSizes = [5, 10, 20, 100, 500, 1000];
+    const pageSizes = [5, 10, 20, 100, 500, 1000];
     const visiblePagesCount = 5;
     const selectedItems = ref(new Set([]));
     const showingDetails = ref(new Set([]));
@@ -551,7 +552,7 @@ export default defineComponent({
     }
 
     return {
-      pagesSizes,
+      pageSizes,
       visiblePagesCount,
       selectedItems,
       showingDetails,

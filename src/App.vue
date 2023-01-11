@@ -122,7 +122,7 @@ export default defineComponent({
 
 <template>
   <component :is="layout" class="main">
-    <router-view :key="$route.path" />
+    <router-view />
     <DialogWrapper :transition-attrs="{ name: 'dialog' }" />
   </component>
 </template>

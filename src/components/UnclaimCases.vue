@@ -9,8 +9,8 @@
     </span>
     <base-checkbox
       class="mb-5"
-      :value="unchangedStatusOnUnclaim"
-      @input="
+      :model-value="unchangedStatusOnUnclaim"
+      @update:modelValue="
         () => {
           unchangedStatusOnUnclaim = !unchangedStatusOnUnclaim;
           updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
@@ -24,8 +24,8 @@
     >
     <base-checkbox
       class="mb-5"
-      :value="updateStatusOnUnclaim"
-      @input="
+      :model-value="updateStatusOnUnclaim"
+      @update:modelValue="
         () => {
           updateStatusOnUnclaim = !updateStatusOnUnclaim;
           unchangedStatusOnUnclaim = !updateStatusOnUnclaim;
@@ -41,13 +41,14 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
+import { ref } from 'vue';
 
 export default {
   name: 'UnclaimCases',
   props: {
     selectedTableItems: { type: Set, default: null, required: false },
   },
+  emits: ['onUnclaimSelect'],
   setup() {
     const unchangedStatusOnUnclaim = ref(true);
     const updateStatusOnUnclaim = ref(false);
