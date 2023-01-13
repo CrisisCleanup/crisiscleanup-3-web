@@ -35,16 +35,13 @@
         }}</base-text>
         <draggable
           v-model="team.users"
-          item-key="id"
-          :options="{ group: 'people' }"
-          @start="drag = true"
-          @end="drag = false"
+          itemKey="id"
+          group="people"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
         >
           <template #item="{ element: user }">
             <div
-              v-for="user in team.users"
               :key="`${user.id}`"
               class="border-b pt-2 bg-white"
               style="display: grid; grid-template-columns: 25px max-content 1fr"
@@ -85,7 +82,7 @@
         <draggable
           v-model="teamWorksites"
           item-key="id"
-          :options="{ group: 'cases' }"
+          group="cases"
           @start="drag = true"
           @end="drag = false"
           handle=".handle"
@@ -144,6 +141,7 @@
             }
           "
         />
+        {{  view }}
 
         <div class="flex py-4">
           <base-button
@@ -182,10 +180,8 @@
           ></base-input>
           <draggable
             v-model="usersList"
-            item-key="id"
-            :options="{ group: 'people' }"
-            @start="drag = true"
-            @end="drag = false"
+            itemKey="id"
+            group="people"
             handle=".handle"
             class="h-96 overflow-scroll"
           >
@@ -231,7 +227,7 @@
           <draggable
             v-model="worksites"
             item-key="id"
-            :options="{ group: 'cases' }"
+            group="cases"
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
@@ -287,7 +283,7 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+import Draggable from 'vuedraggable';
 import {
   adjectives,
   animals,
@@ -302,10 +298,13 @@ import { getColorForStatus } from '../../filters';
 import { getErrorMessage } from '../../utils/errors';
 import { getQueryString } from '../../utils/urls';
 import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
+import User from '@/models/User';
 
 export default {
   name: 'CreateTeamModal',
-  components: { WorksiteStatusDropdown, Avatar, draggable },
+  components: { WorksiteStatusDropdown, Avatar, Draggable },
   props: {
     users: {
       type: Array,
@@ -321,6 +320,10 @@ export default {
     },
   },
   setup(props, ctx) {
+    const $toasted = useToast();
+    const $http = axios;
+    const store = useStore();
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
     const usersList = ref([]);
     const caseList = ref([]);
     const currentSearch = ref('');
@@ -328,40 +331,24 @@ export default {
     const view = ref('users');
     const team = ref({
         users: [],
-        name: `Team ${this.teams.length + 1}`,
+        name: `Team ${props.teams.length + 1}`,
         notes: '',
       }
     );
     const teamWorksites = ref([]);
     const worksites = ref([]);
-    const currentIncidentId = computed(() => mapState('incident', ['currentIncidentId']))
-    onMounted(async () => {
-      usersList.value = Array.from(this.users);
-      caseList.value = Array.from(this.cases);
-      await getClaimedWorksites();
-    });
-    return {
-      usersList,
-      currentSearch,
-      currentCaseSearch,
-      view,
-      team,
-      teamWorksites,
-      worksites,
-      currentIncidentId
-    };
-  },
-  methods: {
-    async getClaimedWorksites() {
+    const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
+
+    const getClaimedWorksites = async () => {
       const params = {
-        incident: this.currentIncidentId,
-        work_type__claimed_by: this.currentUser.organization.id,
+        incident: currentIncidentId.value,
+        work_type__claimed_by: currentUser.value.organization.id,
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
 
-      if (this.currentCaseSearch) {
-        params.search = this.currentCaseSearch;
+      if (currentCaseSearch.value) {
+        params.search = currentCaseSearch;
       }
 
       const results = await Worksite.api().get(
@@ -370,34 +357,36 @@ export default {
           dataKey: 'results',
         },
       );
-      this.worksites = results.entities.worksites;
-    },
-    async statusValueChange(value, workType) {
+      worksites.value = results.entities.worksites;
+    };
+
+    const statusValueChange = async (value, workType, worksiteId) => {
       try {
         await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        await Worksite.api().fetch(this.worksite.id);
-        this.$emit('reloadMap', this.worksite.id);
-        this.$emit('reloadTable');
+        await Worksite.api().fetch(worksiteId);
+        ctx.emit('reloadMap', worksiteId);
+        ctx.emit('reloadTable');
       }
-    },
-    async saveTeam() {
+    };
+
+    const saveTeam = async () => {
       try {
         const teamResult = await Team.api().post('/teams', {
-          ...this.team,
-          incident: this.currentIncidentId,
-          users: this.team.users.map((u) => u.id),
+          ...team.value,
+          incident: currentIncidentId.value,
+          users: team.value.users.map((u) => u.id),
         });
         const [team] = await teamResult.entities.teams;
-        if (this.teamWorksites.length) {
+        if (teamWorksites.value.length) {
           const promises = [];
-          this.teamWorksites.forEach((w) =>
+          teamWorksites.value.forEach((w) =>
             w.work_types.forEach((wt) => {
-              if (wt.claimed_by === this.currentUser.organization.id) {
+              if (wt.claimed_by === currentUser.value.organization.id) {
                 promises.push(
-                  this.$http.post(
+                  $http.post(
                     `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
                     {
                       team: team.id,
@@ -410,45 +399,67 @@ export default {
           );
           await Promise.all(promises);
         }
-        this.$emit('saved');
-        this.$emit('close');
+        ctx.emit('saved');
+        ctx.emit('close');
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        $toasted.error(getErrorMessage(error));
       }
-    },
-    onSearch() {
-      this.usersList = Array.from(
-        this.users.filter((user) => {
+    };
+    const onSearch = () => {
+      usersList.value = Array.from(
+        props.users.filter((user) => {
           return (
             user.full_name
               .toLowerCase()
-              .includes(this.currentSearch.toLowerCase()) ||
-            user.email.toLowerCase().includes(this.currentSearch.toLowerCase())
+              .includes(currentSearch.value.toLowerCase()) ||
+            user.email.toLowerCase().includes(currentSearch.value.toLowerCase())
           );
         }),
       );
-    },
-    onCaseSearch() {
-      this.caseList = Array.from(
-        this.cases.filter((c) => {
+    };
+    const onCaseSearch = () => {
+      caseList.value = Array.from(
+        props.cases.filter((c) => {
           return (
             c.case_number
               .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase()) ||
+              .includes(currentCaseSearch.value.toLowerCase()) ||
             c.work_type
               .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase())
+              .includes(currentCaseSearch.value.toLowerCase())
           );
         }),
       );
-    },
-    generateTeamName() {
-      this.team.name = uniqueNamesGenerator({
+    };
+    const generateTeamName = () => {
+      team.value.name = uniqueNamesGenerator({
         dictionaries: [colors, adjectives, animals],
         style: 'capital',
         separator: ' ',
       });
-    },
+    };
+
+    onMounted(async () => {
+      usersList.value = Array.from(props.users);
+      caseList.value = Array.from(props.cases);
+      await getClaimedWorksites();
+    });
+    return {
+      usersList,
+      currentSearch,
+      currentCaseSearch,
+      view,
+      team,
+      teamWorksites,
+      worksites,
+      currentIncidentId,
+      getClaimedWorksites,
+      statusValueChange,
+      saveTeam,
+      onSearch,
+      onCaseSearch,
+      generateTeamName
+    };
   },
 };
 </script>
