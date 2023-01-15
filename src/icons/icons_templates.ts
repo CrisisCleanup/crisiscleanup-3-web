@@ -1,5 +1,5 @@
 /* eslint-disable */
-const colors = {
+const colors: Record<string, Record<string, any>> = {
   open_unassigned_unclaimed: {
     fillColor: '#d0021b',
     strokeColor: '#e30001',
@@ -948,7 +948,7 @@ const chimney_capping = `<svg width="120" height="55" viewBox="0 0 1200 1200" fi
   </g>{{multiple}}
 </svg>`;
 
-const templates = {
+const templates: Record<string, string> = {
   circle,
   orb,
   plus,

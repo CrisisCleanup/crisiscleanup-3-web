@@ -1,9 +1,11 @@
 import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type { WorkType, Status } from '@/models/types';
+import type LocationType from '@/models/LocationType';
 
 const AppState = {
-  statuses: [],
-  workTypes: [],
-  locationTypes: [],
+  statuses: [] as Status[],
+  workTypes: [] as WorkType[],
+  locationTypes: [] as LocationType[],
   phases: [],
   portal: null,
 };

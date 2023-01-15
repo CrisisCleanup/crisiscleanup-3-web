@@ -4,7 +4,12 @@ import LocationType from './LocationType';
 export default class Location extends Model {
   static entity = 'locations';
 
+  id!: string;
   type!: string;
+  attr!: Record<string, any>;
+  geom!: string;
+  poly!: string;
+  point!: string;
 
   static fields() {
     return {

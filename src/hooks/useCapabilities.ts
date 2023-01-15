@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import { getErrorMessage } from '../utils/errors';
+import { getErrorMessage } from '@/utils/errors';
+import type Organization from '@/models/Organization';
+import type { Capability } from '@/models/types';
 
 async function saveCapabilities(
-  updatedOrganizationCapabilitiesMatrix,
-  organizationCapabilities,
-  organization,
+  updatedOrganizationCapabilitiesMatrix: Set<number>[] | null,
+  organizationCapabilities: Capability[],
+  organization: Organization,
   admin = false,
 ) {
   const $toasted = useToast();

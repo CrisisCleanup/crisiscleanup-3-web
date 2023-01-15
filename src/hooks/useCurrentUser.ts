@@ -1,7 +1,7 @@
+import { computed } from 'vue';
 import User from '../models/User';
 import { store } from '../store';
 import { getErrorMessage } from '../utils/errors';
-import { computed } from 'vue';
 
 export default function useCurrentUser() {
   const currentUser = computed(() => User.find(store.getters['auth/userId']));
@@ -15,14 +15,16 @@ export default function useCurrentUser() {
   };
 
   const saveCurrentUser = async () => {
-    try {
-      await User.api().patch(`/users/${currentUser.value?.id}`, {
-        ...User.find(currentUser.value?.id)?.$toJson(),
-        preferences: currentUser.value?.preferences,
-        states: currentUser.value?.states,
-      });
-    } catch (error) {
-      throw getErrorMessage(error);
+    if (currentUser.value?.id) {
+      try {
+        await User.api().patch(`/users/${currentUser.value?.id}`, {
+          ...User.find(currentUser.value?.id)?.$toJson(),
+          preferences: currentUser.value?.preferences,
+          states: currentUser.value?.states,
+        });
+      } catch (error) {
+        throw getErrorMessage(error);
+      }
     }
   };
 

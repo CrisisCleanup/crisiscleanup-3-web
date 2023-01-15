@@ -5,9 +5,9 @@ import moment from 'moment';
 import enums from '../store/modules/enums';
 import { colors as iconColors, templates } from '../icons/icons_templates';
 import Organization from '../models/Organization';
-import momentWithDurations from 'moment-duration-format';
+import type { WorkType } from '@/models/types';
 
-export function snakeToTitleCase(value) {
+export function snakeToTitleCase(value: string) {
   if (!value) return '';
   // Ref: https://gist.github.com/kkiernan/91298079d34f0f832054
   return value
@@ -18,12 +18,12 @@ export function snakeToTitleCase(value) {
     .join(' ');
 }
 
-export function getWorkTypeName(workType) {
+export function getWorkTypeName(workType: string) {
   const wType = enums.state.workTypes.find((type) => type.key === workType);
   return wType && wType.name_t ? wType.name_t : '';
 }
 
-export function getStatusName(statusKey) {
+export function getStatusName(statusKey: string) {
   const status = enums.state.statuses.find((type) => type.status === statusKey);
   return status ? status.status_name_t : '';
 }
@@ -50,7 +50,7 @@ export function getOrganizationName(id: string) {
 }
 
 export function getStatusBadge(status: string) {
-  const statusDict = {
+  const statusDict: Record<string, string> = {
     open_unassigned: 'error',
     open_assigned: 'processing',
     'open_partially-completed': 'processing',
@@ -69,7 +69,7 @@ export function getStatusBadge(status: string) {
   return statusDict[status];
 }
 
-export const getColorForWorkType = (workType) => {
+export const getColorForWorkType = (workType: WorkType) => {
   if (!workType) {
     return '';
   }
@@ -81,7 +81,7 @@ export const getColorForWorkType = (workType) => {
   return colors.fillColor;
 };
 
-export const getColorForStatus = (status, claimed = true) => {
+export const getColorForStatus = (status: string, claimed = true) => {
   let colorsKey = `${status}_${claimed ? 'claimed' : 'unclaimed'}`;
   let colors = iconColors[colorsKey];
 
@@ -93,7 +93,7 @@ export const getColorForStatus = (status, claimed = true) => {
   return colors.fillColor;
 };
 
-export const getWorkTypeImage = (workType) => {
+export const getWorkTypeImage = (workType: WorkType) => {
   const colorsKey = `${workType.status}_${
     workType.claimed_by ? 'claimed' : 'unclaimed'
   }`;
@@ -110,7 +110,7 @@ export const getWorkTypeImage = (workType) => {
   return '';
 };
 
-export const secondsToHm = (seconds) => {
+export const secondsToHm = (seconds: number) => {
   const d = Number(seconds);
   const h = Math.floor(d / 3600);
   const m = Math.floor((d % 3600) / 60);
@@ -120,13 +120,13 @@ export const secondsToHm = (seconds) => {
   return hDisplay + mDisplay;
 };
 
-export const formatSeconds = (seconds) => {
+export const formatSeconds = (seconds: number) => {
   return moment
     .utc(moment.duration(seconds, 's').asMilliseconds())
     .format('hh:mm:ss');
 };
 
-export const capitalize = (value) => {
+export const capitalize = (value: string) => {
   // "two words" -> "Two Words"
   if (!value) return '';
   const casted = value.toString().toLowerCase();
@@ -136,19 +136,19 @@ export const capitalize = (value) => {
   return final;
 };
 
-export const toUpper = (value) => {
+export const toUpper = (value: string) => {
   if (!value) return '';
   return value.toUpperCase();
 };
 
-export const truncateFilter = (value, length, ...args) =>
+export const truncateFilter = (value: string, length: number, ...args: any) =>
   _.truncate(value, { length, ...args });
 
-export const startCase = (value) => _.startCase(value);
+export const startCase = (value: string) => _.startCase(value);
 
-export const snakeCase = (value) => _.snakeCase(value);
+export const snakeCase = (value: string) => _.snakeCase(value);
 
-export const formatNationalNumber = (mobile) => {
+export const formatNationalNumber = (mobile: string) => {
   const _number = parsePhoneNumber(mobile, 'US');
   if (_number) {
     return _number.formatNational();

@@ -17,13 +17,13 @@ const LANGUAGE_ID_MAPPING: Record<any, any> = {
 // });
 export default class PhoneService {
   store!: any;
-  loggedInAgentId: string | undefined;
-  agent_id: string | undefined;
+  loggedInAgentId: string | undefined | null;
+  agent_id: string | undefined | null;
   callInfo: any;
   queueIds: any;
-  username: string | undefined;
-  password: string | undefined;
-  cf: AgentLibrary | undefined;
+  username: string | undefined | null;
+  password: string | undefined | null;
+  cf: typeof AgentLibrary | undefined;
 
   constructor() {
     this.loggedInAgentId = null;
@@ -41,8 +41,7 @@ export default class PhoneService {
         import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
       ]),
     ];
-    let socketDest;
-    socketDest =
+    const socketDest =
       accessToken && this.agent_id
         ? `wss://c01-con.vacd.biz:8080/?access_token=${accessToken}&agent_id=${this.agent_id}`
         : `wss://c01-con.vacd.biz:8080/`;
@@ -62,7 +61,7 @@ export default class PhoneService {
     });
   }
 
-  async apiLogoutAgent(agentId: string | undefined) {
+  async apiLogoutAgent(agentId: string | undefined | null) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -71,7 +70,7 @@ export default class PhoneService {
     );
   }
 
-  async apiUpdateStats(agentId: string | undefined) {
+  async apiUpdateStats(agentId: string | undefined | null) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -260,8 +259,8 @@ export default class PhoneService {
       this.store.commit('phone/setOutgoingCall', null);
     }
 
-    this.changeState('AWAY').then(() => {});
-    this.apiUpdateStats(this.loggedInAgentId).catch(() => {});
+    this.changeState('AWAY').then(null);
+    this.apiUpdateStats(this.loggedInAgentId).catch(null);
   }
 
   onGetStatsAgent(info: any) {
@@ -400,7 +399,7 @@ export default class PhoneService {
     });
   }
 
-  async dial(destination: string, callerId = null) {
+  async dial(destination: string, callerId: string | null = null) {
     return new Promise((resolve) => {
       this.cf.offhookInit((offhookInitResponse: any) => {
         // Log.debug('Offhook init response', offhookInitResponse);

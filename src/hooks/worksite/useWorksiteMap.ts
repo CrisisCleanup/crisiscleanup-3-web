@@ -1,38 +1,46 @@
 import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
+import type { Sprite } from 'pixi.js';
 import { type Container } from 'pixi.js';
+import type { LatLng, HeatLayer, LeafletMouseEvent } from 'leaflet';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '../../utils/map';
 import Location from '../../models/Location';
-import useRenderedMarkers from './useRenderedMarkers';
 import { i18n } from '../../main';
+import useRenderedMarkers from './useRenderedMarkers';
+import type { LayerGroup, PixiLayer } from '@/utils/types/map';
+import type Worksite from '@/models/Worksite';
 
 export type MapUtils = {
-  getMap: Function;
-  getPixiContainer: Function;
-  getCurrentMarkerLayer: Function;
-  removeLayer: Function;
-  reloadMap: Function;
-  addMarkerToMap: Function;
-  fitLocation: Function;
-  jumpToCase: Function;
-  applyLocation: Function;
-  applyTeamGeoJson: Function;
-  addHeatMap: Function;
-  removeHeatMap: Function;
-  loadMarker: Function | undefined;
-  hideMarkers: Function | undefined;
-  showMarkers: Function | undefined;
+  getMap: () => L.Map;
+  getPixiContainer: () => Container | null;
+  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | null;
+  removeLayer: (key: string) => void;
+  reloadMap: (newMarkers: (Sprite & Worksite)[], visibleIds: string[]) => void;
+  addMarkerToMap: (location: LatLng) => void;
+  fitLocation: (location: Location) => void;
+  jumpToCase: (worksite: Worksite, showPopup: boolean) => void;
+  applyLocation: (locationId: string, value: boolean) => void;
+  applyTeamGeoJson: (teamId: string, value: boolean, geom: any) => void;
+  addHeatMap: (points: LatLng[]) => void;
+  removeHeatMap: () => void;
+  loadMarker: (marker: Sprite & Worksite, index: number) => void;
+  hideMarkers: () => void;
+  showMarkers: () => void;
 };
 
 export default (
-  markers,
-  visibleMarkerIds,
-  onMarkerClick,
-  onLoadMarkers,
+  markers: (Sprite & Worksite)[],
+  visibleMarkerIds: string[],
+  onMarkerClick: (marker: Sprite & Worksite) => void,
+  onLoadMarkers: (fn: { workTypes: Record<string, any> }) => void,
   useGoogleMaps = false,
 ) => {
-  let loadMarker;
+  let loadMarker: (marker: Sprite & Worksite, index: number) => void = (
+    marker,
+    index,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  ) => {};
   const map = L.map('map', {
     zoomControl: false,
   }).fitBounds([
@@ -50,15 +58,18 @@ export default (
     }).addTo(map);
   }
 
-  const removeLayer = (key) => {
+  const removeLayer = (key: string) => {
     map.eachLayer((layer) => {
-      if (layer.key === key) {
+      if ((layer as L.Layer & PixiLayer).key === key) {
         map.removeLayer(layer);
       }
     });
   };
 
-  function setupMap(worksiteMarkers, visibleIds) {
+  function setupMap(
+    worksiteMarkers: (Sprite & Worksite)[],
+    visibleIds: string[],
+  ) {
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
     worksiteLayer.addTo(map);
@@ -75,26 +86,27 @@ export default (
       }
     });
 
-    map.on(
-      'mousemove',
-      L.Util.throttle((e) => {
-        const marker = findMarker(e.latlng);
-        if (marker) {
-          L.DomUtil.addClass(worksiteLayer._container, 'cursor-pointer');
-          worksiteLayer._container.setAttribute('title', marker.case_number);
-        } else {
-          L.DomUtil.removeClass(worksiteLayer._container, 'cursor-pointer');
-          worksiteLayer._container.setAttribute('title', '');
-        }
-      }, 32),
-    );
+    function addCursor(e: LeafletMouseEvent) {
+      const marker = findMarker(e.latlng);
+      if (marker) {
+        L.DomUtil.addClass(worksiteLayer._container, 'cursor-pointer');
+        worksiteLayer._container.setAttribute('title', marker.case_number);
+      } else {
+        L.DomUtil.removeClass(worksiteLayer._container, 'cursor-pointer');
+        worksiteLayer._container.setAttribute('title', '');
+      }
+    }
+
+    map.on('mousemove', L.Util.throttle(addCursor as any, 32, {}));
     map.panBy([1, 0]);
     return { workTypes };
   }
 
   onLoadMarkers(setupMap(markers, visibleMarkerIds));
-
-  const reloadMap = (newMarkers, visibleIds) => {
+  const reloadMap = (
+    newMarkers: (Sprite & Worksite)[],
+    visibleIds: string[],
+  ) => {
     if (map) {
       onLoadMarkers(setupMap(newMarkers, visibleIds));
     }
@@ -104,37 +116,39 @@ export default (
     return map;
   }
 
-  function getPixiContainer(): Container | undefined {
+  function getPixiContainer(): Container | null {
     let container = null;
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer') {
-        container = layer._pixiContainer;
+      if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
+        container = (layer as L.Layer & PixiLayer)._pixiContainer;
       }
     });
     return container;
   }
 
-  function getCurrentMarkerLayer() {
-    let l = null;
+  function getCurrentMarkerLayer(): (L.Layer & PixiLayer) | null {
+    let l: (L.Layer & PixiLayer) | null = null;
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer') {
-        l = layer;
+      if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
+        l = layer as L.Layer & PixiLayer;
       }
     });
     return l;
   }
 
-  async function addMarkerToMap(location) {
+  async function addMarkerToMap(location: LatLng) {
     let markerLocation = location;
     const container = getPixiContainer() as any;
     if (!markerLocation) {
       markerLocation = map.getCenter();
     }
 
-    const markerGroup = L.layerGroup();
+    const markerGroup = L.layerGroup() as LayerGroup & L.LayerGroup;
     markerGroup.key = 'temp_markers';
 
-    const marker = new L.marker(markerLocation, { draggable: 'true' });
+    const marker: L.Marker = L.marker(markerLocation, {
+      draggable: true,
+    });
     markerGroup.addTo(map);
     markerGroup.addLayer(marker);
 
@@ -151,24 +165,24 @@ export default (
     }, 400);
   }
 
-  function fitLocation(location) {
+  function fitLocation(location: Location) {
     if (map) {
       const geojsonFeature = {
         type: 'Feature',
         properties: location.attr,
         geometry: location.poly || location.geom || location.point,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(feature, layer) {
-          layer.location_id = location.id;
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
+          (layer as L.Layer & PixiLayer).location_id = location.id;
         },
-      });
+      } as any);
       map.fitBounds(polygon.getBounds());
     }
   }
 
-  const jumpToCase = async (worksite, showPopup = true) => {
+  const jumpToCase = async (worksite: Worksite, showPopup = true) => {
     const container = getPixiContainer();
     if (map && worksite && container) {
       container.visible = false;
@@ -191,7 +205,7 @@ export default (
     }
   };
 
-  async function applyLocation(locationId, value) {
+  async function applyLocation(locationId: string, value: boolean) {
     if (value && map) {
       await Location.api().fetchById(locationId);
       const location = Location.find(locationId) as any;
@@ -199,51 +213,60 @@ export default (
         type: 'Feature',
         properties: location?.attr,
         geometry: location?.poly || location?.geom || location?.point,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(feature, layer) {
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
           layer.location_id = locationId;
         },
-      });
+      } as any);
       polygon.addTo(map);
       map.fitBounds(polygon.getBounds());
     } else {
       map.eachLayer((layer) => {
-        if (layer.location_id && layer.location_id === locationId) {
+        if (
+          (layer as L.Layer & PixiLayer).location_id &&
+          (layer as L.Layer & PixiLayer).location_id === locationId
+        ) {
           map.removeLayer(layer);
         }
       });
     }
   }
 
-  async function applyTeamGeoJson(teamId, value, geom) {
+  async function applyTeamGeoJson(teamId: string, value: boolean, geom: any) {
     if (value && map) {
       const geojsonFeature = {
         type: 'Feature',
         properties: {},
         geometry: geom,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(_, layer) {
-          layer.location_id = teamId;
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
+          (layer as L.Layer & PixiLayer).location_id = teamId;
         },
-      });
+      } as any);
       polygon.addTo(map);
       map.fitBounds(polygon.getBounds());
     } else {
       map.eachLayer((layer) => {
-        if (layer.location_id && layer.location_id === teamId) {
+        if (
+          (layer as L.Layer & PixiLayer).location_id &&
+          (layer as L.Layer & PixiLayer).location_id === teamId
+        ) {
           map.removeLayer(layer);
         }
       });
     }
   }
 
-  function addHeatMap(points) {
-    const heatLayer = L.heatLayer(points, { radius: 35 }).addTo(map);
-    heatLayer.key = 'heat_layer';
+  function addHeatMap(points: LatLng[]) {
+    // eslint-disable-next-line import/namespace
+    const heatLayer = L.heatLayer(points, {
+      radius: 35,
+    }).addTo(map);
+    (heatLayer as HeatLayer & PixiLayer).key = 'heat_layer';
   }
 
   function removeHeatMap() {

@@ -1,11 +1,11 @@
 <template>
   <div>
     <modal
-      closeable
-      @close="showingModal = false"
       v-if="showingModal"
+      closeable
       modal-classes="bg-white max-w-md shadow"
       :title="$t('databaseAccess.add_ip_to_db')"
+      @close="showingModal = false"
       @ok="saveAccess"
     >
       <div class="p-3">
@@ -15,7 +15,7 @@
         <div>
           <tag-input
             v-model="addresses"
-            :tags.sync="addressesToAdd"
+            v-model:tags="addressesToAdd"
             :placeholder="$t('databaseAccess.add_ip')"
             :add-on-key="[13, 32, ',']"
             :separators="[';', ',', ', ']"
@@ -39,9 +39,9 @@
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
+import { useToast } from 'vue-toastification';
+import axios from 'axios';
 import { getErrorMessage } from '../../utils/errors';
-import {useToast} from "vue-toastification";
-import axios from "axios";
 
 export default defineComponent({
   name: 'DatabaseAccess',

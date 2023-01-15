@@ -155,7 +155,7 @@
     </template>
   </form>
 </template>
-<script>
+<script lang="ts">
 import { parsePhoneNumber } from 'libphonenumber-js';
 import axios from 'axios';
 import { onMounted, ref, watch } from 'vue';
@@ -186,6 +186,12 @@ const INCIDENT_TYPES = [
   'flood_tstorm',
   'rebuild',
 ];
+
+interface Ani {
+  id: string;
+  ani?: string;
+  number?: string;
+}
 
 export default {
   name: 'IncidentForm',
@@ -231,7 +237,7 @@ export default {
       timezone: '',
       use_hotline: false,
     });
-    const aniList = ref([]);
+    const aniList = ref<Ani[]>([]);
 
     async function addNewAni() {
       const result = await prompt({
@@ -248,7 +254,7 @@ export default {
           return;
         }
         try {
-          const { data } = await axios.post(
+          const { data }: { data: Ani } = await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/ani`,
             {
               ani: parsedPhoneNumber.nationalNumber,
@@ -295,7 +301,7 @@ export default {
       const aniResponse = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/ani?limit=200`,
       );
-      aniList.value = aniResponse.data.results.map((ani) => {
+      aniList.value = aniResponse.data.results.map((ani: Ani) => {
         return {
           id: ani.id,
           number: formatNationalNumber(String(ani.ani)),

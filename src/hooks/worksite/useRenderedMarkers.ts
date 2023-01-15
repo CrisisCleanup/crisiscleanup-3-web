@@ -1,19 +1,36 @@
 import { Sprite, Texture } from 'pixi.js';
 import KDBush from 'kdbush';
 import * as turf from '@turf/turf';
+import type * as L from 'leaflet';
+import type { Feature, Point, Properties } from '@turf/turf';
 import { templates, colors } from '../../icons/icons_templates';
+import type Worksite from '@/models/Worksite';
+import type { PixiLayer } from '@/utils/types/map';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
-export default (map, markers, visibleMarkerIds) => {
-  const textureMap = {};
-  let workTypes: Record<string, any> = {};
-  let points = [];
-  let kdBushIndex: KDBush = null;
+interface KDBushPoint {
+  x: number;
+  y: number;
+  id: string;
+  case_number: string;
+  address: string;
+  work_types: any[];
+}
 
-  function renderMarkerSprite(marker, index) {
-    map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer') {
+export default (
+  map: L.Map,
+  markers: (Sprite & Worksite)[],
+  visibleMarkerIds: string[],
+) => {
+  const textureMap: Record<string, Texture> = {};
+  let workTypes: Record<string, any> = {};
+  let points: KDBushPoint[] = [];
+  let kdBushIndex: any = null;
+
+  function renderMarkerSprite(marker: Sprite & Worksite, index: number) {
+    map.eachLayer((layer: L.Layer) => {
+      if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
         const markerTemplate = templates.circle;
         let sprite = new Sprite() as any;
 
@@ -25,7 +42,9 @@ export default (map, markers, visibleMarkerIds) => {
         const { fillColor, strokeColor } = spriteColors;
 
         const { location } = marker;
-        const patientCoords = layer.utils.latLngToLayerPoint([
+        const patientCoords = (
+          layer as L.Layer & PixiLayer
+        ).utils.latLngToLayerPoint([
           location.coordinates[1],
           location.coordinates[0],
         ]);
@@ -75,7 +94,7 @@ export default (map, markers, visibleMarkerIds) => {
         sprite.basicTexture = texture;
         sprite.detailedTexture = Texture.from(typeSvg);
 
-        layer._pixiContainer.addChild(sprite);
+        (layer as L.Layer & PixiLayer)._pixiContainer.addChild(sprite);
       }
     });
   }
@@ -94,10 +113,10 @@ export default (map, markers, visibleMarkerIds) => {
 
     kdBushIndex = new KDBush(
       points,
-      function (p) {
+      function (p: KDBushPoint) {
         return p.x;
       },
-      function (p) {
+      function (p: KDBushPoint) {
         return p.y;
       },
       64,
@@ -105,7 +124,10 @@ export default (map, markers, visibleMarkerIds) => {
     );
   }
 
-  function calcDist(a, b) {
+  function calcDist(
+    a: Feature<Point, Properties>,
+    b: Feature<Point, Properties>,
+  ) {
     const p1 = map.latLngToContainerPoint([
       a.geometry.coordinates[1],
       a.geometry.coordinates[0],
@@ -120,14 +142,14 @@ export default (map, markers, visibleMarkerIds) => {
     return Math.sqrt(dx ** 2 + dy ** 2);
   }
 
-  function findMarker(latlng) {
+  function findMarker(latlng: L.LatLng) {
     if (map.getZoom() < INTERACTIVE_ZOOM_LEVEL) {
       return null;
     }
 
     const results = kdBushIndex
       ?.within(latlng.lat, latlng.lng, 5)
-      .map((id) => points[id]);
+      .map((id: number) => points[id]);
     let minDist = Number.MAX_VALUE;
     let minpxDist = 0;
     let minDistItem = null;

@@ -21,6 +21,8 @@ specifiers:
   '@sipec/vue3-tags-input': ^3.0.4
   '@turf/turf': ^6.5.0
   '@types/leaflet': ^1.9.0
+  '@types/leaflet.gridlayer.googlemutant': ^0.4.6
+  '@types/leaflet.heat': ^0.2.1
   '@types/lodash': ^4.14.186
   '@types/node': ^18.11.6
   '@typescript-eslint/eslint-plugin': ^5.47.0
@@ -140,6 +142,8 @@ dependencies:
   '@sentry/browser': 7.21.1
   '@sipec/vue3-tags-input': 3.0.4_vue@3.2.41
   '@turf/turf': 6.5.0
+  '@types/leaflet.gridlayer.googlemutant': 0.4.6
+  '@types/leaflet.heat': 0.2.1
   '@vitejs/plugin-vue-jsx': 2.1.1_vite@4.0.3+vue@3.2.41
   '@vueform/multiselect': 2.5.7
   '@vuepic/vue-datepicker': 3.6.3_vue@3.2.41
@@ -2805,11 +2809,22 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
+  /@types/leaflet.gridlayer.googlemutant/0.4.6:
+    resolution: {integrity: sha512-L0J7NadcZp5bcKQrv4DVlsEbQ90xLsOKScckAMnxoghh/wogk0GVkauYOYHBKeKDkx9qkMRzTf8oO+fKeYD7oQ==}
+    dependencies:
+      '@types/leaflet': 1.9.0
+    dev: false
+
+  /@types/leaflet.heat/0.2.1:
+    resolution: {integrity: sha512-NESIrQcnaT2gONYOUMfuppWdPDNkmH69qTa5F1kHCSh2WXno84YpOzJn/U+aGSNjUFRdVnRcxn1uxJn68/GNRA==}
+    dependencies:
+      '@types/leaflet': 1.9.0
+    dev: false
+
   /@types/leaflet/1.9.0:
     resolution: {integrity: sha512-7LeOSj7EloC5UcyOMo+1kc3S1UT3MjJxwqsMT1d2PTyvQz53w0Y0oSSk9nwZnOZubCmBvpSNGceucxiq+ZPEUw==}
     dependencies:
       '@types/geojson': 7946.0.8
-    dev: true
 
   /@types/lodash/4.14.186:
     resolution: {integrity: sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw==}

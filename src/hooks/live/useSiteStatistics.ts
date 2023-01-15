@@ -2,17 +2,18 @@ import axios from 'axios';
 import moment from 'moment';
 import { getQueryString } from '@/utils/urls';
 import { i18n } from '@/main';
+import type { SiteStatistic } from '@/hooks/live/types';
 
 export default function useSiteStatistics(queryFilter: Record<string, any>) {
   const statsInterval = ref<ReturnType<typeof setInterval> | null>(null);
-  const currentSiteStats = ref([]);
+  const currentSiteStats = ref<SiteStatistic[]>([]);
   const currentEngagement = ref(0);
   const circularBarplotData = ref([]);
   const barChartData = ref([]);
-  const totalCasesChartData = ref([]);
-  const mapStatistics = ref([]);
+  const totalCasesChartData = ref<Record<string, any>[]>([]);
+  const mapStatistics = ref<Record<string, any>[]>([]);
 
-  function formatStatValue(value) {
+  function formatStatValue(value: string | number) {
     return Number(value).toFixed(0);
   }
 
@@ -27,6 +28,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: end_date.format('YYYY-MM-DD'),
+      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -49,7 +51,9 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     statsInterval.value = null;
 
     const { incident } = queryFilter.value;
-    const params = {};
+    const params = {
+      incident: undefined,
+    };
     if (incident) {
       params.incident = incident;
     }
@@ -76,6 +80,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
       date: d,
       interval,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -95,6 +100,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: end_date.format('YYYY-MM-DD'),
+      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -178,7 +184,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     // this.charts.completion.options = options;
     // this.charts.completion.data = data;
 
-    barChartData.value = chart.labels.map((item, index) => {
+    barChartData.value = chart.labels.map((item: any, index: number) => {
       return {
         group: item,
         newCases: chart.datasets[0].data[index],
@@ -192,6 +198,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD'),
+      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -300,11 +307,11 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
   }
 
   function loadData() {
-    fetchSiteStatistics().then(() => {});
-    fetchEngagementData().then(() => {});
-    fetchCircularBarplotData().then(() => {});
-    getCompletionRateData().then(() => {});
-    getIncidentStats().then(() => {});
+    fetchSiteStatistics().then(null);
+    fetchEngagementData().then(null);
+    fetchCircularBarplotData().then(null);
+    getCompletionRateData().then(null);
+    getIncidentStats().then(null);
   }
 
   loadData();

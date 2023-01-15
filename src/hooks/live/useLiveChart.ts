@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
 import { useResizeObserver } from '@vueuse/core';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 export default function useLiveChart(
-  chartId,
-  margin,
-  onRerender,
+  chartId: string,
+  margin: Record<string, any>,
+  onRerender: () => void,
   autoResize = false,
   renderTimeout = 1500,
 ) {
@@ -42,7 +42,7 @@ export default function useLiveChart(
   }
 
   (() => {
-    const chartContainer = document.querySelector(`#${chartId}`);
+    const chartContainer = document.querySelector(`#${chartId}`) as any;
 
     // define and attach ResizeObserver only if `hasAutoResizing` prop is true
     if (autoResize && chartContainer) {

@@ -1,3 +1,4 @@
+import type { LatLng } from 'leaflet';
 import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
@@ -8,56 +9,65 @@ import {
   Texture,
   utils as pixiUtils,
 } from 'pixi.js';
-import { orderBy, throttle } from 'lodash';
+// eslint-disable-next-line import/named
+import { orderBy } from 'lodash';
+import type { Ref } from 'vue';
 import {
-  getMarkerLayer,
-  mapTileLayer,
-  mapAttribution,
-  mapTileLayerDark,
   degreesToRadians,
-  randomIntFromInterval,
   findBezierPoints,
   getLiveLayer,
+  getMarkerLayer,
+  mapAttribution,
+  mapTileLayer,
+  mapTileLayerDark,
+  randomIntFromInterval,
 } from '../../utils/map';
 import Location from '../../models/Location';
 import { i18n } from '../../main';
 import { colors, templates } from '@/icons/icons_templates';
+import type {
+  LiveGraphics,
+  PixiLayer,
+  LiveSprite,
+  LayerGroup,
+} from '@/utils/types/map';
+import type Worksite from '@/models/Worksite';
+import type Incident from '@/models/Incident';
 
 export type MapUtils = {
-  getMap: Function;
-  getPixiContainer: Function;
-  getCurrentMarkerLayer: Function;
-  removeLayer: Function;
-  reloadMap: Function;
-  addMarkerToMap: Function;
-  fitLocation: Function;
-  jumpToCase: Function;
-  applyLocation: Function;
-  applyTeamGeoJson: Function;
-  addHeatMap: Function;
-  removeHeatMap: Function;
-  loadMarker: Function | undefined;
-  hideMarkers: Function | undefined;
-  showMarkers: Function | undefined;
-  restartLiveEvents: Function | undefined;
-  isPaused: boolean | undefined;
-  displayedWorkTypeSvgs: Array;
+  getMap: () => L.Map;
+  getPixiContainer: () => Container | null;
+  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | null;
+  removeLayer: (key: string) => void;
+  reloadMap: (markers: (Sprite & Worksite & LiveSprite)[]) => void;
+  addMarkerToMap: (location: LatLng) => void;
+  fitLocation: (location: Location) => void;
+  jumpToCase: (worksite: Worksite, showPopup: boolean) => void;
+  applyLocation: (locationId: string, value: boolean) => void;
+  applyTeamGeoJson: (teamId: string, value: boolean, geom: any) => void;
+  restartLiveEvents: () => void;
+  isPaused: Ref<boolean | undefined>;
+  pauseGeneratePoints: () => void;
+  resumeGeneratePoints: () => void;
+  refreshVisibility: () => void;
+  refreshTimeline: (index: number) => void;
+  refreshSvi: (index: number) => void;
+  displayedWorkTypeSvgs: Ref<Record<string, any>[]>;
 };
 
 export default (
-  markers,
-  liveEvents,
-  incident,
+  markers: (Sprite & Worksite & LiveSprite)[],
+  liveEvents: (Sprite & Worksite)[],
+  incident: Incident,
   cadence = 0.03,
-  reloadFunction,
-  onCardAdded,
-  onClearCards,
+  reloadFunction: () => PromiseLike<any>,
+  onCardAdded: (card: Record<any, any>) => void,
+  onClearCards: () => void,
 ) => {
-  let loadMarker;
   let colorMode = 'dark';
   let currentEventIndex = 0;
-  const textureMap = [];
-  const displayedWorkTypeSvgs = ref([]);
+  const textureMap: Record<string, Texture> = {};
+  const displayedWorkTypeSvgs = ref<Record<string, any>[]>([]);
   const visibleWorkTypes = computed(() => {
     const selectedWorkTypes = displayedWorkTypeSvgs.value
       .filter((s) => s.selected)
@@ -67,9 +77,9 @@ export default (
     }
     return null;
   });
-  const displayedWorkTypes = [];
-  const eventsInterval = ref(null);
-  const isPaused = ref(false);
+  const displayedWorkTypes: string[] = [];
+  const eventsInterval = ref<any>(null);
+  const isPaused = ref<boolean | undefined>(false);
   const svg = templates.orb
     .replaceAll('{{fillColor}}', '#61D5F8')
     .replaceAll('{{strokeColor}}', 'black');
@@ -113,13 +123,16 @@ export default (
 
   const removeLayer = (key: string) => {
     map.eachLayer((layer) => {
-      if (layer.key === key) {
+      if ((layer as L.Layer & PixiLayer).key === key) {
         map.removeLayer(layer);
       }
     });
   };
 
-  function generatePoints(liveMarkers, markerSpeed) {
+  function generatePoints(
+    liveMarkers: (Sprite & Worksite & LiveSprite)[],
+    markerSpeed: number,
+  ) {
     if (eventsInterval.value) {
       clearInterval(eventsInterval.value);
     }
@@ -148,12 +161,13 @@ export default (
     const liveLayer = getLiveLayer();
     liveLayer.addTo(map);
     onClearCards();
-    const markerSpeed = Number(100 / liveMarkers.length).toFixed(0) * cadence;
+    const markerSpeed: number =
+      Number((100 / liveMarkers.length).toFixed(0)) * cadence;
     generatePoints(liveMarkers, markerSpeed);
     return undefined;
   };
 
-  function setLegend(createdWorkTypes) {
+  function setLegend(createdWorkTypes: string[]) {
     const workTypes = [
       ...new Set(createdWorkTypes || incident.created_work_types),
     ];
@@ -171,18 +185,20 @@ export default (
     });
   }
 
-  function getMarkerVisibility(sprite) {
+  function getMarkerVisibility(sprite: any) {
     if (!visibleWorkTypes.value) {
       return true;
     }
-    const visible =
-      visibleWorkTypes && visibleWorkTypes.value[sprite.workTypeKey]
-        ? true
-        : false;
-    return visible;
+    return !!(
+      visibleWorkTypes.value &&
+      visibleWorkTypes.value.includes(sprite.workTypeKey)
+    );
   }
 
-  function createCurve(actorMarkerSprite: Sprite, patientMarkerSprite: Sprite) {
+  function createCurve(
+    actorMarkerSprite: Sprite & LiveSprite,
+    patientMarkerSprite: Sprite & LiveSprite,
+  ) {
     const x1 = actorMarkerSprite.x; // in pixels
     const y1 = actorMarkerSprite.y;
     const x2 = patientMarkerSprite.x;
@@ -196,7 +212,7 @@ export default (
 
     const ax2 = Math.cos(ang2) * len * (1 / randomIntFromInterval(2, 5));
     const ay2 = Math.sin(ang2) * len * (1 / randomIntFromInterval(2, 5));
-    const linksGraphics = new Graphics();
+    const linksGraphics = new Graphics() as Graphics & LiveGraphics;
     linksGraphics.x1 = x1;
     linksGraphics.y1 = y1;
     linksGraphics.bezierParams = [
@@ -214,9 +230,10 @@ export default (
     );
     linksGraphics.color = patientMarkerSprite.color;
     linksGraphics.workTypeKey = patientMarkerSprite.workTypeKey;
-    linksGraphics.visible = getMarkerVisibility(linksGraphics);
+    linksGraphics.visible = getMarkerVisibility(linksGraphics as LiveGraphics);
     linksGraphics.moveTo(x1, y1);
-    linksGraphics.bezierCurveTo(...linksGraphics.bezierParams);
+    const [cpX, cpY, cpX2, cpY2, toX, toY] = linksGraphics.bezierParams;
+    linksGraphics.bezierCurveTo(cpX, cpY, cpX2, cpY2, toX, toY);
     linksGraphics.wayPoints = findBezierPoints([
       { x: actorMarkerSprite.x, y: actorMarkerSprite.y },
       { x: x1 + ax1, y: y1 + ay1 },
@@ -227,12 +244,14 @@ export default (
     return linksGraphics;
   }
 
-  async function generateMarker(liveEventMarkers) {
+  async function generateMarker(
+    liveEventMarkers: (Sprite & Worksite & LiveSprite)[],
+  ) {
     if (isPaused.value) {
       return;
     }
     map.eachLayer(async (layer) => {
-      if (layer.key === 'live_layer') {
+      if ((layer as L.Layer & PixiLayer).key === 'live_layer') {
         currentEventIndex++;
         const marker = liveEventMarkers[currentEventIndex];
 
@@ -242,11 +261,13 @@ export default (
         }
 
         if (!marker) {
-          layer._renderer.render(layer._pixiContainer);
-          layer.redraw();
+          (layer as L.Layer & PixiLayer)._renderer.render(
+            (layer as L.Layer & PixiLayer)._pixiContainer,
+          );
+          (layer as L.Layer & PixiLayer).redraw();
           return;
         }
-        const card = {
+        const card: Record<string, any> = {
           classes: 'border w-full h-32 rounded my-2',
           event: marker,
         };
@@ -254,13 +275,15 @@ export default (
         let actorMarkerSprite = null;
         let patientMarkerSprite = null;
         if (marker.actor_blurred_location) {
-          const actorCoords = layer.utils.latLngToLayerPoint([
+          const actorCoords = (
+            layer as L.Layer & PixiLayer
+          ).utils.latLngToLayerPoint([
             marker.actor_blurred_location.coordinates[1],
             marker.actor_blurred_location.coordinates[0],
           ]);
 
-          const isOrg = (element) =>
-            element.name === marker.attr.actor_organization_name;
+          // const isOrg = (element) =>
+          //   element.name === marker.attr.actor_organization_name;
 
           // const index = this.organizations.findIndex(isOrg);
           // if (index !== -1) {
@@ -269,7 +292,7 @@ export default (
           //   );
           // }
 
-          actorMarkerSprite = new Sprite();
+          actorMarkerSprite = new Sprite() as Sprite & LiveSprite;
           actorMarkerSprite.x = actorCoords.x;
           actorMarkerSprite.y = actorCoords.y;
           actorMarkerSprite.x0 = actorCoords.x;
@@ -282,7 +305,9 @@ export default (
           actorMarkerSprite.visible = true;
           card.color = '#61D5F8';
           card.strokeColor = '#61D5F8';
-          layer._pixiContainer.addChild(actorMarkerSprite);
+          (layer as L.Layer & PixiLayer)._pixiContainer.addChild(
+            actorMarkerSprite,
+          );
         }
 
         if (
@@ -290,7 +315,9 @@ export default (
           marker.patient_blurred_location
         ) {
           const location = marker[`${marker.map_destination}_blurred_location`];
-          const patientCoords = layer.utils.latLngToLayerPoint([
+          const patientCoords = (
+            layer as L.Layer & PixiLayer
+          ).utils.latLngToLayerPoint([
             location.coordinates[1],
             location.coordinates[0],
           ]);
@@ -333,7 +360,7 @@ export default (
             card.strokeColor = strokeColor;
           }
 
-          patientMarkerSprite = new Sprite();
+          patientMarkerSprite = new Sprite() as Sprite & LiveSprite;
           patientMarkerSprite.x = patientCoords.x;
           patientMarkerSprite.y = patientCoords.y;
           patientMarkerSprite.x0 = patientCoords.x;
@@ -364,11 +391,15 @@ export default (
           patientMarkerSprite.basicTexture = texture;
           patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
 
-          layer._pixiContainer.addChild(patientMarkerSprite);
+          (layer as L.Layer & PixiLayer)._pixiContainer.addChild(
+            patientMarkerSprite,
+          );
         }
 
-        layer._renderer.render(layer._pixiContainer);
-        layer.redraw();
+        (layer as L.Layer & PixiLayer)._renderer.render(
+          (layer as L.Layer & PixiLayer)._pixiContainer,
+        );
+        (layer as L.Layer & PixiLayer).redraw();
 
         if (actorMarkerSprite && patientMarkerSprite) {
           const linksGraphics = createCurve(
@@ -381,9 +412,13 @@ export default (
           patientMarkerSprite.visible =
             getMarkerVisibility(patientMarkerSprite);
           setTimeout(() => {
-            layer._pixiContainer.addChild(linksGraphics);
-            layer._renderer.render(layer._pixiContainer);
-            layer.redraw();
+            (layer as L.Layer & PixiLayer)._pixiContainer.addChild(
+              linksGraphics,
+            );
+            (layer as L.Layer & PixiLayer)._renderer.render(
+              (layer as L.Layer & PixiLayer)._pixiContainer,
+            );
+            (layer as L.Layer & PixiLayer).redraw();
           }, 50);
         }
 
@@ -392,10 +427,10 @@ export default (
     });
   }
 
-  function addMarker(marker, index) {
+  function addMarker(marker: Worksite & Sprite & LiveSprite, index: number) {
     map.eachLayer((layer) => {
       try {
-        if (layer.key === 'marker_layer') {
+        if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
           const markerTemplate = templates.circle;
           let patientMarkerSprite = null;
           if (
@@ -404,7 +439,9 @@ export default (
           ) {
             const location =
               marker[`${marker.map_destination}_blurred_location`];
-            const patientCoords = layer.utils.latLngToLayerPoint([
+            const patientCoords = (
+              layer as L.Layer & PixiLayer
+            ).utils.latLngToLayerPoint([
               location.coordinates[1],
               location.coordinates[0],
             ]);
@@ -451,7 +488,7 @@ export default (
               displayedWorkTypes.push(workTypeKey);
             }
 
-            patientMarkerSprite = new Sprite();
+            patientMarkerSprite = new Sprite() as Sprite & LiveSprite;
             patientMarkerSprite.index = index;
             patientMarkerSprite.id = marker.id;
             patientMarkerSprite.x = patientCoords.x;
@@ -487,7 +524,9 @@ export default (
             patientMarkerSprite.basicTexture = texture;
             patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
 
-            layer._pixiContainer.addChild(patientMarkerSprite);
+            (layer as L.Layer & PixiLayer)._pixiContainer.addChild(
+              patientMarkerSprite,
+            );
           }
         }
       } catch (error) {
@@ -496,7 +535,7 @@ export default (
     });
   }
 
-  function setupMap(worksiteMarkers, liveEventMarkers) {
+  function setupMap(worksiteMarkers: (Worksite & Sprite & LiveSprite)[]) {
     setLayer('dark');
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
@@ -521,9 +560,9 @@ export default (
 
     map.attributionControl.setPosition('bottomright');
   }
-  const reloadMap = (markers, liveEvents) => {
+  const reloadMap = (markers: (Sprite & Worksite & LiveSprite)[]) => {
     if (map) {
-      setupMap(markers, liveEvents);
+      setupMap(markers);
       setLegend([...displayedWorkTypes]);
     }
   };
@@ -532,11 +571,11 @@ export default (
     return map;
   }
 
-  function getPixiContainer(): Container | undefined {
-    let container = null;
+  function getPixiContainer(): Container | null {
+    let container: Container | null = null;
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer') {
-        container = layer._pixiContainer;
+      if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
+        container = (layer as L.Layer & PixiLayer)._pixiContainer;
       }
     });
     return container;
@@ -545,24 +584,24 @@ export default (
   function getCurrentMarkerLayer() {
     let l = null;
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer') {
+      if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
         l = layer;
       }
     });
     return l;
   }
 
-  async function addMarkerToMap(location) {
+  async function addMarkerToMap(location: LatLng) {
     let markerLocation = location;
     const container = getPixiContainer() as any;
     if (!markerLocation) {
       markerLocation = map.getCenter();
     }
 
-    const markerGroup = L.layerGroup();
+    const markerGroup = L.layerGroup() as LayerGroup & L.LayerGroup;
     markerGroup.key = 'temp_markers';
 
-    const marker = new L.marker(markerLocation, { draggable: 'true' });
+    const marker = L.marker(markerLocation, { draggable: true });
     markerGroup.addTo(map);
     markerGroup.addLayer(marker);
 
@@ -579,24 +618,24 @@ export default (
     }, 400);
   }
 
-  function fitLocation(location) {
+  function fitLocation(location: Location) {
     if (map) {
       const geojsonFeature = {
         type: 'Feature',
         properties: location.attr,
         geometry: location.poly || location.geom || location.point,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(feature, layer) {
-          layer.location_id = location.id;
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
+          (layer as L.Layer & PixiLayer).location_id = location.id;
         },
-      });
+      } as any);
       map.fitBounds(polygon.getBounds());
     }
   }
 
-  const jumpToCase = async (worksite, showPopup = true) => {
+  const jumpToCase = async (worksite: Worksite, showPopup = true) => {
     const container = getPixiContainer();
     if (map && worksite && container) {
       container.visible = false;
@@ -619,7 +658,7 @@ export default (
     }
   };
 
-  async function applyLocation(locationId, value) {
+  async function applyLocation(locationId: string, value: boolean) {
     if (value && map) {
       await Location.api().fetchById(locationId);
       const location = Location.find(locationId) as any;
@@ -627,92 +666,84 @@ export default (
         type: 'Feature',
         properties: location?.attr,
         geometry: location?.poly || location?.geom || location?.point,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(feature, layer) {
-          layer.location_id = locationId;
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
+          (layer as L.Layer & PixiLayer).location_id = locationId;
         },
-      });
+      } as any);
       polygon.addTo(map);
       map.fitBounds(polygon.getBounds());
     } else {
       map.eachLayer((layer) => {
-        if (layer.location_id && layer.location_id === locationId) {
+        if (
+          (layer as L.Layer & PixiLayer).location_id &&
+          (layer as L.Layer & PixiLayer).location_id === locationId
+        ) {
           map.removeLayer(layer);
         }
       });
     }
   }
 
-  async function applyTeamGeoJson(teamId, value, geom) {
+  async function applyTeamGeoJson(teamId: string, value: boolean, geom: any) {
     if (value && map) {
       const geojsonFeature = {
         type: 'Feature',
         properties: {},
         geometry: geom,
-      };
+      } as any;
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
-        onEachFeature(_, layer) {
-          layer.location_id = teamId;
+        onEachFeature(_: never, layer: L.Layer & PixiLayer) {
+          (layer as L.Layer & PixiLayer).location_id = teamId;
         },
-      });
+      } as any);
       polygon.addTo(map);
       map.fitBounds(polygon.getBounds());
     } else {
       map.eachLayer((layer) => {
-        if (layer.location_id && layer.location_id === teamId) {
+        if (
+          (layer as L.Layer & PixiLayer).location_id &&
+          (layer as L.Layer & PixiLayer).location_id === teamId
+        ) {
           map.removeLayer(layer);
         }
       });
     }
   }
 
-  function addHeatMap(points) {
-    const heatLayer = L.heatLayer(points, { radius: 35 }).addTo(map);
-    heatLayer.key = 'heat_layer';
-  }
-
-  function removeHeatMap() {
-    removeLayer('heat_layer');
-  }
-
-  function hideMarkers() {
-    const currentMarkerLayer = getCurrentMarkerLayer();
-    if (currentMarkerLayer) {
-      currentMarkerLayer._pixiContainer.visible = false;
-      map.panBy([1, 0]);
-    }
-  }
-
-  function showMarkers() {
-    const currentMarkerLayer = getCurrentMarkerLayer();
-    if (currentMarkerLayer) {
-      currentMarkerLayer._pixiContainer.visible = true;
-      map.panBy([1, 0]);
-    }
-  }
-
-  function refreshTimeline(index) {
+  function refreshTimeline(index: number) {
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
-        const container = layer._pixiContainer;
-        for (const markerSprite of container.children) {
+      if (
+        (layer as L.Layer & PixiLayer).key === 'marker_layer' ||
+        (layer as L.Layer & PixiLayer).key === 'live_layer'
+      ) {
+        const container = (layer as L.Layer & PixiLayer)._pixiContainer;
+        for (const markerSprite of container.children as (Worksite &
+          Sprite &
+          LiveSprite)[]) {
           markerSprite.visible = markerSprite.index <= index;
         }
 
-        layer._renderer.render(container);
-        layer.redraw();
+        (layer as L.Layer & PixiLayer)._renderer.render(container);
+        (layer as L.Layer & PixiLayer).redraw();
       }
     });
   }
 
-  function refreshSvi(value) {
+  function refreshSvi(value: number) {
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
-        const container = layer._pixiContainer;
-        const sviList = container.children.map((marker) => {
+      if (
+        (layer as L.Layer & PixiLayer).key === 'marker_layer' ||
+        (layer as L.Layer & PixiLayer).key === 'live_layer'
+      ) {
+        const container = (layer as L.Layer & PixiLayer)._pixiContainer;
+        const sprites = container.children as (Worksite &
+          Sprite &
+          LiveSprite)[];
+        const sviList = sprites.map((marker: any) => {
           return {
             id: marker.id,
             svi: marker.svi,
@@ -724,31 +755,34 @@ export default (
         const count = Math.floor((sviList.length * Number(value)) / 100);
         const filteredSvi = sviList.slice(0, count);
         const minSvi = filteredSvi[filteredSvi.length - 1].svi;
-        for (const markerSprite of container.children) {
+        for (const markerSprite of sprites) {
           markerSprite.visible = markerSprite.svi > minSvi;
         }
 
-        layer._renderer.render(container);
-        layer.redraw();
+        (layer as L.Layer & PixiLayer)._renderer.render(container);
+        (layer as L.Layer & PixiLayer).redraw();
       }
     });
   }
 
   function refreshVisibility() {
     map.eachLayer((layer) => {
-      if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
-        const container = layer._pixiContainer;
+      if (
+        (layer as L.Layer & PixiLayer).key === 'marker_layer' ||
+        (layer as L.Layer & PixiLayer).key === 'live_layer'
+      ) {
+        const container = (layer as L.Layer & PixiLayer)._pixiContainer;
         for (const markerSprite of container.children) {
           markerSprite.visible = getMarkerVisibility(markerSprite);
         }
 
-        layer._renderer.render(container);
-        layer.redraw();
+        (layer as L.Layer & PixiLayer)._renderer.render(container);
+        (layer as L.Layer & PixiLayer).redraw();
       }
     });
   }
 
-  setupMap(markers, liveEvents);
+  setupMap(markers);
   setLegend([...displayedWorkTypes]);
 
   const mapUtils: MapUtils = {
@@ -762,11 +796,6 @@ export default (
     jumpToCase,
     applyLocation,
     applyTeamGeoJson,
-    addHeatMap,
-    removeHeatMap,
-    loadMarker,
-    hideMarkers,
-    showMarkers,
     restartLiveEvents,
     isPaused,
     pauseGeneratePoints,

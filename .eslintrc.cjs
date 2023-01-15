@@ -35,15 +35,6 @@ module.exports = {
   },
   plugins: ['vue', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/naming-convention': [
-      'warn',
-      {
-        selector: 'default',
-        format: ['camelCase'],
-        leadingUnderscore: 'allow',
-        trailingUnderscore: 'allow',
-      },
-    ],
     '@typescript-eslint/consistent-type-imports': 'warn',
     'n/file-extension-in-import': 'off',
     'import/extensions': 0,
@@ -53,6 +44,8 @@ module.exports = {
     'unicorn/filename-case': 0,
     'unicorn/prevent-abbreviations': 0,
     'unicorn/no-array-reduce': 0,
+    '@typescript-eslint/naming-convention': 0,
+    'import/no-unassigned-import': 0,
   },
   overrides: [
     {

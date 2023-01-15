@@ -12,7 +12,9 @@ import Worksite from '../models/Worksite';
 import PhoneOutbound from '../models/PhoneOutbound';
 import usePhoneService from './phone/usePhoneService';
 
-export default function useConnectFirst(context: { emit: Function }) {
+export default function useConnectFirst(context: {
+  emit: (action: string) => void;
+}) {
   const $toasted = useToast();
   const { t } = useI18n();
 
@@ -93,7 +95,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       );
       currentAgent.value = data;
     } catch {
-      const { data } = await phoneService.createAgent();
+      const { data }: any = await phoneService.createAgent();
       currentAgent.value = data;
     }
   }
@@ -124,7 +126,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       const password = import.meta.env.VITE_APP_PHONE_DEFAULT_PASSWORD;
 
       if (!currentAgent?.value?.agent_username) {
-        const { data } = await phoneService.createAgent();
+        const { data }: any = await phoneService.createAgent();
         currentAgent.value = data;
       }
 
@@ -156,7 +158,7 @@ export default function useConnectFirst(context: { emit: Function }) {
       context.emit('onLoggedIn');
     }
 
-    phoneService.apiUpdateStats(phoneService.loggedInAgentId).catch(() => {});
+    phoneService.apiUpdateStats(phoneService.loggedInAgentId).catch(null);
   }
 
   async function logoutByPhoneNumber() {
@@ -167,7 +169,7 @@ export default function useConnectFirst(context: { emit: Function }) {
           phoneService
             .apiLoginsByPhone(
               parsedNumber.formatNational().replace(/[^\d.]/g, ''),
-              queueId,
+              Number(queueId),
             )
             .then(async ({ data }: any) => {
               if (data.length > 0) {
@@ -181,7 +183,7 @@ export default function useConnectFirst(context: { emit: Function }) {
 
               return null;
             })
-            .catch(() => {}),
+            .catch(null),
         ),
       );
     }

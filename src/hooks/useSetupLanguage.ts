@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { size } from 'lodash';
+import size from 'lodash/size';
 import moment from 'moment/moment';
 import detectBrowserLanguage from 'detect-browser-language';
 import { i18nService } from '@/services/i18n.service';

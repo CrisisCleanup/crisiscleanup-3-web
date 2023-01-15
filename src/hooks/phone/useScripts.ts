@@ -1,8 +1,8 @@
-// @ts-nocheck TODO(tabiodun): Fix this file
 /**
  * Hook for Phone Scripts
  */
 
+import type { Ref } from 'vue';
 import { computed } from 'vue';
 import * as config from 'tailwind.config';
 import moment from 'moment';
@@ -33,7 +33,7 @@ type UseScriptsProps = {
 };
 
 export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
-  const _callType = wrap(callType);
+  const _callType: Ref<keyof typeof CallType> = wrap(callType);
   const _incident = wrap(incident);
   const _recentWorksite = wrap(recentWorksite);
 
@@ -74,7 +74,7 @@ export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   };
 
   const currentScriptHeader = computed(
-    () => scriptHeaders[_callType.value ? _callType.value : CallType.INBOUND],
+    () => scriptHeaders[_callType.value ?? CallType.INBOUND],
   );
 
   const { currentUser } = useCurrentUser();
@@ -82,26 +82,20 @@ export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   const currentScript = computed(
     () =>
       currentUser &&
-      i18n.global.t(
-        Scripts[_callType.value ? _callType.value : CallType.INBOUND],
-        {
-          name: currentUser.first_name,
-          incidentType: _incident.value ? _incident.value.incident_type : '',
-          timeAgo: _recentWorksite.value
-            ? moment(_recentWorksite.value.updated_at).fromNow()
-            : '',
-        },
-      ),
+      i18n.global.t(Scripts[_callType.value ?? CallType.INBOUND], {
+        name: currentUser.first_name,
+        incidentType: _incident.value ? _incident.value.incident_type : '',
+        timeAgo: _recentWorksite.value
+          ? moment(_recentWorksite.value.updated_at).fromNow()
+          : '',
+      }),
   );
 
   const currentScriptColor = computed(
-    () =>
-      scriptColors[_callType.value ? _callType.value : CallType.INBOUND].light,
+    () => scriptColors[_callType.value ?? CallType.INBOUND].light,
   );
 
-  const currentCallType = computed(() =>
-    _callType.value ? _callType.value : CallType.INBOUND,
-  );
+  const currentCallType = computed(() => _callType.value ?? CallType.INBOUND);
 
   return {
     callType: currentCallType,
