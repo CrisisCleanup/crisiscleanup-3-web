@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { UserConfig } from 'vite';
-import _ from 'lodash';
 import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -92,5 +91,5 @@ export default defineConfig(async ({ command }) => {
     },
   });
 
-  return _.merge({}, ...configs) as UserConfig;
+  return { ...configs } as UserConfig;
 });
