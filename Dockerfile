@@ -14,7 +14,7 @@ RUN apk add gpg gpg-agent git && \
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
 RUN pnpm fetch --dev
-RUN pnpm install --offline --dev
+RUN pnpm install --dev
 
 COPY . .
 
