@@ -14,7 +14,7 @@ RUN apk add gpg gpg-agent git && \
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
 RUN pnpm fetch --dev
-RUN pnpm install --dev
+RUN pnpm install
 
 COPY . .
 
@@ -67,7 +67,7 @@ ENV SENTRY_DSN=${SENTRY_DSN}
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_PROPERTIES=${SENTRY_PROPERTIES:-"sentry.properties"}
 
-ENV NODE_OPTIONS='--max_old_space_size=4096'
+#ENV NODE_OPTIONS='--max_old_space_size=4096'
 
 RUN pnpm build:app --mode=${VITE_APP_STAGE}
 
