@@ -123,6 +123,8 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
             VITE_APP_API_BASE_URL=${{ env.VITE_APP_API_BASE_URL }}
             VITE_APP_BASE_URL=${{ env.VITE_APP_BASE_URL }}
