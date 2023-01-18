@@ -61,14 +61,14 @@ export const routes = [
         path: 'teams',
         component: Teams,
         name: 'nav.organization_teams',
-        // Children: [
-        //   {
-        //     path: ':team_id',
-        //     component: TeamDetail,
-        //     name: 'nav.organization_team_detail',
-        //     meta: { id: 'team_detail' },
-        //   },
-        // ],
+        children: [
+          {
+            path: ':team_id',
+            component: TeamDetail,
+            name: 'nav.organization_team_detail',
+            meta: { id: 'team_detail' },
+          },
+        ],
       },
       {
         path: 'layers',

@@ -591,27 +591,13 @@ import { getErrorMessage } from '../../utils/errors';
 import WorkTypeMap from '@/components/WorkTypeMap.vue';
 import { getQueryString } from '../../utils/urls';
 import Table from '@/components/Table.vue';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import { useDialogs } from '@/hooks/useDialogs.ts';
 
 export default {
   name: 'TeamDetail',
   components: { Table, WorkTypeMap, WorksiteStatusDropdown, Avatar },
-  mixins: [UserMixin, DialogsMixin],
-  async mounted() {
-    await Team.api().get(`/teams/${this.$route.params.team_id}`);
-    const feature = await Team.api().getCasesArea(
-      this.$route.params.team_id,
-      this.currentIncidentId,
-    );
-    const geojsonFeature = {
-      type: 'Feature',
-      properties: {},
-      geometry: feature.response.data,
-    };
-    this.caseArea = L.geoJSON(geojsonFeature, {
-      weight: '1',
-    });
-    await this.getClaimedWorksites();
-  },
   props: {
     workTypes: {
       type: Array,
@@ -626,57 +612,93 @@ export default {
       default: () => [],
     },
   },
-  data() {
-    return {
-      Promise,
-      getColorForStatus,
-      currentUsers: [],
-      userResults: [],
-      caseResults: [],
-      usersToAdd: [],
-      casesToAdd: [],
-      worksites: [],
-      selectedUsers: [],
-      selectedWorksites: [],
-      showAddMembersModal: false,
-      showAddCasesModal: false,
-      showRenameModal: false,
-      showingWorksiteTable: true,
-      showingWorksiteMap: false,
-      caseArea: null,
-      currentUserSearch: '',
-      currentCaseSearch: '',
+  setup(props, ctx) {
+    const $toasted = useToast();
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+    const { t } = useI18n();
+    const { component, selection, confirm } = useDialogs();
+    const $http = axios;
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const currentUsers = ref([]);
+    const userResults = ref([]);
+    const caseResults = ref([]);
+    const usersToAdd = ref([]);
+    const casesToAdd = ref([]);
+    const worksites = ref([]);
+    const selectedUsers = ref([]);
+    const selectedWorksites = ref([]);
+    const showAddMembersModal = ref(false);
+    const showAddCasesModal = ref(false);
+    const showRenameModal = ref(false);
+    const showingWorksiteTable = ref(true);
+    const showingWorksiteMap = ref(false);
+    const caseArea = ref(null);
+    const currentUserSearch = ref('');
+    const currentCaseSearch = ref('');
+    const team = computed(() => Team.find(route.params.team_id));
+    const assignableWorksites = computed(() => worksites.value.filter(
+        (w) => !assignedWorksites.value.map((ws) => ws.id).includes(w.id),
+      ));
+    const mapWorkTypes = computed(() => assignableWorksites.value.map((worksite) => {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          null,
+          currentUser.value.organization,
+        );
+        return { ...workType, location: worksite.location };
+      }))
+    const assignedWorksites = computed(() => Worksite.query()
+        .where((worksite) => {
+          return props.workTypes
+            .filter((wt) => {
+              return team.value.assigned_work_types
+                .map((awt) => awt.id)
+                .includes(wt.id);
+            })
+            .map((awt) => awt.case_number)
+            .includes(worksite.case_number);
+        })
+        .get());
+    const mapAssingedWorkTypes = computed(() => assignedWorksites.value.map((worksite) => {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          null,
+          currentUser.value.organization,
+        );
+        return { ...workType, location: worksite.location };
+      }))
+      const getUser = (id) => {
+      return User.find(id)
     };
-  },
-  watch: {
-    showAddMembersModal() {
-      this.onUserSearch();
-    },
-    showAddCasesModal() {
-      this.onCaseSearch();
-    },
-  },
-  methods: {
-    async renameTeam() {
-      Team.update({
-        where: this.team.id,
-        data: {
-          name: this.team.name,
-        },
-      });
-      await this.updateCurrentTeam();
-      this.showRenameModal = false;
-    },
-    async getClaimedWorksites() {
+    const allTeamUsers = computed(() => {
+      return {
+      get() {
+        return team.value && team.value.users.map((u) => getUser(u));
+      },
+      set(newValue) {
+        Team.update({
+          where: team.value.id,
+          data: {
+            users: newValue.map((u) => u.id),
+          },
+        });
+      },
+      };
+    });
+    const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
+
+    const getClaimedWorksites = async () => {
       const params = {
-        incident: this.currentIncidentId,
-        work_type__claimed_by: this.currentUser.organization.id,
+        incident: currentIncidentId.value,
+        work_type__claimed_by: currentUser.value.organization.id,
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
 
-      if (this.currentCaseSearch) {
-        params.search = this.currentCaseSearch;
+      if (currentCaseSearch.value) {
+        params.search = currentCaseSearch.value;
       }
 
       const results = await Worksite.api().get(
@@ -685,152 +707,162 @@ export default {
           dataKey: 'results',
         },
       );
-      this.worksites = results.entities.worksites;
-    },
-    onUserSearch() {
-      this.userResults = Array.from(
-        this.users.filter((user) => {
+      worksites.value = results.entities.worksites;
+    }
+    const renameTeam = async () => {
+      Team.update({
+        where: team.value.id,
+        data: {
+          name: team.value.name,
+        },
+      });
+      await updateCurrentTeam();
+      showRenameModal.value = false;
+    }
+    const onUserSearch = () => {
+      userResults.value = Array.from(
+        props.users.filter((user) => {
           return (
             user.full_name
               .toLowerCase()
-              .includes(this.currentUserSearch.toLowerCase()) ||
-            user.email.toLowerCase().includes(this.currentSearch.toLowerCase())
+              .includes(currentUserSearch.value.toLowerCase()) ||
+            user.email.toLowerCase().includes(currentUserSearch.value.toLowerCase())
           );
         }),
       );
-    },
-    onCaseSearch() {
-      this.caseResults = Array.from(
-        this.workTypes.filter((c) => {
+    }
+    const onCaseSearch = () => {
+      caseResults.value = Array.from(
+        props.workTypes.filter((c) => {
           return (
             c.case_number
               .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase()) ||
+              .includes(currentCaseSearch.value.toLowerCase()) ||
             c.work_type
               .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase())
+              .includes(currentCaseSearch.value.toLowerCase())
           );
         }),
       );
-    },
-    async addUsers() {
+    }
+    const addUsers = async () => {
       Team.update({
-        where: this.team.id,
+        where: team.value.id,
         data: {
-          users: Array.from(new Set([...this.team.users, ...this.usersToAdd])),
+          users: Array.from(new Set([...team.value.users, ...usersToAdd.value])),
         },
       });
 
-      await this.updateCurrentTeam();
-      this.usersToAdd = [];
-      this.showAddMembersModal = false;
-    },
-    updateNotes(value) {
+      await updateCurrentTeam();
+      usersToAdd.value = [];
+      showAddMembersModal.value = false;
+    }
+    const updateNotes = (value) => {
       Team.update({
-        where: this.team.id,
+        where: team.value.id,
         data: {
           notes: value,
         },
       });
-    },
-    async updateCurrentTeam() {
-      await Team.api().patch(`/teams/${this.team.id}`, this.team.$toJson());
-    },
-    async updateTeam(id, data) {
+    }
+    const updateCurrentTeam = async () => {
+      await Team.api().patch(`/teams/${team.value.id}`, team.value.toJson());
+    }
+    const updateTeam = async (id, data) => {
       await Team.api().patch(`/teams/${id}`, data);
-    },
-    async getWorksite(id) {
+    }
+    const getWorksite = async (id) => {
       const {
         response: { data },
       } = await Worksite.api().get(`/worksites/${id}`);
       return data;
-    },
-    async addCases() {
-      if (this.casesToAdd.length) {
+    }
+    const addCases = async () => {
+      if (casesToAdd.value.length) {
         await Promise.all(
-          this.casesToAdd.map((c) =>
-            this.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+          casesToAdd.value.map((c) =>
+            $http.post(
+              `${import.meta.env.VITE_APP_API_BASE_URL}/worksite_work_types_teams`,
               {
-                team: this.team.id,
+                team: team.value.id,
                 worksite_work_type: c,
               },
             ),
           ),
         );
       }
-      this.casesToAdd = [];
-      this.showAddCasesModal = false;
-      this.currentCaseSearch = null;
-      this.getClaimedWorksites();
-      this.$emit('reload');
-    },
-    async removeFromTeam(userIds) {
-      const newUsers = this.team.users.filter((id) => !userIds.includes(id));
+      casesToAdd.value = [];
+      showAddCasesModal.value = false;
+      currentCaseSearch.value = null;
+      getClaimedWorksites();
+      ctx.emit('reload');
+    };
+    const removeFromTeam = async (userIds) => {
+      const newUsers = team.value.users.filter((id) => !userIds.includes(id));
       Team.update({
-        where: this.team.id,
+        where: team.value.id,
         data: {
           users: newUsers,
         },
       });
-      await this.updateCurrentTeam();
-      this.$emit('reload');
-    },
-    async removeWorksiteFromTeam(worksiteId) {
-      const worksite = await this.getWorksite(worksiteId);
+      await updateCurrentTeam();
+      ctx.emit('reload');
+    }
+    const removeWorksiteFromTeam = async (worksiteId) => {
+      const worksite = await getWorksite(worksiteId);
 
       const ids = worksite.work_types
-        .filter((type) => type.claimed_by === this.currentUser.organization.id)
+        .filter((type) => type.claimed_by === currentUser.value.organization.id)
         .map((wt) => wt.id);
 
-      const workTypesToDelete = this.team.assigned_work_types.filter((awt) =>
+      const workTypesToDelete = team.value.assigned_work_types.filter((awt) =>
         ids.includes(awt.id),
       );
       await Promise.all(
         workTypesToDelete.map((wt) => {
-          return this.$http.delete(
+          return $http.delete(
             `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams/${wt.id}`,
             {
-              data: { team: this.team.id },
+              data: { team: team.value.id },
             },
           );
         }),
       );
 
-      this.$emit('reload');
-    },
-    toggleView(view) {
-      this.showingWorksiteTable = false;
-      this.showingWorksiteMap = false;
-      this[view] = true;
-    },
-    async moveToDifferentTeam(userId) {
-      const result = await this.$selection({
-        title: this.$t('teams.move_teams'),
+      ctx.emit('reload');
+    };
+    const toggleView = (view) => {
+      showingWorksiteTable.value = false;
+      showingWorksiteMap.value = false;
+      this[view].value = true;
+    };
+    const moveToDifferentTeam = async (userId) => {
+      const result = await selection({
+        title: t('teams.move_teams'),
         content: '',
         label: 'name',
-        options: this.teams.filter((t) => t.id !== this.team.id),
-        placeholder: this.$t('teams.select_target_team'),
+        options: props.teams.filter((t) => t.id !== team.value.id),
+        placeholder: t('teams.select_target_team'),
       });
       if (result.id) {
-        await this.removeFromTeam([userId]);
+        await removeFromTeam([userId]);
         result.users.push(userId);
-        await this.updateTeam(result.id, result.$toJson());
-        this.$emit('reload');
+        await updateTeam(result.id, result.toJson());
+        ctx.emit('reload');
       }
-    },
-    async deleteCurrentTeam() {
-      const result = await this.$confirm({
-        title: this.$t('teams.delete_team'),
-        content: this.$t('teams.delete_team_confirm'),
+    }
+    const deleteCurrentTeam = async () => {
+      const result = await confirm({
+        title: t('teams.delete_team'),
+        content: t('teams.delete_team_confirm'),
         actions: {
           no: {
-            text: this.$t('actions.cancel'),
+            text: t('actions.cancel'),
             type: 'outline',
             buttonClass: 'border border-black',
           },
           yes: {
-            text: this.$t('teams.yes'),
+            text: t('teams.yes'),
             type: 'solid',
           },
         },
@@ -839,111 +871,124 @@ export default {
         return;
       }
 
-      await Team.api().delete(`/teams/${this.team.id}`, {
-        delete: this.team.id,
+      await Team.api().delete(`/teams/${team.value.id}`, {
+        delete: team.value.id,
       });
-      this.$emit('reload');
-      await this.$router.push('/organization/teams');
-    },
-    async showOnMap(worksite) {
+      ctx.emit('reload');
+      await router.push('/organization/teams');
+    }
+    const showOnMap = async (worksite) => {
       const workType = Worksite.getWorkType(
         worksite.work_types,
         null,
-        this.currentUser.organization,
+        currentUser.value.organization,
       );
-      await this.$component({
-        title: this.$t('teams.view_case'),
+      await component({
+        title: t('teams.view_case'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
           workTypes: [{ ...workType, location: worksite.location }],
         },
       });
-    },
-    async statusValueChange(value, workType, worksiteId) {
+    }
+    const statusValueChange = async (value, workType, worksiteId) => {
       try {
         await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
         await Worksite.api().fetch(worksiteId);
       }
-    },
-    async showAllOnMap() {
-      await this.$component({
-        title: this.$t('teams.view_all_cases'),
+    }
+    const showAllOnMap = async () => {
+      await component({
+        title: t('teams.view_all_cases'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
-          workTypes: this.assignedWorksites.map((worksite) => {
+          workTypes: assignedWorksites.value.map((worksite) => {
             const workType = Worksite.getWorkType(
               worksite.work_types,
               null,
-              this.currentUser.organization,
+              currentUser.value.organization,
             );
             return { ...workType, location: worksite.location };
           }),
         },
       });
-    },
-  },
-  computed: {
-    team() {
-      return Team.find(this.$route.params.team_id);
-    },
-    assignableWorksites() {
-      return this.worksites.filter(
-        (w) => !this.assignedWorksites.map((ws) => ws.id).includes(w.id),
-      );
-    },
-    mapWorkTypes() {
-      return this.assignableWorksites.map((worksite) => {
-        const workType = Worksite.getWorkType(
-          worksite.work_types,
-          null,
-          this.currentUser.organization,
-        );
-        return { ...workType, location: worksite.location };
-      });
-    },
-    mapAssingedWorkTypes() {
-      return this.assignedWorksites.map((worksite) => {
-        const workType = Worksite.getWorkType(
-          worksite.work_types,
-          null,
-          this.currentUser.organization,
-        );
-        return { ...workType, location: worksite.location };
-      });
-    },
-    assignedWorksites() {
-      return Worksite.query()
-        .where((worksite) => {
-          return this.workTypes
-            .filter((wt) => {
-              return this.team.assigned_work_types
-                .map((awt) => awt.id)
-                .includes(wt.id);
-            })
-            .map((awt) => awt.case_number)
-            .includes(worksite.case_number);
-        })
-        .get();
-    },
-    allTeamUsers: {
-      get() {
-        return this.team && this.team.users.map((u) => this.getUser(u));
-      },
-      set(newValue) {
-        Team.update({
-          where: this.team.id,
-          data: {
-            users: newValue.map((u) => u.id),
-          },
-        });
-      },
-    },
-    ...mapState('incident', ['currentIncidentId']),
+    }
+
+
+    watch(showAddMembersModal.value, () => {
+      onUserSearch();
+    });
+    watch(showAddCasesModal.value, () => {
+      onCaseSearch();
+    });
+
+    onMounted(async () => {
+    await Team.api().get(`/teams/${route.params.team_id}`);
+    const feature = await Team.api().getCasesArea(
+      route.params.team_id,
+      currentIncidentId.value,
+    );
+    const geojsonFeature = {
+      type: 'Feature',
+      properties: {},
+      geometry: feature.response.data,
+    };
+    caseArea.value = L.geoJSON(geojsonFeature, {
+      weight: '1',
+    });
+    await getClaimedWorksites();
+  })
+
+    return {
+      Promise,
+      getColorForStatus,
+      currentUsers,
+      userResults,
+      caseResults,
+      usersToAdd,
+      casesToAdd,
+      worksites,
+      selectedUsers,
+      selectedWorksites,
+      showAddMembersModal,
+      showAddCasesModal,
+      showRenameModal,
+      showingWorksiteTable,
+      showingWorksiteMap,
+      caseArea,
+      currentUserSearch,
+      currentCaseSearch,
+      team,
+      assignableWorksites,
+      mapWorkTypes,
+      assignedWorksites,
+      mapAssingedWorkTypes,
+      allTeamUsers,
+      currentIncidentId,
+      renameTeam,
+      getClaimedWorksites,
+      onUserSearch,
+      onCaseSearch,
+      addUsers,
+      updateNotes,
+      updateCurrentTeam,
+      updateTeam,
+      getWorksite,
+      addCases,
+      removeFromTeam,
+      removeWorksiteFromTeam,
+      toggleView,
+      moveToDifferentTeam,
+      deleteCurrentTeam,
+      showOnMap,
+      statusValueChange,
+      showAllOnMap,
+    };
   },
 };
 </script>

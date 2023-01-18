@@ -379,7 +379,7 @@ export default {
           incident: currentIncidentId.value,
           users: team.value.users.map((u) => u.id),
         });
-        const [team] = await teamResult.entities.teams;
+        // const [team] = await teamResult.entities.teams;
         if (teamWorksites.value.length) {
           const promises = [];
           teamWorksites.value.forEach((w) =>
@@ -389,7 +389,7 @@ export default {
                   $http.post(
                     `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
                     {
-                      team: team.id,
+                      team: teteamResult.entities.teams.id,
                       worksite_work_type: wt.id,
                     },
                   ),
