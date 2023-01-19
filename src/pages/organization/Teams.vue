@@ -81,14 +81,14 @@
       </div>
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
-          <!-- <router-view
+          <router-view
             v-show="teams && teams.length"
             :work-types="claimedWorktypes"
             :users="usersWithoutTeams"
             :teams="teams"
             :key="$route.params.team_id"
             @reload="getData"
-          ></router-view> -->
+          ></router-view>
         </div>
       </div>
     </div>

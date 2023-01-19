@@ -35,7 +35,7 @@
       </div>
     </div>
     <tabs class="w-full" ref="tabs">
-      <tab :name="`${$t('teams.manage_users')} (${allTeamUsers.length})`">
+      <tab :name="`${$t('teams.manage_users')} (${allTeamUsers?.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
@@ -53,7 +53,7 @@
               variant="outline"
               class="px-2 py-1"
               :text="$t('teams.remove_from_team')"
-              :disabled="selectedUsers.length === 0"
+              :disabled="selectedUsers?.length === 0"
               :action="
                 () => {
                   removeFromTeam([...selectedUsers]);
@@ -63,7 +63,7 @@
             ></base-button>
           </div>
         </div>
-        <div class="mt-2">
+        <div class="mt-2" v-if="allTeamUsers">
           <Table
             :columns="[
               {
@@ -200,7 +200,7 @@
           </Table>
         </div>
       </tab>
-      <tab :name="`${$t('teams.manage_cases')} (${assignedWorksites.length})`">
+      <tab :name="`${$t('teams.manage_cases')} (${assignedWorksites?.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
@@ -217,7 +217,7 @@
             variant="outline"
             class="px-2 py-1"
             :text="$t('teams.remove_from_team')"
-            :disabled="selectedWorksites.length === 0"
+            :disabled="selectedWorksites?.length === 0"
             :action="
               () => {
                 Promise.all(
@@ -371,17 +371,17 @@
               </div>
             </template>
           </Table>
-          <WorkTypeMap
+          <!-- <WorkTypeMap
             v-if="showingWorksiteMap"
             class="w-full h-96"
             :work-types="mapAssingedWorkTypes"
             :polygon="caseArea"
-          ></WorkTypeMap>
+          ></WorkTypeMap> -->
         </div>
       </tab>
       <tab :name="$t('teams.notes')">
         <base-input
-          :value="team.notes"
+          :value="team?.notes"
           text-area
           :rows="4"
           :placeholder="$t('teams.notes')"
@@ -471,10 +471,10 @@
     >
       <div class="flex">
         <div class="w-1/3">
-          <WorkTypeMap
+          <!-- <WorkTypeMap
             class="w-full h-96"
             :work-types="mapWorkTypes"
-          ></WorkTypeMap>
+          ></WorkTypeMap> -->
         </div>
         <div class="w-2/3 px-5 py-2">
           <div class="py-2">
@@ -583,7 +583,6 @@ import { mapState } from 'vuex';
 import * as L from 'leaflet';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
-import { UserMixin, DialogsMixin } from '@/mixins';
 import Avatar from '@/components/Avatar.vue';
 import { getColorForStatus } from '../../filters';
 import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
@@ -593,11 +592,12 @@ import { getQueryString } from '../../utils/urls';
 import Table from '@/components/Table.vue';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import { useDialogs } from '@/hooks/useDialogs.ts';
+import useDialogs from '@/hooks/useDialogs.ts';
+import User from '@/models/User';
 
 export default {
   name: 'TeamDetail',
-  components: { Table, WorkTypeMap, WorksiteStatusDropdown, Avatar },
+  components: { Table, WorksiteStatusDropdown, Avatar },
   props: {
     workTypes: {
       type: Array,
@@ -672,21 +672,7 @@ export default {
       const getUser = (id) => {
       return User.find(id)
     };
-    const allTeamUsers = computed(() => {
-      return {
-      get() {
-        return team.value && team.value.users.map((u) => getUser(u));
-      },
-      set(newValue) {
-        Team.update({
-          where: team.value.id,
-          data: {
-            users: newValue.map((u) => u.id),
-          },
-        });
-      },
-      };
-    });
+    const allTeamUsers = computed(() => team.value && team.value.users.map((u) => getUser(u)));
     const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
 
     const getClaimedWorksites = async () => {
@@ -778,7 +764,7 @@ export default {
       return data;
     }
     const addCases = async () => {
-      if (casesToAdd.value.length) {
+      if (casesToAdd.value?.length) {
         await Promise.all(
           casesToAdd.value.map((c) =>
             $http.post(

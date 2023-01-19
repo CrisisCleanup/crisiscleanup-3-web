@@ -7,7 +7,7 @@
       ></div>
     </div>
   </template>
-  <script lang="ts">
+  <!-- <script lang="ts">
   import * as L from 'leaflet';
   import { colors, templates } from '@/icons/icons_templates';
   import { mapAttribution, mapTileLayer } from '../utils/map';
@@ -26,42 +26,31 @@
         default: null,
       },
     },
-    data() {
-      return {
-        markers: [],
-        templates,
-        colors,
-        map: null,
-      };
-    },
-    async mounted() {
-      await this.loadMap();
-      if (this.polygon) {
-        this.polygon.addTo(this.map);
-        this.map.fitBounds(this.polygon.getBounds());
-      }
-    },
-    methods: {
-      async loadMap() {
-        this.mapLoading = true;
+    setup(props) {
+      const markers = ref<Array<unknown>>([]);
+      const map = ref<any>(null);
+      const mapLoading = ref(false);
+
+      const loadMap = async () => {
+        mapLoading.value = true;
   
-        this.markers = this.workTypes;
-        await this.renderMap(this.workTypes);
+        markers.value = props.workTypes;
+        await renderMap(props.workTypes);
   
-        this.$nextTick(() => {
+        nextTick(() => {
           // Add this slight pan to re-render map
-          this.map.panBy([1, 0]);
+          map.value.panBy([1, 0]);
         });
   
-        this.mapLoading = false;
-      },
-      async renderMap(markers) {
-        if (!this.map) {
-          this.map = L.map('map', {
+       mapLoading.value = false;
+      }
+
+      const renderMap = async (markers) => {
+        if (!map.value) {
+          map.value = L.map('map', {
             zoomControl: false,
           }).setView([35.7465122599185, -96.41150963125656], 10);
         }
-        const { map } = this;
   
         L.tileLayer(mapTileLayer, {
           // tileSize: 512,
@@ -70,7 +59,7 @@
           detectRetina: false,
           maxZoom: 18,
           noWrap: false,
-        }).addTo(map);
+        }).addTo(map.value);
   
         markers.forEach((wt) => {
           const { coordinates } = wt.location;
@@ -79,8 +68,8 @@
           const colorsKey = `${wt.status}_${
             wt.claimed_by ? 'claimed' : 'unclaimed'
           }`;
-          const spriteColors = colors[colorsKey];
-          const template = templates[wt.work_type] || templates.unknown;
+          const spriteColors = (colors as Record<string, any>)[colorsKey];
+          const template = (templates as Record<string, any>)[wt.work_type] || templates.unknown;
           const typeSvg = template
             .replaceAll('{{fillColor}}', spriteColors.fillColor)
             .replaceAll('{{strokeColor}}', spriteColors.strokeColor)
@@ -101,12 +90,28 @@
             popupAnchor: [0, -28],
           });
   
-          new L.marker(latLng, { icon: divIcon }).addTo(map);
+          new L.marker(latLng, { icon: divIcon })?.addTo(map);
           map.panTo(latLng);
         });
   
         map.attributionControl.setPosition('bottomright');
-      },
+      }
+
+      onMounted(async () => {
+        await loadMap();
+        if (props.polygon) {
+          props.polygon.addTo(map.value);
+          map.value.fitBounds(props.polygon.getBounds());
+        }
+      });
+      return {
+        markers,
+        templates,
+        colors,
+        map,
+        loadMap,
+        renderMap,
+      };
     },
   };
   </script>
@@ -119,4 +124,4 @@
     height: 30px;
   }
   </style>
-  
+   -->
