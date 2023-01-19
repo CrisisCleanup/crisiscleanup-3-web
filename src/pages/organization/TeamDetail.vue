@@ -125,18 +125,14 @@
             </template>
             <template #actions="slotProps">
               <div style="margin-top: 2px" class="flex justify-end">
-                <base-dropdown
-                  :trigger="'click'"
-                  class-name="team-detail-user"
-                  :x="-145"
-                >
+                <v-popover placement="bottom-end" :triggers="['click']">
                   <ccu-icon
                     slot="icon"
                     :alt="$t('teams.settings')"
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
+                  <template #popper>
                     <ul class="overflow-auto w-40">
                       <li
                         class="
@@ -193,8 +189,8 @@
                         {{ $t('teams.remove_from_team') }}
                       </li>
                     </ul>
-                  </template>
-                </base-dropdown>
+                    </template>
+                </v-popover>
               </div>
             </template>
           </Table>
