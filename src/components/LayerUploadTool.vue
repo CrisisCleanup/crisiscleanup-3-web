@@ -12,7 +12,7 @@
               <div v-for="key in Object.keys(shapefileStructure)" :key="key">
                 {{ key }}
               </div>
-  
+
               <div class="text-underline text-primary-dark">
                 {{ $t('Choose another file') }}
               </div>
@@ -86,7 +86,7 @@
                   select-classes="bg-white border w-full"
                   class="form-field"
                 />
-  
+
                 <textarea
                   :value="shapefileInfo[data.filename].shapefileCustomName"
                   @input="
@@ -177,7 +177,7 @@
       </form>
     </div>
   </template>
-  
+
   <script lang="ts">
   import Layer from '@/models/Layer';
   import DragDrop from '@/components/DragDrop.vue';
@@ -185,7 +185,8 @@
   import { getErrorMessage } from '../utils/errors';
   import { useToast } from 'vue-toastification';
   import axios from 'axios';
-  export default {
+
+   export default {
     name: 'LayerUploadTool',
     components: { DragDrop },
     setup(props, ctx) {
@@ -262,7 +263,7 @@
       });
     }
 
-      
+
 
       const validateUpload = (filename: string) => {
       if (
