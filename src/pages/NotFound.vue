@@ -1,37 +1,30 @@
 <template>
   <HomeLayout>
-    <template #grid-content>
-      <div class="grid--main h-screen">
-        <div class="cover-image"></div>
-      </div>
-    </template>
+    <div class="text-2xl text-center mb-3">{{ t('~~404_not_found') }}</div>
+    <div class="cover-image"></div>
   </HomeLayout>
 </template>
 
-<script>
-import HomeLayout from '@/layouts/Home';
+<script lang="ts">
+import HomeLayout from '@/layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'NotFound',
   components: { HomeLayout },
-};
+  setup() {
+    const { t } = useI18n();
+    return {
+      t,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">
-.homegrid {
-  &.grid-container {
-    grid-template-areas:
-      'logo . . . . survivors'
-      'main main main main main main'
-      'main main main main main main'
-      'main main main main main main';
-  }
-
-  .cover-image {
-    background-image: url(https://source.unsplash.com/random);
-    background-size: cover;
-    background-repeat: no-repeat;
-    @apply w-full h-full;
-  }
+.cover-image {
+  background-image: url('https://source.unsplash.com/random');
+  background-size: cover;
+  background-repeat: no-repeat;
+  @apply w-full h-full;
 }
 </style>

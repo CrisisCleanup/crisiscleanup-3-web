@@ -12,6 +12,7 @@ import useSetupLanguage from '@/hooks/useSetupLanguage';
 import OtherOrganizations from '@/pages/OtherOrganizations.vue';
 import Reports from '@/pages/admin/Reports.vue';
 import Report from '@/pages/admin/Report.vue';
+import NotFound from '@/pages/NotFound.vue';
 
 const routes = [
   {
@@ -73,6 +74,12 @@ const routes = [
   ...AdminRoutes,
   ...OrganizationRoutes,
   ...UnauthenticatedRoutes,
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
 ];
 
 const router = createRouter({
