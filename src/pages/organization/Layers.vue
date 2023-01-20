@@ -48,16 +48,16 @@
 </template>
 
 <script lang="ts">
+import { useToast } from 'vue-toastification';
 import LayerUploadTool from '@/components/LayerUploadTool.vue';
 import LocationTable from '@/components/LocationTable.vue';
-import User from '../../models/User';
-import Location from '../../models/Location';
-import LocationType from '../../models/LocationType';
-import { getQueryString } from '../../utils/urls';
-import { getErrorMessage } from '../../utils/errors';
-import { useToast } from 'vue-toastification';
+import User from '@/models/User';
+import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
+import { getQueryString } from '@/utils/urls';
+import { getErrorMessage } from '@/utils/errors';
 
-export default {
+export default defineComponent({
   name: 'Layers',
   components: { LocationTable, LayerUploadTool },
   setup() {
@@ -69,16 +69,16 @@ export default {
     const locationTypes = computed(() => LocationType.all());
     const locationTypeFilter = ref();
     const currentSearch = ref<string>('');
-    const locationsLoading = ref<Boolean>(false);
+    const locationsLoading = ref(false);
     const locations = ref<Array<Location>>([]);
-    const locationsMeta = ref({
-        pagination: {
-          pageSize: 20,
-          page: 1,
-          current: 1,
-          total: 0
-        },
-      });
+    const locationsMeta = reactive({
+      pagination: {
+        pageSize: 20,
+        page: 1,
+        current: 1,
+        total: 0,
+      },
+    });
 
     const getLocations = async () => {
       locationsLoading.value = true;
@@ -87,9 +87,9 @@ export default {
         type__isnull: false,
         fields: 'id,name,type,shared',
         offset:
-          locationsMeta.value.pagination.pageSize *
-          (locationsMeta.value.pagination.page - 1),
-        limit: locationsMeta.value.pagination.pageSize,
+          locationsMeta.pagination.pageSize *
+          (locationsMeta.pagination.page - 1),
+        limit: locationsMeta.pagination.pageSize,
       };
       if (currentSearch.value) {
         params.search = currentSearch.value;
@@ -108,13 +108,13 @@ export default {
       );
       locations.value = results.response.data.results;
 
-      locationsMeta.value.pagination.total = results.response.data.count;
-      locationsMeta.value.pagination = { ...locationsMeta.value.pagination };
+      locationsMeta.pagination.total = results.response.data.count;
+      locationsMeta.pagination = { ...locationsMeta.pagination };
       locationsLoading.value = false;
     };
 
     const handleTableChange = async ({ pagination }) => {
-      locationsMeta.value.pagination = { ...pagination };
+      locationsMeta.pagination = { ...pagination };
       await getLocations();
     };
 
@@ -131,7 +131,7 @@ export default {
       } finally {
         locationsLoading.value = false;
       }
-    }
+    };
 
     onMounted(async () => await getLocations());
 
@@ -148,10 +148,10 @@ export default {
       deleteLocation,
     };
   },
-};
+});
 </script>
 
-<style>
+<style scoped lang="postcss">
 .location-select .vs__selected {
   @apply text-xs bg-white !important;
 }
