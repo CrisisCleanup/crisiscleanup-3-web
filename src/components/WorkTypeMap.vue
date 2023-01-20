@@ -7,7 +7,7 @@
       ></div>
     </div>
   </template>
-  <!-- <script lang="ts">
+  <script lang="ts">
   import * as L from 'leaflet';
   import { colors, templates } from '@/icons/icons_templates';
   import { mapAttribution, mapTileLayer } from '../utils/map';
@@ -90,7 +90,7 @@
             popupAnchor: [0, -28],
           });
   
-          new L.marker(latLng, { icon: divIcon })?.addTo(map);
+          new L.marker(latLng, { icon: divIcon }).addTo(map);
           map.panTo(latLng);
         });
   
@@ -116,12 +116,11 @@
   };
   </script>
   
-  <style>
-  @import '~leaflet/dist/leaflet.css';
+  <style scoped>
   
   .leaflet-data-marker svg {
     width: 30px;
     height: 30px;
   }
   </style>
-   -->
+  

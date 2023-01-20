@@ -103,7 +103,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex';
 import User from '@/models/User';
 import Team from '@/models/Team';

@@ -13,7 +13,7 @@
           size="small"
           class="p-2"
           type="go-case"
-          @click.native="showAllOnMap"
+          @click.native="showAllOnMap()"
         />
         <ccu-icon
           :alt="$t('actions.delete')"
@@ -326,11 +326,7 @@
                   size="small"
                   class="p-1 py-2"
                   type="go-case"
-                  @click.native="
-                    () => {
-                      showOnMap(slotProps.item);
-                    }
-                  "
+                  @click.native="showOnMap(slotProps.item)"
                 />
               </div>
               <div style="margin-top: 2px" class="flex justify-end">
@@ -367,12 +363,12 @@
               </div>
             </template>
           </Table>
-          <!-- <WorkTypeMap
+          <WorkTypeMap
             v-if="showingWorksiteMap"
             class="w-full h-96"
             :work-types="mapAssingedWorkTypes"
             :polygon="caseArea"
-          ></WorkTypeMap> -->
+          ></WorkTypeMap>
         </div>
       </tab>
       <tab :name="$t('teams.notes')">
@@ -467,10 +463,10 @@
     >
       <div class="flex">
         <div class="w-1/3">
-          <!-- <WorkTypeMap
+          <WorkTypeMap
             class="w-full h-96"
             :work-types="mapWorkTypes"
-          ></WorkTypeMap> -->
+          ></WorkTypeMap>
         </div>
         <div class="w-2/3 px-5 py-2">
           <div class="py-2">
@@ -574,7 +570,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex';
 import * as L from 'leaflet';
 import Team from '@/models/Team';
@@ -593,7 +589,7 @@ import User from '@/models/User';
 
 export default {
   name: 'TeamDetail',
-  components: { Table, WorksiteStatusDropdown, Avatar },
+  components: { Table, WorksiteStatusDropdown, Avatar, WorkTypeMap },
   props: {
     workTypes: {
       type: Array,
@@ -641,7 +637,7 @@ export default {
         const workType = Worksite.getWorkType(
           worksite.work_types,
           null,
-          currentUser.value.organization,
+          currentUser.value?.organization,
         );
         return { ...workType, location: worksite.location };
       }))
@@ -649,7 +645,7 @@ export default {
         .where((worksite) => {
           return props.workTypes
             .filter((wt) => {
-              return team.value.assigned_work_types
+              return team.value?.assigned_work_types
                 .map((awt) => awt.id)
                 .includes(wt.id);
             })
@@ -661,7 +657,7 @@ export default {
         const workType = Worksite.getWorkType(
           worksite.work_types,
           null,
-          currentUser.value.organization,
+          currentUser.value?.organization,
         );
         return { ...workType, location: worksite.location };
       }))
@@ -674,7 +670,7 @@ export default {
     const getClaimedWorksites = async () => {
       const params = {
         incident: currentIncidentId.value,
-        work_type__claimed_by: currentUser.value.organization.id,
+        work_type__claimed_by: currentUser.value?.organization.id,
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
@@ -689,13 +685,13 @@ export default {
           dataKey: 'results',
         },
       );
-      worksites.value = results.entities.worksites;
+      worksites.value = results.entities?.worksites;
     }
     const renameTeam = async () => {
       Team.update({
-        where: team.value.id,
+        where: team.value?.id,
         data: {
-          name: team.value.name,
+          name: team.value?.name,
         },
       });
       await updateCurrentTeam();
@@ -729,9 +725,9 @@ export default {
     }
     const addUsers = async () => {
       Team.update({
-        where: team.value.id,
+        where: team.value?.id,
         data: {
-          users: Array.from(new Set([...team.value.users, ...usersToAdd.value])),
+          users: Array.from(new Set([...team.value?.users, ...usersToAdd.value])),
         },
       });
 
@@ -741,14 +737,14 @@ export default {
     }
     const updateNotes = (value) => {
       Team.update({
-        where: team.value.id,
+        where: team.value?.id,
         data: {
           notes: value,
         },
       });
     }
     const updateCurrentTeam = async () => {
-      await Team.api().patch(`/teams/${team.value.id}`, team.value.toJson());
+      await Team.api().patch(`/teams/${team.value?.id}`, team.value?.toJson());
     }
     const updateTeam = async (id, data) => {
       await Team.api().patch(`/teams/${id}`, data);
@@ -766,7 +762,7 @@ export default {
             $http.post(
               `${import.meta.env.VITE_APP_API_BASE_URL}/worksite_work_types_teams`,
               {
-                team: team.value.id,
+                team: team.value?.id,
                 worksite_work_type: c,
               },
             ),
@@ -780,9 +776,9 @@ export default {
       ctx.emit('reload');
     };
     const removeFromTeam = async (userIds) => {
-      const newUsers = team.value.users.filter((id) => !userIds.includes(id));
+      const newUsers = team.value?.users.filter((id) => !userIds.includes(id));
       Team.update({
-        where: team.value.id,
+        where: team.value?.id,
         data: {
           users: newUsers,
         },
@@ -794,10 +790,10 @@ export default {
       const worksite = await getWorksite(worksiteId);
 
       const ids = worksite.work_types
-        .filter((type) => type.claimed_by === currentUser.value.organization.id)
+        .filter((type) => type.claimed_by === currentUser.value?.organization.id)
         .map((wt) => wt.id);
 
-      const workTypesToDelete = team.value.assigned_work_types.filter((awt) =>
+      const workTypesToDelete = team.value?.assigned_work_types.filter((awt) =>
         ids.includes(awt.id),
       );
       await Promise.all(
@@ -805,7 +801,7 @@ export default {
           return $http.delete(
             `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams/${wt.id}`,
             {
-              data: { team: team.value.id },
+              data: { team: team.value?.id },
             },
           );
         }),
@@ -823,7 +819,7 @@ export default {
         title: t('teams.move_teams'),
         content: '',
         label: 'name',
-        options: props.teams.filter((t) => t.id !== team.value.id),
+        options: props.teams.filter((t) => t.id !== team.value?.id),
         placeholder: t('teams.select_target_team'),
       });
       if (result.id) {
@@ -853,8 +849,8 @@ export default {
         return;
       }
 
-      await Team.api().delete(`/teams/${team.value.id}`, {
-        delete: team.value.id,
+      await Team.api().delete(`/teams/${team.value?.id}`, {
+        delete: team.value?.id,
       });
       ctx.emit('reload');
       await router.push('/organization/teams');
@@ -863,7 +859,7 @@ export default {
       const workType = Worksite.getWorkType(
         worksite.work_types,
         null,
-        currentUser.value.organization,
+        currentUser.value?.organization,
       );
       await component({
         title: t('teams.view_case'),
@@ -893,7 +889,7 @@ export default {
             const workType = Worksite.getWorkType(
               worksite.work_types,
               null,
-              currentUser.value.organization,
+              currentUser.value?.organization,
             );
             return { ...workType, location: worksite.location };
           }),
@@ -975,7 +971,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .team-detail-user-bp__btn--active {
   background: #fff;
 }
