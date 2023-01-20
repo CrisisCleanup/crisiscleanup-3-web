@@ -48,7 +48,7 @@
                 skip-validation
                 class="mx-4"
                 @selectedExisting="
-                  (w) => {
+                  (w: { id: string; }) => {
                     worksiteId = w.id;
                     isViewing = true;
                     if (showingMap) {
@@ -59,7 +59,7 @@
                   }
                 "
                 @input="
-                  (value) => {
+                  (value: string) => {
                     currentSearch = value;
                   }
                 "
@@ -297,7 +297,7 @@
         @onJumpToCase="jumpToCase"
         @onDownloadWorksite="
           () => {
-            downloadWorksites([worksite.id]);
+            downloadWorksites([worksite?.id]);
           }
         "
         @onPrintWorksite="printWorksite"
@@ -312,7 +312,7 @@
             isViewing = false;
             isEditing = true;
             router.push(
-              `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
+              `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
             );
           }
         "
@@ -427,7 +427,7 @@
           class="border shadow"
           @jumpToCase="jumpToCase"
           @savedWorksite="
-            (w) => {
+            (w: { id: any; }) => {
               if (!isEditing) {
                 worksiteId = w.id;
                 mostRecentlySavedWorksite = worksite;
@@ -437,7 +437,7 @@
               } else {
                 isEditing = true;
                 router.push(
-                  `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
+                  `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
                 );
               }
               reloadMap();
@@ -445,11 +445,11 @@
           "
           @closeWorksite="clearCase"
           @navigateToWorksite="
-            (id) => {
+            (id: any) => {
               worksiteId = id;
               isEditing = true;
               router.push(
-                `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
+                `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
               );
             }
           "
@@ -469,7 +469,6 @@ import {
   watch,
   nextTick,
 } from 'vue';
-import { debounce } from 'lodash';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
@@ -477,6 +476,7 @@ import { useStore } from 'vuex';
 import axios from 'axios';
 import type { Sprite } from 'pixi.js';
 import moment from 'moment';
+import type { LatLng } from 'leaflet';
 import WorksiteSearchInput from '../components/work/WorksiteSearchInput.vue';
 import PhoneComponentButton from '../components/phone/PhoneComponentButton.vue';
 import SimpleMap from '../components/SimpleMap.vue';
@@ -501,6 +501,8 @@ import useDialogs from '../hooks/useDialogs';
 import type { MapUtils } from '../hooks/worksite/useWorksiteMap';
 import useWorksiteMap from '../hooks/worksite/useWorksiteMap';
 import UnclaimCases from '@/components/UnclaimCases.vue';
+import { numeral } from '@/utils/helpers';
+import type Location from '@/models/Location';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -558,7 +560,7 @@ export default defineComponent({
     const filterQuery = ref<any>({});
     const filters = ref<any>({});
     const mostRecentlySavedWorksite = ref<any>(null);
-    const selectedTableItems = ref([]);
+    const selectedTableItems = ref<Set<number>>(new Set());
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
     let mapUtils: MapUtils | null;
@@ -723,17 +725,19 @@ export default defineComponent({
         loading.value = true;
         const promises = [] as any;
         const layer = mapUtils?.getCurrentMarkerLayer();
-        const container = layer._pixiContainer;
+        const container = layer?._pixiContainer;
 
         for (const id of selectedTableItems.value) {
-          const sprite = container.children.find((w: Sprite & Worksite) => {
+          const sprite = container?.children.find((w: any) => {
             return Number(w.id) === Number(id);
           });
 
-          for (const workType of sprite.work_types) {
-            promises.push(
-              Worksite.api().updateWorkTypeStatus(workType.id, status),
-            );
+          if (sprite) {
+            for (const workType of sprite.work_types) {
+              promises.push(
+                Worksite.api().updateWorkTypeStatus(workType.id, status),
+              );
+            }
           }
         }
         await Promise.allSettled(promises);
@@ -743,7 +747,7 @@ export default defineComponent({
     }
 
     async function showUnclaimModal() {
-      let options: Record<string, boolean> | null = null;
+      let options: Record<string, boolean> | null = {};
       const response = await component({
         title: t('actions.unclaim_cases'),
         component: UnclaimCases,
@@ -760,7 +764,7 @@ export default defineComponent({
       });
 
       if (response === 'ok' && options) {
-        const promises = [] as any;
+        const promises = [] as Promise<never>[];
         for (const id of selectedTableItems.value) {
           promises.push(
             Worksite.api().unclaimWorksite(
@@ -776,7 +780,7 @@ export default defineComponent({
       reloadTable();
     }
 
-    function toggleHeatMap(points) {
+    function toggleHeatMap(points: LatLng[]) {
       if (points) {
         mapUtils?.addHeatMap(points);
       } else {
@@ -784,28 +788,33 @@ export default defineComponent({
       }
     }
 
-    function filterSvi(e) {
-      sviSliderValue.value = e.target.value;
+    function filterSvi(e: Event) {
+      sviSliderValue.value = Number((e.target as HTMLInputElement).value);
       const layer = mapUtils?.getCurrentMarkerLayer();
-      const container = layer._pixiContainer;
-      const sviList = container.children.map((marker) => {
+      const container = layer?._pixiContainer;
+      const sviList = container?.children.map((marker: any) => {
         return {
           id: marker.id,
           svi: marker.svi,
         };
       });
-      sviList.sort((a, b) => {
-        return (b.svi || 1) - (a.svi || 1);
-      });
-      const count = Math.floor((sviList.length * Number(e.target.value)) / 100);
-      const filteredSvi = sviList.slice(0, count);
-      const minSvi = filteredSvi[filteredSvi.length - 1].svi;
-      container.children.forEach((markerSprite: Sprite) => {
-        markerSprite.visible = markerSprite.svi > minSvi;
-      });
+      if (sviList && container) {
+        sviList.sort((a, b) => {
+          return (b.svi || 1) - (a.svi || 1);
+        });
 
-      layer._renderer.render(container);
-      layer.redraw();
+        const count = Math.floor(
+          (sviList.length * Number((e.target as HTMLInputElement).value)) / 100,
+        );
+        const filteredSvi = sviList.slice(0, count);
+        const minSvi = filteredSvi[filteredSvi.length - 1].svi;
+        for (const markerSprite of container.children) {
+          markerSprite.visible = markerSprite.svi > minSvi;
+        }
+
+        layer._renderer.render(container);
+        layer.redraw();
+      }
 
       updateUserState({});
     }
@@ -818,11 +827,15 @@ export default defineComponent({
       mapUtils?.getMap().zoomOut();
     }
 
-    function applyTeamGeoJson(data) {
+    function applyTeamGeoJson(data: {
+      teamId: string;
+      value: boolean;
+      geom: any;
+    }) {
       mapUtils?.applyTeamGeoJson(data.teamId, data.value, data.geom);
     }
 
-    function applyLocation(data) {
+    function applyLocation(data: { locationId: string; value: boolean }) {
       mapUtils?.applyLocation(data.locationId, data.value);
     }
 
@@ -833,7 +846,7 @@ export default defineComponent({
       );
     }
 
-    function fitLocation(location) {
+    function fitLocation(location: Location) {
       mapUtils?.fitLocation(location);
     }
 
@@ -882,7 +895,7 @@ export default defineComponent({
       }
     }
 
-    function onSelectionChanged(selectedItems) {
+    function onSelectionChanged(selectedItems: Set<number>) {
       selectedTableItems.value = selectedItems;
     }
 
@@ -945,7 +958,7 @@ export default defineComponent({
       forceFileDownload(file.response);
     }
 
-    async function downloadWorksites(ids) {
+    async function downloadWorksites(ids: any[]) {
       loading.value = true;
       try {
         let params;
@@ -978,7 +991,7 @@ export default defineComponent({
       }
     }
 
-    function selectCase(c) {
+    function selectCase(c: { incident: any; id: any }) {
       if (c) {
         store.commit('incident/setCurrentIncidentId', c.incident);
         worksiteId.value = c.id;
@@ -994,23 +1007,23 @@ export default defineComponent({
       router.push(`/incident/${currentIncidentId.value}/work`);
     }
 
-    async function addMarkerToMap(location) {
+    async function addMarkerToMap(location: LatLng) {
       mapUtils?.addMarkerToMap(location);
       showMap();
     }
 
-    function loadCase(data) {
+    function loadCase(data: Sprite & Worksite) {
       isViewing.value = true;
       worksiteId.value = data.id;
       router.push(`/incident/${currentIncidentId.value}/work/${data.id}`);
     }
 
-    function onUpdateQuery(query) {
+    function onUpdateQuery(query: any) {
       filterQuery.value = query;
       updateUserState({});
     }
 
-    function onUpdateFilters(f) {
+    function onUpdateFilters(f: any) {
       filters.value = f;
       updateUserState({});
     }
@@ -1054,7 +1067,7 @@ export default defineComponent({
 
       mapUtils = useWorksiteMap(
         allWorksites,
-        markers.map((m) => m.id),
+        markers.map((m: { id: any }) => m.id),
         (m) => {
           loadCase(m);
         },
@@ -1128,7 +1141,7 @@ export default defineComponent({
       unreadUrgentChatCount,
       unreadNewsCount,
       currentSearch,
-      numeral: (v) => v,
+      numeral,
       moment,
     };
   },

@@ -19,7 +19,7 @@ export type MapUtils = {
   reloadMap: (newMarkers: (Sprite & Worksite)[], visibleIds: string[]) => void;
   addMarkerToMap: (location: LatLng) => void;
   fitLocation: (location: Location) => void;
-  jumpToCase: (worksite: Worksite, showPopup: boolean) => void;
+  jumpToCase: (worksite: Worksite | null, showPopup: boolean) => void;
   applyLocation: (locationId: string, value: boolean) => void;
   applyTeamGeoJson: (teamId: string, value: boolean, geom: any) => void;
   addHeatMap: (points: LatLng[]) => void;
@@ -182,7 +182,7 @@ export default (
     }
   }
 
-  const jumpToCase = async (worksite: Worksite, showPopup = true) => {
+  const jumpToCase = async (worksite: Worksite | null, showPopup = true) => {
     const container = getPixiContainer();
     if (map && worksite && container) {
       container.visible = false;

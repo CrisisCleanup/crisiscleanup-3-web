@@ -109,7 +109,6 @@ export default defineComponent({
           return config;
         }
       });
-      // TODO: Validate Browser
       await getEnums();
     });
 

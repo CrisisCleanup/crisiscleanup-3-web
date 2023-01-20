@@ -52,9 +52,19 @@ export const getGoogleMapsLocation = (url: string) => {
  * @url http://stackoverflow.com/a/14231286/538646
  */
 
-export function averageGeolocation(coords: number[][]) {
+export function averageGeolocation(coords: number[][] | undefined) {
+  if (!coords) {
+    return {
+      latitude: 0,
+      longitude: 0,
+    };
+  }
+
   if (coords.length === 1) {
-    return coords[0];
+    return {
+      latitude: 0,
+      longitude: 0,
+    };
   }
 
   let x = 0;

@@ -7,23 +7,23 @@ import MessageResponseDialog from '../components/dialogs/MessageResponseDialog.v
 import SelectionDialog from '../components/dialogs/SelectionDialog.vue';
 import OrganizationApprovalDialog from '../components/dialogs/OrganizationApprovalDialog.vue';
 
-async function component(props: any) {
+async function component(props: Record<string, any>) {
   return openDialog(ComponentDialog, props);
 }
 
-async function confirm(props: any) {
+async function confirm(props: Record<string, any>) {
   return openDialog(MessageBox, props);
 }
 
-async function prompt(props: any) {
+async function prompt(props: Record<string, any>): Promise<{key: string; response: string}> {
   return openDialog(MessageResponseDialog, props);
 }
 
-async function selection(props: any) {
+async function selection(props: Record<string, any>) {
   return openDialog(SelectionDialog, props);
 }
 
-async function organizationApproval(props: any) {
+async function organizationApproval(props: Record<string, any>) {
   return openDialog(OrganizationApprovalDialog, props);
 }
 

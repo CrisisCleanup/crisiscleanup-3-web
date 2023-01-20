@@ -39,3 +39,26 @@ export function formatCmsItem(text) {
     return i18n.global.t(translation);
   });
 }
+
+export function numeral(value: number, type: string | null = null) {
+  let formatter = new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+  });
+  if (type === 'currency') {
+    formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    });
+  }
+  if (type === 'percentage') {
+    formatter = new Intl.NumberFormat('en-US', {
+      style: 'percent',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  }
+  return formatter.format(value || 0);
+}

@@ -51,9 +51,9 @@
                 {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
               </h5>
               <h3 class="text-3xl">
-                {{ numeral(totalClaimed.length) }}
+                {{ numeral(totalClaimed) }}
                 <span class="text-base">
-                  ({{ numeral(totalClaimed / totalWorksites) }}
+                  ({{ numeral(totalClaimed / totalWorksites, 'percentage') }}
                   {{ $t('dashboard.of_total') }})
                 </span>
                 <span class="text-orange"
@@ -89,7 +89,7 @@
               <h3 class="text-3xl">
                 {{ numeral(totalInProgess) }}
                 <span class="text-base">
-                  ({{ numeral(totalInProgess / totalWorksites) }}
+                  ({{ numeral(totalInProgess / totalWorksites, 'percentage') }}
                   {{ $t('dashboard.of_total') }})
                 </span>
                 <span class="text-yellow-900"
@@ -127,7 +127,7 @@
               <h3 class="text-3xl">
                 {{ numeral(totalClosed) }}
                 <span class="text-base">
-                  ({{ numeral(totalClosed / totalWorksites) }}
+                  ({{ numeral(totalClosed / totalWorksites, 'percentage') }}
                   {{ $t('dashboard.of_total') }})
                 </span>
               </h3>
@@ -234,7 +234,7 @@
                   size="medium"
                   class="p-1 py-2 w-8"
                   type="print"
-                  @click.native="
+                  @clikc="
                     () => {
                       printWorksite(slotProps.item.id);
                     }
@@ -258,7 +258,7 @@
             :text="$t('dashboard.inbound_requests')"
             :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
             variant="text"
-            @click.native="pendingView = 'inbound'"
+            @clikc="pendingView = 'inbound'"
           />
 
           <base-button
@@ -267,7 +267,7 @@
             :text="$t('dashboard.outbound_requests')"
             :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
             variant="text"
-            @click.native="pendingView = 'outbound'"
+            @clikc="pendingView = 'outbound'"
           />
 
           <base-button
@@ -276,7 +276,7 @@
             :text="$t('dashboard.archived_requests')"
             :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
             variant="text"
-            @click.native="pendingView = 'archived'"
+            @clikc="pendingView = 'archived'"
           />
         </div>
         <div class="p-4">
@@ -423,10 +423,14 @@ import UserTransferRequestTable from '../components/UserTransferRequestTable.vue
 import RedeployRequest from '../components/modals/RedeployRequest.vue';
 import InviteUsers from '../components/modals/InviteUsers.vue';
 import useDialogs from '../hooks/useDialogs';
+import ReportWidget from '@/components/reports/ReportWidget.vue';
+import { transformWidgetData } from '@/utils/reports';
+import { numeral } from '@/utils/helpers';
 
 export default defineComponent({
   name: 'Dashboard',
   components: {
+    ReportWidget,
     // ReportWidget,
     UserTransferRequestTable,
     RedeployRequest,
@@ -918,10 +922,6 @@ export default defineComponent({
         loading.value = false;
       },
     );
-
-    function numeral(value) {
-      return value;
-    }
 
     onMounted(async () => {
       if (currentIncidentId.value && !route.params.incident_id) {
