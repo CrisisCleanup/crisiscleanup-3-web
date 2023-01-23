@@ -53,6 +53,7 @@ export default function useConnectFirst(context: {
   const outgoingCall = computed(() => store.getters['phone/outgoingCall']);
   const stats = computed(() => store.getters['phone/stats']);
   const agentStats = computed(() => store.getters['phone/agentStats']);
+  const gateStats = computed(() => store.getters['phone/gateStats']);
   const callHistory = computed(() => store.getters['phone/callHistory']);
   const phoneService = reactive(usePhoneService());
 
@@ -266,6 +267,7 @@ export default function useConnectFirst(context: {
     outgoingCall,
     stats,
     agentStats,
+    gateStats,
     languages,
     callHistory,
     isTakingCalls,

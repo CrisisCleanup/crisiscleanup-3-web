@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col">
-    <base-text class="p-3" variant="h3">{{
+    <base-text class="py-2 px-3" variant="h3">{{
       $t('phoneDashboard.general_statistics')
+    }}</base-text>
+    <base-text class="py-2 px-3" variant="h4">{{
+      $t('~~**Stats may be delayed**')
     }}</base-text>
     <hr />
     <div class="flex flex-col">
@@ -31,28 +34,37 @@
         <base-text>{{ $t('phoneDashboard.agents_online') }}</base-text>
         {{ agentsOnline || 0 }}
       </div>
-      <div class="flex p-2 items-center justify-between">
+      <div
+        v-for="queue in statsPerQueue"
+        :key="queue.queueId"
+        class="flex p-2 items-center justify-between"
+      >
         <ccu-icon with-text type="phone-plus" size="xl">
-          <base-text>{{ $t('phoneDashboard.total_people_waiting') }}</base-text>
+          <base-text
+            >{{ $t('phoneDashboard.total_people_waiting') }}({{
+              queue.language
+            }})</base-text
+          >
         </ccu-icon>
-        {{ stats.inQueue || 0 }}
+        {{ queue.inQueue || 0 }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { onBeforeMount, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import moment from 'moment';
 import PhoneOutbound from '../../models/PhoneOutbound';
 import { makeTableColumns } from '../../utils/table';
 import Incident from '../../models/Incident';
 import useEmitter from '../../hooks/useEmitter';
 import { formatNationalNumber } from '../../filters';
 import useConnectFirst from '../../hooks/useConnectFirst';
-import { onBeforeMount, onMounted, ref } from 'vue';
 import useDialogs from '../../hooks/useDialogs';
 import AjaxTable from '../AjaxTable.vue';
-import { useI18n } from 'vue-i18n';
-import moment from 'moment';
+import Language from '@/models/Language';
 
 export default {
   name: 'GeneralStats',
@@ -147,7 +159,7 @@ export default {
     onBeforeMount(() => {
       setInterval(() => {
         updateCallbacks();
-      }, 30000);
+      }, 30_000);
       emitter.on('phone:agents_online', (count) => {
         agentsOnline.value = count;
       });
@@ -157,12 +169,32 @@ export default {
       updateCallbacks();
     });
 
+    const connectFirst = useConnectFirst(context);
+
+    const availableQueues = {
+      7: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+      2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+    };
+
+    const statsPerQueue = computed(() => {
+      return Object.entries(availableQueues).map(([key, value]) => {
+        const statistics = connectFirst.gateStats.find((element) => {
+          return String(value) === String(element.queueId);
+        });
+        if (statistics) {
+          return { ...statistics, language: Language.find(key).name_t };
+        }
+        return { language: Language.find(key).name_t };
+      });
+    });
+
     return {
       remainingCallbacks,
       remainingCalldowns,
       agentsOnline,
       showOutboundsModal,
-      ...useConnectFirst(context),
+      statsPerQueue,
+      ...connectFirst,
     };
   },
 };

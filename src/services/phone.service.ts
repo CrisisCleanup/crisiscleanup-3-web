@@ -273,6 +273,7 @@ export default class PhoneService {
 
   onQueueStats(info: any) {
     this.store.commit('phone/setGeneralStats', { ...info.totals });
+    this.store.commit('phone/setGateStats', { ...info.queues });
   }
 
   async login(

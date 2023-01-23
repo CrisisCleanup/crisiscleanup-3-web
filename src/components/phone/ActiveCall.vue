@@ -1,8 +1,8 @@
 <template>
   <div v-if="caller" class="flex flex-col items-center justify-between">
     <div
-      class="px-2 py-1 w-full text-white bg-crisiscleanup-lightblue-800"
       v-if="isConnecting"
+      class="px-2 py-1 w-full text-white bg-crisiscleanup-lightblue-800"
     >
       {{ $t('phoneDashboard.connecting') }}
     </div>
@@ -13,7 +13,7 @@
       <div v-if="isInboundCall">{{ $t('phoneDashboard.inbound_call') }}</div>
       <div v-if="isOutboundCall">{{ $t('phoneDashboard.outbound_call') }}</div>
     </div>
-    <div class="px-2 py-1 w-full text-white bg-crisiscleanup-green-300" v-else>
+    <div v-else class="px-2 py-1 w-full text-white bg-crisiscleanup-green-300">
       {{ $t('phoneDashboard.completed') }}
     </div>
 
@@ -29,7 +29,10 @@
       </base-text>
     </div>
 
-    <div class="flex items-start justify-between w-full py-1 px-2">
+    <div
+      v-if="caller"
+      class="flex items-start justify-between w-full py-1 px-2"
+    >
       <div class="flex items-center">
         <base-text variant="h2">
           {{ caller.dnis }}
@@ -39,8 +42,8 @@
         </div>
       </div>
       <div
-        class="text-xs text-crisiscleanup-dark-200"
         v-if="caller.number_of_inbound_calls"
+        class="text-xs text-crisiscleanup-dark-200"
       >
         {{
           `${caller.number_of_inbound_calls} ${$t(
@@ -51,12 +54,12 @@
         }}
       </div>
     </div>
-    <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
+    <div v-if="cards.length > 0">{{ $t('phoneDashboard.existing_cases') }}</div>
     <div class="flex overflow-x-auto overflow-y-hidden w-full">
       <div
         class="cursor-pointer bg-crisiscleanup-light-grey p-1 flex-grow-0 flex-shrink-0 w-32 h-24 m-1"
-        @click="() => setCase(null)"
         :class="Boolean(caseId) ? '' : 'border'"
+        @click="() => setCase(null)"
       >
         <div class="flex flex-col items-center justify-center h-full">
           <base-text variant="h3" class="text-crisiscleanup-dark-400"
@@ -65,19 +68,19 @@
         </div>
       </div>
       <div
-        class="flex-grow-0 flex-shrink-0 w-56 m-1 h-24"
         v-for="c in cards"
         :key="`${c.id}`"
+        class="flex-grow-0 flex-shrink-0 w-56 m-1 h-24"
       >
         <div
           class="cursor-pointer bg-crisiscleanup-light-grey p-1 h-full w-full"
-          @click="() => setCase(c)"
           :class="c.id === caseId ? 'border' : ''"
+          @click="() => setCase(c)"
         >
           <div class="flex items-center">
             <div
-              v-html="getSVG(c.worktype)"
               class="cases-svg-container p-1"
+              v-html="getSVG(c.worktype)"
             ></div>
             <div class="px-1">{{ c.caseNumber }}</div>
           </div>
@@ -89,28 +92,28 @@
       </div>
     </div>
     <ccu-icon
-      @click="hangup"
       v-if="(isOnCall || caller) && isOutboundCall"
       size="lg"
       class="ml-2"
       type="hangup"
+      @click="hangup"
     ></ccu-icon>
   </div>
 </template>
 <script lang="ts">
 import * as Sentry from '@sentry/browser';
-import useScripts from '../../hooks/phone/useScripts';
-import Worksite from '../../models/Worksite';
-import {computed, reactive, ref, watch} from 'vue';
-import useWorktypeImages from '../../hooks/worksite/useWorktypeImages';
-import useConnectFirst from '../../hooks/useConnectFirst';
+import { computed, reactive, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import moment from 'moment';
-import useCurrentUser from "../../hooks/useCurrentUser";
-import {useToast} from "vue-toastification";
-import {useI18n} from "vue-i18n";
-import {store} from "../../store";
-import usePhoneService from "../../hooks/phone/usePhoneService";
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import useScripts from '../../hooks/phone/useScripts';
+import Worksite from '../../models/Worksite';
+import useWorktypeImages from '../../hooks/worksite/useWorktypeImages';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import { store } from '../../store';
+import usePhoneService from '../../hooks/phone/usePhoneService';
 
 export default {
   name: 'ActiveCall',
@@ -129,8 +132,8 @@ export default {
     const phoneService = reactive(usePhoneService());
 
     const hangup = () => {
-      phoneService.hangup()
-    }
+      phoneService.hangup();
+    };
 
     const {
       isTakingCalls,
@@ -141,9 +144,8 @@ export default {
       caller,
       callState,
       isInboundCall,
-      isOutboundCall
-    } =
-      useConnectFirst(context);
+      isOutboundCall,
+    } = useConnectFirst(context);
     const currentIncident = store.getters['incident/currentIncidentId'];
     const cards = ref([]);
     const connectingTimeout = ref(null);
@@ -182,35 +184,34 @@ export default {
             },
           ] as any;
         }
-
       },
     );
 
     watch(
-        () => isTransitioning.value,
-        (newValue) => {
-          if (newValue) {
-            const startedConnecting = moment().toISOString();
-            connectingTimeout.value = setTimeout(() => {
-              const context = {
-                user: currentUser?.$toJson(),
-                caller: caller.value,
-                callState: callState.value,
-                isInboundCall: isInboundCall.value,
-                isOutboundCall: isOutboundCall.value,
-                startedConnecting,
-                connectingTimedOut: moment().toISOString(),
-              };
-              Sentry.setContext('call_info', context);
-              Sentry.captureException(
-                  'Call is stuck connecting state for 45 seconds',
-              );
-              $toasted.error(t('phoneDashboard.could_not_connect'));
-            }, 45000);
-          } else {
-            clearTimeout(connectingTimeout.value);
-          }
-        },
+      () => isTransitioning.value,
+      (newValue) => {
+        if (newValue) {
+          const startedConnecting = moment().toISOString();
+          connectingTimeout.value = setTimeout(() => {
+            const context = {
+              user: currentUser?.$toJson(),
+              caller: caller.value,
+              callState: callState.value,
+              isInboundCall: isInboundCall.value,
+              isOutboundCall: isOutboundCall.value,
+              startedConnecting,
+              connectingTimedOut: moment().toISOString(),
+            };
+            Sentry.setContext('call_info', context);
+            Sentry.captureException(
+              'Call is stuck connecting state for 45 seconds',
+            );
+            $toasted.error(t('phoneDashboard.could_not_connect'));
+          }, 45_000);
+        } else {
+          clearTimeout(connectingTimeout.value);
+        }
+      },
     );
 
     const isConnecting = computed(() => {
