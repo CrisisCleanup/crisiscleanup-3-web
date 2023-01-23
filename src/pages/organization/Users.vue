@@ -96,7 +96,7 @@
                         <base-checkbox
                           v-model="filters.roles.data[role.id]"
                           class="block my-1"
-                          @input="onFilter"
+                          @update:model-value="onFilter"
                           >{{ role.name_t }}
                         </base-checkbox>
                       </div>
@@ -106,14 +106,7 @@
                       <UserSearchInput
                         :placeholder="$t('usersVue.search_users')"
                         class="my-1"
-                        @selectedUser="
-                          (user) => {
-                            filters.invitedBy.data = new Set(
-                              filters.invitedBy.data.add(user),
-                            );
-                            onFilter();
-                          }
-                        "
+                        @selectedUser="onSelectedUser"
                       />
 
                       <div
@@ -240,7 +233,6 @@ export default defineComponent({
       return Role.all();
     });
     const currentUser = computed(() => {
-      // eslint-disable-next-line unicorn/no-array-callback-reference
       return User.find(store.getters['auth/userId']);
     });
     const filterCount = computed(() => {
@@ -271,6 +263,12 @@ export default defineComponent({
       users.value = results.entities?.users || [];
       usersLoading.value = false;
     }, 300);
+
+    function onSelectedUser(user: User) {
+      console.log('onSelectedUser', user);
+      filters.invitedBy.data = new Set(filters.invitedBy.data.add(user));
+      onFilter();
+    }
 
     async function onFilter() {
       currentFilter.value = {};
@@ -311,6 +309,7 @@ export default defineComponent({
       filterCount,
       onFilter,
       onSearch,
+      onSelectedUser,
     };
   },
 });
