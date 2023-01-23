@@ -7,32 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
 
-import {
-  faSpinner,
-  faBars,
-  faTimes,
-  faChevronDown,
-  faChevronUp,
-  faCaretDown,
-  faCaretUp,
-  faEye,
-  faPlus,
-  faMinus,
-  faTree,
-  faSync,
-  faCaretLeft,
-  faCaretRight,
-  faMap,
-  faCamera,
-  faStreetView,
-  faSearchMinus,
-  faChevronRight,
-  faChevronLeft,
-  faUsers,
-  faStar,
-  faPlay,
-  faPause,
-} from '@fortawesome/free-solid-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
 import { createI18n } from 'vue-i18n';
 import vSelect from 'vue-select';
@@ -81,30 +56,7 @@ import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
 import BaseLink from './components/BaseLink.vue';
 
-library.add(faSpinner);
-library.add(faBars);
-library.add(faTimes);
-library.add(faChevronDown);
-library.add(faChevronUp);
-library.add(faCaretDown);
-library.add(faCaretUp);
-library.add(faCaretLeft);
-library.add(faCaretRight);
-library.add(faEye);
-library.add(faPlus);
-library.add(faMinus);
-library.add(faTree);
-library.add(faSync);
-library.add(faMap);
-library.add(faCamera);
-library.add(faStreetView);
-library.add(faSearchMinus);
-library.add(faChevronRight);
-library.add(faChevronLeft);
-library.add(faUsers);
-library.add(faStar);
-library.add(faPlay);
-library.add(faPause);
+library.add(fas);
 
 const getI18n = (messages = {}) => {
   return createI18n({
