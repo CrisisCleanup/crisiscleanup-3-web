@@ -29,7 +29,10 @@
       </base-text>
     </div>
 
-    <div class="flex items-start justify-between w-full py-1 px-2">
+    <div
+      v-if="caller"
+      class="flex items-start justify-between w-full py-1 px-2"
+    >
       <div class="flex items-center">
         <base-text variant="h2">
           {{ caller.dnis }}

@@ -40,6 +40,7 @@ export default {
       'outgoingCall',
       'stats',
       'agentStats',
+      'gateStats',
       'callHistory',
     ]),
     languages() {

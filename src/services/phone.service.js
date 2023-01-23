@@ -245,6 +245,7 @@ export default class PhoneService {
 
   onQueueStats(info) {
     this.store.commit('phone_legacy/setGeneralStats', { ...info.totals });
+    this.store.commit('phone_legacy/setGateStats', [...info.queues]);
   }
 
   login(

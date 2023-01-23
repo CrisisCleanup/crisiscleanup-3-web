@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col">
-    <base-text class="p-3" variant="h3">{{
+    <base-text class="py-2 px-3" variant="h3">{{
       $t('phoneDashboard.general_statistics')
+    }}</base-text>
+    <base-text class="py-2 px-3" variant="h4">{{
+      $t('~~**Stats may be delayed**')
     }}</base-text>
     <hr />
     <div class="flex flex-col">
@@ -31,11 +34,19 @@
         <base-text>{{ $t('phoneDashboard.agents_online') }}</base-text>
         {{ agentsOnline || 0 }}
       </div>
-      <div class="flex p-2 items-center justify-between">
+      <div
+        v-for="queue in statsPerQueue"
+        :key="queue.queueId"
+        class="flex p-2 items-center justify-between"
+      >
         <ccu-icon with-text type="phone-plus" size="xl">
-          <base-text>{{ $t('phoneDashboard.total_people_waiting') }}</base-text>
+          <base-text
+            >{{ $t('phoneDashboard.total_people_waiting') }}({{
+              queue.language
+            }})</base-text
+          >
         </ccu-icon>
-        {{ stats.inQueue || 0 }}
+        {{ queue.inQueue || 0 }}
       </div>
     </div>
   </div>
@@ -48,6 +59,7 @@ import { makeTableColumns } from '@/utils/table';
 import Incident from '@/models/Incident';
 import { EventBus } from '@/event-bus';
 import { formatNationalNumber } from '@/filters';
+import Language from '@/models/Language';
 
 export default {
   name: 'GeneralStats',
@@ -57,6 +69,10 @@ export default {
       remainingCallbacks: 0,
       remainingCalldowns: 0,
       agentsOnline: 0,
+      availableQueues: {
+        7: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+        2: process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+      },
     };
   },
   created() {
@@ -69,6 +85,19 @@ export default {
   },
   async mounted() {
     await this.updateCallbacks();
+  },
+  computed: {
+    statsPerQueue() {
+      return Object.entries(this.availableQueues).map(([key, value]) => {
+        const statistics = this.gateStats.find((element) => {
+          return String(value) === String(element.queueId);
+        });
+        if (statistics) {
+          return { ...statistics, language: Language.find(key).name_t };
+        }
+        return { language: Language.find(key).name_t };
+      });
+    },
   },
   methods: {
     async showOutboundsModal(type = 'callback') {

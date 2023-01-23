@@ -4,6 +4,7 @@ const AppState = {
   incomingCall: null,
   outgoingCall: null,
   stats: {},
+  gateStats: [],
   agentStats: {},
   caller: null,
   gateway: {},
@@ -95,6 +96,9 @@ const mutations = {
   setAgentStats(state, stats) {
     state.agentStats = stats;
   },
+  setGateStats(state, stats) {
+    state.gateStats = stats;
+  },
   setLanguages(state, languages) {
     state.languages = languages;
   },
@@ -109,6 +113,7 @@ const mutations = {
       outgoingCall: null,
       stats: {},
       agentStats: {},
+      gateStats: [],
       caller: null,
       gateway: {},
       needsWelcome: true,
