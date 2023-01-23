@@ -169,8 +169,7 @@ export default {
       updateCallbacks();
     });
 
-    const connectFirst = useConnectFirst(context);
-
+    const { gateStats, stats } = useConnectFirst(context);
     const availableQueues = {
       7: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
       2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
@@ -178,7 +177,7 @@ export default {
 
     const statsPerQueue = computed(() => {
       return Object.entries(availableQueues).map(([key, value]) => {
-        const statistics = connectFirst.gateStats.find((element) => {
+        const statistics = gateStats.value.find((element) => {
           return String(value) === String(element.queueId);
         });
         if (statistics) {
@@ -194,7 +193,8 @@ export default {
       agentsOnline,
       showOutboundsModal,
       statsPerQueue,
-      ...connectFirst,
+      gateStats,
+      stats,
     };
   },
 };

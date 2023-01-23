@@ -27,6 +27,7 @@ const getters = {
   outgoingCall: (state: State) => state.outgoingCall,
   stats: (state: State) => state.stats,
   agentStats: (state: State) => state.agentStats,
+  gateStats: (state: State) => state.gateStats,
   callHistory: (state: State) => state.callHistory,
   getUser: (state: State) => state.user,
   getGateway: (state: State) => state.gateway,
