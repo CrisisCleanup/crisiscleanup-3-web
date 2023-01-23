@@ -40,7 +40,6 @@ export default defineComponent({
     const selectedUser = ref<unknown>();
 
     async function onUserSearch(value: string) {
-      console.log('value', value);
       const _results = await User.api().get(
         `/users?search=${value}&limit=10&&organization=${currentUser.value.organization.id}`,
         { dataKey: 'results' },

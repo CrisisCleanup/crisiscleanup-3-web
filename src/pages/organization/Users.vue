@@ -265,7 +265,6 @@ export default defineComponent({
     }, 300);
 
     function onSelectedUser(user: User) {
-      console.log('onSelectedUser', user);
       filters.invitedBy.data = new Set(filters.invitedBy.data.add(user));
       onFilter();
     }
