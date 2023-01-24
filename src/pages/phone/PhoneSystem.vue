@@ -629,10 +629,11 @@ export default {
       const { chatGroups } = this;
       const [group] = chatGroups;
       this.selectedChat = group;
-      const markers = await this.getWorksites();
+
+      this.mapLoading = true;
       this.mapUtils = useWorksiteMap(
-        markers,
-        markers.map((m) => m.id),
+        [],
+        [],
         (m) => {
           this.onSelectMarker(m);
         },
@@ -764,12 +765,15 @@ export default {
       this.isEditing = true;
       this.worksiteId = marker.id;
     },
-    async getWorksites() {
-      this.mapLoading = true;
+    async getWorksites(incidentId) {
+      const iid =
+        incidentId ??
+        this.currentIncidentId ??
+        this.currentUser?.states?.incident;
+      if (iid === null || iid === undefined) return [];
       const response = await loadCasesCached({
-        incident: this.currentIncidentId,
+        incident: iid,
       });
-      this.mapLoading = false;
       this.allWorksiteCount = response.results.length;
       return response.results;
     },
@@ -837,15 +841,24 @@ export default {
         this.tabs.selectTab(this.$refs.statusTab);
       }
     },
-    currentIncidentId(value) {
-      if (value) {
-        this.getWorksites().then((markers) => {
-          this.mapUtils.reloadMap(
-            markers,
-            markers.map((m) => m.id),
-          );
-        });
-      }
+    currentIncidentId: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue === null || newValue === undefined) return;
+        this.mapLoading = true;
+        this.getWorksites(newValue)
+          .then((results) => {
+            this.mapUtils.reloadMap(
+              results,
+              results.map((w) => w.id),
+            );
+            this.allWorksiteCount = results.length;
+            this.mapLoading = false;
+          })
+          .catch((err) => {
+            this.$log.error('failed to reload map:', err);
+          });
+      },
     },
   },
 };
