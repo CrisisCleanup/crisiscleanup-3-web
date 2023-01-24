@@ -5,12 +5,10 @@ export default class Organization extends Model {
   static entity = 'organizations';
 
   id!: string;
-
   name!: string;
-
   incidents!: any[];
-
   files!: any[];
+  approved_roles!: any[];
 
   static fields() {
     return {
