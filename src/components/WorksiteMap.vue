@@ -371,6 +371,10 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    worksitesQuery() {
+      const incidentId = this.query?.incident ?? this.currentIncidentId;
+      return { ...(this.query ?? {}), incident: incidentId };
+    },
   },
   watch: {
     displayedWorkTypes: {
@@ -391,17 +395,14 @@ export default {
     },
   },
   async mounted() {
-    if (!this.query.incident) {
-      return;
-    }
     this.mapLoading = true;
 
     const allCases = await loadCasesCached({
-      incident: this.query.incident,
+      incident: this.worksitesQuery.incident,
     });
 
     this.markers = allCases.results;
-    const response = await loadCasesCached(this.query);
+    const response = await loadCasesCached(this.worksitesQuery);
 
     const filtered = response.results;
 
