@@ -201,11 +201,7 @@
                 size="small"
                 :value="currentOrganization.facebook"
                 :placeholder="$t('profileOrg.facebook')"
-                @input="
-                  (value) => {
-                    updateOrganization(value, 'facebook');
-                  }
-                "
+                @input="(e) => updateOrganization(e.target.value, 'facebook')"
               />
             </div>
             <div class="form-row flex">
@@ -220,11 +216,7 @@
                 size="small"
                 :value="currentOrganization.twitter"
                 :placeholder="$t('profileOrg.twitter')"
-                @input="
-                  (value) => {
-                    updateOrganization(value, 'twitter');
-                  }
-                "
+                @input="(e) => updateOrganization(e.target.value, 'twitter')"
               />
             </div>
           </div>
@@ -234,11 +226,7 @@
               :placeholder="$t('profileOrg.donation_url')"
               :value="currentOrganization.donate_url"
               required
-              @input="
-                (value) => {
-                  updateOrganization(value, 'donate_url');
-                }
-              "
+              @input="(e) => updateOrganization(e.target.value, 'donate_url')"
             />
           </div>
         </div>
@@ -439,9 +427,7 @@
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
-            (event) => {
-              updateOrganization(event.target.value, 'custom_ops_message');
-            }
+            (e) => updateOrganization(e.target.value, 'custom_ops_message')
           "
         />
       </div>
@@ -505,11 +491,7 @@
           :placeholder="$t('profileOrg.add_tos_text')"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
-          @input="
-            (event) => {
-              updateOrganization(event.target.value, 'custom_legal_tos');
-            }
-          "
+          @input="(e) => updateOrganization(e.target.value, 'custom_legal_tos')"
         />
       </div>
       <hr />
@@ -573,12 +555,8 @@
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
-            (event) => {
-              updateOrganization(
-                event.target.value,
-                'custom_legal_survivor_waiver',
-              );
-            }
+            (e) =>
+              updateOrganization(e.target.value, 'custom_legal_survivor_waiver')
           "
         />
       </div>
