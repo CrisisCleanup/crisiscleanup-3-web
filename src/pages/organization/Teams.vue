@@ -236,7 +236,7 @@ export default {
 
     watch(currentIncidentId, (newState, oldState) => {
       if (String(newState) !== String(oldState)) {
-        this.getData().then(() => {});
+        getData().then(() => {});
       }
     })
 

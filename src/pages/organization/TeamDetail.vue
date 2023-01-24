@@ -584,7 +584,7 @@ import { getQueryString } from '../../utils/urls';
 import Table from '@/components/Table.vue';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import useDialogs from '@/hooks/useDialogs.ts';
+import useDialogs from '@/hooks/useDialogs';
 import User from '@/models/User';
 
 export default {

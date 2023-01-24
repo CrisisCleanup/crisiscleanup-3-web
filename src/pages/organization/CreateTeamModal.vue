@@ -7,19 +7,10 @@
     <div style="display: grid; grid-template-columns: 50% 50%" class="p-2">
       <div class="p-2 flex flex-col justify-between items-start w-full">
         <input
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-2
-            my-2
-            resize-none
-            w-108
-          "
+          v-model="team.name"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
           :required="true"
           type="search"
-          v-model="team.name"
           :placeholder="$t('teams.team_name')"
         />
         <base-button
@@ -83,8 +74,6 @@
           v-model="teamWorksites"
           item-key="id"
           group="cases"
-          @start="drag = true"
-          @end="drag = false"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
         >
@@ -228,8 +217,6 @@
             v-model="worksites"
             item-key="id"
             group="cases"
-            @start="drag = true"
-            @end="drag = false"
             handle=".handle"
             class="h-96 overflow-scroll"
           >
@@ -382,7 +369,7 @@ export default {
         // const [team] = await teamResult.entities.teams;
         if (teamWorksites.value.length) {
           const promises = [];
-          teamWorksites.value.forEach((w) =>
+          teamWorksites.value.forEach((w) => 
             w.work_types.forEach((wt) => {
               if (wt.claimed_by === currentUser.value.organization.id) {
                 promises.push(
@@ -395,8 +382,8 @@ export default {
                   ),
                 );
               }
-            }),
-          );
+            }));
+
           await Promise.all(promises);
         }
         ctx.emit('saved');
