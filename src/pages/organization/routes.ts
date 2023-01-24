@@ -3,7 +3,7 @@ import Affiliates from '@/pages/organization/Affiliates.vue';
 import Organization from '@/pages/organization/Index.vue';
 import Invitations from '@/pages/organization/Invitations.vue';
 import Layers from '@/pages/organization/Layers.vue';
-// import OrganizationProfile from '@/pages/organization/Profile.vue';
+import OrganizationProfile from '@/pages/organization/Profile.vue';
 import Users from '@/pages/organization/Users.vue';
 import UserView from '@/pages/organization/UserView.vue';
 import Teams from '@/pages/organization/Teams.vue';
@@ -53,8 +53,7 @@ export const routes = [
       },
       {
         path: 'profile',
-        // Component: OrganizationProfile,
-        component: mockComponent('OrganizationProfile', 'OrganizationProfile'),
+        component: OrganizationProfile,
         name: 'nav.organization_profile',
       },
       {
