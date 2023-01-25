@@ -21,15 +21,7 @@
         floatLabel ? 'py-2 pt-3' : '',
       ]"
       :placeholder="placeholder"
-      :classes="{
-        search: `${selectClasses} px-1`,
-        container: containerClasses,
-        optionSelected: 'text-white bg-crisiscleanup-dark-200',
-        optionPointed: 'text-gray-800 bg-crisiscleanup-dark-100',
-        optionSelectedPointed:
-          'text-white bg-crisiscleanup-dark-200 opacity-90',
-        tag: 'text-xs bg-white py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1 border border-crisiscleanup-dark-100',
-      }"
+      :classes="multiSelectClasses"
       v-bind="$attrs"
       @input="
         (v) => {
@@ -195,6 +187,25 @@ export default {
       return isFloated_.value;
     });
 
+    const multiSelectClasses = computed(() => {
+      // only override the default classes if we have a custom class
+      const searchClassesObj = props.selectClasses
+        ? { search: props.selectClasses }
+        : {};
+      const containerClassesObj = props.containerClasses
+        ? { container: props.containerClasses }
+        : {};
+      return {
+        ...searchClassesObj,
+        ...containerClassesObj,
+        optionSelected: 'text-white bg-crisiscleanup-dark-200',
+        optionPointed: 'text-gray-800 bg-crisiscleanup-dark-100',
+        optionSelectedPointed:
+          'text-white bg-crisiscleanup-dark-200 opacity-90',
+        tag: 'text-xs bg-white py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1 border border-crisiscleanup-dark-100',
+      };
+    });
+
     function onInput(value) {
       isEmpty_.value = value === null;
       if (value === null && props.floatLabel) {
@@ -284,6 +295,7 @@ export default {
       floatStyle,
       isEmpty,
       isFloated,
+      multiSelectClasses,
       onInput,
       onBlur,
       open,
