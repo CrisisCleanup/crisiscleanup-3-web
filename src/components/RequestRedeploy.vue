@@ -1,16 +1,27 @@
 <template>
   <div class="p-3 h-full">
     <div>
-      <form-select
-        :value="selectedIncidentId"
-        :options="incident_list"
-        searchable
-        select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12 mb-3"
-        item-key="id"
-        label="name"
+      <base-select
+        v-model="selectedIncidentId"
         :placeholder="$t('locationVue.select_incident')"
-        @input="selectedIncidentId = $event"
-      />
+        :label="$t('locationVue.select_incident')"
+        :options="incidentList"
+        :min-chars="1"
+        :add-option-on="['enter', 'tab']"
+        item-key="id"
+        searchable
+      >
+        <template #option="{ option }">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <div class="text-sm font-medium text-gray-900">
+                {{ option.name }}
+              </div>
+            </div>
+          </div>
+        </template>
+      </base-select>
+      {{ selectedIncidentName }}
     </div>
     <base-button
       variant="solid"
@@ -21,71 +32,101 @@
     />
   </div>
 </template>
-<script>
-import Organization from '../models/Organization';
-import User from '../models/User';
-import { getErrorMessage } from '../utils/errors';
 
-export default {
+<script lang="ts">
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import type Incident from '@/models/Incident';
+import Organization from '@/models/Organization';
+import User from '@/models/User';
+import { getErrorMessage } from '@/utils/errors';
+
+export default defineComponent({
   name: 'RequestRedeploy',
-  async mounted() {
-    const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
-    );
-    const incidentRequestsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
-    );
-    this.incidents = response.data.results;
-    this.incidentRequests = incidentRequestsResponse.data.results;
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    incident_list() {
-      if (this.incidents) {
-        return this.incidents.filter(
+  setup() {
+    const store = useStore();
+    const { t } = useI18n();
+    const toast = useToast();
+
+    const showRedeployModal = ref(false);
+    const selectedIncidentId = ref();
+    const incidents = ref<Incident[]>([]);
+    const incidentRequests = ref<
+      (Record<string, any> & { incident: string })[]
+    >([]);
+
+    const currentUser = computed(() => {
+      return User.find(store.getters['auth/userId']) as User;
+    });
+    const currentOrganization = computed(() => {
+      return Organization.find(
+        currentUser.value.organization.id,
+      ) as Organization;
+    });
+    const incidentList = computed(() => {
+      if (incidents.value) {
+        return incidents.value.filter(
           (incident) =>
-            !this.currentOrganization.approved_incidents.includes(
+            !currentOrganization.value.approved_incidents.includes(
               incident.id,
             ) &&
-            !this.incidentRequests
+            !incidentRequests.value
               .map((request) => request.incident)
               .includes(incident.id),
         );
       }
       return [];
-    },
-    currentOrganization() {
-      return Organization.find(this.currentUser.organization.id);
-    },
-  },
-  methods: {
-    async requestIncident() {
+    });
+    const selectedIncidentName = computed(() => {
+      const incident = incidents.value.find(
+        (incident) => incident.id === selectedIncidentId.value,
+      );
+      return incident ? incident.name : '';
+    });
+
+    onMounted(async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/incidents_list`,
+        {
+          params: {
+            fields: 'id,name,short_name,geofence,locations',
+            limit: 200,
+            sort: '-start_at',
+          },
+        },
+      );
+      const incidentRequestsResponse = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/incident_requests`,
+      );
+      incidents.value = response.data.results;
+      incidentRequests.value = incidentRequestsResponse.data.results;
+    });
+
+    async function requestIncident() {
       try {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+        await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/incident_requests`,
           {
-            organization: this.currentOrganization.id,
-            incident: this.selectedIncidentId,
+            organization: currentOrganization.value.id,
+            incident: selectedIncidentId.value,
           },
         );
-        this.showRedeployModal = false;
-        await this.$toasted.success(
-          this.$t('requestRedeploy.request_redeploy_success'),
-        );
+        showRedeployModal.value = false;
+        await toast.success(t('requestRedeploy.request_redeploy_success'));
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await toast.error(getErrorMessage(error));
       }
-    },
-  },
-  data() {
+    }
+
     return {
-      showRedeployModal: false,
-      selectedIncidentId: false,
-      incidents: [],
-      incidentRequests: [],
+      showRedeployModal,
+      selectedIncidentId,
+      selectedIncidentName,
+      incidentList,
+      requestIncident,
     };
   },
-};
+});
 </script>
+
+<style lang="postcss" scoped></style>
