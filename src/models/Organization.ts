@@ -9,6 +9,7 @@ export default class Organization extends Model {
   incidents!: any[];
   files!: any[];
   approved_roles!: any[];
+  approved_incidents!: string[];
 
   static fields() {
     return {
