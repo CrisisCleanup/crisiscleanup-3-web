@@ -57,7 +57,6 @@
               >{{ $t('~~Add new') }}
             </base-button>
             <base-button
-              v-if="!currentLocalization.id"
               :action="autoTranslate"
               variant="outline"
               class="px-2 py-1"
@@ -247,18 +246,6 @@ export default defineComponent({
       });
     }
 
-    async function deleteLocalizationText(text: LocalizationText) {
-      if (text.id) {
-        return $http.delete(
-          `${process.env.VUE_APP_API_BASE_URL}/admins/localizations_text/${text.id}`,
-        );
-      }
-      localizationTexts.value = localizationTexts.value.filter(function (item) {
-        return item !== text;
-      });
-      return Promise.resolve();
-    }
-
     async function loadLocalizationTexts(localization: Localization) {
       const response = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/admins/localizations_text`,
@@ -269,6 +256,19 @@ export default defineComponent({
         },
       );
       localizationTexts.value = response.data.results;
+    }
+
+    async function deleteLocalizationText(text: LocalizationText) {
+      if (text.id) {
+        await $http.delete(
+          `${process.env.VUE_APP_API_BASE_URL}/admins/localizations_text/${text.id}`,
+        );
+        return loadLocalizationTexts(currentLocalization.value);
+      }
+      localizationTexts.value = localizationTexts.value.filter(function (item) {
+        return item !== text;
+      });
+      return Promise.resolve();
     }
 
     async function saveLocalizationTexts() {
@@ -316,7 +316,6 @@ export default defineComponent({
       );
 
       if (englishLocalization) {
-        localizationTexts.value = [englishLocalization];
         // eslint-disable-next-line no-restricted-syntax
         for (const lang of Language.all()) {
           if (lang.id === englishLanguage?.id) {
@@ -324,11 +323,18 @@ export default defineComponent({
           }
           translate(englishLocalization.text, 'en-US', lang.subtag).then(
             (translation) => {
-              localizationTexts.value.push({
-                localization: '',
-                text: translation,
-                language: lang.id,
-              });
+              const existingLang = localizationTexts.value.find(
+                (t) => t.language === lang.id,
+              );
+              if (existingLang) {
+                existingLang.text = translation;
+              } else {
+                localizationTexts.value.push({
+                  localization: '',
+                  text: translation,
+                  language: lang.id,
+                });
+              }
             },
           );
         }
