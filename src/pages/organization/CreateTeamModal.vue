@@ -21,9 +21,9 @@
           :action="generateTeamName"
         />
 
-        <base-text class="mb-2">{{
-          `${$t('teams.team_members_list')} (${team.users.length})`
-        }}</base-text>
+        <base-text class="mb-2">
+          {{ `${$t('teams.team_members_list')} (${team.users.length})` }}
+        </base-text>
         <draggable
           v-model="team.users"
           itemKey="id"
@@ -130,7 +130,7 @@
             }
           "
         />
-        {{  view }}
+        {{ view }}
 
         <div class="flex py-4">
           <base-button
@@ -269,7 +269,7 @@
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import Draggable from 'vuedraggable';
 import {
   adjectives,
@@ -277,57 +277,66 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
-import { mapState } from 'vuex';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
 import Avatar from '@/components/Avatar.vue';
-import { getColorForStatus } from '../../filters';
-import { getErrorMessage } from '../../utils/errors';
-import { getQueryString } from '../../utils/urls';
+import { getErrorMessage } from '@/utils/errors';
+import { getQueryString } from '@/utils/urls';
 import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 import { useToast } from 'vue-toastification';
 import axios from 'axios';
 import User from '@/models/User';
+import { PropType } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'CreateTeamModal',
   components: { WorksiteStatusDropdown, Avatar, Draggable },
   props: {
     users: {
-      type: Array,
+      type: Array as PropType<User[]>,
       default: () => [],
     },
     cases: {
-      type: Array,
+      type: Array as PropType<Worksite[]>,
       default: () => [],
     },
     teams: {
-      type: Array,
+      type: Array as PropType<Team[]>,
       default: () => [],
     },
   },
+  emits: ['saved', 'close', 'reloadMap', 'reloadTable'],
   setup(props, ctx) {
     const $toasted = useToast();
     const $http = axios;
     const store = useStore();
-    const currentUser = computed(() => User.find(store.getters['auth/userId']));
-    const usersList = ref([]);
-    const caseList = ref([]);
+    const currentUser = computed(
+      () => User.find(store.getters['auth/userId']) as User,
+    );
+    const usersList = ref<unknown[]>([]);
+    const caseList = ref<unknown[]>([]);
     const currentSearch = ref('');
     const currentCaseSearch = ref('');
     const view = ref('users');
-    const team = ref({
-        users: [],
-        name: `Team ${props.teams.length + 1}`,
-        notes: '',
-      }
+    const team = ref<Partial<Team>>({
+      users: [],
+      name: `Team ${props.teams.length + 1}`,
+      notes: '',
+    });
+    const teamWorksites = ref<Worksite[]>([]);
+    const worksites = ref<Worksite[]>([]);
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
     );
-    const teamWorksites = ref([]);
-    const worksites = ref([]);
-    const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
+
+    onMounted(async () => {
+      usersList.value = [...props.users];
+      caseList.value = [...props.cases];
+      await getClaimedWorksites();
+    });
 
     const getClaimedWorksites = async () => {
-      const params = {
+      const params: Record<string, unknown> = {
         incident: currentIncidentId.value,
         work_type__claimed_by: currentUser.value.organization.id,
         fields:
@@ -335,7 +344,7 @@ export default {
       };
 
       if (currentCaseSearch.value) {
-        params.search = currentCaseSearch;
+        params.search = currentCaseSearch.value;
       }
 
       const results = await Worksite.api().get(
@@ -344,10 +353,14 @@ export default {
           dataKey: 'results',
         },
       );
-      worksites.value = results.entities.worksites;
+      worksites.value = (results.entities?.worksites || []) as Worksite[];
     };
 
-    const statusValueChange = async (value, workType, worksiteId) => {
+    const statusValueChange = async (
+      value: any,
+      workType: Record<string, unknown>,
+      worksiteId: number,
+    ) => {
       try {
         await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
@@ -364,26 +377,31 @@ export default {
         const teamResult = await Team.api().post('/teams', {
           ...team.value,
           incident: currentIncidentId.value,
-          users: team.value.users.map((u) => u.id),
+          users: team.value.users && team.value.users.map((u) => u.id),
         });
-        // const [team] = await teamResult.entities.teams;
-        if (teamWorksites.value.length) {
+        const _team = (await teamResult.entities?.teams?.[0]) as Team;
+        if (!_team) {
+          throw new Error('Team not found. Something went wrong.');
+        }
+        if (teamWorksites.value.length > 0) {
           const promises = [];
-          teamWorksites.value.forEach((w) => 
-            w.work_types.forEach((wt) => {
+          for (const w of teamWorksites.value) {
+            for (const wt of w.work_types) {
               if (wt.claimed_by === currentUser.value.organization.id) {
                 promises.push(
                   $http.post(
-                    `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+                    `${
+                      import.meta.env.VITE_APP_API_BASE_URL
+                    }/worksite_work_types_teams`,
                     {
-                      team: teteamResult.entities.teams.id,
+                      team: _team.id,
                       worksite_work_type: wt.id,
                     },
                   ),
                 );
               }
-            }));
-
+            }
+          }
           await Promise.all(promises);
         }
         ctx.emit('saved');
@@ -393,8 +411,8 @@ export default {
       }
     };
     const onSearch = () => {
-      usersList.value = Array.from(
-        props.users.filter((user) => {
+      usersList.value = [
+        ...props.users.filter((user) => {
           return (
             user.full_name
               .toLowerCase()
@@ -402,11 +420,11 @@ export default {
             user.email.toLowerCase().includes(currentSearch.value.toLowerCase())
           );
         }),
-      );
+      ];
     };
     const onCaseSearch = () => {
-      caseList.value = Array.from(
-        props.cases.filter((c) => {
+      caseList.value = [
+        ...props.cases.filter((c) => {
           return (
             c.case_number
               .toLowerCase()
@@ -416,7 +434,7 @@ export default {
               .includes(currentCaseSearch.value.toLowerCase())
           );
         }),
-      );
+      ];
     };
     const generateTeamName = () => {
       team.value.name = uniqueNamesGenerator({
@@ -426,11 +444,6 @@ export default {
       });
     };
 
-    onMounted(async () => {
-      usersList.value = Array.from(props.users);
-      caseList.value = Array.from(props.cases);
-      await getClaimedWorksites();
-    });
     return {
       usersList,
       currentSearch,
@@ -445,10 +458,10 @@ export default {
       saveTeam,
       onSearch,
       onCaseSearch,
-      generateTeamName
+      generateTeamName,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>
