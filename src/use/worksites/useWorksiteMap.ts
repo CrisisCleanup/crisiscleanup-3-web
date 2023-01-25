@@ -4,6 +4,7 @@ import { Container } from 'pixi.js';
 import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
+import useEmitter from '@/use/useEmitter';
 
 export default (
   markers,
@@ -104,6 +105,8 @@ export default (
   }
 
   async function addMarkerToMap(location) {
+    const { emitter } = useEmitter();
+
     let markerLocation = location;
     const container = getPixiContainer() as any;
     if (!markerLocation) {
@@ -117,8 +120,12 @@ export default (
     markerGroup.addTo(map);
     markerGroup.addLayer(marker);
 
+    marker.on('dragend', function (event) {
+      emitter.emit('updatedWorksiteLocation', event.target.getLatLng());
+    });
+
     container.visible = false;
-    map.setView([markerLocation.lat, markerLocation.lng], 15);
+    map.setView([markerLocation.lat, markerLocation.lng], map.getZoom());
     marker
       .bindTooltip(window.vue.$t('casesVue.drag_pin_to_correct_location'), {
         direction: 'top',

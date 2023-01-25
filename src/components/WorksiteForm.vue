@@ -604,11 +604,11 @@ export default {
     }
 
     async function geocodeWorksite(latitude, longitude, skipAddress = false) {
-      const geocode = await GeocoderService.getLocationDetails({
-        latitude,
-        longitude,
-      });
       if (!skipAddress) {
+        const geocode = await GeocoderService.getLocationDetails({
+          latitude,
+          longitude,
+        });
         const geocodeKeys = [
           'address',
           'city',
@@ -619,6 +619,7 @@ export default {
         geocodeKeys.forEach((key) =>
           updateWorksite(geocode.address_components[key], key),
         );
+        return geocode;
       }
       updateWorksite(
         {
@@ -629,7 +630,7 @@ export default {
       );
       const what3words = await What3wordsService.getWords(latitude, longitude);
       updateWorksite(what3words, 'what3words');
-      return geocode;
+      return null;
     }
 
     async function initForm() {
