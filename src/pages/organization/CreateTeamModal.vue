@@ -277,16 +277,16 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import type { PropType } from 'vue';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
 import Avatar from '@/components/Avatar.vue';
 import { getErrorMessage } from '@/utils/errors';
 import { getQueryString } from '@/utils/urls';
 import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
-import { useToast } from 'vue-toastification';
-import axios from 'axios';
 import User from '@/models/User';
-import { PropType } from 'vue';
 
 export default defineComponent({
   name: 'CreateTeamModal',
