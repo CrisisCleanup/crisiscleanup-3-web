@@ -284,52 +284,50 @@ import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import MessageBox from '@/components/dialogs/MessageBox';
 const messageBox = create(MessageBox);
+import { useRouter, useRoute } from 'vue-router';
 
 export default {
   name: 'Location',
   components: { LocationTool },
-  data() {
-    return {
-      currentLocation: null,
-      loading: false,
-      locationAccess: 'Public',
-      organizationResults: [],
-      selectedOrganization: null,
-      selectedIncidentId: null,
-      relatedOrganizations: [],
-      relatedIncidents: [],
-    };
-  },
-  computed: {
-    isNew() {
-      return !this.$route.params.location_id;
-    },
-    locationTypes() {
-      return LocationType.all();
-    },
-    selectedIncident() {
+  setup(props, ctx) {
+    const route = useRoute();
+    const router = useRouter();
+    const currentLocation = ref();
+    const currentPolygon = ref(null);
+    const loading = ref(false);
+    const locationAccess = ref('Public');
+    const organizationResults = ref([]);
+    const selectedOrganization = ref();
+    const selectedIncidentId = ref();
+    const relatedOrganizations = ref([]);
+    const relatedIncidents = ref([]);
+    const isNew = computed(() => {
+      return !route.params.location_id;
+    });
+    const locationTypes = computed(() => LocationType.all());
+    const selectedIncident = computed(() => {
       if (this.selectedIncidentId) {
         return Incident.find(this.selectedIncidentId);
       }
       return null;
-    },
-    incidents() {
+    });
+    const incidents = computed(() => {
       return Incident.query().orderBy('id', 'desc').get();
-    },
-    isPrimaryResponseArea() {
+    });
+    const isPrimaryResponseArea = computed(() => {
       return (
         LocationType.query().where('key', 'org_primary_response_area').get()[0]
           .id === this.currentLocation.type
       );
-    },
-    isSecondaryResponseArea() {
+    });
+    const isSecondaryResponseArea = computed(() => {
       return (
         LocationType.query()
           .where('key', 'org_secondary_response_area')
           .get()[0].id === this.currentLocation.type
       );
-    },
-    isIncidentRelated() {
+    });
+    const isIncidentRelated = computed(() => {
       const incidentRelatedTypes = LocationType.query()
         .where('key', (key) =>
           [
@@ -343,77 +341,51 @@ export default {
       return incidentRelatedTypes.some(
         (key) => key.id === this.currentLocation.type,
       );
-    },
-  },
-  async mounted() {
-    await this.loadLocation();
-  },
-  methods: {
-    async loadLocation() {
-      this.loading = true;
-      await LocationType.api().get('/location_types', {
-        dataKey: 'results',
-      });
-      if (this.$route.params.location_id) {
-        try {
-          await Location.api().fetchById(this.$route.params.location_id);
-          this.currentLocation = Location.find(this.$route.params.location_id);
-          this.loadRelatedEntities();
-        } catch (e) {
-          this.currentLocation = new Location();
-          await this.$router.replace(`/locations/new`);
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.reset();
-      }
-      this.loading = false;
-    },
-    reset() {
-      this.currentLocation = new Location();
-      this.currentPolygon = null;
-      this.selectedIncidentId = null;
-      this.selectedOrganization = null;
+    });
+    const reset = () => {
+      currentLocation.value = new Location();
+      currentPolygon.value = null;
+      selectedIncidentId.value = null;
+      selectedOrganization.value = null;
       if (this.$refs.locationTool) {
         this.$refs.locationTool.reset();
       }
-    },
-    async downloadCurrentLocation() {
-      this.loading = true;
+    };
+    const downloadCurrentLocation = async () => {
+      loading.value = true;
       const shapefile = await Location.api().download(
-        this.$route.params.location_id,
+        route.params.location_id,
       );
       forceFileDownload(shapefile.response);
-      this.loading = false;
-    },
-    async deleteCurrentLocation() {
-      this.loading = true;
+      loading.value = false;
+    }
+    const setCurrentLocation = (location) => {
+      currentPolygon.value = location;
+    }
+    const deleteCurrentLocation = async () => {
+      loading.value = true;
       try {
         await Location.api().delete(
-          `/locations/${this.$route.params.location_id}`,
+          `/locations/${route.params.location_id}`,
           {
-            delete: this.$route.params.location_id,
+            delete: route.params.location_id,
           },
         );
         await this.$toasted.success(this.$t('locationVue.location_deleted'));
-        this.reset();
-        await this.$router.push('/locations/new');
+        reset();
+        await router.push('/locations/new');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    setCurrentLocation(location) {
-      this.currentPolygon = location;
-    },
-    async onSelectOrganization(value) {
-      this.selectedOrganization = value;
-      if (!this.currentLocation.name) {
-        this.currentLocation.name = `${this.selectedOrganization.name} ${this.currentLocation.location_type.name_t}`;
+    }
+    const onSelectOrganization = async (value) => {
+      selectedOrganization.value = value;
+      if (!currentLocation.value.name) {
+        currentLocation.value.name = `${selectedOrganization.value.name} ${currentLocation.value.location_type.name_t}`;
       }
-      if (this.isPrimaryResponseArea && value.primary_location) {
+      if (isPrimaryResponseArea.value && value.primary_location) {
         const result = await messageBox({
           title: this.$t('locationVue.existing_location'),
           content: this.$t('locationVue.location_already_exists_organization', {
@@ -434,22 +406,21 @@ export default {
         });
 
         if (result === 'edit') {
-          await this.$router.push(`/locations/${value.primary_location}/edit`);
+          await router.push(`/locations/${value.primary_location}/edit`);
         }
       }
-    },
-
-    async onSelectIncident(value) {
-      this.selectedIncidentId = value;
+    }
+    const onSelectIncident = async (value) => {
+      selectedIncidentId.value = value;
       let incident = Incident.find(value);
-      if (!this.currentLocation.name) {
-        this.currentLocation.name = `${incident.name} ${this.currentLocation.location_type.name_t}`;
+      if (!currentLocation.value.name) {
+        currentLocation.value.name = `${incident.name} ${currentLocation.value.location_type.name_t}`;
       }
-      if (this.isIncidentRelated && incident.locations.length) {
+      if (isIncidentRelated.value && incident.locations.length) {
         await Incident.api().fetchById(value);
         incident = Incident.find(value);
         const existingLocation = incident.locationModels.find(
-          (location) => location.type === this.currentLocation.type,
+          (location) => location.type === currentLocation.value.type,
         );
         if (existingLocation) {
           const result = await messageBox({
@@ -472,84 +443,84 @@ export default {
           });
 
           if (result === 'edit') {
-            await this.$router.push(`/locations/${existingLocation.id}/edit`);
+            await router.push(`/locations/${existingLocation.id}/edit`);
           }
         }
       }
-    },
-    async onOrganizationSearch(value) {
+    }
+    const onOrganizationSearch = async (value) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
           dataKey: 'results',
         },
       );
-      this.organizationResults = results.entities.organizations;
-    },
-    async saveLocation(goToNew) {
+      organizationResults.value = results.entities.organizations;
+    }
+    const saveLocation = async (goToNew) => {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
         return;
       }
 
-      if (!this.currentPolygon) {
+      if (!currentPolygon.value) {
         this.$toasted.error(this.$t('locationVue.no_valid_drawing_found'));
         return;
       }
 
-      this.loading = true;
-      let { geometry } = this.currentPolygon.toGeoJSON();
-      const { type, features } = this.currentPolygon.toGeoJSON();
+      loading.value = true;
+      let { geometry } = currentPolygon.value.toGeoJSON();
+      const { type, features } = currentPolygon.value.toGeoJSON();
       if (type === 'FeatureCollection') {
         const [feature] = features;
         geometry = feature.geometry;
       }
 
-      this.currentLocation.point = null;
-      this.currentLocation.poly = null;
-      this.currentLocation.geom = null;
+      currentLocation.value.point = null;
+      currentLocation.value.poly = null;
+      currentLocation.value.geom = null;
 
       if (geometry.type === 'Point') {
-        this.currentLocation.point = geometry;
+        currentLocation.value.point = geometry;
       } else if (geometry.type === 'Polygon') {
-        this.currentLocation.poly = geometry;
+        currentLocation.value.poly = geometry;
       } else if (geometry.type === 'MultiPolygon') {
-        this.currentLocation.geom = geometry;
+        currentLocation.value.geom = geometry;
       }
 
       try {
         let response;
-        if (this.$route.params.location_id) {
+        if (route.params.location_id) {
           response = await Location.api().put(
-            `/locations/${this.$route.params.location_id}`,
-            this.currentLocation,
+            `/locations/${route.params.location_id}`,
+            currentLocation.value,
           );
         } else {
           response = await Location.api().post(
             '/locations',
-            this.currentLocation,
+            currentLocation.value,
           );
-          if (this.isPrimaryResponseArea) {
+          if (isPrimaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${this.selectedOrganization.id}`,
+              `/organizations/${selectedOrganization.value.id}`,
               {
                 primary_location: response.response.data.id,
               },
             );
           }
 
-          if (this.isSecondaryResponseArea) {
+          if (isSecondaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${this.selectedOrganization.id}`,
+              `/organizations/${selectedOrganization.value.id}`,
               {
                 secondary_location: response.response.data.id,
               },
             );
           }
 
-          if (this.isIncidentRelated) {
+          if (isIncidentRelated.value) {
             await Incident.api().addLocation(
-              this.selectedIncidentId,
+              selectedIncidentId.value,
               response.response.data.id,
             );
           }
@@ -557,62 +528,114 @@ export default {
         await this.$toasted.success(this.$t('locationVue.location_saved'));
 
         if (goToNew) {
-          this.reset();
+          reset();
         } else {
           const locationId = response.response.data.id;
-          await this.$router.push(`/locations/${locationId}/edit`);
-          await this.loadLocation();
+          await router.push(`/locations/${locationId}/edit`);
+          await loadLocation();
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    async loadRelatedEntities() {
-      this.relatedOrganizations = [];
-      this.relatedIncidents = [];
-      if (this.isPrimaryResponseArea) {
+    }
+    const loadRelatedEntities = async () => {
+      relatedOrganizations.value = [];
+      relatedIncidents.value = [];
+      if (isPrimaryResponseArea.value) {
         const results = await Organization.api().get(
-          `/organizations?primary_location=${this.$route.params.location_id}&fields=id,name`,
+          `/organizations?primary_location=${route.params.location_id}&fields=id,name`,
           {
             dataKey: 'results',
           },
         );
-        this.relatedOrganizations = [...results.entities.organizations];
+        relatedOrganizations.value = [...results.entities.organizations];
       }
-      if (this.isSecondaryResponseArea) {
+      if (isSecondaryResponseArea.value) {
         const results = await Organization.api().get(
-          `/organizations?secondary_location=${this.$route.params.location_id}&fields=id,name`,
+          `/organizations?secondary_location=${route.params.location_id}&fields=id,name`,
           {
             dataKey: 'results',
           },
         );
-        this.relatedOrganizations = [...results.entities.organizations];
+        relatedOrganizations.value = [...results.entities.organizations];
       }
-      if (this.isIncidentRelated) {
-        const incidentIds = this.currentLocation.joins.map(
+      if (isIncidentRelated.value) {
+        const incidentIds = currentLocation.value.joins.map(
           (join) => join.object_id,
         );
         const incidents = Incident.query().whereIdIn(incidentIds).get();
-        this.relatedIncidents = [...incidents];
+        relatedIncidents.value = [...incidents];
       }
-    },
-    async detachLocationFromOrganization(organization) {
+    }
+    const detachLocationFromOrganization = async (organization) => {
       const data = {};
-      if (this.isPrimaryResponseArea) {
+      if (isPrimaryResponseArea.value) {
         data.primary_location = null;
       }
-      if (this.isSecondaryResponseArea) {
+      if (isSecondaryResponseArea.value) {
         data.secondary_location = null;
       }
       await Organization.api().patch(`/organizations/${organization.id}`, data);
-      await this.loadLocation();
-    },
-    async detachLocationFromIncident(incident) {
-      await Incident.api().removeLocation(incident.id, this.currentLocation.id);
-      await this.loadLocation();
-    },
+      await loadLocation();
+    }
+    const detachLocationFromIncident = async (incident) => {
+      await Incident.api().removeLocation(incident.id, currentLocation.value.id);
+      await loadLocation();
+    }
+    const loadLocation = async () => {
+      loading.value = true;
+      await LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      });
+      if (route.params.location_id) {
+        try {
+          await Location.api().fetchById(route.params.location_id);
+          currentLocation.value = Location.find(route.params.location_id);
+          this.loadRelatedEntities();
+        } catch (e) {
+          currentLocation.value = new Location();
+          await router.replace(`/locations/new`);
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        reset();
+      }
+      loading.value = false;
+    };
+    onMounted(() => {
+      loadLocation();
+    });
+    return {
+      currentLocation,
+      loading,
+      locationAccess,
+      organizationResults,
+      selectedOrganization,
+      selectedIncidentId,
+      relatedOrganizations,
+      relatedIncidents,
+      isNew,
+      locationTypes,
+      selectedIncident,
+      incidents,
+      isPrimaryResponseArea,
+      isSecondaryResponseArea,
+      isIncidentRelated,
+      reset,
+      downloadCurrentLocation,
+      deleteCurrentLocation,
+      setCurrentLocation,
+      onSelectOrganization,
+      onSelectIncident,
+      onOrganizationSearch,
+      saveLocation,
+      loadRelatedEntities,
+      detachLocationFromOrganization,
+      detachLocationFromIncident
+    };
   },
 };
 </script>
