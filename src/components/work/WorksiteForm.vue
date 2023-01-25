@@ -1,5 +1,5 @@
 <template>
-  <form v-if="ready" class="form h-full" ref="form" @submit.prevent>
+  <form v-if="ready" ref="form" class="form h-full" @submit.prevent>
     <div class="form-content">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
@@ -12,10 +12,10 @@
           :placeholder="$t('formLabels.name')"
           size="large"
           required
-          @input="(e) => updateWorksite(e, 'name')"
-          @selectedExisting="onWorksiteSelect"
           skip-validation
           class="w-full"
+          @input="(e) => updateWorksite(e, 'name')"
+          @selectedExisting="onWorksiteSelect"
         />
       </section>
       <div class="form-field">
@@ -25,8 +25,6 @@
           size="large"
           required
           :placeholder="$t('formLabels.phone1')"
-          @update:modelValue="(v) => updateWorksite(v, 'phone1')"
-          @iconClicked="() => sendSms(worksite.phone1)"
           :fa-icon="
             currentIncident.auto_contact && worksite.id ? 'comment' : null
           "
@@ -35,16 +33,16 @@
               ? $t('caseForm.sms')
               : null
           "
+          @update:modelValue="(v) => updateWorksite(v, 'phone1')"
+          @iconClicked="() => sendSms(worksite.phone1)"
         />
       </div>
-      <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
+      <div v-if="worksite.phone2 || addAdditionalPhone" class="form-field">
         <base-input
           :model-value="worksite.phone2"
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
-          @update:modelValue="(v) => updateWorksite(v, 'phone2')"
-          @iconClicked="() => sendSms(worksite.phone2)"
           :fa-icon="
             currentIncident.auto_contact && worksite.id ? 'comment' : null
           "
@@ -53,6 +51,8 @@
               ? $t('caseForm.sms')
               : null
           "
+          @update:modelValue="(v) => updateWorksite(v, 'phone2')"
+          @iconClicked="() => sendSms(worksite.phone2)"
         />
       </div>
       <base-button
@@ -72,7 +72,7 @@
           @update:modelValue="(v) => updateWorksite(v, 'email')"
         />
       </div>
-      <div class="form-field" v-if="currentIncident.auto_contact">
+      <div v-if="currentIncident.auto_contact" class="form-field">
         <span slot="label" class="flex items-center">
           <span>{{ $t('casesVue.auto_contact_frequency') }}</span>
           <ccu-icon
@@ -90,13 +90,13 @@
           :model-value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
-          @update:modelValue="
-            (v) => updateWorksite(v, 'auto_contact_frequency_t')
-          "
           select-classes="h-12 border"
           item-key="value"
           label="name_t"
           :placeholder="$t('casesVue.auto_contact_frequency')"
+          @update:modelValue="
+            (v) => updateWorksite(v, 'auto_contact_frequency_t')
+          "
         />
       </div>
       <div
@@ -158,8 +158,8 @@
               ? $t('formLabels.address')
               : $t('caseView.full_address')
           "
-          @update:modelValue="(v) => updateWorksite(v, 'address')"
           required
+          @update:modelValue="(v) => updateWorksite(v, 'address')"
         />
         <WorksiteSearchInput
           v-else
@@ -173,11 +173,11 @@
           "
           size="large"
           required
+          use-geocoder
+          class="w-full"
           @input="(v) => updateWorksite(v, 'address')"
           @selectedExisting="onWorksiteSelect"
           @selectedGeocode="onGeocodeSelect"
-          use-geocoder
-          class="w-full"
         />
       </div>
       <template v-if="showAddressDetails">
@@ -220,8 +220,8 @@
             selector="js-worksite-postal-code"
             size="large"
             :placeholder="$t('formLabels.postal_code')"
-            @update:modelValue="(v) => updateWorksite(v, 'postal_code')"
             required
+            @update:modelValue="(v) => updateWorksite(v, 'postal_code')"
           />
         </div>
       </template>
@@ -261,21 +261,21 @@
           </span>
         </div>
         <WorksiteNotes
-          @saveNote="saveNote"
           :worksite="worksite"
+          @saveNote="saveNote"
           @input="currentNote = $event"
         />
-        <div class="my-1 py-1" v-if="!worksite.isWrongLocation">
+        <div v-if="!worksite.isWrongLocation" class="my-1 py-1">
           <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
             {{ $t('caseForm.address_problems') }}
           </base-checkbox>
         </div>
-        <div class="my-1 py-1" v-if="!worksite.isHighPriority">
+        <div v-if="!worksite.isHighPriority" class="my-1 py-1">
           <base-checkbox v-model="isHighPriority" class="text-primary-dark">
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
-        <div class="my-1 py-1" v-if="!worksite.isFavorite">
+        <div v-if="!worksite.isFavorite" class="my-1 py-1">
           <base-checkbox v-model="isFavorite" class="text-primary-dark">
             {{ $t('actions.member_of_my_org') }}
           </base-checkbox>
@@ -306,18 +306,18 @@
           >{{ $t('caseView.report') }}
         </SectionHeading>
         <WorksiteReportSection
-          :worksite="worksite"
           :key="worksite.total_time"
+          :worksite="worksite"
           @timeAdded="reloadWorksite"
         />
         <SectionHeading :count="6" class="mb-3"
           >{{ $t('caseForm.photos') }}
         </SectionHeading>
         <WorksiteImageSection
-          class="px-3 pb-3"
-          :worksite="worksite"
           :key="worksite.files"
           ref="worksiteImageSection"
+          class="px-3 pb-3"
+          :worksite="worksite"
           @updateFiles="updateImage"
           @popLocal="onRemoveFile"
         />
@@ -565,11 +565,11 @@ export default {
     }
 
     async function geocodeWorksite(latitude, longitude, skipAddress = false) {
-      const geocode = await GeocoderService.getLocationDetails({
-        latitude,
-        longitude,
-      });
       if (!skipAddress) {
+        const geocode = await GeocoderService.getLocationDetails({
+          latitude,
+          longitude,
+        });
         const geocodeKeys = [
           'address',
           'city',
@@ -577,8 +577,10 @@ export default {
           'state',
           'postal_code',
         ];
-        for (const key of geocodeKeys)
+        for (const key of geocodeKeys) {
           updateWorksite(geocode.address_components[key], key);
+        }
+        return geocode;
       }
       updateWorksite(
         {
@@ -589,7 +591,7 @@ export default {
       );
       const what3words = await What3wordsService.getWords(latitude, longitude);
       updateWorksite(what3words, 'what3words');
-      return geocode;
+      return null;
     }
 
     async function initForm() {

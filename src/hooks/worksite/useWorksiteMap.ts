@@ -10,6 +10,7 @@ import { i18n } from '../../main';
 import useRenderedMarkers from './useRenderedMarkers';
 import type { LayerGroup, PixiLayer } from '@/utils/types/map';
 import type Worksite from '@/models/Worksite';
+import useEmitter from "@/hooks/useEmitter";
 
 export type MapUtils = {
   getMap: () => L.Map;
@@ -137,6 +138,8 @@ export default (
   }
 
   async function addMarkerToMap(location: LatLng) {
+    const { emitter } = useEmitter();
+
     let markerLocation = location;
     const container = getPixiContainer() as any;
     if (!markerLocation) {
@@ -151,6 +154,10 @@ export default (
     });
     markerGroup.addTo(map);
     markerGroup.addLayer(marker);
+
+    marker.on('dragend', function (event) {
+      emitter.emit('updatedWorksiteLocation', event.target.getLatLng());
+    });
 
     container.visible = false;
     map.setView([markerLocation.lat, markerLocation.lng], 15);
