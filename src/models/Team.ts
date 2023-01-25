@@ -1,16 +1,17 @@
-import { Model } from '@vuex-orm/core';
-import Incident from './Incident';
-import { WorkType } from './types';
-import User from './User';
+import type { Config } from '@vuex-orm/plugin-axios';
+import type Incident from './Incident';
+import type { WorkType } from './types';
+import type User from './User';
+import CCUModel from '@/models/model';
 
-export default class Team extends Model {
+export default class Team extends CCUModel<Team> {
   static entity = 'teams';
-  id!: String;
-  name!: String;
-  notes!: Object;
-  users!: User;
+  id!: string;
+  name!: string;
+  notes!: string;
+  users!: User[];
   assigned_work_types!: Array<WorkType>;
-  cases_area!: Object;
+  cases_area!: Record<string, unknown>;
   incident!: Incident;
 
   static fields() {
@@ -25,14 +26,14 @@ export default class Team extends Model {
     };
   }
 
-  static apiConfig = {
+  static apiConfig: Config = {
     actions: {
-      fetchById(id) {
+      fetchById(id: number) {
         return this.get(`/teams/${id}`);
       },
-      getCasesArea(id, incident) {
+      getCasesArea(id: number, incident: number) {
         return this.get(`/teams/${id}/cases_area?incident=${incident}`);
       },
-    } as any,
+    },
   };
 }
