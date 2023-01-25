@@ -178,13 +178,8 @@
 
             <UserSearchInput
               :key="JSON.stringify(organization.primary_contacts)"
-              class="h-12 w-full sm:w-84"
               :placeholder="$t('profileOrg.add_primary_contacts')"
-              @selectedUser="
-                (user) => {
-                  makePrimaryContact(user);
-                }
-              "
+              @selectedUser="(user) => makePrimaryContact(user)"
             />
           </div>
           <div class="form-row">
