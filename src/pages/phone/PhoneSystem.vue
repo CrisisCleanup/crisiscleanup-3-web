@@ -83,6 +83,20 @@
                 </div>
               </template>
               <template v-slot:component>
+                <div
+                  class="bg-red-500 mt-6 text-white p-1.5"
+                  v-if="potentialFailedCall"
+                >
+                  {{
+                    $t('~~We detected that the phone call may have ended early')
+                  }}
+                  <base-button
+                    :action="retryFailedCall"
+                    variant="solid"
+                    class="px-2 text-black mt-1"
+                    :text="$t('~~Try again')"
+                  />
+                </div>
                 <tabs :details="false" ref="tabs" @mounted="setTabs">
                   <tab :name="$t('phoneDashboard.active_call')">
                     <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
@@ -697,6 +711,7 @@ export default {
         await this.$toasted.success(this.$t('phoneDashboard.update_success'));
         this.clearCall();
         this.clearCase();
+        this.setPotentialFailedCall(null);
         await this.loadAgent();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -816,6 +831,16 @@ export default {
       EventBus.$emit('phone_component:close');
       // open the active call PhoneComponentButton
       EventBus.$emit('phone_component:open', 'news');
+    },
+    async retryFailedCall() {
+      if (this.potentialFailedCall) {
+        const { phone_number } = this.potentialFailedCall;
+        if (this.call) {
+          await this.completeCall({ status: 23, notes: '' });
+        }
+        await this.$phoneService.changeState('WORKING');
+        await this.dialManualOutbound(phone_number);
+      }
     },
   },
   watch: {

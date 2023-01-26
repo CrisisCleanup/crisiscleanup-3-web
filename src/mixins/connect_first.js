@@ -38,6 +38,7 @@ export default {
       'caller',
       'incomingCall',
       'outgoingCall',
+      'potentialFailedCall',
       'stats',
       'agentStats',
       'gateStats',
@@ -60,6 +61,7 @@ export default {
     ...mapMutations('phone_legacy', [
       'setOutgoingCall',
       'setIncomingCall',
+      'setPotentialFailedCall',
       'setCurrentCall',
       'setCaller',
       'setState',

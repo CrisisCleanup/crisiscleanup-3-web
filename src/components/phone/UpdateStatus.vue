@@ -138,6 +138,10 @@ export default {
               name_t: this.$t('phoneStatus.either_bad-number'),
               value: 19,
             },
+            {
+              name_t: this.$t('phoneStatus.no-answer_premature-disconnection'),
+              value: 23,
+            },
           ],
           color: '#FAB92E',
         },

@@ -13,10 +13,13 @@ const AppState = {
   callType: null,
   languages: [],
   callHistory: [],
+  potentialFailedCall: null,
 };
 
 // getters
 const getters = {
+  getCall: (state) => state.call,
+  getPotentialFailedCall: (state) => state.potentialFailedCall,
   getCallState: (state) => state.callState,
   getCallType: (state) => state.callType,
   getCaller: (state) => state.caller,
@@ -58,6 +61,9 @@ const mutations = {
   },
   setCurrentCall(state, call) {
     state.call = call;
+  },
+  setPotentialFailedCall(state, call) {
+    state.potentialFailedCall = call;
   },
   setIncomingCall(state, call) {
     state.incomingCall = call;
@@ -121,6 +127,7 @@ const mutations = {
       callType: null,
       languages: [],
       callHistory: [],
+      potentialFailedCall: null,
     });
   },
 };

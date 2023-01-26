@@ -135,35 +135,6 @@ export default {
       connectingTimeout: null,
     };
   },
-  async mounted() {
-    this.$watch(
-      'isTransitioning',
-      (newValue) => {
-        if (newValue) {
-          const startedConnecting = this.$moment().toISOString();
-          this.connectingTimeout = setTimeout(() => {
-            const context = {
-              user: this.currentUser.$toJson(),
-              caller: this.caller,
-              callState: this.callState,
-              isInboundCall: this.isInboundCall,
-              isOutboundCall: this.isOutboundCall,
-              startedConnecting,
-              connectingTimedOut: this.$moment().toISOString(),
-            };
-            Sentry.setContext('call_info', context);
-            Sentry.captureException(
-              'Call is stuck connecting state for 45 seconds',
-            );
-            this.$toasted.error(this.$t('phoneDashboard.could_not_connect'));
-          }, 45000);
-        } else {
-          clearTimeout(this.connectingTimeout);
-        }
-      },
-      { immediate: true },
-    );
-  },
   methods: {
     getSVG(worktype) {
       return this.getWorktypeSVG(worktype);
@@ -191,6 +162,34 @@ export default {
           },
         ];
       }
+    },
+    isTransitioning: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          const startedConnecting = this.$moment().toISOString();
+          this.connectingTimeout = setTimeout(() => {
+            const context = {
+              user: this.currentUser.$toJson(),
+              caller: this.caller,
+              callState: this.callState,
+              isInboundCall: this.isInboundCall,
+              isOutboundCall: this.isOutboundCall,
+              startedConnecting,
+              connectingTimedOut: this.$moment().toISOString(),
+            };
+            Sentry.setContext('call_info', context);
+            Sentry.captureException(
+              'Call is stuck connecting state for 45 seconds',
+            );
+            this.$toasted.error(this.$t('phoneDashboard.could_not_connect'));
+            this.setPotentialFailedCall(this.call);
+            this.$phoneService.hangup();
+          }, 45000);
+        } else {
+          clearTimeout(this.connectingTimeout);
+        }
+      },
     },
   },
   computed: {
