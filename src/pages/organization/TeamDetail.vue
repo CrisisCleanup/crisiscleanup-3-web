@@ -127,7 +127,6 @@
               <div style="margin-top: 2px" class="flex justify-end">
                 <v-popover placement="bottom-end" :triggers="['click']">
                   <ccu-icon
-                    slot="icon"
                     :alt="$t('teams.settings')"
                     size="medium"
                     type="settings"
@@ -165,7 +164,7 @@
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                         @click="
                           () => {
-                            removeFromTeam(slotProps.item.id);
+                            removeFromTeam([slotProps.item.id]);
                           }
                         "
                       >
@@ -357,7 +356,7 @@
           text-area
           :rows="4"
           :placeholder="$t('teams.notes')"
-          @input="updateNotes"
+          @update:model-value="updateNotes"
           @blur="updateCurrentTeam"
         />
       </tab>
@@ -616,12 +615,7 @@ export default defineComponent({
     const currentCaseSearch = ref('');
 
     const team = computed(() => {
-      const t = Team.find(route.params.team_id);
-      if (!t) {
-        console.error('Team not found');
-        return null;
-      }
-      return t;
+      return Team.find(route.params.team_id) as Team;
     });
     const assignableWorksites = computed(() =>
       worksites.value.filter(
@@ -754,6 +748,7 @@ export default defineComponent({
       id: number | string,
       data: Record<string, any>,
     ) => {
+      console.log('updateTeam', id, data);
       await Team.api().patch(`/teams/${id}`, data);
     };
     const getWorksite = async (id: number) => {
@@ -826,17 +821,27 @@ export default defineComponent({
       showingWorksiteMap.value = view === 'showingWorksiteMap';
     };
     const moveToDifferentTeam = async (userId) => {
-      const result: Team = await selection({
+      const _id: number = await selection({
         title: t('teams.move_teams'),
         content: '',
         label: 'name',
+        itemKey: 'id',
         options: props.teams.filter((t) => t.id !== team.value?.id),
         placeholder: t('teams.select_target_team'),
       });
-      if (result.id) {
+      const result = Team.find(_id);
+      if (result && result.id) {
         await removeFromTeam([userId]);
-        result.users.push(userId);
-        await updateTeam(result.id, result.$toJson());
+        await Team.update({
+          where: result.id,
+          data: {
+            users: [...(result.users || []), userId],
+          },
+        });
+        const t = Team.find(result.id);
+        if (t) {
+          await updateTeam(t.id, t.$toJson());
+        }
         ctx.emit('reload');
       }
     };
