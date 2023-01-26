@@ -35,14 +35,7 @@
           <div
             v-for="team in teams"
             :key="`${team.id}`"
-            class="
-              h-full
-              px-4
-              pt-2
-              pb-6
-              hover:bg-crisiscleanup-light-grey
-              cursor-pointer
-            "
+            class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :class="
               String(team.id) === String($route.params.team_id)
                 ? 'bg-crisiscleanup-light-grey'
@@ -104,31 +97,31 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex';
+import CreateTeamModal from './CreateTeamModal.vue';
 import User from '@/models/User';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
 import Avatar from '@/components/Avatar.vue';
-import CreateTeamModal from './CreateTeamModal.vue';
-import { getQueryString } from '../../utils/urls';
-import enums from '../../store/modules/enums';
+import { getQueryString } from '@/utils/urls';
+import enums from '@/store/modules/enums';
 
-export default {
+export default defineComponent({
   name: 'Teams',
   components: { CreateTeamModal, Avatar },
   setup() {
     const store = useStore();
     const currentSearch = ref('');
     const creatingTeam = ref(false);
-    const users = ref([]);
-    const usersWithoutTeams = ref([]);
-    const teams = ref([]);
-    
-    const currentUser = computed(() => User.find(store.getters['auth/userId']));
-    const currentIncidentId = computed(() => store.getters['incident/currentIncidentId']);
-    const statuses = computed(() => store.getters['enums']);
+    const users = ref<User[]>([]);
+    const usersWithoutTeams = ref<User[]>([]);
+    const teams = ref<Team[]>([]);
+
+    const currentUser = computed(() => User.find(store.getters['auth/userId']) as User);
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'] as number,
+    );
     const claimedWorktypes = computed(() => {
-      const query = Worksite.query().where((worksite) => {
+      const query = Worksite.query().where((worksite: Worksite) => {
         if (
           worksite.work_types &&
           currentIncidentId.value === worksite.incident
@@ -141,10 +134,10 @@ export default {
         }
         return false;
       });
-      const worksites = query.get();
-      const workTypes = [];
-      worksites.forEach((w) => {
-        w.work_types.forEach((wt) => {
+      const worksites = query.get() as Worksite[];
+      const workTypes: Record<string, any>[] = [];
+      for (const w of worksites) {
+        for (const wt of w.work_types) {
           if (wt.claimed_by === currentUser.value.organization.id) {
             const closedStatuses = enums.state.statuses.filter(
               (status) => status.primary_state === 'closed',
@@ -162,13 +155,13 @@ export default {
                 .includes(wt.status),
             });
           }
-        });
-      });
+        }
+      }
       return workTypes;
     });
 
-    const getUser = (id) => {
-      return User.find(id)
+    const getUser = (id: number) => {
+      return User.find(id);
     };
     const getTeams = async () => {
       const results = await Team.api().get(
@@ -179,16 +172,16 @@ export default {
           dataKey: 'results',
         },
       );
-      teams.value = results.entities.teams;
-    }
-    const getAssignedWorkTypes = async (team) => {
+      teams.value = (results.entities?.teams || []) as Team[];
+    };
+    const getAssignedWorkTypes = (team: Team) => {
       return claimedWorktypes.value.filter((wt) => {
         return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
       });
-    }
-    const getCaseCompletion = (team) => {
+    };
+    const getCaseCompletion = (team: Team) => {
       const workTypes = getAssignedWorkTypes(team);
-      if (workTypes && workTypes.length) {
+      if (workTypes && workTypes.length > 0) {
         return Number(
           (workTypes.filter((wt) => Boolean(wt.completed)).length /
             workTypes.length) *
@@ -196,7 +189,7 @@ export default {
         ).toFixed(0);
       }
       return 0;
-    }
+    };
     const getClaimedWorksites = async () => {
       const params = {
         incident: currentIncidentId.value,
@@ -209,7 +202,7 @@ export default {
       Worksite.api().get(`/worksites?${getQueryString(params)}`, {
         dataKey: 'results',
       });
-    }
+    };
 
     const getData = async () => {
       const results = await User.api().get(
@@ -224,21 +217,21 @@ export default {
           dataKey: 'results',
         },
       );
-      users.value = results.entities.users;
-      usersWithoutTeams.value = usersWithoutTeamsResults.entities.users;
+      users.value = (results.entities?.users || []) as User[];
+      usersWithoutTeams.value = (usersWithoutTeamsResults.entities?.users || []) as User[];
       await getTeams();
       await getClaimedWorksites();
-    }
+    };
 
     const onSearch = async () => {
       await getTeams();
-    }
+    };
 
     watch(currentIncidentId, (newState, oldState) => {
       if (String(newState) !== String(oldState)) {
         getData().then(() => {});
       }
-    })
+    });
 
     onMounted(async () => {
       await getData();
@@ -260,10 +253,10 @@ export default {
       claimedWorktypes,
     };
   },
-};
+});
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .users-avatars-list {
   grid-template-columns: repeat(auto-fill, 3.5rem);
 }
