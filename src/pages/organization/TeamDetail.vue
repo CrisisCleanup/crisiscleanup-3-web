@@ -313,18 +313,17 @@
                 />
               </div>
               <div style="margin-top: 2px" class="flex justify-end">
-                <base-dropdown
-                  :trigger="'click'"
+                <v-popover
+                  placement="bottom-end"
+                  :triggers="['click']"
                   class-name="team-detail-case"
-                  :x="-145"
                 >
                   <ccu-icon
-                    slot="icon"
                     :alt="$t('teams.settings')"
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
+                  <template #popper>
                     <ul class="overflow-auto w-40">
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
@@ -338,7 +337,7 @@
                       </li>
                     </ul>
                   </template>
-                </base-dropdown>
+                </v-popover>
               </div>
             </template>
           </Table>
