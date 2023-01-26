@@ -54,7 +54,6 @@
               >{{ $t('~~Add new') }}
             </base-button>
             <base-button
-              v-if="!currentLocalization.id"
               :action="autoTranslate"
               variant="outline"
               class="px-2 py-1"
@@ -225,7 +224,6 @@ export default defineComponent({
       );
 
       if (englishLocalization) {
-        localizationTexts.value = [englishLocalization];
         for (const lang of Language.all()) {
           if (lang.id === englishLanguage?.id) {
             continue;
@@ -235,11 +233,18 @@ export default defineComponent({
             'en-US',
             lang.subtag,
           );
-          localizationTexts.value.push({
-            localization: '',
-            text: translation,
-            language: lang.id,
-          });
+          const existingLang = localizationTexts.value.find(
+            (t) => t.language === lang.id,
+          );
+          if (existingLang) {
+            existingLang.text = translation;
+          } else {
+            localizationTexts.value.push({
+              localization: '',
+              text: translation,
+              language: lang.id,
+            });
+          }
         }
       } else {
         await $toasted.error('English translation required for generation');
@@ -277,11 +282,12 @@ export default defineComponent({
 
     async function deleteLocalizationText(text: LocalizationText) {
       if (text.id) {
-        return axios.delete(
+        await axios.delete(
           `${import.meta.env.VITE_APP_API_BASE_URL}/admins/localizations_text/${
             text.id
           }`,
         );
+        return loadLocalizationTexts(currentLocalization.value);
       } else {
         localizationTexts.value = localizationTexts.value.filter(function (
           item,
