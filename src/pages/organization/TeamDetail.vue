@@ -344,7 +344,7 @@
           <WorkTypeMap
             v-if="showingWorksiteMap"
             class="w-full h-96"
-            :work-types="mapAssingedWorkTypes"
+            :work-types="mapAssignedWorkTypes"
             :polygon="caseArea"
           ></WorkTypeMap>
         </div>
@@ -645,7 +645,7 @@ export default defineComponent({
         })
         .get(),
     );
-    const mapAssingedWorkTypes = computed(() =>
+    const mapAssignedWorkTypes = computed(() =>
       assignedWorksites.value.map((worksite) => {
         const workType = Worksite.getWorkType(
           worksite.work_types,
@@ -962,7 +962,7 @@ export default defineComponent({
       assignableWorksites,
       mapWorkTypes,
       assignedWorksites,
-      mapAssingedWorkTypes,
+      mapAssignedWorkTypes,
       allTeamUsers,
       currentIncidentId,
       renameTeam,
