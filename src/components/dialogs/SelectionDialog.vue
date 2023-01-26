@@ -13,7 +13,7 @@
                 :alt="$t('actions.cancel')"
                 size="xs"
                 type="cancel"
-                @click.native="
+                @click="
                   () => {
                     closeDialog(false);
                   }
