@@ -13,6 +13,7 @@ import OtherOrganizations from '@/pages/OtherOrganizations.vue';
 import Reports from '@/pages/admin/Reports.vue';
 import Report from '@/pages/admin/Report.vue';
 import NotFound from '@/pages/NotFound.vue';
+import Location from '@/pages/Location.vue';
 
 const mockComponent = (title: string, content: string) => ({
   name: title,
@@ -77,7 +78,7 @@ const routes = [
   },
   {
     path: '/locations/new',
-    component: mockComponent('Locations', 'new locations'),
+    component: Location,
     name: 'nav.new_location',
     meta: { layout: 'authenticated' },
   },

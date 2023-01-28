@@ -3,18 +3,7 @@
     <div
       v-if="loading"
       style="z-index: 1001"
-      class="
-        absolute
-        bottom-0
-        left-0
-        right-0
-        top-0
-        bg-crisiscleanup-light-grey
-        opacity-75
-        flex
-        items-center
-        justify-center
-      "
+      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
     >
       <spinner />
     </div>
@@ -33,7 +22,6 @@
             size="small"
             class="p-1 py-2"
             type="edit"
-            @click.native="() => {}"
           />
           <ccu-icon
             v-if="!isNew"
@@ -41,7 +29,7 @@
             size="small"
             class="p-1 py-2"
             type="download"
-            @click.native="downloadCurrentLocation"
+            @click="downloadCurrentLocation"
           />
           <ccu-icon
             v-show="false"
@@ -57,7 +45,7 @@
             size="small"
             class="p-1 py-2"
             type="trash"
-            @click.native="deleteCurrentLocation"
+            @click="deleteCurrentLocation"
           />
         </div>
       </div>
@@ -126,7 +114,7 @@
             <div
               v-if="
                 (isPrimaryResponseArea || isSecondaryResponseArea) &&
-                relatedOrganizations.length
+                relatedOrganizations.length > 0
               "
             >
               <base-text :weight="400">{{
@@ -142,7 +130,7 @@
                   type="trash"
                   size="small"
                   :alt="$t('actions.clear_location')"
-                  @click.native="
+                  @click="
                     () => {
                       detachLocationFromOrganization(organization);
                     }
@@ -150,7 +138,7 @@
                 />
               </div>
             </div>
-            <div v-if="isIncidentRelated && relatedIncidents.length">
+            <div v-if="isIncidentRelated && relatedIncidents.length > 0">
               <base-text :weight="400">{{
                 $t('locationVue.related_incidents')
               }}</base-text>
@@ -164,7 +152,7 @@
                   type="trash"
                   size="small"
                   :alt="$t('actions.clear_location')"
-                  @click.native="
+                  @click="
                     () => {
                       detachLocationFromIncident(incident);
                     }
@@ -176,15 +164,7 @@
 
           <textarea
             v-model="currentLocation.notes"
-            class="
-              text-base
-              my-2
-              border border-crisiscleanup-dark-100
-              placeholder-crisiscleanup-dark-200
-              outline-none
-              p-2
-              resize-none
-            "
+            class="text-base my-2 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
             rows="4"
             :placeholder="$t('locationVue.notes')"
           />
@@ -273,8 +253,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { create } from 'vue-modal-dialogs';
+import { useRouter, useRoute } from 'vue-router';
+import { useToast } from 'vue-toastification';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
@@ -283,31 +265,33 @@ import LocationTool from '@/components/LocationTool';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import MessageBox from '@/components/dialogs/MessageBox';
-const messageBox = create(MessageBox);
-import { useRouter, useRoute } from 'vue-router';
 
-export default {
+const messageBox = create(MessageBox);
+
+defineComponent({
   name: 'Location',
   components: { LocationTool },
   setup(props, ctx) {
+    const { t } = useI18n();
+    const $toasted = useToast();
     const route = useRoute();
     const router = useRouter();
-    const currentLocation = ref();
-    const currentPolygon = ref(null);
+    const currentLocation = ref<Location>();
+    const currentPolygon = ref();
     const loading = ref(false);
     const locationAccess = ref('Public');
-    const organizationResults = ref([]);
-    const selectedOrganization = ref();
-    const selectedIncidentId = ref();
-    const relatedOrganizations = ref([]);
-    const relatedIncidents = ref([]);
+    const organizationResults = ref<Array<Organization>>([]);
+    const selectedOrganization = ref<Organization | null>();
+    const selectedIncidentId = ref<string | null>();
+    const relatedOrganizations = ref<Array<Organization>>([]);
+    const relatedIncidents = ref<Array<Incident>>([]);
     const isNew = computed(() => {
       return !route.params.location_id;
     });
     const locationTypes = computed(() => LocationType.all());
     const selectedIncident = computed(() => {
-      if (this.selectedIncidentId) {
-        return Incident.find(this.selectedIncidentId);
+      if (selectedIncidentId.value) {
+        return Incident.find(selectedIncidentId.value);
       }
       return null;
     });
@@ -317,14 +301,14 @@ export default {
     const isPrimaryResponseArea = computed(() => {
       return (
         LocationType.query().where('key', 'org_primary_response_area').get()[0]
-          .id === this.currentLocation.type
+          .id === currentLocation.value?.type
       );
     });
     const isSecondaryResponseArea = computed(() => {
       return (
         LocationType.query()
           .where('key', 'org_secondary_response_area')
-          .get()[0].id === this.currentLocation.type
+          .get()[0].id === currentLocation.value?.type
       );
     });
     const isIncidentRelated = computed(() => {
@@ -339,7 +323,7 @@ export default {
         )
         .get();
       return incidentRelatedTypes.some(
-        (key) => key.id === this.currentLocation.type,
+        (key) => key.id === currentLocation.value?.type,
       );
     });
     const reset = () => {
@@ -353,52 +337,47 @@ export default {
     };
     const downloadCurrentLocation = async () => {
       loading.value = true;
-      const shapefile = await Location.api().download(
-        route.params.location_id,
-      );
+      const shapefile = await Location.api().download(route.params.location_id);
       forceFileDownload(shapefile.response);
       loading.value = false;
-    }
-    const setCurrentLocation = (location) => {
+    };
+    const setCurrentLocation = (location: Location) => {
       currentPolygon.value = location;
-    }
+    };
     const deleteCurrentLocation = async () => {
       loading.value = true;
       try {
-        await Location.api().delete(
-          `/locations/${route.params.location_id}`,
-          {
-            delete: route.params.location_id,
-          },
-        );
-        await this.$toasted.success(this.$t('locationVue.location_deleted'));
+        await Location.api().delete(`/locations/${route.params.location_id}`, {
+          delete: route.params.location_id as string,
+        });
+        await $toasted.success(t('locationVue.location_deleted'));
         reset();
         await router.push('/locations/new');
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
         loading.value = false;
       }
-    }
+    };
     const onSelectOrganization = async (value) => {
       selectedOrganization.value = value;
-      if (!currentLocation.value.name) {
-        currentLocation.value.name = `${selectedOrganization.value.name} ${currentLocation.value.location_type.name_t}`;
+      if (currentLocation.value && !currentLocation.value.name) {
+        currentLocation.value.name = `${selectedOrganization.value?.name} ${currentLocation.value.location_type?.name_t}`;
       }
       if (isPrimaryResponseArea.value && value.primary_location) {
         const result = await messageBox({
-          title: this.$t('locationVue.existing_location'),
-          content: this.$t('locationVue.location_already_exists_organization', {
+          title: t('locationVue.existing_location'),
+          content: t('locationVue.location_already_exists_organization', {
             organization: value.name,
           }),
           actions: {
             continue: {
-              text: this.$t('actions.create_new'),
+              text: t('actions.create_new'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             edit: {
-              text: this.$t('actions.edit_existing'),
+              text: t('actions.edit_existing'),
               type: 'solid',
               buttonClass: 'border border-black',
             },
@@ -409,33 +388,33 @@ export default {
           await router.push(`/locations/${value.primary_location}/edit`);
         }
       }
-    }
+    };
     const onSelectIncident = async (value) => {
       selectedIncidentId.value = value;
       let incident = Incident.find(value);
-      if (!currentLocation.value.name) {
-        currentLocation.value.name = `${incident.name} ${currentLocation.value.location_type.name_t}`;
+      if (currentLocation.value && !currentLocation.value.name) {
+        currentLocation.value.name = `${incident?.name} ${currentLocation.value.location_type?.name_t}`;
       }
-      if (isIncidentRelated.value && incident.locations.length) {
+      if (isIncidentRelated.value && incident?.locations.length) {
         await Incident.api().fetchById(value);
         incident = Incident.find(value);
-        const existingLocation = incident.locationModels.find(
-          (location) => location.type === currentLocation.value.type,
+        const existingLocation = incident?.locationModels.find(
+          (location) => location.type === currentLocation.value?.type,
         );
         if (existingLocation) {
           const result = await messageBox({
-            title: this.$t('locationVue.existing_location'),
-            content: this.$t('locationVue.location_already_exists_incident', {
-              incident: incident.name,
+            title: t('locationVue.existing_location'),
+            content: t('locationVue.location_already_exists_incident', {
+              incident: incident?.name,
             }),
             actions: {
               continue: {
-                text: this.$t('actions.create_new'),
+                text: t('actions.create_new'),
                 type: 'outline',
                 buttonClass: 'border border-black',
               },
               edit: {
-                text: this.$t('actions.edit_existing'),
+                text: t('actions.edit_existing'),
                 type: 'outline',
                 buttonClass: 'border border-black',
               },
@@ -447,7 +426,7 @@ export default {
           }
         }
       }
-    }
+    };
     const onOrganizationSearch = async (value) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
@@ -455,8 +434,9 @@ export default {
           dataKey: 'results',
         },
       );
-      organizationResults.value = results.entities.organizations;
-    }
+      organizationResults.value = results.entities
+        ?.organizations as Array<Organization>;
+    };
     const saveLocation = async (goToNew) => {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
@@ -464,7 +444,7 @@ export default {
       }
 
       if (!currentPolygon.value) {
-        this.$toasted.error(this.$t('locationVue.no_valid_drawing_found'));
+        $toasted.error(t('locationVue.no_valid_drawing_found'));
         return;
       }
 
@@ -476,16 +456,18 @@ export default {
         geometry = feature.geometry;
       }
 
-      currentLocation.value.point = null;
-      currentLocation.value.poly = null;
-      currentLocation.value.geom = null;
+      if (currentLocation.value) {
+        currentLocation.value.point = null;
+        currentLocation.value.poly = null;
+        currentLocation.value.geom = null;
 
-      if (geometry.type === 'Point') {
-        currentLocation.value.point = geometry;
-      } else if (geometry.type === 'Polygon') {
-        currentLocation.value.poly = geometry;
-      } else if (geometry.type === 'MultiPolygon') {
-        currentLocation.value.geom = geometry;
+        if (geometry.type === 'Point') {
+          currentLocation.value.point = geometry;
+        } else if (geometry.type === 'Polygon') {
+          currentLocation.value.poly = geometry;
+        } else if (geometry.type === 'MultiPolygon') {
+          currentLocation.value.geom = geometry;
+        }
       }
 
       try {
@@ -502,7 +484,7 @@ export default {
           );
           if (isPrimaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${selectedOrganization.value.id}`,
+              `/organizations/${selectedOrganization.value?.id}`,
               {
                 primary_location: response.response.data.id,
               },
@@ -511,7 +493,7 @@ export default {
 
           if (isSecondaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${selectedOrganization.value.id}`,
+              `/organizations/${selectedOrganization.value?.id}`,
               {
                 secondary_location: response.response.data.id,
               },
@@ -525,7 +507,7 @@ export default {
             );
           }
         }
-        await this.$toasted.success(this.$t('locationVue.location_saved'));
+        await $toasted.success(t('locationVue.location_saved'));
 
         if (goToNew) {
           reset();
@@ -535,11 +517,11 @@ export default {
           await loadLocation();
         }
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
         loading.value = false;
       }
-    }
+    };
     const loadRelatedEntities = async () => {
       relatedOrganizations.value = [];
       relatedIncidents.value = [];
@@ -550,7 +532,11 @@ export default {
             dataKey: 'results',
           },
         );
-        relatedOrganizations.value = [...results.entities.organizations];
+        if (results.entities) {
+          relatedOrganizations.value = [
+            ...results.entities.organizations,
+          ] as Organization[];
+        }
       }
       if (isSecondaryResponseArea.value) {
         const results = await Organization.api().get(
@@ -559,31 +545,33 @@ export default {
             dataKey: 'results',
           },
         );
-        relatedOrganizations.value = [...results.entities.organizations];
+        if (results.entities) {
+          relatedOrganizations.value = [
+            ...results.entities.organizations,
+          ] as Organization[];
+        }
       }
       if (isIncidentRelated.value) {
-        const incidentIds = currentLocation.value.joins.map(
+        const incidentIds = currentLocation.value?.joins.map(
           (join) => join.object_id,
         );
         const incidents = Incident.query().whereIdIn(incidentIds).get();
-        relatedIncidents.value = [...incidents];
+        relatedIncidents.value = [...incidents] as Incident[];
       }
-    }
-    const detachLocationFromOrganization = async (organization) => {
-      const data = {};
-      if (isPrimaryResponseArea.value) {
-        data.primary_location = null;
-      }
-      if (isSecondaryResponseArea.value) {
-        data.secondary_location = null;
-      }
+    };
+    const detachLocationFromOrganization = async (
+      organization: Organization,
+    ) => {
       await Organization.api().patch(`/organizations/${organization.id}`, data);
       await loadLocation();
-    }
+    };
     const detachLocationFromIncident = async (incident) => {
-      await Incident.api().removeLocation(incident.id, currentLocation.value.id);
+      await Incident.api().removeLocation(
+        incident.id,
+        currentLocation.value?.id,
+      );
       await loadLocation();
-    }
+    };
     const loadLocation = async () => {
       loading.value = true;
       await LocationType.api().get('/location_types', {
@@ -592,13 +580,15 @@ export default {
       if (route.params.location_id) {
         try {
           await Location.api().fetchById(route.params.location_id);
-          currentLocation.value = Location.find(route.params.location_id);
-          this.loadRelatedEntities();
+          currentLocation.value = Location.find(
+            route.params.location_id,
+          ) as Location;
+          await loadRelatedEntities();
         } catch (e) {
           currentLocation.value = new Location();
           await router.replace(`/locations/new`);
         } finally {
-          this.loading = false;
+          loading.value = false;
         }
       } else {
         reset();
@@ -634,10 +624,10 @@ export default {
       saveLocation,
       loadRelatedEntities,
       detachLocationFromOrganization,
-      detachLocationFromIncident
+      detachLocationFromIncident,
     };
   },
-};
+});
 </script>
 
 <style scoped>
