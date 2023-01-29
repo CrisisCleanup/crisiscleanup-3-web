@@ -10,8 +10,8 @@
             :class="showingMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
             ccu-event="user_ui-view-map"
-            @click="toggleView('showingMap')"
             data-cy="cases.mapButton"
+            @click="toggleView('showingMap')"
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
@@ -20,8 +20,8 @@
             :class="showingTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
             ccu-event="user_ui-view-table"
-            @click="toggleView('showingTable')"
             data-cy="cases.tableButton"
+            @click="toggleView('showingTable')"
           />
         </div>
         <span v-if="allWorksiteCount" class="font-thin">
@@ -37,14 +37,14 @@
             display-property="name"
             :placeholder="$t('actions.search')"
             size="medium"
+            skip-validation
+            class="mx-2 w-full"
             @selectedExisting="onSelectExistingWorksite"
             @input="
               (value) => {
                 search = value;
               }
             "
-            skip-validation
-            class="mx-2 w-full"
           />
         </div>
         <div
@@ -66,7 +66,7 @@
       <div class="phone-system__main-content">
         <div v-show="showingMap" class="phone-system__main-content--map">
           <SimpleMap :map-loading="mapLoading" />
-          <div class="phone-system__actions" ref="phoneButtons">
+          <div ref="phoneButtons" class="phone-system__actions">
             <PhoneComponentButton
               name="caller"
               class="phone-system__action"
@@ -82,11 +82,25 @@
                 </div>
               </template>
               <template #component>
-                <tabs :details="false" ref="tabs" @mounted="setTabs">
-                  <tab :name="$t('phoneDashboard.active_call')" ref="callTab">
+                <div
+                  v-if="potentialFailedCall"
+                  class="bg-red-500 mt-6 text-white p-1.5"
+                >
+                  {{
+                    $t('~~We detected that the phone call may have ended early')
+                  }}
+                  <base-button
+                    :action="retryFailedCall"
+                    variant="solid"
+                    class="px-2 text-black mt-1"
+                    :text="$t('~~Try again')"
+                  />
+                </div>
+                <tabs ref="tabs" :details="false" @mounted="setTabs">
+                  <tab ref="callTab" :name="$t('phoneDashboard.active_call')">
                     <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
                   </tab>
-                  <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
+                  <tab ref="statusTab" :name="$t('phoneDashboard.call_status')">
                     <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
                   </tab>
                 </tabs>
@@ -104,8 +118,8 @@
                 <ManualDialer
                   class="p-2"
                   style="z-index: 1002"
-                  @onDial="dialManualOutbound"
                   :dialing="dialing"
+                  @onDial="dialManualOutbound"
                 ></ManualDialer>
               </template>
             </PhoneComponentButton>
@@ -148,12 +162,12 @@
               <template #component>
                 <Chat
                   v-if="selectedChat"
+                  :chat="selectedChat"
                   @unreadCount="unreadChatCount = $event"
                   @unreadUrgentCount="unreadUrgentChatCount = $event"
                   @onNewMessage="unreadChatCount += 1"
                   @onNewUrgentMessage="unreadUrgentChatCount += 1"
                   @focusNewsTab="focusNewsTab"
-                  :chat="selectedChat"
                 />
               </template>
             </PhoneComponentButton>
@@ -266,10 +280,10 @@
         </div>
         <div v-show="showingTable" class="phone-system__main-content--table">
           <AjaxTable
+            ref="table"
             :columns="columns"
             :url="tableUrl"
             :body-style="{ height: '100%' }"
-            ref="table"
             class="mt-6 shadow-lg"
             :query="worksiteQuery"
             @rowClick="
@@ -364,13 +378,14 @@
         <WorksiteForm
           v-else
           ref="worksiteForm"
+          :key="worksiteId"
           :incident-id="String(currentIncidentId)"
           :worksite-id="worksiteId"
-          :key="worksiteId"
-          @jumpToCase="jumpToCase"
           disable-claim-and-save
           :data-prefill="prefillData"
           :is-editing="isEditing"
+          class="border shadow"
+          @jumpToCase="jumpToCase"
           @savedWorksite="
             (worksite) => {
               worksiteId = worksite.id;
@@ -379,7 +394,6 @@
             }
           "
           @closeWorksite="clearCase"
-          class="border shadow"
           @navigateToWorksite="
             (id) => {
               worksiteId = id;
@@ -413,7 +427,6 @@ import CaseHeader from '../../components/work/CaseHeader.vue';
 import Worksite from '../../models/Worksite';
 import CaseHistory from '../../components/work/CaseHistory.vue';
 import WorksiteSearchInput from '../../components/work/WorksiteSearchInput.vue';
-import { getErrorMessage } from '../../utils/errors';
 import PhoneOutbound from '../../models/PhoneOutbound';
 import useEmitter from '../../hooks/useEmitter';
 import GeneralStats from '../../components/phone/GeneralStats.vue';
@@ -425,7 +438,6 @@ import Chat from '../../components/chat/Chat.vue';
 import ActiveCall from '../../components/phone/ActiveCall.vue';
 import UpdateStatus from '../../components/phone/UpdateStatus.vue';
 import PhoneIndicator from '../../components/phone/PhoneIndicator.vue';
-import { loadCasesCached } from '../../utils/worksite';
 import useWorksiteMap from '../../hooks/worksite/useWorksiteMap';
 import PhoneToolBar from '../../components/phone/PhoneToolBar.vue';
 import PhoneNews from '../../components/phone/PhoneNews.vue';
@@ -434,6 +446,8 @@ import useConnectFirst from '../../hooks/useConnectFirst';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import User from '../../models/User';
 import WorksiteForm from '../../components/work/WorksiteForm.vue';
+import { loadCasesCached } from '@/utils/worksite.js';
+import { getErrorMessage } from '@/utils/errors.js';
 import usePhoneService from '@/hooks/phone/usePhoneService';
 
 export default {
@@ -508,12 +522,15 @@ export default {
       currentIncidentId,
       call,
       clearCall,
+      potentialFailedCall,
+      setPotentialFailedCall,
       loadAgent,
       setWorking,
       dialNextOutbound,
       setAvailable,
       setGeneralStats,
       setCurrentIncidentId,
+      dialManualOutbound,
     } = connectFirst;
 
     const prefillData = computed(function () {
@@ -652,6 +669,7 @@ export default {
         await $toasted.success(t('phoneDashboard.update_success'));
         clearCall();
         clearCase();
+        setPotentialFailedCall(null);
         await loadAgent();
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -756,6 +774,17 @@ export default {
     const switchToCallTab = () => {
       tabs.value.selectTab(callTab.value.index);
     };
+
+    async function retryFailedCall() {
+      if (potentialFailedCall.value) {
+        const { phone_number } = potentialFailedCall.value;
+        if (call.value) {
+          await completeCall({ status: 23, notes: '' });
+        }
+        await phoneService.changeState('WORKING');
+        await dialManualOutbound(phone_number);
+      }
+    }
 
     async function init() {
       phoneService.apiGetQueueStats().then((response) => {
@@ -882,6 +911,7 @@ export default {
       init,
       getIncidentPhoneNumbers,
       completeCall,
+      potentialFailedCall,
       setManualOutbound,
       clearCase,
       setTabs,
@@ -900,6 +930,7 @@ export default {
       getWorkTypeName,
       updateUserState: User.api().updateUserState,
       moment,
+      retryFailedCall,
     };
   },
 };

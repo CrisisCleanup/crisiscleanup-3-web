@@ -123,6 +123,10 @@ export default {
             name_t: t('phoneStatus.skipped_did-not-inbound'),
             value: 22,
           },
+          {
+            name_t: t('phoneStatus.no-answer_premature-disconnection'),
+            value: 23,
+          },
         ],
         color: '#F0F032',
       },

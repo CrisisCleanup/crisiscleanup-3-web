@@ -8,7 +8,7 @@
     <div class="flex flex-wrap">
       <div
         class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
       >
         <!--Metric Card-->
         <div class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5">
@@ -36,7 +36,7 @@
 
       <div
         class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
       >
         <!--Metric Card-->
         <div class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg">
@@ -72,7 +72,7 @@
 
       <div
         class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
       >
         <!--Metric Card-->
         <div class="bg-orange-400 rounded-lg shadow-lg">
@@ -110,7 +110,7 @@
 
       <div
         class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
       >
         <!--Metric Card-->
         <div class="bg-crisiscleanup-green-100 rounded-lg shadow-lg">
@@ -181,7 +181,7 @@
             <template #case_number="slotProps">
               <router-link
                 class=""
-                :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
                 {{ slotProps.item.case_number }}
@@ -190,7 +190,7 @@
             <template #phone="slotProps">
               <router-link
                 class=""
-                :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
                 {{ slotProps.item.phone }}
@@ -199,7 +199,7 @@
             <template #full_address="slotProps">
               <router-link
                 class=""
-                :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
                 {{ slotProps.item.full_address }}
@@ -208,7 +208,7 @@
             <template #name="slotProps">
               <router-link
                 class=""
-                :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
                 {{ slotProps.item.name }}
@@ -218,7 +218,7 @@
               <div class="flex">
                 <router-link
                   class=""
-                  :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                  :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                   tag="div"
                 >
                   <ccu-icon

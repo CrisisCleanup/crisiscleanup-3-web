@@ -145,6 +145,7 @@ export default {
       callState,
       isInboundCall,
       isOutboundCall,
+      setPotentialFailedCall,
     } = useConnectFirst(context);
     const currentIncident = store.getters['incident/currentIncidentId'];
     const cards = ref([]);
@@ -207,6 +208,8 @@ export default {
               'Call is stuck connecting state for 45 seconds',
             );
             $toasted.error(t('phoneDashboard.could_not_connect'));
+            setPotentialFailedCall(call.value);
+            phoneService.hangup();
           }, 45_000);
         } else {
           clearTimeout(connectingTimeout.value);

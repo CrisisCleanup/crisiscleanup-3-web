@@ -48,6 +48,7 @@ export default function useConnectFirst(context: {
   const callState = computed(() => store.getters['phone/callState']);
   const callType = computed(() => store.getters['phone/callType']);
   const call = computed(() => store.getters['phone/call']);
+  const potentialFailedCall = computed(() => store.getters['phone/potentialFailedCall']);
   const caller = computed(() => store.getters['phone/caller']);
   const incomingCall = computed(() => store.getters['phone/incomingCall']);
   const outgoingCall = computed(() => store.getters['phone/outgoingCall']);
@@ -59,6 +60,10 @@ export default function useConnectFirst(context: {
 
   const setCallHistory = (callHistory: any) => {
     store.commit('phone/setCallHistory', callHistory);
+  };
+
+  const setPotentialFailedCall = (call: any) => {
+    store.commit('phone/setPotentialFailedCall', call);
   };
 
   const setCallType = (callType: any) => {
@@ -262,6 +267,7 @@ export default function useConnectFirst(context: {
     callState,
     callType,
     call,
+    potentialFailedCall,
     caller,
     incomingCall,
     outgoingCall,
@@ -291,6 +297,7 @@ export default function useConnectFirst(context: {
     },
     setCallType,
     setCallHistory,
+    setPotentialFailedCall,
     setGeneralStats(stats: any) {
       store.commit('phone/setGeneralStats', stats);
     },

@@ -253,6 +253,10 @@ export default class PhoneService {
   endCallFunction(info: any) {
     // Log.debug(info);
     if (!info.callDts) {
+      this.store.commit(
+        'phone/setPotentialFailedCall',
+        this.store.getters['phone/call'],
+      );
       this.store.commit('phone/clearCall');
     } else {
       this.store.commit('phone/setIncomingCall', null);
@@ -425,7 +429,7 @@ export default class PhoneService {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
       // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
-      // Log.debug(this.store.callstate);
+      // Log.debug(this.store.callState);
       this.cf.offhookTerm((offhookTermResponse: any) => {
         // Log.debug('Offhook term response', offhookTermResponse);
         this.changeState('AWAY').then(() => {
