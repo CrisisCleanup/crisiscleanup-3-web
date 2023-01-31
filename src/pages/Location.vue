@@ -261,10 +261,10 @@ import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import LocationTool from '@/components/LocationTool';
+import LocationTool from '@/components/LocationTool.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
-import MessageBox from '@/components/dialogs/MessageBox';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
 
 const messageBox = create(MessageBox);
 
@@ -285,6 +285,8 @@ defineComponent({
     const selectedIncidentId = ref<string | null>();
     const relatedOrganizations = ref<Array<Organization>>([]);
     const relatedIncidents = ref<Array<Incident>>([]);
+    const locationTool = ref();
+    const form = ref();
     const isNew = computed(() => {
       return !route.params.location_id;
     });
@@ -331,8 +333,8 @@ defineComponent({
       currentPolygon.value = null;
       selectedIncidentId.value = null;
       selectedOrganization.value = null;
-      if (this.$refs.locationTool) {
-        this.$refs.locationTool.reset();
+      if (locationTool.value) {
+        locationTool.value.reset();
       }
     };
     const downloadCurrentLocation = async () => {
@@ -389,7 +391,7 @@ defineComponent({
         }
       }
     };
-    const onSelectIncident = async (value) => {
+    const onSelectIncident = async (value: string) => {
       selectedIncidentId.value = value;
       let incident = Incident.find(value);
       if (currentLocation.value && !currentLocation.value.name) {
@@ -427,7 +429,7 @@ defineComponent({
         }
       }
     };
-    const onOrganizationSearch = async (value) => {
+    const onOrganizationSearch = async (value: string) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
@@ -437,8 +439,8 @@ defineComponent({
       organizationResults.value = results.entities
         ?.organizations as Array<Organization>;
     };
-    const saveLocation = async (goToNew) => {
-      const isValid = this.$refs.form.reportValidity();
+    const saveLocation = async (goToNew: boolean) => {
+      const isValid = form.value.reportValidity();
       if (!isValid) {
         return;
       }
@@ -461,12 +463,23 @@ defineComponent({
         currentLocation.value.poly = null;
         currentLocation.value.geom = null;
 
-        if (geometry.type === 'Point') {
-          currentLocation.value.point = geometry;
-        } else if (geometry.type === 'Polygon') {
-          currentLocation.value.poly = geometry;
-        } else if (geometry.type === 'MultiPolygon') {
-          currentLocation.value.geom = geometry;
+        switch (geometry.type) {
+          case 'Point': {
+            currentLocation.value.point = geometry;
+
+            break;
+          }
+          case 'Polygon': {
+            currentLocation.value.poly = geometry;
+
+            break;
+          }
+          case 'MultiPolygon': {
+            currentLocation.value.geom = geometry;
+
+            break;
+          }
+          // No default
         }
       }
 
@@ -565,7 +578,7 @@ defineComponent({
       await Organization.api().patch(`/organizations/${organization.id}`, data);
       await loadLocation();
     };
-    const detachLocationFromIncident = async (incident) => {
+    const detachLocationFromIncident = async (incident: Incident) => {
       await Incident.api().removeLocation(
         incident.id,
         currentLocation.value?.id,
@@ -584,7 +597,7 @@ defineComponent({
             route.params.location_id,
           ) as Location;
           await loadRelatedEntities();
-        } catch (e) {
+        } catch {
           currentLocation.value = new Location();
           await router.replace(`/locations/new`);
         } finally {
@@ -614,6 +627,8 @@ defineComponent({
       isPrimaryResponseArea,
       isSecondaryResponseArea,
       isIncidentRelated,
+      locationTool,
+      form,
       reset,
       downloadCurrentLocation,
       deleteCurrentLocation,

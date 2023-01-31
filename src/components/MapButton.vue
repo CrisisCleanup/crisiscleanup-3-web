@@ -3,18 +3,18 @@
     :auto-hide="false"
     popover-class="layer-action-popover"
     placement="bottom-end"
-    :disabled="disabled || !actions.length"
+    :disabled="disabled || actions?.length !== 0"
   >
     <ccu-icon
       :alt="title || buttonText"
       :class="['map-button', buttonClass, selected ? 'selected' : '']"
       :type="icon"
       size="xl"
-      @click.native="$emit('click')"
+      @click="$emit('click')"
     />
-    <div
-      v-if="actions.length"
-      slot="popover"
+    <slot
+      v-if="actions?.length"
+      name="popover"
       class="flex text-primary-dark"
       style="z-index: 1001"
     >
@@ -32,7 +32,7 @@
         class="p-1 px-2 text-xs"
         :ccu-event="ccuEvent"
       />
-    </div>
+    </slot>
   </v-popover>
 </template>
 <script>

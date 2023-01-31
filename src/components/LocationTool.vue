@@ -272,7 +272,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as L from 'leaflet';
 import '@geoman-io/leaflet-geoman-free';
 import * as circleToPolygon from 'circle-to-polygon';
@@ -285,12 +285,12 @@ import Organization from '@/models/Organization';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
-import LayerUploadTool from '@/components/LayerUploadTool';
+import LayerUploadTool from '@/components/LayerUploadTool.vue';
 import { EventsMixin } from '@/mixins';
-import MapButton from './MapButton';
+import MapButton from './MapButton.vue';
 import { getQueryString } from '../utils/urls';
 
-export default {
+export default defineComponent({
   name: 'LocationTool',
   components: { LayerUploadTool, MapButton },
   mixins: [vueUndoRedo, EventsMixin],
@@ -779,7 +779,7 @@ export default {
       this.map.fitBounds(this.currentPolygon.getBounds());
     },
   },
-};
+});
 </script>
 
 <style scoped>
