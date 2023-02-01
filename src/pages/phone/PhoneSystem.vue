@@ -87,13 +87,13 @@
                   class="bg-red-500 mt-6 text-white p-1.5"
                 >
                   {{
-                    $t('~~We detected that the phone call may have ended early')
+                    $t('phoneDashboard.ended_early')
                   }}
                   <base-button
                     :action="retryFailedCall"
                     variant="solid"
                     class="px-2 text-black mt-1"
-                    :text="$t('~~Try again')"
+                    :text="$t('phoneDashboard.try_again')"
                   />
                 </div>
                 <tabs ref="tabs" :details="false" @mounted="setTabs">

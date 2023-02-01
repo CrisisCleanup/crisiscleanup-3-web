@@ -7,57 +7,57 @@
             {{ currentLocalization.id }} : {{ currentLocalization.group_label }}
           </div>
           <div v-else class="text-xl font-semibold mb-3">
-            {{ $t('~~New Localization') }}
+            {{ $t('adminLocalizations.new_localization') }}
           </div>
           <div class="flex items-center gap-2">
             <base-button
               :action="saveLocalization"
               variant="solid"
               class="px-2 py-1"
-              >{{ $t('~~Save') }}
+              >{{ $t('actions.save') }}
             </base-button>
             <base-button
               :action="saveAndClear"
               variant="solid"
               class="px-2 py-1"
-              >{{ $t('~~Save and Clear') }}
+              >{{ $t('actions.save_and_clear') }}
             </base-button>
           </div>
         </div>
         <base-input
           v-model="currentLocalization.group"
-          :placeholder="$t('~~Group')"
+          :placeholder="$t('adminLocalizations.group')"
           class="mb-2"
         />
         <base-input
           v-model="currentLocalization.label"
-          :placeholder="$t('~~Label')"
+          :placeholder="$t('adminLocalizations.label')"
           class="mb-2"
         />
         <base-input
           v-model="currentLocalization.group_label"
-          :placeholder="$t('~~Group Label')"
+          :placeholder="$t('adminLocalizations.group_label')"
           class="mb-2"
         />
         <base-checkbox v-model="currentLocalization.is_front_end" class="mb-2">
-          {{ $t('~~Available in frontend') }}
+          {{ $t('adminLocalizations.available_frontend') }}
         </base-checkbox>
       </div>
       <div class="col-span-2">
         <div class="mb-3 flex items-center justify-between">
-          <span class="text-xl font-semibold">{{ $t('~~Text Items') }}</span>
+          <span class="text-xl font-semibold">{{ $t('adminLocalizations.text_items') }}</span>
           <div class="flex items-center gap-2">
             <base-button
               :action="addNewText"
               variant="outline"
               class="px-2 py-1"
-              >{{ $t('~~Add new') }}
+              >{{ $t('actions.new') }}
             </base-button>
             <base-button
               :action="autoTranslate"
               variant="outline"
               class="px-2 py-1"
-              >{{ $t('~~Generate Translations') }}
+              >{{ $t('actions.generate_translations') }}
             </base-button>
           </div>
         </div>
@@ -80,7 +80,7 @@
             v-model="text.text"
             class="w-full flex-1"
             type="search"
-            :placeholder="$t('Text')"
+            :placeholder="$t('adminLocalizations.text')"
           ></base-input>
           <ccu-icon
             :alt="$t('actions.cancel')"
@@ -247,13 +247,13 @@ export default defineComponent({
           }
         }
       } else {
-        await $toasted.error('English translation required for generation');
+        await $toasted.error(t('adminLocalizations.english_required'));
       }
     }
 
     async function editLocalizationTextAdvanced(text: LocalizationText) {
       await component({
-        title: t('~~Edit Text'),
+        title: t('actions.edit'),
         component: Editor,
         classes: 'w-full overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
@@ -270,7 +270,7 @@ export default defineComponent({
 
     async function previewLocalizationText(text: LocalizationText) {
       await component({
-        title: t('~~Preview Text'),
+        title: t('actions.preview'),
         component: CmsViewer,
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
@@ -331,7 +331,7 @@ export default defineComponent({
         }
         currentLocalization.value = response.data;
         await saveLocalizationTexts();
-        await $toasted.success('~~Success');
+        await $toasted.success(t('info.success'));
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
         throw error;

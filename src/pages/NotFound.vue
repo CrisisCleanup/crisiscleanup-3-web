@@ -1,6 +1,6 @@
 <template>
   <HomeLayout>
-    <div class="text-2xl text-center mb-3">{{ t('~~404_not_found') }}</div>
+    <div class="text-2xl text-center mb-3">{{ t('info.error_404') }}</div>
     <div class="cover-image"></div>
   </HomeLayout>
 </template>

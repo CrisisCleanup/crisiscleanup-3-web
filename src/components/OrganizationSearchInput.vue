@@ -1,6 +1,6 @@
 <template>
   <Multiselect
-    :placeholder="$t('Organization (optional)')"
+    :placeholder="$t('registerOrg.organization_name')"
     label="name"
     :filter-results="false"
     :min-chars="1"

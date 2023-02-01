@@ -135,7 +135,7 @@ export default defineComponent({
     async function saveUser() {
       try {
         if (!isDefined(selectedUser)) {
-          $toasted.error(t('~~User not found. Unable to save.'));
+          $toasted.error(t('profileUser.save_user_fail'));
           return;
         }
         await User.api().patch(`/users/${selectedUser.value.id}`, {
@@ -164,7 +164,7 @@ export default defineComponent({
       });
       if (result === 'delete') {
         if (!isDefined(selectedUser)) {
-          $toasted.error(t('~~User not found. Unable to delete.'));
+          $toasted.error(t('profileUser.delete_user_fail'));
           return;
         }
         await User.api().orphan(selectedUser.value.id);

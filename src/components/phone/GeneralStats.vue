@@ -4,7 +4,7 @@
       $t('phoneDashboard.general_statistics')
     }}</base-text>
     <base-text class="py-2 px-3" variant="h4">{{
-      $t('~~**Stats may be delayed**')
+      $t('phoneDashboard.stats_delayed')
     }}</base-text>
     <hr />
     <div class="flex flex-col">

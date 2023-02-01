@@ -12,8 +12,8 @@
         width="2rem"
         height="1rem"
         class="text-white bg-crisiscleanup-red-700 mx-1 absolute -top-0.5 -right-8 p-3"
-        :title="$t('~~New Badge')"
-        >{{ $t("~~New") }}</badge
+        :title="$t('info.new_badge')"
+        >{{ $t("info.new") }}</badge
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
