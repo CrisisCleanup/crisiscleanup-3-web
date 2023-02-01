@@ -88,13 +88,13 @@
                   v-if="potentialFailedCall"
                 >
                   {{
-                    $t('~~We detected that the phone call may have ended early')
+                    $t('phoneDashboard.ended_early')
                   }}
                   <base-button
                     :action="retryFailedCall"
                     variant="solid"
                     class="px-2 text-black mt-1"
-                    :text="$t('~~Try again')"
+                    :text="$t('phoneDashboard.try_again')"
                   />
                 </div>
                 <tabs :details="false" ref="tabs" @mounted="setTabs">

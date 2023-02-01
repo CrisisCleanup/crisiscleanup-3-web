@@ -20,8 +20,8 @@
           -right-8
           p-3
         "
-        :title="$t('~~New Badge')"
-        >{{ $t('~~New') }}</badge
+        :title="$t('info.new_badge')"
+        >{{ $t('info.new') }}</badge
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"

@@ -4,7 +4,7 @@
     :suggestions="organizationResults"
     :size="size"
     display-property="name"
-    :placeholder="$t('Organization (optional)')"
+    :placeholder="$t('registerOrg.organization_name')"
     clear-on-selected
     @selected="
       (value) => {
