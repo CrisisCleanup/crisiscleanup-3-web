@@ -1,8 +1,8 @@
 <template>
   <Home>
-    <div class="flex items-center justify-around h-full">
+    <div class="flex items-center justify-around h-full p-3">
       <LoginForm class="w-120" />
-      <div class="grid--globe self-center">
+      <div class="grid--globe hidden md:block">
         <div class="homegrid-globe">
           <img src="../../assets/globe.png" :alt="$t('loginForm.globe')" />
         </div>

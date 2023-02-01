@@ -446,8 +446,8 @@ import useConnectFirst from '../../hooks/useConnectFirst';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import User from '../../models/User';
 import WorksiteForm from '../../components/work/WorksiteForm.vue';
-import { loadCasesCached } from '@/utils/worksite.js';
-import { getErrorMessage } from '@/utils/errors.js';
+import { loadCasesCached } from '@/utils/worksite';
+import { getErrorMessage } from '@/utils/errors';
 import usePhoneService from '@/hooks/phone/usePhoneService';
 
 export default {
