@@ -15,7 +15,9 @@ async function confirm(props: Record<string, any>) {
   return openDialog(MessageBox, props);
 }
 
-async function prompt(props: Record<string, any>): Promise<{key: string; response: string}> {
+async function prompt(
+  props: Record<string, any>,
+): Promise<{ key: string; response: string }> {
   return openDialog(MessageResponseDialog, props);
 }
 

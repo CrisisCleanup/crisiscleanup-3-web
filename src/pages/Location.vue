@@ -254,24 +254,23 @@
 </template>
 
 <script lang="ts">
-import { create } from 'vue-modal-dialogs';
 import { useRouter, useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import useDialogs from '@/hooks/useDialogs';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import LocationTool from '@/components/LocationTool.vue';
+import LocationTool from '@/components/locations/LocationTool.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import MessageBox from '@/components/dialogs/MessageBox.vue';
 
-const messageBox = create(MessageBox);
-
-defineComponent({
+export default defineComponent({
   name: 'Location',
   components: { LocationTool },
   setup(props, ctx) {
+    const { confirm: messageBox } = useDialogs();
     const { t } = useI18n();
     const $toasted = useToast();
     const route = useRoute();
@@ -286,7 +285,7 @@ defineComponent({
     const relatedOrganizations = ref<Array<Organization>>([]);
     const relatedIncidents = ref<Array<Incident>>([]);
     const locationTool = ref();
-    const form = ref();
+    const form = ref(null);
     const isNew = computed(() => {
       return !route.params.location_id;
     });
@@ -315,7 +314,7 @@ defineComponent({
     });
     const isIncidentRelated = computed(() => {
       const incidentRelatedTypes = LocationType.query()
-        .where('key', (key) =>
+        .where('key', (key: string) =>
           [
             'incident_primary_damaged_area',
             'incident_storm_track',
