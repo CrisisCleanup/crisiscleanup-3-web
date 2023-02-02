@@ -15,12 +15,6 @@ import Report from '@/pages/admin/Report.vue';
 import NotFound from '@/pages/NotFound.vue';
 import Location from '@/pages/Location.vue';
 
-const mockComponent = (title: string, content: string) => ({
-  name: title,
-  render: () =>
-    h('div', { class: 'mock-component' }, [h('h1', title), h('p', content)]),
-});
-
 const routes = [
   {
     path: '/',
@@ -80,6 +74,12 @@ const routes = [
     path: '/locations/new',
     component: Location,
     name: 'nav.new_location',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/locations/:location_id/edit',
+    component: Location,
+    name: 'nav.edit_location',
     meta: { layout: 'authenticated' },
   },
   ...HomeRoutes,
