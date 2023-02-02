@@ -1,6 +1,6 @@
 import { openDB } from 'idb';
 
-const dbPromise = openDB('crisiscleanup', 2, {
+const dbPromise = openDB('crisiscleanup', 3, {
   upgrade(db, oldVersion) {
     if (oldVersion > 0) {
       db.deleteObjectStore('keyval');
