@@ -4,7 +4,11 @@
     <div class="work-page__main">
       <div class="relative">
         <div class="flex items-center justify-between">
-          <div v-if="!collapsedUtilityBar" class="flex items-center h-16">
+          <div
+            v-if="!collapsedUtilityBar"
+            :key="currentIncidentId"
+            class="flex items-center h-16"
+          >
             <div class="flex py-3 px-2" style="min-width: 80px">
               <ccu-icon
                 :alt="$t('casesVue.map_view')"

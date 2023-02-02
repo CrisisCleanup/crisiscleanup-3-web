@@ -107,10 +107,10 @@
             >
           </div>
           <div
+            v-if="teams.length > 0"
             class="p-3 px-4 border-b cursor-pointer"
             :class="{ 'border-l-4 border-l-black': currentSection === 'teams' }"
             @click="currentSection = 'teams'"
-            v-if="teams.length"
           >
             {{ $t('worksiteFilters.teams') }}
             <span
@@ -330,8 +330,8 @@
               </div>
               <div v-if="expanded[f.key]">
                 <template
-                  :key="field.field_key"
                   v-for="field in getFieldsForType(f.key)"
+                  :key="field.field_key"
                 >
                   <div class="border-b py-3">
                     <template v-if="field.html_type === 'select'">
@@ -430,7 +430,7 @@
           </div>
           <div v-if="currentSection === 'locations'" class="flex flex-col">
             <div class="mb-2">
-              <div class="claim-status mb-2" v-if="filters.locations">
+              <div v-if="filters.locations" class="claim-status mb-2">
                 <div class="my-1 text-base">
                   {{ $t('worksiteFilters.response_areas') }}
                 </div>
@@ -480,6 +480,7 @@
                   {{ $t('worksiteFilters.created') }}
                 </div>
                 <datepicker
+                  v-model="filters.dates.data.created"
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
                   :formatter="{
@@ -487,12 +488,12 @@
                     month: 'MMM',
                   }"
                   :placeholder="$t('worksiteFilters.start_date')"
-                  v-model="filters.dates.data.created"
                 ></datepicker>
                 <div class="my-1 text-base">
                   {{ $t('worksiteFilters.updated') }}
                 </div>
                 <datepicker
+                  v-model="filters.dates.data.updated"
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
                   :formatter="{
@@ -500,7 +501,6 @@
                     month: 'MMM',
                   }"
                   :placeholder="$t('worksiteFilters.start_date')"
-                  v-model="filters.dates.data.updated"
                 ></datepicker>
               </div>
             </div>
@@ -537,6 +537,8 @@
 
 <script>
 import { useStore } from 'vuex';
+import { computed, onMounted, ref, watch } from 'vue';
+import LitepieDatepicker from 'litepie-datepicker';
 import Team from '../../models/Team';
 import WorksiteFieldsFilter from '../../utils/data_filters/WorksiteFieldsFilter';
 import WorksiteFlagsFilter from '../../utils/data_filters/WorksiteFlagsFilter';
@@ -549,9 +551,7 @@ import WorksiteMyTeamFilter from '../../utils/data_filters/WorksiteMyTeamFilter'
 import SurvivorFilter from '../../utils/data_filters/SurvivorFilter';
 import WorksiteTeamsFilter from '../../utils/data_filters/WorksiteTeamsFilter';
 import WorksiteDatesFilter from '../../utils/data_filters/WorksiteDatesFilter';
-import { computed, onMounted, ref, watch } from 'vue';
 import { getStatusName } from '../../filters/index';
-import LitepieDatepicker from 'litepie-datepicker';
 
 export default {
   name: 'WorksiteFilters',
@@ -583,18 +583,17 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const filters = ref({
-      fields: {},
-      statuses: {},
-      teams: {},
-      dates: {},
-      my_team: {},
-      survivors: {},
-      statusGroups: {},
-      flags: {},
-      form_data: {},
-      sub_fields: {},
-      locations: {},
-      missingWorkType: {},
+      fields: new WorksiteFieldsFilter('fields', {}),
+      statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
+      flags: new WorksiteFlagsFilter('flags', {}),
+      form_data: new FormDataFilter('form_data', {}),
+      statuses: new WorksiteStatusFilter('statuses', {}),
+      locations: new WorksiteLocationsFilter('locations', {}),
+      teams: new WorksiteTeamsFilter('teams', {}),
+      my_team: new WorksiteMyTeamFilter('my_team', {}),
+      dates: new WorksiteDatesFilter('dates', {}),
+      survivors: new SurvivorFilter('survivors', {}),
+      missingWorkType: new WorksiteMissingWorkTypeFilter('missingWorkType', {}),
     });
     const currentSection = ref('general');
     const expanded = ref({});
@@ -618,7 +617,7 @@ export default {
           fieldsWithTypes.map((t) => t.if_selected_then_work_type),
         );
 
-        return Array.from(types).map((workType) => {
+        return [...types].map((workType) => {
           return store.getters['enums/workTypes'].find(
             (type) => type.key === workType,
           );
@@ -765,7 +764,6 @@ export default {
         count: filtersCount.value,
       });
 
-      // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(filters.value.fields.data)) {
         if (!value) {
           expanded.value[key] = false;
@@ -793,7 +791,6 @@ export default {
             return element.field_key === field.field_parent_key;
           });
 
-          // eslint-disable-next-line camelcase
           let { if_selected_then_work_type } = field;
           if (parent) {
             if_selected_then_work_type = parent.if_selected_then_work_type;
