@@ -3,7 +3,7 @@
     <div
       v-if="loading"
       style="z-index: 1001"
-      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+      class="absolute inset-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
     >
       <spinner />
     </div>
@@ -63,18 +63,16 @@
             required
             :placeholder="$t('locationVue.location_name')"
           />
-          <form-select
+          <base-select
             v-if="!loading"
-            :value="currentLocation.type"
+            :model-value="currentLocation.type"
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            :required="true"
             :placeholder="$t('locationVue.location_type')"
-            select-classes="bg-white border border-crisiscleanup-dark-100 h-12"
-            @input="
-              (type) => {
-                currentLocation.type = type;
+            @update:model-value="
+              (t) => {
+                currentLocation.type = t;
                 selectedIncidentId = null;
                 selectedOrganization = null;
               }
@@ -83,29 +81,26 @@
 
           <div v-if="!currentLocation.id" class="extra-actions">
             <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
-              <autocomplete
-                class="my-2"
-                icon="search"
-                :suggestions="organizationResults"
-                display-property="name"
-                size="large"
+              <base-select
+                label="name"
+                item-key="id"
+                :options="onOrganizationSearch"
                 :placeholder="$t('locationVue.search_for_organization')"
-                clear-on-selected
-                @selected="onSelectOrganization"
-                @search="onOrganizationSearch"
+                :model-value="selectedOrganization"
+                @update:model-value="onSelectOrganization"
+                searchable
+                object
               />
             </div>
             <div v-if="isIncidentRelated">
-              <form-select
+              <base-select
                 :value="selectedIncidentId"
-                class="my-2"
                 :options="incidents"
                 searchable
-                select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12 mb-3"
                 item-key="id"
                 label="name"
                 :placeholder="$t('locationVue.select_incident')"
-                @input="onSelectIncident"
+                @update:model-value="onSelectIncident"
               />
             </div>
           </div>
@@ -152,11 +147,7 @@
                   type="trash"
                   size="small"
                   :alt="$t('actions.clear_location')"
-                  @click="
-                    () => {
-                      detachLocationFromIncident(incident);
-                    }
-                  "
+                  @click="() => detachLocationFromIncident(incident)"
                 />
               </div>
             </div>
@@ -227,11 +218,7 @@
             :alt="$t('actions.save_and_new')"
             class="p-2"
             variant="solid"
-            :action="
-              () => {
-                saveLocation(true);
-              }
-            "
+            :action="() => saveLocation(true)"
           />
         </div>
       </form>
@@ -264,11 +251,11 @@ import Incident from '@/models/Incident';
 import LocationTool from '@/components/locations/LocationTool.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
-import MessageBox from '@/components/dialogs/MessageBox.vue';
+import BaseSelect from '@/components/BaseSelect.vue';
 
 export default defineComponent({
   name: 'Location',
-  components: { LocationTool },
+  components: { BaseSelect, LocationTool },
   setup(props, ctx) {
     const { confirm: messageBox } = useDialogs();
     const { t } = useI18n();
@@ -285,7 +272,7 @@ export default defineComponent({
     const relatedOrganizations = ref<Array<Organization>>([]);
     const relatedIncidents = ref<Array<Incident>>([]);
     const locationTool = ref();
-    const form = ref(null);
+    const form = ref<HTMLFormElement | null>(null);
     const isNew = computed(() => {
       return !route.params.location_id;
     });
@@ -360,7 +347,7 @@ export default defineComponent({
         loading.value = false;
       }
     };
-    const onSelectOrganization = async (value) => {
+    const onSelectOrganization = async (value: Organization) => {
       selectedOrganization.value = value;
       if (currentLocation.value && !currentLocation.value.name) {
         currentLocation.value.name = `${selectedOrganization.value?.name} ${currentLocation.value.location_type?.name_t}`;
@@ -435,12 +422,19 @@ export default defineComponent({
           dataKey: 'results',
         },
       );
-      organizationResults.value = results.entities
-        ?.organizations as Array<Organization>;
+      organizationResults.value = (results.entities?.organizations ||
+        []) as Array<Organization>;
+      return organizationResults.value;
     };
     const saveLocation = async (goToNew: boolean) => {
+      if (!form.value) {
+        console.error('Form ref not found!');
+        return;
+      }
       const isValid = form.value.reportValidity();
       if (!isValid) {
+        console.error('Form is not valid!');
+        $toasted.error(t('~~locationVue.form_not_valid'));
         return;
       }
 
@@ -557,11 +551,8 @@ export default defineComponent({
             dataKey: 'results',
           },
         );
-        if (results.entities) {
-          relatedOrganizations.value = [
-            ...results.entities.organizations,
-          ] as Organization[];
-        }
+        relatedOrganizations.value = (results.entities?.organizations ||
+          []) as Organization[];
       }
       if (isIncidentRelated.value) {
         const incidentIds = currentLocation.value?.joins.map(
@@ -574,6 +565,13 @@ export default defineComponent({
     const detachLocationFromOrganization = async (
       organization: Organization,
     ) => {
+      const data: Record<string, unknown> = {};
+      if (isPrimaryResponseArea.value) {
+        data.primary_location = null;
+      }
+      if (isSecondaryResponseArea.value) {
+        data.secondary_location = null;
+      }
       await Organization.api().patch(`/organizations/${organization.id}`, data);
       await loadLocation();
     };
@@ -596,7 +594,8 @@ export default defineComponent({
             route.params.location_id,
           ) as Location;
           await loadRelatedEntities();
-        } catch {
+        } catch (error) {
+          $toasted.error(getErrorMessage(error));
           currentLocation.value = new Location();
           await router.replace(`/locations/new`);
         } finally {
@@ -607,8 +606,8 @@ export default defineComponent({
       }
       loading.value = false;
     };
-    onMounted(() => {
-      loadLocation();
+    onMounted(async () => {
+      await loadLocation();
     });
     return {
       currentLocation,
@@ -644,7 +643,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .form-field {
   @apply my-2;
 }
