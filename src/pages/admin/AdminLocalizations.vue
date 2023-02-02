@@ -302,7 +302,7 @@ export default defineComponent({
         }
         currentLocalization.value = response.data;
         await saveLocalizationTexts();
-        await this.$toasted.success(this.$t('info.success'));
+        await $toasted.success($t('info.success'));
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
         throw error;
@@ -339,7 +339,7 @@ export default defineComponent({
           );
         }
       } else {
-        await this.$toasted.error(this.$t('adminLocalizations.english_required'));
+        await $toasted.error($t('adminLocalizations.english_required'));
       }
     }
 
