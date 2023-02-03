@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core';
 import Incident from './Incident';
+import type Location from './Location';
 
 export default class Organization extends Model {
   static entity = 'organizations';
@@ -10,6 +11,8 @@ export default class Organization extends Model {
   files!: any[];
   approved_roles!: any[];
   approved_incidents!: string[];
+  primary_location!: Location;
+  secondary_location!: Location;
 
   static fields() {
     return {

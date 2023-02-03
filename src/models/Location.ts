@@ -9,10 +9,10 @@ export default class Location extends Model {
   name!: string;
   notes!: string;
   shared!: string;
-  geom!: string;
-  poly!: string;
+  geom!: string | null;
+  poly!: string | null;
   attr!: Record<string, any>;
-  point!: string;
+  point!: string | null;
   joins!: string;
 
   static fields() {

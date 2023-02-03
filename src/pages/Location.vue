@@ -87,9 +87,9 @@
                 :options="onOrganizationSearch"
                 :placeholder="$t('locationVue.search_for_organization')"
                 :model-value="selectedOrganization"
-                @update:model-value="onSelectOrganization"
                 searchable
                 object
+                @update:model-value="onSelectOrganization"
               />
             </div>
             <div v-if="isIncidentRelated">
@@ -166,22 +166,19 @@
                 class="mr-4"
                 label="shared"
                 :name="$t('locationVue.shared')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
+                v-model="currentLocation.shared"
               />
               <base-radio
                 class="mr-4"
                 label="private"
                 :name="$t('locationVue.private')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
+                v-model="currentLocation.shared"
               />
               <base-radio
                 class="mr-4"
                 label="public"
                 :name="$t('locationVue.public')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
+                v-model="currentLocation.shared"
               />
             </div>
           </div>
