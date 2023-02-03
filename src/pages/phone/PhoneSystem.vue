@@ -671,6 +671,8 @@ export default {
         clearCase();
         setPotentialFailedCall(null);
         await loadAgent();
+        emitter.emit('phone_component:close');
+        switchToCallTab();
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
@@ -815,31 +817,10 @@ export default {
     );
 
     watch(
-      () => caller.value,
-      (oldValue, newValue) => {
-        if (!oldValue && newValue) {
-          emitter.emit('phone_component:close');
-          // open the active call PhoneComponentButton
-          emitter.emit('phone_component:open', 'caller');
-        }
-      },
-    );
-
-    watch(
-      () => call.value,
-      (oldValue, newValue) => {
-        if (!oldValue && newValue) {
-          emitter.emit('phone_component:open', 'caller');
-          // switchToCallTab();
-        }
-      },
-    );
-
-    watch(
       () => isOnCall.value,
-      (oldValue, newValue) => {
+      (newValue, oldValue) => {
         if (oldValue && !newValue) {
-          // switchToStatusTab();
+          switchToStatusTab();
         }
       },
     );

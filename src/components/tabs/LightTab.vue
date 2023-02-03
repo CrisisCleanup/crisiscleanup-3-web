@@ -30,7 +30,6 @@ export default defineComponent({
     watch(
       () => props.selected,
       () => {
-        debugger;
         tabs.selectedIndex = index;
       },
     );

@@ -171,8 +171,8 @@ export default {
 
     const { gateStats, stats } = useConnectFirst(context);
     const availableQueues = {
-      7: import.meta.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-      2: import.meta.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+      7: import.meta.env.VITE_APP_SPANISH_PHONE_GATEWAY,
+      2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
     };
 
     const statsPerQueue = computed(() => {

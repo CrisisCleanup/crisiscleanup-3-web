@@ -4,6 +4,7 @@ import { store } from '../store';
 import User from '../models/User';
 import Incident from '../models/Incident';
 import { i18n } from '../main';
+import useEmitter from "@/hooks/useEmitter";
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
   2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
@@ -179,6 +180,10 @@ export default class PhoneService {
     );
     const [caller] = dnisResponse.data.results;
     this.store.commit('phone/setCaller', caller);
+
+    const { emitter } = useEmitter();
+    emitter.emit('phone_component:close');
+    emitter.emit('phone_component:open', 'caller');
   }
 
   async getAccessToken() {
@@ -221,17 +226,17 @@ export default class PhoneService {
 
   async onNewSession(info: any) {
     if (info.sessionType === 'AGENT') {
-      if (this.store.getters['phone/getIncomingCall']) {
+      if (this.store.getters['phone/incomingCall']) {
         this.store.commit(
           'phone/setCurrentCall',
-          this.store.getters['phone/getIncomingCall'],
+          this.store.getters['phone/incomingCall'],
         );
         this.store.commit('phone/setCallType', 'INBOUND');
         this.store.commit('phone/setIncomingCall', null);
       } else {
         this.store.commit(
           'phone/setCurrentCall',
-          this.store.getters['phone/getOutgoingCall'],
+          this.store.getters['phone/outgoingCall'],
         );
         this.store.commit('phone/setOutgoingCall', null);
       }
@@ -277,7 +282,7 @@ export default class PhoneService {
 
   onQueueStats(info: any) {
     this.store.commit('phone/setGeneralStats', { ...info.totals });
-    this.store.commit('phone/setGateStats', { ...info.queues });
+    this.store.commit('phone/setGateStats', [...info.queues]);
   }
 
   async login(
