@@ -17,15 +17,13 @@
 </template>
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue';
-// import { EventsMixin } from '@/mixins';
-// import useLogEvent from '@/use/events/useLogEvent';
+import useLogEvent from '@/hooks/useLogEvent';
 
 export default defineComponent({
   name: 'BaseCheckbox',
-  // mixins: [EventsMixin],
 
   setup(props, context) {
-    // const { logEvent } = useLogEvent();
+    const { logEvent } = useLogEvent();
 
     const isInvalid = ref(false);
     const input = ref<HTMLInputElement | null>(null);
@@ -43,7 +41,7 @@ export default defineComponent({
     function update(e) {
       context.emit('update:modelValue', e.target.checked);
       isInvalid.value = input?.value?.checkValidity() || false;
-      // logEvent(props.ccuEvent);
+      logEvent(props.ccuEvent);
     }
 
     function change(e) {

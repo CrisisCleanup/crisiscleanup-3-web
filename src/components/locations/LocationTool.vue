@@ -281,7 +281,7 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import * as circleToPolygon from 'circle-to-polygon';
 import * as turf from '@turf/turf';
 import { useStore } from 'vuex';
-import { throttle, cloneDeep } from 'lodash';
+import { throttle } from 'lodash';
 import { useRefHistory } from '@vueuse/core';
 import {
   reactive,
@@ -301,9 +301,8 @@ import LocationType from '../../models/LocationType';
 import useWorksiteMap from '../../hooks/worksite/useWorksiteMap';
 import LayerUploadTool from './LayerUploadTool.vue';
 import MapButton from './MapButton.vue';
-import { getMarkerLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import useRenderedMarkers from '@/hooks/worksite/useRenderedMarkers';
+import useLogEvent from '@/hooks/useLogEvent';
 
 export default {
   name: 'LocationTool',
@@ -770,7 +769,8 @@ export default {
         nextTick(() => {
           showPopup(layer.getBounds().getCenter());
         });
-        // this.logEvent('user_ui-draw');
+        const { logEvent } = useLogEvent();
+        logEvent('user_ui-draw');
       });
 
       stateRefs.map.value = leafletMap;

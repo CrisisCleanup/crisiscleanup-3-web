@@ -30,7 +30,7 @@
       />
       <ccu-icon
         v-tooltip="{
-          // content: $t(`adminCMS.cms_help`), TODO: Figure out why this doesn't work
+          content: $t(`adminCMS.cms_help`),
           trigger: 'click',
           classes: 'interactive-tooltip w-auto',
         }"
@@ -370,6 +370,9 @@ export default {
       handleFileUpload,
       uploading,
       moment,
+      $t: (text) => {
+        return text ? t(text) : null;
+      },
     };
   },
 };

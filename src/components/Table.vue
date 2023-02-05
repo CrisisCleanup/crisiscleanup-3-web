@@ -254,14 +254,13 @@
 </template>
 
 <script lang="ts">
-// import { EventsMixin } from '@/mixins';
 import { computed, ref, defineComponent } from 'vue';
 import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
+import useLogEvent from '@/hooks/useLogEvent';
 
 export default defineComponent({
   name: 'Table',
-  // mixins: [EventsMixin], TODO: Events Mixin
   props: {
     columns: {
       type: Array,
@@ -495,9 +494,11 @@ export default defineComponent({
         ...props.pagination,
       };
       const filter = {};
-      // this.logEvent(
-      //     sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
-      // );
+      const { logEvent } = useLogEvent();
+
+      logEvent(
+        sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
+      );
       emit('change', { pagination, filter, sorter, columnSearch });
     }
     function onSearch() {

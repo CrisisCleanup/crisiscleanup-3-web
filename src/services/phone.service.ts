@@ -433,7 +433,6 @@ export default class PhoneService {
   async hangup() {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
-      // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
       // Log.debug(this.store.callState);
       this.cf.offhookTerm((offhookTermResponse: any) => {
         // Log.debug('Offhook term response', offhookTermResponse);

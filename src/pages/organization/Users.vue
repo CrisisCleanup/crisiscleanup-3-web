@@ -237,7 +237,6 @@ export default defineComponent({
     });
     const filterCount = computed(() => {
       return Object.values(filters).reduce((total, obj) => {
-        // TODO: This looks wrong, should be obj.getCount()
         return total + obj.getCount();
       }, 0);
     });

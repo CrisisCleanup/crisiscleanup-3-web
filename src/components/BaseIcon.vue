@@ -33,13 +33,11 @@
 import { kebabCase } from "lodash";
 import { computed, defineComponent, PropType, ref } from "vue";
 import { ICON_MAP, ICON_SIZES, ICONS } from "../constants";
-// import { EventsMixin } from '@/mixins';
 
 type IconSize = typeof ICON_SIZES[number];
 
 export default defineComponent({
   name: "BaseIcon",
-  // mixins: [EventsMixin],
 
   props: {
     type: {

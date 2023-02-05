@@ -8,13 +8,21 @@
     :delay="0"
     :searchable="true"
     :object="true"
-    :create-option="allowNew"
-    :add-option-on="['enter', 'tab']"
     value-prop="id"
     :options="onOrganizationSearch"
+    :clear-on-blur="false"
+    @close="
+      (select) => {
+        const value = select.input.value;
+        $nextTick(() => {
+          if (!Number.isInteger(select.textValue) && allowNew) {
+            $emit('input', value);
+          }
+        });
+      }
+    "
     @update:modelValue="
       (value) => {
-        // TODO: Is there a way to do this without the click?
         if (Number.isInteger(value.id)) {
           $emit('selectedOrganization', value);
         } else {
@@ -25,6 +33,9 @@
   >
     <template v-if="isAdmin" #option="{ option }">
       <span>{{ option.id }} - {{ option.name }}</span>
+    </template>
+    <template v-if="allowNew" #nooptions>
+      <div></div>
     </template>
   </Multiselect>
 </template>
@@ -91,6 +102,7 @@ export default defineComponent({
 
     return {
       onOrganizationSearch,
+      log: console.log,
     };
   },
 });

@@ -1,6 +1,5 @@
 <template>
   <div class="work-page h-full" :class="{ collapsedForm }">
-    <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
       <div class="relative">
         <div class="flex items-center justify-between">
