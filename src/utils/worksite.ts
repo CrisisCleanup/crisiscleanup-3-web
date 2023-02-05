@@ -25,7 +25,7 @@ const loadCasesCached = async (query) => {
   const casesUpdated = await DbService.getItem(`casesUpdated:${queryHash}`);
   const casesReconciled =
     (await DbService.getItem(`casesReconciled:${queryHash}`)) ||
-    moment('2022-09-01').toISOString();
+    moment().toISOString();
   if (cachedCases) {
     const [response, reconciliationResponse] = await Promise.all([
       axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/worksites_all`, {
