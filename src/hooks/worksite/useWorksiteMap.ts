@@ -10,7 +10,8 @@ import { i18n } from '../../main';
 import useRenderedMarkers from './useRenderedMarkers';
 import type { LayerGroup, PixiLayer } from '@/utils/types/map';
 import type Worksite from '@/models/Worksite';
-import useEmitter from "@/hooks/useEmitter";
+import useEmitter from '@/hooks/useEmitter';
+import '@/external/Leaflet.GoogleMutant/index';
 
 export type MapUtils = {
   getMap: () => L.Map;

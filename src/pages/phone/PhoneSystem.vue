@@ -803,7 +803,7 @@ export default {
           onSelectMarker(m);
         },
         () => {},
-        false,
+        true,
       );
     }
 

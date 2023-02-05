@@ -7,6 +7,7 @@ import * as L from 'leaflet';
 import { nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { mapTileLayer } from '@/utils/map';
+import '@/external/Leaflet.GoogleMutant/index';
 
 export default {
   name: 'LocationViewer',
@@ -61,8 +62,7 @@ export default {
           zoomControl: false,
         }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 3);
         if (props.useGoogleMaps) {
-          // L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(this.map); TODO: Fix google maps view
-          createTileLayer().addTo(map.value);
+          L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map.value);
         } else {
           createTileLayer().addTo(map.value);
         }
