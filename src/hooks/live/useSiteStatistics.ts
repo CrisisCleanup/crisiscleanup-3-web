@@ -1,10 +1,15 @@
 import axios from 'axios';
 import moment from 'moment';
+import type { Ref } from 'vue';
 import { getQueryString } from '@/utils/urls';
 import { i18n } from '@/main';
 import type { SiteStatistic } from '@/hooks/live/types';
+import type Organization from '@/models/Organization';
 
-export default function useSiteStatistics(queryFilter: Record<string, any>) {
+export default function useSiteStatistics(
+  queryFilter: Record<string, any>,
+  organizations: Ref<Organization[]>,
+) {
   const statsInterval = ref<ReturnType<typeof setInterval> | null>(null);
   const currentSiteStats = ref<SiteStatistic[]>([]);
   const currentEngagement = ref(0);
@@ -28,7 +33,6 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: end_date.format('YYYY-MM-DD'),
-      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -51,9 +55,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     statsInterval.value = null;
 
     const { incident } = queryFilter.value;
-    const params = {
-      incident: undefined,
-    };
+    const params = {};
     if (incident) {
       params.incident = incident;
     }
@@ -80,7 +82,6 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
       date: d,
       interval,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -100,7 +101,6 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: end_date.format('YYYY-MM-DD'),
-      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -198,7 +198,6 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
     const params = {
       start_date: start_date.format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD'),
-      incident: undefined,
     };
     if (incident) {
       params.incident = incident;
@@ -273,8 +272,7 @@ export default function useSiteStatistics(queryFilter: Record<string, any>) {
       {
         name: 'Total Orgs',
         color: mapStatisticsColors[6],
-        count: 0,
-        // count: this.organizations.length TODO: Find a better way to do this,
+        count: organizations.value.length,
         style: `border: none`,
         title: i18n.global.t('pewPew.total_orgs'),
       },

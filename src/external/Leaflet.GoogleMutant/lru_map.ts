@@ -160,7 +160,6 @@ export class LRUMap {
   }
 
   shift() {
-    // todo: handle special case when limit == 1
     var entry = this.oldest;
     if (entry) {
       if (this.oldest[NEWER]) {

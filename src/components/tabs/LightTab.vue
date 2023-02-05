@@ -14,30 +14,15 @@ export default defineComponent({
     selected: { type: Boolean },
     disabled: { type: Boolean, default: false },
   },
-  setup(props) {
+  setup() {
     const index = ref(0);
-    const isActive = ref(false);
+    const isActive = computed(() => index.value === tabs.selectedIndex);
 
     const tabs = inject('TabsProvider');
-
-    watch(
-      () => tabs.selectedIndex,
-      () => {
-        isActive.value = index.value === tabs.selectedIndex;
-      },
-    );
-
-    watch(
-      () => props.selected,
-      () => {
-        tabs.selectedIndex = index;
-      },
-    );
 
     onBeforeMount(() => {
       index.value = tabs.count;
       tabs.count++;
-      isActive.value = index.value === tabs.selectedIndex;
     });
     return { index, isActive };
   },

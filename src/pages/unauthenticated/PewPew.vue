@@ -520,6 +520,12 @@ export default {
     const lastEventTimestamp = ref(null);
     const markersLength = ref(0);
     const mapUtils = ref(null);
+    const isDarkMode = computed(() => colorMode.value === 'dark');
+    const isLoggedIn = computed(() => store.getters['auth/isLoggedIn']);
+    const incidentList = computed(() =>
+      Incident.query().where('active_phone_number', Boolean).get(),
+    );
+    const organizations = ref([]);
 
     const {
       currentSiteStats,
@@ -529,7 +535,7 @@ export default {
       totalCasesChartData,
       mapStatistics,
       formatStatValue,
-    } = useSiteStatistics(queryFilter);
+    } = useSiteStatistics(queryFilter, organizations);
 
     const styles = computed(() => {
       if (colorMode.value === 'dark') {
@@ -557,12 +563,6 @@ export default {
       };
     });
 
-    const isDarkMode = computed(() => colorMode.value === 'dark');
-    const isLoggedIn = computed(() => store.getters['auth/isLoggedIn']);
-    const incidentList = computed(() =>
-      Incident.query().where('active_phone_number', Boolean).get(),
-    );
-    const organizations = ref([]);
     const siteInfoTimerData = reactive({
       timerId: null,
       activeInfoTab: 0,
