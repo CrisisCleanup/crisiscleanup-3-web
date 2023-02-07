@@ -50,6 +50,7 @@
 <script>
 import { computed } from 'vue';
 import Avatar from '../Avatar.vue';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default {
   name: 'UserProfileMenu',
@@ -61,6 +62,8 @@ export default {
     },
   },
   setup(props) {
+    const { currentUser } = useCurrentUser();
+
     const styles = computed(() => ({
       title:
         props.invert === true
@@ -70,6 +73,7 @@ export default {
 
     return {
       styles,
+      currentUser,
     };
   },
 };
