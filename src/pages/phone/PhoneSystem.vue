@@ -65,7 +65,7 @@
       />
       <div class="phone-system__main-content">
         <div v-show="showingMap" class="phone-system__main-content--map">
-          <SimpleMap :map-loading="mapLoading" />
+          <SimpleMap :key="showingMap" :map-loading="mapLoading" />
           <div ref="phoneButtons" class="phone-system__actions">
             <PhoneComponentButton
               name="caller"
@@ -86,9 +86,7 @@
                   v-if="potentialFailedCall"
                   class="bg-red-500 mt-6 text-white p-1.5"
                 >
-                  {{
-                    $t('phoneDashboard.ended_early')
-                  }}
+                  {{ $t('phoneDashboard.ended_early') }}
                   <base-button
                     :action="retryFailedCall"
                     variant="solid"
@@ -283,7 +281,7 @@
             ref="table"
             :columns="columns"
             :url="tableUrl"
-            :body-style="{ height: '100%' }"
+            :body-style="{ height: '30rem' }"
             class="mt-6 shadow-lg"
             :query="worksiteQuery"
             @rowClick="
@@ -691,7 +689,15 @@ export default {
     function toggleView(view) {
       showingMap.value = false;
       showingTable.value = false;
-      [view].value = true;
+      if (view === 'showingMap') {
+        showingMap.value = true;
+        nextTick(() => {
+          init();
+        });
+      }
+      if (view === 'showingTable') {
+        showingTable.value = true;
+      }
     }
     function onSelectExistingWorksite(worksite) {
       // only show worksite on map if on map view

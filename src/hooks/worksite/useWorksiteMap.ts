@@ -29,6 +29,7 @@ export type MapUtils = {
   loadMarker: (marker: Sprite & Worksite, index: number) => void;
   hideMarkers: () => void;
   showMarkers: () => void;
+  loadMapTiles: () => L.Map;
 };
 
 export default (
@@ -43,22 +44,28 @@ export default (
     index,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
   ) => {};
-  const map = L.map('map', {
-    zoomControl: false,
-  }).fitBounds([
-    [17.644_022_027_872_726, -122.783_144_702_938_76],
-    [50.792_047_064_406_866, -69.872_988_452_938_74],
-  ]);
-  if (useGoogleMaps) {
-    L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
-  } else {
-    L.tileLayer(mapTileLayer, {
-      attribution: mapAttribution,
-      detectRetina: false,
-      maxZoom: 18,
-      noWrap: false,
-    }).addTo(map);
+
+  function loadMapTiles() {
+    const map = L.map('map', {
+      zoomControl: false,
+    }).fitBounds([
+      [17.644_022_027_872_726, -122.783_144_702_938_76],
+      [50.792_047_064_406_866, -69.872_988_452_938_74],
+    ]);
+    if (useGoogleMaps) {
+      L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
+    } else {
+      L.tileLayer(mapTileLayer, {
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      }).addTo(map);
+    }
+    return map;
   }
+
+  const map = loadMapTiles();
 
   const removeLayer = (key: string) => {
     map.eachLayer((layer) => {
@@ -313,6 +320,7 @@ export default (
     loadMarker,
     hideMarkers,
     showMarkers,
+    loadMapTiles,
   };
   return mapUtils;
 };
