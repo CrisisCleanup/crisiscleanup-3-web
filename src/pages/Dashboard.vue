@@ -5,13 +5,17 @@
       <InviteUsers class="mx-1" />
     </div>
 
-    <div class="flex flex-wrap">
+    <div
+      class="grid grid-rows-4 grid-cols-1 md:grid-rows-2 md:grid-cols-2 xl:grid-rows-1 xl:grid-cols-4"
+    >
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
+        class="p-3 cursor-pointer h-full w-full"
+        @click="$router.push(`/incident/${currentIncidentId}/work`)"
       >
         <!--Metric Card-->
-        <div class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5">
+        <div
+          class="h-full bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
+        >
           <div class="flex flex-row items-center">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-lightblue-900">
@@ -26,7 +30,6 @@
               </h5>
               <h3 class="text-3xl">
                 {{ numeral(claimedWorksites.length) }}
-                <span class="text-green"><i class="fas fa-caret-up"></i></span>
               </h3>
             </div>
           </div>
@@ -35,11 +38,13 @@
       </div>
 
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
+        class="p-3 cursor-pointer h-full w-full"
+        @click="$router.push(`/incident/${currentIncidentId}/work`)"
       >
         <!--Metric Card-->
-        <div class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg">
+        <div
+          class="h-full bg-crisiscleanup-yellow-100 rounded-lg shadow-lg relative"
+        >
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-yellow-900">
@@ -56,14 +61,11 @@
                   ({{ numeral(totalClaimed / totalWorksites, 'percentage') }}
                   {{ $t('dashboard.of_total') }})
                 </span>
-                <span class="text-orange"
-                  ><i class="fas fa-exchange-alt"></i
-                ></span>
               </h3>
             </div>
           </div>
           <div
-            class="bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
+            class="absolute bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
             :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
           ></div>
         </div>
@@ -71,11 +73,11 @@
       </div>
 
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
+        class="p-3 cursor-pointer h-full w-full"
+        @click="$router.push(`/incident/${currentIncidentId}/work`)"
       >
         <!--Metric Card-->
-        <div class="bg-orange-400 rounded-lg shadow-lg">
+        <div class="h-full bg-orange-400 rounded-lg shadow-lg relative">
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-orange-600">
@@ -92,14 +94,11 @@
                   ({{ numeral(totalInProgess / totalWorksites, 'percentage') }}
                   {{ $t('dashboard.of_total') }})
                 </span>
-                <span class="text-yellow-900"
-                  ><i class="fas fa-caret-up"></i
-                ></span>
               </h3>
             </div>
           </div>
           <div
-            class="bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
+            class="absolute bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
             :style="{
               width: `${(totalInProgess / totalWorksites) * 100}%`,
             }"
@@ -109,11 +108,13 @@
       </div>
 
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
-        @click="$router.push(`/incident/${currentIncidentId}/cases`)"
+        class="p-3 cursor-pointer h-full w-full"
+        @click="$router.push(`/incident/${currentIncidentId}/work`)"
       >
         <!--Metric Card-->
-        <div class="bg-crisiscleanup-green-100 rounded-lg shadow-lg">
+        <div
+          class="h-full bg-crisiscleanup-green-100 rounded-lg shadow-lg relative"
+        >
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-green-900">
@@ -134,7 +135,7 @@
             </div>
           </div>
           <div
-            class="bottom-0 left-0 border-b-4 rounded-b-lg border-green-600"
+            class="bottom-0 left-0 border-b-4 rounded-b-lg border-green-600 absolute"
             :style="{ width: `${(totalClosed / totalWorksites) * 100}%` }"
           ></div>
         </div>

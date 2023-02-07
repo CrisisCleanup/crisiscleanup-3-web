@@ -190,7 +190,7 @@ button:focus {
 /** ----- DEPRECATED ----- */
 
 button.solid {
-  @apply bg-primary-light;
+  @apply bg-primary-light border-primary-light border;
 }
 
 button.solid:hover {
@@ -203,8 +203,7 @@ button.solid.disabled {
 }
 
 button.outline {
-  background-color: transparent;
-  border: 1px solid black;
+  @apply bg-transparent border-black border;
 }
 
 button.outline:hover {

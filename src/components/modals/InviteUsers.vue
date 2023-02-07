@@ -4,7 +4,7 @@
       :text="$t('usersVue.invite_new_user')"
       :alt="$t('usersVue.invite_new_user')"
       variant="solid"
-      size="medium"
+      class="mx-1 px-3 py-1"
       :action="
         () => {
           showInviteModal = true;
