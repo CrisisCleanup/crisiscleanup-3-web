@@ -86,6 +86,7 @@ import floodTornadoWind from './assets/disaster_icons/flood-tornado_wind.svg';
 import floodTropicalStorm from './assets/disaster_icons/flood-tstorm.svg';
 import hail from './assets/disaster_icons/hail.svg';
 import hurricane from './assets/disaster_icons/hurricane.svg';
+import iceStorm from './assets/disaster_icons/ice-storm.svg';
 import mudslide from './assets/disaster_icons/mudslide.svg';
 import other from './assets/disaster_icons/other.svg';
 import rebuild from './assets/disaster_icons/rebuild.svg';
@@ -107,6 +108,7 @@ export const DISASTER_ICONS: Record<string, any> = {
   'flood-tstorm': floodTropicalStorm,
   hail,
   hurricane,
+  'ice-storm': iceStorm,
   mudslide,
   other,
   rebuild,

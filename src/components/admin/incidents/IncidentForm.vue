@@ -175,6 +175,7 @@ const INCIDENT_TYPES = [
   'flood',
   'hurricane',
   'flood_tornado_wind',
+  'ice_storm',
   'wind',
   'tornado',
   'mudslide',
