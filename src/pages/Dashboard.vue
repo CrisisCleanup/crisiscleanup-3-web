@@ -235,11 +235,7 @@
                   size="medium"
                   class="p-1 py-2 w-8"
                   type="print"
-                  @clikc="
-                    () => {
-                      printWorksite(slotProps.item.id);
-                    }
-                  "
+                  :action="() => printWorksite(slotProps.item.id)"
                 />
               </div>
             </template>
