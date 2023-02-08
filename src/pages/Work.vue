@@ -1,6 +1,6 @@
 <template>
   <div class="work-page h-full" :class="{ collapsedForm }">
-    <div class="work-page__main">
+    <div :key="currentIncidentId" class="work-page__main">
       <div class="relative">
         <div class="flex items-center justify-between">
           <div
@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="work-page__main-content">
-        <div v-show="showingMap" class="work-page__main-content--map">
+        <div v-if="showingMap" class="work-page__main-content--map">
           <SimpleMap
             :map-loading="mapLoading"
             show-zoom-buttons
@@ -221,7 +221,7 @@
             </PhoneComponentButton>
           </div>
         </div>
-        <div v-show="showingTable" class="work-page__main-content--table">
+        <div v-if="showingTable" class="work-page__main-content--table">
           <div class="flex items-center justify-end">
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
@@ -677,6 +677,9 @@ export default defineComponent({
           updateUserState({});
         });
       }
+      nextTick(() => {
+        init();
+      });
       updateUserState({});
     };
 
@@ -1052,19 +1055,7 @@ export default defineComponent({
       },
     );
 
-    onMounted(async () => {
-      if (route.params.incident_id) {
-        store.commit('incident/setCurrentIncidentId', route.params.incident_id);
-      }
-      if (route.params.id) {
-        worksiteId.value = route.params.id;
-        if (route?.meta?.id === 'work_case_edit') {
-          isEditing.value = true;
-        } else {
-          isViewing.value = true;
-        }
-      }
-      loadStatesForUser();
+    async function init() {
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
 
@@ -1081,6 +1072,22 @@ export default defineComponent({
           // });
         },
       );
+    }
+
+    onMounted(async () => {
+      if (route.params.incident_id) {
+        store.commit('incident/setCurrentIncidentId', route.params.incident_id);
+      }
+      if (route.params.id) {
+        worksiteId.value = route.params.id;
+        if (route?.meta?.id === 'work_case_edit') {
+          isEditing.value = true;
+        } else {
+          isViewing.value = true;
+        }
+      }
+      loadStatesForUser();
+      await init();
     });
 
     return {
