@@ -13,7 +13,10 @@
     <link rel="icon" href="/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:100, 300,400,500,600,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700&display=swap" rel="stylesheet">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuQPeETkH_q3QE00PeC3g8bHAyVseh7FY&amp;libraries=places"></script>
+    <script>
+      window['mapsCallback'] = () => {}
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuQPeETkH_q3QE00PeC3g8bHAyVseh7FY&amp;libraries=places&callback=mapsCallback"></script>
     <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=8ded7c6f-5e21-423d-bd23-75d1a3dfc46c"> </script>
     <script type="text/javascript">
         window.zESettings = {
