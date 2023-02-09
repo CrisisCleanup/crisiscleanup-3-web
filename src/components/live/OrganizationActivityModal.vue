@@ -40,7 +40,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.type_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
@@ -62,7 +63,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.role_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
@@ -86,7 +88,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.incidents_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
@@ -102,7 +105,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.cases_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
@@ -118,7 +122,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.call_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
@@ -134,7 +139,8 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.value_description'),
-                trigger: 'click',
+                html: true,
+                triggers: ['click'],
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"

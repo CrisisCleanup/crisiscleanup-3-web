@@ -46,7 +46,8 @@
         v-tooltip="{
           content: $t('worksiteMap.zoom_to_make_interactive'),
           // show: showInteractivePopover,
-          trigger: 'hover',
+          html: true,
+          triggers: ['hover'],
           classes: 'interactive-tooltip',
           placement: 'right-start',
         }"

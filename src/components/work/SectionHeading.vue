@@ -21,7 +21,8 @@
       v-if="tooltip"
       v-tooltip="{
         content: tooltip,
-        trigger: 'hover',
+        html: true,
+        triggers: ['hover'],
         classes: 'interactive-tooltip w-72',
       }"
       :alt="$t('actions.help_alt')"

@@ -78,7 +78,8 @@
           <ccu-icon
             v-tooltip="{
               content: $t('casesVue.auto_contact_frequency_help'),
-              trigger: 'hover',
+              html: true,
+              triggers: ['hover'],
               classes: 'interactive-tooltip w-72',
             }"
             :alt="$t('casesVue.auto_contact_frequency_help')"
@@ -106,7 +107,8 @@
         <ccu-icon
           v-tooltip="{
             content: $t('caseForm.location_instructions'),
-            trigger: 'click',
+            html: true,
+            triggers: ['click'],
             classes: 'interactive-tooltip w-72',
           }"
           :alt="$t('caseForm.location_instructions')"

@@ -5,7 +5,8 @@
       <ccu-icon
         v-tooltip="{
           content: $t(capability.description_t),
-          trigger: 'click',
+          html: true,
+          triggers: ['click'],
           classes: 'interactive-tooltip w-auto',
         }"
         :invert-color="true"

@@ -796,8 +796,9 @@ export default defineComponent({
       }
     }
 
-    function filterSvi(e: Event) {
-      sviSliderValue.value = Number((e.target as HTMLInputElement).value);
+    function filterSvi(value: number) {
+      if (value === 0) return;
+      sviSliderValue.value = Number(value);
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
       const sviList = container?.children.map((marker: any) => {
@@ -811,9 +812,7 @@ export default defineComponent({
           return (b.svi || 1) - (a.svi || 1);
         });
 
-        const count = Math.floor(
-          (sviList.length * Number((e.target as HTMLInputElement).value)) / 100,
-        );
+        const count = Math.floor((sviList.length * Number(value)) / 100);
         const filteredSvi = sviList.slice(0, count);
         const minSvi = filteredSvi[filteredSvi.length - 1].svi;
         for (const markerSprite of container.children) {
@@ -1053,6 +1052,7 @@ export default defineComponent({
           isEditing.value = false;
           isViewing.value = false;
           router.push(`/incident/${currentIncidentId.value}/work`);
+          init();
         }
       },
     );
@@ -1096,6 +1096,8 @@ export default defineComponent({
             [_southWest.lat, _southWest.lng],
           ]);
         }
+
+        filterSvi(sviSliderValue.value);
       });
     }
 

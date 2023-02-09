@@ -476,7 +476,8 @@
                 <div
                   v-tooltip="{
                     content: getContactView(request),
-                    trigger: 'hover',
+                    html: true,
+                    triggers: ['hover'],
                     classes: 'interactive-tooltip w-72',
                   }"
                 >

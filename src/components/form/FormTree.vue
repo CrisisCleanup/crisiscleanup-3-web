@@ -50,8 +50,9 @@
             <ccu-icon
               v-if="field.help_t"
               v-tooltip="{
+                html: true,
                 content: field.help_t,
-                trigger: 'hover',
+                triggers: ['hover'],
                 classes: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
@@ -82,8 +83,9 @@
             <ccu-icon
               v-if="field.help_t"
               v-tooltip="{
+                html: true,
                 content: field.help_t,
-                trigger: 'hover',
+                triggers: ['hover'],
                 classes: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
@@ -151,8 +153,9 @@
             <ccu-icon
               v-if="field.help_t"
               v-tooltip="{
+                html: true,
                 content: field.help_t,
-                trigger: 'hover',
+                triggers: ['hover'],
                 classes: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
@@ -188,8 +191,9 @@
           <ccu-icon
             v-if="field.help_t"
             v-tooltip="{
+              html: true,
               content: field.help_t,
-              trigger: 'hover',
+              triggers: ['hover'],
               classes: 'interactive-tooltip w-72',
             }"
             :alt="$t('actions.help_alt')"

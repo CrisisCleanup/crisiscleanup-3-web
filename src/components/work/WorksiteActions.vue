@@ -14,7 +14,8 @@
           <img
             v-tooltip="{
               content: $t('casesVue.damage_assessment_help'),
-              trigger: 'hover',
+              html: true,
+              triggers: ['hover'],
               classes: 'interactive-tooltip w-72',
             }"
             class="w-5 h-5"

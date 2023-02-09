@@ -42,7 +42,7 @@
                   size="xxs"
                   variant="outline"
                   class="worksite__dialer"
-                  v-tooltip="{ content: 'Call Number' }"
+                  v-tooltip="{ content: 'Call Number', html: true }"
                   :action="() => openDialerTab(worksite.phone1)"
                 />
               </div>

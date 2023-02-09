@@ -9,7 +9,8 @@
           v-if="fromTooltip"
           v-tooltip="{
             content: fromTooltip,
-            trigger: 'click',
+            triggers: ['click'],
+            html: true,
             classes: 'interactive-tooltip w-auto',
           }"
           :alt="$t('actions.help_alt')"
