@@ -55,7 +55,8 @@
                     worksiteId = w.id;
                     isViewing = true;
                     if (showingMap) {
-                      router.push({
+                        router.push(
+                          `/incident/${currentIncidentId}/work/${w.id}`, {
                         query: { showOnMap: true },
                       });
                     }

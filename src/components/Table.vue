@@ -79,10 +79,10 @@
               :options="column ? column.getSelectValues(data) : []"
               item-key="value"
               label="name_t"
-              :model-value="columnSearch[column.key]"
+              :model-value="internalColumnSearch[column.key]"
               @update:modelValue="
                 (value) => {
-                  columnSearch[column.key] = value;
+                  internalColumnSearch[column.key] = value;
                   onSearch();
                 }
               "
@@ -90,11 +90,11 @@
             <base-input
               v-else
               :placeholder="column.title"
-              :model-value="columnSearch[column.key]"
+              :model-value="internalColumnSearch[column.key]"
               input-style="width: 100%"
               @update:modelValue="
                 (value) => {
-                  columnSearch[column.key] = value;
+                  internalColumnSearch[column.key] = value;
                   onSearch();
                 }
               "
@@ -324,6 +324,7 @@ export default defineComponent({
     const visiblePagesCount = 5;
     const selectedItems = ref(new Set([]));
     const showingDetails = ref(new Set([]));
+    const internalColumnSearch = ref({ ...props.columnSearch });
 
     const pageCount = computed(() => {
       return Math.ceil(
@@ -347,7 +348,9 @@ export default defineComponent({
       }).fill(0);
 
       if (pageCount.value < visiblePagesCount) {
-        return new Array(pageCount.value).fill(0).map((_, index) => index + 1);
+        return Array.from({ length: pageCount.value })
+          .fill(0)
+          .map((_, index) => index + 1);
       }
 
       if (currentPage <= visiblePagesThreshold + 1) {
@@ -458,7 +461,7 @@ export default defineComponent({
           newPage = value;
         }
       }
-      const columnSearch = { ...props.columnSearch };
+      const columnSearch = { ...internalColumnSearch.value };
 
       const pagination = {
         ...props.pagination,
@@ -472,7 +475,7 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
     function onSelectPageSize(pageSize) {
-      const columnSearch = { ...props.columnSearch };
+      const columnSearch = { ...internalColumnSearch.value };
       const pagination = {
         ...props.pagination,
         current: 1,
@@ -485,7 +488,7 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
     function sort(key) {
-      const columnSearch = { ...props.columnSearch };
+      const columnSearch = { ...internalColumnSearch.value };
       const sorter = { ...props.sorter };
       sorter.key = key;
       sorter.direction = sorter.direction === 'asc' ? 'desc' : 'asc';
@@ -502,7 +505,7 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
     function onSearch() {
-      const columnSearch = { ...props.columnSearch };
+      const columnSearch = { ...internalColumnSearch.value };
       const sorter = { ...props.sorter };
       const pagination = {
         ...props.pagination,
@@ -575,6 +578,7 @@ export default defineComponent({
       rowClick,
       exportTableCSV,
       handleColumnAction,
+      internalColumnSearch,
     };
   },
 });

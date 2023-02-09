@@ -849,7 +849,7 @@ export default defineComponent({
       columnSearch: incomingColumnSearch,
     }) {
       sorter.value = { ...incomingSorter };
-      incomingColumnSearch.value = { ...columnSearch };
+      columnSearch.value = { ...incomingColumnSearch };
     }
     function handlePendingTableChange({ sorter: incomingSorter }) {
       pendingSorter.value = { ...incomingSorter };

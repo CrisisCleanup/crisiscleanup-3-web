@@ -52,7 +52,8 @@ export default (
         sprite = new Sprite();
         sprite.index = index;
         sprite.id = marker.id;
-        if (!visibleMarkerIds.includes(marker.id)) {
+        const isFilteredMarker = !visibleMarkerIds.includes(marker.id);
+        if (isFilteredMarker) {
           sprite.zIndex = 0;
           sprite.alpha = 0.3;
         }
@@ -66,8 +67,8 @@ export default (
         sprite.y0 = patientCoords.y;
         sprite.anchor.set(0.5, 0.5);
         const svg = markerTemplate
-          .replaceAll('{{fillColor}}', fillColor)
-          .replaceAll('{{strokeColor}}', 'white');
+          .replaceAll('{{fillColor}}', isFilteredMarker ? 'white' : fillColor)
+          .replaceAll('{{strokeColor}}', isFilteredMarker ? fillColor : 'white');
         let texture = textureMap[fillColor];
         if (!texture) {
           textureMap[fillColor] = Texture.from(svg);
@@ -88,8 +89,8 @@ export default (
         const detailedTemplate =
           templates[workType?.work_type] || templates.unknown;
         const typeSvg = detailedTemplate
-          .replaceAll('{{fillColor}}', fillColor)
-          .replaceAll('{{strokeColor}}', strokeColor);
+          .replaceAll('{{fillColor}}', isFilteredMarker ? 'white' : fillColor)
+          .replaceAll('{{strokeColor}}', isFilteredMarker ? strokeColor : 'white');
 
         sprite.basicTexture = texture;
         sprite.detailedTexture = Texture.from(typeSvg);
