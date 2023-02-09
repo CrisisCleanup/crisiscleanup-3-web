@@ -331,6 +331,7 @@
         :action="
           () => {
             clearWorksiteStorage();
+            initForm();
             $emit('closeWorksite');
           }
         "
@@ -1317,6 +1318,7 @@ export default {
       form,
       onRemoveFile,
       worksiteImageSection,
+      initForm,
     };
   },
 };

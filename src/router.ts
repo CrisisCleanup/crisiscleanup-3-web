@@ -14,6 +14,7 @@ import Reports from '@/pages/admin/Reports.vue';
 import Report from '@/pages/admin/Report.vue';
 import NotFound from '@/pages/NotFound.vue';
 import Location from '@/pages/Location.vue';
+import Profile from "@/pages/Profile.vue";
 
 const routes = [
   {
@@ -32,6 +33,12 @@ const routes = [
     path: '/incident/:incident_id/dashboard',
     component: Dashboard,
     name: 'nav.dashboard',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    name: 'nav.profile',
     meta: { layout: 'authenticated' },
   },
   {

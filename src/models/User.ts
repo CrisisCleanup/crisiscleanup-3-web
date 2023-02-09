@@ -128,6 +128,19 @@ export default class User extends CCUModel<User> {
     return languageList;
   }
 
+  get languageIds() {
+    const languageList: any[] = [];
+    if (this.primary_language) {
+      languageList.push(this.primary_language);
+    }
+
+    if (this.secondary_language) {
+      languageList.push(this.secondary_language);
+    }
+
+    return languageList;
+  }
+
   get notificationSettings() {
     const settings = {
       has_notifications: false,

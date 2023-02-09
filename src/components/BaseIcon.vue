@@ -188,4 +188,8 @@ export default defineComponent({
   filter: invert(92%) sepia(21%) saturate(3995%) hue-rotate(346deg)
     brightness(98%) contrast(106%);
 }
+
+img {
+  max-width: fit-content;
+}
 </style>

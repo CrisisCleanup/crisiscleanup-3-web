@@ -79,6 +79,22 @@ export default defineComponent({
       emit('tabSelected', state.tabs[i]);
     };
 
+    const nextTab = () => {
+      if (state.selectedIndex < state.tabs.length - 1) {
+        selectTab(state.selectedIndex + 1);
+      }
+    };
+
+    const previousTab = (i: number) => {
+      if (state.selectedIndex > 0) {
+        selectTab(state.selectedIndex - 1);
+      }
+    };
+
+    const isLast = computed(
+      () => state.selectedIndex === state.tabs.length - 1,
+    );
+
     onBeforeMount(() => {
       if (slots.default) {
         state.tabs = slots
@@ -94,7 +110,7 @@ export default defineComponent({
       selectTab(0);
     });
 
-    return { ...toRefs(state), selectTab };
+    return { ...toRefs(state), selectTab, nextTab, previousTab, isLast };
   },
 });
 </script>

@@ -55,6 +55,7 @@ import Tabs from './components/tabs/Tabs.vue';
 import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
 import BaseLink from './components/BaseLink.vue';
+import TreeMenu from "@/components/TreeMenu.vue";
 
 library.add(fas);
 
@@ -97,6 +98,7 @@ app.component('VPopover', Dropdown);
 app.component('VMenu', Menu);
 app.component('Spinner', Spinner);
 app.component('FormTree', FormTree);
+app.component('TreeMenu', TreeMenu);
 app.component('Tabs', Tabs);
 app.component('Tab', Tab);
 app.component('Datepicker', Datepicker);

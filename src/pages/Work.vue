@@ -480,6 +480,7 @@ import axios from 'axios';
 import type { Sprite } from 'pixi.js';
 import moment from 'moment';
 import type { LatLng } from 'leaflet';
+import * as L from 'leaflet';
 import WorksiteSearchInput from '../components/work/WorksiteSearchInput.vue';
 import PhoneComponentButton from '../components/phone/PhoneComponentButton.vue';
 import SimpleMap from '../components/SimpleMap.vue';
@@ -577,14 +578,14 @@ export default defineComponent({
         true,
       );
       if (states) {
-        // if (states.showingMap) {
-        //   showingMap.value = true;
-        //   showingTable.value = false;
-        // }
-        // if (states.showingTable) {
-        //   showingTable.value = true;
-        //   showingMap.value = false;
-        // }
+        if (states.showingMap) {
+          showingMap.value = true;
+          showingTable.value = false;
+        }
+        if (states.showingTable) {
+          showingTable.value = true;
+          showingMap.value = false;
+        }
         if (states.appliedFilters) {
           filterQuery.value = states.appliedFilters;
         }
@@ -1067,11 +1068,34 @@ export default defineComponent({
         },
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
-          // nextTick(() => {
-          //   filterSvi(sviSliderValue.value);
-          // });
         },
       );
+
+      nextTick(() => {
+        mapUtils?.getMap().on(
+          'move',
+          L.Util.throttle(
+            () => {
+              updateUserState({
+                mapViewPort: mapUtils?.getMap().getBounds(),
+              });
+            },
+            1000,
+            {},
+          ),
+        );
+        if (
+          currentUser?.value?.states &&
+          currentUser?.value?.states.mapViewPort
+        ) {
+          const { _northEast, _southWest } =
+            currentUser.value.states.mapViewPort;
+          mapUtils?.getMap().fitBounds([
+            [_northEast.lat, _northEast.lng],
+            [_southWest.lat, _southWest.lng],
+          ]);
+        }
+      });
     }
 
     onMounted(async () => {
