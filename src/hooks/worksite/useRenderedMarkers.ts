@@ -6,6 +6,7 @@ import type { Feature, Point, Properties } from '@turf/turf';
 import { templates, colors } from '../../icons/icons_templates';
 import type Worksite from '@/models/Worksite';
 import type { PixiLayer } from '@/utils/types/map';
+import moment from "moment";
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -61,6 +62,7 @@ export default (
         sprite.svi = marker.svi;
         sprite.work_types = marker.work_types;
         sprite.updated_at = marker.updated_at;
+        sprite.updated_at_moment = moment(marker.updated_at);
         sprite.x = patientCoords.x;
         sprite.y = patientCoords.y;
         sprite.x0 = patientCoords.x;

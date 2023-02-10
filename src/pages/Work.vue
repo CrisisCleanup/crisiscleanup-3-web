@@ -110,9 +110,26 @@
             :from-tooltip="$t(`svi.svi_more_info_link`)"
             handle-size="12px"
             track-size="8px"
+            class="pt-1 ml-4"
             slider-class="w-64"
             @input="filterSvi"
           />
+          <Slider
+            v-if="datesList && datesList.length > 1000"
+            track-size="8px"
+            handle-size="12px"
+            primary-color="#dadada"
+            secondary-color="white"
+            class="pt-1 ml-4"
+            slider-class="w-84"
+            :title="$t('casesVue.updated')"
+            :value="dateSliderValue"
+            :min="0"
+            :max="1000"
+            :from="dateSliderFrom()"
+            :to="dateSliderTo()"
+            @input="filterDates"
+          ></Slider>
         </div>
       </div>
       <div class="work-page__main-content">
@@ -568,6 +585,7 @@ export default defineComponent({
     const selectedTableItems = ref<Set<number>>(new Set());
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
+    const dateSliderValue = ref(1000);
     let mapUtils: MapUtils | null;
     const unreadChatCount = ref(0);
     const unreadUrgentChatCount = ref(0);
@@ -593,6 +611,9 @@ export default defineComponent({
         if (states.sviLevel) {
           sviSliderValue.value = states.sviLevel;
         }
+        if (states.dateLevel) {
+          dateSliderValue.value = states.dateLevel;
+        }
         if (states.filters) {
           filters.value = {
             ...states.filters,
@@ -616,6 +637,7 @@ export default defineComponent({
           showingMap: showingMap.value,
           showingTable: showingTable.value,
           sviLevel: sviSliderValue.value,
+          dateLevel: dateSliderValue.value,
           ...data,
         },
       );
@@ -796,24 +818,31 @@ export default defineComponent({
       }
     }
 
-    function filterSvi(value: number) {
-      if (value === 0) return;
-      sviSliderValue.value = Number(value);
+    const sviList = computed(() => {
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
-      const sviList = container?.children.map((marker: any) => {
+      const list = container?.children.map((marker: any) => {
         return {
           id: marker.id,
           svi: marker.svi,
         };
       });
-      if (sviList && container) {
-        sviList.sort((a, b) => {
+      if (list && container) {
+        list.sort((a, b) => {
           return (b.svi || 1) - (a.svi || 1);
         });
+      }
+      return list;
+    });
 
-        const count = Math.floor((sviList.length * Number(value)) / 100);
-        const filteredSvi = sviList.slice(0, count);
+    function filterSvi(value: number) {
+      if (value === 0) return;
+      sviSliderValue.value = Number(value);
+      const layer = mapUtils?.getCurrentMarkerLayer();
+      const container = layer?._pixiContainer;
+      if (sviList.value && container) {
+        const count = Math.floor((sviList.value.length * Number(value)) / 100);
+        const filteredSvi = sviList.value.slice(0, count);
         const minSvi = filteredSvi[filteredSvi.length - 1].svi;
         for (const markerSprite of container.children) {
           markerSprite.visible = markerSprite.svi > minSvi;
@@ -821,6 +850,73 @@ export default defineComponent({
 
         layer._renderer.render(container);
         layer.redraw();
+      }
+
+      updateUserState({});
+    }
+
+    const datesList = ref([]);
+
+    function getDatesList() {
+      const layer = mapUtils?.getCurrentMarkerLayer();
+      const container = layer?._pixiContainer;
+      const list = container?.children.map((marker: any) => {
+        return {
+          id: marker.id,
+          updated_at: marker.updated_at_moment,
+        };
+      });
+      if (list && container) {
+        list.sort((a, b) => {
+          return b.updated_at - a.updated_at;
+        });
+      }
+      datesList.value = list;
+    }
+
+    const dateSliderFrom = () => {
+      const list = datesList.value;
+      if (list) {
+        return `${moment({ hours: 0 }).diff(
+          list[0].updated_at,
+          'days',
+        )} days ago`;
+      }
+      return '';
+    };
+
+    const dateSliderTo = () => {
+      const list = datesList.value;
+      if (list) {
+        return `${moment({ hours: 0 }).diff(
+          list[list.length - 1].updated_at,
+          'days',
+        )} days ago`;
+      }
+      return '';
+    };
+
+    function filterDates(value: number) {
+      if (sviSliderValue.value !== 100) {
+        filterSvi(100);
+      }
+      if (value === 0) return;
+      dateSliderValue.value = Number(value);
+      const layer = mapUtils?.getCurrentMarkerLayer();
+      const container = layer?._pixiContainer;
+
+      if (datesList.value) {
+        const count = Math.floor(
+          (datesList.value.length * Number(value)) / 1000,
+        );
+        const filteredSvi = datesList.value.slice(0, count);
+        const minSvi = filteredSvi[filteredSvi.length - 1].updated_at;
+        for (const markerSprite of container?.children || []) {
+          markerSprite.visible = markerSprite.updated_at_moment > minSvi;
+        }
+
+        layer?._renderer.render(container);
+        layer?.redraw();
       }
 
       updateUserState({});
@@ -1069,6 +1165,7 @@ export default defineComponent({
         },
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
+          getDatesList();
         },
       );
 
@@ -1164,7 +1261,9 @@ export default defineComponent({
       zoomIn,
       zoomOut,
       filterSvi,
+      filterDates,
       sviSliderValue,
+      dateSliderValue,
       toggleHeatMap,
       showUpdateStatusModal,
       showUnclaimModal,
@@ -1180,6 +1279,9 @@ export default defineComponent({
       currentSearch,
       numeral,
       moment,
+      datesList,
+      dateSliderFrom,
+      dateSliderTo,
     };
   },
 });

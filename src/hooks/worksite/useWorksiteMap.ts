@@ -108,7 +108,7 @@ export default (
 
     map.on('mousemove', L.Util.throttle(addCursor as any, 32, {}));
     map.panBy([1, 0]);
-    return { workTypes };
+    return { workTypes, sprites: getPixiContainer()?.children };
   }
 
   onLoadMarkers(setupMap(markers, visibleMarkerIds));
