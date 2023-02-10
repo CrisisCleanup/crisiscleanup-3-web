@@ -419,6 +419,12 @@
               showFlags = false;
             }
           "
+          @reloadMap="
+            () => {
+              reloadMap();
+              showFlags = false;
+            }
+          "
           @clearCase="clearCase"
         ></CaseFlag>
         <WorksiteView
