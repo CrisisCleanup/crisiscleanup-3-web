@@ -601,7 +601,15 @@ export default (
     const markerGroup = L.layerGroup() as LayerGroup & L.LayerGroup;
     markerGroup.key = 'temp_markers';
 
-    const marker = L.marker(markerLocation, { draggable: true });
+    const svgIcon = L.divIcon({
+      className: 'crisiscleanup-map-marker',
+      html: templates.map_marker,
+      iconAnchor: [12, 0],
+      popupAnchor: [10, -35],
+      iconSize: [50, 50],
+    });
+
+    const marker = L.marker(markerLocation, { draggable: true, icon: svgIcon });
     markerGroup.addTo(map);
     markerGroup.addLayer(marker);
 

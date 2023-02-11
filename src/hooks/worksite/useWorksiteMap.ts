@@ -12,6 +12,7 @@ import type { LayerGroup, PixiLayer } from '@/utils/types/map';
 import type Worksite from '@/models/Worksite';
 import useEmitter from '@/hooks/useEmitter';
 import '@/external/Leaflet.GoogleMutant/index';
+import { templates } from '@/icons/icons_templates';
 
 export type MapUtils = {
   getMap: () => L.Map;
@@ -29,7 +30,6 @@ export type MapUtils = {
   loadMarker: (marker: Sprite & Worksite, index: number) => void;
   hideMarkers: () => void;
   showMarkers: () => void;
-  loadMapTiles: () => L.Map;
 };
 
 export default (
@@ -44,28 +44,22 @@ export default (
     index,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
   ) => {};
-
-  function loadMapTiles() {
-    const map = L.map('map', {
-      zoomControl: false,
-    }).fitBounds([
-      [17.644_022_027_872_726, -122.783_144_702_938_76],
-      [50.792_047_064_406_866, -69.872_988_452_938_74],
-    ]);
-    if (useGoogleMaps) {
-      L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
-    } else {
-      L.tileLayer(mapTileLayer, {
-        attribution: mapAttribution,
-        detectRetina: false,
-        maxZoom: 18,
-        noWrap: false,
-      }).addTo(map);
-    }
-    return map;
+  const map = L.map('map', {
+    zoomControl: false,
+  }).fitBounds([
+    [17.644_022_027_872_726, -122.783_144_702_938_76],
+    [50.792_047_064_406_866, -69.872_988_452_938_74],
+  ]);
+  if (useGoogleMaps) {
+    L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
+  } else {
+    L.tileLayer(mapTileLayer, {
+      attribution: mapAttribution,
+      detectRetina: false,
+      maxZoom: 18,
+      noWrap: false,
+    }).addTo(map);
   }
-
-  const map = loadMapTiles();
 
   const removeLayer = (key: string) => {
     map.eachLayer((layer) => {
@@ -157,7 +151,16 @@ export default (
     const markerGroup = L.layerGroup() as LayerGroup & L.LayerGroup;
     markerGroup.key = 'temp_markers';
 
+    const svgIcon = L.divIcon({
+      className: 'crisiscleanup-map-marker',
+      html: templates.map_marker,
+      iconAnchor: [12, 0],
+      popupAnchor: [10, -35],
+      iconSize: [50, 50],
+    });
+
     const marker: L.Marker = L.marker(markerLocation, {
+      icon: svgIcon,
       draggable: true,
     });
     markerGroup.addTo(map);
@@ -320,7 +323,6 @@ export default (
     loadMarker,
     hideMarkers,
     showMarkers,
-    loadMapTiles,
   };
   return mapUtils;
 };

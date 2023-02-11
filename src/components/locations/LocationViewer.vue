@@ -8,6 +8,7 @@ import { nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { mapTileLayer } from '@/utils/map';
 import '@/external/Leaflet.GoogleMutant/index';
+import { templates } from '@/icons/icons_templates';
 
 export default {
   name: 'LocationViewer',
@@ -35,12 +36,20 @@ export default {
       });
     }
     function addMarkerToMap() {
+      const svgIcon = L.divIcon({
+        className: 'crisiscleanup-map-marker',
+        html: templates.map_marker,
+        iconAnchor: [12, 0],
+        popupAnchor: [10, -35],
+        iconSize: [50, 50],
+      });
+
       const markerLocation = props.location;
 
       markerLayer.value.clearLayers();
       const marker = new L.marker(
         [markerLocation.coordinates[1], markerLocation.coordinates[0]],
-        { draggable: 'true' },
+        { draggable: 'true', icon: svgIcon },
       ).addTo(markerLayer.value);
       marker.on('dragend', (event) => {
         emit('updatedLocation', event.target.getLatLng());
