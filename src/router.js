@@ -32,6 +32,7 @@ import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
 import * as UITypes from '@/store/modules/ui/types';
+import Downloads from '@/pages/Downloads';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -66,6 +67,12 @@ const routes = [
     path: '/profile',
     component: Profile,
     name: 'nav.profile',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/downloads',
+    component: Downloads,
+    name: 'nav.downloads',
     meta: { layout: 'authenticated' },
   },
   {
