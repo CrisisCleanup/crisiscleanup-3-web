@@ -14,7 +14,8 @@ import Reports from '@/pages/admin/Reports.vue';
 import Report from '@/pages/admin/Report.vue';
 import NotFound from '@/pages/NotFound.vue';
 import Location from '@/pages/Location.vue';
-import Profile from "@/pages/Profile.vue";
+import Profile from '@/pages/Profile.vue';
+import Downloads from '@/pages/Downloads.vue';
 
 const routes = [
   {
@@ -39,6 +40,12 @@ const routes = [
     path: '/profile',
     component: Profile,
     name: 'nav.profile',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/downloads',
+    component: Downloads,
+    name: 'nav.downloads',
     meta: { layout: 'authenticated' },
   },
   {

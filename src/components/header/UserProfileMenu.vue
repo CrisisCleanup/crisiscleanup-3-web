@@ -37,6 +37,16 @@
             "
           />
           <base-button
+            data-cy="auth.userprofile.downloads"
+            class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+            :text="$t('actions.downloads')"
+            :action="
+              () => {
+                $router.push(`/downloads`);
+              }
+            "
+          />
+          <base-button
             data-cy="auth.userprofile.logout"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('actions.logout')"

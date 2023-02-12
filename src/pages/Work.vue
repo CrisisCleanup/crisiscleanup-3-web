@@ -555,7 +555,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const $toasted = useToast();
-    const { prompt, component } = useDialogs();
+    const { prompt, component, confirm } = useDialogs();
     const { t } = useI18n();
     const store = useStore();
 
@@ -1092,7 +1092,16 @@ export default defineComponent({
             responseType: 'blob',
           },
         );
-        forceFileDownload(response);
+        if (response.status === 202) {
+          await confirm({
+            title: t('~~Download in progress'),
+            content: t(
+              `~~Due to the large size of your download, we have queued it up for processing and it should be ready in a few mins, please go to the <a class="underline text-primary-dark" href="/downloads">Downloads page</a> to check if it is ready`
+            ),
+          });
+        } else {
+          forceFileDownload(response);
+        }
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       } finally {
