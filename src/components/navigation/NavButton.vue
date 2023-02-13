@@ -53,7 +53,7 @@ export default {
           };
     });
 
-    let routeName = useRoute().name;
+    const routeName = useRoute().name;
     const isActive = computed(() =>
       routeName ? t(routeName).includes(props.route.key.toLowerCase()) : false,
     );
@@ -61,6 +61,7 @@ export default {
     return {
       isActive,
       iconProps,
+      routeName,
     };
   },
 };

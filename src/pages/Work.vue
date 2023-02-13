@@ -81,12 +81,6 @@
                 @toggleHeatMap="toggleHeatMap"
               />
             </div>
-            <div
-              v-if="loading || mapLoading"
-              class="flex h-full items-center justify-center"
-            >
-              <font-awesome-icon size="xl" icon="spinner" spin />
-            </div>
           </div>
           <div class="flex justify-end items-center w-full">
             <font-awesome-icon
@@ -249,8 +243,8 @@
                   : ''
               "
               :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :text="$t('actions.print')"
-              :alt="$t('actions.print')"
+              :text="$t('~~Print Claimed')"
+              :alt="$t('~~Print Claimed')"
               :action="printSelectedWorksites"
               data-cy="worksiteview_actionBatchPrint"
             />
@@ -321,7 +315,7 @@
             downloadWorksites([worksite?.id]);
           }
         "
-        @onPrintWorksite="printWorksite"
+        @onPrintWorksite="() => printWorksite(worksite?.id)"
         @onFlagCase="
           () => {
             showFlags = true;
@@ -531,6 +525,7 @@ import useWorksiteMap from '../hooks/worksite/useWorksiteMap';
 import UnclaimCases from '@/components/UnclaimCases.vue';
 import { numeral } from '@/utils/helpers';
 import type Location from '@/models/Location';
+import Organization from '@/models/Organization';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -1008,11 +1003,15 @@ export default defineComponent({
       selectedTableItems.value = selectedItems;
     }
 
-    async function printWorksite() {
+    async function printWorksite(id: number) {
       loading.value = true;
       let file;
-      if (workTypesClaimedByOrganization.value.length > 0) {
-        file = await Worksite.api().printWorksite(worksite?.value?.id, '');
+      let worksiteToPrint = await Worksite.find(id);
+      const hasClaimedWorkType = worksiteToPrint?.work_types.some((type) =>
+        currentUser?.value?.organization.affiliates.includes(type.claimed_by),
+      );
+      if (hasClaimedWorkType) {
+        file = await Worksite.api().printWorksite(id, '');
       } else {
         const result = await prompt({
           title: t('actions.print_case'),
@@ -1039,16 +1038,13 @@ export default defineComponent({
         });
 
         if (result.key === 'claimAndPrint') {
-          file = await Worksite.api().printWorksite(worksite?.value?.id, '');
+          file = await Worksite.api().printWorksite(id, '');
         }
         if (result.key === 'printNoClaim') {
           if (!result.response) {
             $toasted.error(t('casesVue.please_explain_why_no_claim'));
           } else {
-            file = await Worksite.api().printWorksite(
-              worksite?.value?.id,
-              result.response,
-            );
+            file = await Worksite.api().printWorksite(id, result.response);
           }
         }
       }
@@ -1060,11 +1056,45 @@ export default defineComponent({
     }
 
     async function printSelectedWorksites() {
-      const file = await Worksite.api().downloadWorksite(
-        [...selectedTableItems.value],
-        'application/pdf',
-      );
-      forceFileDownload(file.response);
+      const ids = [...selectedTableItems.value];
+      if (ids.length === 1) {
+        return printWorksite(ids[0]);
+      }
+
+      const hasClaimedWorkType = (w: Worksite) => {
+        return w.work_types.some((type) =>
+          currentUser?.value?.organization.affiliates.includes(type.claimed_by),
+        );
+      };
+
+      await Worksite.api().get(`/worksites?id__in=${ids.join(',')}`, {
+        dataKey: 'results',
+      });
+
+      const worksitesToPrint = Worksite.query()
+        .whereIdIn(ids.map(String))
+        .get();
+
+      if (!worksitesToPrint.every((w) => hasClaimedWorkType(w))) {
+        await confirm({
+          title: t('~~Cannot claim some cases'),
+          content: t(
+            `~~Unclaimed cases cannot be printed in bulk. Only claimed cases will be printed. Please claim the cases you wish to print one at a time before printing them in bulk.`,
+          ),
+        });
+      }
+
+      const ids_to_print = worksitesToPrint
+        .filter((w) => hasClaimedWorkType(w))
+        .map((w) => w.id);
+
+      if (ids_to_print.length > 0) {
+        const file = await Worksite.api().downloadWorksite(
+          ids_to_print,
+          'application/pdf',
+        );
+        forceFileDownload(file.response);
+      }
     }
 
     async function downloadWorksites(ids: any[]) {
@@ -1096,7 +1126,7 @@ export default defineComponent({
           await confirm({
             title: t('~~Download in progress'),
             content: t(
-              `~~Due to the large size of your download, we have queued it up for processing and it should be ready in a few mins, please go to the <a class="underline text-primary-dark" href="/downloads">Downloads page</a> to check if it is ready`
+              `~~Due to the large size of your download, we have queued it up for processing and it should be ready in a few mins, please go to the <a class="underline text-primary-dark" href="/downloads">Downloads page</a> to check if it is ready`,
             ),
           });
         } else {
