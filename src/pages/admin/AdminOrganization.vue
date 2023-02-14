@@ -476,9 +476,9 @@
                 <div
                   v-tooltip="{
                     content: getContactView(request),
-                    html: true,
                     triggers: ['hover'],
-                    classes: 'interactive-tooltip w-72',
+                    html: true,
+                    popperClass: 'interactive-tooltip w-72',
                   }"
                 >
                   <ccu-icon

@@ -78,7 +78,7 @@
                               content: $t(stat.description_t),
                               html: true,
                               triggers: ['click'],
-                              classes: 'interactive-tooltip w-auto',
+                              popperClass: 'interactive-tooltip w-auto',
                             }"
                             :invert-color="true"
                             :alt="$t('actions.help_alt')"
@@ -97,9 +97,9 @@
                           <ccu-icon
                             v-tooltip="{
                               content: $t(stat.description_t),
-                              html: true,
                               triggers: ['click'],
-                              classes: 'interactive-tooltip w-auto',
+                              html: true,
+                              popperClass: 'interactive-tooltip w-auto',
                             }"
                             :invert-color="true"
                             :alt="$t('actions.help_alt')"

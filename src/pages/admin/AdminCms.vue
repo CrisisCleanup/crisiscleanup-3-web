@@ -31,9 +31,9 @@
       <ccu-icon
         v-tooltip="{
           content: $t(`adminCMS.cms_help`),
-          html: true,
           triggers: ['click'],
-          classes: 'interactive-tooltip w-auto',
+          popperClass: 'interactive-tooltip w-auto',
+          html: true,
         }"
         :alt="$t('actions.help_alt')"
         type="help"

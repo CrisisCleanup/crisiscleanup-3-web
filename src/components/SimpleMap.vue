@@ -46,10 +46,10 @@
         v-tooltip="{
           content: $t('worksiteMap.zoom_to_make_interactive'),
           // show: showInteractivePopover,
-          html: true,
           triggers: ['hover'],
-          classes: 'interactive-tooltip',
+          popperClass: 'interactive-tooltip',
           placement: 'right-start',
+          html: true,
         }"
         text=""
         :title="$t('worksiteMap.zoom_to_interactive')"

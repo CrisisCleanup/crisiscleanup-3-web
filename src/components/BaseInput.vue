@@ -60,9 +60,9 @@
       v-else-if="icon || tooltip"
       v-tooltip="{
         content: tooltip,
-        html: true,
         triggers: ['hover'],
-        classes: 'interactive-tooltip w-72',
+        popperClass: 'interactive-tooltip w-72',
+        html: true,
       }"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"

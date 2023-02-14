@@ -60,10 +60,10 @@
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      html: true,
                       content: $t(field.help_t),
                       triggers: ['hover'],
-                      classes: 'interactive-tooltip w-72',
+                      popperClass: 'interactive-tooltip w-72',
+                      html: true,
                     }"
                     :alt="$t('actions.help_alt')"
                     type="help"
@@ -94,10 +94,10 @@
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      html: true,
                       content: $t(field.help_t),
                       triggers: ['hover'],
-                      classes: 'interactive-tooltip w-72',
+                      popperClass: 'interactive-tooltip w-72',
+                      html: true,
                     }"
                     :alt="$t('actions.help_alt')"
                     type="help"
@@ -157,10 +157,10 @@
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      html: true,
                       content: $t(field.help_t),
                       triggers: ['hover'],
-                      classes: 'interactive-tooltip w-72',
+                      html: true,
+                      popperClass: 'interactive-tooltip w-72',
                     }"
                     :alt="$t('actions.help_alt')"
                     type="help"
@@ -181,10 +181,10 @@
                 <ccu-icon
                   v-if="field.help_t"
                   v-tooltip="{
-                    html: true,
                     content: $t(field.help_t),
                     triggers: ['hover'],
-                    classes: 'interactive-tooltip w-72',
+                    html: true,
+                    popperClass: 'interactive-tooltip w-72',
                   }"
                   :alt="$t('actions.help_alt')"
                   type="help"

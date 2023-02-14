@@ -10,8 +10,8 @@
           v-tooltip="{
             content: fromTooltip,
             triggers: ['click'],
+            popperClass: 'interactive-tooltip w-auto',
             html: true,
-            classes: 'interactive-tooltip w-auto',
           }"
           :alt="$t('actions.help_alt')"
           type="help"

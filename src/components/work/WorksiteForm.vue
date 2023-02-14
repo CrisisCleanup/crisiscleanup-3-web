@@ -77,14 +77,13 @@
           <span>{{ $t('casesVue.auto_contact_frequency') }}</span>
           <ccu-icon
             v-tooltip="{
-              content: $t('casesVue.auto_contact_frequency_help'),
-              html: true,
+              content: `${$t('casesVue.auto_contact_frequency_help')}`,
               triggers: ['hover'],
-              classes: 'interactive-tooltip w-72',
+              popperClass: 'interactive-tooltip w-72',
             }"
             :alt="$t('casesVue.auto_contact_frequency_help')"
             type="help"
-            size="large"
+            size="lg"
           />
         </span>
         <base-select
@@ -107,9 +106,9 @@
         <ccu-icon
           v-tooltip="{
             content: $t('caseForm.location_instructions'),
-            html: true,
             triggers: ['click'],
-            classes: 'interactive-tooltip w-72',
+            popperClass: 'interactive-tooltip w-72',
+            html: true,
           }"
           :alt="$t('caseForm.location_instructions')"
           type="help"
@@ -333,7 +332,6 @@
         :action="
           () => {
             clearWorksiteStorage();
-            initForm();
             $emit('closeWorksite');
           }
         "
@@ -1320,7 +1318,6 @@ export default {
       form,
       onRemoveFile,
       worksiteImageSection,
-      initForm,
     };
   },
 };
@@ -1337,5 +1334,8 @@ export default {
 
 .form-content {
   overflow-y: auto;
+}
+.vue-tooltip.tooltip-custom {
+  background-color: red;
 }
 </style>

@@ -40,9 +40,9 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.type_description'),
-                html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                html: true,
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -63,9 +63,9 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.role_description'),
-                html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                html: true,
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -88,9 +88,9 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.incidents_description'),
-                html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                html: true,
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -105,9 +105,9 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.cases_description'),
-                html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                html: true,
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -122,9 +122,9 @@
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.call_description'),
-                html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                html: true,
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -141,7 +141,7 @@
                 content: $t('pewPew.value_description'),
                 html: true,
                 triggers: ['click'],
-                classes: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
