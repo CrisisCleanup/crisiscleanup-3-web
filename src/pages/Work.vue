@@ -525,7 +525,7 @@ import useWorksiteMap from '../hooks/worksite/useWorksiteMap';
 import UnclaimCases from '@/components/UnclaimCases.vue';
 import { numeral } from '@/utils/helpers';
 import type Location from '@/models/Location';
-import Organization from '@/models/Organization';
+import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -742,8 +742,8 @@ export default defineComponent({
       let status;
       const response = await component({
         title: t('actions.update_status'),
-        component: 'UpdateCaseStatus',
-        classes: 'w-full h-48 overflow-auto p-3',
+        component: UpdateCaseStatus,
+        classes: 'w-full h-24 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {
           updatedStatus: (payload: string) => {
@@ -755,20 +755,38 @@ export default defineComponent({
       if (response === 'ok' && status) {
         loading.value = true;
         const promises = [] as any;
-        const layer = mapUtils?.getCurrentMarkerLayer();
-        const container = layer?._pixiContainer;
+        const ids = [...selectedTableItems.value];
 
-        for (const id of selectedTableItems.value) {
-          const sprite = container?.children.find((w: any) => {
-            return Number(w.id) === Number(id);
+        const hasClaimedWorkType = (w: Worksite) => {
+          return w.work_types.some((type) =>
+            currentUser?.value?.organization.affiliates.includes(
+              type.claimed_by,
+            ),
+          );
+        };
+
+        await Worksite.api().get(`/worksites?id__in=${ids.join(',')}`, {
+          dataKey: 'results',
+        });
+
+        const worksitesChangeStatus = Worksite.query()
+          .whereIdIn(ids.map(String))
+          .get();
+
+        if (!worksitesChangeStatus.every((w) => hasClaimedWorkType(w))) {
+          await confirm({
+            title: t('~~Cannot change status some cases'),
+            content: t(
+              `~~Unclaimed cases cannot be have status changes in bulk. Only claimed cases will be changed. Please claim the cases you wish to change status for one at a time before updating them in bulk.`,
+            ),
           });
+        }
 
-          if (sprite) {
-            for (const workType of sprite.work_types) {
-              promises.push(
-                Worksite.api().updateWorkTypeStatus(workType.id, status),
-              );
-            }
+        for (const worksite of worksitesChangeStatus) {
+          for (const workType of worksite.work_types) {
+            promises.push(
+              Worksite.api().updateWorkTypeStatus(workType.id, status),
+            );
           }
         }
         await Promise.allSettled(promises);
