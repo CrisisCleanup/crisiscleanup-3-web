@@ -8,26 +8,27 @@
         required
       />
     </div>
-    <div class="form-row flex flex-col sm:flex-row w-full">
+    <div class="form-row flex flex-col gap-2 sm:flex-row w-full">
       <FloatingInput
         v-model="currentIncident.short_name"
-        class="mr-2 w-1/2"
+        class="flex-1"
         :placeholder="$t('incidentBuilder.incident_short_name')"
         required
       />
       <base-select
         v-model="currentIncident.timezone"
         :options="timezoneNames"
-        class="w-1/2 mt-0.5"
+        class="flex-1"
         :placeholder="$t('incidentBuilder.timezone')"
         searchable
-        select-classes="bg-white outline-none w-full h-12"
+        select-classes="bg-white outline-none w-full h-14"
       />
     </div>
     <div class="form-row flex">
       <datepicker
         v-model="currentIncident.start_at"
         :timezone="currentIncident.timezone"
+        :placeholder="$t('actions.start')"
         auto-apply
         format="yyyy-MM-dd"
         class="h-12 mr-2"
@@ -130,6 +131,7 @@
         <datepicker
           v-model="currentAni.start_at"
           :timezone="currentAni.timezone"
+          :placeholder="$t('actions.start')"
           auto-apply
           format="yyyy-MM-dd"
         ></datepicker>
@@ -148,6 +150,7 @@
         <datepicker
           v-model="currentAni.end_at"
           :timezone="currentAni.timezone"
+          :placeholder="$t('actions.end')"
           auto-apply
           format="yyyy-MM-dd"
         ></datepicker>

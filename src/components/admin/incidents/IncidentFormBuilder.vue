@@ -128,6 +128,7 @@ export default {
       );
       fieldTree.value = sortBy(nest(formFields.value), (o) => o.list_order);
       list.value = [...fieldTree.value];
+      emit('onUpdateForm', list.value);
     }
     async function getAvailableFields() {
       const response = await axios.get(
