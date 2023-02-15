@@ -124,9 +124,10 @@ export default {
       );
       organizationResults.value = results.entities.organizations;
     }
-    async function inviteUsers() {
+    const inviteUsers = async () => {
       let tags = _.defaultTo([...usersToInvite.value], []);
       try {
+        console.log(tags, emails.value);
         if (emails.value) {
           const emailList = emails.value.match(EMAIL_REGEX);
           let extTags = _.attempt(createTags, emailList);
@@ -139,9 +140,9 @@ export default {
           await $toasted.error(t('inviteTeammates.provide_valid_email'));
           return;
         }
-        const emails = tags.map((value) => value.text);
+        const emailsGroup = tags.map((value) => value.text);
         await Promise.all(
-          emails.map((email) =>
+          emailsGroup.map((email) =>
             User.api().inviteUser(email, selectedOrganization.value),
           ),
         );
