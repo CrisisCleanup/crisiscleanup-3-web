@@ -140,6 +140,7 @@ export default (
   }
 
   async function addMarkerToMap(location: LatLng) {
+    removeLayer('temp_markers');
     const { emitter } = useEmitter();
 
     let markerLocation = location;

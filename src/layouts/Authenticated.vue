@@ -13,7 +13,7 @@
         />
       </div>
       <NavMenu
-        :key="JSON.stringify(currentUser && currentUser.permissions)"
+        :key="route"
         :routes="routes"
         :logo-route="logoRoute"
         class="flex flex-col text-sm"
@@ -414,7 +414,7 @@ export default {
       currentOrganization,
       currentIncident,
       incidents,
-
+      route,
       routes,
       logoRoute,
       // login,
