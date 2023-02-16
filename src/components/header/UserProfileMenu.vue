@@ -29,7 +29,7 @@
           <base-button
             data-cy="auth.userprofile.profile"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-            :text="$t('actions.profile')"
+            :text="$t('nav.profile')"
             :action="
               () => {
                 $router.push(`/profile`);
@@ -39,7 +39,7 @@
           <base-button
             data-cy="auth.userprofile.downloads"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-            :text="$t('actions.downloads')"
+            :text="$t('nav.downloads')"
             :action="
               () => {
                 $router.push(`/downloads`);
