@@ -119,7 +119,7 @@
             v-model="newIncident"
             :options="incidents"
             searchable
-            select-classes="bg-white border w-full h-12 mb-3"
+            select-classes="bg-white w-full h-12"
             item-key="id"
             label="name"
           />

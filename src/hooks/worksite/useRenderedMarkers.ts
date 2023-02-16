@@ -92,7 +92,11 @@ export default (
           templates[workType?.work_type] || templates.unknown;
         const typeSvg = detailedTemplate
           .replaceAll('{{fillColor}}', isFilteredMarker ? 'white' : fillColor)
-          .replaceAll('{{strokeColor}}', isFilteredMarker ? strokeColor : 'white');
+          .replaceAll('{{strokeColor}}', isFilteredMarker ? strokeColor : 'white')
+          .replaceAll(
+            '{{multiple}}',
+            sprite.work_types.length > 1 ? templates.plus : '',
+          );
 
         sprite.basicTexture = texture;
         sprite.detailedTexture = Texture.from(typeSvg);

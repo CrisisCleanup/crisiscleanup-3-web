@@ -220,12 +220,14 @@ export default class Worksite extends CCUModel<Worksite> {
         const organizations = worksite.response.data.work_types
           .filter((workType) => Boolean(workType.claimed_by))
           .map((workType) => workType.claimed_by);
-        await Organization.api().get(
-          `/organizations?id__in=${organizations.join(',')}`,
-          {
-            dataKey: 'results',
-          },
-        );
+        if (organizations.length > 0) {
+          await Organization.api().get(
+            `/organizations?id__in=${organizations.join(',')}`,
+            {
+              dataKey: 'results',
+            },
+          );
+        }
         const eventUserIds = worksite.response.data.events
           .map((event) => event.created_by)
           .filter(

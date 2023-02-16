@@ -628,19 +628,21 @@ export default defineComponent({
       if (!data) {
         data = {};
       }
+      const newStates = {
+        appliedFilters: filterQuery.value,
+        filters: filters.value,
+        showingMap: showingMap.value,
+        showingTable: showingTable.value,
+        sviLevel: sviSliderValue.value,
+        dateLevel: dateSliderValue.value,
+        mapViewPort: mapUtils?.getMap().getBounds(),
+        ...data,
+      };
       User.api().updateUserState(
         {
           incident: currentIncidentId.value,
         },
-        {
-          appliedFilters: filterQuery.value,
-          filters: filters.value,
-          showingMap: showingMap.value,
-          showingTable: showingTable.value,
-          sviLevel: sviSliderValue.value,
-          dateLevel: dateSliderValue.value,
-          ...data,
-        },
+        newStates,
       );
     }
 
@@ -685,7 +687,6 @@ export default defineComponent({
         allWorksites,
         markers.map((m: Worksite) => m.id),
       );
-      updateUserState({});
     }
 
     const showTable = () => {
@@ -837,7 +838,7 @@ export default defineComponent({
       }
     }
 
-    const sviList = computed(() => {
+    const getSviList = () => {
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
       const list = container?.children.map((marker: any) => {
@@ -852,7 +853,7 @@ export default defineComponent({
         });
       }
       return list;
-    });
+    };
 
     function filterSvi(value: number) {
       if (value === 0) return;
@@ -875,6 +876,7 @@ export default defineComponent({
     }
 
     const datesList = ref([]);
+    const sviList = ref([]);
 
     function getDatesList() {
       const layer = mapUtils?.getCurrentMarkerLayer();
@@ -890,7 +892,7 @@ export default defineComponent({
           return b.updated_at - a.updated_at;
         });
       }
-      datesList.value = list;
+      return list;
     }
 
     const dateSliderFrom = () => {
@@ -1170,6 +1172,8 @@ export default defineComponent({
       worksiteId.value = null;
       isEditing.value = false;
       isViewing.value = false;
+      showHistory.value = false;
+      showFlags.value = false;
       router.push(`/incident/${currentIncidentId.value}/work`);
     }
 
@@ -1229,35 +1233,35 @@ export default defineComponent({
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
           getDatesList();
+
+          const states = currentUser?.value?.getStatesForIncident(
+            currentIncidentId.value,
+            true,
+          );
+          if (states.mapViewPort) {
+            const { _northEast, _southWest } = states.mapViewPort;
+            mapUtils?.getMap().fitBounds([
+              [_northEast.lat, _northEast.lng],
+              [_southWest.lat, _southWest.lng],
+            ]);
+          }
+          sviList.value = getSviList();
+          datesList.value = getDatesList();
+          filterSvi(sviSliderValue.value);
         },
       );
 
       nextTick(() => {
         mapUtils?.getMap().on(
-          'move',
+          'zoomend',
           L.Util.throttle(
             () => {
-              updateUserState({
-                mapViewPort: mapUtils?.getMap().getBounds(),
-              });
+              updateUserState({});
             },
             1000,
             {},
           ),
         );
-        if (
-          currentUser?.value?.states &&
-          currentUser?.value?.states.mapViewPort
-        ) {
-          const { _northEast, _southWest } =
-            currentUser.value.states.mapViewPort;
-          mapUtils?.getMap().fitBounds([
-            [_northEast.lat, _northEast.lng],
-            [_southWest.lat, _southWest.lng],
-          ]);
-        }
-
-        filterSvi(sviSliderValue.value);
       });
     }
 

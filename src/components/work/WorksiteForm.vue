@@ -365,6 +365,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { sortBy, uniqueId } from 'lodash';
 import moment from 'moment';
 import * as turf from '@turf/turf';
+import * as L from 'leaflet';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
 import axios from 'axios';
@@ -1196,8 +1197,15 @@ export default {
 
     async function toggleSelectOnMap() {
       shouldSelectOnMap.value = !shouldSelectOnMap.value;
+      let location = null;
+      if (worksite.value.location) {
+        location = L.latLng(
+          worksite.value.location.coordinates[1],
+          worksite.value.location.coordinates[0],
+        );
+      }
       if (shouldSelectOnMap.value) {
-        emit('geocoded', null);
+        emit('geocoded', location);
       }
     }
 
