@@ -127,7 +127,6 @@ export default {
     const inviteUsers = async () => {
       let tags = _.defaultTo([...usersToInvite.value], []);
       try {
-        console.log(tags, emails.value);
         if (emails.value) {
           const emailList = emails.value.match(EMAIL_REGEX);
           let extTags = _.attempt(createTags, emailList);
