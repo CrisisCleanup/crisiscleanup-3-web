@@ -1,6 +1,6 @@
 <template>
   <form class="bg-white flex flex-col">
-    <div class="flex flex-col flex-wrap h-60 text-center">
+    <div class="flex flex-col flex-wrap text-center" style="height: 18rem">
       <div v-for="(section, index) in sortedValues" :key="index">
         <div>
           <div class="font-bold">
