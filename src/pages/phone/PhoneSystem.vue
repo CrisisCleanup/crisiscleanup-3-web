@@ -912,6 +912,7 @@ export default {
       width: 35vw;
 
       &--caller {
+        width: 50vw;
         @apply h-full;
       }
       &--dialer {
