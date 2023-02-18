@@ -243,8 +243,8 @@
                   : ''
               "
               :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :text="$t('~~Print Claimed')"
-              :alt="$t('~~Print Claimed')"
+              :text="$t('actions.print_claimed')"
+              :alt="$t('actions.print_claimed')"
               :action="printSelectedWorksites"
               data-cy="worksiteview_actionBatchPrint"
             />
@@ -776,10 +776,8 @@ export default defineComponent({
 
         if (!worksitesChangeStatus.every((w) => hasClaimedWorkType(w))) {
           await confirm({
-            title: t('~~Cannot change status some cases'),
-            content: t(
-              `~~Unclaimed cases cannot be have status changes in bulk. Only claimed cases will be changed. Please claim the cases you wish to change status for one at a time before updating them in bulk.`,
-            ),
+            title: t('info.cannot_claim_cases'),
+            content: t('info.cannot_claim_cases_d'),
           });
         }
 
@@ -1097,10 +1095,8 @@ export default defineComponent({
 
       if (!worksitesToPrint.every((w) => hasClaimedWorkType(w))) {
         await confirm({
-          title: t('~~Cannot claim some cases'),
-          content: t(
-            `~~Unclaimed cases cannot be printed in bulk. Only claimed cases will be printed. Please claim the cases you wish to print one at a time before printing them in bulk.`,
-          ),
+          title: t('info.cannot_claim_cases'),
+          content: t('info.cannot_claim_cases_d'),
         });
       }
 
@@ -1144,10 +1140,8 @@ export default defineComponent({
         );
         if (response.status === 202) {
           await confirm({
-            title: t('~~Download in progress'),
-            content: t(
-              `~~Due to the large size of your download, we have queued it up for processing and it should be ready in a few mins, please go to the <a class="underline text-primary-dark" href="/downloads">Downloads page</a> to check if it is ready`,
-            ),
+            title: t('info.processing_download'),
+            content: t('info.processing_download_d'),
           });
         } else {
           forceFileDownload(response);

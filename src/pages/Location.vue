@@ -431,7 +431,7 @@ export default defineComponent({
       const isValid = form.value.reportValidity();
       if (!isValid) {
         console.error('Form is not valid!');
-        $toasted.error(t('~~locationVue.form_not_valid'));
+        $toasted.error(t('locationVue.form_not_valid'));
         return;
       }
 

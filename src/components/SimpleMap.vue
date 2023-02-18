@@ -65,6 +65,14 @@
         class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
       <base-button
+        v-tooltip="{
+          content: $t('worksiteMap.zoom_to_incident'),
+          // show: showInteractivePopover,
+          triggers: ['hover'],
+          popperClass: 'interactive-tooltip',
+          placement: 'right-start',
+          html: true,
+        }"
         text=""
         :title="$t('worksiteMap.zoom_to_incident')"
         :alt="$t('worksiteMap.zoom_to_incident')"

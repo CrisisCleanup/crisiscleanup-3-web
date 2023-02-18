@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <base-text variant="h1" class="my-3">{{ $t('~~User Downloads') }}</base-text>
+    <base-text variant="h1" class="my-3">{{ $t('nav.user_downloads') }}</base-text>
     <AjaxTable
       :url="tableUrl"
       :columns="columns"
@@ -18,7 +18,7 @@
           >
         </div>
         <div v-else>
-          {{ $t('~~Processing...') }}
+          {{ $t('info.processing') }}
         </div>
       </template>
     </AjaxTable>

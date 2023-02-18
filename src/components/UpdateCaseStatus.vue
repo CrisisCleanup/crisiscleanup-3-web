@@ -6,7 +6,7 @@
       searchable
       item-key="status"
       label="status"
-      :placeholder="$t('~~Select Status')"
+      :placeholder="$t('actions.select_status')"
       @update:modelValue="$emit('updatedStatus', $event)"
     >
       <template #selected-option="{ option }">
