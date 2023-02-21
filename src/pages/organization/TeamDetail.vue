@@ -942,7 +942,7 @@ export default defineComponent({
 
     return {
       Promise,
-      currentUsers,
+      currentUser,
       userResults,
       caseResults,
       usersToAdd,
