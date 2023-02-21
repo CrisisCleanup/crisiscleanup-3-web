@@ -94,10 +94,8 @@ export default defineComponent({
       if (currentSearch.value) {
         params.search = currentSearch.value;
       }
-      console.log(locationTypeFilter.value);
       if (locationTypeFilter.value) {
         params.type = locationTypeFilter.value;
-        console.log(locationTypeFilter.value);
       }
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
