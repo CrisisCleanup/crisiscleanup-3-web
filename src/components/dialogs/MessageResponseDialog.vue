@@ -65,7 +65,7 @@
               </base-button>
             </div>
             <div
-              class="flex items-center justify-end w-full"
+              class="flex items-center justify-center w-full py-2"
               v-if="Object.keys(actions).length > 0"
             >
               <base-button

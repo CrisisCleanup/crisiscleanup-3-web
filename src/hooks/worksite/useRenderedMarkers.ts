@@ -3,10 +3,10 @@ import KDBush from 'kdbush';
 import * as turf from '@turf/turf';
 import type * as L from 'leaflet';
 import type { Feature, Point, Properties } from '@turf/turf';
+import moment from 'moment';
 import { templates, colors } from '../../icons/icons_templates';
 import type Worksite from '@/models/Worksite';
 import type { PixiLayer } from '@/utils/types/map';
-import moment from "moment";
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -62,6 +62,8 @@ export default (
         sprite.svi = marker.svi;
         sprite.work_types = marker.work_types;
         sprite.updated_at = marker.updated_at;
+        sprite.flags = marker.flags || [];
+        sprite.favorite_id = marker.favorite_id;
         sprite.updated_at_moment = moment(marker.updated_at);
         sprite.x = patientCoords.x;
         sprite.y = patientCoords.y;
@@ -70,7 +72,10 @@ export default (
         sprite.anchor.set(0.5, 0.5);
         const svg = markerTemplate
           .replaceAll('{{fillColor}}', isFilteredMarker ? 'white' : fillColor)
-          .replaceAll('{{strokeColor}}', isFilteredMarker ? fillColor : 'white');
+          .replaceAll(
+            '{{strokeColor}}',
+            isFilteredMarker ? fillColor : 'white',
+          );
         let texture = textureMap[fillColor];
         if (!texture) {
           textureMap[fillColor] = Texture.from(svg);
@@ -88,11 +93,25 @@ export default (
           workTypes = { ...workTypes };
         }
 
-        const detailedTemplate =
+        let detailedTemplate =
           templates[workType?.work_type] || templates.unknown;
+
+        const flags = sprite.flags || [];
+        const isHighPriority = flags.some(
+          (flag: { is_high_priority: boolean }) => flag.is_high_priority,
+        );
+        if (sprite.favorite || sprite.favorite_id) {
+          detailedTemplate = templates.favorite;
+        } else if (isHighPriority) {
+          detailedTemplate = templates.important;
+        }
+
         const typeSvg = detailedTemplate
           .replaceAll('{{fillColor}}', isFilteredMarker ? 'white' : fillColor)
-          .replaceAll('{{strokeColor}}', isFilteredMarker ? strokeColor : 'white')
+          .replaceAll(
+            '{{strokeColor}}',
+            isFilteredMarker ? strokeColor : 'white',
+          )
           .replaceAll(
             '{{multiple}}',
             sprite.work_types.length > 1 ? templates.plus : '',

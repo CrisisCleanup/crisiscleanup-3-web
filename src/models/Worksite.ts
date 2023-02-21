@@ -37,6 +37,7 @@ export default class Worksite extends CCUModel<Worksite> {
   work_types!: any[];
 
   favorite!: boolean;
+  favorite_id!: string | null;
   svi!: number;
 
   key_work_type!: Record<string, any>;

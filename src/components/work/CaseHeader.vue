@@ -136,7 +136,7 @@ import { momentFromNow } from '../../filters';
 
 export default defineComponent({
   name: 'CaseHeader',
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'],
@@ -181,6 +181,7 @@ export default defineComponent({
         );
       }
       await Worksite.api().fetch(props.worksite.id);
+      emit('reloadMap');
     }
     async function toggleHighPriority(isHighPriority) {
       if (isHighPriority) {
@@ -201,6 +202,7 @@ export default defineComponent({
         );
       }
       await Worksite.api().fetch(props.worksite.id);
+      emit('reloadMap');
     }
 
     return {

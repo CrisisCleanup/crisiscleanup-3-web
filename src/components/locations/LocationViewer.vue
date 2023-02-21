@@ -39,8 +39,7 @@ export default {
       const svgIcon = L.divIcon({
         className: 'crisiscleanup-map-marker',
         html: templates.map_marker,
-        iconAnchor: [12, 0],
-        popupAnchor: [10, -35],
+        iconAnchor: [20, 40],
         iconSize: [50, 50],
       });
 
@@ -61,6 +60,7 @@ export default {
       marker
         .bindTooltip(t('casesVue.drag_pin_to_correct_location'), {
           direction: 'top',
+          offset: L.point({ x: 0, y: -40 }),
         })
         .openTooltip();
     }

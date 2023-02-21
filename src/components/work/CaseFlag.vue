@@ -283,7 +283,7 @@
     <div v-if="currentFlag.reason_t" class="flex justify-center items-center">
       <base-button
         size="medium"
-        class="m-1 text-black p-3 px-4 border-2 border-black"
+        class="m-1 text-black p-3 px-4 border-2 border-black flex-1"
         :text="$t('actions.cancel')"
         :alt="$t('actions.cancel')"
         :action="
@@ -296,7 +296,7 @@
         v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'"
         size="medium"
         variant="solid"
-        class="m-1 text-black p-3 px-4 border-2 border-primary-light"
+        class="m-1 text-black p-3 px-4 border-2 border-primary-light flex-1"
         :text="$t('actions.update_location')"
         :alt="$t('actions.update_location')"
         :action="updateWorksiteLocation"
@@ -305,7 +305,7 @@
         v-else
         size="medium"
         variant="solid"
-        class="m-1 text-black p-3 px-4 border-2 border-primary-light"
+        class="m-1 text-black p-3 px-4 border-2 border-primary-light flex-1"
         :text="$t('actions.submit')"
         :alt="$t('actions.submit')"
         :action="flagWorksite"
@@ -529,7 +529,7 @@ export default {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: calc(100vh - 370px - var(--safe-area-inset-bottom)) 80px;
+  grid-template-rows: calc(100vh - 330px - var(--safe-area-inset-bottom)) 80px;
 }
 </style>
 

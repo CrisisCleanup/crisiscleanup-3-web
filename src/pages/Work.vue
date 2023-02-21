@@ -2,34 +2,32 @@
   <div class="work-page h-full" :class="{ collapsedForm }">
     <div :key="currentIncidentId" class="work-page__main">
       <div class="relative">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center">
           <div
             v-if="!collapsedUtilityBar"
             :key="currentIncidentId"
-            class="flex items-center h-16"
+            class="flex items-center flex-wrap w-full p-3"
           >
-            <div class="flex py-3 px-2" style="min-width: 80px">
-              <ccu-icon
-                :alt="$t('casesVue.map_view')"
-                size="medium"
-                class="mr-4 cursor-pointer"
-                :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-                type="map"
-                ccu-event="user_ui-view-map"
-                data-cy="cases.mapButton"
-                @click="() => showMap(true)"
-              />
-              <ccu-icon
-                :alt="$t('casesVue.table_view')"
-                size="medium"
-                class="mr-4 cursor-pointer"
-                :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-                type="table"
-                ccu-event="user_ui-view-table"
-                data-cy="cases.tableButton"
-                @click="showTable"
-              />
-            </div>
+            <ccu-icon
+              :alt="$t('casesVue.map_view')"
+              size="medium"
+              class="mr-4 cursor-pointer"
+              :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+              type="map"
+              ccu-event="user_ui-view-map"
+              data-cy="cases.mapButton"
+              @click="() => showMap(true)"
+            />
+            <ccu-icon
+              :alt="$t('casesVue.table_view')"
+              size="medium"
+              class="mr-4 cursor-pointer"
+              :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+              type="table"
+              ccu-event="user_ui-view-table"
+              data-cy="cases.tableButton"
+              @click="showTable"
+            />
             <span v-if="allWorksiteCount" class="font-thin">
               <span v-if="allWorksiteCount === filteredWorksiteCount">
                 {{ $t('casesVue.cases') }}
@@ -41,16 +39,15 @@
                 {{ numeral(allWorksiteCount) }}
               </span>
             </span>
-            <div class="flex justify-start w-auto">
-              <WorksiteSearchInput
-                :value="currentSearch"
-                icon="search"
-                display-property="name"
-                :placeholder="$t('actions.search')"
-                size="medium"
-                skip-validation
-                class="mx-4"
-                @selectedExisting="
+            <WorksiteSearchInput
+              :value="currentSearch"
+              icon="search"
+              display-property="name"
+              :placeholder="$t('actions.search')"
+              size="medium"
+              skip-validation
+              class="mx-4 py-1"
+              @selectedExisting="
                   (w: { id: string; }) => {
                     worksiteId = w.id;
                     isViewing = true;
@@ -62,27 +59,30 @@
                     }
                   }
                 "
-                @input="
+              @input="
                   (value: string) => {
                     currentSearch = value;
                   }
                 "
-              />
-              <WorksiteActions
-                v-if="currentIncidentId"
-                :key="currentIncidentId"
-                :current-incident-id="String(currentIncidentId)"
-                :inital-filters="filters"
-                @updatedQuery="onUpdateQuery"
-                @updatedFilters="onUpdateFilters"
-                @applyLocation="applyLocation"
-                @applyTeamGeoJson="applyTeamGeoJson"
-                @downloadCsv="downloadWorksites"
-                @toggleHeatMap="toggleHeatMap"
-              />
-            </div>
+            />
+            <WorksiteActions
+              v-if="currentIncidentId"
+              :key="currentIncidentId"
+              class="py-1"
+              :current-incident-id="String(currentIncidentId)"
+              :inital-filters="filters"
+              @updatedQuery="onUpdateQuery"
+              @updatedFilters="onUpdateFilters"
+              @applyLocation="applyLocation"
+              @applyTeamGeoJson="applyTeamGeoJson"
+              @downloadCsv="downloadWorksites"
+              @toggleHeatMap="toggleHeatMap"
+            />
           </div>
-          <div class="flex justify-end items-center w-full">
+          <div
+            :class="collapsedUtilityBar ? 'w-full' : ''"
+            class="flex justify-end items-center justify-self-end"
+          >
             <font-awesome-icon
               :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
               class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
@@ -310,6 +310,7 @@
         :is-viewing-worksite="isViewing"
         @closeWorksite="clearCase"
         @onJumpToCase="jumpToCase"
+        @reloadMap="reloadMap"
         @onDownloadWorksite="
           () => {
             downloadWorksites([worksite?.id]);
@@ -1247,7 +1248,7 @@ export default defineComponent({
 
       nextTick(() => {
         mapUtils?.getMap().on(
-          'zoomend',
+          'moveend',
           L.Util.throttle(
             () => {
               updateUserState({});
