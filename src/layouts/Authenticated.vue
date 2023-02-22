@@ -239,7 +239,7 @@ export default {
       ).matches;
     };
 
-    const { setupLanguage } = useSetupLanguage(currentUser.value);
+    const { setupLanguage } = useSetupLanguage();
 
     const acceptTermsAndConditions = async () => {
       await User.api().acceptTerms();

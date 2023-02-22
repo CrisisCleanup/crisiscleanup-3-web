@@ -76,17 +76,17 @@ import { computed, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import LanguageTag from '../tags/LanguageTag.vue';
 import useConnectFirst from '../../hooks/useConnectFirst';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import EditAgentModal from './EditAgentModal.vue';
 import PhoneIndicator from './PhoneIndicator.vue';
 import usePhoneService from '@/hooks/phone/usePhoneService';
+import User from '@/models/User';
 
 export default {
   name: 'Agent',
   components: { PhoneIndicator, EditAgentModal, LanguageTag },
   setup(props, context) {
     const editingAgent = ref(false);
-    const { currentUser } = useCurrentUser();
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
     const store = useStore();
     const phoneService = reactive(usePhoneService());
     const {

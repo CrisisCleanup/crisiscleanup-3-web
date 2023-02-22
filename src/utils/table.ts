@@ -9,6 +9,7 @@ type ColumnT = {
   key: string;
   title: string;
   width?: string;
+  transformer?: (field: string) => string;
 };
 
 /**

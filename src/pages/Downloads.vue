@@ -29,6 +29,7 @@
 import { makeTableColumns } from '@/utils/table';
 import AjaxTable from '@/components/AjaxTable.vue';
 import BaseText from "@/components/BaseText.vue";
+import moment from "moment/moment";
 
 export default {
   name: 'Downloads',
@@ -36,10 +37,17 @@ export default {
   setup() {
     const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/user_downloads`;
     const columns = makeTableColumns([
-      ['uuid', '1fr', 'ID'],
       ['created_at', '1fr', 'Created At'],
       ['file', '1fr', 'Status'],
     ]);
+    for (const column of columns) {
+      // overwrite default column title from `Name` to `Organization`
+      if (column.key === 'created_at') {
+        column.transformer = (field) => {
+          return moment(field).format('ddd MMMM Do YYYY');
+        };
+      }
+    }
     return {
       tableUrl,
       columns,

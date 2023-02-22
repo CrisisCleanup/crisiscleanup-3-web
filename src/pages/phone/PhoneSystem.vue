@@ -43,6 +43,7 @@
             @input="
               (value) => {
                 search = value;
+                worksiteQuery = { ...worksiteQuery, search: value };
               }
             "
           />
@@ -277,41 +278,31 @@
           </div>
         </div>
         <div v-show="showingTable" class="phone-system__main-content--table">
-          <AjaxTable
-            ref="table"
-            :columns="columns"
-            :url="tableUrl"
-            :body-style="{ height: '30rem' }"
-            class="mt-6 shadow-lg"
-            :query="worksiteQuery"
+          <div class="flex justify-end items-center">
+            <base-button
+              class="ml-3 my-3 border p-1 px-4 bg-white"
+              :class="
+                selectedTableItems && selectedTableItems.size === 0
+                  ? 'text-crisiscleanup-grey-700'
+                  : ''
+              "
+              :disabled="selectedTableItems && selectedTableItems.size === 0"
+              :action="showUnclaimModal"
+              :text="$t('actions.unclaim')"
+              :alt="$t('actions.unclaim')"
+            >
+            </base-button>
+          </div>
+          <WorksiteTable
+            :worksite-query="worksiteQuery"
+            @selectionChanged="onSelectionChanged"
             @rowClick="
               (worksite) => {
                 worksiteId = worksite.id;
                 isEditing = true;
               }
             "
-          >
-            <template #work_types="slotProps">
-              <div class="flex flex-col">
-                <div
-                  v-for="work_type in slotProps.item.work_types"
-                  :key="`${work_type.id}`"
-                  class="badge-holder flex items-center"
-                >
-                  <badge
-                    class="mx-1"
-                    :color="
-                      getColorForStatus(
-                        work_type.status,
-                        Boolean(work_type.claimed_by),
-                      )
-                    "
-                  />
-                  {{ getWorkTypeName(work_type.work_type) }}
-                </div>
-              </div>
-            </template>
-          </AjaxTable>
+          />
         </div>
       </div>
     </div>
@@ -386,9 +377,7 @@
           @jumpToCase="jumpToCase"
           @savedWorksite="
             (worksite) => {
-              worksiteId = worksite.id;
-              isEditing = true;
-              switchToStatusTab();
+              onSaveCase(worksite);
             }
           "
           @closeWorksite="clearCase"
@@ -447,10 +436,13 @@ import WorksiteForm from '../../components/work/WorksiteForm.vue';
 import { loadCasesCached } from '@/utils/worksite';
 import { getErrorMessage } from '@/utils/errors';
 import usePhoneService from '@/hooks/phone/usePhoneService';
+import WorksiteTable from '@/components/work/WorksiteTable.vue';
+import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 
 export default {
   name: 'PhoneSystem',
   components: {
+    WorksiteTable,
     PhoneIndicator,
     UpdateStatus,
     ActiveCall,
@@ -511,7 +503,13 @@ export default {
     const worksiteForm = ref(null);
     const statusTab = ref(null);
     const callTab = ref(null);
+    const selectedTableItems = ref(new Set());
     const connectFirst = useConnectFirst(context);
+
+    const { showUnclaimModal } = useWorksiteTableActions(
+      selectedTableItems,
+      () => {},
+    );
 
     const {
       isOnCall,
@@ -550,55 +548,9 @@ export default {
     const showingDetails = computed(function () {
       return showHistory.value || showFlags.value;
     });
-    const tableUrl = computed(
-      () => `${import.meta.env.VITE_APP_API_BASE_URL}/worksites`,
-    );
-    const worksiteQuery = computed(function () {
-      return {
-        incident: currentIncidentId.value,
-      };
+    const worksiteQuery = ref({
+      incident: currentIncidentId.value,
     });
-    const columns = [
-      {
-        title: t('casesVue.number_abbrev'),
-        dataIndex: 'case_number',
-        key: 'case_number',
-        sortKey: 'id',
-        width: '0.5fr',
-        sortable: true,
-      },
-      {
-        title: t('casesVue.work_type'),
-        dataIndex: 'work_types',
-        key: 'work_types',
-        scopedSlots: { customRender: 'work_types' },
-        width: '1.5fr',
-      },
-      {
-        title: t('casesVue.name'),
-        dataIndex: 'name',
-        key: 'name',
-        width: '1.5fr',
-        sortable: true,
-      },
-      {
-        title: t('casesVue.full_address'),
-        dataIndex: 'address',
-        key: 'address',
-      },
-      {
-        title: t('casesVue.city'),
-        dataIndex: 'city',
-        key: 'city',
-        sortable: true,
-      },
-      {
-        title: t('casesVue.county_parish'),
-        dataIndex: 'county',
-        key: 'county',
-        sortable: true,
-      },
-    ];
     const worksite = computed(function () {
       if (worksiteId.value) {
         return Worksite.find(worksiteId.value);
@@ -608,6 +560,14 @@ export default {
     const incidentsWithActivePhones = computed(() =>
       Incident.query().where('active_phone_number', Boolean).get(),
     );
+
+    function onSelectionChanged(selectedItems) {
+      selectedTableItems.value = selectedItems;
+    }
+
+    function reloadTable() {
+      worksiteQuery.value = { ...worksiteQuery.value };
+    }
 
     function getIncidentPhoneNumbers(incident) {
       if (Array.isArray(incident.active_phone_number)) {
@@ -758,6 +718,24 @@ export default {
         worksiteId.value = null;
       }
     }
+
+    async function onSaveCase(worksite) {
+      worksiteId.value = worksite.id;
+      isEditing.value = true;
+      switchToStatusTab();
+      if (showingTable.value) {
+        reloadTable();
+      }
+      if (showingMap.value) {
+        getWorksites().then((markers) => {
+          mapUtils.value.reloadMap(
+            markers,
+            markers.map((m) => m.id),
+          );
+        });
+      }
+    }
+
     async function getChatGroups() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups`,
@@ -886,9 +864,7 @@ export default {
       prefillData,
       callsWaiting,
       showingDetails,
-      tableUrl,
       worksiteQuery,
-      columns,
       worksite,
       incidentsWithActivePhones,
       worksiteForm,
@@ -918,6 +894,11 @@ export default {
       updateUserState: User.api().updateUserState,
       moment,
       retryFailedCall,
+      onSelectionChanged,
+      selectedTableItems,
+      showUnclaimModal,
+      reloadTable,
+      onSaveCase,
     };
   },
 };

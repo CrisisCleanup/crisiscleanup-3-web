@@ -19,7 +19,8 @@
         <div
           v-for="work_type in slotProps.item.work_types"
           :key="`${work_type.id}`"
-          class="badge-holder flex items-center"
+          class="badge-holder flex items-center cursor-pointer"
+          :title="getStatusName(work_type.status)"
         >
           <badge
             class="mx-1"
@@ -36,9 +37,14 @@
 
 <script>
 import { ref } from 'vue';
-import AjaxTable from '../../components/AjaxTable.vue';
-import { getColorForStatus, getWorkTypeName } from '../../filters';
 import { useI18n } from 'vue-i18n';
+import AjaxTable from '@/components/AjaxTable.vue';
+import {
+  getColorForStatus,
+  getWorkTypeName,
+  getStatusName,
+} from '../../filters';
+
 export default {
   name: 'WorksiteTable',
   components: { AjaxTable },
@@ -88,7 +94,7 @@ export default {
       },
     ]);
     const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/worksites`;
-    return { columns, tableUrl, getColorForStatus, getWorkTypeName };
+    return { columns, tableUrl, getColorForStatus, getWorkTypeName, getStatusName };
   },
   props: {
     worksiteQuery: { type: Object, default: null, required: false },

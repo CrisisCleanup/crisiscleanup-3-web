@@ -791,14 +791,14 @@ export default {
             incident: currentIncident.value.name,
           }),
           actions: {
-            continue: {
-              text: t('actions.continue_anyway'),
-              type: 'solid',
-            },
             retry: {
               text: t('actions.retry'),
               type: 'outline',
               buttonClass: 'border border-black',
+            },
+            continue: {
+              text: t('actions.continue_anyway'),
+              type: 'solid',
             },
           },
         });

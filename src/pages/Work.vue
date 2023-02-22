@@ -92,7 +92,7 @@
           </div>
         </div>
         <div
-          v-if="!collapsedUtilityBar"
+          v-if="!collapsedUtilityBar && !showingTable"
           class="flex justify-center items-center"
         >
           <Slider
@@ -527,6 +527,7 @@ import UnclaimCases from '@/components/UnclaimCases.vue';
 import { numeral } from '@/utils/helpers';
 import type Location from '@/models/Location';
 import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
+import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -592,6 +593,14 @@ export default defineComponent({
     const unreadChatCount = ref(0);
     const unreadUrgentChatCount = ref(0);
     const unreadNewsCount = ref(0);
+
+    const { showUnclaimModal } = useWorksiteTableActions(
+      selectedTableItems,
+      () => {
+        loading.value = false;
+        reloadTable();
+      },
+    );
 
     function loadStatesForUser() {
       const states = currentUser?.value?.getStatesForIncident(
@@ -788,40 +797,6 @@ export default defineComponent({
               Worksite.api().updateWorkTypeStatus(workType.id, status),
             );
           }
-        }
-        await Promise.allSettled(promises);
-      }
-      loading.value = false;
-      reloadTable();
-    }
-
-    async function showUnclaimModal() {
-      let options: Record<string, boolean> | null = {};
-      const response = await component({
-        title: t('actions.unclaim_cases'),
-        component: UnclaimCases,
-        classes: 'w-full h-48 overflow-auto p-3',
-        modalClasses: 'bg-white max-w-3xl shadow',
-        props: {
-          selectedTableItems,
-        },
-        listeners: {
-          onUnclaimSelect: (payload: Record<string, boolean>) => {
-            options = payload;
-          },
-        },
-      });
-
-      if (response === 'ok' && options) {
-        const promises = [] as Promise<never>[];
-        for (const id of selectedTableItems.value) {
-          promises.push(
-            Worksite.api().unclaimWorksite(
-              id,
-              [],
-              options?.updateStatusOnUnclaim ? 'open_unassigned' : null,
-            ),
-          );
         }
         await Promise.allSettled(promises);
       }

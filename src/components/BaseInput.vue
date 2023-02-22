@@ -19,6 +19,7 @@
       :autocomplete="autocomplete"
       :rows="rows"
       @input="update"
+      @input.stop=""
       @change="change"
       @blur="$emit('blur', $event)"
       @focus="$emit('focus', $event)"

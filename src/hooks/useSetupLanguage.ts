@@ -6,13 +6,14 @@ import { i18nService } from '@/services/i18n.service';
 import { i18n } from '@/main';
 import { store } from '@/store';
 import Language from '@/models/Language';
-import type User from '@/models/User';
+import User from '@/models/User';
 
-export default function useSetupLanguage(currentUser: User | null = null) {
+export default function useSetupLanguage() {
   return {
     setupLanguage: async () => {
       const { setLocaleMessage, locale } = i18n.global;
       let currentLanguage: string;
+      const currentUser = User.find(store.getters['auth/userId']);
       if (currentUser?.primary_language || currentUser?.secondary_language) {
         const userLanguage =
           Language.find(currentUser?.primary_language) ||
