@@ -27,7 +27,9 @@ async function saveCapabilities(
       updatedOrganizationCapabilitiesMatrix[org_capability.phase].delete(
         org_capability.capability,
       );
-    } else {
+    } else if (
+      updatedOrganizationCapabilitiesMatrix[org_capability.phase].size > 0
+    ) {
       capabilitiesToRemove.push(org_capability);
     }
   }
@@ -56,7 +58,7 @@ async function saveCapabilities(
         ),
       );
     } catch (error) {
-      await $toasted.error(getErrorMessage(error));
+      $toasted.error(getErrorMessage(error));
     }
   }
 
@@ -73,7 +75,7 @@ async function saveCapabilities(
         ),
       );
     } catch (error) {
-      await $toasted.error(getErrorMessage(error));
+      $toasted.error(getErrorMessage(error));
     }
   }
 

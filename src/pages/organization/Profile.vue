@@ -961,8 +961,6 @@ export default defineComponent({
       logoUrl,
       termsOfService,
       liabilityWaiver,
-
-      saveCapabilities,
       setCurrentLocation,
       makePrimaryContact,
       deletePrimaryContact,
