@@ -659,7 +659,7 @@
       </h1>
       <div class="flex flex-row pb-20 sm:pb-0">
         <div class="flex flex-col m-5">
-          <ul class="text-xl text-crisiscleanup-dark-400 font-hairline">
+          <ul class="text-xl text-crisiscleanup-dark-400 font-hairline about">
             <li>
               <a
                 href="https://app.dev.crisiscleanup.io/"
@@ -728,6 +728,9 @@ export default {
 </script>
 
 <style scoped>
+.about > li {
+  @apply underline;
+}
 @media only screen and (max-width: 640px) {
   .homegrid {
     height: 100vh;
