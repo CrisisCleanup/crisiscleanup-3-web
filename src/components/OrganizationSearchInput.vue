@@ -5,7 +5,7 @@
     :filter-results="false"
     :min-chars="1"
     :resolve-on-load="false"
-    :no-options-text="$t('~~Search for Organization')"
+    :no-options-text="$t('registerOrg.search_for_organization')"
     :delay="0"
     :searchable="true"
     :object="true"
