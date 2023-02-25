@@ -160,25 +160,25 @@
             :placeholder="$t('locationVue.notes')"
           />
           <div>
-            <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
+            <div class="mt-20 text-base">{{ $t('locationVue.access') }}</div>
             <div class="flex flex-wrap mt-2">
               <base-radio
+                v-model="currentLocation.shared"
                 class="mr-4"
                 label="shared"
                 :name="$t('locationVue.shared')"
-                v-model="currentLocation.shared"
               />
               <base-radio
+                v-model="currentLocation.shared"
                 class="mr-4"
                 label="private"
                 :name="$t('locationVue.private')"
-                v-model="currentLocation.shared"
               />
               <base-radio
+                v-model="currentLocation.shared"
                 class="mr-4"
                 label="public"
                 :name="$t('locationVue.public')"
-                v-model="currentLocation.shared"
               />
             </div>
           </div>

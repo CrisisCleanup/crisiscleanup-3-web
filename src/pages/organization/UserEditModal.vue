@@ -17,10 +17,10 @@
         <base-input
           size="large"
           class="m-2"
-          :value="user.first_name"
+          :model-value="user.first_name"
           :placeholder="$t('profileUser.first_name_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'first_name');
             }
@@ -29,10 +29,10 @@
         <base-input
           size="large"
           class="m-2"
-          :value="user.last_name"
+          :model-value="user.last_name"
           :placeholder="$t('profileUser.last_name_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'last_name');
             }
@@ -41,17 +41,17 @@
         <base-input
           size="large"
           class="m-2"
-          :value="user.mobile"
+          :model-value="user.mobile"
           :placeholder="$t('profileUser.mobile_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'mobile');
             }
           "
         />
         <base-input
-          :value="user.email"
+          :model-value="user.email"
           size="large"
           class="m-2"
           :placeholder="$t('profileUser.email_placeholder ')"

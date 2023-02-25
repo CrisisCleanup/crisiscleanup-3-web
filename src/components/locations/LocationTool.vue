@@ -1,7 +1,8 @@
 <template>
-  <div style="display: grid; grid-template-rows: auto 1fr">
-    <div class="h-16 flex items-center w-full p-2" style="z-index: 10000">
+  <div class="p-2" style="display: grid; grid-template-rows: auto 1fr">
+    <div class="h-16 flex items-center w-full p-6" style="z-index: 10000">
       <Multiselect
+        class="flex-1"
         :placeholder="$t('locationTool.search_several_area_types')"
         label="name"
         :filter-results="false"
@@ -19,7 +20,7 @@
       >
         <template #option="{ option }">
           <div
-            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b w-full"
           >
             <span>{{ option.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{
@@ -34,7 +35,7 @@
         :options="locationTypes"
         item-key="id"
         label="name_t"
-        class="ml-3 w-1/3"
+        class="ml-3 flex-1"
         searchable
         :placeholder="$t('locationVue.location_type')"
         @update:modelValue="

@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { useToast } from 'vue-toastification';
-import LayerUploadTool from '@/components/LayerUploadTool.vue';
+import LayerUploadTool from '@/components/locations/LayerUploadTool.vue';
 import LocationTable from '@/components/LocationTable.vue';
 import User from '@/models/User';
 import Location from '@/models/Location';
