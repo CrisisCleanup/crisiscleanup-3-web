@@ -311,6 +311,7 @@
         @closeWorksite="clearCase"
         @onJumpToCase="jumpToCase"
         @reloadMap="reloadMap"
+        @onShareWorksite="() => shareWorksite(worksite?.id)"
         @onDownloadWorksite="
           () => {
             downloadWorksites([worksite?.id]);
@@ -528,6 +529,8 @@ import { numeral } from '@/utils/helpers';
 import type Location from '@/models/Location';
 import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
+import JsonWrapper from '@/components/JsonWrapper.vue';
+import ShareWorksite from '@/components/modals/ShareWorksite.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -974,8 +977,8 @@ export default defineComponent({
       ) as Incident;
 
       if (locationModels.length > 0) {
-        goToIncidentCenter();
         mapUtils?.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
+        goToIncidentCenter();
       } else {
         const center = averageGeolocation(
           mapUtils
@@ -995,6 +998,99 @@ export default defineComponent({
 
     function onSelectionChanged(selectedItems: Set<number>) {
       selectedTableItems.value = selectedItems;
+    }
+
+    async function shareWorksite(id: number) {
+      loading.value = true;
+      let noClaimText = '';
+      let worksiteToShare = await Worksite.find(id);
+      const hasClaimedWorkType = worksiteToShare?.work_types.some((type) =>
+        currentUser?.value?.organization.affiliates.includes(type.claimed_by),
+      );
+      if (hasClaimedWorkType) {
+        noClaimText = '';
+      } else {
+        const result = await prompt({
+          title: t('~~Share Case'),
+          content: t(
+            '~~Please claim this case if you plan to share it. If you do not plan to do the work, please let us know why you are sharing the case.',
+          ),
+          actions: {
+            cancel: {
+              text: t('actions.cancel'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            shareNoClaim: {
+              text: t('~~Share without claiming'),
+              type: 'solid',
+              buttonClass:
+                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+            },
+            claimAndShare: {
+              text: t('~~Claim and Share'),
+              type: 'solid',
+              buttonClass:
+                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+            },
+          },
+        });
+
+        if (result.key === 'cancel' || !result) {
+          return;
+        }
+
+        if (result.key === 'claimAndShare') {
+          noClaimText = '';
+        }
+        if (result.key === 'shareNoClaim') {
+          if (!result.response) {
+            $toasted.error(t('casesVue.please_explain_why_no_claim'));
+            return shareWorksite(id);
+          } else {
+            noClaimText = result.response;
+          }
+        }
+      }
+
+      let emails: string[] = [];
+      let phoneNumbers: string[] = [];
+      let shareMessage = '';
+
+      const result = await component({
+        title: t('actions.share'),
+        component: ShareWorksite,
+        classes: 'w-full h-144',
+        actionText: t('actions.share'),
+        props: {
+          worksite: id,
+        },
+        listeners: {
+          phoneNumbersUpdated: (value: string[]) => {
+            phoneNumbers = value.map((number) =>
+              String(number).replace(/\D/g, ''),
+            );
+          },
+          emailsUpdated: (value: string[]) => {
+            emails = value;
+          },
+          shareMessageUpdated: (value: string) => {
+            shareMessage = value;
+          },
+        },
+      });
+      if (result === 'no' || result === 'cancel') {
+        return;
+      }
+
+      await Worksite.api().shareWorksite(
+        id,
+        emails,
+        phoneNumbers,
+        shareMessage,
+        noClaimText,
+      );
+      await reloadCase();
     }
 
     async function printWorksite(id: number) {
@@ -1282,6 +1378,7 @@ export default defineComponent({
       loadCase,
       workTypesClaimedByOrganization,
       printWorksite,
+      shareWorksite,
       printSelectedWorksites,
       downloadWorksites,
       onSelectionChanged,

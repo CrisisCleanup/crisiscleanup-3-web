@@ -2,7 +2,7 @@
   <div>
     <Multiselect
       ref="input"
-      :value="modelValue"
+      :model-value="modelValue"
       :required="required"
       :options="options"
       :can-clear="clearable"
@@ -23,10 +23,9 @@
       :placeholder="placeholder"
       :classes="multiSelectClasses"
       v-bind="$attrs"
-      @input="
+      @update:modelValue="
         (v) => {
           onInput(v);
-          $emit('update:modelValue', v);
         }
       "
     >

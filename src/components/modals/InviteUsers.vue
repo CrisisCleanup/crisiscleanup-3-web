@@ -172,6 +172,9 @@ export default {
 
 <style>
 .vue-tags-input {
-  @apply h-8 w-108 mb-2;
+  @apply h-auto w-full mb-2;
+}
+.vue-tags-input .ti-input {
+  @apply h-auto;
 }
 </style>

@@ -105,6 +105,7 @@
           class="p-1 py-2"
           type="share"
           data-cy="cases.icons.share"
+          @click="$emit('onShareWorksite')"
         />
         <ccu-icon
           :alt="$t('actions.print')"

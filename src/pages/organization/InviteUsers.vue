@@ -180,10 +180,9 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .vue-tags-input {
-  @apply h-8 w-108 mb-2;
+  @apply h-auto w-full mb-2;
 }
-
 .vue-tags-input .ti-input {
-  @apply h-8;
+  @apply h-auto;
 }
 </style>

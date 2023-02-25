@@ -448,6 +448,28 @@ export default class Worksite extends CCUModel<Worksite> {
           // Console.error(e)
         }
       },
+      shareWorksite(
+        id,
+        emails: string[],
+        phoneNumbers: string[],
+        shareMessage: string,
+        noClaimReason = '',
+      ) {
+        try {
+          const data: Record<string, any> = {
+            emails,
+            phone_numbers: phoneNumbers,
+            share_message: shareMessage,
+          };
+          if (noClaimReason) {
+            data.no_claim_reason_text = noClaimReason;
+          }
+
+          return this.post(`/worksites/${id}/share`, data, { save: false });
+        } catch {
+          // Console.error(e)
+        }
+      },
       // TODO: handle exceptions and ensure a value is returned
 
       downloadWorksite(ids, type = 'text/csv') {

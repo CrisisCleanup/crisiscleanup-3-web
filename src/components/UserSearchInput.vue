@@ -1,6 +1,6 @@
 <template>
   <base-select
-    v-model="selectedUser"
+    :model-value="selectedUser"
     :placeholder="placeholder"
     :options="onUserSearch"
     :min-chars="1"
@@ -8,12 +8,13 @@
     value-prop="id"
     object
     searchable
+    @update:modelValue="onUserUpdate"
   >
     <template #option="{ option }">
       <div class="flex items-center">
         <div class="flex flex-col">
           <span class="text-sm">{{ option.full_name }}</span>
-          <span class="text-xs">{{ option.email }}</span>
+          <span class="text-xs">{{ option[displayProp] }}</span>
         </div>
       </div>
     </template>
@@ -31,6 +32,10 @@ export default defineComponent({
       default: '',
       required: false,
     },
+    displayProp: {
+      type: String,
+      default: 'email',
+    },
   },
   emits: ['selectedUser'],
   setup(props, { emit }) {
@@ -41,7 +46,7 @@ export default defineComponent({
 
     async function onUserSearch(value: string) {
       const _results = await User.api().get(
-        `/users?search=${value}&limit=10&&organization=${currentUser.value.organization.id}`,
+        `/users?search=${value}&limit=10&&organization=${currentUser?.value?.organization.id}`,
         { dataKey: 'results' },
       );
       const results = (_results.entities?.users || []) as User[];
@@ -49,17 +54,16 @@ export default defineComponent({
       return results;
     }
 
-    watch(
-      () => selectedUser.value,
-      (value) => {
-        emit('selectedUser', value);
-      },
-    );
+    const onUserUpdate = (value: any) => {
+      emit('selectedUser', value);
+      selectedUser.value = value;
+    };
 
     return {
       selectedUser,
       userResults,
       onUserSearch,
+      onUserUpdate,
     };
   },
 });
