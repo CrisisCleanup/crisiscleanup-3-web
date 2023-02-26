@@ -545,7 +545,7 @@
     <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
       <base-text variant="h2" :weight="600"> Groups</base-text>
       <div class="flex flex-col sm:flex-row item-start">
-        <div class="w-84">
+        <div class="">
           <div class="flex items-center justify-start w-full">
             <GroupSearchInput
               v-model="groupToAdd"
