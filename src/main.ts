@@ -9,7 +9,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
-import { createI18n } from 'vue-i18n';
+import { createI18n } from 'vue-i18n/dist/vue-i18n.esm-bundler.js';
 import vSelect from 'vue-select';
 import App from './App.vue';
 import router from './router';
