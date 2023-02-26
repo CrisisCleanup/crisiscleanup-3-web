@@ -65,16 +65,18 @@
                 :placeholder="$t('registerOrg.twitter')"
               />
             </div>
-            <textarea
+            <base-input
+              text-area
               v-model="organization.where_are_you_working"
-              class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
+              class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
               :placeholder="$t('registerOrg.where_working')"
               required
             />
-            <textarea
+            <base-input
+              text-area
               v-model="organization.referral"
-              class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
+              class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
               :placeholder="$t('registerOrg.referral')"
               required
@@ -180,10 +182,12 @@ import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import Home from '@/layouts/Home.vue';
 import CapabilityGrid from '@/components/CapabilityGrid.vue';
 import useCapabilities from '@/hooks/useCapabilities';
+import BaseInput from '@/components/BaseInput.vue';
 
 export default {
   name: 'Register',
   components: {
+    BaseInput,
     Home,
     CapabilityGrid,
     OrganizationSearchInput,

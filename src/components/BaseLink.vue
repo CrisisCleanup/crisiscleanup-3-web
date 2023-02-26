@@ -5,7 +5,6 @@
     :href="href"
     class="link"
     :target="target"
-    :download="download"
   >
     <base-text :variant="textVariant">
       <slot />
@@ -20,10 +19,6 @@ export default defineComponent({
   name: 'BaseLink',
   props: {
     href: {
-      type: String,
-      default: '',
-    },
-    download: {
       type: String,
       default: '',
     },

@@ -426,7 +426,7 @@
             <base-select
               :placeholder="$t('adminOrganization.incident')"
               :model-value="incidentToAdd"
-              class="my-2 mr-1"
+              class="my-2 mr-1 w-108"
               select-classes="h-full p-1"
               :options="selectableIncidents"
               multiple
@@ -547,7 +547,11 @@
       <div class="flex flex-col sm:flex-row item-start">
         <div class="w-84">
           <div class="flex items-center justify-start w-full">
-            <GroupSearchInput v-model="groupToAdd" class="mr-1" size="large" />
+            <GroupSearchInput
+              v-model="groupToAdd"
+              class="mr-1 w-108"
+              size="large"
+            />
             <base-button
               :text="$t('actions.add')"
               size="large"

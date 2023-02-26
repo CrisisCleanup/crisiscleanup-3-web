@@ -297,6 +297,10 @@ input.invalid {
   @apply border border-crisiscleanup-red-100;
 }
 
+textarea.invalid {
+  @apply border border-crisiscleanup-red-100;
+}
+
 input {
   outline: none;
   width: var(--width);

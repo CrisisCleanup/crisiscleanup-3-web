@@ -198,6 +198,8 @@ export default {
       return {
         ...searchClassesObj,
         ...containerClassesObj,
+        wrapper:
+          'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer outline-none h-12',
         optionSelected: 'text-white bg-crisiscleanup-dark-200',
         optionPointed: 'text-gray-800 bg-crisiscleanup-dark-100',
         optionSelectedPointed:
