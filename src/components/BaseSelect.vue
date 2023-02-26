@@ -21,6 +21,7 @@
         floatLabel ? 'py-2 pt-3' : '',
       ]"
       :placeholder="placeholder"
+      :no-options-text="placeholder"
       :classes="multiSelectClasses"
       v-bind="$attrs"
       @update:modelValue="
