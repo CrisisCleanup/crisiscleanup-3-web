@@ -158,20 +158,23 @@
               })
             }}
           </base-text>
-          <base-button
-            :text="$t('actions.got_it')"
-            :alt="$t('actions.got_it')"
-            size="large"
-            variant="solid"
-            class="mt-10"
-            :action="
-              () => {
-                router.push('/login');
-              }
-            "
-          ></base-button>
         </div>
-        <div slot="footer"></div>
+        <template #footer>
+          <div class="flex items-center justify-center py-2 border-t">
+            <base-button
+              :text="$t('actions.got_it')"
+              :alt="$t('actions.got_it')"
+              size="large"
+              variant="solid"
+              class="mt-10"
+              :action="
+                () => {
+                  $router.push('/login');
+                }
+              "
+            ></base-button>
+          </div>
+        </template>
       </modal>
     </div>
   </Home>

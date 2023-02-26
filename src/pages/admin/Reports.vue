@@ -8,7 +8,7 @@
     >
       <div class="flex justify-around m-5">
         <base-text variant="body">
-          <span v-html="$t('reportsVue.no_state_account_yet')"></span>
+          <span v-html="requestAccessText"></span>
         </base-text>
       </div>
       <div slot="footer" class="flex p-1 justify-center">
@@ -31,7 +31,7 @@
         <div v-for="r in reportsGrouped[sponsored]" :key="`${r.id}`">
           <div
             class="my-4 mx-2 bg-white shadow h-auto content-center flex-wrap cursor-pointer"
-            @click="() => requestReport(r, null, sponsored)"
+            @click="() => requestReport(r, null, sponsored === 'true')"
           >
             <div class="flex flex-col justify-around">
               <div class="m-5">
@@ -155,6 +155,7 @@ export default {
       reportsKeys,
       currentUser,
       requestReport,
+      requestAccessText: t('reportsVue.no_state_account_yet')
     };
   },
 };

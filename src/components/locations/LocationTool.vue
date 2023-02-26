@@ -1,16 +1,12 @@
 <template>
   <div class="p-2" style="display: grid; grid-template-rows: auto 1fr">
     <div class="h-16 flex items-center w-full p-6" style="z-index: 10000">
-      <Multiselect
+      <base-select
         class="flex-1"
         :placeholder="$t('locationTool.search_several_area_types')"
+        searchable
+        item-key="id"
         label="name"
-        :filter-results="false"
-        :min-chars="1"
-        :resolve-on-load="false"
-        :delay="0"
-        :searchable="true"
-        value-prop="id"
         :options="onLocationSearch"
         @update:modelValue="
           (value) => {
@@ -19,16 +15,14 @@
         "
       >
         <template #option="{ option }">
-          <div
-            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b w-full"
-          >
+          <div class="flex justify-between text-sm p-2 cursor-pointer w-full">
             <span>{{ option.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{
               option.location_type && option.location_type.name_t
             }}</span>
           </div>
         </template>
-      </Multiselect>
+      </base-select>
 
       <base-select
         :model-value="currentLocationType"
