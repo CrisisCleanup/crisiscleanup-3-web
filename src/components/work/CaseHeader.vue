@@ -88,7 +88,8 @@
           :alt="$t('actions.history')"
           size="small"
           class="p-1 py-2"
-          type="history"
+          :fa="true"
+          type="user-group"
           @click="$emit('onShowHistory')"
         />
         <ccu-icon
