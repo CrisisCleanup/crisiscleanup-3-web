@@ -1011,10 +1011,8 @@ export default defineComponent({
         noClaimText = '';
       } else {
         const result = await prompt({
-          title: t('~~Share Case'),
-          content: t(
-            '~~Please claim this case if you plan to share it. If you do not plan to do the work, please let us know why you are sharing the case.',
-          ),
+          title: t('casesVue.share_case'),
+          content: t('casesVue.please_claim_if_share'),
           actions: {
             cancel: {
               text: t('actions.cancel'),
@@ -1022,13 +1020,12 @@ export default defineComponent({
               buttonClass: 'border border-black',
             },
             shareNoClaim: {
-              text: t('~~Share without claiming'),
-              type: 'solid',
-              buttonClass:
-                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+              text: t('actions.share_no_claim'),
+              type: 'outline',
+              buttonClass: 'border border-black',
             },
             claimAndShare: {
-              text: t('~~Claim and Share'),
+              text: t('actions.claim_and_share'),
               type: 'solid',
               buttonClass:
                 'border text-base p-2 px-4 mx-2 text-black border-primary-light',

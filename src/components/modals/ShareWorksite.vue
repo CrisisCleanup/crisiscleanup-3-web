@@ -1,18 +1,13 @@
 <template>
   <div class="p-3">
     <div class="mb-2">
-      <p>
-        {{
-          $t(
-            '~~Please enter emails and phone numbers of users you would like to share this case with.',
-          )
-        }}
+      <p>{{$t('shareWorksite.share_via_email_phone_intro')}}
       </p>
     </div>
     <tag-input
       v-model="emails"
       v-model:tags="emailsToShare"
-      :placeholder="$t('~~Emails to share case with')"
+      :placeholder="$t('shareWorksite.manually_enter_emails')"
       :validation="emailValidation"
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
@@ -27,7 +22,7 @@
     />
 
     <UserSearchInput
-      :placeholder="$t('~~Search for user emails')"
+      :placeholder="$t('shareWorksite.search_emails')"
       class="my-1"
       @selectedUser="onSelectedUserEmail"
     />
@@ -37,7 +32,7 @@
     <tag-input
       v-model="phoneNumbers"
       v-model:tags="phoneNumbersToShare"
-      :placeholder="$t('~~Phone numbers to share case with')"
+      :placeholder="$t('shareWorksite.manually_enter_phones')"
       :validation="phoneValidation"
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
@@ -52,7 +47,7 @@
     />
 
     <UserSearchInput
-      :placeholder="$t('~~Search for user phone numbers')"
+      :placeholder="$t('shareWorksite.search_phones')"
       class="my-1"
       display-prop="mobile"
       @selectedUser="onSelectedUserPhone"
@@ -64,11 +59,7 @@
       :disabled="false"
       :rows="6"
       class="my-4"
-      :placeholder="
-        $t(
-          '~Please include a message to send to users you will be sharing this case with',
-        )
-      "
+      :placeholder="$t('shareWorksite.add_message')"
       @update:modelValue="
         (value) => {
           shareMessage = value;
