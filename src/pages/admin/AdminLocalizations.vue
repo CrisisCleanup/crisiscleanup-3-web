@@ -3,10 +3,10 @@
     <div class="grid grid-cols-3 h-1/2 gap-5">
       <div class="col-span-1">
         <div class="mb-1 flex items-center justify-between">
-          <div v-if="currentLocalization.id" class="text-xl font-semibold mb-3">
-            {{ currentLocalization.id }} : {{ currentLocalization.group_label }}
+          <div v-if="currentLocalization.id" class="text-xl font-semibold mb-1">
+            {{ currentLocalization.id }}
           </div>
-          <div v-else class="text-xl font-semibold mb-3">
+          <div v-else class="text-xl font-semibold mb-2">
             {{ $t('adminLocalizations.new_localization') }}
           </div>
           <div class="flex items-center gap-2">
@@ -35,6 +35,9 @@
               >{{ $t('actions.save_and_clear') }}
             </base-button>
           </div>
+        </div>
+        <div v-if="currentLocalization.id" class="text-xl font-semibold mb-3">
+          {{ currentLocalization.group_label }}
         </div>
         <base-input
           v-model="currentLocalization.group"
