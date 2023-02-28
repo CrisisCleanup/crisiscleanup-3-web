@@ -152,7 +152,6 @@
             required
           >
             <div
-              class="privacy"
               v-html="$t('registerOrg') ? $t('registerOrg.tos_priv_agree') : ''"
             ></div>
           </base-checkbox>
@@ -358,8 +357,8 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
-.privacy > a {
+<style lang="scss">
+.activities-checkbox a {
   @apply text-primary-dark;
   text-decoration: underline !important;
   &:hover {

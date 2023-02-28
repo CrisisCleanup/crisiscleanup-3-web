@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-col h-full" data-cy="myorg-dashboard">
     <div
-      class="h-12 bg-white mx-5 border-t flex justify-around text-crisiscleanup-grey-700"
+      class="h-max bg-white mx-5 border-t flex justify-around text-crisiscleanup-grey-700"
     >
       <template v-for="r in routes">
         <router-link
           v-if="!r.isDisabled"
           :key="`myorg-nav-${r.name}`"
           :to="`/organization/${r.name}`"
-          class="flex w-48 justify-center mx-2 cursor-pointer"
+          class="flex justify-center mx-2 cursor-pointer"
           :data-cy="`myorg-nav-${r.name}`"
           :class="r.class ? r.class : null"
         >

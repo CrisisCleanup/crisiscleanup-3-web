@@ -168,6 +168,66 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.grid--main {
+  h1 {
+    @apply text-2xl font-bold mt-3;
+  }
+  h2 {
+    @apply text-xl font-bold mt-3;
+  }
+
+  h3 {
+    @apply text-lg font-semibold mt-3;
+  }
+
+  h4 {
+    @apply text-base mt-3;
+  }
+
+  h5 {
+    @apply text-sm mt-3;
+  }
+
+  h6 {
+    @apply text-xs mt-3;
+  }
+
+  p {
+    @apply my-2;
+  }
+
+  ul {
+    @apply mt-3 list-disc;
+    list-style-position: inside;
+  }
+
+  ol {
+    @apply mt-3 list-decimal;
+    list-style-position: inside;
+  }
+
+  strong {
+    @apply font-bold;
+  }
+
+  u {
+    @apply underline;
+  }
+
+  em {
+    @apply italic;
+  }
+
+  a {
+    @apply text-primary-dark underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+</style>
+
 <style scoped>
 .side {
   grid-area: side;

@@ -120,7 +120,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <component :is="layout" class="main">
+  <component :is="layout">
     <router-view />
     <DialogWrapper :transition-attrs="{ name: 'dialog' }" />
   </component>

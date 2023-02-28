@@ -8,7 +8,7 @@
     >
       <div class="flex justify-around m-5">
         <base-text variant="body">
-          <span v-html="requestAccessText"></span>
+          <span v-html="$t('reportsVue.no_state_account_yet')"></span>
         </base-text>
       </div>
       <div slot="footer" class="flex p-1 justify-center">
@@ -155,7 +155,6 @@ export default {
       reportsKeys,
       currentUser,
       requestReport,
-      requestAccessText: t('reportsVue.no_state_account_yet')
     };
   },
 };

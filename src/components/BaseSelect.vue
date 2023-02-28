@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 9997">
     <Multiselect
       ref="input"
       :model-value="modelValue"
@@ -14,6 +14,7 @@
       :disabled="disabled"
       class="form-select text-base"
       :resolve-on-load="false"
+      :clear-on-blur="false"
       :delay="typeof options === 'function' ? 0 : undefined"
       :filter-results="typeof options === 'function' ? false : undefined"
       :class="[
