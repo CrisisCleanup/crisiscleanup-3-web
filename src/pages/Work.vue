@@ -1088,6 +1088,7 @@ export default defineComponent({
         noClaimText,
       );
       await reloadCase();
+      $toasted.success(t('~~Successfully shared case'));
     }
 
     async function printWorksite(id: number) {

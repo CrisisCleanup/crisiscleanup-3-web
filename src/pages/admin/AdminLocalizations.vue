@@ -11,6 +11,18 @@
           </div>
           <div class="flex items-center gap-2">
             <base-button
+              v-if="currentLocalization.id"
+              :action="deleteAll"
+              class="px-2 py-1 bg-crisiscleanup-dark-red text-white"
+              >{{ $t('actions.delete') }}
+            </base-button>
+            <base-button
+              :action="clearLocalization"
+              variant="outline"
+              class="px-2 py-1"
+              >{{ $t('actions.clear') }}
+            </base-button>
+            <base-button
               :action="saveLocalization"
               variant="solid"
               class="px-2 py-1"
@@ -45,7 +57,9 @@
       </div>
       <div class="col-span-2">
         <div class="mb-3 flex items-center justify-between">
-          <span class="text-xl font-semibold">{{ $t('adminLocalizations.text_items') }}</span>
+          <span class="text-xl font-semibold">{{
+            $t('adminLocalizations.text_items')
+          }}</span>
           <div class="flex items-center gap-2">
             <base-button
               :action="addNewText"
@@ -64,7 +78,7 @@
         <div
           v-for="text in localizationTexts"
           :key="text"
-          class="flex gap-2 items-center mb-1"
+          class="flex gap-2 items-start mb-1"
         >
           <base-select
             :key="text.language"
@@ -81,6 +95,8 @@
             class="w-full flex-1"
             type="search"
             :placeholder="$t('adminLocalizations.text')"
+            text-area
+            rows="3"
           ></base-input>
           <ccu-icon
             :alt="$t('actions.cancel')"
@@ -119,15 +135,32 @@
       </div>
     </div>
     <div>
-      <base-input
-        :placeholder="$t('actions.search')"
-        @update:modelValue="
-          (value) => {
-            tableQuery.search = value;
-            tableQuery = { ...tableQuery };
-          }
-        "
-      />
+      <div class="flex items-center gap-2">
+        <base-input
+          class="w-108"
+          height="48"
+          :placeholder="$t('~~Search Label, Group and Text')"
+          @update:modelValue="
+            (value) => {
+              tableQuery.search = value;
+              tableQuery = { ...tableQuery };
+            }
+          "
+        />
+        <base-select
+          class="w-108"
+          searchable
+          :placeholder="$t('actions.filter_groups')"
+          :options="groups"
+          multiple
+          @update:modelValue="
+            (value) => {
+              tableQuery.group__in = value;
+              tableQuery = { ...tableQuery };
+            }
+          "
+        />
+      </div>
       <AjaxTable
         :url="tableUrl"
         :columns="columns"
@@ -160,6 +193,7 @@ import CmsViewer from '@/components/cms/CmsViewer.vue';
 import useDialogs from '@/hooks/useDialogs';
 import Editor from '@/components/Editor.vue';
 import useTranslation from '@/hooks/useTranslation';
+import BaseSelect from '@/components/BaseSelect.vue';
 
 interface Localization {
   id?: string;
@@ -178,7 +212,7 @@ interface LocalizationText {
 
 export default defineComponent({
   name: 'AdminLocalizations',
-  components: { BaseButton, BaseInput, BaseCheckbox, AjaxTable },
+  components: { BaseSelect, BaseButton, BaseInput, BaseCheckbox, AjaxTable },
   setup() {
     const languages = Language.all();
     const { t } = useI18n();
@@ -201,6 +235,7 @@ export default defineComponent({
     const tableQuery = ref({
       search: '',
     });
+    const groups = ref([]);
 
     const currentLocalization = ref<Localization>({
       group: '',
@@ -297,22 +332,38 @@ export default defineComponent({
       }
     }
 
+    function clearLocalization() {
+      currentLocalization.value = {
+        group: '',
+        label: '',
+        group_label: '',
+        is_front_end: true,
+      };
+      localizationTexts.value = [
+        {
+          localization: '',
+          text: '',
+          language: '',
+        },
+      ];
+    }
+
+    async function deleteAll() {
+      await Promise.all(
+        localizationTexts.value.map((text) => deleteLocalizationText(text)),
+      );
+      await axios.delete(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/admins/localizations/${
+          currentLocalization.value.id
+        }`,
+      );
+      clearLocalization();
+    }
+
     async function saveAndClear() {
       try {
         await saveLocalization();
-        currentLocalization.value = {
-          group: '',
-          label: '',
-          group_label: '',
-          is_front_end: true,
-        };
-        localizationTexts.value = [
-          {
-            localization: '',
-            text: '',
-            language: '',
-          },
-        ];
+        clearLocalization();
       } catch {
         /* empty */
       }
@@ -382,6 +433,13 @@ export default defineComponent({
       return;
     }
 
+    onMounted(async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/admins/localizations/groups`,
+      );
+      groups.value = response.data;
+    });
+
     return {
       currentLocalization,
       tableUrl,
@@ -392,11 +450,14 @@ export default defineComponent({
       addNewText,
       saveLocalization,
       saveAndClear,
+      clearLocalization,
+      deleteAll,
       tableQuery,
       deleteLocalizationText,
       editLocalizationTextAdvanced,
       previewLocalizationText,
       autoTranslate,
+      groups,
     };
   },
 });
