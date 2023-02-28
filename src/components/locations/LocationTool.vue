@@ -16,7 +16,7 @@
       >
         <template #option="{ option }">
           <div class="flex justify-between text-sm p-2 cursor-pointer w-full">
-            <span>{{ option.name }}</span>
+            <span class="mr-1">{{ option.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{
               option.location_type && option.location_type.name_t
             }}</span>
