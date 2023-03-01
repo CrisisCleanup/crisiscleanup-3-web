@@ -1,3 +1,4 @@
+import { version } from '@/../package.json';
 import { createApp } from 'vue';
 import './style.css';
 import axios from 'axios';
@@ -6,6 +7,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from '@sentry/tracing';
 
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
@@ -55,7 +58,7 @@ import Tabs from './components/tabs/Tabs.vue';
 import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
 import BaseLink from './components/BaseLink.vue';
-import TreeMenu from "@/components/TreeMenu.vue";
+import TreeMenu from '@/components/TreeMenu.vue';
 
 library.add(fas);
 
@@ -113,4 +116,22 @@ app.use(i18n);
 app.use(Toast, {});
 app.use(JsonViewer);
 app.config.devtools = true;
+
+Sentry.init({
+  dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
+  release: `crisiscleanup-4-web@v${version}`,
+  environment: import.meta.env.VITE_APP_STAGE,
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      tracePropagationTargets: [
+        'localhost',
+        'app.staging.crisiscleanupZ.io',
+        'crisiscleanup.org',
+        /^\//,
+      ],
+    }),
+  ],
+});
+
 app.mount('#app');

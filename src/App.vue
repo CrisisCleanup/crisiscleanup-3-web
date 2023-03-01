@@ -109,6 +109,18 @@ export default defineComponent({
           return config;
         }
       });
+      // Intercept and handle unauthenticated requests
+      axios.interceptors.response.use(
+        function (response) {
+          return response;
+        },
+        function (error) {
+          if (error.response && error.response.status === 401) {
+            store.commit('auth/setShowLoginModal', true);
+          }
+          return Promise.reject(error);
+        },
+      );
       await getEnums();
     });
 

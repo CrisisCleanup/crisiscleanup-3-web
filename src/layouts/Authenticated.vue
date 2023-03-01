@@ -255,42 +255,9 @@ export default {
       });
     };
 
-    // const logoutByPhoneNumber = async () => {
-    //   const parsedNumber = parsePhoneNumber(
-    //       currentUser?.value?.mobile || '',
-    //       'US',
-    //   );
-    //   if (
-    //       currentUser.value &&
-    //       currentUser?.value?.mobile &&
-    //       $phoneService.queueIds
-    //   ) {
-    //     await Promise.all(
-    //         $phoneService.queueIds.map((queueId) =>
-    //             $phoneService
-    //                 .apiLoginsByPhone(
-    //                     parsedNumber.formatNational().replace(/[^\d.]/g, ''),
-    //                     queueId,
-    //                 )
-    //                 .then(async ({ data }) => {
-    //                   if (data.length) {
-    //                     await Promise.all(
-    //                         data.map((phoneLogin) =>
-    //                             $phoneService.apiLogoutAgent(phoneLogin.agentId),
-    //                         ),
-    //                     );
-    //                   }
-    //                   return null;
-    //                 })
-    //                 .catch(() => {}),
-    //         ),
-    //     );
-    //   }
-    // };
-
     const logoutApp = async () => {
-      // await logoutByPhoneNumber();
       await store.dispatch('auth/logout');
+      await router.push('/login');
     };
 
     watch(
