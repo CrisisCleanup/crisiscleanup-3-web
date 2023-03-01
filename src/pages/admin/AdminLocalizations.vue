@@ -1,6 +1,6 @@
 <template>
-  <div class="grid h-full grid-rows-2 p-4">
-    <div class="grid grid-cols-3 h-1/2 gap-5">
+  <div class="grid h-full grid-rows-2 px-4 py-2">
+    <div class="grid grid-cols-3 h-full overflow-auto gap-5">
       <div class="col-span-1">
         <div class="mb-1 flex items-center justify-between">
           <div v-if="currentLocalization.id" class="text-xl font-semibold mb-1">
@@ -138,9 +138,9 @@
       </div>
     </div>
     <div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
         <base-input
-          class="w-108"
+          class="flex-1"
           height="48"
           :placeholder="$t('~~Search Label, Group and Text')"
           @update:modelValue="
@@ -150,8 +150,19 @@
             }
           "
         />
+        <base-input
+          class="flex-1"
+          height="48"
+          :placeholder="$t('~~Search Labels only')"
+          @update:modelValue="
+            (value) => {
+              tableQuery.label__icontains = value;
+              tableQuery = { ...tableQuery };
+            }
+          "
+        />
         <base-select
-          class="w-108"
+          class="flex-1"
           searchable
           :placeholder="$t('actions.filter_groups')"
           :options="groups"
