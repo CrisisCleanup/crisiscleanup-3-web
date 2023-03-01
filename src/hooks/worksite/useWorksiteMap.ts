@@ -32,12 +32,17 @@ export type MapUtils = {
   showMarkers: () => void;
 };
 
+const DEFAULT_MAP_BOUNDS = [
+  [17.644_022_027_872_726, -122.783_144_702_938_76],
+  [50.792_047_064_406_866, -69.872_988_452_938_74],
+];
 export default (
   markers: (Sprite & Worksite)[],
   visibleMarkerIds: string[],
   onMarkerClick: (marker: Sprite & Worksite) => void,
   onLoadMarkers: (fn: { workTypes: Record<string, any> }) => void,
   useGoogleMaps = false,
+  mapBounds = null,
 ) => {
   let loadMarker: (marker: Sprite & Worksite, index: number) => void = (
     marker,
@@ -46,10 +51,7 @@ export default (
   ) => {};
   const map = L.map('map', {
     zoomControl: false,
-  }).fitBounds([
-    [17.644_022_027_872_726, -122.783_144_702_938_76],
-    [50.792_047_064_406_866, -69.872_988_452_938_74],
-  ]);
+  }).fitBounds(mapBounds || DEFAULT_MAP_BOUNDS);
   if (useGoogleMaps) {
     L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
   } else {

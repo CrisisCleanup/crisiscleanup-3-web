@@ -642,13 +642,10 @@ export default defineComponent({
         data = {};
       }
       const newStates = {
-        appliedFilters: filterQuery.value,
-        filters: filters.value,
         showingMap: showingMap.value,
         showingTable: showingTable.value,
         sviLevel: sviSliderValue.value,
         dateLevel: dateSliderValue.value,
-        mapViewPort: mapUtils?.getMap().getBounds(),
         ...data,
       };
       User.api().updateUserState(
@@ -852,8 +849,8 @@ export default defineComponent({
       updateUserState({});
     }
 
-    const datesList = ref([]);
-    const sviList = ref([]);
+    const datesList = ref<any[]>([]);
+    const sviList = ref<any[]>([]);
 
     function getDatesList() {
       const layer = mapUtils?.getCurrentMarkerLayer();
@@ -1254,18 +1251,24 @@ export default defineComponent({
 
     function onUpdateQuery(query: any) {
       filterQuery.value = query;
-      updateUserState({});
+      updateUserState({
+        appliedFilters: filterQuery.value,
+        filters: filters.value,
+      });
     }
 
     function onUpdateFilters(f: any) {
       filters.value = f;
-      updateUserState({});
+      updateUserState({
+        appliedFilters: filterQuery.value,
+        filters: filters.value,
+      });
     }
 
     watch(
       () => worksiteQuery.value,
-      (value) => {
-        if (value) {
+      (value, previousValue) => {
+        if (JSON.stringify(value) !== JSON.stringify(previousValue)) {
           reloadMap();
         }
       },
@@ -1287,6 +1290,19 @@ export default defineComponent({
     async function init() {
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
+
+      const states = currentUser?.value?.getStatesForIncident(
+        currentIncidentId.value,
+        true,
+      );
+      let bounds;
+      if (states.mapViewPort) {
+        const { _northEast, _southWest } = states.mapViewPort;
+        bounds = [
+          [_northEast.lat, _northEast.lng],
+          [_southWest.lat, _southWest.lng],
+        ];
+      }
 
       mapUtils = useWorksiteMap(
         allWorksites,
@@ -1312,7 +1328,11 @@ export default defineComponent({
           sviList.value = getSviList();
           datesList.value = getDatesList();
           filterSvi(sviSliderValue.value);
+          updateUserState({ mapViewPort: states.mapViewPort });
+          loadStatesForUser();
         },
+        false,
+        bounds,
       );
 
       nextTick(() => {
@@ -1320,7 +1340,7 @@ export default defineComponent({
           'moveend',
           L.Util.throttle(
             () => {
-              updateUserState({});
+              updateUserState({ mapViewPort: mapUtils?.getMap().getBounds() });
             },
             1000,
             {},

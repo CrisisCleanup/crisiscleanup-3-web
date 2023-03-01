@@ -293,7 +293,7 @@ export default class User extends CCUModel<User> {
         }
 
         const states = (currentUser && currentUser.states) || {};
-        const currentIncident = states.incident;
+        const currentIncident = globalStates.incident || states.incident;
         let updatedStates = {
           ...states,
           ...globalStates,
@@ -301,9 +301,14 @@ export default class User extends CCUModel<User> {
         };
         let updatedIncidentStates = states.incidents || {};
         if (incidentStates) {
+          const currentIncidentStates =
+            updatedIncidentStates[currentIncident] || {};
           updatedIncidentStates = {
             ...updatedIncidentStates,
-            [currentIncident]: incidentStates,
+            [currentIncident]: {
+              ...currentIncidentStates,
+              ...incidentStates,
+            },
           };
         }
 

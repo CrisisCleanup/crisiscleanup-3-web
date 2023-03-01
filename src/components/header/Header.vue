@@ -41,12 +41,18 @@
           </div>
         </div>
       </div>
-      <div v-if="$can('development_mode')">
+      <div v-if="$can('development_mode')" class="flex gap-2">
         <base-button
           class="p-1.5"
           variant="solid"
           :text="$t('actions.debug_user')"
           :action="showCurrentUser"
+        />
+        <base-button
+          class="p-1.5"
+          variant="solid"
+          :text="$t('actions.debug_incident_states')"
+          :action="showCurrentIncidentStates"
         />
       </div>
       <div class="flex h-full items-center">
@@ -73,18 +79,18 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import DisasterIcon from '../DisasterIcon.vue';
-// import RedeployRequest from '@/pages/RedeployRequest';
 import BaseSelect from '../BaseSelect.vue';
 import useDialogs from '../../hooks/useDialogs';
 import JsonWrapper from '../JsonWrapper.vue';
 import useAcl from '../../hooks/useAcl';
 import PhoneIndicator from '../phone/PhoneIndicator.vue';
 import RedeployRequest from '../modals/RedeployRequest.vue';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import UserProfileMenu from './UserProfileMenu.vue';
+import User from '@/models/User';
 
 export default {
   name: 'Header',
@@ -105,18 +111,34 @@ export default {
       default: () => ({}),
     },
   },
-  setup() {
+  setup(props) {
     const { component } = useDialogs();
     const { $can } = useAcl();
     const { t } = useI18n();
-    const { currentUser } = useCurrentUser();
+    const store = useStore();
+
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
     async function showCurrentUser() {
       await component({
-        title: `User: ${currentUser.id} | ${currentUser.first_name} ${currentUser.last_name}`,
+        title: `User: ${currentUser.value.id} | ${currentUser.value.first_name} ${currentUser.value.last_name}`,
         component: JsonWrapper,
         classes: 'w-full h-96',
         props: {
-          jsonData: currentUser,
+          jsonData: currentUser.value,
+        },
+      });
+    }
+    async function showCurrentIncidentStates() {
+      const states = currentUser?.value?.getStatesForIncident(
+        props.currentIncident?.id,
+        true,
+      );
+      await component({
+        title: `Incident: ${props.currentIncident?.id}`,
+        component: JsonWrapper,
+        classes: 'w-full h-96',
+        props: {
+          jsonData: states,
         },
       });
     }
@@ -128,6 +150,7 @@ export default {
       $t: (text) => {
         return text ? t(text) : null;
       },
+      showCurrentIncidentStates,
     };
   },
 };
