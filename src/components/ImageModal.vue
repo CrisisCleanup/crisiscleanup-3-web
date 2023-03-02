@@ -5,7 +5,20 @@
         <div v-for="(image, idx) in imageList" :key="idx">
           <slot name="image">
             <div class="relative image-container w-24 h-24 mb-2">
+              <div
+                v-if="image.filename.endsWith('.pdf')"
+                class="w-20 h-20 mx-2 cursor-pointer flex flex-col items-center justify-center gap-2"
+                :title="image.filename_original"
+                @click="appearPdf(image)"
+              >
+                <font-awesome-icon
+                  icon="file-pdf"
+                  size="3x"
+                  class="cursor-pointer"
+                />
+              </div>
               <img
+                v-else
                 class="w-20 h-20 mx-2 cursor-pointer"
                 :src="image.small_thumbnail_url"
                 @click="appearModal(image, idx)"
@@ -27,6 +40,8 @@
 <script>
 import { api as viewerApi } from 'v-viewer';
 import { computed } from 'vue';
+import useDialogs from '@/hooks/useDialogs';
+import PdfViewer from '@/components/PdfViewer.vue';
 
 export default {
   name: 'ImageModal',
@@ -41,6 +56,8 @@ export default {
     },
   },
   setup(props) {
+    const { component } = useDialogs();
+
     const images = computed(() => {
       return props.imageList.map((image) => {
         return {
@@ -49,6 +66,17 @@ export default {
         };
       });
     });
+    async function appearPdf(file) {
+      await component({
+        title: file.filename_original,
+        component: PdfViewer,
+        classes: 'w-full h-144 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-4xl shadow',
+        props: {
+          pdf: file,
+        },
+      });
+    }
     function appearModal(image, idx) {
       viewerApi({
         options: {
@@ -62,6 +90,7 @@ export default {
     return {
       images,
       appearModal,
+      appearPdf,
     };
   },
 };

@@ -117,6 +117,7 @@ specifiers:
   vue-highlight-words: ^3.0.1
   vue-i18n: '9'
   vue-json-viewer: '3'
+  vue-pdf-embed: ^1.1.5
   vue-router: '4'
   vue-select: 4.0.0-beta.6
   vue-toastification: 2.0.0-rc.5
@@ -210,6 +211,7 @@ dependencies:
   vue-highlight-words: 3.0.1_vue@3.2.41
   vue-i18n: 9.2.2_vue@3.2.41
   vue-json-viewer: 3.0.4_vue@3.2.41
+  vue-pdf-embed: 1.1.5_vue@3.2.41
   vue-router: 4.1.6_vue@3.2.41
   vue-select: 4.0.0-beta.6_vue@3.2.41
   vue-toastification: 2.0.0-rc.5_vue@3.2.41
@@ -8195,6 +8197,14 @@ packages:
       vue: ^3.2.2
     dependencies:
       clipboard: 2.0.11
+      vue: 3.2.41
+    dev: false
+
+  /vue-pdf-embed/1.1.5_vue@3.2.41:
+    resolution: {integrity: sha512-aOUKlPFML9abOmFJgCuDujzcXmjN1Ck3X3vt0h2N/EGZYASS9TRXu96s+NzwZDr13iTZ8LGskLOzzXvf7FIpwQ==}
+    peerDependencies:
+      vue: ^2.x || ^3.x
+    dependencies:
       vue: 3.2.41
     dev: false
 
