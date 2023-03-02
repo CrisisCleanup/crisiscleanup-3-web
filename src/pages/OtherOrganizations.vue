@@ -155,7 +155,7 @@ export default defineComponent({
   components: { Table },
   setup(props) {
     const store = useStore();
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     const loading = ref(false);
     const organizations = reactive({
@@ -253,7 +253,7 @@ export default defineComponent({
       const organizationRolesResponse = await cachedGet(
         `${import.meta.env.VITE_APP_API_BASE_URL}/organization_roles`,
         {},
-        'organizations_roles',
+        `organizations_roles:${locale.value}`,
       );
       organizationRoles.value = organizationRolesResponse.data.results;
 

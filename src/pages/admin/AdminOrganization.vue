@@ -722,7 +722,7 @@ export default {
     GroupSearchInput,
   },
   setup() {
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const $toasted = useToast();
     const route = useRoute();
     const { confirm, selection, component } = useDialogs();
@@ -979,14 +979,14 @@ export default {
           roles: await cachedGet(
             `${import.meta.env.VITE_APP_API_BASE_URL}/organization_roles`,
             {},
-            'organizations_roles',
+            `organizations_roles:${locale.value}`,
           ),
           capabilities: await cachedGet(
             `${
               import.meta.env.VITE_APP_API_BASE_URL
             }/organization_capabilities?limit=200`,
             {},
-            'organization_capabilities',
+            `organization_capabilities:${locale.value}`,
           ),
           organizationCapabilities: await axios.get(
             `${

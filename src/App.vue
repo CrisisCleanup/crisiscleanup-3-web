@@ -20,7 +20,7 @@ export default defineComponent({
     const layout = computed(
       () => `${route.meta?.layout || defaultLayout}-layout`,
     );
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const store = useStore();
 
     const eventsInterval = ref<any | null>(null);
@@ -40,7 +40,7 @@ export default defineComponent({
               Authorization: null,
             },
           },
-          'statuses',
+          `statuses:${locale.value}`,
         ),
         workTypes: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/work_types`,
@@ -57,7 +57,7 @@ export default defineComponent({
               Authorization: null,
             },
           },
-          'incidents_phases',
+          `incidents_phases:${locale.value}`,
         ),
         locationTypes: cachedGet(
           `${import.meta.env.VITE_APP_API_BASE_URL}/location_types`,
@@ -66,7 +66,7 @@ export default defineComponent({
               Authorization: null,
             },
           },
-          'location_types',
+          `location_types:${locale.value}`,
         ),
         portal: cachedGet(
           `${import.meta.env.VITE_APP_API_BASE_URL}/portals/current`,
@@ -75,7 +75,7 @@ export default defineComponent({
               Authorization: null,
             },
           },
-          'portal',
+          `portal:${locale.value}`,
         ),
       });
       store.commit('enums/setStatuses', enums.statuses.data.results);
