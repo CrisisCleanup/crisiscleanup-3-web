@@ -19,7 +19,7 @@
       icon="search"
       class="sm:w-84 my-2"
       :placeholder="$t('actions.search')"
-      @input="onSearchInput"
+      @update:modelValue="onSearchInput"
     ></base-input>
 
     <Table
