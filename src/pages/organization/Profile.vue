@@ -706,6 +706,11 @@ export default defineComponent({
         `${
           import.meta.env.VITE_APP_API_BASE_URL
         }/organization_organizations_capabilities`,
+        {
+          params: {
+            organization: currentOrganization.value.id,
+          },
+        },
       );
       organizationCapabilities.value = _organizationCapabilities.data.results;
     }
