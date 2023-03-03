@@ -2,7 +2,6 @@ import { version } from '@/../package.json';
 import { createApp } from 'vue';
 import './style.css';
 import axios from 'axios';
-import VueAxios from 'vue-axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
@@ -108,7 +107,6 @@ app.component('Datepicker', Datepicker);
 app.directive('tooltip', VTooltip);
 
 app.use(store);
-app.use(VueAxios, axios);
 app.use(Vue3Mq);
 app.use(router);
 app.use(i18n);

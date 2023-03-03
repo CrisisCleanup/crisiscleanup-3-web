@@ -110,7 +110,6 @@
     "v-viewer": "^3.0.11",
     "viewerjs": "1.11.1",
     "vue": "^3.2.41",
-    "vue-axios": "^3.5.0",
     "vue-composable": "1.0.0-beta.24",
     "vue-highlight-words": "^3.0.1",
     "vue-i18n": "9",
