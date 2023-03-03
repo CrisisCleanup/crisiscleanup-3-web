@@ -118,7 +118,7 @@ app.use(JsonViewer);
 app.config.devtools = true;
 
 Sentry.init({
-  dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
+  dsn: 'https://33b5cc9258d64b5cb2a8084af5df4051@o317954.ingest.sentry.io/4504774609141760',
   release: `crisiscleanup-4-web@v${version}`,
   environment: import.meta.env.VITE_APP_STAGE,
   integrations: [
