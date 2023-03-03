@@ -7,12 +7,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
-import * as Sentry from "@sentry/vue";
+import * as Sentry from '@sentry/vue';
 import { BrowserTracing } from '@sentry/tracing';
 
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
-import { createI18n } from 'vue-i18n/dist/vue-i18n.esm-bundler.js';
+import { createI18n } from 'vue-i18n';
 import vSelect from 'vue-select';
 import App from './App.vue';
 import router from './router';
@@ -35,9 +35,6 @@ import { store } from './store';
 // Toast
 import 'vue-toastification/dist/index.css';
 
-// I18n
-import { AuthService } from './services/auth.service';
-
 import 'vue-select/dist/vue-select.css';
 
 // Responsive
@@ -58,10 +55,12 @@ import Tabs from './components/tabs/Tabs.vue';
 import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
 import BaseLink from './components/BaseLink.vue';
+
+import { AuthService } from './services/auth.service';
 import TreeMenu from '@/components/TreeMenu.vue';
 
 library.add(fas);
-
+// I18n
 const getI18n = (messages = {}) => {
   return createI18n({
     legacy: false,
