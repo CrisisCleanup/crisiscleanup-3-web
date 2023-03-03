@@ -47,8 +47,6 @@ export default defineConfig(async ({ command }) => {
     sentryVitePlugin({
       include: '.',
       ignore: ['node_modules', 'vite.config.ts'],
-      org: '#crisis-cleanup',
-      project: 'crisiscleanup-4-web',
     }),
   ];
 
@@ -87,6 +85,7 @@ export default defineConfig(async ({ command }) => {
   configs.push({
     test: {
       include: ['test/**/*.test.ts', 'test/**/*.spec.ts'],
+      setupFiles: './src/setupTests.ts',
       globals: true,
       environment: 'happy-dom',
       deps: {

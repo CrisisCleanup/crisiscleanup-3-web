@@ -139,9 +139,10 @@ export default defineComponent({
       if (sorter && sorter.key) {
         params.sort = `${sorter.direction === 'desc' ? '-' : ''}${sorter.key}`;
       }
-      const queryString = getQueryString(params);
 
-      const response = await axios.get(`${props.url}?${queryString}`);
+      const response = await axios.get(`${props.url}`, {
+        params,
+      });
       data.value = response.data.results;
       meta.value.pagination = {
         ...pagination,
