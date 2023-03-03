@@ -47,6 +47,7 @@ module.exports = {
     '@typescript-eslint/naming-convention': 0,
     'import/no-unassigned-import': 0,
     'vue/multi-word-component-names': 'warn',
+    'import/no-cycle': 0,
   },
   overrides: [
     {

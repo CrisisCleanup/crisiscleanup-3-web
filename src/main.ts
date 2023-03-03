@@ -79,7 +79,7 @@ if (AuthService.getUser()) {
 }
 
 const app = createApp(App);
-app.component('FontAwesomeIcon', FontAwesomeIcon);
+app.component('FontAwesomeIcon', FontAwesomeIcon as any);
 app.component('CcuIcon', BaseIcon);
 app.component('BaseButton', BaseButton);
 app.component('BaseInput', BaseInput);

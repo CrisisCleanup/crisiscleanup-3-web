@@ -1,4 +1,4 @@
-import { i18n } from '../../main';
+import { i18n } from '@/main';
 
 export default class Filter {
   name: string;

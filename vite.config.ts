@@ -8,6 +8,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import autoImport from 'unplugin-auto-import/vite';
 import inspect from 'vite-plugin-inspect';
 import inspector from 'vite-plugin-vue-inspector';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import postcssConfig from './postcss.config.cjs';
 
 export default defineConfig(async ({ command }) => {
@@ -43,6 +44,12 @@ export default defineConfig(async ({ command }) => {
     // https://github.com/webfansplz/vite-plugin-vue-inspector
     // Press Meta+Shift to see the inspector
     inspector(),
+    sentryVitePlugin({
+      include: '.',
+      ignore: ['node_modules', 'vite.config.ts'],
+      org: '#crisis-cleanup',
+      project: 'crisiscleanup-4-web',
+    }),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
