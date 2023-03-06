@@ -126,7 +126,7 @@ Sentry.init({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracePropagationTargets: [
         'localhost',
-        'app.staging.crisiscleanupZ.io',
+        'app.staging.crisiscleanup.io',
         'crisiscleanup.org',
         /^\//,
       ],
