@@ -149,12 +149,14 @@ import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
 import { cachedGet } from '@/utils/promise';
 import type Role from '@/models/Role';
+import { useApi } from '@/hooks/useApi';
 
 export default defineComponent({
   name: 'OtherOrganizations',
   components: { Table },
   setup(props) {
     const store = useStore();
+    const ccuApi = useApi();
     const { t, locale } = useI18n();
 
     const loading = ref(false);
@@ -278,20 +280,22 @@ export default defineComponent({
       }
       const queryString = getQueryString(params);
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${
-          currentIncidentId.value
-        }/organizations?${queryString}`,
+      const { data: orgData, isFinished } = ccuApi(
+        `/incidents/${currentIncidentId.value}/organizations?${queryString}`,
+        { method: 'GET' },
       );
-      organizations.data = response.data.results;
-      const newPagination = {
-        ...pagination,
-        total: response.data.count,
-      };
-      organizations.meta = {
-        pagination: newPagination,
-      };
-      loading.value = false;
+      whenever(isFinished, () => {
+        console.log('r finished', orgData.value);
+        organizations.data = orgData.value.results;
+        const newPagination = {
+          ...pagination,
+          total: orgData.value.count,
+        };
+        organizations.meta = {
+          pagination: newPagination,
+        };
+        loading.value = false;
+      });
     }
     function getOpenStatuses() {
       enums.state.statuses.filter(
