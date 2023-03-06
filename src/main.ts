@@ -107,6 +107,9 @@ app.component('Datepicker', Datepicker);
 app.directive('tooltip', VTooltip);
 
 app.use(store);
+// provide axios globally
+app.provide('axios', axios);
+
 app.use(Vue3Mq);
 app.use(router);
 app.use(i18n);
