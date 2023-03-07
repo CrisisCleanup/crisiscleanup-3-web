@@ -143,14 +143,11 @@ import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
 import InviteUsers from './InviteUsers.vue';
 import Table from '@/components/Table.vue';
+import type { TableSorterObject } from '@/components/Table.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
 
 type TableInstance = InstanceType<typeof Table>;
-type SorterObject = Record<string, unknown> & {
-  key?: string;
-  direction?: 'asc' | 'desc';
-};
 
 export default defineComponent({
   name: 'Invitations',
@@ -160,8 +157,8 @@ export default defineComponent({
     const $toasted = useToast();
     const invitationsTable = ref<TableInstance | null>(null);
     const invitationRequestsTable = ref<TableInstance | null>(null);
-    const invitationSorter = ref<SorterObject>({});
-    const invitationRequestsSorter = ref<SorterObject>({});
+    const invitationSorter = ref<TableSorterObject<Invitation>>({});
+    const invitationRequestsSorter = ref<TableSorterObject<Invitation>>({});
 
     const currentRequestsColumns = reactive([
       {
