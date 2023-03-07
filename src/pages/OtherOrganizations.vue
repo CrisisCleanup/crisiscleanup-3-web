@@ -150,6 +150,7 @@ import { getQueryString } from '@/utils/urls';
 import { cachedGet } from '@/utils/promise';
 import type Role from '@/models/Role';
 import { useApi } from '@/hooks/useApi';
+import Organization from '@/models/Organization';
 
 export default defineComponent({
   name: 'OtherOrganizations',
@@ -161,7 +162,7 @@ export default defineComponent({
 
     const loading = ref(false);
     const organizations = reactive({
-      data: [],
+      data: [] as Organization[],
       meta: {
         pagination: {
           pageSize: 50,
@@ -280,12 +281,20 @@ export default defineComponent({
       }
       const queryString = getQueryString(params);
 
-      const { data: orgData, isFinished } = ccuApi(
-        `/incidents/${currentIncidentId.value}/organizations?${queryString}`,
-        { method: 'GET' },
-      );
+      const { data: orgData, isFinished } = ccuApi<{
+        count: number;
+        next: string;
+        previous: string;
+        results: Organization[];
+      }>(`/incidents/${currentIncidentId.value}/organizations?${queryString}`, {
+        method: 'GET',
+      });
       whenever(isFinished, () => {
         console.log('r finished', orgData.value);
+        if (!isDefined(orgData)) {
+          console.error('Org data is not defined');
+          return;
+        }
         organizations.data = orgData.value.results;
         const newPagination = {
           ...pagination,
