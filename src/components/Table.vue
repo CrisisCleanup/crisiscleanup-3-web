@@ -339,6 +339,13 @@ export default defineComponent({
       },
     },
   },
+  emits: [
+    'change',
+    'allSelected',
+    'allDeselected',
+    'selectionChanged',
+    'rowClick',
+  ],
   setup(props, { emit }) {
     const mq = useMq();
 
