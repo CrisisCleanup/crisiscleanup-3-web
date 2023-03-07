@@ -94,28 +94,30 @@
         </div>
       </template>
       <template #approved_roles="slotProps">
-        <v-popover popover-class="org-role-popover">
+        <v-popover popperClass="w-80">
           <base-text class="details-name" variant="body">
             <span :class="`tooltip-target cursor-pointer text-primary-dark`">{{
               getHighestRole(slotProps.item.approved_roles).name_t
             }}</span>
           </base-text>
           <template #popper>
-            <div>
-              <div class="text-base">
-                {{
-                  getHighestRole(slotProps.item.approved_roles).data_access_t
-                }}
-              </div>
-              <div class="text-xs mb-2">
-                {{
-                  getHighestRole(slotProps.item.approved_roles).description_t
-                }}
-              </div>
-              <div class="text-xs">
-                {{
-                  getHighestRole(slotProps.item.approved_roles).limitations_t
-                }}
+            <div class="bg-black p-2">
+              <div class="bg-white rounded p-1">
+                <div class="text-base">
+                  {{
+                    getHighestRole(slotProps.item.approved_roles).data_access_t
+                  }}
+                </div>
+                <div class="text-xs mb-2">
+                  {{
+                    getHighestRole(slotProps.item.approved_roles).description_t
+                  }}
+                </div>
+                <div class="text-xs">
+                  {{
+                    getHighestRole(slotProps.item.approved_roles).limitations_t
+                  }}
+                </div>
               </div>
             </div>
           </template>
@@ -389,8 +391,6 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .org-role-popover {
-  @apply bg-black text-white p-3 outline-none;
-  width: 230px;
-  z-index: 1000;
+
 }
 </style>
