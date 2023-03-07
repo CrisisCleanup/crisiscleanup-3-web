@@ -143,7 +143,6 @@
 <script lang="ts">
 import { throttle } from 'lodash';
 import moment from 'moment';
-import axios from 'axios';
 import enums from '../store/modules/enums';
 import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
@@ -317,14 +316,6 @@ export default defineComponent({
         .map((status: Record<string, unknown>) => status.status)
         .join(',');
     }
-    async function getOrganizationContacts(organizationId: number) {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_APP_API_BASE_URL
-        }/ghost_users?organization=${organizationId}`,
-      );
-      return response.data.results;
-    }
     function getHighestRole(roles: number[]) {
       if (roles.length > 0) {
         return organizationRoles.value.find((role) => roles.includes(role.id));
@@ -347,7 +338,6 @@ export default defineComponent({
       isLandscape,
       getOrganizations,
       getOpenStatuses,
-      getOrganizationContacts,
       getHighestRole,
       onSearchInput,
     };
