@@ -254,10 +254,18 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, defineComponent } from 'vue';
+import { computed, ref, defineComponent, PropType } from 'vue';
 import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 import useLogEvent from '@/hooks/useLogEvent';
+
+export type TableSorterObject<T = Record<string, unknown>> = Record<
+  string,
+  unknown
+> & {
+  key?: keyof T;
+  direction?: 'asc' | 'desc';
+};
 
 export default defineComponent({
   name: 'Table',
@@ -282,8 +290,8 @@ export default defineComponent({
       },
     },
     sorter: {
-      type: Object,
-      default: () => {
+      type: Object as PropType<TableSorterObject>,
+      default: (): TableSorterObject => {
         return {};
       },
     },
