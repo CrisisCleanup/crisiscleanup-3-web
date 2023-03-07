@@ -259,12 +259,26 @@ import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 import useLogEvent from '@/hooks/useLogEvent';
 
+export type TableColumnSearch = Record<string, any>;
+export type TableColumnFilters = Record<string, any>;
+export type TablePagination = {
+  current?: number;
+  page?: number;
+  pageSize?: number;
+  total?: number;
+};
 export type TableSorterObject<T = Record<string, unknown>> = Record<
   string,
   unknown
 > & {
   key?: keyof T;
   direction?: 'asc' | 'desc';
+};
+export type TableChangeEmitItem<T = Record<string, unknown>> = {
+  sorter?: TableSorterObject<T>;
+  pagination?: TablePagination;
+  filters?: TableColumnFilters;
+  columnSearch?: TableColumnSearch;
 };
 
 export default defineComponent({
