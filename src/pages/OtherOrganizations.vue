@@ -350,15 +350,11 @@ export default defineComponent({
       });
     }
     function getOpenStatuses() {
-      enums.state.statuses.filter(
-        (status: Record<string, unknown>) => status.primary_state === 'open',
-      );
+      enums.state.statuses.filter((status) => status.primary_state === 'open');
       const openStatuses = enums.state.statuses.filter(
-        (status: Record<string, unknown>) => status.primary_state === 'open',
+        (status) => status.primary_state === 'open',
       );
-      return openStatuses
-        .map((status: Record<string, unknown>) => status.status)
-        .join(',');
+      return openStatuses.map((status) => status.status).join(',');
     }
     function getHighestRole(roles: number[]) {
       if (roles.length > 0) {
