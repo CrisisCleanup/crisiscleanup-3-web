@@ -22,7 +22,7 @@ export type WrappedUseAxiosReturn<
 export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,
   options: UseApiOptions,
-) => WrappedUseAxiosReturn;
+) => WrappedUseAxiosReturn<T, R, D>;
 
 export function useApi(baseUrl?: string): UseApiReturn {
   const apiUrl = baseUrl ?? (import.meta.env.VITE_APP_API_BASE_URL as string);
@@ -30,6 +30,7 @@ export function useApi(baseUrl?: string): UseApiReturn {
   if (!axios) {
     throw new Error('Cannot inject axios');
   }
+
   return <T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     options: UseApiOptions,
