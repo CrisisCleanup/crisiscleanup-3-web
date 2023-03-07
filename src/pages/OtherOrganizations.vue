@@ -29,7 +29,8 @@
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
-      @change="getOrganizations"
+      :sorter="otherOrgSorter"
+      @change="handleOtherOrgTableChange"
       class="bg-white border"
       has-row-details
     >
@@ -145,6 +146,7 @@ import { throttle } from 'lodash';
 import moment from 'moment';
 import enums from '../store/modules/enums';
 import Table from '@/components/Table.vue';
+import type { TableSorterObject } from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
 import { cachedGet } from '@/utils/promise';
 import type Role from '@/models/Role';
@@ -172,6 +174,7 @@ export default defineComponent({
       search: '',
       visible: true,
     });
+    const otherOrgSorter = ref<TableSorterObject<Organization>>({});
     const organizationRoles = ref<Role[]>([]);
 
     const currentIncidentId = computed(
@@ -276,6 +279,23 @@ export default defineComponent({
         'only screen and (max-device-width: 1223px) and (orientation: landscape)',
       ).matches;
     }
+
+    function otherOrgSorterFunc<T extends Organization>(a: T, b: T) {
+      if (otherOrgSorter.value.key) {
+        const { key, direction } = otherOrgSorter.value;
+        if (direction === 'asc') {
+          return a[key] > b[key] ? 1 : -1;
+        } else {
+          return a[key] < b[key] ? 1 : -1;
+        }
+      }
+      return a.name > b.name ? 1 : -1; // default sort by name
+    }
+
+    async function handleOtherOrgTableChange({ sorter }) {
+      otherOrgSorter.value = { ...sorter };
+      await getOrganizations(organizations.meta);
+    }
     async function getOrganizations(data: Record<string, any> = {}) {
       loading.value = true;
       const pagination = data.pagination || organizations.meta.pagination;
@@ -297,12 +317,11 @@ export default defineComponent({
         method: 'GET',
       });
       whenever(isFinished, () => {
-        console.log('r finished', orgData.value);
         if (!isDefined(orgData)) {
           console.error('Org data is not defined');
           return;
         }
-        organizations.data = orgData.value.results;
+        organizations.data = orgData.value.results.sort(otherOrgSorterFunc);
         const newPagination = {
           ...pagination,
           total: orgData.value.count,
@@ -341,6 +360,7 @@ export default defineComponent({
       organizationRoles,
       currentIncidentId,
       currentUser,
+      otherOrgSorter,
       throttle,
       getCreatedAtLteFilter,
       isLandscape,
@@ -348,6 +368,7 @@ export default defineComponent({
       getOpenStatuses,
       getHighestRole,
       onSearchInput,
+      handleOtherOrgTableChange,
     };
   },
 });
