@@ -42,7 +42,7 @@ export default defineComponent({
   props: {
     action: {
       type: Function as PropType<() => any>,
-      default: () => {},
+      required: true,
     },
     disabled: {
       type: Boolean,
@@ -100,10 +100,15 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    timeout: {
+      type: Number,
+      default: 5000,
+    },
   },
 
   setup(props) {
-    const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
+    const delay = async (ms: number) =>
+      new Promise((res) => setTimeout(res, ms));
     const loading = ref(false);
 
     const buttonTitle = computed(() => props.text || props.alt || props.title);
@@ -131,7 +136,7 @@ export default defineComponent({
         'items-center': true,
         'justify-center': true,
         'base-button': true,
-      };
+      } as Record<string, string | boolean>;
       if (props.variant) {
         styleObject[props.variant] = true;
       }
@@ -140,7 +145,7 @@ export default defineComponent({
     });
 
     const timeout = async () => {
-      await delay(5000);
+      await delay(props.timeout);
       throw undefined;
     };
 
@@ -151,6 +156,8 @@ export default defineComponent({
         if (props.action) {
           await Promise.race([props.action(), timeout()]);
         }
+      } catch {
+        // TODO: expose method for handling button exceptions
       } finally {
         const { logEvent } = useLogEvent();
         logEvent(props.ccuEvent);

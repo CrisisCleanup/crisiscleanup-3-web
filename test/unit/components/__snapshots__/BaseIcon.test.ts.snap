@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`BaseIcon > should render correctly and match snapshot 1`] = `
+<base-button
+  action="() => {
+      }"
+  alt="button"
+  class="flex items-center base-icon js-button"
+  data-v-92245bab=""
+  title="button"
+>
+  <img
+    alt="button"
+    class="ccu-icon cursor-pointer small"
+    data-v-92245bab=""
+    src="/src/assets/icons/dashboard.svg"
+  />
+  
+  
+</base-button>
+`;

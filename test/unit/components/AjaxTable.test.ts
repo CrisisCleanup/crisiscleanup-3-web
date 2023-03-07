@@ -19,5 +19,21 @@ describe('AjaxTable', () => {
     await flushPromises();
     expect(wrapper.html()).toContain('Name from table data');
     expect(wrapper.html()).toContain('id_from_table_data');
+    expect(wrapper.html()).not.toContain('info.search_items');
+  });
+  it('should render with search', async () => {
+    const wrapper = mount(AjaxTable, {
+      props: {
+        enableSearch: true,
+        columns: makeTableColumns([
+          ['id', '1fr', 'ID'],
+          ['name', '1fr', 'Name'],
+        ]),
+        url: 'https://test.crisiscleanup.io/table',
+        query: {},
+      },
+    });
+    await flushPromises();
+    expect(wrapper.html()).toContain('info.search_items');
   });
 });

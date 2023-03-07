@@ -1,0 +1,44 @@
+// Vitest Snapshot v1
+
+exports[`BaseCheckbox > should match snapshot with props 1`] = `
+<label
+  class="checkbox-container"
+  data-v-4f6a8895=""
+  style="display: block; padding-left: 30px;"
+  value="true"
+>
+  
+  
+  <input
+    class="checkmark-input"
+    data-v-4f6a8895=""
+    type="checkbox"
+  />
+  <span
+    class="checkmark"
+    data-v-4f6a8895=""
+    style="top: 0px; left: 0px;"
+  />
+</label>
+`;
+
+exports[`BaseCheckbox > should render correctly and match snapshot 1`] = `
+<label
+  class="checkbox-container"
+  data-v-4f6a8895=""
+  style="display: block; padding-left: 30px;"
+>
+  
+  
+  <input
+    class="checkmark-input"
+    data-v-4f6a8895=""
+    type="checkbox"
+  />
+  <span
+    class="checkmark"
+    data-v-4f6a8895=""
+    style="top: 0px; left: 0px;"
+  />
+</label>
+`;

@@ -1,0 +1,162 @@
+// Vitest Snapshot v1
+
+exports[`BaseInput > should emit value on input 1`] = `undefined`;
+
+exports[`BaseInput > should render correctly and match snapshot 1`] = `
+<div
+  class="flex justify-start relative items-center"
+  data-v-82c69faf=""
+>
+  <!--v-if-->
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
+
+exports[`BaseInput > should render correctly and match snapshot when required and not provided 1`] = `
+<div
+  class="flex justify-start relative items-center"
+  data-v-82c69faf=""
+>
+  <!--v-if-->
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    required=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
+
+exports[`BaseInput > should render correctly and match snapshot when required and not provided 2`] = `
+<div
+  class="flex justify-start relative items-center"
+  data-v-82c69faf=""
+>
+  <!--v-if-->
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    required=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
+
+exports[`BaseInput > should render correctly and match snapshot when required and provided 1`] = `
+<div
+  class="flex justify-start relative items-center"
+  data-v-82c69faf=""
+>
+  <!--v-if-->
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    required=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
+
+exports[`BaseInput > should render correctly and match snapshot when required and provided 2`] = `
+<div
+  class="flex justify-start relative items-center"
+  data-v-82c69faf=""
+>
+  <!--v-if-->
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    required=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
+
+exports[`BaseInput > should render correctly and match snapshot with label 1`] = `
+<div
+  class="flex justify-start relative flex-col items-start border"
+  data-v-82c69faf=""
+>
+  <label
+    class="text-xs px-1 text-crisiscleanup-dark-300"
+    data-v-82c69faf=""
+  >
+    Top Label
+  </label>
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large border-none"
+    data-cy=""
+    data-v-82c69faf=""
+    pattern=".*"
+    placeholder=""
+    rows="0"
+    style="--height: 40px; --width: 300px;"
+    type="search"
+  />
+  <!--v-if-->
+  <!--v-if-->
+  <!--v-if-->
+  
+  
+</div>
+`;
