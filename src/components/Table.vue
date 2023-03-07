@@ -298,7 +298,7 @@ export default defineComponent({
       default: () => [],
     },
     pagination: {
-      type: Object,
+      type: Object as PropType<TablePagination>,
       default: () => {
         return {};
       },
@@ -310,7 +310,7 @@ export default defineComponent({
       },
     },
     columnSearch: {
-      type: Object,
+      type: Object as PropType<TableColumnSearch>,
       default: () => {
         return {};
       },
