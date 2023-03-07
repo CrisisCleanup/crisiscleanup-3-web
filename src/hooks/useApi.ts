@@ -24,6 +24,40 @@ export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
   options: UseApiOptions,
 ) => WrappedUseAxiosReturn<T, R, D>;
 
+/**
+ * A wrapper around vueuse/integrations/useAxios hook
+ * @param url
+ * @param options
+ *
+ * @example
+ * ```ts
+ * const ccuApi = useApi();
+ *
+ * const {
+ *   response: phoneResponse, // Reactive AxiosResponse
+ *   data: phoneData, // Reactive AxiosResponse.data
+ *   isFinished: phoneIsFinished,
+ *   isLoading: phoneIsLoading,
+ *   isAborted: phoneIsAborted,
+ *   error: phoneError,
+ *   abort: phoneAbort, // Method to abort the request
+ * } = ccuApi<
+ *   PhoneResponse, // AxiosResponse.data type
+ * >('/phone/info', { method: 'GET', params: { phone_number: '555-555-5555' } });
+ *
+ * whenever(phoneIsFinished, () => {
+ *   if (phoneIsFinished.value) {
+ *     console.log(phoneData.value);
+ *   }
+ *   if (phoneError.value) {
+ *     console.error(phoneError.value);
+ *   }
+ *   // do something with the response / data
+ *   console.log(phoneResponse.value);
+ *   console.log(phoneData.value);
+ * });
+ * ```
+ */
 export function useApi(baseUrl?: string): UseApiReturn {
   const apiUrl = baseUrl ?? (import.meta.env.VITE_APP_API_BASE_URL as string);
   const axios = inject<AxiosInstance>('axios');
