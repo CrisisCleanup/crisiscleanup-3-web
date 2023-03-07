@@ -149,7 +149,7 @@ import { getQueryString } from '@/utils/urls';
 import { cachedGet } from '@/utils/promise';
 import type Role from '@/models/Role';
 import { useApi } from '@/hooks/useApi';
-import Organization from '@/models/Organization';
+import type Organization from '@/models/Organization';
 
 export default defineComponent({
   name: 'OtherOrganizations',
