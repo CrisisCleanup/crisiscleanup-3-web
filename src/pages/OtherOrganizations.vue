@@ -389,8 +389,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="postcss" scoped>
-.org-role-popover {
-
-}
-</style>
+<style lang="postcss" scoped></style>
