@@ -4,20 +4,25 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 
 export type UseApiOptions<D = any> = Omit<AxiosRequestConfig<D>, 'baseURL'>;
 
+type UseAxiosReturnType<T = any, R = AxiosResponse<T>, D = any> = ReturnType<
+  typeof useAxios<T, R, D>
+>;
+
 export type WrappedUseAxiosReturn<
   T = any,
   R = AxiosResponse<T>,
   D = any,
-> = Pick<
-  ReturnType<typeof useAxios<T, R, D>>,
-  | 'response'
-  | 'data'
-  | 'isFinished'
-  | 'isLoading'
-  | 'isAborted'
-  | 'error'
-  | 'abort'
->;
+  E extends UseAxiosReturnType<T, R, D> = UseAxiosReturnType<T, R, D>,
+> = {
+  response: E['response'];
+  data: E['data'];
+  isFinished: E['isFinished'];
+  isLoading: E['isLoading'];
+  isAborted: E['isAborted'];
+  error: E['error'];
+  abort: E['abort'];
+  success: E['then'];
+};
 
 export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,
@@ -82,6 +87,7 @@ export function useApi(baseUrl?: string): UseApiReturn {
       isAborted: r.isAborted,
       error: r.error,
       abort: r.abort,
+      success: r.then,
     };
   };
 }
