@@ -1,6 +1,6 @@
 <template>
   <form class="bg-white flex flex-col">
-    <div class="flex flex-col flex-wrap text-center" style="height: 18rem">
+    <div class="flex flex-col flex-wrap text-center status-wrapper">
       <div v-for="(section, index) in sortedValues" :key="index">
         <div>
           <div class="font-bold">
@@ -148,3 +148,9 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="postcss">
+.status-wrapper {
+  height: 18rem;
+};
+</style>
