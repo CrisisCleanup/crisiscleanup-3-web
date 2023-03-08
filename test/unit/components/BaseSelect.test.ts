@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { useI18n } from 'vue-i18n';
+import axios from 'axios';
 import BaseSelect from '@/components/BaseSelect.vue';
-import axios from "axios";
 
 vi.mock('vue3-mq');
 vi.mock('vue-i18n');
@@ -61,5 +61,41 @@ describe('BaseSelect', () => {
       },
     });
     expect(spy).not.toHaveBeenCalled();
+  });
+  it('should be able to select and clear item', async () => {
+    const options = ['tobi', 'aaron', 'deep'];
+    const wrapper = mount(BaseSelect, {
+      props: {
+        options,
+      },
+    });
+    await flushPromises();
+    await wrapper.find('.multiselect-options').trigger('click');
+    await wrapper.find('.multiselect-option').trigger('click');
+    const selected = wrapper.find('.multiselect-single-label-text').text();
+    expect(selected).toEqual(options[0]);
+    await wrapper.find('.multiselect-clear').trigger('click');
+    const selectedAfterClear = wrapper.find('.multiselect-single-label-text');
+    expect(selectedAfterClear.exists()).toBeFalsy();
+    expect(wrapper.vm.isInvalid).to.equal(false);
+  });
+
+  it('should be able to select and clear item but invalid when required', async () => {
+    const options = ['tobi', 'aaron', 'deep'];
+    const wrapper = mount(BaseSelect, {
+      props: {
+        options,
+        required: true,
+      },
+    });
+    await flushPromises();
+    await wrapper.find('.multiselect-options').trigger('click');
+    await wrapper.find('.multiselect-option').trigger('click');
+    const selected = wrapper.find('.multiselect-single-label-text').text();
+    expect(selected).toEqual(options[0]);
+    await wrapper.find('.multiselect-clear').trigger('click');
+    const selectedAfterClear = wrapper.find('.multiselect-single-label-text');
+    expect(selectedAfterClear.exists()).toBeFalsy();
+    expect(wrapper.vm.isInvalid).to.equal(true);
   });
 });

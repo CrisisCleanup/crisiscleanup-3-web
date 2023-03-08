@@ -222,8 +222,8 @@ export default {
           .filter(Boolean);
         emit('changed', xor(value, currentValues));
       }
-      if (props.required && inputRef.value.checkValidity()) {
-        isInvalid.value = false;
+      if (props.required) {
+        isInvalid.value = isEmpty_.value;
       }
     }
 
@@ -271,15 +271,6 @@ export default {
     }
 
     onMounted(() => {
-      if (props.required) {
-        inputRef.value.addEventListener(
-          'invalid',
-          () => {
-            isInvalid.value = true;
-          },
-          true,
-        );
-      }
       if (props.floatLabel) {
         inputRef.value.parentElement.classList.add('has-float');
         baseHeight_.value = inputRef.value.parentElement.clientHeight;
