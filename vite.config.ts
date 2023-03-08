@@ -25,6 +25,9 @@ export default defineConfig(async ({ command }) => {
         'vue/macros',
         'vuex',
         '@vueuse/core',
+        {
+          '@/hooks/useApi': ['useApi'],
+        },
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: ['src/stores'],

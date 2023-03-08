@@ -112,6 +112,7 @@
     "unrefElement": true,
     "until": true,
     "useActiveElement": true,
+    "useApi": true,
     "useArrayEvery": true,
     "useArrayFilter": true,
     "useArrayFind": true,
