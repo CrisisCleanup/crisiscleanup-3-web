@@ -50,7 +50,8 @@
           class="mb-2"
         />
         <base-input
-          v-model="currentLocalization.group_label"
+          disabled
+          :model-value="`${currentLocalization.group}.${currentLocalization.label}`"
           :placeholder="$t('adminLocalizations.group_label')"
           class="mb-2"
         />
@@ -169,7 +170,7 @@
           multiple
           @update:modelValue="
             (value) => {
-              tableQuery.group__in = value;
+              tableQuery.group__in = value.join(',');
               tableQuery = { ...tableQuery };
             }
           "
@@ -389,10 +390,16 @@ export default defineComponent({
         if (currentLocalization.value.id) {
           response = await axios.put(
             `${tableUrl}/${currentLocalization.value.id}`,
-            currentLocalization.value,
+            {
+              ...currentLocalization.value,
+              group_label: `${currentLocalization.value.group}.${currentLocalization.value.label}`,
+            },
           );
         } else {
-          response = await axios.post(tableUrl, currentLocalization.value);
+          response = await axios.post(tableUrl, {
+            ...currentLocalization.value,
+            group_label: `${currentLocalization.value.group}.${currentLocalization.value.label}`,
+          });
         }
         currentLocalization.value = response.data;
         await saveLocalizationTexts();
