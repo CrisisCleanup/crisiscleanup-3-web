@@ -428,7 +428,6 @@ export default defineComponent({
   name: 'Dashboard',
   components: {
     ReportWidget,
-    // ReportWidget,
     UserTransferRequestTable,
     RedeployRequest,
     InviteUsers,

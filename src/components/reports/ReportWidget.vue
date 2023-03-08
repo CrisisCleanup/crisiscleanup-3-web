@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3">
+  <div v-if="hasData" class="p-3">
     <div class="actions flex my-4 justify-end items-center">
       <base-button
         class="text-base font-thin mx-1"
@@ -129,6 +129,15 @@ export default {
     const availableWidgets = ref<any[]>([]);
     const showDescription = ref<boolean>(false);
 
+    const hasData = computed(() => {
+      if (!props.value.data) {
+        return false;
+      }
+      return (
+        props.value.data.length > 0 || Object.keys(props.value.data).length > 0
+      );
+    });
+
     function getWidgetSvg() {
       return document.querySelector(`#d3Chart-${props.widgetKey} > svg`)
         ?.outerHTML;
@@ -152,6 +161,7 @@ export default {
       availableWidgets,
       reloadUserWidgets,
       showDescription,
+      hasData,
     };
   },
 };
