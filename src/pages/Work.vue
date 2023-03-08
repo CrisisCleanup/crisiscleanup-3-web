@@ -790,15 +790,17 @@ export default defineComponent({
         if (!worksitesChangeStatus.every((w) => hasClaimedWorkType(w))) {
           await confirm({
             title: t('info.cannot_claim_cases'),
-            content: t('info.cannot_claim_cases_d'),
+            content: t('casesVue.bulk_status_update_for_claimed_only'),
           });
         }
 
         for (const worksite of worksitesChangeStatus) {
-          for (const workType of worksite.work_types) {
-            promises.push(
-              Worksite.api().updateWorkTypeStatus(workType.id, status),
-            );
+          if (hasClaimedWorkType(worksite)) {
+            for (const workType of worksite.work_types) {
+              promises.push(
+                Worksite.api().updateWorkTypeStatus(workType.id, status),
+              );
+            }
           }
         }
         await Promise.allSettled(promises);
