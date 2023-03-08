@@ -550,6 +550,7 @@
             <GroupSearchInput
               v-model="groupToAdd"
               class="mr-1 w-108"
+              style="z-index: 10"
               size="large"
             />
             <base-button
@@ -1411,7 +1412,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .input {
   @apply my-1;
 }
