@@ -31,8 +31,8 @@ export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
 
 /**
  * A wrapper around vueuse/integrations/useAxios hook
- * @param url
- * @param options
+ *
+ * @param baseUrl - The base URL to use for all requests
  *
  * @example
  * ```ts
