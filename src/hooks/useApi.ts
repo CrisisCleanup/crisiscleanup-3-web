@@ -36,8 +36,11 @@ export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
  *
  * @example
  * ```ts
- * const ccuApi = useApi();
+ * /////////////////////////////////////////////////////////////
+ * // Usage without async/await
+ * /////////////////////////////////////////////////////////////
  *
+ * const ccuApi = useApi();
  * const {
  *   response: phoneResponse, // Reactive AxiosResponse
  *   data: phoneData, // Reactive AxiosResponse.data
@@ -61,7 +64,30 @@ export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
  *   console.log(phoneResponse.value);
  *   console.log(phoneData.value);
  * });
+ *
+ * /////////////////////////////////////////////////////////////
+ * // Usage with async/await using the success method
+ * /////////////////////////////////////////////////////////////
+ *
+ * const ccuApi = useApi();
+ * const { success } = ccuApi('/todos/1', {
+ *    method: 'GET',
+ * });
+ * const {
+ *   response: todoResponse, // Reactive AxiosResponse
+ *   data: todoData, // Reactive AxiosResponse.data
+ *   isFinished: todoIsFinished,
+ *   isLoading: todoIsLoading,
+ *   isAborted: todoIsAborted,
+ *   error: todoError,
+ *   abort: todoAbort, // Method to abort the request
+ * } = await success();
+ *
+ * // do something with data
+ * console.log(todoData.value);
  * ```
+ *
+ * @see https://vueuse.org/integrations/useAxios/
  */
 export function useApi(baseUrl?: string): UseApiReturn {
   const apiUrl = baseUrl ?? (import.meta.env.VITE_APP_API_BASE_URL as string);
