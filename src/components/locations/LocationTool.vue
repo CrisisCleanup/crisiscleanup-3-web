@@ -49,7 +49,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-undo"
-            :disabled="!canUndo"
+            :disabled="history.length === 0"
             :title="$t('actions.undo')"
             ccu-event="user_ui-draw-undo"
             @click="
@@ -62,7 +62,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-redo"
-            :disabled="!canRedo"
+            :disabled="history.length === 0"
             :title="$t('actions.redo')"
             @click="
               () => {
@@ -132,7 +132,7 @@
           />
         </div>
         <base-button
-          class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
+          class="bg-white p-1 border ml-5 flex items-center justify-center px-2"
           style="height: 37px"
           :text="$t('locationTool.upload_layer_plus')"
           :action="
@@ -197,7 +197,7 @@
           class="bg-white p-1 border ml-5 flex items-center justify-center"
           style="height: 37px"
         >
-          <base-checkbox @update:modelVaule="toggleIncidents">
+          <base-checkbox @update:modelValue="toggleIncidents">
             {{ $t('locationTool.show_incidents') }}
           </base-checkbox>
         </div>
@@ -222,8 +222,13 @@
             max="100"
             step="1"
           />
-          <div class="pr-2">
-            {{ currentBufferDistance }} {{ $t('locationTool.miles') }}
+          <div class="pr-2 flex items-center justify-center gap-2">
+            <base-input
+              v-model="currentBufferDistance"
+              width="50"
+              height="25"
+            />
+            {{ $t('locationTool.miles') }}
           </div>
         </div>
         <base-button
@@ -298,10 +303,11 @@ import LayerUploadTool from './LayerUploadTool.vue';
 import MapButton from './MapButton.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useLogEvent from '@/hooks/useLogEvent';
+import BaseInput from '@/components/BaseInput.vue';
 
 export default {
   name: 'LocationTool',
-  components: { LayerUploadTool, MapButton, Multiselect },
+  components: { BaseInput, LayerUploadTool, MapButton, Multiselect },
   props: {
     locations: {
       type: Array,
@@ -398,12 +404,12 @@ export default {
     }
     function toggleIncidents(value) {
       if (value) {
-        stateRefs.incidentLayer.value.addTo(stateRefs.map.value);
+        stateRefs.incidentLayer.value.addTo(mapUtils.getMap());
         nextTick(() => {
           stateRefs.map.value.panBy([1, 0]);
         });
       } else if (stateRefs.incidentLayer.value) {
-        stateRefs.map.value.removeLayer(stateRefs.incidentLayer.value);
+        mapUtils.getMap().removeLayer(stateRefs.incidentLayer.value);
       }
     }
     async function getIncidentLocations(incidents) {
@@ -590,7 +596,7 @@ export default {
       stateRefs.currentDraw.value = type;
       setTimeout(() => {
         stateRefs.map.value.pm.enableDraw(type, options);
-      }, 200);
+      }, 500);
     }
 
     function showPopup(center) {
@@ -820,6 +826,7 @@ export default {
       currentPolygon,
       toggleWorksites,
       toggleIncidents,
+      clearAll,
     };
   },
 };

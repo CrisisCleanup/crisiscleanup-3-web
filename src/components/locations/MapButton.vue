@@ -2,7 +2,7 @@
   <v-popover
     :auto-hide="false"
     popper-class="layer-action-popover"
-    placement="bottom-end"
+    placement="bottom-start"
     :disabled="disabled || actions.length === 0"
   >
     <ccu-icon

@@ -853,7 +853,7 @@ export default {
 
     async function editLocation(type) {
       stateRefs.settingLocation.value = type;
-      const classes = 'h-full p-3';
+      const classes = 'h-168 p-3';
       const response = await component({
         title: t('profileOrg.select_location'),
         component: LocationTool,
