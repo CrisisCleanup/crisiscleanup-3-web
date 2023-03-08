@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { useApi } from '@/hooks/useApi';
 
@@ -19,16 +19,41 @@ vi.mock('@vueuse/integrations/useAxios', () => {
         title: 'delectus aut autem',
         completed: false,
       };
+      const response = shallowRef({ data: d });
+      const data = ref(d);
+      const isFinished = ref(true);
+      const isLoading = ref(false);
+      const isAborted = ref(false);
+      const error = {};
+      const abort = () => {
+        console.log('abort');
+      };
+
+      const then = async () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({
+              response,
+              data,
+              isFinished,
+              isLoading,
+              isAborted,
+              error,
+            });
+          }, 200);
+        });
+      };
+
       return {
-        response: ref(d),
-        data: ref(d),
-        isFinished: ref(true),
-        isLoading: ref(false),
-        isAborted: ref(false),
-        error: {},
-        abort() {
-          console.log('abort');
-        },
+        response,
+        data,
+        isFinished,
+        isLoading,
+        isAborted,
+        error,
+        abort,
+        // eslint-disable-next-line unicorn/no-thenable
+        then,
       };
     },
   };
@@ -117,12 +142,44 @@ describe('useApi', () => {
     expect(r.data.value).toBeDefined();
     expect(r.response.value).toMatchInlineSnapshot(`
       {
+        "data": {
+          "completed": false,
+          "id": 1,
+          "title": "delectus aut autem",
+        },
+      }
+    `);
+    expect(r.data.value).toMatchInlineSnapshot(`
+      {
         "completed": false,
         "id": 1,
         "title": "delectus aut autem",
       }
     `);
-    expect(r.data.value).toMatchInlineSnapshot(`
+  });
+
+  it('works with async/await using success()', async () => {
+    const wrapper = mount(componentOptions, { global: globalOptions });
+    const apiInstance = wrapper.vm.api;
+    const { success } = apiInstance('/todos/1', {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer 12345',
+      },
+    });
+    const { data, response, isFinished, isLoading } = await success();
+    expect(isFinished.value).toBe(true);
+    expect(isLoading.value).toBe(false);
+    expect(response.value).toMatchInlineSnapshot(`
+      {
+        "data": {
+          "completed": false,
+          "id": 1,
+          "title": "delectus aut autem",
+        },
+      }
+    `);
+    expect(data.value).toMatchInlineSnapshot(`
       {
         "completed": false,
         "id": 1,
