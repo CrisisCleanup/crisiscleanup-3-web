@@ -4,7 +4,7 @@
       class="p-2 bg-primary-light border-primary-light"
       :href="pdf.full_url"
       :download="pdf.filename_original"
-      >{{ $t('~~Download') }}</a
+      >{{ $t('actions.download') }}</a
     >
   </div>
   <div class="h-144 overflow-y-auto border">

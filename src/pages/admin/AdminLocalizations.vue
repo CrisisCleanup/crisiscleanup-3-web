@@ -142,7 +142,7 @@
         <base-input
           class="flex-1"
           height="48"
-          :placeholder="$t('~~Search Label, Group and Text')"
+          :placeholder="$t('adminLocalizations.search_group_label_text')"
           @update:modelValue="
             (value) => {
               tableQuery.search = value;
@@ -153,7 +153,7 @@
         <base-input
           class="flex-1"
           height="48"
-          :placeholder="$t('~~Search Labels only')"
+          :placeholder="$t('adminLocalizations.search_labels_only')"
           @update:modelValue="
             (value) => {
               tableQuery.label__icontains = value;
@@ -164,7 +164,7 @@
         <base-select
           class="flex-1"
           searchable
-          :placeholder="$t('actions.filter_groups')"
+          :placeholder="$t('adminLocalizations.filter_groups')"
           :options="groups"
           multiple
           @update:modelValue="
