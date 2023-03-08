@@ -7,8 +7,8 @@ import Filter from './Filter';
 
 export default class WorksiteStatusGroupFilter extends Filter {
   packFunction() {
-    const currentUser = User.find(store.getters['auth/userId']);
-    const packed = {};
+    const currentUser = User.find(store.getters['auth/userId'])!;
+    const packed: Record<string, unknown> = {};
     if (this.data.unclaimed) {
       packed.work_type__claimed_by__isnull = true;
     }
@@ -67,8 +67,8 @@ export default class WorksiteStatusGroupFilter extends Filter {
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
-    this.data = { ...this.data };
+    this.data = { ...(this.data as Record<string, unknown>) };
   }
 }
