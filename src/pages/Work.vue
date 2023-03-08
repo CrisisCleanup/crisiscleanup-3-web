@@ -194,6 +194,7 @@
                   @unreadUrgentCount="unreadUrgentChatCount = $event"
                   @onNewMessage="unreadChatCount += 1"
                   @onNewUrgentMessage="unreadUrgentChatCount += 1"
+                  @focusNewsTab="focusNewsTab"
                 />
               </template>
             </PhoneComponentButton>
@@ -531,6 +532,7 @@ import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 import JsonWrapper from '@/components/JsonWrapper.vue';
 import ShareWorksite from '@/components/modals/ShareWorksite.vue';
+import useEmitter from "@/hooks/useEmitter";
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -558,6 +560,7 @@ export default defineComponent({
     const { prompt, component, confirm } = useDialogs();
     const { t } = useI18n();
     const store = useStore();
+    const { emitter } = useEmitter();
 
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'],
@@ -1364,6 +1367,11 @@ export default defineComponent({
       loadStatesForUser();
       await init();
     });
+    function focusNewsTab() {
+      emitter.emit('phone_component:close');
+      // open the active call PhoneComponentButton
+      emitter.emit('phone_component:open', 'news');
+    }
 
     return {
       addMarkerToMap,
@@ -1434,6 +1442,7 @@ export default defineComponent({
       datesList,
       dateSliderFrom,
       dateSliderTo,
+      focusNewsTab,
     };
   },
 });
