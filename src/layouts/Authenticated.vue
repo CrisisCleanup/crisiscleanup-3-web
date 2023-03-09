@@ -287,7 +287,7 @@ export default {
         }
       } catch {
         await AuthService.removeUser();
-        await store.dispatch('auth/logout');
+        await logoutApp();
         return;
       }
       await Promise.all([
