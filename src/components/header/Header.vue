@@ -1,5 +1,5 @@
 <template>
-  <div class="header header--grid bg-white w-full" style="z-index: 5000">
+  <div class="header header--grid bg-white w-full" style="z-index: 4999">
     <div class="flex justify-between h-full items-center">
       <div class="flex items-center ml-2">
         <div class="h-10 w-10 flex items-center">

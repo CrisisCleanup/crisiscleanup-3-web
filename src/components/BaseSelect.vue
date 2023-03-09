@@ -1,5 +1,5 @@
 <template>
-  <div style="z-index: 9997">
+  <div>
     <Multiselect
       ref="input"
       :model-value="modelValue"
@@ -15,8 +15,8 @@
       class="form-select text-base"
       :resolve-on-load="false"
       :clear-on-blur="false"
-      :delay="typeof options === 'function' ? 0 : undefined"
-      :filter-results="typeof options === 'function' ? false : undefined"
+      :delay="isAsync ? 0 : undefined"
+      :filter-results="isAsync ? false : undefined"
       :class="[
         isInvalid && !modelValue ? 'invalid' : '',
         floatLabel ? 'py-2 pt-3' : '',
@@ -30,6 +30,7 @@
           onInput(v);
         }
       "
+      @open="handleOpen"
     >
       <template #singlelabel="{ value }">
         <slot name="selected-option" :option="value" />
@@ -153,12 +154,16 @@ export default {
     const selected = ref(null);
 
     const inputIdSelector = computed(() => {
-      const idSpec = props.floatLabel ? props.floatLabel : '';
+      const idSpec = props.floatLabel ?? '';
       return `select-id-${kebabCase(idSpec)}`;
     });
 
     const inputRef = computed(() => {
       return input.value || document.getElementById(inputIdSelector.value);
+    });
+
+    const isAsync = computed(() => {
+      return typeof props.options === 'function';
     });
 
     const heightMultiplier = computed(() => {
@@ -270,6 +275,13 @@ export default {
       emit('resize', currentHeight_.value);
     }
 
+    function handleOpen() {
+      // This basically triggers a search once the box is selected
+      if (isAsync.value && props.searchable && !inputRef.value.search) {
+        inputRef.value.clearSearch();
+      }
+    }
+
     onMounted(() => {
       if (props.floatLabel) {
         inputRef.value.parentElement.classList.add('has-float');
@@ -296,9 +308,17 @@ export default {
       handleResize,
       input,
       inputLabel,
+      isAsync,
+      handleOpen,
     };
   },
 };
 </script>
 
 <style src="@vueform/multiselect/themes/tailwind.css"></style>
+
+<style>
+.multiselect-dropdown {
+  z-index: 4999;
+}
+</style>
