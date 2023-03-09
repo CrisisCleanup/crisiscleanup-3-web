@@ -789,7 +789,7 @@ export default defineComponent({
 
         if (!worksitesChangeStatus.every((w) => hasClaimedWorkType(w))) {
           await confirm({
-            title: t('info.cannot_claim_cases'),
+            title: t('casesVue.cannot_share_cases'),
             content: t('casesVue.bulk_status_update_for_claimed_only'),
           });
         }
