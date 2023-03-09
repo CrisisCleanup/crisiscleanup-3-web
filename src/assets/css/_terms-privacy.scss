@@ -2,6 +2,7 @@ ol.outline {
   list-style-type: none;
   margin-left: 0;
   counter-reset: item;
+  outline-style: none;
 }
 ol.outline > li {
   counter-increment: customlistcounter;
