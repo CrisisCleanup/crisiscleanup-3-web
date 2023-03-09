@@ -817,7 +817,7 @@ export default defineComponent({
       }
     }
 
-    const getSviList = () => {
+    const getSviList = useMemoize((_) => {
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
       const list = container?.children.map((marker: any) => {
@@ -832,16 +832,17 @@ export default defineComponent({
         });
       }
       return list;
-    };
+    });
 
     function filterSvi(value: number) {
       if (value === 0) return;
       sviSliderValue.value = Number(value);
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
-      if (sviList.value && container) {
-        const count = Math.floor((sviList.value.length * Number(value)) / 100);
-        const filteredSvi = sviList.value.slice(0, count);
+      const sviList = getSviList(container?.children?.length);
+      if (sviList && container) {
+        const count = Math.floor((sviList.length * Number(value)) / 100);
+        const filteredSvi = sviList.slice(0, count);
         const minSvi = filteredSvi[filteredSvi.length - 1].svi;
         for (const markerSprite of container.children) {
           markerSprite.visible = markerSprite.svi > minSvi;
@@ -855,7 +856,6 @@ export default defineComponent({
     }
 
     const datesList = ref<any[]>([]);
-    const sviList = ref<any[]>([]);
 
     function getDatesList() {
       const layer = mapUtils?.getCurrentMarkerLayer();
@@ -1330,7 +1330,6 @@ export default defineComponent({
               [_southWest.lat, _southWest.lng],
             ]);
           }
-          sviList.value = getSviList();
           datesList.value = getDatesList();
           filterSvi(sviSliderValue.value);
           updateUserState({ mapViewPort: states.mapViewPort });

@@ -4,7 +4,9 @@
       <span
         class="text-crisiscleanup-grey-900 text-sm mx-1 flex items-center justify-start"
       >
-        {{ from }}
+        <span class="cursor-pointer" @click="$emit('input', Number(1))">{{
+          from
+        }}</span>
         <ccu-icon
           v-if="fromTooltip"
           v-tooltip="{
@@ -26,7 +28,8 @@
         >
       </div>
       <span
-        class="text-crisiscleanup-grey-900 text-sm items-center justify-start mx-1"
+        class="text-crisiscleanup-grey-900 text-sm items-center justify-start mx-1 cursor-pointer"
+        @click="$emit('input', Number(max))"
         >{{ to }}</span
       >
     </div>

@@ -71,6 +71,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     async function onOrganizationSearch(value: string) {

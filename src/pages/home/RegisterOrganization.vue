@@ -36,6 +36,7 @@
                 size="large"
                 class="form-field"
                 allow-new
+                required
                 @selectedOrganization="
                   (organization) => {
                     $router.push(
