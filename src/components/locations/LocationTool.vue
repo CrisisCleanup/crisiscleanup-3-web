@@ -278,7 +278,6 @@ import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
-import * as circleToPolygon from 'circle-to-polygon';
 import * as turf from '@turf/turf';
 import { useStore } from 'vuex';
 import { throttle } from 'lodash';
@@ -754,16 +753,9 @@ export default {
         let newLayer = L.geoJSON(layer.toGeoJSON());
 
         if (layer instanceof L.Circle) {
-          const radius = e.layer.getRadius();
-          const { coordinates } = e.layer.toGeoJSON().geometry;
           const numberOfEdges = 64;
-          const geometry = circleToPolygon(coordinates, radius, numberOfEdges);
-          const geojsonFeature = {
-            type: 'Feature',
-            properties: {},
-            geometry,
-          };
-          newLayer = L.geoJSON(geojsonFeature);
+          const geometry = L.PM.Utils.circleToPolygon(layer, numberOfEdges);
+          newLayer = L.geoJSON(geometry.toGeoJSON());
         }
 
         [stateRefs.bufferedLayer.value] = newLayer.getLayers();

@@ -48,7 +48,6 @@ specifiers:
   bowser: ^2.11.0
   browser-acl: ^1.0.2
   cf-agent-library: git+https://git@github.com/CrisisCleanup/cf-agent-library.git
-  circle-to-polygon: ^2.2.0
   color: ^4.2.3
   d3: ^7.0.0
   d3-array: ^2.8.0
@@ -167,7 +166,6 @@ dependencies:
   bowser: 2.11.0
   browser-acl: 1.0.2
   cf-agent-library: github.com/CrisisCleanup/cf-agent-library/f1953ec15ff69d7750d8071a729859daaf3f0739
-  circle-to-polygon: 2.2.0
   color: 4.2.3
   d3: 7.6.1
   d3-array: 2.12.1
@@ -3957,10 +3955,6 @@ packages:
     resolution: {integrity: sha512-2CpRNYmImPx+RXKLq6jko/L07phmS9I02TyqkcNU20GCF/GgaWvc58hPtjxDX8lPpkdwc9sNh72V9k00S7ezog==}
     engines: {node: '>=8'}
     dev: true
-
-  /circle-to-polygon/2.2.0:
-    resolution: {integrity: sha512-yC9/bw6P0YmV2/oxm4DLrSgrzHhbz9H+vgUScmSFN5KilR/KFGVRbUi9a0mIYPsXK44HvnysVVi/iIysRJVvNw==}
-    dev: false
 
   /clean-regexp/1.0.0:
     resolution: {integrity: sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==}

@@ -69,7 +69,6 @@
     "bowser": "^2.11.0",
     "browser-acl": "^1.0.2",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
-    "circle-to-polygon": "^2.2.0",
     "color": "^4.2.3",
     "d3": "^7.0.0",
     "d3-array": "^2.8.0",
