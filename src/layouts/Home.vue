@@ -8,24 +8,7 @@
           <img src="../assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
         </a>
       </div>
-      <div class="grid--survivors w-full md:w-52">
-        <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
-        <base-text font="display" variant="h2" class="help-contact">
-          <div v-if="incidentList && incidentList.length > 0">
-            <div
-              v-for="incident in filterNumbers(incidentList)"
-              :key="incident.id"
-              class="ml-2"
-            >
-              {{ incident.short_name }}:
-              {{ getIncidentPhoneNumbers(incident) }}
-            </div>
-          </div>
-          <div v-else>
-            <spinner />
-          </div>
-        </base-text>
-      </div>
+      <IncidentContact class="w-full md:w-52" />
     </div>
     <div
       :key="Object.keys(messages)"
@@ -80,25 +63,18 @@
 <script>
 import { onBeforeMount, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
-import axios from 'axios';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
-import { formatNationalNumber } from '@/filters';
+import IncidentContact from '@/components/IncidentContact.vue';
 
 export default {
   name: 'Home',
+  components: { IncidentContact },
   setup() {
     const { t, messages } = useI18n();
     const { setupLanguage } = useSetupLanguage();
-    const incidentList = ref([]);
 
     onBeforeMount(async () => {
       await setupLanguage();
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_APP_API_BASE_URL
-        }/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at`,
-      );
-      incidentList.value = response.data.results;
     });
 
     const defaultRoutes = [
@@ -141,28 +117,12 @@ export default {
       training: t('publicNav.training'),
       survivor: t('publicNav.survivor'),
       contact: t('publicNav.contact'),
-      survive: t('homeVue.survivors_call'),
     });
-
-    function getIncidentPhoneNumbers(incident) {
-      if (Array.isArray(incident.active_phone_number)) {
-        return incident.active_phone_number
-          .map((number) => formatNationalNumber(String(number)))
-          .join(', ');
-      }
-      return formatNationalNumber(String(incident.active_phone_number));
-    }
-    function filterNumbers(item) {
-      return item.filter((filterItem) => filterItem.active_phone_number);
-    }
 
     return {
       routes: defaultRoutes,
       lang,
       messages,
-      incidentList,
-      getIncidentPhoneNumbers,
-      filterNumbers,
     };
   },
 };

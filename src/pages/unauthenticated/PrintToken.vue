@@ -1,5 +1,16 @@
 <template>
-  <Home>
+  <div
+    id="top"
+    class="logo flex items-center justify-between p-3 border border-b"
+  >
+    <img
+      id="header"
+      src="@/assets/ccu-logo-black-500w.png"
+      style="height: 53px"
+    />
+    <IncidentContact class="w-48" />
+  </div>
+  <div class="flex flex-col items-center p-3 mt-8">
     <div class="grid--top">
       <div class="text-5xl">
         {{ $t('printToken.thank_you_for_helping') }}
@@ -20,8 +31,8 @@
       <div v-if="loading" class="flex h-screen items-center justify-center">
         <font-awesome-icon size="xl" icon="spinner" spin />
       </div>
-      <div v-else class="w-2/3 sm:w-screen">
-        <div class="flex">
+      <div v-else class="flex flex-col items-center">
+        <div class="w-full grid grid-cols-2">
           <div
             v-for="work_type in printToken.work_types"
             :key="`${work_type.id}`"
@@ -42,7 +53,7 @@
             />
           </div>
         </div>
-        <form ref="form" class="w-120 flex flex-col" autocomplete="off">
+        <form ref="form" class="w-full grid grid-flow-row" autocomplete="off">
           <span class="text-sm">{{ $t('printToken.notes') }}</span>
           <textarea
             v-model="printToken.status_notes"
@@ -58,6 +69,7 @@
           }}</span>
           <base-input
             v-model="printToken.hours_per_volunteer"
+            type="number"
             pattern="^\d*(\.\d{0,2})?$"
           />
 
@@ -77,13 +89,13 @@
         <base-button
           variant="solid"
           :action="save"
-          class="my-2 font-light p-5 w-120"
+          class="my-2 font-light p-5 w-full"
           :text="$t('actions.save')"
           :alt="$t('actions.save')"
         />
       </div>
     </div>
-  </Home>
+  </div>
 </template>
 
 <script>
@@ -96,10 +108,12 @@ import { getErrorMessage } from '../../utils/errors';
 import Home from '@/layouts/Home.vue';
 import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
 import { getWorkTypeName } from '@/filters/index';
+import IncidentContact from '@/components/IncidentContact.vue';
 
 export default {
   name: 'PrintToken',
   components: {
+    IncidentContact,
     WorksiteImageSection,
     Home,
     WorksiteStatusDropdown,
@@ -119,7 +133,7 @@ export default {
         state,
         postal_code: postalCode,
       } = printToken.value;
-      return `${address}, ${city}, ${state} ${postalCode}`;
+      return `${address}${address ? ', ' : ''}${city}, ${state} ${postalCode}`;
     });
 
     async function reloadFiles() {
