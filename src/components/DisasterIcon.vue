@@ -1,19 +1,33 @@
 <template>
-  <object
-    ref="icon"
-    type="image/svg+xml"
-    class="disaster-icon"
-    :data="incidentImage"
-    :style="style"
-    @load="setStyle"
-  ></object>
+  <div class="disaster-icon select-none cursor-pointer" @dblclick="toggleEasterEgg">
+    <object
+      v-if="randomEasterEgg"
+      ref="icon"
+      type="image/svg+xml"
+      class="disaster-icon"
+      :data="randomEasterEgg"
+      :style="style"
+      @load="setStyle"
+    ></object>
+    <object
+      v-else
+      ref="icon"
+      type="image/svg+xml"
+      class="disaster-icon"
+      :data="incidentImage"
+      :style="style"
+      @load="setStyle"
+    ></object>
+  </div>
 </template>
 <script lang="ts">
-import { ref, computed } from "vue";
-import Incident from "../models/Incident";
+import { ref, computed } from 'vue';
+import _ from 'lodash';
+import Incident from '@/models/Incident';
+import { EASTER_EGG_DISASTER_ICONS } from '@/constants';
 
 export default {
-  name: "DisasterIcon",
+  name: 'DisasterIcon',
   props: {
     width: {
       type: [Number, null],
@@ -31,15 +45,24 @@ export default {
     },
   },
 
-  setup(props) {
+  setup(props: {
+    currentIncident: {
+      incidentImage: any;
+      incident_type: string;
+      color: string;
+    };
+    width: null;
+    height: null;
+  }) {
     const ready = ref(false);
     const width_ = ref(null);
     const height_ = ref(null);
+    const randomEasterEgg = ref<string | null>(null);
     const icon = ref<HTMLObjectElement | null>(null);
 
     const style = computed(() => ({
-      visibility: ready.value ? "visible" : "hidden",
-      pointerEvents: "none",
+      visibility: ready.value ? 'visible' : 'hidden',
+      pointerEvents: 'none',
     }));
 
     const incidentImage = computed(() => {
@@ -56,9 +79,15 @@ export default {
     function setColor() {
       if (svgDocument.value) {
         const { value } = svgDocument;
-        value.getElementsByTagName("path")[0].style.fill =
+        value.querySelectorAll('path')[0].style.fill =
           props.currentIncident.color;
       }
+    }
+
+    function toggleEasterEgg() {
+      randomEasterEgg.value = randomEasterEgg.value
+        ? null
+        : _.sample(EASTER_EGG_DISASTER_ICONS) || '';
     }
 
     function setSize() {
@@ -94,7 +123,16 @@ export default {
       setColor,
       setSize,
       setStyle,
+      toggleEasterEgg,
+      randomEasterEgg,
     };
   },
 };
 </script>
+
+<style>
+.disaster-icon object {
+  width: 40px;
+  height: 40px;
+}
+</style>

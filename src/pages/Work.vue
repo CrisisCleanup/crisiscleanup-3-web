@@ -532,7 +532,7 @@ import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 import JsonWrapper from '@/components/JsonWrapper.vue';
 import ShareWorksite from '@/components/modals/ShareWorksite.vue';
-import useEmitter from "@/hooks/useEmitter";
+import useEmitter from '@/hooks/useEmitter';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -1311,35 +1311,37 @@ export default defineComponent({
         ];
       }
 
-      mapUtils = useWorksiteMap(
-        allWorksites,
-        markers.map((m: { id: any }) => m.id),
-        (m) => {
-          loadCase(m);
-        },
-        ({ workTypes }) => {
-          availableWorkTypes.value = workTypes;
-          getDatesList();
+      try {
+        mapUtils = useWorksiteMap(
+          allWorksites,
+          markers.map((m: { id: any }) => m.id),
+          (m) => {
+            loadCase(m);
+          },
+          ({ workTypes }) => {
+            availableWorkTypes.value = workTypes;
+            getDatesList();
 
-          const states = currentUser?.value?.getStatesForIncident(
-            currentIncidentId.value,
-            true,
-          );
-          if (states.mapViewPort) {
-            const { _northEast, _southWest } = states.mapViewPort;
-            mapUtils?.getMap().fitBounds([
-              [_northEast.lat, _northEast.lng],
-              [_southWest.lat, _southWest.lng],
-            ]);
-          }
-          datesList.value = getDatesList();
-          filterSvi(sviSliderValue.value);
-          updateUserState({ mapViewPort: states.mapViewPort });
-          loadStatesForUser();
-        },
-        false,
-        bounds,
-      );
+            const states = currentUser?.value?.getStatesForIncident(
+              currentIncidentId.value,
+              true,
+            );
+            if (states.mapViewPort) {
+              const { _northEast, _southWest } = states.mapViewPort;
+              mapUtils?.getMap().fitBounds([
+                [_northEast.lat, _northEast.lng],
+                [_southWest.lat, _southWest.lng],
+              ]);
+            }
+            datesList.value = getDatesList();
+            filterSvi(sviSliderValue.value);
+            updateUserState({ mapViewPort: states.mapViewPort });
+            loadStatesForUser();
+          },
+          false,
+          bounds,
+        );
+      } catch {}
 
       nextTick(() => {
         mapUtils?.getMap().on(

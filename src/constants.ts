@@ -98,7 +98,19 @@ import tropicalStorm from './assets/disaster_icons/tropical-storm.svg';
 import virus from './assets/disaster_icons/virus.svg';
 import volcano from './assets/disaster_icons/volcano.svg';
 import wind from './assets/disaster_icons/wind.svg';
+import bigfoot from './assets/disaster_icons/bigfoot.svg';
+import dracula from './assets/disaster_icons/dracula.svg';
+import ufo from './assets/disaster_icons/ufo.svg';
+import velociraptor from './assets/disaster_icons/velociraptor.svg';
+import zombies from './assets/disaster_icons/zombies.svg';
 
+export const EASTER_EGG_DISASTER_ICONS = {
+  bigfoot,
+  dracula,
+  ufo,
+  velociraptor,
+  zombies,
+};
 export const DISASTER_ICONS: Record<string, any> = {
   'contaminated-water': contaminatedWater,
   earthquake,
@@ -206,7 +218,6 @@ export const ICON_MAP = {
   'sticky-note-solid': stickyNoteSolid,
 };
 
-/* eslint-enable global-require */
 export const ICONS = Object.fromEntries(
   Object.entries(ICON_MAP).map(([key]) => [snakeCase(key), key]),
 );
