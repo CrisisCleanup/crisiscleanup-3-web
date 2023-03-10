@@ -134,4 +134,7 @@ Sentry.init({
   ],
 });
 
-app.mount('#app');
+// eslint-disable-next-line unicorn/prefer-top-level-await
+router.isReady().then(() => {
+  app.mount('#app');
+});

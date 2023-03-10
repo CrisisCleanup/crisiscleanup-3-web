@@ -10,8 +10,8 @@
     />
     <IncidentContact class="w-48" />
   </div>
-  <div class="flex flex-col items-center p-3 mt-8">
-    <div class="grid--top">
+  <div class="flex flex-col items-center p-3 my-4">
+    <div class="grid--top max-w-2xl mb-2">
       <div class="text-5xl">
         {{ $t('printToken.thank_you_for_helping') }}
       </div>
@@ -27,12 +27,12 @@
         <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
       </div>
     </div>
-    <div class="grid--main">
+    <div class="grid--main w-screen">
       <div v-if="loading" class="flex h-screen items-center justify-center">
         <font-awesome-icon size="xl" icon="spinner" spin />
       </div>
       <div v-else class="flex flex-col items-center">
-        <div class="w-full grid grid-cols-2">
+        <div class="flex flex-wrap justify-center items-center max-w-2xl">
           <div
             v-for="work_type in printToken.work_types"
             :key="`${work_type.id}`"
@@ -42,7 +42,7 @@
               {{ getWorkTypeName(work_type.work_type) }}
             </span>
             <WorksiteStatusDropdown
-              class="block text-xl"
+              class="block text-xl min-w-max"
               :current-work-type="work_type"
               use-icon
               @input="
@@ -53,7 +53,11 @@
             />
           </div>
         </div>
-        <form ref="form" class="w-full grid grid-flow-row" autocomplete="off">
+        <form
+          ref="form"
+          class="w-full grid grid-flow-row max-w-2xl p-3"
+          autocomplete="off"
+        >
           <span class="text-sm">{{ $t('printToken.notes') }}</span>
           <textarea
             v-model="printToken.status_notes"
@@ -85,14 +89,14 @@
               @photosChanged="reloadFiles"
             />
           </div>
+          <base-button
+            variant="solid"
+            :action="save"
+            class="my-2 font-light p-5 w-full"
+            :text="$t('actions.save')"
+            :alt="$t('actions.save')"
+          />
         </form>
-        <base-button
-          variant="solid"
-          :action="save"
-          class="my-2 font-light p-5 w-full"
-          :text="$t('actions.save')"
-          :alt="$t('actions.save')"
-        />
       </div>
     </div>
   </div>
