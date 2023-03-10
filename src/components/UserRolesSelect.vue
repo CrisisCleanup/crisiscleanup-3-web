@@ -5,6 +5,7 @@
     class="border border-crisiscleanup-dark-100"
     multiple
     searchable
+    :clearable="false"
     mode="tags"
     :options="roles"
     item-key="id"
