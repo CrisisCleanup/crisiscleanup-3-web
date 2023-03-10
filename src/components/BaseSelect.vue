@@ -205,7 +205,7 @@ export default {
         ...searchClassesObj,
         ...containerClassesObj,
         wrapper:
-          'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer outline-none h-12',
+          'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer outline-none min-h-[theme(spacing.12)]',
         optionSelected: 'text-white bg-crisiscleanup-dark-200',
         optionPointed: 'text-gray-800 bg-crisiscleanup-dark-100',
         optionSelectedPointed:
@@ -320,5 +320,13 @@ export default {
 <style>
 .multiselect-dropdown {
   z-index: 4999;
+}
+
+.multiselect-search {
+  @apply h-full;
+}
+
+.multiselect-tags-search {
+  @apply h-full;
 }
 </style>

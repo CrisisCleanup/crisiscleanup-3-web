@@ -1251,6 +1251,8 @@ export default defineComponent({
     function loadCase(data: Sprite & Worksite) {
       isViewing.value = true;
       worksiteId.value = data.id;
+      showHistory.value = false;
+      showFlags.value = false;
       router.push(`/incident/${currentIncidentId.value}/work/${data.id}`);
     }
 
