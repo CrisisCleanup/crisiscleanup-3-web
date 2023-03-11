@@ -27,20 +27,24 @@ export default function useSetupLanguage() {
         currentLanguage = detectBrowserLanguage() as string;
       }
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/languages`,
-      );
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/languages`,
+        );
 
-      const _availableLanguages: Array<{
-        id: string;
-        name_t: string;
-        subtag: string;
-      }> = response?.data?.results ?? [];
+        const _availableLanguages: Array<{
+          id: string;
+          name_t: string;
+          subtag: string;
+        }> = response?.data?.results ?? [];
 
-      const availableLanguages = _availableLanguages.map((l) => l.subtag);
-      const isSpanish = currentLanguage.startsWith('es');
-      if (isSpanish && !availableLanguages.includes(currentLanguage)) {
-        currentLanguage = 'es';
+        const availableLanguages = _availableLanguages.map((l) => l.subtag);
+        const isSpanish = currentLanguage.startsWith('es');
+        if (isSpanish && !availableLanguages.includes(currentLanguage)) {
+          currentLanguage = 'es';
+        }
+      } catch (error) {
+        console.log(error);
       }
 
       store.commit('locale/setLanguage', currentLanguage);
