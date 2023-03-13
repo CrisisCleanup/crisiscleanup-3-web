@@ -1,8 +1,31 @@
+<img src=".github/img/ccu-ballons.png" align="right" width="20%"  />
+
 # Crisis Cleanup
 
-> NOTE: This README needs more work once project is in a stable state.
+Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 600,000+ volunteers from 2,500+ organizations with 140,000+ households in 55 states/provinces and 207 disasters in 7 countries; a new disaster every two weeks.
 
-Crisis Cleanup repo with vue 3.
+Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction. 
+
+Other Project Stats (As of 2023-03-13)
+-------------
+
+ - 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
+ - 35,000+: Households that could not have been helped without Crisis Cleanup.
+ - 5.6 Million: Number of volunteer hours facilitated.
+ - 1.4 Million: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
+ - $1.695 Billion: Minimum total market value of services to survivors.
+ - $1,741: Value of each cleanup volunteer to his/her community.
+ - $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
+ - $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
+ - $9,052: Average commercial value of service to each homeowner.
+How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
+
+# Contributing
+To preserve our ability to provide open source humanitarian disaster software, all contributions are subject to the terms of the relevant [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) downloadable at [crisiscleanup.org/contributions](https://www.crisiscleanup.org/contributions).
+
+Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-web/blob/master/CONTRIBUTING.md) for important details.
+
+# Getting Started
 
 ## Project Setup
 
