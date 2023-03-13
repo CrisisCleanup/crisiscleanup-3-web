@@ -19,7 +19,7 @@
             :placeholder="$t('databaseAccess.add_ip')"
             :add-on-key="[13, 32, ',']"
             :separators="[';', ',', ', ']"
-            @tags-changed="(newTags) => (addressesToAdd = newTags)"
+            @tags-changed="(newTags: string[]) => (addressesToAdd = newTags)"
           />
         </div>
       </div>
@@ -48,9 +48,9 @@ export default defineComponent({
   setup() {
     const $toasted = useToast();
 
-    const showingModal = ref(null);
+    const showingModal = ref(false);
     const addresses = ref('');
-    const addressesToAdd = ref([]);
+    const addressesToAdd = ref<string[]>([]);
 
     async function saveAccess() {
       try {

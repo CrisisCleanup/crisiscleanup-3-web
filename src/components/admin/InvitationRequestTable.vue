@@ -37,14 +37,14 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
 import Table from '../Table.vue';
 import InvitationRequest from '../../models/InvitationRequest';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'InvitationRequestTable',
   components: { Table },
   props: {
@@ -71,13 +71,13 @@ export default {
       });
     }
 
-    async function acceptInvitationRequest(request) {
+    async function acceptInvitationRequest(request: InvitationRequest) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await loadAllInvitationRequests();
       await $toasted.success(t('invitationsVue.invitation_request_accepted'));
       emit('reload');
     }
-    async function rejectInvitationRequest(request) {
+    async function rejectInvitationRequest(request: InvitationRequest) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await loadAllInvitationRequests();
       await $toasted.success(t('invitationsVue.invitation_request_declined'));
@@ -106,7 +106,7 @@ export default {
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1fr',
-          transformer: (field, item) => {
+          transformer: (field: string, item: InvitationRequest) => {
             return `${item.first_name} ${item.last_name}`;
           },
         },
@@ -137,7 +137,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

@@ -10,7 +10,7 @@
         label="name"
         :placeholder="$t('incidentBuilder.select_template')"
         @update:modelValue="
-          (value) => {
+          (value: string) => {
             selectedIncidentTemplate = value;
             getTemplate(value);
           }
@@ -82,9 +82,9 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Draggable from 'vuedraggable';
-import { sortBy } from 'lodash/collection';
+import _ from 'lodash';
 import { debounce } from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
@@ -92,8 +92,9 @@ import { useRoute } from 'vue-router';
 import { groupBy } from '@/utils/array';
 import { nest } from '@/utils/form';
 import NestedBuilderItem from '@/components/admin/incidents/NestedBuilderItem.vue';
+import { FormField } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'IncidentFormBuilder',
   components: { Draggable, NestedBuilderItem },
   props: {
@@ -108,25 +109,25 @@ export default {
     const incidents = ref([]);
     const availableFields = ref([]);
     const formFields = ref([]);
-    const list = ref([]);
+    const list = ref<FormField[]>([]);
     const elementSearch = ref('');
-    const selectedIncidentTemplate = ref(null);
+    const selectedIncidentTemplate = ref<string>('');
 
-    const groupedFields = computed(() => {
+    const groupedFields = computed<Record<string, FormField[]>>(() => {
       const fields = [...availableFields.value];
       return groupBy(fields, 'data_group');
     });
 
-    const fieldTree = ref([]);
+    const fieldTree = ref<FormField[]>([]);
 
-    async function getTemplate(value) {
+    async function getTemplate(value: string) {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${value}/template`,
       );
       formFields.value = response.data.filter(
-        (field) => !['hidden', 'divend'].includes(field.html_type),
+        (field: FormField) => !['hidden', 'divend'].includes(field.html_type),
       );
-      fieldTree.value = sortBy(nest(formFields.value), (o) => o.list_order);
+      fieldTree.value = _.sortBy(nest(formFields.value), (o: FormField) => o.list_order);
       list.value = [...fieldTree.value];
       emit('onUpdateForm', list.value);
     }
@@ -142,8 +143,8 @@ export default {
       );
       availableFields.value = response.data.results;
     }
-    function updateField({ field_key, prop, value }) {
-      const find = (list) => {
+    function updateField({ field_key, prop, value }: Record<string, any>) {
+      const find = (list: FormField[]): FormField | null => {
         let i = 0;
         let found;
 
@@ -163,7 +164,7 @@ export default {
 
       const field = find(list.value);
       if (field) {
-        field[prop] = value;
+        (field as Record<string, any>)[prop] = value;
       }
     }
     const search = debounce(
@@ -214,5 +215,5 @@ export default {
       fieldTree,
     };
   },
-};
+});
 </script>

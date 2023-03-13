@@ -43,15 +43,16 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
 import moment from 'moment';
 import Table from '../Table.vue';
 import Invitation from '../../models/Invitation';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'InvitationTable',
   components: { Table },
   props: {
@@ -78,7 +79,7 @@ export default {
       });
     }
 
-    async function resendInvitation(invitation) {
+    async function resendInvitation(invitation: Invitation) {
       await Invitation.api().resendInvitation(invitation);
       await loadAllInvitations();
       await $toasted.success(t('invitationsVue.invitation_resent'));
@@ -106,7 +107,7 @@ export default {
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
-          transformer: (item) => {
+          transformer: (item: User) => {
             return `${item.email}`;
           },
         },
@@ -127,7 +128,7 @@ export default {
           dataIndex: 'expires_at',
           key: 'expires_at',
           width: '1fr',
-          transformer: (expires_at) => {
+          transformer: (expires_at: string) => {
             return moment(expires_at).format('L');
           },
         },
@@ -140,7 +141,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

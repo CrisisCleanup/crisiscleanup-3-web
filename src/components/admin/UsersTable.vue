@@ -49,7 +49,7 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
@@ -58,8 +58,9 @@ import Role from '../../models/Role';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useDialogs from '../../hooks/useDialogs';
 import AdminEventStream from './AdminEventStream.vue';
+import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'UsersTable',
   components: { Table },
   props: {
@@ -81,7 +82,7 @@ export default {
     const { component } = useDialogs();
     const store = useStore();
 
-    function getHighestRole(roles) {
+    function getHighestRole(roles: number[]) {
       const query = Role.query()
         .whereIdIn(roles)
         .orderBy('level', 'desc')
@@ -91,7 +92,7 @@ export default {
       }
       return '';
     }
-    async function loginAs(userId) {
+    async function loginAs(userId: string) {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
         {
@@ -101,7 +102,7 @@ export default {
       store.commit('auth/setUser', response.data);
       window.location.reload();
     }
-    async function showUserEvents(user) {
+    async function showUserEvents(user: User) {
       await component({
         title: `Events for User ${user.id}: ${user.first_name} ${user.last_name} ${user.email}`,
         component: AdminEventStream,
@@ -184,7 +185,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

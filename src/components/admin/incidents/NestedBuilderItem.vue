@@ -73,7 +73,7 @@
                 <base-select
                   :options="
                     (field.values &&
-                      field.values.map((item) => {
+                      field.values.map((item: Record<string, string>) => {
                         return {
                           value: item.value,
                           name_t: $t(item.name_t),
@@ -108,7 +108,7 @@
                   multiple
                   :options="
                     (field.values &&
-                      field.values.map((item) => {
+                      field.values.map((item: Record<string, string>) => {
                         return {
                           value: item.value,
                           name_t: $t(item.name_t),
@@ -223,8 +223,8 @@
           :key="JSON.stringify(field.children)"
           class="item-sub"
           :list="field.children"
-          @deleteItem="(value) => deleteItem(field, value)"
-          @change="(value) => onChildChange(field, value)"
+          @deleteItem="(value: any) => deleteItem(field, value)"
+          @change="(value: any) => onChildChange(field, value)"
           @update="$emit('update', $event)"
         />
         <ItemEditor v-if="editing" :item="field" @close="editing = false" />
@@ -233,7 +233,7 @@
   </draggable>
 </template>
 
-<script>
+<script lang="ts">
 import draggable from 'vuedraggable';
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -241,8 +241,9 @@ import SectionHeading from '@/components/work/SectionHeading.vue';
 import RecurringSchedule from '@/components/RecurringSchedule.vue';
 import ItemEditor from '@/components/ItemEditor.vue';
 import useDialogs from '@/hooks/useDialogs';
+import { FormField } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'NestedBuilderItem',
   components: {
     ItemEditor,
@@ -258,17 +259,18 @@ export default {
     },
     list: {
       required: false,
-      type: Array,
+      type: Array<FormField>,
       default: () => [],
     },
   },
+  emits: ["change", "update", "deleteItem"],
   setup(props, { emit }) {
     const { t } = useI18n();
     const { component } = useDialogs();
 
-    const showChildren = ref({});
+    const showChildren = ref<Record<string, boolean>>({});
     const editing = ref(false);
-    const internalList = ref([]);
+    const internalList = ref<FormField[]>([]);
 
     const dragOptions = {
       animation: 0,
@@ -277,21 +279,21 @@ export default {
       ghostClass: 'ghost',
     };
 
-    function getSelectValuesList(defaultValues) {
-      return Object.keys(defaultValues).map((key) => {
+    function getSelectValuesList(defaultValues: Record<string, string>) {
+      return Object.keys(defaultValues).map((key: string) => {
         return {
           value: key,
           name_t: t(defaultValues[key]),
         };
       });
     }
-    async function editField(field) {
+    async function editField(field: FormField) {
       await component({
         title: t('actions.edit'),
         component: ItemEditor,
         actionText: t('actions.done'),
         listeners: {
-          update: (payload) => {
+          update: (payload: FormField) => {
             emit('update', payload);
           },
         },
@@ -300,7 +302,7 @@ export default {
         },
       });
     }
-    function onListChange(change) {
+    function onListChange(change: { added: { element: { phase: number; children: FormField[]; }; }; }) {
       if (change.added) {
         change.added.element.phase = 4;
         change.added.element.children = [];
@@ -310,13 +312,13 @@ export default {
         emit('change', internalList.value);
       });
     }
-    function deleteItem(field, key) {
-      field.children = field.children.filter((f) => f.field_key !== key);
+    function deleteItem(field: { children: FormField[]; }, key: string) {
+      field.children = field.children.filter((f: { field_key: string; }) => f.field_key !== key);
       nextTick(() => {
         emit('change', internalList.value);
       });
     }
-    function onChildChange(field, change) {
+    function onChildChange(field: { children: FormField[]; }, change: { added: { element: FormField; }; }) {
       field.children = [...field.children, change.added.element];
       nextTick(() => {
         emit('change', internalList.value);
@@ -351,12 +353,12 @@ export default {
       deleteItem,
       onChildChange,
       dragOptions,
-      $t: (text) => {
+      $t: (text: any) => {
         return text ? t(text) : null;
       },
     };
   },
-};
+});
 </script>
 
 <style scoped>

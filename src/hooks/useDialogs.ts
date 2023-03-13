@@ -17,7 +17,7 @@ async function confirm(props: Record<string, any>) {
 
 async function prompt(
   props: Record<string, any>,
-): Promise<{ key: string; response: string }> {
+): Promise<Record<string, any> | string> {
   return openDialog(MessageResponseDialog, props);
 }
 
@@ -25,7 +25,7 @@ async function selection(props: Record<string, any>) {
   return openDialog(SelectionDialog, props);
 }
 
-async function organizationApproval(props: Record<string, any>) {
+async function organizationApproval(props: Record<string, any>): Promise<Record<string, any> | string> {
   return openDialog(OrganizationApprovalDialog, props);
 }
 

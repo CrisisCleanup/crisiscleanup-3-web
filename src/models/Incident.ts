@@ -14,7 +14,11 @@ export default class Incident extends CCUModel<Incident> {
 
   incident_type!: string;
 
-  start_at!: string;
+  start_at!: string | Date;
+  timezone!: string;
+  is_archived!: boolean;
+  turn_on_release!: boolean;
+  auto_contact!: boolean;
 
   active_phone_number!: string;
 
@@ -28,6 +32,7 @@ export default class Incident extends CCUModel<Incident> {
     return {
       id: this.attr(''),
       case_label: this.string(''),
+      timezone: this.string(''),
       form_fields: this.attr(null),
       geofence: this.attr(null),
       short_name: this.attr(null),
@@ -42,6 +47,7 @@ export default class Incident extends CCUModel<Incident> {
       auto_contact: this.attr(false),
       active_phone_number: this.attr(null),
       created_work_types: this.attr([]),
+      is_archived: this.attr(false),
     };
   }
 

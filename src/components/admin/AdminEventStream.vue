@@ -7,7 +7,7 @@
     class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
     :placeholder="$t('adminDashboard.filter_by_event')"
     @update:modelValue="
-      (value) => {
+      (value: string) => {
         filterEvents = [];
         filterEvents = [...value];
       }
@@ -102,7 +102,7 @@ const AdminEventStream = defineComponent({
     const { t } = useI18n();
     const eventStream = ref<any[]>([]);
     const events = ref<any[]>([]);
-    const filterEvents = ref([]);
+    const filterEvents = ref<string[]>([]);
     const showUser = ref(true);
     const loading = ref(false);
 
@@ -192,6 +192,7 @@ const AdminEventStream = defineComponent({
       showEventAttrs,
       showAll,
       momentFromNow,
+      getEventLogs,
     };
   },
 });

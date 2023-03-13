@@ -9,10 +9,10 @@
         container-class="items-center justify-start cursor-pointer"
         :disabled="uploading"
         :multiple="false"
-        :key="imports"
+        :key="imports.length"
         @files="
           (files) => {
-            handleFileUpload(files, 'fileTypes.logo');
+            handleFileUpload(files);
           }
         "
       >
@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
@@ -90,10 +90,6 @@ export default {
   components: { DragDrop, Table },
   setup() {
     const { t } = useI18n();
-    // const { currentUser } = useCurrentUser();
-    // const { component } = useDialogs();
-    // const store = useStore();
-
     const uploading = ref(false);
     const ignoreDuplicates = ref(false);
     const uploadType = ref('worksite');
@@ -107,7 +103,7 @@ export default {
       });
       imports.value = pageData.imports.data.results;
     }
-    async function handleFileUpload(fileList) {
+    async function handleFileUpload(fileList: File[]) {
       if (fileList.length === 0) {
         return;
       }
@@ -115,7 +111,7 @@ export default {
       formData.append('file', fileList[0]);
       formData.append('type', uploadType.value);
       if (ignoreDuplicates.value) {
-        formData.append('skip_duplicate_check', true);
+        formData.append('skip_duplicate_check', JSON.stringify(true));
       }
       uploading.value = true;
       await axios.post(
@@ -131,7 +127,7 @@ export default {
       uploading.value = false;
       await loadPageData();
     }
-    async function downloadSuccessful(reportId) {
+    async function downloadSuccessful(reportId: string) {
       try {
         const response = await axios.request({
           url: `${
@@ -146,7 +142,7 @@ export default {
         // console.error(e)
       }
     }
-    async function downloadFailed(reportId) {
+    async function downloadFailed(reportId: string) {
       try {
         const response = await axios.request({
           url: `${

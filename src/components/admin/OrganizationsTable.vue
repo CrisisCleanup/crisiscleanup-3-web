@@ -80,7 +80,7 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
@@ -89,8 +89,9 @@ import Organization from '../../models/Organization';
 import { cachedGet } from '../../utils/promise';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useDialogs from '../../hooks/useDialogs';
+import { OrganizationRole } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'OrganizationsTable',
   components: { Table },
   props: {
@@ -110,16 +111,16 @@ export default {
     const { t } = useI18n();
     const { currentUser } = useCurrentUser();
     const { organizationApproval } = useDialogs();
-    const organizationRoles = ref([]);
+    const organizationRoles = ref<OrganizationRole[]>([]);
 
-    function getHighestRole(roles) {
+    function getHighestRole(roles: number[]) {
       if (roles.length > 0) {
-        return organizationRoles.value.find((role) => roles.includes(role.id))
-          .name_t;
+        const orgRole = organizationRoles.value.find((role: OrganizationRole) => roles.includes(role.id));
+        return orgRole ? orgRole.name_t: '';
       }
       return '';
     }
-    async function getOrganizationContacts(organizationId) {
+    async function getOrganizationContacts(organizationId: string) {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -127,22 +128,22 @@ export default {
       );
       return response.data.results;
     }
-    async function approveOrganization(organizationId) {
+    async function approveOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.approve_organization'),
         content: t('orgTable.give_approve_reason'),
       });
-      if (result) {
+      if (result && typeof(result) !== 'string') {
         await Organization.api().approve(organizationId, result.reason);
         emit('reload');
       }
     }
-    async function rejectOrganization(organizationId) {
+    async function rejectOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.reject_organization'),
         content: t('orgTable.give_reject_reason'),
       });
-      if (result) {
+      if (result && typeof(result) !== 'string') {
         await Organization.api().reject(
           organizationId,
           result.reason,
@@ -208,7 +209,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

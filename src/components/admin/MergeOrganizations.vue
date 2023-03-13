@@ -64,7 +64,7 @@
     </modal>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';

@@ -87,16 +87,16 @@ export default defineComponent({
       shared: '',
       notes: '',
     });
-    const locationLayer = ref(L.layerGroup());
+    const locationLayer = ref<L.LayerGroup<any>>(L.layerGroup());
 
-    async function saveLocation(polygon) {
-      let { geometry } = polygon.toGeoJSON();
-      const { type, features } = polygon.toGeoJSON();
+    async function saveLocation(polygon: L.GeoJSON) {
+      let { geometry } = polygon.toGeoJSON() as any;
+      const { type, features } = polygon.toGeoJSON() as any;
       const locationTypeKey = 'incident_primary_damaged_area';
       const locationType = LocationType.query()
         .where('key', locationTypeKey)
         .get()[0];
-      const location = {
+      const location: Partial<Location> = {
         type: locationType.id,
         ...currentLocation.value,
       };
@@ -130,7 +130,7 @@ export default defineComponent({
         await Location.api().fetchById(locationId);
         emit('onLocationChange', response.response.data);
         locationLayer.value.clearLayers();
-        polygon.addTo(locationLayer.value);
+        polygon.addTo(locationLayer.value as any);
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
@@ -145,7 +145,7 @@ export default defineComponent({
         classes: 'w-full h-144 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {
-          changed: (payload) => {
+          changed: (payload: L.GeoJSON) => {
             polygon = payload;
           },
         },
@@ -163,16 +163,18 @@ export default defineComponent({
       if (props.location) {
         await Location.api().fetchById(props.location.location);
         const location = Location.find(props.location.location);
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: location.attr,
-          geometry: location.poly || location.geom || location.point,
-        };
-        L.geoJSON(geojsonFeature, {
-          weight: '1',
-        }).addTo(locationLayer.value);
+        if (location) {
+          const geojsonFeature = {
+            type: 'Feature',
+            properties: location.attr,
+            geometry: location.poly || location.geom || location.point,
+          } as any;
+          L.geoJSON(geojsonFeature, {
+            weight: '1',
+          } as any).addTo(locationLayer.value as any);
 
-        currentLocation.value = location;
+          currentLocation.value = location;
+        }
       }
 
       nextTick(() => {

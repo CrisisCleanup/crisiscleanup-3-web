@@ -86,14 +86,15 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import Table from '../Table.vue';
 import useDialogs from '../../hooks/useDialogs';
 import { momentFromNow } from '../../filters';
+import { IncidentRequest } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'IncidentApprovalTable',
   components: { Table },
   props: {
@@ -113,7 +114,7 @@ export default {
     const { t } = useI18n();
     const { confirm } = useDialogs();
 
-    async function showContacts(request) {
+    async function showContacts(request: IncidentRequest) {
       const contact = request.requested_by_contact;
       await confirm({
         title: t('incidentApprovalTable.requester'),
@@ -125,7 +126,7 @@ export default {
         `,
       });
     }
-    async function approveRequest(requestId) {
+    async function approveRequest(requestId: string) {
       await axios.post(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -136,7 +137,7 @@ export default {
       );
       emit('reload');
     }
-    async function rejectRequest(requestId) {
+    async function rejectRequest(requestId: string) {
       await axios.post(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -187,7 +188,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

@@ -80,7 +80,7 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import Table from '../Table.vue';
@@ -89,7 +89,7 @@ import Incident from '../../models/Incident';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useDialogs from '@/hooks/useDialogs';
 
-export default {
+export default defineComponent({
   name: 'OrganizationApprovalTable',
   components: { Table },
   props: {
@@ -110,7 +110,7 @@ export default {
     const { currentUser } = useCurrentUser();
     const { confirm, prompt } = useDialogs();
 
-    async function getOrganizationContacts(organizationId) {
+    async function getOrganizationContacts(organizationId: string) {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -118,11 +118,11 @@ export default {
       );
       return response.data.results;
     }
-    function getIncidentName(id) {
-      const incident = Incident.find((element) => id(element));
+    function getIncidentName(id: string) {
+      const incident = Incident.find(id);
       return incident && incident.name;
     }
-    async function showContacts(organization) {
+    async function showContacts(organization: Organization) {
       const contacts = await getOrganizationContacts(organization.id);
       const contact = contacts.length > 0 ? contacts[0] : null;
       await confirm({
@@ -136,22 +136,22 @@ export default {
         `,
       });
     }
-    async function approveOrganization(organizationId) {
+    async function approveOrganization(organizationId: string) {
       const result = await prompt({
         title: t('actions.approve_organization'),
         content: t('orgApprovalTable.give_approve_reason'),
       });
-      if (result) {
+      if (result && typeof(result) !== 'string') {
         await Organization.api().approve(organizationId, result.reason);
         emit('reload');
       }
     }
-    async function rejectOrganization(organizationId) {
+    async function rejectOrganization(organizationId: string) {
       const result = await prompt({
         title: t('actions.reject_organization'),
         content: t('orgApprovalTable.give_reject_reason'),
       });
-      if (result) {
+      if (result && typeof(result) !== 'string') {
         await Organization.api().reject(
           organizationId,
           result.reason,
@@ -213,7 +213,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

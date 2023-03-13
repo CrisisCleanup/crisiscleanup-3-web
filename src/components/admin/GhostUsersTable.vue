@@ -20,12 +20,12 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import Table from '../Table.vue';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'GhostUsersTable',
   components: { Table },
   props: {
@@ -92,7 +92,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

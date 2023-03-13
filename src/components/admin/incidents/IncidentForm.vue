@@ -106,7 +106,7 @@
           label="number"
           :placeholder="$t('incidentBuilder.phone_numbers')"
           @update:modelValue="
-            (value) => {
+            (value: string) => {
               currentAni.anis = [];
               currentAni.anis = [...value];
             }
@@ -170,6 +170,7 @@ import FloatingInput from '@/components/FloatingInput.vue';
 import { formatNationalNumber } from '@/filters';
 import { getErrorMessage } from '@/utils/errors';
 import useDialogs from '@/hooks/useDialogs';
+import type Incident from '@/models/Incident';
 
 const INCIDENT_TYPES = [
   'contaminated_water',
@@ -195,9 +196,10 @@ interface Ani {
   id: string;
   ani?: string;
   number?: string;
+  phone_number?: string;
 }
 
-export default {
+export default defineComponent({
   name: 'IncidentForm',
   components: { FloatingInput },
   props: {
@@ -206,7 +208,7 @@ export default {
       default: () => ({}),
     },
     aniIncidents: {
-      type: Array,
+      type: Array<Ani>,
       default: () => [],
     },
   },
@@ -224,7 +226,7 @@ export default {
 
     const timezoneNames = moment.tz.names();
 
-    const currentIncident = ref({
+    const currentIncident = ref<Partial<Incident>>({
       name: '',
       short_name: '',
       timezone: '',
@@ -232,9 +234,9 @@ export default {
       is_archived: false,
       turn_on_release: false,
       auto_contact: true,
-      start_at: null,
+      start_at: '',
     });
-    const currentAni = ref({
+    const currentAni = ref<Record<string, any>>({
       anis: [],
       start_at: null,
       end_at: null,
@@ -252,8 +254,8 @@ export default {
       if (result) {
         let parsedPhoneNumber;
         try {
-          parsedPhoneNumber = parsePhoneNumber(result);
-        } catch (error) {
+          parsedPhoneNumber = parsePhoneNumber(result as string);
+        } catch (error: any) {
           await $toasted.error(error.message);
           return;
         }
@@ -322,7 +324,7 @@ export default {
       timezoneNames,
     };
   },
-};
+});
 </script>
 <style scoped>
 .form-row {
