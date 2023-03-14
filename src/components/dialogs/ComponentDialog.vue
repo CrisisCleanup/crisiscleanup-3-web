@@ -61,7 +61,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { closeDialog } from 'vue3-promise-dialog';
 import useEmitter from '../../hooks/useEmitter';

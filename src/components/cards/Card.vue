@@ -15,8 +15,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Card',
   props: {
     bodyStyle: {
@@ -27,7 +27,7 @@ export default {
       type: Boolean,
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

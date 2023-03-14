@@ -17,8 +17,8 @@
               v-for="message in sortedMessages"
               :message="message"
               :key="message.id"
-              @onFavorite="(message) => toggleFavorite(message, true)"
-              @onUnfavorite="(message) => toggleFavorite(message, false)"
+              @onFavorite="(message: any) => toggleFavorite(message, true)"
+              @onUnfavorite="(message: any) => toggleFavorite(message, false)"
             />
           </div>
           <div
@@ -83,9 +83,8 @@
   </div>
 </template>
 
-<script>
-import { uniqWith } from 'lodash/array';
-import { isEqual } from 'lodash/lang';
+<script lang="ts">
+import _ from 'lodash';
 import {
   computed,
   nextTick,
@@ -103,8 +102,9 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 import User from '../../models/User';
 import { useWebSockets } from '../../hooks/useWebSockets';
 import ChatMessage from './ChatMessage.vue';
+import { Message } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'Chat',
   components: { ChatMessage },
   props: {
@@ -118,38 +118,38 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const socket = ref(null);
+    const socket = ref<WebSocket | null>(null);
     const currentMessage = ref('');
-    const messages = ref([]);
-    const favorites = ref([]);
+    const messages = ref<Message[]>([]);
+    const favorites = ref<Message[]>([]);
     const urgent = ref(false);
     const loadingMessages = ref(false);
-    let sendToWebsocket;
-    const messagesBox = ref(null);
+    let sendToWebsocket: (data: Partial<Message>) => void;
+    const messagesBox = ref<HTMLDivElement | null>(null);
     const { currentUser } = useCurrentUser();
     const $toasted = useToast();
 
     const sortedMessages = computed(() => {
       const currentMessages = [...messages.value];
       currentMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
-      return uniqWith(currentMessages, isEqual);
+      return _.uniqWith(currentMessages, _.isEqual);
     });
 
     function handleWheel() {
       if (
-        messagesBox.value.scrollTop === 0 &&
+        messagesBox?.value?.scrollTop === 0 &&
         sortedMessages.value.length > 0 &&
         !loadingMessages.value
       ) {
         getMessages(sortedMessages.value[0].created_at, false);
       }
     }
-    async function getMessages(before = null, scroll = true) {
+    async function getMessages(before: string | null = null, scroll = true) {
       loadingMessages.value = true;
       const parameters = {
         message_group: props.chat.id,
         limit: 5,
-      };
+      } as Record<string, any>;
       if (before && messages.value.length > 0) {
         parameters.created_at__lte = before;
       }
@@ -181,8 +181,8 @@ export default {
         message_group: props.chat.id,
         limit: 1,
         is_urgent: false,
-      };
-      if (currentUser.states[props.stateKey]) {
+      } as Record<string, any>;
+      if (currentUser?.states[props.stateKey]) {
         parameters.created_at__gte = currentUser.states[props.stateKey];
       }
       const queryString = getQueryString(parameters);
@@ -197,8 +197,8 @@ export default {
         message_group: props.chat.id,
         limit: 1,
         is_urgent: true,
-      };
-      if (currentUser.states[props.stateKey]) {
+      } as Record<string, any>;
+      if (currentUser?.states[props.stateKey]) {
         parameters.created_at__gte = currentUser.states[props.stateKey];
       }
       const queryString = getQueryString(parameters);
@@ -219,7 +219,7 @@ export default {
         {},
       );
     }
-    async function toggleFavorite(message, state) {
+    async function toggleFavorite(message: { id: any; is_favorite: boolean; }, state: any) {
       try {
         if (state) {
           await axios.post(
@@ -250,9 +250,9 @@ export default {
       const { socket: s, send } = useWebSockets(
         `/ws/chat/${props.chat.id}`,
         'chat',
-        (data) => {
+        (data: Message) => {
           messages.value = [data, ...messages.value];
-          if (data.created_by !== currentUser.id) {
+          if (String(data.created_by) !== String(currentUser?.id)) {
             if (data.is_urgent) {
               emit('onNewUrgentMessage');
             } else {
@@ -280,7 +280,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      socket.value.close();
+      socket?.value?.close();
     });
 
     return {
@@ -298,7 +298,7 @@ export default {
       focusNewsTab,
     };
   },
-};
+});
 </script>
 
 <style scoped>

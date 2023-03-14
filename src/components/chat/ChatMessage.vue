@@ -72,18 +72,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
-import { ref } from 'vue';
+import { PropType, ref } from 'vue';
 import { formatDateString } from '../../filters/index';
 import moment from 'moment';
+import { Message } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'ChatMessage',
   components: { UserDetailsTooltip },
   props: {
     message: {
-      type: Object,
+      type: Object as PropType<Message>,
       default: () => ({}),
     },
   },
@@ -95,7 +96,7 @@ export default {
       moment,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

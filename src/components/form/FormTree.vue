@@ -16,7 +16,7 @@
               Boolean(dynamicFields[field.field_key]) || hasSelectedChildren
             "
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
                 updateChildren(field, value);
                 showChildren = !showChildren;
@@ -30,10 +30,10 @@
           <WorksiteStatusDropdown
             v-if="worksite.id && currentWorkType"
             class="block"
-            :phase="incident.phase"
+            :phase="incident ? incident.phase: null"
             :current-work-type="currentWorkType"
             @input="
-              (value) => {
+              (value: string) => {
                 $emit('updateWorkTypeStatus', {
                   work_type: field.if_selected_then_work_type,
                   status: value,
@@ -69,7 +69,7 @@
             label="name_t"
             select-classes="h-12 border"
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
               }
             "
@@ -106,7 +106,7 @@
             label="name_t"
             select-classes="bg-white border text-xs role-select p-1 form-multiselect"
             @update:modelValue="
-              (value) => {
+              (value: string[]) => {
                 $emit('updateField', {
                   key: field.field_key,
                   value: value.join(','),
@@ -125,7 +125,7 @@
             :break-glass="field.read_only_break_glass"
             :placeholder="field.placeholder_t || field.label_t"
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
               }
             "
@@ -139,7 +139,7 @@
             :model-value="dynamicFields[field.field_key] || field.recur_default"
             :is-default="!dynamicFields[field.field_key]"
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
               }
             "
@@ -170,7 +170,7 @@
             :model-value="dynamicFields[field.field_key]"
             :placeholder="field.placeholder_t || field.label_t"
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
               }
             "
@@ -182,7 +182,7 @@
           <base-checkbox
             :model-value="dynamicFields[field.field_key]"
             @update:modelValue="
-              (value) => {
+              (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
               }
             "
@@ -212,30 +212,30 @@
       :worksite="worksite"
       :dynamic-fields="dynamicFields"
       @updateField="
-        ({ key, value }) => {
+        ({ key, value }: Record<string, string>) => {
           $emit('updateField', { key, value });
         }
       "
       @updateWorkTypeStatus="
-        ({ work_type, status }) => {
+        ({ work_type, status }: Record<string, string>) => {
           $emit('updateWorkTypeStatus', { work_type, status });
         }
       "
     />
   </div>
 </template>
-<script>
+<script lang="ts">
 import SectionHeading from '../../components/work/SectionHeading.vue';
 import RecurringSchedule from '../../components/RecurringSchedule.vue';
 import Incident from '../../models/Incident';
 import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import useCurrentUser from '../../hooks/useCurrentUser';
 import BaseSelect from '../BaseSelect.vue';
+import { FormField, WorkType } from '@/models/types';
 
-export default {
+export default defineComponent({
   props: {
     worksite: {
       type: Object,
@@ -250,10 +250,11 @@ export default {
       default: () => [],
     },
     field: {
-      type: Object,
+      type: Object as PropType<FormField>,
       default: () => ({}),
     },
   },
+  emits: ["updateField", "updateWorkTypeStatus"],
   components: {
     BaseSelect,
     WorksiteStatusDropdown,
@@ -265,7 +266,6 @@ export default {
     const showChildren = ref(true);
     const { t } = useI18n();
     const store = useStore();
-    const { currentUser } = useCurrentUser();
 
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'],
@@ -275,11 +275,11 @@ export default {
     });
     const currentWorkType = computed(() => {
       return props.worksite.work_types.find(
-        (wt) => wt.work_type === props.field.if_selected_then_work_type,
+        (wt: WorkType) => wt.work_type === props.field.if_selected_then_work_type,
       );
     });
     const hasSelectedChildren = computed(() => {
-      return props.field.children.some((childField) => {
+      return props.field.children.some((childField: FormField) => {
         return (
           childField.if_selected_then_work_type &&
           Boolean(props.dynamicFields[childField.field_key])
@@ -287,12 +287,12 @@ export default {
       });
     });
 
-    function getValue(fieldKey) {
+    function getValue(fieldKey: string) {
       if (!props.worksite || !props.worksite.form_data) {
         return '';
       }
 
-      const key = props.worksite.form_data.find((element) => {
+      const key = props.worksite.form_data.find((element: FormField) => {
         return element.field_key === fieldKey;
       });
       if (key) {
@@ -302,10 +302,10 @@ export default {
       }
       return '';
     }
-    function getSectionCount(currentField) {
+    function getSectionCount(currentField: FormField) {
       return currentField.order_label;
     }
-    function getSelectValuesList(defaultValues) {
+    function getSelectValuesList(defaultValues: Record<string, string>) {
       return Object.keys(defaultValues).map((key) => {
         return {
           value: key,
@@ -313,9 +313,9 @@ export default {
         };
       });
     }
-    function updateChildren(field, value) {
+    function updateChildren(field: FormField, value: string) {
       if (!value) {
-        field.children.forEach((child) => {
+        field.children.forEach((child: FormField) => {
           emit('updateField', {
             key: child.field_key,
             value: child.html_type === 'checkbox' ? false : '',
@@ -331,7 +331,7 @@ export default {
         );
       }
 
-      const hasSelectedChildren = props.field.children.some((childField) => {
+      const hasSelectedChildren = props.field.children.some((childField: FormField) => {
         return (
           childField.if_selected_then_work_type &&
           Boolean(props.dynamicFields[childField.field_key])
@@ -353,7 +353,7 @@ export default {
       updateChildren,
     };
   },
-};
+});
 </script>
 
 <style>

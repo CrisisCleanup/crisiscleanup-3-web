@@ -1,4 +1,4 @@
-import User from "../User";
+import type User from '../User';
 
 export type WorkType = {
   key: string;
@@ -21,7 +21,18 @@ export type Capability = {
 };
 
 export type FormField = {
-  html_type: "hidden" | "divend" | "h4" | "h5" | "select" | "multiselect" | "text" | "cronselect" | "suggest" | "textarea" | "checkbox";
+  html_type:
+    | 'hidden'
+    | 'divend'
+    | 'h4'
+    | 'h5'
+    | 'select'
+    | 'multiselect'
+    | 'text'
+    | 'cronselect'
+    | 'suggest'
+    | 'textarea'
+    | 'checkbox';
   field_key: string;
   field_parent_key: string;
   order_label: string;
@@ -30,8 +41,11 @@ export type FormField = {
   label_t: string;
   placeholder_t: string;
   values: string[];
-  values_default_t: Record<string, string>[];
-  children: FormField[]
+  values_default_t: Record<string, string>;
+  children: FormField[];
+  if_selected_then_work_type: string;
+  read_only_break_glass: boolean;
+  recur_default: string;
 };
 
 export type IncidentRequest = {
@@ -42,4 +56,16 @@ export type IncidentRequest = {
 export type OrganizationRole = {
   id: number;
   name_t: string;
+};
+
+export type Message = {
+  id: number;
+  created_by: number;
+  timestamp: number;
+  content: string;
+  full_name: string;
+  created_at: string;
+  is_urgent: boolean;
+  is_favorite: boolean;
+  profile_picture_file: string;
 };

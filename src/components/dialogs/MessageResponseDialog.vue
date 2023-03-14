@@ -94,7 +94,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
 import {closeDialog} from "vue3-promise-dialog";
 import {defineComponent, ref} from "vue";
 

@@ -72,7 +72,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import { closeDialog } from 'vue3-promise-dialog';
 import { useI18n } from 'vue-i18n';

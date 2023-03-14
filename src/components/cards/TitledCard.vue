@@ -48,7 +48,7 @@ import _ from 'lodash';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import Card from './Card.vue';
 
-export default {
+export default defineComponent({
   name: 'TitledCard',
   components: {
     Card,
@@ -94,7 +94,7 @@ export default {
       hasDropdown,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss" scoped>
