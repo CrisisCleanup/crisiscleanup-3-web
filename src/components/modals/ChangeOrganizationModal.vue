@@ -4,9 +4,11 @@
     :closeable="true"
     @close="$emit('cancel')"
   >
-    <div slot="header" class="text-lg border-b p-3">
-      {{ $t('userTransfer.change_organization') }}
-    </div>
+    <template #header>
+      <div class="text-lg border-b p-3">
+        {{ $t('userTransfer.change_organization') }}
+      </div>
+    </template>
     <div v-if="loading" class="flex h-full items-center justify-center">
       <font-awesome-icon size="xl" icon="spinner" spin />
     </div>
@@ -101,7 +103,7 @@
                     <base-checkbox
                       class="pb-2"
                       @input="
-                        (value) => {
+                        (value: boolean) => {
                           setCases(value, cases);
                         }
                       "
@@ -118,7 +120,7 @@
                         class="pb-2"
                         :value="selectedCases.includes(work_type.id)"
                         @input="
-                          (value) => {
+                          (value: boolean) => {
                             setCases(value, [work_type]);
                           }
                         "
@@ -219,11 +221,14 @@ import { groupBy } from '@/utils/array';
 import { getColorForStatus, getWorkTypeName } from '@/filters';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
+import type Tabs from '@/components/tabs/Tabs.vue';
 import type Incident from '@/models/Incident';
+import type { WorkType } from '@/models/types';
 
 export default defineComponent({
   name: 'ChangeOrganizationModal',
   components: { OrganizationSearchInput },
+emits: ['cancel'],
 
   setup(props, context) {
     const { currentUser } = useCurrentUser();
@@ -232,10 +237,10 @@ export default defineComponent({
     const page = ref('start');
     const lineageUsers = ref([]);
     const incidents = ref([]);
-    const nestedUsers = ref([]);
-    const claimedCases = ref({});
+    const nestedUsers = ref<Record<string, any>>([]);
+    const claimedCases = ref<Record<string, WorkType[]>>({});
     const selectedOrganization = ref<any | null>(null);
-    const tabs = ref(null);
+    const tabs = ref<typeof Tabs | null>(null);
     const loading = ref(false);
     const isMounted = ref(false);
     const selectedUsers = ref<any | null>([]);

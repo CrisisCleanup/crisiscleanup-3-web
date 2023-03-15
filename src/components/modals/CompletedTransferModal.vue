@@ -6,7 +6,7 @@
     closeable
   >
     <div class="p-3">
-      <div>
+      <div v-if="currentUser && requestingUser">
         {{ $t("userTransfer.you_have_been_moved_to") }}
         {{ currentUser.organization.name }} {{ $t("userTransfer.by") }}
         {{ requestingUser.first_name }} {{ requestingUser.last_name }} ({{

@@ -18,7 +18,7 @@
       closeable
       @close="
         () => {
-          emails = [];
+          emails = '';
           showInviteModal = false;
         }
       "
@@ -35,46 +35,49 @@
             :validation="validation"
             :add-on-key="[13, 32, ',']"
             :separators="[';', ',', ', ']"
-            @tags-changed="(newTags) => (usersToInvite = newTags)"
+            @tags-changed="(newTags: any) => (usersToInvite = newTags)"
           />
         </div>
-        <div v-if="isAdmin || currentOrganization.affiliates.length > 1">
+        <div v-if="isAdmin || (currentOrganization && currentOrganization.affiliates.length > 1)">
           <OrganizationSearchInput
-            @selectedOrganization="(id) => (selectedOrganization = id)"
             class="w-108"
-            :allowed-organization-ids="currentOrganization.affiliates"
+            :allowed-organization-ids="currentOrganization ? currentOrganization.affiliates: []"
             :is-admin="isAdmin"
+            @selectedOrganization="(id) => (selectedOrganization = id)"
           />
         </div>
       </div>
-      <div slot="footer" class="p-3 flex justify-end">
-        <base-button
-          :text="$t('actions.cancel')"
-          :alt="$t('actions.cancel')"
-          class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
-          :action="
-            () => {
-              showInviteModal = false;
-            }
-          "
-        />
-        <base-button
-          variant="solid"
-          :action="() => inviteUsers()"
-          :text="$t('actions.submit_invites')"
-          :alt="$t('actions.submit_invites')"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-      </div>
+      <template #footer>
+        <div class="p-3 flex justify-end">
+          <base-button
+            :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
+            class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+            :action="
+              () => {
+                showInviteModal = false;
+              }
+            "
+          />
+          <base-button
+            variant="solid"
+            :action="() => inviteUsers()"
+            :text="$t('actions.submit_invites')"
+            :alt="$t('actions.submit_invites')"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+        </div>
+      </template>
     </modal>
   </div>
 </template>
-<script>
+<script lang="ts">
 import _ from 'lodash';
 import Multiselect from '@vueform/multiselect';
 import { computed, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
+import type { TagInputData } from '@sipec/vue3-tags-input';
 import { createTags } from '@sipec/vue3-tags-input';
 import User from '../../models/User';
 import Organization from '../../models/Organization';
@@ -84,9 +87,9 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 
 const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
-export default {
+export default defineComponent({
   name: 'InviteUsers',
-  components: { OrganizationSearchInput, Multiselect },
+  components: { OrganizationSearchInput },
   props: {
     isAdmin: {
       type: Boolean,
@@ -105,27 +108,28 @@ export default {
       },
     ];
     const emails = ref('');
-    const usersToInvite = ref([]);
+    const usersToInvite = ref<TagInputData[]>([]);
     const multiselect = ref(null);
     const showInviteModal = ref(false);
     const selectedOrganization = ref(null);
-    const organizationResults = ref([]);
+    const organizationResults = ref<Organization[]>([]);
     const { currentUser } = useCurrentUser();
     const currentOrganization = computed(() =>
       Organization.find(currentUser?.organization?.id),
     );
 
-    async function onOrganizationSearch(value) {
+    async function onOrganizationSearch(value: string) {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
           dataKey: 'results',
         },
       );
-      organizationResults.value = results.entities.organizations;
+      organizationResults.value = (results.entities?.organizations ||
+        []) as Organization[];
     }
     const inviteUsers = async () => {
-      let tags = _.defaultTo([...usersToInvite.value], []);
+      let tags = _.defaultTo([...usersToInvite.value], []) as TagInputData[];
       try {
         if (emails.value) {
           const emailList = emails.value.match(EMAIL_REGEX);
@@ -151,7 +155,7 @@ export default {
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
-    }
+    };
 
     return {
       validation,
@@ -167,7 +171,7 @@ export default {
       usersToInvite,
     };
   },
-};
+});
 </script>
 
 <style>

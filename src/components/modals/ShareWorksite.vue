@@ -12,7 +12,7 @@
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
       @tags-changed="
-        (newTags) => {
+        (newTags: TagInputData[]) => {
           emailsToShare = newTags;
           $emit('emailsUpdated', [
             ...new Set(emailsToShare.map((tag) => tag.text)),
@@ -37,7 +37,7 @@
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
       @tags-changed="
-        (newTags) => {
+        (newTags: TagInputData[]) => {
           phoneNumbersToShare = newTags;
           $emit('phoneNumbersUpdated', [
             ...new Set(phoneNumbersToShare.map((tag) => tag.text)),
@@ -61,7 +61,7 @@
       class="my-4"
       :placeholder="$t('shareWorksite.add_message')"
       @update:modelValue="
-        (value) => {
+        (value: string) => {
           shareMessage = value;
           $emit('shareMessageUpdated', value);
         }
@@ -72,16 +72,16 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { createTags } from '@sipec/vue3-tags-input';
+import { createTags, TagInputData } from '@sipec/vue3-tags-input';
 import _ from 'lodash';
 import UserSearchInput from '@/components/UserSearchInput.vue';
 import type User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'ShareWorksite',
   components: { UserSearchInput },
   emits: ['emailsUpdated', 'phoneNumbersUpdated', 'shareMessageUpdated'],
-  setup(props: never, { emit }) {
+  setup(props, { emit }) {
     const emailValidation = [
       {
         classes: 'email',
@@ -98,9 +98,9 @@ export default {
     ];
     const shareMessage = ref('');
     const emails = ref('');
-    const emailsToShare = ref<any[]>([]);
+    const emailsToShare = ref<TagInputData[]>([]);
     const phoneNumbers = ref('');
-    const phoneNumbersToShare = ref<any[]>([]);
+    const phoneNumbersToShare = ref<TagInputData[]>([]);
 
     function onSelectedUserEmail(user: User) {
       if (user.email) {
@@ -134,7 +134,7 @@ export default {
       onSelectedUserPhone,
     };
   },
-};
+});
 </script>
 
 <style>

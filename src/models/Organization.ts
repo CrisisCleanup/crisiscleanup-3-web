@@ -13,6 +13,7 @@ export default class Organization extends Model {
   approved_incidents!: string[];
   primary_location!: Location;
   secondary_location!: Location;
+  affiliates!: string[];
 
   static fields() {
     return {

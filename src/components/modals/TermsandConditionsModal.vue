@@ -9,7 +9,7 @@
         v-html="$t('termsConditionsModal.accept_terms_conditions')"
       ></div>
 
-      <div class="tos" v-if="organization.custom_legal_tos">
+      <div v-if="organization.custom_legal_tos" class="tos">
         <div class="text-base py-1 font-semibold">
           {{ $t(`termsConditionsModal.your_organization_terms_conditions`) }}
         </div>
@@ -20,28 +20,30 @@
         ></div>
       </div>
     </div>
-    <div slot="footer" class="flex items-center justify-center py-2 border-t">
-      <base-button
-        data-cy="termsmodal.acceptBtn"
-        :text="$t('actions.accept')"
-        :alt="$t('actions.accept')"
-        variant="solid"
-        class="px-6 p-3 accept-button"
-        :action="
-          () => {
-            $emit('acceptedTerms');
-          }
-        "
-      >
-        {{ $t("actions.accept") }}
-      </base-button>
-    </div>
+    <template #footer>
+      <div class="flex items-center justify-center py-2 border-t">
+        <base-button
+          data-cy="termsmodal.acceptBtn"
+          :text="$t('actions.accept')"
+          :alt="$t('actions.accept')"
+          variant="solid"
+          class="px-6 p-3 accept-button"
+          :action="
+            () => {
+              $emit('acceptedTerms');
+            }
+          "
+        >
+          {{ $t('actions.accept') }}
+        </base-button>
+      </div>
+    </template>
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "TermsandConditionsModal",
+  name: 'TermsandConditionsModal',
   props: {
     organization: {
       type: Object,
@@ -50,6 +52,7 @@ export default {
       },
     },
   },
+  emits: ['acceptedTerms'],
 };
 </script>
 

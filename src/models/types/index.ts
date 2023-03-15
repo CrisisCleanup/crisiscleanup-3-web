@@ -1,11 +1,13 @@
 import type User from '../User';
 
 export type WorkType = {
+  id: number;
   key: string;
   name_t: string;
   status: string;
   claimed_by: number | undefined;
   work_type: string;
+  case_number?: string;
 };
 
 export type Status = {
@@ -51,6 +53,7 @@ export type FormField = {
 export type IncidentRequest = {
   requested_by_contact: Partial<User>;
   id: number;
+  incident: string;
 };
 
 export type OrganizationRole = {

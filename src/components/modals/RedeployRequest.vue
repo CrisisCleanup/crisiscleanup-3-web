@@ -60,7 +60,7 @@
     </modal>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Organization from '../../models/Organization';
 import { getErrorMessage } from '../../utils/errors';
 import { computed, onMounted, ref } from 'vue';
@@ -69,8 +69,10 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import BaseSelect from '../BaseSelect.vue';
+import Incident from '@/models/Incident';
+import { IncidentRequest } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'RedeployRequest',
   components: { BaseSelect },
   props: {
@@ -91,8 +93,8 @@ export default {
 
     const showRedeployModal = ref(false);
     const selectedIncidentId = ref(false);
-    const incidents = ref([]);
-    const incidentRequests = ref([]);
+    const incidents = ref<Incident[]>([]);
+    const incidentRequests = ref<IncidentRequest[]>([]);
 
     const currentOrganization = computed(() =>
       Organization.find(currentUser?.organization?.id),
@@ -100,15 +102,18 @@ export default {
 
     const incident_list = computed(() => {
       if (incidents.value) {
-        return incidents.value.filter(
-          (incident) =>
+        return incidents.value.filter((incident) => {
+          if (currentOrganization.value) {
+            return (
             !currentOrganization.value.approved_incidents.includes(
               incident.id,
             ) &&
             !incidentRequests.value
               .map((request) => request.incident)
-              .includes(incident.id),
-        );
+              .includes(incident.id)
+          );
+          }
+        });
       }
       return [];
     });
@@ -118,7 +123,7 @@ export default {
         await axios.post(
           `${import.meta.env.VITE_APP_API_BASE_URL}/incident_requests`,
           {
-            organization: currentOrganization.value.id,
+            organization: currentOrganization?.value?.id,
             incident: selectedIncidentId.value,
           },
         );
@@ -155,5 +160,5 @@ export default {
       incident_list,
     };
   },
-};
+});
 </script>
