@@ -245,23 +245,32 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
 import { useI18n } from 'vue-i18n';
-import { reactive, toRefs } from 'vue';
+import { PropType, reactive, toRefs } from 'vue';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
 import Table from '@/components/Table.vue';
 import { cachedGet } from '@/utils/promise';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
+import { OrganizationRole } from '@/models/types';
 
-export default {
+type OrganizationStatistic = {
+  calls: number;
+  reported_count: number;
+  claimed_count: number;
+  closed_count: number;
+  commercial_value: number;
+};
+
+export default defineComponent({
   name: 'OrganizationActivityModal',
   components: { Table, CaseDonutChart, Capability },
   props: {
     generalInfo: {
-      type: Object,
+      type: Object as PropType<Record<string, any>>,
       default: null,
     },
     styles: {
@@ -325,27 +334,33 @@ export default {
     function getTotalValue() {
       return _.sumBy(
         props.generalInfo.statistics,
-        (stat) => stat.commercial_value || 0,
+        (stat: OrganizationStatistic) => stat.commercial_value || 0,
       );
     }
     function getTotalCalls() {
-      return _.sumBy(props.generalInfo.statistics, (stat) => stat.calls || 0);
+      return _.sumBy(
+        props.generalInfo.statistics,
+        (stat: OrganizationStatistic) => stat.calls || 0,
+      );
     }
     function getTotalCases() {
       return _.sumBy(
         props.generalInfo.statistics,
-        (stat) =>
+        (stat: OrganizationStatistic) =>
           (stat.reported_count || 0) +
           ((stat.claimed_count || 0) - (stat.closed_count || 0)) +
           (stat.closed_count || 0),
       );
     }
-    function getRoleNames(roleIds) {
+    function getRoleNames(roleIds: number[]) {
       return _.join(
-        _.map(
-          roleIds,
-          (id) => _.find(state.roles, (role) => role.id === id).name_t,
-        ),
+        _.map(roleIds, (id) => {
+          const orgRole = _.find(
+            state.roles,
+            (role: OrganizationRole) => role.id === id,
+          );
+          return orgRole?.name_t;
+        }),
         ', ',
       );
     }
@@ -354,7 +369,7 @@ export default {
       state.isIncidentHidden = true;
       state.isCapabilityHidden = true;
     }
-    function isDataEmpty(data) {
+    function isDataEmpty(data: OrganizationStatistic) {
       return (
         (data.reported_count || 0) <= 0 &&
         (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
@@ -392,7 +407,7 @@ export default {
       isDataEmpty,
     };
   },
-};
+});
 </script>
 <style lang="postcss" scoped>
 .pew-pew-blue {

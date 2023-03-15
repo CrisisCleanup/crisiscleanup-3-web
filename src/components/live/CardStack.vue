@@ -26,12 +26,15 @@ import hexToRgba from 'hex-to-rgba';
 import EventCard from '@/components/live/EventCard.vue';
 
 interface Event {
+  id: string;
   past_tense_t: string;
   attr: Record<any, any>;
 }
 
 interface EventCardType {
   event: Event;
+  color: string,
+  strokeColor: string;
 }
 
 export default defineComponent({
@@ -39,18 +42,18 @@ export default defineComponent({
   components: { EventCard },
   setup() {
     const { t } = useI18n();
-    const $t = (text, attrs) => {
+    const $t = (text: string, attrs: Record<string, any>) => {
       return text ? t(text, attrs) : null;
     };
     const cards = ref<EventCardType[]>([]);
     function clearCards() {
       cards.value = [];
     }
-    function getTranslation(tag, attr) {
+    function getTranslation(tag: string, attr: Record<string, any>) {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]): [any, any] => [
           key,
-          key.endsWith('_t') ? $t(value as string) : value,
+          key.endsWith('_t') ? $t(value, {}) : value,
         ]),
       );
       return $t(tag, translated_attrs);

@@ -69,7 +69,7 @@
                 v-if="!loading"
                 :model-value="shapefileInfo[data.filename].shapefileKey"
                 @update:modelValue="
-                  (value) => {
+                  (value: string) => {
                     shapefileInfo[data.filename].shapefileKey = value;
                     shapefileInfo = { ...shapefileInfo };
                   }
@@ -83,7 +83,7 @@
               <textarea
                 :model-value="shapefileInfo[data.filename].shapefileCustomName"
                 @update:modelValue="
-                  (event) => {
+                  (event: any) => {
                     shapefileInfo[data.filename].shapefileCustomName =
                       event.target.value;
                     shapefileInfo = { ...shapefileInfo };
@@ -100,7 +100,7 @@
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileType"
                   @update:modelValue="
-                    (value) => {
+                    (value: string) => {
                       shapefileInfo[data.filename].shapefileType = value;
                       shapefileInfo = { ...shapefileInfo };
                     }
@@ -118,7 +118,7 @@
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileAccess"
                   @update:modelValue="
-                    (value) => {
+                    (value: string) => {
                       shapefileInfo[data.filename].shapefileAccess = value;
                       shapefileInfo = { ...shapefileInfo };
                     }
@@ -162,7 +162,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
@@ -172,7 +172,7 @@ import { getErrorMessage } from '../../utils/errors';
 import DragDrop from '../DragDrop.vue';
 import LocationType from '../../models/LocationType';
 
-export default {
+export default defineComponent({
   name: 'LayerUploadTool',
   components: { DragDrop },
   setup(props, { emit }) {
@@ -180,21 +180,22 @@ export default {
     const $toasted = useToast();
 
     const file = ref('');
-    const shapefileStructure = ref(null);
-    const fileList = ref([]);
+    const shapefileStructure = ref<Record<string, any> | null>(null);
+    const fileList = ref<File[]>([]);
     const loading = ref(false);
-    const shapefileInfo = ref({});
+    const shapefileInfo = ref<Record<string, any>>({});
 
     const locationTypes = computed(() => {
       return LocationType.all();
     });
 
     const shapefiles = computed(() => {
-      if (!shapefileStructure.value) {
+      const value = shapefileStructure.value;
+      if (!value) {
         return [];
       }
-      return Object.keys(shapefileStructure.value).map((item) => {
-        const { count, fields, sample } = shapefileStructure.value[item];
+      return Object.keys(value).map((item) => {
+        const { count, fields, sample } = value[item];
         return {
           filename: item,
           count,
@@ -204,16 +205,16 @@ export default {
       });
     });
 
-    function customSample(filename) {
+    function customSample(filename: string) {
       let returnString = shapefileInfo.value[filename].shapefileCustomName;
       const matches =
         shapefileInfo.value[filename].shapefileCustomName.match(/{.+?}/g);
       if (matches) {
-        const replaceArray = matches.map((match) =>
+        const replaceArray = matches.map((match: string) =>
           match.replace('{', '').replace('}', ''),
         );
         for (let i = 0; i <= replaceArray.length - 1; i++) {
-          if (shapefileStructure.value[filename].sample[replaceArray[i]]) {
+          if (shapefileStructure.value && shapefileStructure.value[filename].sample[replaceArray[i]]) {
             returnString = returnString.replace(
               `{${replaceArray[i]}}`,
               shapefileStructure.value[filename].sample[replaceArray[i]],
@@ -223,7 +224,7 @@ export default {
       }
       return returnString;
     }
-    async function handleFileUpload(f) {
+    async function handleFileUpload(f: File[]) {
       fileList.value = f;
       if (f.length === 0) {
         return;
@@ -241,11 +242,13 @@ export default {
         },
       );
       shapefileStructure.value = result.data;
-      for (const key of Object.keys(shapefileStructure.value)) {
+      if (shapefileStructure.value) {
+        for (const key of Object.keys(shapefileStructure.value)) {
         shapefileInfo.value[key] = { showingSampleModal: false };
       }
+      }
     }
-    async function uploadShapefile(filename) {
+    async function uploadShapefile(filename: string) {
       if (!validateUpload(filename)) {
         return;
       }
@@ -288,7 +291,7 @@ export default {
         await $toasted.error(getErrorMessage(error));
       }
     }
-    function validateUpload(filename) {
+    function validateUpload(filename: string) {
       if (
         !shapefileInfo.value[filename].shapefileCustomName &&
         !shapefileInfo.value[filename].shapefileKey
@@ -323,7 +326,7 @@ export default {
       validateUpload,
     };
   },
-};
+});
 </script>
 
 <style scoped>

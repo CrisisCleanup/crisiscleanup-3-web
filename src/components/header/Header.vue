@@ -19,7 +19,7 @@
             select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded p-2"
             item-key="id"
             label="name"
-            @update:modelValue="(payload) => $emit('update:incident', payload)"
+            @update:modelValue="(payload: string) => $emit('update:incident', payload)"
           >
             <template #list-header>
               <div
@@ -37,7 +37,7 @@
             </template>
           </BaseSelect>
           <div class="flex ml-2 font-bold mt-2">
-            <span>{{ $t($route.name) }}</span>
+            <span>{{ $t($route.name as string) }}</span>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -120,7 +120,7 @@ export default {
     const currentUser = computed(() => User.find(store.getters['auth/userId']));
     async function showCurrentUser() {
       await component({
-        title: `User: ${currentUser.value.id} | ${currentUser.value.first_name} ${currentUser.value.last_name}`,
+        title: `User: ${currentUser?.value?.id} | ${currentUser?.value?.first_name} ${currentUser?.value?.last_name}`,
         component: JsonWrapper,
         classes: 'w-full h-96',
         props: {
@@ -147,7 +147,7 @@ export default {
       $can,
       showRedeployModal,
       showCurrentUser,
-      $t: (text) => {
+      $t: (text: string) => {
         return text ? t(text) : null;
       },
       showCurrentIncidentStates,

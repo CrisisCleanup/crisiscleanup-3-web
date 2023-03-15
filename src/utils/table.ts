@@ -5,6 +5,10 @@
 import _ from 'lodash';
 
 type ColumnT = {
+titleClass: string;
+class: string;
+style: { border: number; };
+headerStyle: { border: number; };
   dataIndex: string;
   key: string;
   title: string;

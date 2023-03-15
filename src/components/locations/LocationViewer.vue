@@ -2,15 +2,16 @@
   <div id="map" ref="map" />
 </template>
 
-<script>
+<script lang="ts">
 import * as L from 'leaflet';
 import { nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { mapTileLayer } from '@/utils/map';
 import '@/external/Leaflet.GoogleMutant/index';
 import { templates } from '@/icons/icons_templates';
+import type { LeafletEvent } from 'leaflet';
 
-export default {
+export default defineComponent({
   name: 'LocationViewer',
   props: {
     location: {
@@ -25,7 +26,7 @@ export default {
   },
   emits: ['updatedLocation'],
   setup(props, { emit }) {
-    const map = ref(null);
+    const map = ref<L.Map | null>(null);
     const markerLayer = ref(L.layerGroup());
     const { t } = useI18n();
 
@@ -46,14 +47,15 @@ export default {
       const markerLocation = props.location;
 
       markerLayer.value.clearLayers();
-      const marker = new L.marker(
+      const marker = new (L.marker as any)(
         [markerLocation.coordinates[1], markerLocation.coordinates[0]],
         { draggable: 'true', icon: svgIcon },
-      ).addTo(markerLayer.value);
-      marker.on('dragend', (event) => {
+      );
+      marker.addTo(markerLayer.value);
+      marker.on('dragend', (event: LeafletEvent) => {
         emit('updatedLocation', event.target.getLatLng());
       });
-      map.value.setView(
+      map.value?.setView(
         [markerLocation.coordinates[1], markerLocation.coordinates[0]],
         15,
       );
@@ -71,11 +73,13 @@ export default {
           zoomControl: false,
         }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 3);
         if (props.useGoogleMaps) {
-          L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map.value);
+          L.gridLayer
+            .googleMutant({ type: 'roadmap' })
+            .addTo(map.value as L.Map);
         } else {
-          createTileLayer().addTo(map.value);
+          createTileLayer().addTo(map.value as L.Map);
         }
-        markerLayer.value.addTo(map.value);
+        markerLayer.value.addTo(map.value as L.Map);
         addMarkerToMap();
       });
     });
@@ -87,7 +91,7 @@ export default {
       addMarkerToMap,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

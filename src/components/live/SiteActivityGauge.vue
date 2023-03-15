@@ -2,7 +2,7 @@
   <div :id="chartId" ref="chart"></div>
 </template>
 
-<script lang="ts">
+<script>
 import * as d3 from 'd3';
 import { useI18n } from 'vue-i18n';
 import _ from 'lodash';

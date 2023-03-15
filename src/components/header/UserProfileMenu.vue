@@ -10,7 +10,7 @@
     >
       <div class="profile-menu__body flex cursor-pointer items-center">
         <Avatar
-          :initials="currentUser && currentUser.first_name"
+          :initials="currentUser ? currentUser.first_name: undefined"
           :url="currentUser && currentUser.profilePictureUrl"
           class="p-1"
           size="small"
@@ -57,12 +57,12 @@
     </v-popover>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { computed } from 'vue';
 import Avatar from '../Avatar.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'UserProfileMenu',
   components: { Avatar },
   props: {
@@ -86,7 +86,7 @@ export default {
       currentUser,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss"></style>

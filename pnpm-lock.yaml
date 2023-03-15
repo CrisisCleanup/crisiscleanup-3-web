@@ -25,6 +25,7 @@ specifiers:
   '@sentry/webpack-plugin': ^1.20.0
   '@sipec/vue3-tags-input': ^3.0.4
   '@turf/turf': ^6.5.0
+  '@types/geojson': ^7946.0.10
   '@types/leaflet': ^1.9.0
   '@types/leaflet.gridlayer.googlemutant': ^0.4.6
   '@types/leaflet.heat': ^0.2.1
@@ -67,6 +68,7 @@ specifiers:
   eslint-plugin-promise: ^6.0.0
   eslint-plugin-vue: ^9.8.0
   floating-vue: 2.0.0-beta.20
+  geojson: ^0.5.0
   happy-dom: ^8.1.1
   hex-to-rgba: ^2.0.1
   husky: ^8.0.2
@@ -153,6 +155,7 @@ dependencies:
   '@sentry/webpack-plugin': 1.20.0
   '@sipec/vue3-tags-input': 3.0.4_vue@3.2.41
   '@turf/turf': 6.5.0
+  '@types/geojson': 7946.0.10
   '@types/leaflet.gridlayer.googlemutant': 0.4.6
   '@types/leaflet.heat': 0.2.1
   '@vitejs/plugin-vue-jsx': 2.1.1_vite@4.0.3+vue@3.2.41
@@ -176,6 +179,7 @@ dependencies:
   dayjs: 1.11.7
   detect-browser-language: 0.0.2
   floating-vue: 2.0.0-beta.20_vue@3.2.41
+  geojson: 0.5.0
   hex-to-rgba: 2.0.1
   idb: 7.1.1
   jwt-decode: 3.1.2
@@ -3003,8 +3007,12 @@ packages:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: true
 
+  /@types/geojson/7946.0.10:
+    resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
+
   /@types/geojson/7946.0.8:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
+    dev: false
 
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
@@ -3037,7 +3045,7 @@ packages:
   /@types/leaflet/1.9.0:
     resolution: {integrity: sha512-7LeOSj7EloC5UcyOMo+1kc3S1UT3MjJxwqsMT1d2PTyvQz53w0Y0oSSk9nwZnOZubCmBvpSNGceucxiq+ZPEUw==}
     dependencies:
-      '@types/geojson': 7946.0.8
+      '@types/geojson': 7946.0.10
 
   /@types/lodash/4.14.186:
     resolution: {integrity: sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw==}
@@ -5616,6 +5624,11 @@ packages:
       '@turf/meta': 6.5.0
       '@types/geojson': 7946.0.8
       rbush: 3.0.1
+    dev: false
+
+  /geojson/0.5.0:
+    resolution: {integrity: sha512-/Bx5lEn+qRF4TfQ5aLu6NH+UKtvIv7Lhc487y/c8BdludrCTpiWf9wyI0RTyqg49MFefIAvFDuEi5Dfd/zgNxQ==}
+    engines: {node: '>= 0.10'}
     dev: false
 
   /get-caller-file/2.0.5:

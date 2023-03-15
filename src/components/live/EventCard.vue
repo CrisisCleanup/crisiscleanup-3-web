@@ -33,13 +33,13 @@ export default {
   },
   setup() {
     const { t } = useI18n();
-    const $t = (text, attrs) => {
+    const $t = (text:string, attrs: Record<string, any>) => {
       return text ? t(text, attrs) : null;
     };
 
     function getEventTitle(event_key: string) {
       if (event_key) {
-        return $t(`events.${event_key.replace(':', '_')}`);
+        return $t(`events.${event_key.replace(':', '_')}`, {});
       }
       return event_key;
     }
@@ -47,7 +47,7 @@ export default {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [
           key,
-          key.endsWith('_t') ? $t(value as string) : value,
+          key.endsWith('_t') ? $t(value, {}) : value,
         ]),
       );
       return $t(tag, translated_attrs);

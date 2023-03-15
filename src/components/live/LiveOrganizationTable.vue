@@ -74,7 +74,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { nFormatter } from '@/utils/helpers';
 import { makeTableColumns } from '@/utils/table';
@@ -83,6 +83,7 @@ import earthGlobe from '@/assets/icons/earth-globe.svg';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
 import Table from '@/components/Table.vue';
 import OrganizationActivityModal from '@/components/live/OrganizationActivityModal.vue';
+import Organization from '@/models/Organization';
 
 export default {
   name: 'LiveOrganizationTable',
@@ -110,7 +111,7 @@ export default {
     const isOrgActivityModalHidden = ref(true);
 
     const orgInfo = reactive({
-      generalInfo: {},
+      generalInfo: {} as Record<string, any>,
       incidents: [],
       capability: [],
     });
@@ -141,7 +142,7 @@ export default {
       };
     });
 
-    async function getOrganization(organization_id) {
+    async function getOrganization(organization_id: string) {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -154,7 +155,7 @@ export default {
       );
       return response.data;
     }
-    async function getOrganizationCapabilities(organization_id) {
+    async function getOrganizationCapabilities(organization_id: string) {
       const response = await axios.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -162,7 +163,7 @@ export default {
       );
       return response.data.results;
     }
-    async function getOrganizationStatisticsByIncident(organization_id) {
+    async function getOrganizationStatisticsByIncident(organization_id: string) {
       const { start_date, end_date } = props.queryFilter;
       const params = {
         start_date: start_date.format('YYYY-MM-DD'),
@@ -179,7 +180,7 @@ export default {
       return response.data;
     }
 
-    function getLogoUrl(organization) {
+    function getLogoUrl(organization: Organization) {
       if (organization.files.length > 0) {
         const logos = organization.files.filter(
           (file) => file.file_type_t === 'fileTypes.logo',
@@ -191,7 +192,7 @@ export default {
       return earthGlobe;
     }
 
-    function isCaseDonutChartDataEmpty(data) {
+    function isCaseDonutChartDataEmpty(data: { reported_count: any; claimed_count: any; closed_count: any; }): boolean {
       // check if chart data is 0 for all sections
       return (
         (data.reported_count || 0) <= 0 &&
@@ -200,7 +201,7 @@ export default {
       );
     }
 
-    async function onRowClick(item) {
+    async function onRowClick(item: Organization) {
       isOrgActivityModalLoading.value = true;
       const organization = await getOrganization(item.id);
       orgInfo.generalInfo = item;

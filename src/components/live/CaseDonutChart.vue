@@ -2,12 +2,12 @@
   <div :id="chartId" ref="chart"></div>
 </template>
 
-<script>
-import { reactive, onMounted } from 'vue';
+<script lang="ts">
+import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-export default {
+export default defineComponent({
   name: 'CaseDonutChart',
   props: {
     chartData: {
@@ -52,7 +52,7 @@ export default {
         .range(['#ffffff', '#61F8B0', '#F79820']);
 
       // Compute the position of each group on the pie:
-      const pie = d3.pie().value((d) => d[1]);
+      const pie = d3.pie().value((d: string[]) => d[1]);
 
       const data_ready = pie(Object.entries(props.chartData));
 
@@ -68,7 +68,7 @@ export default {
             .innerRadius(height / 5) // This is the size of the donut hole
             .outerRadius(radius),
         )
-        .attr('fill', (d) => color(d.data[0]))
+        .attr('fill', (d: { data: any[]; }) => color(d.data[0]))
         .attr('stroke', 'black')
         .style('stroke-width', '1px')
         .style('opacity', 0.7);
@@ -78,5 +78,5 @@ export default {
       chart,
     };
   },
-};
+});
 </script>

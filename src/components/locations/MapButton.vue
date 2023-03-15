@@ -33,8 +33,10 @@
     </template>
   </v-popover>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { PropType } from 'vue';
+
+export default defineComponent({
   name: 'MapButton',
   props: {
     buttonClass: {
@@ -66,13 +68,13 @@ export default {
       default: false,
     },
     actions: {
-      type: Array,
+      type: Array as PropType<{id: string, text: string}[]>,
       default: () => {
         return [];
       },
     },
   },
-};
+});
 </script>
 
 <style>

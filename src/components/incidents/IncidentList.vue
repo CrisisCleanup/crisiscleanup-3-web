@@ -44,11 +44,13 @@
   <div v-else>No Incidents Found</div>
 </template>
 <script lang="ts">
-export default {
+import { PropType } from 'vue';
+
+export default defineComponent({
   name: 'IncidentList',
   props: {
     incidentList: {
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       default: null,
     },
   },
@@ -70,5 +72,5 @@ export default {
       totalValue,
     };
   },
-};
+});
 </script>
