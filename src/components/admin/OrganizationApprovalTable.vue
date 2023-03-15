@@ -11,10 +11,10 @@
     <template #statuses="slotProps">
       <div class="w-full flex items-center text-primary-dark">
         <font-awesome-icon
+          v-if="slotProps.item.profile_completed"
           class="mx-1"
           size="lg"
           icon="check-circle"
-          v-if="slotProps.item.profile_completed"
         />
         <badge
           v-if="slotProps.item.is_verified"
@@ -105,10 +105,11 @@ export default defineComponent({
     },
     loading: Boolean,
   },
+  emits: ['reload'],
   setup(props, { emit }) {
     const { t } = useI18n();
     const { currentUser } = useCurrentUser();
-    const { confirm, prompt } = useDialogs();
+    const { confirm, organizationApproval } = useDialogs();
 
     async function getOrganizationContacts(organizationId: string) {
       const response = await axios.get(
@@ -137,21 +138,21 @@ export default defineComponent({
       });
     }
     async function approveOrganization(organizationId: string) {
-      const result = await prompt({
+      const result = await organizationApproval({
         title: t('actions.approve_organization'),
         content: t('orgApprovalTable.give_approve_reason'),
       });
-      if (result && typeof(result) !== 'string') {
+      if (result && typeof result !== 'string') {
         await Organization.api().approve(organizationId, result.reason);
         emit('reload');
       }
     }
     async function rejectOrganization(organizationId: string) {
-      const result = await prompt({
+      const result = await organizationApproval({
         title: t('actions.reject_organization'),
         content: t('orgApprovalTable.give_reject_reason'),
       });
-      if (result && typeof(result) !== 'string') {
+      if (result && typeof result !== 'string') {
         await Organization.api().reject(
           organizationId,
           result.reason,
