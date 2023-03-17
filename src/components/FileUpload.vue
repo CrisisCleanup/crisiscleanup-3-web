@@ -1,36 +1,36 @@
 <template>
   <div>
     <modal
-      closeable
-      @close="showingUploadModal = false"
       v-if="showingUploadModal"
+      closeable
       modal-classes="bg-white max-w-md shadow"
       :title="$t('fileUpload.upload_file')"
+      @close="showingUploadModal = false"
     >
       <div class="flex flex-col items-center p-3">
         <base-select
           :model-value="selectedModel"
           :options="Object.keys(fileAwareModels)"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @update:modelValue="(value) => (selectedModel = value)"
           :placeholder="$t('fileUpload.select_entity')"
+          @update:modelValue="(value) => (selectedModel = value)"
         />
 
         <base-select
           :model-value="uploadType"
           :options="fileTypes"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @update:modelValue="(value) => (uploadType = value)"
           item-key="value"
           label="name_t"
           :placeholder="$t('fileUpload.select_file_type')"
+          @update:modelValue="(value) => (uploadType = value)"
         />
 
         <OrganizationSearchInput
           v-if="selectedModel === 'Organization'"
           size="large"
-          @selectedOrganization="entityId = $event"
           class="bg-white h-12 mb-3 w-full"
+          @selectedOrganization="entityId = $event.id"
         />
 
         <base-select
@@ -40,15 +40,15 @@
           item-key="id"
           label="name_t"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
-          @update:modelValue="(value) => (entityId = value)"
           :placeholder="$t('fileUpload.select_report')"
+          @update:modelValue="(value) => (entityId = value)"
         />
 
         <DragDrop
+          :key="entityId"
           class="border w-72 bg-white"
           :choose-title="$t('dragDrop.choose_files')"
           :drag-title="$t('fileUpload.select_file_upload')"
-          :key="entityId"
           @files="handleFileUpload"
         >
           <template v-if="uploading">

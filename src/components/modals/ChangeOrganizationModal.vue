@@ -54,7 +54,7 @@
             <OrganizationSearchInput
               class="w-108"
               size="large"
-              @selectedOrganization="selectedOrganization = $event"
+              @selectedOrganization="selectedOrganization = $event.id"
             />
           </tab>
           <tab
@@ -228,7 +228,7 @@ import type { WorkType } from '@/models/types';
 export default defineComponent({
   name: 'ChangeOrganizationModal',
   components: { OrganizationSearchInput },
-emits: ['cancel'],
+  emits: ['cancel'],
 
   setup(props, context) {
     const { currentUser } = useCurrentUser();

@@ -38,12 +38,21 @@
             @tags-changed="(newTags: any) => (usersToInvite = newTags)"
           />
         </div>
-        <div v-if="isAdmin || (currentOrganization && currentOrganization.affiliates.length > 1)">
+        <div
+          v-if="
+            isAdmin ||
+            (currentOrganization && currentOrganization.affiliates.length > 1)
+          "
+        >
           <OrganizationSearchInput
             class="w-108"
-            :allowed-organization-ids="currentOrganization ? currentOrganization.affiliates: []"
+            :allowed-organization-ids="
+              currentOrganization ? currentOrganization.affiliates : []
+            "
             :is-admin="isAdmin"
-            @selectedOrganization="(id) => (selectedOrganization = id)"
+            @selectedOrganization="
+              (organization) => (selectedOrganization = organization.id)
+            "
           />
         </div>
       </div>
