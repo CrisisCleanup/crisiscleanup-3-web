@@ -112,10 +112,10 @@ import Worksite from '../../models/Worksite';
 import useWorktypeImages from '../../hooks/worksite/useWorktypeImages';
 import useConnectFirst from '../../hooks/useConnectFirst';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import { store } from '../../store';
 import usePhoneService from '../../hooks/phone/usePhoneService';
+import type { WorkType } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'ActiveCall',
   props: {
     caseId: {
@@ -148,12 +148,12 @@ export default {
       setPotentialFailedCall,
     } = useConnectFirst(context);
     const currentIncident = store.getters['incident/currentIncidentId'];
-    const cards = ref([]);
-    const connectingTimeout = ref(null);
-    function getSVG(worktype) {
+    const cards = ref<Record<string, any>[]>([]);
+    const connectingTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+    function getSVG(worktype: WorkType) {
       return getWorktypeSVG(worktype);
     }
-    function setCase(caseObject) {
+    function setCase(caseObject: Record<string, any> | null) {
       context.emit('setCase', caseObject);
     }
 
@@ -169,21 +169,21 @@ export default {
       () => call.value,
       (newValue) => {
         if (newValue && newValue.worksite) {
-          const c: Worksite = Worksite.find(newValue.worksite);
+          const c = Worksite.find(newValue.worksite) as Worksite;
           cards.value = [
             {
               name: c.name,
-              caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
+              caseNumber: c.case_number ?? `PDA-${c.id}`,
               address: c.short_address,
               state: c.state,
-              worktype: Worksite.getWorkType(c.work_types),
+              worktype: Worksite.getWorkType(c.work_types, null, null),
               fullAddress: c.full_address,
               id: c.id,
               type: c.case_number ? 'worksite' : 'pda',
               incident: c.incident,
               updated_at: c.updated_at,
             },
-          ] as any;
+          ];
         }
       },
     );
@@ -212,7 +212,9 @@ export default {
             phoneService.hangup();
           }, 45_000);
         } else {
-          clearTimeout(connectingTimeout.value);
+          clearTimeout(
+            connectingTimeout.value as ReturnType<typeof setTimeout>,
+          );
         }
       },
     );
@@ -236,7 +238,7 @@ export default {
       hangup,
     };
   },
-};
+});
 </script>
 
 <style>

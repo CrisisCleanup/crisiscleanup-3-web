@@ -15,20 +15,14 @@
       />
     </router-link>
 
-    <template v-for="r in navRoutes">
-      <a
-        v-if="r.external"
-        :key="r.title"
-        :alt="r.title"
-        :href="r.route"
-        target="_blank"
-      >
+    <template v-for="r in navRoutes" :key="r.title">
+      <a v-if="r.external" :alt="r.title" :href="r.route" target="_blank">
         <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
       </a>
-      <router-link v-else :key="r.title" :to="r.routeProps">
+      <router-link v-else :to="r.routeProps">
         <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
@@ -51,7 +45,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
@@ -59,7 +53,7 @@ import useNavigation from '@/hooks/useNavigation';
 import useAcl from '@/hooks/useAcl';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'PewPewNavBar',
   props: {
     colorMode: {
@@ -127,12 +121,15 @@ export default {
         ? 'nav'
         : 'publicNav';
       return _.map(_routeDefs, (value, key) => {
-        const { icon, disabled, title, route, external } = value;
+        const { icon, disabled, title, route, external } = value as Record<
+          string,
+          any
+        >;
         if (disabled === true) return false;
         let iconProps = { type: key };
         if (!_.isNil(icon)) {
           if (_.isObject(icon)) {
-            iconProps = icon;
+            iconProps = icon as any;
           } else {
             iconProps.type = icon;
           }
@@ -162,9 +159,9 @@ export default {
       routes,
       navRoutes,
       isLoggedIn,
-    };
+    } as Record<string, any>;
   },
-};
+});
 </script>
 <style lang="scss">
 .pewpew {

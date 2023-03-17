@@ -12,6 +12,10 @@ export default class PhoneOutbound extends Model {
 
   dnis1!: string;
 
+  location_name!: string;
+  
+  state_name!: string;
+
   static fields() {
     return {
       id: this.attr(''),

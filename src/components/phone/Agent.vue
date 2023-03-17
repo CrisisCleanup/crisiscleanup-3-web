@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between mr-3">
       <div class="flex items-start justify-start">
         <div class="flex ml-4">
-          <base-text variant="bodysm">{{ currentUser.mobile }}</base-text>
+          <base-text variant="bodysm" v-if="currentUser">{{ currentUser.mobile }}</base-text>
         </div>
       </div>
       <div class="py-3">
@@ -54,7 +54,7 @@
         :text="$t('phoneDashboard.stop_taking_calls')"
       ></base-button>
       <base-checkbox
-        v-if="currentUser.isAdmin"
+        v-if="currentUser && currentUser.isAdmin"
         class="p-0.5 ml-3"
         @update:modelValue="$emit('onToggleOutbounds', $event)"
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import LanguageTag from '../tags/LanguageTag.vue';

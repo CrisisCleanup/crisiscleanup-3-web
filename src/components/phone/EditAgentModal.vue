@@ -21,7 +21,7 @@
           size="medium"
           placeholder="+1 (000) 000-0000"
           :validator="validatePhoneNumber"
-          @update:modelValue="(value) => (phoneNumber = value)"
+          @update:modelValue="(value: string) => (phoneNumber = value)"
         />
       </div>
       <div class="section flex flex-col">
@@ -39,7 +39,7 @@
           size="large"
           select-classes="bg-white border text-xs p-1 profile-select"
           :limit="2"
-          @update:modelValue="(value) => (languages = value)"
+          @update:modelValue="(value: string[]) => (languages = value)"
         />
       </div>
     </div>
@@ -56,7 +56,7 @@
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import Language from '../../models/Language';
@@ -64,16 +64,16 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 import useConnectFirst from '../../hooks/useConnectFirst';
 import useValidation from '../../hooks/useValidation';
 
-export default {
+export default defineComponent({
   name: 'EditAgentModal',
   setup(props, context) {
     const number = ref('');
-    const languages = ref([]);
+    const languages = ref<string[]>([]);
     const phoneNumber = ref('');
     const { currentUser, updateCurrentUser, saveCurrentUser } =
       useCurrentUser();
     const { loadAgent } = useConnectFirst(context);
-    const { validatePhoneNumber } = useValidation(context);
+    const { validatePhoneNumber } = useValidation();
     const $toasted = useToast();
 
     async function updateUserNeeded() {
@@ -91,7 +91,7 @@ export default {
         await saveCurrentUser();
         await loadAgent();
         context.emit('cancel');
-      } catch (error) {
+      } catch (error: any) {
         // this.$log.error('Failed to save user', e);
         $toasted.error(error);
       }
@@ -100,12 +100,12 @@ export default {
     const supportedLanguages = computed(() => {
       const languages = Language.all();
       const ids = new Set([2, 7]);
-      return languages.filter((l) => ids.has(l.id));
+      return languages.filter((l) => ids.has(Number(l.id)));
     });
 
     onMounted(() => {
-      phoneNumber.value = currentUser.mobile;
-      languages.value = currentUser.languages.map((l) => l.id);
+      phoneNumber.value = currentUser?.mobile || '';
+      languages.value = currentUser?.languages.map((l) => l.id) || [];
     });
 
     return {
@@ -118,7 +118,7 @@ export default {
     };
   },
   mounted() {},
-};
+});
 </script>
 
 <style scoped lang="scss">

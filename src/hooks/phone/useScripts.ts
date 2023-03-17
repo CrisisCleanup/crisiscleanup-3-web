@@ -29,7 +29,7 @@ const Scripts = Object.freeze({
 type UseScriptsProps = {
   callType: typeof CallType;
   incident: typeof Incident;
-  recentWorksite?: typeof Worksite;
+  recentWorksite?: Record<string, any>;
 };
 
 export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {

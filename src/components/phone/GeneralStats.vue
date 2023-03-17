@@ -52,7 +52,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment';
@@ -66,7 +66,7 @@ import useDialogs from '../../hooks/useDialogs';
 import AjaxTable from '../AjaxTable.vue';
 import Language from '@/models/Language';
 
-export default {
+export default defineComponent({
   name: 'GeneralStats',
   setup(props, context) {
     const { component } = useDialogs();
@@ -86,7 +86,7 @@ export default {
         modalClasses: 'bg-white max-w-3xl shadow',
         id: 'outbound_list',
         listeners: {
-          rowClick: (payload) => {
+          rowClick: (payload: Record<string, any>) => {
             emitter.emit('phone_component:close');
             emitter.emit('modal_component:close', 'outbound_list');
             emitter.emit('phone_component:open', 'dialer');
@@ -106,9 +106,8 @@ export default {
               '1fr',
               t('phoneDashboard.location'),
               {
-                transformer: (_, item) => {
-                  return `${item.location_name || ''} ${item.state_name}`;
-                },
+                transformer: (_: string, item: PhoneOutbound) =>
+                  `${item.location_name || ''} ${item.state_name}`,
               },
             ],
             [
@@ -116,7 +115,7 @@ export default {
               '1fr',
               t('phoneDashboard.incident'),
               {
-                transformer: (field) => {
+                transformer: (field: any) => {
                   const incident = Incident.find(field[0]);
                   if (incident) {
                     return `${incident.name}`;
@@ -130,7 +129,7 @@ export default {
               '1fr',
               t('phoneDashboard.last_called_at'),
               {
-                transformer: (field) => {
+                transformer: (field: any) => {
                   return moment(field).fromNow();
                 },
               },
@@ -160,7 +159,7 @@ export default {
       setInterval(() => {
         updateCallbacks();
       }, 30_000);
-      emitter.on('phone:agents_online', (count) => {
+      emitter.on('phone:agents_online', (count: any) => {
         agentsOnline.value = count;
       });
     });
@@ -177,13 +176,15 @@ export default {
 
     const statsPerQueue = computed(() => {
       return Object.entries(availableQueues).map(([key, value]) => {
-        const statistics = gateStats.value.find((element) => {
-          return String(value) === String(element.queueId);
-        });
+        const statistics = gateStats.value.find(
+          (element: Record<string, any>) => {
+            return String(value) === String(element.queueId);
+          },
+        );
         if (statistics) {
-          return { ...statistics, language: Language.find(key).name_t };
+          return { ...statistics, language: Language.find(key)?.name_t };
         }
-        return { language: Language.find(key).name_t };
+        return { language: Language.find(key)?.name_t };
       });
     });
 
@@ -197,7 +198,7 @@ export default {
       stats,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

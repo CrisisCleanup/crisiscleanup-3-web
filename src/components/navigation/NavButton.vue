@@ -27,12 +27,12 @@
   </router-link>
 </template>
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
-export default {
+export default defineComponent({
   name: 'NavButton',
   props: {
     route: {
@@ -55,7 +55,9 @@ export default {
 
     const routeName = useRoute().name;
     const isActive = computed(() =>
-      routeName ? t(routeName).includes(props.route.key.toLowerCase()) : false,
+      routeName
+        ? t(routeName as string).includes(props.route.key.toLowerCase())
+        : false,
     );
 
     return {
@@ -64,7 +66,7 @@ export default {
       routeName,
     };
   },
-};
+});
 </script>
 
 <style scoped>

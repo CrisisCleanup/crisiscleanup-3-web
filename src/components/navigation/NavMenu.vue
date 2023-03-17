@@ -8,24 +8,25 @@
 
     <div class="menu overflow-y-auto grid">
       <NavButton
-        class="overflow-y-auto"
         v-for="r in routes"
         :key="r.key"
+        class="overflow-y-auto"
         :route="r"
       />
     </div>
   </div>
 </template>
 
-<script>
-import NavButton from "./NavButton.vue";
+<script lang="ts">
+import type { PropType } from 'vue';
+import NavButton from './NavButton.vue';
 
 export default {
-  name: "NavMenu",
+  name: 'NavMenu',
   components: { NavButton },
   props: {
     routes: {
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       default: () => [],
     },
     logoRoute: {

@@ -33,16 +33,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import useConnectFirst from '../../hooks/useConnectFirst';
 import { formatSeconds } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'AgentStats',
   setup(props, context) {
     return { ...useConnectFirst(context), formatSeconds };
   },
-};
+});
 </script>
 
 <style scoped></style>

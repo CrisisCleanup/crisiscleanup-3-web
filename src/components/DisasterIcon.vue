@@ -1,5 +1,8 @@
 <template>
-  <div class="disaster-icon select-none cursor-pointer" @dblclick="toggleEasterEgg">
+  <div
+    class="disaster-icon select-none cursor-pointer"
+    @dblclick="toggleEasterEgg"
+  >
     <object
       v-if="randomEasterEgg"
       ref="icon"
@@ -26,15 +29,15 @@ import _ from 'lodash';
 import Incident from '@/models/Incident';
 import { EASTER_EGG_DISASTER_ICONS } from '@/constants';
 
-export default {
+export default defineComponent({
   name: 'DisasterIcon',
   props: {
     width: {
-      type: [Number, null],
+      type: Number,
       default: null,
     },
     height: {
-      type: [Number, null],
+      type: Number,
       default: null,
     },
     currentIncident: {
@@ -45,18 +48,10 @@ export default {
     },
   },
 
-  setup(props: {
-    currentIncident: {
-      incidentImage: any;
-      incident_type: string;
-      color: string;
-    };
-    width: null;
-    height: null;
-  }) {
+  setup(props) {
     const ready = ref(false);
-    const width_ = ref(null);
-    const height_ = ref(null);
+    const width_ = ref<number | null>(null);
+    const height_ = ref<number | null>(null);
     const randomEasterEgg = ref<string | null>(null);
     const icon = ref<HTMLObjectElement | null>(null);
 
@@ -92,11 +87,9 @@ export default {
 
     function setSize() {
       if (svgDocument.value) {
-        const svg = svgDocument.value.activeElement;
+        const svg = svgDocument.value.activeElement as any;
         if (svg) {
-          // @ts-ignore
           svg.attributes.width.nodeValue = width_.value;
-          // @ts-ignore
           svg.attributes.height.nodeValue = height_.value;
         }
       }
@@ -127,7 +120,7 @@ export default {
       randomEasterEgg,
     };
   },
-};
+});
 </script>
 
 <style>

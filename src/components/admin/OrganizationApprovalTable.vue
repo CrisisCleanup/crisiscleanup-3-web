@@ -49,7 +49,7 @@
           :alt="$t('actions.approve')"
           variant="solid"
           size="small"
-          class="mx-2"
+          class="mx-1"
           :action="
             () => {
               approveOrganization(slotProps.item.id);
@@ -61,7 +61,7 @@
           :alt="$t('actions.reject')"
           variant="outline"
           size="small"
-          class="mx-2"
+          class="mx-1"
           :action="
             () => {
               rejectOrganization(slotProps.item.id);
@@ -72,7 +72,7 @@
           v-if="currentUser && currentUser.isAdmin"
           :href="`/admin/organization/${slotProps.item.id}`"
           text-variant="bodysm"
-          class="px-2"
+          class="px-1"
           >{{ $t('actions.edit') }}</base-link
         >
       </div>
@@ -83,6 +83,7 @@
 <script lang="ts">
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import moment from 'moment/moment';
 import Table from '../Table.vue';
 import Organization from '../../models/Organization';
 import Incident from '../../models/Incident';
@@ -173,43 +174,52 @@ export default defineComponent({
           title: t('ID'),
           dataIndex: 'id',
           key: 'id',
-          width: '75px',
+          width: 'minmax(75px, 4%)',
         },
         {
           title: t('orgApprovalTable.name'),
           dataIndex: 'name',
           key: 'name',
-          width: '1.5fr',
+          width: 'minmax(200px, 12%)',
         },
         {
           title: t('orgApprovalTable.org_statuses'),
           dataIndex: 'statuses',
           key: 'statuses',
-          width: '0.75fr',
+          width: 'minmax(75px, 5%)',
         },
         {
           title: t('orgApprovalTable.website'),
           dataIndex: 'url',
           key: 'url',
-          width: '1fr',
+          width: 'minmax(125px, 12%)',
         },
         {
           title: t('adminOrganization.admin_notes'),
           dataIndex: 'admin_notes',
           key: 'admin_notes',
-          width: '2fr',
+          width: 'minmax(200px, 20%)',
         },
         {
           title: t('incidentApprovalTable.incident'),
           dataIndex: 'incidents',
           key: 'incidents',
-          width: '1fr',
+          width: 'minmax(120px, 15%)',
+        },
+        {
+          title: t('~~Requested At'),
+          dataIndex: 'created_at',
+          key: 'created_at',
+          width: 'minmax(120px, 17%)',
+          transformer: (requested_at: Date) => {
+            return moment(requested_at);
+          },
         },
         {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: '1.5fr',
+          width: 'minmax(125px, 15%)',
         },
       ],
     };
