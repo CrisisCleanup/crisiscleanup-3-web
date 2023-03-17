@@ -330,9 +330,9 @@ export default defineComponent({
     }
     function onChildChange(
       field: { children: FormField[] },
-      change: { added: { element: FormField } },
+      change: FormField[],
     ) {
-      field.children = [...field.children, change.added.element];
+      field.children = [...change];
       nextTick(() => {
         emit('change', internalList.value);
       });
