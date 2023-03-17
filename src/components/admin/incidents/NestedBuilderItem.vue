@@ -17,7 +17,7 @@
           <div class="handle min-w-max">
             <ccu-icon
               icon-classes="cursor-move"
-              :alt="$t('actions.drag')"
+              :alt="translate('actions.drag')"
               height="18"
               width="12"
               type="drag"
@@ -29,8 +29,8 @@
                 <SectionHeading
                   class="sm:bg-white"
                   :count="field.order_label"
-                  :tooltip="$t(field.help_t)"
-                  >{{ $t(field.label_t) }}
+                  :tooltip="translate(field.help_t)"
+                  >{{ translate(field.label_t) }}
                 </SectionHeading>
                 <base-button
                   :icon="showChildren[field.field_key] ? 'minus' : 'plus'"
@@ -48,7 +48,7 @@
               <div class="form-field flex items-center justify-between">
                 <base-checkbox>
                   <div class="text-base font-semibold">
-                    {{ $t(field.label_t) }}
+                    {{ translate(field.label_t) }}
                   </div>
                 </base-checkbox>
               </div>
@@ -56,16 +56,16 @@
             <template v-if="field.html_type === 'select'">
               <div :key="field.field_key" class="form-field">
                 <span slot="label" class="flex items-center">
-                  <span>{{ $t(field.label_t) }}</span>
+                  <span>{{ translate(field.label_t) }}</span>
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      content: $t(field.help_t),
+                      content: translate(field.help_t),
                       triggers: ['hover'],
                       popperClass: 'interactive-tooltip w-72',
                       html: true,
                     }"
-                    :alt="$t('actions.help_alt')"
+                    :alt="translate('actions.help_alt')"
                     type="help"
                     size="large"
                   />
@@ -76,7 +76,7 @@
                       field.values.map((item: Record<string, string>) => {
                         return {
                           value: item.value,
-                          name_t: $t(item.name_t),
+                          name_t: translate(item.name_t),
                         };
                       })) ||
                     getSelectValuesList(field.values_default_t)
@@ -90,16 +90,16 @@
             <template v-if="field.html_type === 'multiselect'">
               <div :key="field.field_key" class="form-field">
                 <span slot="label" class="flex items-center">
-                  <span>{{ $t(field.label_t) }}</span>
+                  <span>{{ translate(field.label_t) }}</span>
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      content: $t(field.help_t),
+                      content: translate(field.help_t),
                       triggers: ['hover'],
                       popperClass: 'interactive-tooltip w-72',
                       html: true,
                     }"
-                    :alt="$t('actions.help_alt')"
+                    :alt="translate('actions.help_alt')"
                     type="help"
                     size="large"
                   />
@@ -111,7 +111,7 @@
                       field.values.map((item: Record<string, string>) => {
                         return {
                           value: item.value,
-                          name_t: $t(item.name_t),
+                          name_t: translate(item.name_t),
                         };
                       })) ||
                     getSelectValuesList(field.values_default_t)
@@ -125,16 +125,18 @@
             <template v-if="field.html_type === 'text'">
               <div :key="field.field_key" class="form-field">
                 <base-input
-                  :tooltip="$t(field.help_t)"
+                  :tooltip="translate(field.help_t)"
                   size="large"
                   :break-glass="field.read_only_break_glass"
-                  :placeholder="$t(field.placeholder_t) || $t(field.label_t)"
+                  :placeholder="
+                    translate(field.placeholder_t) || translate(field.label_t)
+                  "
                 />
               </div>
             </template>
             <template v-if="field.html_type === 'cronselect'">
               <div class="form-field">
-                <div class="mb-1">{{ $t(field.label_t) }}</div>
+                <div class="mb-1">{{ translate(field.label_t) }}</div>
                 <RecurringSchedule
                   :value="field.recur_default"
                   :is-default="false"
@@ -146,23 +148,25 @@
                 <autocomplete
                   tooltip="info"
                   display-property="description"
-                  :placeholder="$t(field.placeholder_t) || $t(field.label_t)"
+                  :placeholder="
+                    translate(field.placeholder_t) || translate(field.label_t)
+                  "
                 />
               </div>
             </template>
             <template v-if="field.html_type === 'textarea'">
               <div :key="field.field_key" class="form-field">
                 <span slot="label" class="flex items-center">
-                  <span>{{ $t(field.label_t) }}</span>
+                  <span>{{ translate(field.label_t) }}</span>
                   <ccu-icon
                     v-if="field.help_t"
                     v-tooltip="{
-                      content: $t(field.help_t),
+                      content: translate(field.help_t),
                       triggers: ['hover'],
                       html: true,
                       popperClass: 'interactive-tooltip w-72',
                     }"
-                    :alt="$t('actions.help_alt')"
+                    :alt="translate('actions.help_alt')"
                     type="help"
                     size="large"
                   />
@@ -171,22 +175,24 @@
                   text-area
                   :disabled="false"
                   :rows="4"
-                  :placeholder="$t(field.placeholder_t) || $t(field.label_t)"
+                  :placeholder="
+                    translate(field.placeholder_t) || translate(field.label_t)
+                  "
                 />
               </div>
             </template>
             <template v-if="field.html_type === 'checkbox'">
               <div :key="field.field_key" class="form-field flex items-center">
-                <base-checkbox>{{ $t(field.label_t) }}</base-checkbox>
+                <base-checkbox>{{ translate(field.label_t) }}</base-checkbox>
                 <ccu-icon
                   v-if="field.help_t"
                   v-tooltip="{
-                    content: $t(field.help_t),
+                    content: translate(field.help_t),
                     triggers: ['hover'],
                     html: true,
                     popperClass: 'interactive-tooltip w-72',
                   }"
-                  :alt="$t('actions.help_alt')"
+                  :alt="translate('actions.help_alt')"
                   type="help"
                   size="large"
                 />
@@ -196,7 +202,7 @@
           <div v-if="!['h4'].includes(field.html_type)" class="min-w-max">
             <div class="flex mr-2 justify-center w-full">
               <ccu-icon
-                :alt="$t('actions.edit')"
+                :alt="translate('actions.edit')"
                 size="small"
                 type="edit"
                 class="mx-2"
@@ -207,7 +213,7 @@
                 "
               />
               <ccu-icon
-                :alt="$t('actions.delete')"
+                :alt="translate('actions.delete')"
                 size="small"
                 type="trash"
                 class="mx-2"
@@ -241,7 +247,7 @@ import SectionHeading from '@/components/work/SectionHeading.vue';
 import RecurringSchedule from '@/components/RecurringSchedule.vue';
 import ItemEditor from '@/components/ItemEditor.vue';
 import useDialogs from '@/hooks/useDialogs';
-import { FormField } from '@/models/types';
+import type { FormField } from '@/models/types';
 
 export default defineComponent({
   name: 'NestedBuilderItem',
@@ -263,7 +269,7 @@ export default defineComponent({
       default: () => [],
     },
   },
-  emits: ["change", "update", "deleteItem"],
+  emits: ['change', 'update', 'deleteItem'],
   setup(props, { emit }) {
     const { t } = useI18n();
     const { component } = useDialogs();
@@ -302,7 +308,9 @@ export default defineComponent({
         },
       });
     }
-    function onListChange(change: { added: { element: { phase: number; children: FormField[]; }; }; }) {
+    function onListChange(change: {
+      added: { element: { phase: number; children: FormField[] } };
+    }) {
       if (change.added) {
         change.added.element.phase = 4;
         change.added.element.children = [];
@@ -312,13 +320,18 @@ export default defineComponent({
         emit('change', internalList.value);
       });
     }
-    function deleteItem(field: { children: FormField[]; }, key: string) {
-      field.children = field.children.filter((f: { field_key: string; }) => f.field_key !== key);
+    function deleteItem(field: { children: FormField[] }, key: string) {
+      field.children = field.children.filter(
+        (f: { field_key: string }) => f.field_key !== key,
+      );
       nextTick(() => {
         emit('change', internalList.value);
       });
     }
-    function onChildChange(field: { children: FormField[]; }, change: { added: { element: FormField; }; }) {
+    function onChildChange(
+      field: { children: FormField[] },
+      change: { added: { element: FormField } },
+    ) {
       field.children = [...field.children, change.added.element];
       nextTick(() => {
         emit('change', internalList.value);
@@ -353,7 +366,7 @@ export default defineComponent({
       deleteItem,
       onChildChange,
       dragOptions,
-      $t: (text: any) => {
+      translate: (text: any) => {
         return text ? t(text) : null;
       },
     };
