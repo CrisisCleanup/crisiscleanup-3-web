@@ -89,7 +89,7 @@
       <!-- Stats -->
       <div class="flex flex-row justify-around m-5">
         <div class="flex flex-col">
-          <h1 class="text-3xl font-bold text-center">1800+</h1>
+          <h1 class="text-3xl font-bold text-center">2,500+</h1>
           <base-text weight="300" variant="body" class="crisiscleanup-grey-500"
             >{{ $t('about.organizations') }}
           </base-text>
@@ -195,36 +195,6 @@
           >
           </base-text>
         </div>
-
-        <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/olgauzhykova.jpg" class="m-5" />
-          <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Olga Uzhykova</span><br />
-            {{ $t('about.olga_uzhykova_title') }}
-          </p>
-          <base-text
-            variant="body"
-            class="pt-2"
-            v-html="$t('about.olga_uzhykova_bio')"
-          >
-          </base-text>
-        </div>
-        <!-- End Card -->
-
-        <!-- StartCard -->
-        <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/mariiafilatova.jpg" class="m-5" />
-          <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Mariia Filatova</span><br />
-            {{ $t('about.mariia_filatova_title') }}
-          </p>
-          <base-text
-            variant="body"
-            class="pt-2"
-            v-html="$t('about.mariia_filatova_bio')"
-          >
-          </base-text>
-        </div>
         <!-- End Card -->
 
         <!-- StartCard -->
@@ -241,6 +211,23 @@
           >
           </base-text>
         </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/deeppanchal.jpg" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Deep Panchal</span><br />
+            {{ $t('about.deep_panchal_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.deep_panchal_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
 
         <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
@@ -276,15 +263,15 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/tylersanders.png" class="m-5" />
+          <img src="@/assets/headshots/quivan.jpg" class="m-5" />
           <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Tyler Sanders</span><br />
-            {{ $t('about.tyler_sanders_title') }}
+            <span class="font-bold">Qui Van</span><br />
+            {{ $t('about.qui_van_title') }}
           </p>
           <base-text
             variant="body"
             class="pt-2"
-            v-html="$t('about.tyler_sanders_bio')"
+            v-html="$t('about.qui_van_bio')"
           >
           </base-text>
         </div>
@@ -292,19 +279,20 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/marktregellas.jpg" class="m-5" />
+          <img src="@/assets/headshots/zacstout.jpeg" class="m-5" />
           <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Mark Tregellas</span><br />
-            {{ $t('about.mark_tregellas_title') }}
+            <span class="font-bold">Zac Stout</span><br />
+            {{ $t('about.zac_stout_title') }}
           </p>
           <base-text
             variant="body"
             class="pt-2"
-            v-html="$t('about.mark_tregellas_bio')"
+            v-html="$t('about.zac_stout_bio')"
           >
           </base-text>
         </div>
         <!-- End Card -->
+
       </div>
 
       <!-- Major Contributors -->
@@ -331,6 +319,38 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/olgauzhykova.jpg" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Olga Uzhykova</span><br />
+            {{ $t('about.olga_uzhykova_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.olga_uzhykova_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/mariiafilatova.jpg" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Mariia Filatova</span><br />
+            {{ $t('about.mariia_filatova_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.mariia_filatova_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
           <img src="@/assets/headshots/zacharystraub.jpg" class="m-5" />
           <p class="text-3xl px-0.5 pb-5">
             <span class="font-bold">Zachary Straub</span><br />
@@ -340,6 +360,38 @@
             variant="body"
             class="pt-2"
             v-html="$t('about.zachary_straub_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/tylersanders.png" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Tyler Sanders</span><br />
+            {{ $t('about.tyler_sanders_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.tyler_sanders_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/marktregellas.jpg" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Mark Tregellas</span><br />
+            {{ $t('about.mark_tregellas_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.mark_tregellas_bio')"
           >
           </base-text>
         </div>
