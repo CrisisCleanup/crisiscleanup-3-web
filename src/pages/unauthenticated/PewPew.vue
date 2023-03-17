@@ -33,7 +33,7 @@
                   </div>
                   <div class="h-40 w-full">
                     <SiteActivityGauge
-                      v-if="currentEngagement > 0"
+                      v-if="currentSiteStats.length > 0"
                       :key="currentEngagement"
                       class="h-full w-full"
                       :chart-data="currentEngagement"

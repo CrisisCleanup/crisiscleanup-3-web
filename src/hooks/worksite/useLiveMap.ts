@@ -59,7 +59,7 @@ export default (
   markers: (Sprite & Worksite & LiveSprite)[],
   liveEvents: (Sprite & Worksite)[],
   incident: Incident,
-  cadence = 0.03,
+  cadence = 0.015,
   reloadFunction: () => PromiseLike<any>,
   onCardAdded: (card: Record<any, any>) => void,
   onClearCards: () => void,

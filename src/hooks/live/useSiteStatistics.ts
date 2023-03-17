@@ -45,7 +45,8 @@ export default function useSiteStatistics(
       }/reports_data/pp_engagement?${queryString}`,
     );
     if (response.data.length > 0) {
-      currentEngagement.value = response.data[0].three_day_velocity * 100;
+      currentEngagement.value =
+        (response.data[0].three_day_velocity || 0) * 100;
     }
   }
   async function fetchSiteStatistics() {
