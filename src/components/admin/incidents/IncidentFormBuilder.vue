@@ -8,7 +8,7 @@
         select-classes="bg-white outline-none h-9 mb-3"
         item-key="id"
         label="name"
-        :placeholder="$t('incidentBuilder.select_template')"
+        :placeholder="translate('incidentBuilder.select_template')"
         @update:modelValue="
           (value: string) => {
             selectedIncidentTemplate = value;
@@ -38,7 +38,7 @@
     <div class="flex-1 mx-1">
       <base-input
         icon="search"
-        :placeholder="$t('incidentBuilder.search_elements')"
+        :placeholder="translate('incidentBuilder.search_elements')"
         class="mb-2"
         :model-value="elementSearch"
         @update:modelValue="search"
@@ -66,13 +66,13 @@
                   <div class="handle min-w-max mr-0.5">
                     <ccu-icon
                       icon-classes="cursor-move"
-                      :alt="$t('actions.drag')"
+                      :alt="translate('actions.drag')"
                       height="15"
                       width="10"
                       type="drag"
                     />
                   </div>
-                  {{ $t(field.label_t) }} ({{ field.html_type }})
+                  {{ translate(field.label_t) }} ({{ field.html_type }})
                 </div>
               </div>
             </template>
@@ -84,15 +84,14 @@
 </template>
 <script lang="ts">
 import Draggable from 'vuedraggable';
-import _ from 'lodash';
-import { debounce } from 'lodash';
+import _, { debounce } from 'lodash';
 import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { groupBy } from '@/utils/array';
 import { nest } from '@/utils/form';
 import NestedBuilderItem from '@/components/admin/incidents/NestedBuilderItem.vue';
-import { FormField } from '@/models/types';
+import type { FormField } from '@/models/types';
 
 export default defineComponent({
   name: 'IncidentFormBuilder',
@@ -127,7 +126,10 @@ export default defineComponent({
       formFields.value = response.data.filter(
         (field: FormField) => !['hidden', 'divend'].includes(field.html_type),
       );
-      fieldTree.value = _.sortBy(nest(formFields.value), (o: FormField) => o.list_order);
+      fieldTree.value = _.sortBy(
+        nest(formFields.value),
+        (o: FormField) => o.list_order,
+      );
       list.value = [...fieldTree.value];
       emit('onUpdateForm', list.value);
     }
@@ -213,6 +215,7 @@ export default defineComponent({
       search,
       groupedFields,
       fieldTree,
+      translate: useI18n().t,
     };
   },
 });
