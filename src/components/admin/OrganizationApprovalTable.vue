@@ -186,13 +186,13 @@ export default defineComponent({
           title: t('orgApprovalTable.org_statuses'),
           dataIndex: 'statuses',
           key: 'statuses',
-          width: 'minmax(75px, 5%)',
+          width: 'minmax(75px, 7%)',
         },
         {
           title: t('orgApprovalTable.website'),
           dataIndex: 'url',
           key: 'url',
-          width: 'minmax(125px, 12%)',
+          width: 'minmax(125px, 14%)',
         },
         {
           title: t('adminOrganization.admin_notes'),
@@ -210,16 +210,16 @@ export default defineComponent({
           title: t('~~Requested At'),
           dataIndex: 'created_at',
           key: 'created_at',
-          width: 'minmax(120px, 17%)',
+          width: 'minmax(120px, 10%)',
           transformer: (requested_at: Date) => {
-            return moment(requested_at);
+            return moment(requested_at).fromNow();
           },
         },
         {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: 'minmax(125px, 15%)',
+          width: 'minmax(125px, 18%)',
         },
       ],
     };
