@@ -192,6 +192,7 @@ export default defineComponent({
           title: t('orgApprovalTable.website'),
           dataIndex: 'url',
           key: 'url',
+          class: 'break-all',
           width: 'minmax(125px, 14%)',
         },
         {
