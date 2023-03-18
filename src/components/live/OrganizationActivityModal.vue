@@ -154,7 +154,10 @@
     <section class="incidents-section">
       <div
         class="flex justify-between items-center cursor-pointer"
-        @click="isIncidentHidden = !isIncidentHidden"
+        @click="
+          isIncidentHidden = !isIncidentHidden;
+          isCapabilityHidden = true;
+        "
       >
         <span>{{ $t('pewPew.incidents') }}</span>
         <font-awesome-icon
@@ -217,7 +220,10 @@
     <section class="capabilities-section">
       <div
         class="flex justify-between items-center cursor-pointer"
-        @click="isCapabilityHidden = !isCapabilityHidden"
+        @click="
+          isCapabilityHidden = !isCapabilityHidden;
+          isIncidentHidden = true;
+        "
       >
         <span>{{ $t('pewPew.capabilities') }}</span>
         <font-awesome-icon
@@ -248,14 +254,15 @@
 <script lang="ts">
 import _ from 'lodash';
 import { useI18n } from 'vue-i18n';
-import { PropType, reactive, toRefs } from 'vue';
+import type { PropType } from 'vue';
+import { reactive, toRefs } from 'vue';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
 import Table from '@/components/Table.vue';
 import { cachedGet } from '@/utils/promise';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
-import { OrganizationRole } from '@/models/types';
+import type { OrganizationRole } from '@/models/types';
 
 type OrganizationStatistic = {
   calls: number;
