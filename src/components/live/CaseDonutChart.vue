@@ -26,6 +26,7 @@ export default defineComponent({
   },
   setup(props) {
     const chart = ref(null);
+    const { t } = useI18n();
 
     onMounted(() => {
       // set the dimensions and margins of the graph
@@ -68,10 +69,23 @@ export default defineComponent({
             .innerRadius(height / 5) // This is the size of the donut hole
             .outerRadius(radius),
         )
-        .attr('fill', (d: { data: any[]; }) => color(d.data[0]))
+        .attr('fill', (d: { data: any[] }) => color(d.data[0]))
         .attr('stroke', 'black')
         .style('stroke-width', '1px')
-        .style('opacity', 0.7);
+        .style('opacity', 0.7)
+        .on('mouseover', function (event, d) {
+          d3.select(this).transition().duration(200).style('opacity', 1);
+          d3.select(this)
+            .append('title')
+            .text(
+              // d.data[0] represents labels i.e. Reported Cases, Closed Cases, etc
+              // d.data[1] represents total number of Reported/Closed cases
+              (d) => `${t(_.startCase(d.data[0]))}: ${t(d.data[1])}`,
+            );
+        })
+        .on('mouseout', function (event, d) {
+          d3.select(this).transition().duration(200).style('opacity', 0.7);
+        });
     });
 
     return {
