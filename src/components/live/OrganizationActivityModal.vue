@@ -43,6 +43,7 @@
                 triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -66,6 +67,7 @@
                 triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -91,6 +93,7 @@
                 triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -108,6 +111,7 @@
                 triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -125,6 +129,7 @@
                 triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -142,6 +147,7 @@
                 html: true,
                 triggers: ['click'],
                 popperClass: 'interactive-tooltip w-108',
+                autoHide: true,
               }"
               v-bind="helpTooltipAttrs"
             />
