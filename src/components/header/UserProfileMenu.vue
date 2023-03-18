@@ -10,7 +10,7 @@
     >
       <div class="profile-menu__body flex cursor-pointer items-center">
         <Avatar
-          :initials="currentUser ? currentUser.first_name: undefined"
+          :initials="currentUser ? currentUser.first_name : undefined"
           :url="currentUser && currentUser.profilePictureUrl"
           class="p-1"
           size="small"
@@ -60,7 +60,7 @@
 <script lang="ts">
 import { computed } from 'vue';
 import Avatar from '../Avatar.vue';
-import useCurrentUser from '@/hooks/useCurrentUser';
+import User from '@/models/User';
 
 export default defineComponent({
   name: 'UserProfileMenu',
@@ -72,7 +72,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { currentUser } = useCurrentUser();
+    const store = useStore();
+    const currentUser = computed(() => {
+      return User.find(store.getters['auth/userId']) as User;
+    });
 
     const styles = computed(() => ({
       title:

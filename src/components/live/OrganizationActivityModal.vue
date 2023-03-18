@@ -42,7 +42,7 @@
                 content: $t('pewPew.type_description'),
                 triggers: ['click'],
                 html: true,
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -65,7 +65,7 @@
                 content: $t('pewPew.role_description'),
                 triggers: ['click'],
                 html: true,
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -90,7 +90,7 @@
                 content: $t('pewPew.incidents_description'),
                 triggers: ['click'],
                 html: true,
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -107,7 +107,7 @@
                 content: $t('pewPew.cases_description'),
                 triggers: ['click'],
                 html: true,
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -124,7 +124,7 @@
                 content: $t('pewPew.call_description'),
                 triggers: ['click'],
                 html: true,
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />
@@ -141,7 +141,7 @@
                 content: $t('pewPew.value_description'),
                 html: true,
                 triggers: ['click'],
-                popperClass: 'interactive-tooltip w-auto',
+                popperClass: 'interactive-tooltip w-108',
               }"
               v-bind="helpTooltipAttrs"
             />

@@ -1,6 +1,7 @@
 <template>
   <div class="">
     <div
+      v-if="!isOrgActivityModalHidden"
       :class="isOrgActivityModalHidden ? 'translate-x-full' : 'translate-x-0'"
       class="w-full absolute top-0 right-0 flex justify-center transform transition duration-500"
       style="z-index: 1002"
@@ -83,7 +84,7 @@ import earthGlobe from '@/assets/icons/earth-globe.svg';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
 import Table from '@/components/Table.vue';
 import OrganizationActivityModal from '@/components/live/OrganizationActivityModal.vue';
-import Organization from '@/models/Organization';
+import type Organization from '@/models/Organization';
 
 export default {
   name: 'LiveOrganizationTable',
@@ -163,7 +164,9 @@ export default {
       );
       return response.data.results;
     }
-    async function getOrganizationStatisticsByIncident(organization_id: string) {
+    async function getOrganizationStatisticsByIncident(
+      organization_id: string,
+    ) {
       const { start_date, end_date } = props.queryFilter;
       const params = {
         start_date: start_date.format('YYYY-MM-DD'),
@@ -192,7 +195,11 @@ export default {
       return earthGlobe;
     }
 
-    function isCaseDonutChartDataEmpty(data: { reported_count: any; claimed_count: any; closed_count: any; }): boolean {
+    function isCaseDonutChartDataEmpty(data: {
+      reported_count: any;
+      claimed_count: any;
+      closed_count: any;
+    }): boolean {
       // check if chart data is 0 for all sections
       return (
         (data.reported_count || 0) <= 0 &&
