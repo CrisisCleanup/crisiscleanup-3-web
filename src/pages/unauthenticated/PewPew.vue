@@ -290,13 +290,17 @@
                   <transition name="fade">
                     <div
                       v-if="!isLegendHidden"
-                      class="flex flex-wrap justify-between"
+                      class="grid grid-cols-2 auto-cols-max justify-between"
                     >
                       <div
                         v-for="entry in displayedWorkTypeSvgs"
                         :key="entry.key"
-                        class="flex items-center w-1/2 mb-1 cursor-pointer hover:border-2"
-                        :class="entry.selected ? 'selected border-2' : 'my-1'"
+                        class="flex items-center mb-1 cursor-pointer p-1 hover:border-white border"
+                        :class="
+                          entry.selected
+                            ? 'selected border-white'
+                            : 'border-transparent'
+                        "
                         @click="
                           () => {
                             entry.selected = !entry.selected;
@@ -325,12 +329,12 @@
                     />
                   </div>
                   <div
-                    class="mapStats flex flex-nowrap items-center overflow-x-auto mb-2 px-3"
+                    class="mapStats grid grid-flow-col auto-cols-max items-center overflow-x-auto mb-2 px-3"
                   >
                     <div
                       v-for="item in mapStatistics"
                       :key="item['title']"
-                      class="w-auto p-1 px-3 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md"
+                      class="p-1 px-3 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md"
                       :style="item['style']"
                     >
                       <div class="text-center text-white text-xs opacity-50">

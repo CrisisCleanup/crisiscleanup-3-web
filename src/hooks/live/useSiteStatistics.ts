@@ -227,6 +227,7 @@ export default function useSiteStatistics(
         count: incidentStats.all.total,
         style: `border-color: ${mapStatisticsColors[0]}`,
         title: i18n.global.t('pewPew.all_cases'),
+        filter: '*',
       },
       {
         name: 'Unclaimed',
@@ -234,6 +235,7 @@ export default function useSiteStatistics(
         count: incidentStats.unclaimed.total,
         style: `border-color: ${mapStatisticsColors[1]}`,
         title: i18n.global.t('pewPew.unclaimed'),
+        filter: 'unclaimed',
       },
       {
         name: 'Claimed',
@@ -241,6 +243,7 @@ export default function useSiteStatistics(
         count: incidentStats.claimed.total,
         style: `border-color: ${mapStatisticsColors[2]}`,
         title: i18n.global.t('pewPew.claimed'),
+        filter: 'claimed',
       },
       {
         name: 'In Progress',
@@ -248,6 +251,7 @@ export default function useSiteStatistics(
         count: incidentStats.assigned.total,
         style: `border-color: ${mapStatisticsColors[3]}`,
         title: i18n.global.t('pewPew.in_progress'),
+        filter: 'in_progress',
       },
       {
         name: 'Partly Done',
@@ -255,6 +259,7 @@ export default function useSiteStatistics(
         count: incidentStats.partial.total,
         style: `border-color: ${mapStatisticsColors[4]}`,
         title: i18n.global.t('pewPew.partly_done'),
+        filter: 'partially-completed',
       },
       {
         name: 'Closed',
@@ -262,6 +267,7 @@ export default function useSiteStatistics(
         count: incidentStats.closed.total,
         style: `border-color: ${mapStatisticsColors[5]}`,
         title: i18n.global.t('pewPew.closed'),
+        filter: 'closed',
       },
       {
         name: 'Overdue',
