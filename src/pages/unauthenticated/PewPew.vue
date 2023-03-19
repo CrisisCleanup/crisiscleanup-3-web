@@ -493,6 +493,7 @@ import D3BarChart from '@/components/live/D3BarChart.vue';
 import LightTab from '@/components/tabs/LightTab.vue';
 import TotalCases from '@/components/live/TotalCases.vue';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar.vue';
+import User from '@/models/User';
 
 export default {
   name: 'PewPew',
@@ -731,6 +732,12 @@ export default {
     }
 
     onMounted(async () => {
+      try {
+        await User.api().get('/users/me', {});
+      } catch {
+        return undefined;
+      }
+
       getRecentIncidents().then((results) => {
         incidents.value = results;
       });

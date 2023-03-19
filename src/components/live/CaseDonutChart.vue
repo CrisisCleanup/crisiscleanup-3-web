@@ -73,7 +73,7 @@ export default defineComponent({
         .attr('stroke', 'black')
         .style('stroke-width', '1px')
         .style('opacity', 0.7)
-        .on('mouseover', function (event, d) {
+        .on('mouseover', function () {
           d3.select(this).transition().duration(200).style('opacity', 1);
           d3.select(this)
             .append('title')
@@ -83,7 +83,7 @@ export default defineComponent({
               (d) => `${t(_.startCase(d.data[0]))}: ${t(d.data[1])}`,
             );
         })
-        .on('mouseout', function (event, d) {
+        .on('mouseout', function () {
           d3.select(this).transition().duration(200).style('opacity', 0.7);
         });
     });

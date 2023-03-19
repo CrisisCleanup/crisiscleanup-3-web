@@ -22,12 +22,12 @@
           {{ r.title }}
         </div>
       </a>
-      <router-link v-else :to="r.routeProps">
+      <a v-else :href="r.routeProps">
         <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
-      </router-link>
+      </a>
     </template>
 
     <div v-if="!isLoggedIn" class="pewpew__navactions flex flex-col m-1 mt-6">
@@ -51,7 +51,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import useNavigation from '@/hooks/useNavigation';
 import useAcl from '@/hooks/useAcl';
-import useCurrentUser from '@/hooks/useCurrentUser';
+import User from '@/models/User';
 
 export default defineComponent({
   name: 'PewPewNavBar',
@@ -68,7 +68,7 @@ export default defineComponent({
     const isLoggedIn = computed(() => store.getters['auth/isLoggedIn']);
 
     const currentIncidentId = store.getters['incident/currentIncidentId'];
-    const { currentUser } = useCurrentUser();
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
 
     const { HomeNavigation, FooterNavigation } = useNavigation();
     const publicRoutes = computed(() => {
@@ -86,31 +86,45 @@ export default defineComponent({
     });
 
     const routes = computed(() => {
-      return {
-        dashboard: {},
+      const _routes = {
+        dashboard: {
+          route: { to: `/dashboard` },
+        },
         cases: {
           route: {
             name: 'nav.new_case',
             params: {
               incidentId: currentIncidentId,
             },
+            route: { to: `/incident/${currentIncidentId}/work` },
           },
         },
         phone: {
+          route: { to: `/phone` },
           disabled: !$can || !$can('phone_agent'),
         },
         organization: {
           title: 'nav.my_organization',
-          route: { name: 'nav.organization_invitations' },
+          route: {
+            name: 'nav.organization_invitations',
+            to: '/organization/invitations',
+          },
         },
-        other_organizations: { icon: 'otherorg' },
-        reports: {},
-        training: { icon: { type: 'info', invertColor: true } },
+        other_organizations: {
+          icon: 'otherorg',
+          route: { to: '/other_organizations' },
+        },
+        reports: { route: { to: '/reports' } },
+        training: {
+          icon: { type: 'info', invertColor: true },
+          route: { to: '/training' },
+        },
         admin: {
-          disabled: !(currentUser && currentUser.isAdmin),
-          route: { name: 'nav.admin_dashboard' },
+          disabled: !(currentUser?.value && currentUser?.value.isAdmin),
+          route: { name: 'nav.admin_dashboard', to: '/admin' },
         },
       };
+      return _routes;
     });
 
     const navRoutes = computed(() => {
@@ -120,12 +134,11 @@ export default defineComponent({
       const _routeRootKey = store.getters['auth/isLoggedIn']
         ? 'nav'
         : 'publicNav';
-      return _.map(_routeDefs, (value, key) => {
+      const map = _.map(_routeDefs, (value, key) => {
         const { icon, disabled, title, route, external } = value as Record<
           string,
           any
         >;
-        if (disabled === true) return false;
         let iconProps = { type: key };
         if (!_.isNil(icon)) {
           if (_.isObject(icon)) {
@@ -139,7 +152,7 @@ export default defineComponent({
         if (!_.isNil(title)) {
           _title = t(title);
         }
-        let routeProps = route;
+        let routeProps = route.to;
         if (!external && _.isNil(route)) {
           routeProps = { name: routeName };
         }
@@ -151,6 +164,7 @@ export default defineComponent({
           routeProps,
         };
       });
+      return map;
     });
 
     return {
