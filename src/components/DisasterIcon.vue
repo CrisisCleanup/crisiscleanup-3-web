@@ -7,7 +7,7 @@
       v-if="randomEasterEgg"
       ref="icon"
       type="image/svg+xml"
-      class="disaster-icon"
+      class="easter-egg"
       :data="randomEasterEgg"
       :style="style"
       @load="setStyle"
@@ -16,7 +16,7 @@
       v-else
       ref="icon"
       type="image/svg+xml"
-      class="disaster-icon"
+      class="standard-icon"
       :data="incidentImage"
       :style="style"
       @load="setStyle"
@@ -124,8 +124,11 @@ export default defineComponent({
 </script>
 
 <style>
-.disaster-icon object {
-  width: 40px;
-  height: 40px;
+.disaster-icon .standard-icon {
+  @apply w-10 h-10;
+}
+
+.disaster-icon .easter-egg {
+  @apply w-10 h-10;
 }
 </style>

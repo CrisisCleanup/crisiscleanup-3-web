@@ -1,0 +1,24 @@
+<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_8010_394312)">
+<path d="M48 22C48 34.1503 38.1503 44 26 44C13.8497 44 4 34.1503 4 22C4 9.84974 13.8497 0 26 0C38.1503 0 48 9.84974 48 22Z" fill="#009BFF"/>
+</g>
+<path d="M11 18.1914L19.8536 27.045C19.9473 27.1387 20.0745 27.1914 20.2071 27.1914H31.8045C31.9302 27.1914 32.0513 27.2387 32.1436 27.324L38.5 33.1914" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.5 32.1934C25.5 30.5934 23.1667 29.5267 22 29.1934H30.5C28.5 29.1934 27 31.1934 27 32.1934C27 34.1934 31 33.6934 31 35.6934H21.5C21.5 33.6934 25.5 34.1934 25.5 32.1934Z" fill="white"/>
+<path d="M33.0002 25.1911C33.5 25.1911 35 26.6909 37.5002 29.1911C39.6749 31.6909 40.707 28.8985 39.9999 28.1914C36.4999 24.6914 36.9999 21.1911 29.4999 21.1911C21.9999 21.1911 22.0002 17.1911 19.5002 19.6911C17.0002 22.1911 20.6972 25.1914 22.5 25.1914C26.0001 25.1914 27.4997 25.1911 33.0002 25.1911Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19.2539 15.2115C18.5426 15.3289 18 15.9468 18 16.6914C18 17.5198 18.6716 18.1914 19.5 18.1914C19.618 18.1914 19.7328 18.1778 19.8429 18.152C19.4424 19.3377 18.3209 20.1914 17 20.1914C15.3431 20.1914 14 18.8483 14 17.1914C14 15.5346 15.3431 14.1914 17 14.1914C17.8982 14.1914 18.7041 14.5861 19.2539 15.2115Z" fill="white"/>
+<ellipse cx="25.6896" cy="7.82469" rx="2.75242" ry="3" transform="rotate(-22.4559 25.6896 7.82469)" fill="white"/>
+<path d="M26.5 15.6927L27.5 20.1927C29.1 20.5927 31.6667 20.526 32.5 20.6927C32.5 20.3594 32.4 18.6934 32 16.6934C31.5 14.1934 29 8.69267 27 11.6927C25 14.6927 23.5 14.6927 22 15.1927C20.5 15.6927 20 17.6927 22.5 17.1927C24.5 16.7927 26 16.026 26.5 15.6927Z" fill="white"/>
+<path d="M19 16.3833C19 16.2166 19.6474 15.9828 20.0474 16.3828C20.4474 16.7828 21.5474 16.5496 22.0474 16.3828" stroke="white" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19 17.1934C19.1903 17.5191 20.2271 17.6173 20.1157 16.6337C20.0044 15.6501 21.2205 15.5511 21.8426 15.6248" stroke="white" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<filter id="filter0_d_8010_394312" x="0" y="0" width="52" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_8010_394312"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_8010_394312" result="shape"/>
+</filter>
+</defs>
+</svg>

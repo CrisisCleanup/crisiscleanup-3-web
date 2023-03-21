@@ -98,11 +98,23 @@ import tropicalStorm from './assets/disaster_icons/tropical-storm.svg';
 import virus from './assets/disaster_icons/virus.svg';
 import volcano from './assets/disaster_icons/volcano.svg';
 import wind from './assets/disaster_icons/wind.svg';
-import bigfoot from './assets/disaster_icons/bigfoot.svg';
 import dracula from './assets/disaster_icons/dracula.svg';
 import ufo from './assets/disaster_icons/ufo.svg';
 import velociraptor from './assets/disaster_icons/velociraptor.svg';
+import bigfoot from './assets/disaster_icons/bigfoot.svg';
 import zombies from './assets/disaster_icons/zombies.svg';
+
+import alien from './assets/disaster_icons/alien.svg';
+import asteriod from './assets/disaster_icons/asteriod.svg';
+import dentist from './assets/disaster_icons/dentist.svg';
+import gnome from './assets/disaster_icons/gnome.svg';
+import godzilla from './assets/disaster_icons/godzilla.svg';
+import killerclown from './assets/disaster_icons/killerclown.svg';
+import kingkong from './assets/disaster_icons/kingkong.svg';
+import lightning from './assets/disaster_icons/lightning.svg';
+import piranha from './assets/disaster_icons/piranha.svg';
+import sharknado from './assets/disaster_icons/sharknado.svg';
+import trex from './assets/disaster_icons/trex.svg';
 
 export const EASTER_EGG_DISASTER_ICONS = {
   bigfoot,
@@ -110,6 +122,17 @@ export const EASTER_EGG_DISASTER_ICONS = {
   ufo,
   velociraptor,
   zombies,
+  alien,
+  asteriod,
+  dentist,
+  gnome,
+  godzilla,
+  killerclown,
+  kingkong,
+  lightning,
+  piranha,
+  sharknado,
+  trex,
 };
 export const DISASTER_ICONS: Record<string, any> = {
   'contaminated-water': contaminatedWater,
