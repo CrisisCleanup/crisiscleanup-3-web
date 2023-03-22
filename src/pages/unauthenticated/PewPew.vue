@@ -732,12 +732,6 @@ export default {
     }
 
     onMounted(async () => {
-      try {
-        await User.api().get('/users/me', {});
-      } catch {
-        return undefined;
-      }
-
       getRecentIncidents().then((results) => {
         incidents.value = results;
       });
