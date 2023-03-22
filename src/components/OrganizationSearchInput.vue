@@ -12,9 +12,15 @@
     value-prop="id"
     :options="onOrganizationSearch"
     :clear-on-blur="false"
+    class="outline-none"
+    native-support
+    :class="[isInvalid ? 'invalid' : '']"
     @close="
       (select) => {
         const value = select.input.value;
+        if (value) {
+          isInvalid = false;
+        }
         $nextTick(() => {
           if (!Number.isInteger(select.textValue) && allowNew) {
             $emit('input', value);
@@ -24,6 +30,9 @@
     "
     @update:modelValue="
       (value) => {
+        if (value) {
+          isInvalid = false;
+        }
         if (Number.isInteger(value.id)) {
           $emit('selectedOrganization', value);
         } else {
@@ -77,6 +86,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const isInvalid = ref(false);
     async function onOrganizationSearch(value: string) {
       const parameters: Record<string, unknown> = {
         fields: 'id,name',
@@ -105,12 +115,39 @@ export default defineComponent({
       return results.entities?.organizations || [];
     }
 
+    onMounted(() => {
+      if (props.required) {
+        const input = document.querySelector(
+          '.multiselect-search',
+        ) as HTMLInputElement;
+        const form = document.querySelector('.form') as HTMLFormElement;
+        if (input) {
+          form?.addEventListener(
+            'invalid',
+            (event) => {
+              if (!input.value) {
+                isInvalid.value = true;
+                input.setCustomValidity('Please fill out this field');
+                input.focus();
+              }
+            },
+            true,
+          );
+        }
+      }
+    });
+
     return {
       onOrganizationSearch,
       log: console.log,
+      isInvalid,
     };
   },
 });
 </script>
 
-<style lang="postcss" scoped></style>
+<style lang="postcss" scoped>
+.form-field.invalid {
+  @apply border-crisiscleanup-red-100;
+}
+</style>
