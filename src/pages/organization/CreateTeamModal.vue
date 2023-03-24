@@ -408,18 +408,6 @@ export default defineComponent({
         );
       });
     };
-    const onCaseSearch = () => {
-      caseList.value = props.cases.filter((c) => {
-        return (
-          c.case_number
-            .toLowerCase()
-            .includes(currentCaseSearch.value.toLowerCase()) ||
-          c.work_type
-            .toLowerCase()
-            .includes(currentCaseSearch.value.toLowerCase())
-        );
-      });
-    };
     const generateTeamName = () => {
       team.value.name = uniqueNamesGenerator({
         dictionaries: [colors, adjectives, animals],
@@ -441,7 +429,6 @@ export default defineComponent({
       statusValueChange,
       saveTeam,
       onSearch,
-      onCaseSearch,
       generateTeamName,
     };
   },
