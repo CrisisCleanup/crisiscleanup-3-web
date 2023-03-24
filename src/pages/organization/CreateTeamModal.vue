@@ -269,7 +269,6 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
-import axios from 'axios';
 import { useToast } from 'vue-toastification';
 import type { PropType } from 'vue';
 import Team from '@/models/Team';
@@ -449,4 +448,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>
