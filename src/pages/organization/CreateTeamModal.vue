@@ -157,7 +157,7 @@
             icon="search"
             class="w-84 mr-4 mb-6"
             :placeholder="$t('actions.search')"
-            @input="onSearch"
+            @update:model-value="onSearch"
           ></base-input>
           <draggable
             v-model="usersList"
@@ -203,7 +203,7 @@
             icon="search"
             class="w-84 mr-4 mb-6"
             :placeholder="$t('actions.search')"
-            @input="getClaimedWorksites"
+            @update:model-value="getClaimedWorksites"
           ></base-input>
           <draggable
             v-model="worksites"
