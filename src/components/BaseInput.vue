@@ -197,6 +197,7 @@ export default defineComponent({
       default: '40',
     },
   },
+  emits: ['update:modelValue'],
 
   setup(props, context) {
     const id = ref(null);
