@@ -60,11 +60,7 @@
           type="link"
           :text="$t('teams.add_members')"
           :alt="$t('teams.add_members')"
-          :action="
-            () => {
-              view = 'users';
-            }
-          "
+          :action="() => (view = 'users')"
         />
 
         <base-text class="mb-2">{{
@@ -124,11 +120,7 @@
           type="link"
           :text="$t('teams.assign_cases')"
           :alt="$t('teams.assign_cases')"
-          :action="
-            () => {
-              view = 'cases';
-            }
-          "
+          :action="() => (view = 'cases')"
         />
         {{ view }}
 
@@ -411,30 +403,26 @@ export default defineComponent({
       }
     };
     const onSearch = () => {
-      usersList.value = [
-        ...props.users.filter((user) => {
-          return (
-            user.full_name
-              .toLowerCase()
-              .includes(currentSearch.value.toLowerCase()) ||
-            user.email.toLowerCase().includes(currentSearch.value.toLowerCase())
-          );
-        }),
-      ];
+      usersList.value = props.users.filter((user) => {
+        return (
+          user.full_name
+            .toLowerCase()
+            .includes(currentSearch.value.toLowerCase()) ||
+          user.email.toLowerCase().includes(currentSearch.value.toLowerCase())
+        );
+      });
     };
     const onCaseSearch = () => {
-      caseList.value = [
-        ...props.cases.filter((c) => {
-          return (
-            c.case_number
-              .toLowerCase()
-              .includes(currentCaseSearch.value.toLowerCase()) ||
-            c.work_type
-              .toLowerCase()
-              .includes(currentCaseSearch.value.toLowerCase())
-          );
-        }),
-      ];
+      caseList.value = props.cases.filter((c) => {
+        return (
+          c.case_number
+            .toLowerCase()
+            .includes(currentCaseSearch.value.toLowerCase()) ||
+          c.work_type
+            .toLowerCase()
+            .includes(currentCaseSearch.value.toLowerCase())
+        );
+      });
     };
     const generateTeamName = () => {
       team.value.name = uniqueNamesGenerator({
