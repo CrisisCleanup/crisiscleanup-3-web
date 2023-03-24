@@ -300,7 +300,7 @@ export default defineComponent({
   emits: ['saved', 'close', 'reloadMap', 'reloadTable'],
   setup(props, ctx) {
     const $toasted = useToast();
-    const $http = axios;
+    const ccuApi = useApi();
     const store = useStore();
     const currentUser = computed(
       () => User.find(store.getters['auth/userId']) as User,
@@ -380,17 +380,14 @@ export default defineComponent({
           for (const w of teamWorksites.value) {
             for (const wt of w.work_types) {
               if (wt.claimed_by === currentUser.value.organization.id) {
-                promises.push(
-                  $http.post(
-                    `${
-                      import.meta.env.VITE_APP_API_BASE_URL
-                    }/worksite_work_types_teams`,
-                    {
-                      team: _team.id,
-                      worksite_work_type: wt.id,
-                    },
-                  ),
-                );
+                const { success } = ccuApi('/worksite_work_types_teams', {
+                  method: 'POST',
+                  data: {
+                    team: _team.id,
+                    worksite_work_type: wt.id,
+                  },
+                });
+                promises.push(success());
               }
             }
           }
