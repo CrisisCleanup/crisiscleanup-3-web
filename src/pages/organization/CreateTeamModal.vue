@@ -123,28 +123,6 @@
           :action="() => (view = 'cases')"
         />
         {{ view }}
-
-        <div class="flex py-4">
-          <base-button
-            :alt="$t('actions.cancel')"
-            class="px-4 p-2 border border-black mx-2"
-            :action="
-              () => {
-                $emit('close');
-              }
-            "
-          >
-            {{ $t('actions.cancel') }}
-          </base-button>
-          <base-button
-            :alt="$t('actions.create')"
-            variant="solid"
-            class="px-4 p-2 mx-2"
-            :action="saveTeam"
-          >
-            {{ $t('actions.create') }}
-          </base-button>
-        </div>
       </div>
       <div class="p-2">
         <template v-if="view === 'users'">
@@ -257,7 +235,29 @@
         </template>
       </div>
     </div>
-    <span slot="footer" />
+    <template #footer>
+      <div class="flex py-4 justify-center items-center">
+        <base-button
+          :alt="$t('actions.cancel')"
+          class="px-4 p-2 border border-black mx-2"
+          :action="
+            () => {
+              $emit('close');
+            }
+          "
+        >
+          {{ $t('actions.cancel') }}
+        </base-button>
+        <base-button
+          :alt="$t('actions.create')"
+          variant="solid"
+          class="px-4 p-2 mx-2"
+          :action="saveTeam"
+        >
+          {{ $t('actions.create') }}
+        </base-button>
+      </div>
+    </template>
   </modal>
 </template>
 
