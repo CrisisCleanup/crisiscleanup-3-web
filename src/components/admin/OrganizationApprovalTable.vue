@@ -208,7 +208,7 @@ export default defineComponent({
           width: 'minmax(120px, 15%)',
         },
         {
-          title: t('~~Requested At'),
+          title: t('incidentApprovalTable.requested_at'),
           dataIndex: 'created_at',
           key: 'created_at',
           width: 'minmax(120px, 10%)',
