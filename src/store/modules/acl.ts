@@ -32,7 +32,7 @@ const mutations = {
 
     state.acl.rule(
       `development_mode`,
-      import.meta.env.NODE_ENV !== 'production',
+      ['development', 'staging'].includes(import.meta.env.NODE_ENV),
     );
     state.acl.rule(`app_stage.${import.meta.env.VITE_APP_STAGE}`, true);
 
