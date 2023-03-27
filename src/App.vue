@@ -86,13 +86,14 @@ export default defineComponent({
     }
 
     watch(
-      () => route,
-      (to) => {
-        const newTitle = `${t(to?.name?.toString() || '')}: Crisis Cleanup`;
+      () => route.name,
+      (n) => {
+        const newTitle = `${t(n.toString() || '')}: Crisis Cleanup`;
         if (document.title !== newTitle) {
           document.title = newTitle;
         }
       },
+      { immediate: true },
     );
 
     onMounted(async () => {
