@@ -100,7 +100,7 @@ export default defineComponent({
         },
       );
       store.commit('auth/setUser', response.data);
-      window.location.reload();
+      window.location.replace('/');
     }
     async function showUserEvents(user: User) {
       await component({
