@@ -308,5 +308,6 @@ export default function useConnectFirst(context: {
       store.commit('phone/resetState');
     },
     loginPhone,
+    dialNextOutbound,
   };
 }
