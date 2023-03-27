@@ -94,6 +94,7 @@ import CompletedTransferModal from '../components/modals/CompletedTransferModal.
 import { AuthService } from '../services/auth.service';
 import LoginForm from '../components/LoginForm.vue';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
+import useAcl from '@/hooks/useAcl';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -112,6 +113,7 @@ export default {
     const $http = axios;
     const { t, setLocaleMessage, locale } = useI18n();
     const store = useStore();
+    const { $can } = useAcl();
 
     // const { $log } = context.root;
     const currentIncidentId = computed(
@@ -170,7 +172,7 @@ export default {
         icon: 'phone',
         text: t('nav.phone'),
         to: '/phone',
-        // disabled: !context.root.$can || !context.root.$can('phone_agent'),
+        disabled: !$can || !$can('phone_agent'),
       },
       {
         key: 'my_organization',
