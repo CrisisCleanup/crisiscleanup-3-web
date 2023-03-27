@@ -11,6 +11,7 @@ import { BrowserTracing } from '@sentry/tracing';
 
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
+import type { PluginOptions as VueToastificationPluginOptions } from 'vue-toastification';
 import { createI18n } from 'vue-i18n';
 import vSelect from 'vue-select';
 import App from './App.vue';
@@ -113,7 +114,9 @@ app.provide('axios', axios);
 app.use(Vue3Mq);
 app.use(router);
 app.use(i18n);
-app.use(Toast, {});
+app.use(Toast, {
+  timeout: 10_000,
+} as VueToastificationPluginOptions);
 app.use(JsonViewer);
 app.config.devtools = true;
 
