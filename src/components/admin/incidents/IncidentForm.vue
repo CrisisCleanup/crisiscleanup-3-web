@@ -29,9 +29,8 @@
         v-model="currentIncident.start_at"
         :timezone="currentIncident.timezone"
         :placeholder="$t('actions.start')"
-        auto-apply
-        format="yyyy-MM-dd"
         class="h-12 mr-2"
+        v-bind="datePickerDefaultProps"
       ></datepicker>
       <base-button
         :text="$t('actions.start_now')"
@@ -132,8 +131,7 @@
           v-model="currentAni.start_at"
           :timezone="currentAni.timezone"
           :placeholder="$t('actions.start')"
-          auto-apply
-          format="yyyy-MM-dd"
+          v-bind="datePickerDefaultProps"
         ></datepicker>
         <base-button
           :text="$t('actions.start_now')"
@@ -151,13 +149,13 @@
           v-model="currentAni.end_at"
           :timezone="currentAni.timezone"
           :placeholder="$t('actions.end')"
-          auto-apply
-          format="yyyy-MM-dd"
+          v-bind="datePickerDefaultProps"
         ></datepicker>
       </div>
     </template>
   </form>
 </template>
+
 <script lang="ts">
 import { parsePhoneNumber } from 'libphonenumber-js';
 import axios from 'axios';
@@ -171,6 +169,7 @@ import { formatNationalNumber } from '@/filters';
 import { getErrorMessage } from '@/utils/errors';
 import useDialogs from '@/hooks/useDialogs';
 import type Incident from '@/models/Incident';
+import type { VueDatePicker } from '@vuepic/vue-datepicker';
 
 const INCIDENT_TYPES = [
   'contaminated_water',
@@ -217,6 +216,11 @@ export default defineComponent({
     const $toasted = useToast();
     const { t } = useI18n();
 
+    const datePickerDefaultProps = reactive<VueDatePicker>({
+      format: 'yyyy-MM-dd HH:mm:ss',
+      autoApply: true,
+      enableSeconds: true,
+    });
     const incidentTypeOptions = INCIDENT_TYPES.map((key) => {
       return {
         value: key,
@@ -322,6 +326,7 @@ export default defineComponent({
       addNewAni,
       incidentTypeOptions,
       timezoneNames,
+      datePickerDefaultProps,
     };
   },
 });
