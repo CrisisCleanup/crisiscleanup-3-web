@@ -1,62 +1,72 @@
-# Ignore
-.github
+# Common
+README.md
+CHANGELOG.md
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# git
+.git
+.gitattributes
+.gitignore
+
+# Editors
 .idea
-.jest
-.nyc_output
-.run
-.storybook
 .vscode
-coverage
-flow-typed
-internal
-out
-.editorconfig
+
+# Node
+
+## Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Dependency directories
+node_modules/
+
+# Envs
 .env
 .env.base
 .env.proxy
-.eslintignore
-.eslintrc.js
-.flowconfig
-.gitattributes
-.prettierignore
-.prettierrc
-.restyled.yaml
-CONTRIBUTING.md
-README.md
-dev.Dockerfile
-docker-compose.yml
-yarn-error.log
 .env.sample
-.tool-versions
-node_modules
-.husky
-dist
-Dockerfile
 .env.dev
 .env.staging
 .env.prod
 .envrc
-.dockerignore
+
+# Ignore
+.github
+.jest
+.nyc_output
+.run
+.storybook
+coverage
+internal
+out
+.editorconfig
+.eslintignore
+.eslintrc.js
+.prettierignore
+.prettierrc
+CONTRIBUTING.md
+.tool-versions
+.husky
+dist
+README.md
 
 # Don't ignore
-
 !public
 !icon_templates
 !src
 !package.json
-!yarn.lock
+!pnpm-lock.yaml
 !nginx.conf
 !LICENSE
 !sentry.properties
-!template-compiler.js
 !vue.config.js
-!tailwind.config.js
+!tailwind.config.cjs
 !tests
 !cypress.json
-!postcss.config.js
-!jest.config.js
-!jsconfig.json
-!babel.config.js
-# for sentry plugin
-!.gitignore
-!.git
+!postcss.config.cjs
