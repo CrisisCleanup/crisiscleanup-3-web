@@ -119,7 +119,7 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import { useToast } from 'vue-toastification';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -133,7 +133,7 @@ import PasswordResetRequest from '@/models/PasswordResetRequest';
 import User from '@/models/User';
 import useDialogs from '@/hooks/useDialogs';
 
-export default {
+export default defineComponent({
   name: 'InvitationSignup',
   components: { Home },
   setup() {
@@ -225,6 +225,7 @@ export default {
     }
 
     onMounted(async () => {
+      return;
       try {
         const results = await Invitation.api().fetchById(route.params.token);
         [invitation.value] = results.entities.invitations;
@@ -252,10 +253,9 @@ export default {
       ...toRefs(userInfo),
       acceptInvite,
       transfer,
-      validatePassword,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">
