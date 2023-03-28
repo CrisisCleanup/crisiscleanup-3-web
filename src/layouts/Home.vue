@@ -60,13 +60,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onBeforeMount, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import IncidentContact from '@/components/IncidentContact.vue';
 
-export default {
+export default defineComponent({
   name: 'Home',
   components: { IncidentContact },
   setup() {
@@ -125,7 +125,7 @@ export default {
       messages,
     };
   },
-};
+});
 </script>
 
 <style lang="scss">
