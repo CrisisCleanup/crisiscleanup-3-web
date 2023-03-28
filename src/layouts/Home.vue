@@ -53,7 +53,7 @@
         </base-button>
       </div>
     </div>
-    <div class="main w-screen md:w-auto sm:m-10">
+    <div class="main w-screen md:w-auto sm:m-10 z-50">
       <slot />
     </div>
     <div class="bottom"></div>
