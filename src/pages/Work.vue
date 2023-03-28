@@ -47,18 +47,7 @@
               size="medium"
               skip-validation
               class="mx-4 py-1"
-              @selectedExisting="
-                  (w: { id: string; }) => {
-                    worksiteId = w.id;
-                    isViewing = true;
-                    if (showingMap) {
-                        router.push(
-                          `/incident/${currentIncidentId}/work/${w.id}`, {
-                        query: { showOnMap: true },
-                      });
-                    }
-                  }
-                "
+              @selectedExisting="handleSelectedExisting"
               @input="
                   (value: string) => {
                     currentSearch = value;
@@ -450,33 +439,9 @@
           :is-editing="isEditing"
           class="border shadow"
           @jumpToCase="jumpToCase"
-          @savedWorksite="
-            (w: { id: any; }) => {
-              if (!isEditing) {
-                worksiteId = w.id;
-                mostRecentlySavedWorksite = worksite;
-                $nextTick(() => {
-                  clearCase();
-                });
-              } else {
-                isEditing = true;
-                router.push(
-                  `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
-                );
-              }
-              reloadMap();
-            }
-          "
+          @savedWorksite="handleWorksiteSave"
           @closeWorksite="clearCase"
-          @navigateToWorksite="
-            (id: any) => {
-              worksiteId = id;
-              isEditing = true;
-              router.push(
-                `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
-              );
-            }
-          "
+          @navigateToWorksite="handleWorksiteNavigate"
           @geocoded="addMarkerToMap"
         />
       </div>
@@ -1357,6 +1322,41 @@ export default defineComponent({
       });
     }
 
+    function handleSelectedExisting(w: Worksite) {
+      worksiteId.value = w.id;
+      isViewing.value = true;
+      if (showingMap.value) {
+        router.push({
+          path: `/incident/${currentIncidentId.value}/work/${worksiteId.value}`,
+          query: { showOnMap: true },
+        });
+      }
+    }
+
+    function handleWorksiteSave(w: Worksite) {
+      if (!isEditing.value) {
+        worksiteId.value = w.id;
+        mostRecentlySavedWorksite.value = w;
+        nextTick(() => {
+          clearCase();
+        });
+      } else {
+        isEditing.value = true;
+        router.push(
+          `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
+        );
+      }
+      reloadMap();
+    }
+
+    function handleWorksiteNavigation(id: number) {
+      worksiteId.value = id;
+      isEditing.value = true;
+      router.push(
+        `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
+      );
+    }
+
     onMounted(async () => {
       if (route.params.incident_id) {
         store.commit('incident/setCurrentIncidentId', route.params.incident_id);
@@ -1448,6 +1448,9 @@ export default defineComponent({
       dateSliderFrom,
       dateSliderTo,
       focusNewsTab,
+      handleSelectedExisting,
+      handleWorksiteSave,
+      handleWorksiteNavigation,
     };
   },
 });
