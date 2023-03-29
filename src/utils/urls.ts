@@ -1,4 +1,4 @@
-export function getQueryString(parameters) {
+export function getQueryString(parameters: Record<string, any>) {
   return Object.keys(parameters)
     .map(
       (key) =>
