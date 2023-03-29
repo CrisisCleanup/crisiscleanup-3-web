@@ -1,0 +1,847 @@
+// Vitest Snapshot v1
+
+exports[`utils > reports > transformGraphData 1`] = `
+{
+  "cases_new_claimed_closed_cumulative_value_widget": {
+    "data": [
+      {
+        "the_date": "2023-02-07",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-08",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-09",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-21",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-22",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-24",
+        "today_claimed_case_value_cumsum": 0,
+        "today_closed_case_value_cumsum": 0,
+        "today_created_case_value_cumsum": null,
+      },
+      {
+        "the_date": "2023-02-27",
+        "today_claimed_case_value_cumsum": 3750,
+        "today_closed_case_value_cumsum": 375,
+        "today_created_case_value_cumsum": -1150,
+      },
+      {
+        "the_date": "2023-02-28",
+        "today_claimed_case_value_cumsum": 3750,
+        "today_closed_case_value_cumsum": 375,
+        "today_created_case_value_cumsum": -1150,
+      },
+    ],
+    "display_options": {
+      "axes": {
+        "x": {
+          "name": "reports.labels.date",
+        },
+        "y": {
+          "name": "reports.labels.value_of_work",
+        },
+      },
+      "colors": {
+        "reports.cases_new_claimed_closed_cumulative_value_widget.today_claimed_case_value_cumsum": "#FAB92E",
+        "reports.cases_new_claimed_closed_cumulative_value_widget.today_closed_case_value_cumsum": "#0FA355",
+        "reports.cases_new_claimed_closed_cumulative_value_widget.today_created_case_value_cumsum": "#D0021B",
+      },
+      "number_format": "currency",
+    },
+    "group_by": "the_date",
+    "type": "multiline",
+  },
+  "cases_new_claimed_closed_cumulative_widget": {
+    "data": [
+      {
+        "the_date": "2023-02-07",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -2.7037,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-08",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -8.0626,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-09",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -9.0626,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-21",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -9.0626,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-22",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -9.0626,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-24",
+        "today_claimed_case_count_cumsum": 0,
+        "today_closed_case_count_cumsum": -9.0626,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-27",
+        "today_claimed_case_count_cumsum": 1,
+        "today_closed_case_count_cumsum": -4.3164,
+        "today_created_case_count_cumsum": 0,
+      },
+      {
+        "the_date": "2023-02-28",
+        "today_claimed_case_count_cumsum": 1,
+        "today_closed_case_count_cumsum": -4.5664,
+        "today_created_case_count_cumsum": 1,
+      },
+    ],
+    "display_options": {
+      "axes": {
+        "x": {
+          "name": "reports.labels.date",
+        },
+        "y": {
+          "name": "reports.labels.number_of_cases",
+        },
+      },
+      "colors": {
+        "reports.cases_new_claimed_closed_cumulative_widget.today_claimed_case_count_cumsum": "#FAB92E",
+        "reports.cases_new_claimed_closed_cumulative_widget.today_closed_case_count_cumsum": "#0FA355",
+        "reports.cases_new_claimed_closed_cumulative_widget.today_created_case_count_cumsum": "#D0021B",
+      },
+      "number_format": "standard",
+    },
+    "group_by": "the_date",
+    "type": "multiline",
+  },
+  "cases_new_claimed_closed_widget": {
+    "data": [
+      {
+        "the_date": 2023-02-07T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": -2.7037,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-08T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": -5.3589,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-09T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": -1,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-21T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": 0,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-22T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": 0,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-24T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": 0,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-27T06:00:00.000Z,
+        "today_claimed_case_count": 1,
+        "today_closed_case_count": 4.7462,
+        "today_created_case_count": 0,
+      },
+      {
+        "the_date": 2023-02-28T06:00:00.000Z,
+        "today_claimed_case_count": 0,
+        "today_closed_case_count": -0.25,
+        "today_created_case_count": 1,
+      },
+    ],
+    "display_options": {
+      "axes": {
+        "x": {
+          "name": "reports.labels.date",
+        },
+        "y": {
+          "name": "reports.labels.number_of_cases",
+        },
+      },
+      "colors": {
+        "reports.cases_new_claimed_closed_widget.today_claimed_case_count": "#FAB92E",
+        "reports.cases_new_claimed_closed_widget.today_closed_case_count": "#0FA355",
+        "reports.cases_new_claimed_closed_widget.today_created_case_count": "#D0021B",
+      },
+      "number_format": "standard",
+    },
+    "group_by": "the_date",
+    "type": "barstack",
+  },
+  "velocity_widget": {
+    "data": [
+      {
+        "the_date": "2023-02-01",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-02",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-03",
+        "velocity": 0.0001157315317791553,
+      },
+      {
+        "the_date": "2023-02-04",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-05",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-06",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-07",
+        "velocity": 0.006683495960246219,
+      },
+      {
+        "the_date": "2023-02-08",
+        "velocity": 0.003978271404908464,
+      },
+      {
+        "the_date": "2023-02-09",
+        "velocity": 0.001121149214110567,
+      },
+      {
+        "the_date": "2023-02-10",
+        "velocity": 0.00005786576588957765,
+      },
+      {
+        "the_date": "2023-02-11",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-12",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-13",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-14",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-15",
+        "velocity": 0.0035298117192642366,
+      },
+      {
+        "the_date": "2023-02-16",
+        "velocity": 0.0005207918930061989,
+      },
+      {
+        "the_date": "2023-02-17",
+        "velocity": 0.0030017866055218408,
+      },
+      {
+        "the_date": "2023-02-18",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-19",
+        "velocity": 0,
+      },
+      {
+        "the_date": "2023-02-20",
+        "velocity": 0.00008679864883436647,
+      },
+      {
+        "the_date": "2023-02-21",
+        "velocity": 0.003891472756074097,
+      },
+      {
+        "the_date": "2023-02-22",
+        "velocity": 0.0034864123948470534,
+      },
+      {
+        "the_date": "2023-02-23",
+        "velocity": 0.0010198841238038062,
+      },
+      {
+        "the_date": "2023-02-24",
+        "velocity": 0.002267614700797824,
+      },
+      {
+        "the_date": "2023-02-25",
+        "velocity": 0.0012802800703069057,
+      },
+      {
+        "the_date": "2023-02-26",
+        "velocity": 0.0005063254515338044,
+      },
+      {
+        "the_date": "2023-02-27",
+        "velocity": 0.00017359729766873295,
+      },
+      {
+        "the_date": "2023-02-28",
+        "velocity": 0.00040506036122704356,
+      },
+    ],
+    "display_options": {
+      "axes": {
+        "x": {
+          "name": "reports.labels.date",
+        },
+        "y": {
+          "name": "reports.labels.velocity",
+        },
+      },
+      "colors": {
+        "reports.velocity_widget.velocity": "#0FA355",
+      },
+      "number_format": "percentage",
+    },
+    "group_by": "the_date",
+    "type": "multiline",
+  },
+  "work_type_widget": {
+    "data": {
+      "debris": [
+        {
+          "name": "closed_completed_value",
+          "value": 3000,
+        },
+        {
+          "name": "open_completed_value",
+          "value": 0,
+        },
+      ],
+      "mold_remediation": [
+        {
+          "name": "closed_completed_value",
+          "value": 12000,
+        },
+      ],
+      "muck_out": [
+        {
+          "name": "closed_completed_value",
+          "value": 54000,
+        },
+        {
+          "name": "open_completed_value",
+          "value": 9000,
+        },
+      ],
+      "rebuild": [
+        {
+          "name": "closed_completed_value",
+          "value": 20000,
+        },
+        {
+          "name": "open_completed_value",
+          "value": 5000,
+        },
+      ],
+      "tarp": [
+        {
+          "name": "closed_completed_value",
+          "value": 900,
+        },
+        {
+          "name": "open_completed_value",
+          "value": 0,
+        },
+      ],
+      "trees": [
+        {
+          "name": "closed_completed_value",
+          "value": 9375,
+        },
+        {
+          "name": "open_completed_value",
+          "value": 0,
+        },
+      ],
+    },
+    "display_options": {
+      "axes": null,
+      "colors": {
+        "reports.work_type_widget.closed_completed_value": "#0FA355",
+        "reports.work_type_widget.in_progress_completed_value": "#FAB92E",
+        "reports.work_type_widget.open_completed_value": "#D0021B",
+      },
+      "number_format": "currency",
+    },
+    "group_by": "work_type_key",
+    "type": "pie",
+  },
+}
+`;
+
+exports[`utils > reports > transformWidgetData: cases_new_claimed_closed_cumulative_value_widget 1`] = `
+{
+  "data": [
+    {
+      "the_date": "2023-02-07",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-08",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-09",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-21",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-22",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-24",
+      "today_claimed_case_value_cumsum": 0,
+      "today_closed_case_value_cumsum": 0,
+      "today_created_case_value_cumsum": null,
+    },
+    {
+      "the_date": "2023-02-27",
+      "today_claimed_case_value_cumsum": 3750,
+      "today_closed_case_value_cumsum": 375,
+      "today_created_case_value_cumsum": -1150,
+    },
+    {
+      "the_date": "2023-02-28",
+      "today_claimed_case_value_cumsum": 3750,
+      "today_closed_case_value_cumsum": 375,
+      "today_created_case_value_cumsum": -1150,
+    },
+  ],
+  "display_options": {
+    "axes": {
+      "x": {
+        "name": "reports.labels.date",
+      },
+      "y": {
+        "name": "reports.labels.value_of_work",
+      },
+    },
+    "colors": {
+      "reports.cases_new_claimed_closed_cumulative_value_widget.today_claimed_case_value_cumsum": "#FAB92E",
+      "reports.cases_new_claimed_closed_cumulative_value_widget.today_closed_case_value_cumsum": "#0FA355",
+      "reports.cases_new_claimed_closed_cumulative_value_widget.today_created_case_value_cumsum": "#D0021B",
+    },
+    "number_format": "currency",
+  },
+  "group_by": "the_date",
+  "type": "multiline",
+}
+`;
+
+exports[`utils > reports > transformWidgetData: cases_new_claimed_closed_cumulative_widget 1`] = `
+{
+  "data": [
+    {
+      "the_date": "2023-02-07",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -2.7037,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-08",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -8.0626,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-09",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -9.0626,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-21",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -9.0626,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-22",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -9.0626,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-24",
+      "today_claimed_case_count_cumsum": 0,
+      "today_closed_case_count_cumsum": -9.0626,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-27",
+      "today_claimed_case_count_cumsum": 1,
+      "today_closed_case_count_cumsum": -4.3164,
+      "today_created_case_count_cumsum": 0,
+    },
+    {
+      "the_date": "2023-02-28",
+      "today_claimed_case_count_cumsum": 1,
+      "today_closed_case_count_cumsum": -4.5664,
+      "today_created_case_count_cumsum": 1,
+    },
+  ],
+  "display_options": {
+    "axes": {
+      "x": {
+        "name": "reports.labels.date",
+      },
+      "y": {
+        "name": "reports.labels.number_of_cases",
+      },
+    },
+    "colors": {
+      "reports.cases_new_claimed_closed_cumulative_widget.today_claimed_case_count_cumsum": "#FAB92E",
+      "reports.cases_new_claimed_closed_cumulative_widget.today_closed_case_count_cumsum": "#0FA355",
+      "reports.cases_new_claimed_closed_cumulative_widget.today_created_case_count_cumsum": "#D0021B",
+    },
+    "number_format": "standard",
+  },
+  "group_by": "the_date",
+  "type": "multiline",
+}
+`;
+
+exports[`utils > reports > transformWidgetData: cases_new_claimed_closed_widget 1`] = `
+{
+  "data": [
+    {
+      "the_date": 2023-02-07T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": -2.7037,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-08T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": -5.3589,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-09T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": -1,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-21T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": 0,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-22T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": 0,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-24T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": 0,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-27T06:00:00.000Z,
+      "today_claimed_case_count": 1,
+      "today_closed_case_count": 4.7462,
+      "today_created_case_count": 0,
+    },
+    {
+      "the_date": 2023-02-28T06:00:00.000Z,
+      "today_claimed_case_count": 0,
+      "today_closed_case_count": -0.25,
+      "today_created_case_count": 1,
+    },
+  ],
+  "display_options": {
+    "axes": {
+      "x": {
+        "name": "reports.labels.date",
+      },
+      "y": {
+        "name": "reports.labels.number_of_cases",
+      },
+    },
+    "colors": {
+      "reports.cases_new_claimed_closed_widget.today_claimed_case_count": "#FAB92E",
+      "reports.cases_new_claimed_closed_widget.today_closed_case_count": "#0FA355",
+      "reports.cases_new_claimed_closed_widget.today_created_case_count": "#D0021B",
+    },
+    "number_format": "standard",
+  },
+  "group_by": "the_date",
+  "type": "barstack",
+}
+`;
+
+exports[`utils > reports > transformWidgetData: velocity_widget 1`] = `
+{
+  "data": [
+    {
+      "the_date": "2023-02-01",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-02",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-03",
+      "velocity": 0.0001157315317791553,
+    },
+    {
+      "the_date": "2023-02-04",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-05",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-06",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-07",
+      "velocity": 0.006683495960246219,
+    },
+    {
+      "the_date": "2023-02-08",
+      "velocity": 0.003978271404908464,
+    },
+    {
+      "the_date": "2023-02-09",
+      "velocity": 0.001121149214110567,
+    },
+    {
+      "the_date": "2023-02-10",
+      "velocity": 0.00005786576588957765,
+    },
+    {
+      "the_date": "2023-02-11",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-12",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-13",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-14",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-15",
+      "velocity": 0.0035298117192642366,
+    },
+    {
+      "the_date": "2023-02-16",
+      "velocity": 0.0005207918930061989,
+    },
+    {
+      "the_date": "2023-02-17",
+      "velocity": 0.0030017866055218408,
+    },
+    {
+      "the_date": "2023-02-18",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-19",
+      "velocity": 0,
+    },
+    {
+      "the_date": "2023-02-20",
+      "velocity": 0.00008679864883436647,
+    },
+    {
+      "the_date": "2023-02-21",
+      "velocity": 0.003891472756074097,
+    },
+    {
+      "the_date": "2023-02-22",
+      "velocity": 0.0034864123948470534,
+    },
+    {
+      "the_date": "2023-02-23",
+      "velocity": 0.0010198841238038062,
+    },
+    {
+      "the_date": "2023-02-24",
+      "velocity": 0.002267614700797824,
+    },
+    {
+      "the_date": "2023-02-25",
+      "velocity": 0.0012802800703069057,
+    },
+    {
+      "the_date": "2023-02-26",
+      "velocity": 0.0005063254515338044,
+    },
+    {
+      "the_date": "2023-02-27",
+      "velocity": 0.00017359729766873295,
+    },
+    {
+      "the_date": "2023-02-28",
+      "velocity": 0.00040506036122704356,
+    },
+  ],
+  "display_options": {
+    "axes": {
+      "x": {
+        "name": "reports.labels.date",
+      },
+      "y": {
+        "name": "reports.labels.velocity",
+      },
+    },
+    "colors": {
+      "reports.velocity_widget.velocity": "#0FA355",
+    },
+    "number_format": "percentage",
+  },
+  "group_by": "the_date",
+  "type": "multiline",
+}
+`;
+
+exports[`utils > reports > transformWidgetData: work_type_widget 1`] = `
+{
+  "data": {
+    "debris": [
+      {
+        "name": "closed_completed_value",
+        "value": 3000,
+      },
+      {
+        "name": "open_completed_value",
+        "value": 0,
+      },
+    ],
+    "mold_remediation": [
+      {
+        "name": "closed_completed_value",
+        "value": 12000,
+      },
+    ],
+    "muck_out": [
+      {
+        "name": "closed_completed_value",
+        "value": 54000,
+      },
+      {
+        "name": "open_completed_value",
+        "value": 9000,
+      },
+    ],
+    "rebuild": [
+      {
+        "name": "closed_completed_value",
+        "value": 20000,
+      },
+      {
+        "name": "open_completed_value",
+        "value": 5000,
+      },
+    ],
+    "tarp": [
+      {
+        "name": "closed_completed_value",
+        "value": 900,
+      },
+      {
+        "name": "open_completed_value",
+        "value": 0,
+      },
+    ],
+    "trees": [
+      {
+        "name": "closed_completed_value",
+        "value": 9375,
+      },
+      {
+        "name": "open_completed_value",
+        "value": 0,
+      },
+    ],
+  },
+  "display_options": {
+    "axes": null,
+    "colors": {
+      "reports.work_type_widget.closed_completed_value": "#0FA355",
+      "reports.work_type_widget.in_progress_completed_value": "#FAB92E",
+      "reports.work_type_widget.open_completed_value": "#D0021B",
+    },
+    "number_format": "currency",
+  },
+  "group_by": "work_type_key",
+  "type": "pie",
+}
+`;
