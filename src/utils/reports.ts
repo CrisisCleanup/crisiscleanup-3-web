@@ -1,5 +1,40 @@
 import moment from 'moment';
 
+export interface ReportWidgetDefinition<T extends Record<string, any>> {
+  type: string;
+  cumsum?: string[];
+  sum?: string[];
+  filters: Record<string, string>;
+  group_by: (keyof T)[];
+}
+
+export type ReportWidgetInput = {
+  [key: string]: string;
+} & {
+  type: string;
+  field: string;
+  filter: string;
+};
+
+export type ReportWidgetDisplayOptions = {
+  [key: string]: any;
+} & {
+  number_format?: string;
+  axes?: {
+    x: { name: string };
+    y: { name: string };
+  };
+  colors?: Record<string, any>;
+};
+
+export interface ReportWidgetGraphData<T extends Record<string, any>> {
+  key: string;
+  inputs: ReportWidgetInput[];
+  definition: ReportWidgetDefinition<T>;
+  data: T[];
+  display_options: ReportWidgetDisplayOptions;
+}
+
 /**
  * Group objects by property.
  * `nestGroupsBy` helper method.
@@ -82,14 +117,16 @@ export function nestGroupsBy<T extends Record<string, any>, K extends keyof T>(
   return grouped;
 }
 
-export function transformWidgetData(graphValue) {
+export function transformWidgetData<T extends Record<string, any>>(
+  graphValue: ReportWidgetGraphData<T>,
+) {
   let data = {};
   if (graphValue.definition.type === 'pie') {
     const value1 = nestGroupsBy(
       graphValue.data,
       graphValue.definition.group_by,
     );
-    const result = {};
+    const result = {} as Record<string, any>;
     if (graphValue.data.length > 0) {
       Object.entries(value1).forEach(([wt, d]) => {
         result[wt] = [];
@@ -139,8 +176,10 @@ export function transformWidgetData(graphValue) {
   return data;
 }
 
-export function transformGraphData(rawGraphData) {
-  const transformedGraphData = {};
+export function transformGraphData<T extends Record<string, any>>(
+  rawGraphData: [string, ReportWidgetGraphData<T>][],
+) {
+  const transformedGraphData = {} as Record<string, any>;
   if (rawGraphData) {
     rawGraphData.forEach(([graphKey, graphValue]) => {
       transformedGraphData[graphKey] = transformWidgetData(graphValue);
