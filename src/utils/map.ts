@@ -157,10 +157,18 @@ export function getMarkerLayer(
               markerSprite.texture = markerSprite.basicTexture;
             }
 
-            markerSprite.scale.set(
-              markerSprite.currentScale +
-                lambda * (markerSprite.targetScale - markerSprite.currentScale),
-            );
+            if (markerSprite.currentScale && markerSprite.targetScale) {
+              markerSprite.scale.set(
+                markerSprite.currentScale +
+                  lambda *
+                    (markerSprite.targetScale - markerSprite.currentScale),
+              );
+            } else {
+              console.error(
+                'markerSprite currentScale or targetScale is undefined',
+                markerSprite,
+              );
+            }
           }
 
           renderer.render(container);
@@ -314,11 +322,18 @@ export function getLiveLayer() {
                 }
               }
 
-              markerSprite.scale.set(
-                markerSprite.currentScale +
-                  lambda *
-                    (markerSprite.targetScale - markerSprite.currentScale),
-              );
+              if (markerSprite.currentScale && markerSprite.targetScale) {
+                markerSprite.scale.set(
+                  markerSprite.currentScale +
+                    lambda *
+                      (markerSprite.targetScale - markerSprite.currentScale),
+                );
+              } else {
+                console.error(
+                  'markerSprite currentScale or targetScale is undefined',
+                  markerSprite,
+                );
+              }
             }
           }
 
