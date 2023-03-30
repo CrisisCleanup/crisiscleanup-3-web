@@ -1,8 +1,7 @@
+import type { Sprite } from 'pixi.js';
 import {
   Container,
   settings as PixiSettings,
-  Sprite,
-  Texture,
   utils as pixiUtils,
 } from 'pixi.js';
 
@@ -13,8 +12,8 @@ import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
 
-import Worksite from '../models/Worksite';
-import { PixiUtils } from './types/map';
+import type Worksite from '../models/Worksite';
+import { PixiDisplayObjectWithCachedProps } from '@/utils/types/map';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -115,7 +114,7 @@ export function getMarkerLayer(
     let frame: number | null = null;
     const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
-      function (utils: PixiUtils) {
+      function (utils) {
         const zoom = utils.getMap().getZoom();
         // Const center = utils.getMap().getCenter();
         if (frame) {
@@ -135,7 +134,7 @@ export function getMarkerLayer(
         let start: number | null = null;
         const delta = 250;
 
-        for (const markerSprite of container.children) {
+        for (const markerSprite of container.children as PixiDisplayObjectWithCachedProps[]) {
           if (firstDraw) {
             markerSprite.scale.set(invScale);
           } else {
@@ -150,7 +149,7 @@ export function getMarkerLayer(
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          for (const markerSprite of container.children) {
+          for (const markerSprite of container.children as PixiDisplayObjectWithCachedProps[]) {
             if (zoom >= INTERACTIVE_ZOOM_LEVEL) {
               markerSprite.texture =
                 markerSprite.detailedTexture || markerSprite.basicTexture;
@@ -198,7 +197,7 @@ export function getLiveLayer() {
     let frame: number | null = null;
     const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
-      function (utils: PixiUtils) {
+      function (utils) {
         const zoom = utils.getMap().getZoom();
         // Const center = utils.getMap().getCenter();
         if (frame) {
@@ -215,7 +214,7 @@ export function getLiveLayer() {
           // PrevCenter = center;
         }
 
-        for (const markerSprite of container.children) {
+        for (const markerSprite of container.children as PixiDisplayObjectWithCachedProps[]) {
           // If (!markerSprite.type === 'line') return;
           if (firstDraw) {
             markerSprite.scale.set(invScale);
@@ -229,7 +228,9 @@ export function getLiveLayer() {
         const delta = 250;
 
         function createLineAnimation(
-          markerSprite: Sprite & Record<string, any>,
+          markerSprite: PixiDisplayObjectWithCachedProps &
+            Sprite &
+            Record<string, any>,
           type = 'arc',
         ) {
           if (markerSprite.frame) {
@@ -284,13 +285,15 @@ export function getLiveLayer() {
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          for (const markerSprite of container.children) {
+          for (const markerSprite of container.children as PixiDisplayObjectWithCachedProps[]) {
             if (markerSprite.type === 'line') {
               if (zoom !== previousZoom) {
                 markerSprite.clear();
               }
 
-              createLineAnimation(markerSprite);
+              createLineAnimation(
+                markerSprite as PixiDisplayObjectWithCachedProps & Sprite,
+              );
               markerSprite.frame = requestAnimationFrame(animate);
             } else {
               if (markerSprite.type === 'actor') {
