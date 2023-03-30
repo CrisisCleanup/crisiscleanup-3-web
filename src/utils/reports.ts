@@ -4,16 +4,17 @@ export interface ReportWidgetDefinition<T extends Record<string, any>> {
   type: string;
   cumsum?: string[];
   sum?: string[];
-  filters: Record<string, string>;
-  group_by: (keyof T)[];
+  filters?: Record<string, any>;
+  group_by: (keyof T)[] | string[];
 }
 
 export type ReportWidgetInput = {
-  [key: string]: string;
+  [key: string]: any;
 } & {
   type: string;
   field: string;
   filter: string;
+  exclude?: boolean;
 };
 
 export type ReportWidgetDisplayOptions = {
