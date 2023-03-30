@@ -243,7 +243,7 @@ export function getLiveLayer() {
         ) {
           if (markerSprite.frame) {
             cancelAnimationFrame(markerSprite.frame);
-            markerSprite.frame = null;
+            markerSprite.frame = undefined;
           }
 
           if (markerSprite.currentPoint === 0) {
