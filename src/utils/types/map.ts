@@ -1,42 +1,22 @@
-import type { Container, Texture } from 'pixi.js';
+import type { LeafletPixiOverlayUtils } from 'leaflet-pixi-overlay';
+import type { Container, Texture, DisplayObject } from 'pixi.js';
 
-export interface PixiUtils {
-  getMap: () => {
-    (): any;
-    new (): any;
-    getZoom: { (): any; new (): any };
-    getCenter: { (): any; new (): any };
-    getBounds: {
-      (): {
-        (): any;
-        new (): any;
-        contains: { (arg0: any[]): any; new (): any };
-      };
-      new (): any;
-    };
-  };
-  getContainer: () => any;
-  getRenderer: () => any;
-  latLngToLayerPoint: any;
-  getScale: (arg0?: number | undefined) => number;
-}
-
-export interface PixiLayer {
+export type PixiLayer = {
   key: string;
   location_id: string;
-  utils: PixiUtils;
+  utils: LeafletPixiOverlayUtils;
 
   _pixiContainer: Container;
 
   _renderer: any;
   redraw: any;
-}
+};
 
-export interface LayerGroup {
+export type LayerGroup = {
   key: string;
-}
+};
 
-export interface LiveGraphics {
+export type LiveGraphics = {
   x1: number;
   y1: number;
   type: string;
@@ -46,9 +26,9 @@ export interface LiveGraphics {
   workTypeKey: string;
   currentPoint: number;
   live: boolean;
-}
+};
 
-export interface LiveSprite {
+export type LiveSprite = {
   id: number;
   svi: number;
   index: number;
@@ -66,4 +46,16 @@ export interface LiveSprite {
   patient_blurred_location: any;
   recipient_blurred_location: any;
   map_destination: 'actor' | 'patient' | 'recipient';
-}
+};
+
+export type PixiDisplayObjectWithCachedProps = {
+  currentScale?: number;
+  targetScale?: number;
+  texture: Texture;
+  detailedTexture: Texture;
+  basicTexture: Texture;
+  frame?: number | undefined;
+  type?: string;
+  clear: () => void;
+  remove: () => void;
+} & DisplayObject;
