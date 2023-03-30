@@ -42,7 +42,7 @@ export function formatCmsItem(text: string): string {
 
 export function numeral(
   value: number,
-  type: string | undefined = null,
+  type: string | undefined = undefined,
 ): string {
   let formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 1,
