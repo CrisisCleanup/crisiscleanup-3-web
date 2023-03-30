@@ -9,14 +9,22 @@ type LocaleFormFieldsT = Record<
   }
 >;
 
-export const groupBy = (key) => (array) =>
-  array.reduce((objectsByKeyValue, object) => {
-    const value = object[key];
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(object);
-    return objectsByKeyValue;
-  }, {});
+export const groupBy =
+  <T extends Record<string, any>, K extends keyof T>(key: K) =>
+  (array: T[]): Record<T[K], T[]> =>
+    array.reduce((objectsByKeyValue, object) => {
+      const value = object[key];
+      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(
+        object,
+      );
+      return objectsByKeyValue;
+    }, {} as Record<T[K], T[]>);
 
-export const buildForm = (key, dict, array) => {
+export const buildForm = <T extends Record<string, any>, K extends keyof T>(
+  key: K,
+  dict: Record<K, T[]>,
+  array: T[],
+) => {
   // TODO: refactor after writing unit tests
 
   for (const item of dict[key]) {
@@ -30,24 +38,21 @@ export const buildForm = (key, dict, array) => {
   }
 };
 
-// @ts-expect-error
-// @ts-expect-error
-export const nest = (
-  items,
-  key = null,
+export const nest = <T extends Record<string, any>, K extends keyof T>(
+  items: T[],
+  key: K | null = null,
   link = 'field_parent_key',
-  excluded = [],
-) =>
+  excluded: K[] = [],
+): Record<K, T & { children: T[] | null }>[] =>
   items
-    .filter((item: { field_key: string }) => Boolean(item.field_key))
-    .filter(
-      (item: { field_key: string }) =>
-        // @ts-expect-error
-        item[link] === key && !excluded.includes(item.field_key),
-    )
+    .filter((item) => Boolean(item.field_key))
+    .filter((item) => item[link] === key && !excluded.includes(item.field_key))
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
-export const nestUsers = (items, key: string | undefined = null) => {
+export const nestUsers = <T extends Record<string, any>, K extends keyof T>(
+  items: T[],
+  key: K | null = null,
+): Record<K, T & { label: string; children: T[] | null }>[] => {
   return items
     .filter((item) => {
       if (item.referring_user) {
@@ -98,5 +103,5 @@ export const makeLocaleInputs = ({
         key: _key,
       };
     },
-    {},
+    {} as Record<string, any>,
   );
