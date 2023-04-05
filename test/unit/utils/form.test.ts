@@ -133,7 +133,6 @@ describe('utils > urls', () => {
       id: i + 1,
       referring_user: i === 0 ? null : i,
     }));
-    console.log('data', data);
     const r = nestUsers(data, 1);
     expect(r).toMatchSnapshot();
   });
