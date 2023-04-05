@@ -5,8 +5,8 @@ import Filter from './Filter';
 
 export default class UserLocationsFilter extends Filter {
   packFunction() {
-    const currentUser = User.find(store.getters['auth/userId']);
-    const packed = {};
+    const currentUser = User.find(store.getters['auth/userId'])!;
+    const packed: Record<string, any> = {};
     if (this.data.organization_primary_location) {
       packed.organization_primary_location = currentUser.organization.id;
     }
@@ -39,7 +39,7 @@ export default class UserLocationsFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels: Record<string, unknown> = {};
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
@@ -56,7 +56,7 @@ export default class UserLocationsFilter extends Filter {
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }
