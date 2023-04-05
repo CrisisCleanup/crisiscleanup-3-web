@@ -91,7 +91,6 @@ specifiers:
   moment-duration-format: ^2.3.2
   moment-timezone: ^0.5.40
   msw: ^1.1.0
-  nearest-color: ^0.4.4
   parse-address: ^1.1.2
   pixi-filters: ^5.0.0
   pixi.js: ^6.5.8
@@ -196,7 +195,6 @@ dependencies:
   moment: 2.29.4
   moment-duration-format: 2.3.2
   moment-timezone: 0.5.40
-  nearest-color: 0.4.4
   parse-address: 1.1.2
   pixi-filters: 5.0.0_pn32dkfqmirf6csgmr3emjmlxm
   pixi.js: 6.5.8
@@ -6819,10 +6817,6 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
-
-  /nearest-color/0.4.4:
-    resolution: {integrity: sha512-orhcaIORC10tf41Ld2wwlcC+FaAavHG87JHWB3eHH5p7v2k9Tzym2XNEZzLAm5YJwGv6Q38WWc7SOb+Qfu/4NQ==}
-    dev: false
 
   /node-fetch/2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
