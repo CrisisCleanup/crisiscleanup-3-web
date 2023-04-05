@@ -22,11 +22,11 @@ export default class UserRoleFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels: Record<string, unknown> = {};
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
-      const { id, name_t } = Role.find(key);
+      const { id, name_t } = Role.find(key)!;
       labels[id] = name_t;
     }
 
