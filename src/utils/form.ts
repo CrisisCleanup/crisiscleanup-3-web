@@ -25,8 +25,6 @@ export const buildForm = <T extends Record<string, any>, K extends keyof T>(
   dict: Record<K, T[]>,
   array: T[],
 ) => {
-  // TODO: refactor after writing unit tests
-
   for (const item of dict[key]) {
     if (item.label_t && Boolean(item.field_key)) {
       array.push(item);
@@ -40,23 +38,25 @@ export const buildForm = <T extends Record<string, any>, K extends keyof T>(
 
 export const nest = <T extends Record<string, any>, K extends keyof T>(
   items: T[],
-  key: K | null = null,
+  value: T[K] | null = null,
   link = 'field_parent_key',
   excluded: K[] = [],
 ): Record<K, T & { children: T[] | null }>[] =>
   items
     .filter((item) => Boolean(item.field_key))
-    .filter((item) => item[link] === key && !excluded.includes(item.field_key))
+    .filter(
+      (item) => item[link] === value && !excluded.includes(item.field_key),
+    )
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
 export const nestUsers = <T extends Record<string, any>, K extends keyof T>(
   items: T[],
-  key: K | null = null,
+  referringUserId: T[K] | null = null,
 ): Record<K, T & { label: string; children: T[] | null }>[] => {
   return items
     .filter((item) => {
       if (item.referring_user) {
-        return item.referring_user === key;
+        return item.referring_user === referringUserId;
       }
 
       return false;
