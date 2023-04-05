@@ -2,6 +2,41 @@ import { faker } from '@faker-js/faker';
 
 export const MOCK_DATE = new Date(Date.UTC(2022, 1, 1, 1, 1, 1, 1));
 
+export function generateMockUser() {
+  const activeRole = faker.datatype.number({ min: 1, max: 10 });
+  return {
+    id: faker.datatype.number(),
+    email: faker.internet.email(),
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    organization: {
+      id: faker.datatype.number(),
+      name: faker.company.name(),
+      is_active: faker.datatype.boolean(),
+      roles: faker.helpers.arrayElements([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+      type_t: 'orgType.survivor_client_services',
+      affiliates: faker.helpers.arrayElements([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+      all_affiliates_and_groups: faker.helpers.arrayElements([
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+      ]),
+    },
+    roles: [activeRole],
+    active_roles: [activeRole],
+    pending_roles: [],
+    mobile: faker.phone.number(),
+    social: null,
+    lineage: faker.helpers.arrayElements([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+    files: [],
+    primary_language: faker.datatype.number({ min: 1, max: 3 }),
+    secondary_language: null,
+    referring_user: faker.datatype.number(),
+    accepted_terms: null,
+    accepted_terms_timestamp: null,
+    last_sign_in_at: null,
+    sign_in_count: 0,
+  };
+}
+
 export function generateMockIncident() {
   const _id = faker.datatype.number();
   const disasterName = faker.random.alphaNumeric(3);
