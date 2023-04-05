@@ -3,7 +3,7 @@ import Filter from './Filter';
 
 export default class WorksiteFlagsFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed: Record<string, unknown> = {};
     const flagEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -26,7 +26,7 @@ export default class WorksiteFlagsFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels: Record<string, unknown> = {};
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
@@ -38,7 +38,7 @@ export default class WorksiteFlagsFilter extends Filter {
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }
