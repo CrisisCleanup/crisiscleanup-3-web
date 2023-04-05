@@ -93,6 +93,7 @@ export default defineConfig(async ({ command }) => {
         provider: 'c8',
         reporter: ['text', 'json', 'html'],
       },
+      globalSetup: './test/globalSetup.ts',
     },
   });
 
