@@ -296,7 +296,7 @@ describe('utils > urls', () => {
           ],
           [
             "#@%^%#$@#$@#.com",
-            true,
+            false,
           ],
           [
             "@example.com",
@@ -304,7 +304,7 @@ describe('utils > urls', () => {
           ],
           [
             "Joe Smith <email@example.com>",
-            true,
+            false,
           ],
           [
             "email.example.com",
@@ -312,27 +312,27 @@ describe('utils > urls', () => {
           ],
           [
             "email@example@example.com",
-            true,
+            false,
           ],
           [
             ".email@example.com",
-            true,
+            false,
           ],
           [
             "email.@example.com",
-            true,
+            false,
           ],
           [
             "email..email@example.com",
-            true,
+            false,
           ],
           [
             "あいうえお@example.com",
-            true,
+            false,
           ],
           [
             "email@example.com (Joe Smith)",
-            true,
+            false,
           ],
           [
             "email@example",
@@ -340,23 +340,23 @@ describe('utils > urls', () => {
           ],
           [
             "email@-example.com",
-            true,
+            false,
           ],
           [
             "email@example.web",
-            true,
+            false,
           ],
           [
             "email@111.222.333.44444",
-            true,
+            false,
           ],
           [
             "email@example..com",
-            true,
+            false,
           ],
           [
             "Abc..123@example.com",
-            true,
+            false,
           ],
         ]
       `);
