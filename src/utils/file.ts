@@ -34,15 +34,18 @@ export async function uploadToS3({
   return presignedPostUrl.filePath;
 }
 
-export async function uploadFile(formData) {
+export async function uploadFile(formData: FormData) {
   const upload = formData.get('upload');
+  if (!upload || !(upload instanceof File)) {
+    throw new Error('No file to upload');
+  }
   const contentType = upload.type;
   const filename = upload.name;
   formData.delete('upload');
   formData.append('filename', filename);
   formData.append('content_type', contentType);
 
-  const result = await axios.post(
+  const result = await axios.post<Record<string, any>>(
     `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
     formData,
     {
