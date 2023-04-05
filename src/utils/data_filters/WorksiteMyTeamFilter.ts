@@ -3,7 +3,7 @@ import Filter from './Filter';
 
 export default class WorksiteMyTeamFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed: Record<string, unknown> = {};
     if (this.data.my_team) {
       packed.my_team = this.data.my_team;
     }
@@ -29,7 +29,7 @@ export default class WorksiteMyTeamFilter extends Filter {
     };
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }
