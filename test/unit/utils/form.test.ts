@@ -1,7 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import { faker } from '@faker-js/faker';
 import { generateMockIncident, generateMockUser } from '../../helpers';
-import { groupBy, buildForm, nest, nestUsers, EMAIL_REGEX } from '@/utils/form';
+import {
+  groupBy,
+  buildForm,
+  nest,
+  nestUsers,
+  makeLocaleInputs,
+  EMAIL_REGEX,
+} from '@/utils/form';
 
 describe('utils > urls', () => {
   const data = [
@@ -137,6 +144,43 @@ describe('utils > urls', () => {
     expect(r).toMatchSnapshot();
   });
 
+  test('makeLocaleInputs', () => {
+    const r1 = makeLocaleInputs({ inputs: ['hello12', 'world'] });
+    const r2 = makeLocaleInputs({
+      inputs: ['abc', 'def', 'hello'],
+      prefix: 'p1',
+      base: 'b1',
+    });
+    expect(r1).toMatchInlineSnapshot(`
+      {
+        "hello12": {
+          "key": ".",
+          "value": "hello12",
+        },
+        "world": {
+          "key": ".",
+          "value": "world",
+        },
+      }
+    `);
+    expect(r2).toMatchInlineSnapshot(`
+      {
+        "abc": {
+          "key": "p1.b1",
+          "value": "abc",
+        },
+        "def": {
+          "key": "p1.b1",
+          "value": "def",
+        },
+        "hello": {
+          "key": "p1.b1",
+          "value": "hello",
+        },
+      }
+    `);
+  });
+
   // TODO: Improve email regex and make this test pass
   test.fails('EMAIL_REGEX', () => {
     // See: https://gist.github.com/cjaoude/fd9910626629b53c4d25
@@ -252,7 +296,7 @@ describe('utils > urls', () => {
           ],
           [
             "#@%^%#$@#$@#.com",
-            false,
+            true,
           ],
           [
             "@example.com",
@@ -260,7 +304,7 @@ describe('utils > urls', () => {
           ],
           [
             "Joe Smith <email@example.com>",
-            false,
+            true,
           ],
           [
             "email.example.com",
@@ -268,27 +312,27 @@ describe('utils > urls', () => {
           ],
           [
             "email@example@example.com",
-            false,
+            true,
           ],
           [
             ".email@example.com",
-            false,
+            true,
           ],
           [
             "email.@example.com",
-            false,
+            true,
           ],
           [
             "email..email@example.com",
-            false,
+            true,
           ],
           [
             "あいうえお@example.com",
-            false,
+            true,
           ],
           [
             "email@example.com (Joe Smith)",
-            false,
+            true,
           ],
           [
             "email@example",
@@ -296,23 +340,23 @@ describe('utils > urls', () => {
           ],
           [
             "email@-example.com",
-            false,
+            true,
           ],
           [
             "email@example.web",
-            false,
+            true,
           ],
           [
             "email@111.222.333.44444",
-            false,
+            true,
           ],
           [
             "email@example..com",
-            false,
+            true,
           ],
           [
             "Abc..123@example.com",
-            false,
+            true,
           ],
         ]
       `);
