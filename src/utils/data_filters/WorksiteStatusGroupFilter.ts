@@ -55,7 +55,7 @@ export default class WorksiteStatusGroupFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels = {} as Record<string, string>;
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
