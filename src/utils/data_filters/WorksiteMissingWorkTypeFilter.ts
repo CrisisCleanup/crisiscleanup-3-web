@@ -4,7 +4,7 @@ import Filter from './Filter';
 
 export default class WorksiteMissingWorkTypeFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed: Record<string, unknown> = {};
     if (this.data.missing_work_type) {
       packed.missing_work_type = true;
     }
@@ -24,7 +24,7 @@ export default class WorksiteMissingWorkTypeFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels: Record<string, unknown> = {};
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
@@ -36,7 +36,7 @@ export default class WorksiteMissingWorkTypeFilter extends Filter {
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }
