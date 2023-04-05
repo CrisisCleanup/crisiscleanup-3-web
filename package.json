@@ -75,7 +75,6 @@
     "d3-array": "^2.8.0",
     "d3-color": "^1.4.1",
     "d3-interpolate": "^3.0.1",
-    "d3-quadtree": "^1.0.7",
     "d3-scale": "^3.2.1",
     "dayjs": "^1.11.7",
     "detect-browser-language": "0.0.2",

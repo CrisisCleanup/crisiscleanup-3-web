@@ -55,7 +55,6 @@ specifiers:
   d3-array: ^2.8.0
   d3-color: ^1.4.1
   d3-interpolate: ^3.0.1
-  d3-quadtree: ^1.0.7
   d3-scale: ^3.2.1
   dayjs: ^1.11.7
   detect-browser-language: 0.0.2
@@ -175,7 +174,6 @@ dependencies:
   d3-array: 2.12.1
   d3-color: 1.4.1
   d3-interpolate: 3.0.1
-  d3-quadtree: 1.0.7
   d3-scale: 3.3.0
   dayjs: 1.11.7
   detect-browser-language: 0.0.2
@@ -4323,10 +4321,6 @@ packages:
   /d3-polygon/3.0.1:
     resolution: {integrity: sha512-3vbA7vXYwfe1SYhED++fPUQlWSYTTGmFmQiany/gdbiWgU/iEyQzyymwL9SkJjFFuCS4902BSzewVGsHHmHtXg==}
     engines: {node: '>=12'}
-    dev: false
-
-  /d3-quadtree/1.0.7:
-    resolution: {integrity: sha512-RKPAeXnkC59IDGD0Wu5mANy0Q2V28L+fNe65pOCXVdVuTJS3WPKaJlFHer32Rbh9gIo9qMuJXio8ra4+YmIymA==}
     dev: false
 
   /d3-quadtree/3.0.1:
