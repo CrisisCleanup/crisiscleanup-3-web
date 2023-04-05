@@ -85,8 +85,8 @@ export const makeLocaleInputs = ({
   base = '',
 }: {
   inputs: string[];
-  prefix: string;
-  base: string;
+  prefix?: string;
+  base?: string;
 }): LocaleFormFieldsT =>
   _.transform(
     inputs,
