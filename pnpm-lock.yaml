@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@faker-js/faker': ^7.6.0
   '@fortawesome/fontawesome-svg-core': ^6.2.0
   '@fortawesome/free-brands-svg-icons': ^6.2.0
   '@fortawesome/free-regular-svg-icons': ^6.2.0
@@ -224,6 +225,7 @@ dependencies:
   vuex: 4.0.2_vue@3.2.41
 
 devDependencies:
+  '@faker-js/faker': 7.6.0
   '@types/leaflet': 1.9.0
   '@types/lodash': 4.14.186
   '@types/node': 18.11.6
@@ -765,6 +767,11 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@faker-js/faker/7.6.0:
+    resolution: {integrity: sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==}
+    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: true
 
   /@floating-ui/core/0.3.1:
