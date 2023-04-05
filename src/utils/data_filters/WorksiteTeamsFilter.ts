@@ -4,7 +4,7 @@ import Filter from './Filter';
 
 export default class WorksiteTeamsFilter extends Filter {
   packFunction() {
-    const packed = {};
+    const packed = {} as Record<string, any>;
     const teamsEntries = Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     });
@@ -27,19 +27,19 @@ export default class WorksiteTeamsFilter extends Filter {
   }
 
   getFilterLabels() {
-    const labels = {};
+    const labels = {} as Record<string, string>;
     for (const [key] of Object.entries(this.data).filter(([, value]) => {
       return Boolean(value);
     })) {
       labels[key] = `${useI18n().t('worksiteFilters.teams')}: ${
-        Team.find(key).name
+        Team.find(key)?.name
       }`;
     }
 
     return labels;
   }
 
-  removeField(identifier) {
+  removeField(identifier: string) {
     this.data[identifier] = false;
     this.data = { ...this.data };
   }
