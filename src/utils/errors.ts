@@ -18,18 +18,19 @@ export function getErrorMessage(error: any) {
     return i18n.global.t('info.error_500');
   }
 
-  const message = Array.isArray(error.response.data.errors[0])
-    ? error.response.data.errors[0].message[0]
-    : error.response.data.errors[0].message;
+  const _errors = error.response.data.errors as { [key: string]: string }[];
+  const message = Array.isArray(_errors[0])
+    ? _errors[0].message[0]
+    : _errors[0].message;
 
   if (error.response.status === 400) {
     // Show the error field, unless it is 'non_field_errors'
     let response = '';
-    error.response.data.errors.forEach((e: any) => {
+    for (const e of _errors) {
       let { field } = e;
       field = field === 'non_field_errors' ? '' : `${field}: `;
       response = `${response}${field}${e.message}<br>`;
-    });
+    }
     return response;
   }
 
