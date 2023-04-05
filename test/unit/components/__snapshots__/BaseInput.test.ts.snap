@@ -27,58 +27,6 @@ exports[`BaseInput > should render correctly and match snapshot 1`] = `
 </div>
 `;
 
-exports[`BaseInput > should render correctly and match snapshot when required and not provided 1`] = `
-<div
-  class="flex justify-start relative items-center"
-  data-v-82c69faf=""
->
-  <!--v-if-->
-  <input
-    autocomplete="off"
-    class="flex-grow p-1 text-base large"
-    data-cy=""
-    data-v-82c69faf=""
-    pattern=".*"
-    placeholder=""
-    required=""
-    rows="0"
-    style="--height: 40px; --width: 300px;"
-    type="search"
-  />
-  <!--v-if-->
-  <!--v-if-->
-  <!--v-if-->
-  
-  
-</div>
-`;
-
-exports[`BaseInput > should render correctly and match snapshot when required and not provided 2`] = `
-<div
-  class="flex justify-start relative items-center"
-  data-v-82c69faf=""
->
-  <!--v-if-->
-  <input
-    autocomplete="off"
-    class="flex-grow p-1 text-base large"
-    data-cy=""
-    data-v-82c69faf=""
-    pattern=".*"
-    placeholder=""
-    required=""
-    rows="0"
-    style="--height: 40px; --width: 300px;"
-    type="search"
-  />
-  <!--v-if-->
-  <!--v-if-->
-  <!--v-if-->
-  
-  
-</div>
-`;
-
 exports[`BaseInput > should render correctly and match snapshot when required and provided 1`] = `
 <div
   class="flex justify-start relative items-center"
