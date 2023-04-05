@@ -81,8 +81,7 @@ import User from '@/models/User';
 import Organization from '@/models/Organization';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import { getErrorMessage } from '@/utils/errors';
-
-const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+import { EMAIL_REGEX } from '@/utils/form';
 
 export default defineComponent({
   name: 'InviteUsers',
