@@ -39,6 +39,7 @@ export default class Worksite extends CCUModel<Worksite> {
   favorite!: boolean;
   favorite_id!: string | null;
   svi!: number;
+  language!: number;
 
   key_work_type!: Record<string, any>;
 
@@ -71,6 +72,7 @@ export default class Worksite extends CCUModel<Worksite> {
       updated_at: this.attr(null),
       favorite: this.attr(null),
       auto_contact_frequency_t: this.attr(null),
+      language: this.attr(null),
     };
   }
 

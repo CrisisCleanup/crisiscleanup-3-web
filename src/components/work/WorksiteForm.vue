@@ -72,6 +72,22 @@
           @update:modelValue="(v) => updateWorksite(v, 'email')"
         />
       </div>
+      <div class="form-field">
+        <span class="flex items-center">
+          <span>{{ $t('~~Primary Language') }}</span>
+        </span>
+        <base-select
+          :model-value="worksite.language"
+          :options="supportedLanguages"
+          class="bg-white"
+          select-classes="h-12 border"
+          item-key="id"
+          label="name_t"
+          size="large"
+          :placeholder="$t('~~Primary Language')"
+          @update:modelValue="(v) => updateWorksite(v, 'language')"
+        />
+      </div>
       <div v-if="currentIncident.auto_contact" class="form-field">
         <span slot="label" class="flex items-center">
           <span>{{ $t('casesVue.auto_contact_frequency') }}</span>
@@ -384,6 +400,7 @@ import WorksiteReportSection from './WorksiteReportSection.vue';
 import WorksiteSearchInput from './WorksiteSearchInput.vue';
 import SectionHeading from './SectionHeading.vue';
 import WorksiteNotes from './WorksiteNotes.vue';
+import Language from '@/models/Language';
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
   'formOptions.often',
@@ -483,6 +500,12 @@ export default {
 
     const currentIncident = computed(() => {
       return Incident.find(props.incidentId);
+    });
+
+    const supportedLanguages = computed(() => {
+      const languages = Language.all();
+      const ids = new Set([2, 7]);
+      return languages.filter((l) => ids.has(Number(l.id)));
     });
 
     const fields = computed(() => {
@@ -1327,6 +1350,7 @@ export default {
       form,
       onRemoveFile,
       worksiteImageSection,
+      supportedLanguages,
     };
   },
 };
