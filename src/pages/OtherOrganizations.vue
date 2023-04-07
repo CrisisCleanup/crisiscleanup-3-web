@@ -129,7 +129,7 @@
           :action="
             () => {
               $router.push(
-                `/incident/${currentIncidentId}/work/new?showTable=true&work_type__claimed_by=${
+                `/incident/${currentIncidentId}/work?showTable=true&work_type__claimed_by=${
                   slotProps.item.id
                 }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${getCreatedAtLteFilter()}`,
               );

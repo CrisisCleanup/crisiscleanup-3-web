@@ -628,6 +628,7 @@ export default defineComponent({
       const query = {
         incident: currentIncidentId.value,
         ...filterQuery.value,
+        ...route.query,
       };
       if (currentSearch.value) {
         query.search = currentSearch.value;
@@ -1370,6 +1371,10 @@ export default defineComponent({
         }
       }
       loadStatesForUser();
+      if (route.query.showTable) {
+        showingTable.value = true;
+        showingMap.value = false;
+      }
       await init();
     });
     function focusNewsTab() {
