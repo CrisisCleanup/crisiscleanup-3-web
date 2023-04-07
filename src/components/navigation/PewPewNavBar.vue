@@ -90,15 +90,6 @@ export default defineComponent({
         dashboard: {
           route: { to: `/dashboard` },
         },
-        cases: {
-          route: {
-            name: 'nav.new_case',
-            params: {
-              incidentId: currentIncidentId,
-            },
-            route: { to: `/incident/${currentIncidentId}/work` },
-          },
-        },
         phone: {
           route: { to: `/phone` },
           disabled: !$can || !$can('phone_agent'),
