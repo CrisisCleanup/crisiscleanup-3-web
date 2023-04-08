@@ -74,7 +74,7 @@
       </div>
       <div class="form-field">
         <span class="flex items-center">
-          <span>{{ $t('~~Primary Language') }}</span>
+          <span>{{ $t('formLabels.primary_language') }}</span>
         </span>
         <base-select
           :model-value="worksite.language"
@@ -84,7 +84,7 @@
           item-key="id"
           label="name_t"
           size="large"
-          :placeholder="$t('~~Primary Language')"
+          :placeholder="$t('formLabels.primary_language')"
           @update:modelValue="(v) => updateWorksite(v, 'language')"
         />
       </div>
