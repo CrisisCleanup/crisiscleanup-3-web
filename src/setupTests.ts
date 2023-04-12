@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { config } from '@vue/test-utils';
@@ -6,6 +6,50 @@ import { config } from '@vue/test-utils';
 config.global.mocks = {
   $t: (string: string, context: Record<string, any>) => string, // just return translation key
 };
+
+vi.mock('@geoman-io/leaflet-geoman-free', () => {
+  return {
+    __esModule: true,
+    default: vi.fn(),
+  };
+});
+vi.mock('vue-json-viewer', () => {
+  return {
+    __esModule: true,
+    default: vi.fn(),
+  };
+});
+vi.mock('vue3-mq');
+
+class MockWorker {
+  private url: string;
+  private onmessage: (p: { data: any }) => void;
+  constructor(stringUrl: string) {
+    this.url = stringUrl;
+    // eslint-disable-next-line unicorn/prefer-add-event-listener
+    this.onmessage = () => undefined;
+  }
+
+  postMessage(msg: any) {
+    this.onmessage({ data: msg });
+  }
+
+  addEventListener(type: any, listener: (p: { data: any }) => void) {
+    // eslint-disable-next-line unicorn/prefer-add-event-listener
+    this.onmessage = listener;
+  }
+
+  removeEventListener() {
+    // eslint-disable-next-line unicorn/prefer-add-event-listener
+    this.onmessage = () => undefined;
+  }
+
+  terminate() {
+    return undefined;
+  }
+}
+
+global.Worker = MockWorker as any;
 
 const tableData = [
   {

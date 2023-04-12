@@ -1,5 +1,6 @@
 <template>
   <base-select
+    v-if="events"
     :model-value="filterEvents"
     multiple
     searchable

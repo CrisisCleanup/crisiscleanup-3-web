@@ -83,7 +83,7 @@ export default defineConfig(async ({ command }) => {
   configs.push({
     test: {
       include: ['test/**/*.test.ts', 'test/**/*.spec.ts'],
-      setupFiles: './src/setupTests.ts',
+      setupFiles: ['./src/setupTests.ts', 'fake-indexeddb/auto'],
       globals: true,
       environment: 'happy-dom',
       deps: {

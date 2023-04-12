@@ -1,5 +1,5 @@
 <template>
-  <div class="table-grid w-full">
+  <div class="table-grid js-table w-full">
     <div
       v-if="!hideHeader && $mq !== 'sm'"
       class="header text-crisiscleanup-grey-700 bg-white"
@@ -9,7 +9,10 @@
         v-if="enableSelection && $mq !== 'sm'"
         class="flex items-center p-2 border-b"
       >
-        <base-checkbox class="mb-5" @update:modelValue="setAllChecked" />
+        <base-checkbox
+          class="mb-5 js-select-all"
+          @update:modelValue="setAllChecked"
+        />
       </div>
       <div
         v-if="hasRowDetails && $mq !== 'sm'"
@@ -114,8 +117,11 @@
         v-for="item of data"
         :key="item.id"
         :style="gridStyleRow"
-        class="hover:bg-crisiscleanup-light-grey border-b"
-        :class="{ 'bg-crisiscleanup-light-grey': selectedItems.has(item.id) }"
+        class="hover:bg-crisiscleanup-light-grey border-b js-table-row"
+        :class="{
+          'bg-crisiscleanup-light-grey':
+            selectedItems && selectedItems.has(item.id),
+        }"
         @click="rowClick(item, $event)"
       >
         <div
@@ -124,7 +130,7 @@
         >
           <base-checkbox
             :model-value="selectedItems.has(item.id)"
-            class="mb-5"
+            class="mb-5 js-select-item"
             data-cy="tableview_actionSelect"
             @update:modelValue="
               (value) => {
@@ -216,16 +222,17 @@
             :text="$t('tableVue.prev')"
             :alt="$t('tableVue.prev')"
             icon="caret-left"
-            class="mr-3 text-base"
+            class="mr-3 text-base js-prev"
           />
-          <div>
+          <div class="js-page-triggers">
             <template v-for="trigger in paginationTriggers" :key="trigger">
               <span
                 :class="{
                   'rounded-full border px-3 py-1 bg-white shadow-inner':
                     trigger === pagination.current,
+                  [`js-pagination-trigger-${trigger}`]: true,
                 }"
-                class="cursor-pointer mx-4 text-base"
+                class="cursor-pointer mx-4 text-base js-pagination-trigger"
                 @click="
                   () => {
                     pageChangeHandle(trigger);
@@ -245,7 +252,7 @@
             :text="$t('tableVue.next')"
             :alt="$t('tableVue.next')"
             suffix-icon="caret-right"
-            class="text-base"
+            class="text-base js-next"
           />
         </div>
       </div>
@@ -254,7 +261,8 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, defineComponent, PropType } from 'vue';
+import type { PropType } from 'vue';
+import { computed, ref, defineComponent } from 'vue';
 import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 import useLogEvent from '@/hooks/useLogEvent';

@@ -143,6 +143,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^9.8.0",
+    "fake-indexeddb": "^4.0.1",
     "happy-dom": "^8.1.1",
     "husky": "^8.0.2",
     "is-ci": "^3.0.1",
