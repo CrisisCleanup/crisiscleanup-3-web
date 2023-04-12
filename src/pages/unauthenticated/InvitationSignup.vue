@@ -225,7 +225,6 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      return;
       try {
         const results = await Invitation.api().fetchById(route.params.token);
         [invitation.value] = results.entities.invitations;
