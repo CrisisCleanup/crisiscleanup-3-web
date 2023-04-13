@@ -5,6 +5,7 @@
     }}</base-text>
     <div class="flex items-center justify-start">
       <DragDrop
+        v-if="imports"
         class="cursor-pointer w-32 py-2 mr-2"
         container-class="items-center justify-start cursor-pointer"
         :disabled="uploading"
