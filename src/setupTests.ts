@@ -67,58 +67,6 @@ export const restHandlers = [
       }),
     );
   }),
-  rest.get(
-    `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          results: [
-            /* Add mock data for the API response */
-          ],
-        }),
-      );
-    },
-  ),
-
-  rest.post(
-    `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
-    (req, res, ctx) => {
-      return res(ctx.status(200));
-    },
-  ),
-
-  rest.get(
-    `${
-      import.meta.env.VITE_APP_API_BASE_URL
-    }/worksites_import/:reportId/get_successes`,
-    (req, res, ctx: any) => {
-      return res(
-        ctx.status(200),
-        ctx.blob(
-          new Blob([
-            /* Add mock data for the API response */
-          ]),
-        ),
-      );
-    },
-  ),
-
-  rest.get(
-    `${
-      import.meta.env.VITE_APP_API_BASE_URL
-    }/worksites_import/:reportId/get_failures`,
-    (req, res, ctx: any) => {
-      return res(
-        ctx.status(200),
-        ctx.blob(
-          new Blob([
-            /* Add mock data for the API response */
-          ]),
-        ),
-      );
-    },
-  ),
 ];
 
 const server = setupServer(...restHandlers);
