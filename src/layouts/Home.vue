@@ -34,7 +34,10 @@
         </span>
       </div>
     </div>
-    <div class="register flex items-center justify-center m-8 w-max">
+    <div
+      class="register flex items-center justify-center m-8 w-max"
+      v-if="!hideRegister"
+    >
       <div class="grid--actions mb-4 flex flex-col w-full">
         <base-text
           font="display"
@@ -168,12 +171,18 @@ export default defineComponent({
       terms: t('publicNav.terms'),
     });
 
+    const route = useRoute();
+
+    //Hide register button on pages where the user is already registering or accepting an invitation
+    const hideRegister = route.name === "nav.register" || route.name === "nav.invitation_token";
+
     return {
       routes: defaultRoutes,
       footerRoutes,
       lang,
       messages,
       route,
+      hideRegister,
     };
   },
 });
