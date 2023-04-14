@@ -29,14 +29,14 @@ describe('Card', () => {
       },
     });
     expect(wrapper.html()).toMatchInlineSnapshot(`
-      "<div class=\\"shadow-crisiscleanup-card card h-full\\" data-v-cc50f56d=\\"\\">
-        <div class=\\"header\\" data-v-cc50f56d=\\"\\">
-          <div class=\\"header--inner\\" data-v-cc50f56d=\\"\\">
+      "<div data-v-inspector-file=\\"/Users/tobi/code/crisiscleanup-4-web/src/components/cards/Card.vue\\" data-v-inspector-line=\\"2\\" data-v-inspector-column=\\"3\\" data-v-inspector-title=\\"Card.vue\\" class=\\"shadow-crisiscleanup-card card h-full\\" data-v-cc50f56d=\\"\\">
+        <div data-v-inspector-file=\\"/Users/tobi/code/crisiscleanup-4-web/src/components/cards/Card.vue\\" data-v-inspector-line=\\"3\\" data-v-inspector-column=\\"5\\" data-v-inspector-title=\\"Card.vue\\" class=\\"header\\" data-v-cc50f56d=\\"\\">
+          <div data-v-inspector-file=\\"/Users/tobi/code/crisiscleanup-4-web/src/components/cards/Card.vue\\" data-v-inspector-line=\\"4\\" data-v-inspector-column=\\"7\\" data-v-inspector-title=\\"Card.vue\\" class=\\"header--inner\\" data-v-cc50f56d=\\"\\">
             <div>Header</div>
           </div>
         </div>
-        <div class=\\"body\\" data-v-cc50f56d=\\"\\">
-          <div class=\\"body--inner h-full\\" style=\\"\\" data-v-cc50f56d=\\"\\">
+        <div data-v-inspector-file=\\"/Users/tobi/code/crisiscleanup-4-web/src/components/cards/Card.vue\\" data-v-inspector-line=\\"8\\" data-v-inspector-column=\\"5\\" data-v-inspector-title=\\"Card.vue\\" class=\\"body\\" data-v-cc50f56d=\\"\\">
+          <div data-v-inspector-file=\\"/Users/tobi/code/crisiscleanup-4-web/src/components/cards/Card.vue\\" data-v-inspector-line=\\"9\\" data-v-inspector-column=\\"7\\" data-v-inspector-title=\\"Card.vue\\" class=\\"body--inner h-full\\" style=\\"\\" data-v-cc50f56d=\\"\\">
             <div>Hello world</div>
           </div>
         </div>

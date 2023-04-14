@@ -12,7 +12,7 @@ describe('AjaxTable', () => {
           ['id', '1fr', 'ID'],
           ['name', '1fr', 'Name'],
         ]),
-        url: 'https://test.crisiscleanup.io/table',
+        url: `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
         query: {},
       },
     });
@@ -29,7 +29,7 @@ describe('AjaxTable', () => {
           ['id', '1fr', 'ID'],
           ['name', '1fr', 'Name'],
         ]),
-        url: 'https://test.crisiscleanup.io/table',
+        url: `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
         query: {},
       },
     });

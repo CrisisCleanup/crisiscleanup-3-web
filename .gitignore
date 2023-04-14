@@ -5,7 +5,8 @@ node_modules
 /public/map_icons/*.svg
 
 # Environment Files
-.env*
+.env
+.env.staging
 !.env.sample
 
 # Direnv

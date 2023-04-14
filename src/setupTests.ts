@@ -59,14 +59,58 @@ const tableData = [
 ];
 
 export const restHandlers = [
-  rest.get('https://test.crisiscleanup.io/table', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        results: tableData,
-      }),
-    );
-  }),
+  rest.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          results: tableData,
+        }),
+      );
+    },
+  ),
+  rest.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages`,
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          results: [
+            {
+              id: 1,
+              content: 'Hello, how can I help you?',
+              created_at: '2023-01-01T00:00:00.000Z',
+              is_urgent: false,
+            },
+            {
+              id: 2,
+              content: 'I need assistance with my account.',
+              created_at: '2023-01-01T01:00:00.000Z',
+              is_urgent: false,
+            },
+          ],
+        }),
+      );
+    },
+  ),
+  rest.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups/1/my_favorites`,
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          results: [],
+        }),
+      );
+    },
+  ),
+  rest.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/users/undefined`,
+    (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json({}));
+    },
+  ),
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
     (req, res, ctx) => {

@@ -6,6 +6,10 @@ exports[`BaseInput > should render correctly and match snapshot 1`] = `
 <div
   class="flex justify-start relative items-center"
   data-v-82c69faf=""
+  data-v-inspector-column="3"
+  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseInput.vue"
+  data-v-inspector-line="2"
+  data-v-inspector-title="BaseInput.vue"
 >
   <!--v-if-->
   <input
@@ -31,6 +35,10 @@ exports[`BaseInput > should render correctly and match snapshot when required an
 <div
   class="flex justify-start relative items-center"
   data-v-82c69faf=""
+  data-v-inspector-column="3"
+  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseInput.vue"
+  data-v-inspector-line="2"
+  data-v-inspector-title="BaseInput.vue"
 >
   <!--v-if-->
   <input
@@ -57,6 +65,10 @@ exports[`BaseInput > should render correctly and match snapshot when required an
 <div
   class="flex justify-start relative items-center"
   data-v-82c69faf=""
+  data-v-inspector-column="3"
+  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseInput.vue"
+  data-v-inspector-line="2"
+  data-v-inspector-title="BaseInput.vue"
 >
   <!--v-if-->
   <input
@@ -83,10 +95,18 @@ exports[`BaseInput > should render correctly and match snapshot with label 1`] =
 <div
   class="flex justify-start relative flex-col items-start border"
   data-v-82c69faf=""
+  data-v-inspector-column="3"
+  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseInput.vue"
+  data-v-inspector-line="2"
+  data-v-inspector-title="BaseInput.vue"
 >
   <label
     class="text-xs px-1 text-crisiscleanup-dark-300"
     data-v-82c69faf=""
+    data-v-inspector-column="5"
+    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseInput.vue"
+    data-v-inspector-line="3"
+    data-v-inspector-title="BaseInput.vue"
   >
     Top Label
   </label>

@@ -26,10 +26,10 @@
     "clean": "pnpm dlx rimraf dist \"**/coverage\"",
     "repair:clean-modules": "pnpm dlx rimraf node_modules",
     "repair:prune-pnpm": "pnpm run clean && pnpm run repair:clean-modules && pnpm store prune",
-    "test": "vitest",
-    "test:unit": "vitest",
+    "test": "vitest --mode testing",
+    "test:unit": "vitest --mode testing",
     "test:e2e": "echo \"No e2e tests yet\" && exit 0",
-    "test:cov": "vitest run --coverage"
+    "test:cov": "vitest --mode testing run --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.0",

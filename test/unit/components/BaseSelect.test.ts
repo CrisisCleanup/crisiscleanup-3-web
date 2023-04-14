@@ -54,7 +54,7 @@ describe('BaseSelect', () => {
         searchable: true,
         options: async () => {
           const response = await axios.get(
-            'https://test.crisiscleanup.io/table',
+            `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
           );
           return response.data.results;
         },
