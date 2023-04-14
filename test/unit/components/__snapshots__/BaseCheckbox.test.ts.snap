@@ -4,10 +4,6 @@ exports[`BaseCheckbox > should match snapshot with props 1`] = `
 <label
   class="checkbox-container"
   data-v-4f6a8895=""
-  data-v-inspector-column="3"
-  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-  data-v-inspector-line="2"
-  data-v-inspector-title="BaseCheckbox.vue"
   style="display: block; padding-left: 30px;"
   value="true"
 >
@@ -16,19 +12,11 @@ exports[`BaseCheckbox > should match snapshot with props 1`] = `
   <input
     class="checkmark-input"
     data-v-4f6a8895=""
-    data-v-inspector-column="5"
-    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-    data-v-inspector-line="4"
-    data-v-inspector-title="BaseCheckbox.vue"
     type="checkbox"
   />
   <span
     class="checkmark"
     data-v-4f6a8895=""
-    data-v-inspector-column="5"
-    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-    data-v-inspector-line="15"
-    data-v-inspector-title="BaseCheckbox.vue"
     style="top: 0px; left: 0px;"
   />
 </label>
@@ -38,10 +26,6 @@ exports[`BaseCheckbox > should render correctly and match snapshot 1`] = `
 <label
   class="checkbox-container"
   data-v-4f6a8895=""
-  data-v-inspector-column="3"
-  data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-  data-v-inspector-line="2"
-  data-v-inspector-title="BaseCheckbox.vue"
   style="display: block; padding-left: 30px;"
 >
   
@@ -49,19 +33,11 @@ exports[`BaseCheckbox > should render correctly and match snapshot 1`] = `
   <input
     class="checkmark-input"
     data-v-4f6a8895=""
-    data-v-inspector-column="5"
-    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-    data-v-inspector-line="4"
-    data-v-inspector-title="BaseCheckbox.vue"
     type="checkbox"
   />
   <span
     class="checkmark"
     data-v-4f6a8895=""
-    data-v-inspector-column="5"
-    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseCheckbox.vue"
-    data-v-inspector-line="15"
-    data-v-inspector-title="BaseCheckbox.vue"
     style="top: 0px; left: 0px;"
   />
 </label>

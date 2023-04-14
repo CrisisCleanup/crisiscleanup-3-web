@@ -13,10 +13,6 @@ exports[`BaseIcon > should render correctly and match snapshot 1`] = `
     alt="button"
     class="ccu-icon cursor-pointer small"
     data-v-92245bab=""
-    data-v-inspector-column="5"
-    data-v-inspector-file="/Users/tobi/code/crisiscleanup-4-web/src/components/BaseIcon.vue"
-    data-v-inspector-line="12"
-    data-v-inspector-title="BaseIcon.vue"
     src="/src/assets/icons/dashboard.svg"
   />
   
