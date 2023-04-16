@@ -98,7 +98,6 @@
             @input="filterSvi"
           />
           <Slider
-            v-if="datesList && datesList.length > 1000"
             track-size="8px"
             handle-size="12px"
             primary-color="#dadada"
@@ -108,9 +107,9 @@
             :title="$t('casesVue.updated')"
             :value="dateSliderValue"
             :min="0"
-            :max="1000"
-            :from="dateSliderFrom()"
-            :to="dateSliderTo()"
+            :max="100"
+            :from="dateSliderFrom"
+            :to="dateSliderTo"
             @input="filterDates"
           ></Slider>
         </div>
@@ -559,7 +558,7 @@ export default defineComponent({
     const selectedTableItems = ref<Set<number>>(new Set());
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
-    const dateSliderValue = ref(1000);
+    const dateSliderValue = ref(100);
     let mapUtils: MapUtils | null;
     const unreadChatCount = ref(0);
     const unreadUrgentChatCount = ref(0);
@@ -821,9 +820,7 @@ export default defineComponent({
       updateUserState({});
     }
 
-    const datesList = ref<any[]>([]);
-
-    function getDatesList() {
+    const getDatesList = useMemoize((_) => {
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
       const list = container?.children.map((marker: any) => {
@@ -838,10 +835,15 @@ export default defineComponent({
         });
       }
       return list;
-    }
+    });
 
-    const dateSliderFrom = () => {
-      const list = datesList.value;
+    const dateSliderFrom = ref<string>('');
+    const dateSliderTo = ref<string>('');
+
+    const getDateSliderFrom = useMemoize((_) => {
+      const layer = mapUtils?.getCurrentMarkerLayer();
+      const container = layer?._pixiContainer;
+      const list = getDatesList(container?.children?.length);
       if (list) {
         return `${moment({ hours: 0 }).diff(
           list[0].updated_at,
@@ -849,10 +851,12 @@ export default defineComponent({
         )} days ago`;
       }
       return '';
-    };
+    });
 
-    const dateSliderTo = () => {
-      const list = datesList.value;
+    const getDateSliderTo = useMemoize((_) => {
+      const layer = mapUtils?.getCurrentMarkerLayer();
+      const container = layer?._pixiContainer;
+      const list = getDatesList(container?.children?.length);
       if (list) {
         return `${moment({ hours: 0 }).diff(
           list[list.length - 1].updated_at,
@@ -860,25 +864,26 @@ export default defineComponent({
         )} days ago`;
       }
       return '';
-    };
+    });
 
     function filterDates(value: number) {
       if (sviSliderValue.value !== 100) {
         filterSvi(100);
       }
-      if (value === 0) return;
-      dateSliderValue.value = Number(value);
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
+      const dl = getDatesList(container?.children?.length);
+      dateSliderFrom.value = getDateSliderFrom(container?.children?.length);
+      dateSliderTo.value = getDateSliderTo(container?.children?.length);
+      if (value === 0) return;
+      dateSliderValue.value = Number(value);
 
-      if (datesList.value) {
-        const count = Math.floor(
-          (datesList.value.length * Number(value)) / 1000,
-        );
-        const filteredSvi = datesList.value.slice(0, count);
-        const minSvi = filteredSvi[filteredSvi.length - 1].updated_at;
+      if (dl) {
+        const count = Math.floor((dl.length * Number(value)) / 100);
+        const filteredDates = dl.slice(0, count);
+        const minDate = filteredDates[filteredDates.length - 1]?.updated_at;
         for (const markerSprite of container?.children || []) {
-          markerSprite.visible = markerSprite.updated_at_moment > minSvi;
+          markerSprite.visible = markerSprite.updated_at_moment > minDate;
         }
 
         layer?._renderer.render(container);
@@ -1286,7 +1291,6 @@ export default defineComponent({
           },
           ({ workTypes }) => {
             availableWorkTypes.value = workTypes;
-            getDatesList();
 
             const states = currentUser?.value?.getStatesForIncident(
               currentIncidentId.value,
@@ -1299,8 +1303,11 @@ export default defineComponent({
                 [_southWest.lat, _southWest.lng],
               ]);
             }
-            datesList.value = getDatesList();
             filterSvi(sviSliderValue.value);
+            nextTick(() => {
+              // Used to trigger calculation of labels ofr updated slider
+              filterDates(0);
+            });
             updateUserState({ mapViewPort: states.mapViewPort });
             loadStatesForUser();
           },
@@ -1449,7 +1456,6 @@ export default defineComponent({
       currentSearch,
       numeral,
       moment,
-      datesList,
       dateSliderFrom,
       dateSliderTo,
       focusNewsTab,

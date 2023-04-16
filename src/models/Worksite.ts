@@ -237,9 +237,11 @@ export default class Worksite extends CCUModel<Worksite> {
             (userId) =>
               Number(userId) !== Number(User.store().getters['auth/userId']),
           );
-        await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
-          dataKey: 'results',
-        });
+        if (eventUserIds.length > 0) {
+          await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
+            dataKey: 'results',
+          });
+        }
         return worksite;
       },
       async find_or_fetch(id, { resolve = true }) {
