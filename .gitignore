@@ -5,9 +5,9 @@ node_modules
 /public/map_icons/*.svg
 
 # Environment Files
-.env
-.env.staging
+.env*
 !.env.sample
+!.env.test
 
 # Direnv
 !.envrc
