@@ -4,23 +4,23 @@
 
 Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 600,000+ volunteers from 2,500+ organizations with 140,000+ households in 55 states/provinces and 207 disasters in 7 countries; a new disaster every two weeks.
 
-Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction. 
+Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction.
 
-Other Project Stats (As of 2023-03-13)
--------------
+## Other Project Stats (As of 2023-03-13)
 
- - 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
- - 35,000+: Households that could not have been helped without Crisis Cleanup.
- - 5.6 Million: Number of volunteer hours facilitated.
- - 1.4 Million: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
- - $1.695 Billion: Minimum total market value of services to survivors.
- - $1,741: Value of each cleanup volunteer to his/her community.
- - $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
- - $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
- - $9,052: Average commercial value of service to each homeowner.
-How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
+- 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
+- 35,000+: Households that could not have been helped without Crisis Cleanup.
+- 5.6 Million: Number of volunteer hours facilitated.
+- 1.4 Million: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
+- $1.695 Billion: Minimum total market value of services to survivors.
+- $1,741: Value of each cleanup volunteer to his/her community.
+- $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
+- $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
+- $9,052: Average commercial value of service to each homeowner.
+  How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
 
 # Contributing
+
 To preserve our ability to provide open source humanitarian disaster software, all contributions are subject to the terms of the relevant [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) downloadable at [crisiscleanup.org/contributions](https://www.crisiscleanup.org/contributions).
 
 Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-web/blob/master/CONTRIBUTING.md) for important details.
@@ -108,27 +108,4 @@ pnpm run test:cov
 
 #### Environment Variables
 
-Setup the project environment by creating a `.env` file with (at least) the following:
-
-```bash
-VITE_APP_TITLE=
-VITE_APP_WHAT_3_WORDS_API_KEY=
-VITE_APP_GOOGLE_MAPS_API_KEY=
-VITE_APP_GOOGLE_TRANSLATE_API_KEY=
-VITE_APP_PITNEYBOWES_API_KEY=
-VITE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN=
-VITE_APP_S3D_BUCKET=
-VITE_APP_API_BASE_URL=
-VITE_APP_PORTAL_KEY=
-
-# CCP
-VITE_APP_CCP_URL=
-VITE_APP_WS_URL=
-VITE_APP_AWS_CCP_REGION=
-VITE_APP_CCP_PRINCIPAL=
-VITE_APP_CCP_ROLE=
-VITE_APP_CCP_INSTANCE=
-VITE_APP_STAGE=
-```
-
-
+Setup the project environment by creating a `.env` file. See [`.env.sample`](.env.sample) for an example.
