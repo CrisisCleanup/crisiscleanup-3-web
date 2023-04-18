@@ -27,6 +27,7 @@ specifiers:
   '@sipec/vue3-tags-input': ^3.0.4
   '@turf/turf': ^6.5.0
   '@types/geojson': ^7946.0.10
+  '@types/google.maps': ^3.52.5
   '@types/leaflet': ^1.9.0
   '@types/leaflet.gridlayer.googlemutant': ^0.4.6
   '@types/leaflet.heat': ^0.2.1
@@ -223,6 +224,7 @@ dependencies:
 
 devDependencies:
   '@faker-js/faker': 7.6.0
+  '@types/google.maps': 3.52.5
   '@types/leaflet': 1.9.0
   '@types/lodash': 4.14.186
   '@types/node': 18.11.6
@@ -3018,6 +3020,10 @@ packages:
   /@types/geojson/7946.0.8:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
     dev: false
+
+  /@types/google.maps/3.52.5:
+    resolution: {integrity: sha512-nhFo5xLsWnjr2zuL0V5khlpo2pPFXJzYdnuIt3hLBGgcvMkLfRqKP8TdKrjh0gUuWfm55Iex+3XU1v+oAyu1jw==}
+    dev: true
 
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
