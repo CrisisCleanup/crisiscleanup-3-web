@@ -28,12 +28,12 @@ export namespace pitneybowes {
   };
 
   export type GeosearchLocation = {
-    address: PBMatchedAddress;
-    distance: PBDistance;
-    geometry: PBGeometry;
+    address: MatchedAddress;
+    distance: Distance;
+    geometry: Geometry;
   };
 
   export type GeosearchLocations = {
-    location: PBGeosearchLocation[];
+    location: GeosearchLocation[];
   };
 }
