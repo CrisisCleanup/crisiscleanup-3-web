@@ -1,16 +1,21 @@
-/* global google */
-/* eslint-disable */
+import * as parser from 'parse-address';
+import { store } from '@/store';
+import type { pitneybowes } from '@/types/pitney-bowes';
 
-import { store } from '../store';
+export type GeocoderType = 'google' | 'pitney-bowes';
+
+export interface LatitudeLongitude {
+  latitude: number;
+  longitude: number;
+}
 
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
-let GEOCODER: string = 'google';
-import * as parser from 'parse-address';
+const GEOCODER = 'google' as GeocoderType;
 
 export default {
   getGooglePlaceDetails(placeId: string) {
     const sessionToken = store.getters['map/autocompleteToken'];
-    return new Promise((resolve) => {
+    return new Promise<google.maps.places.PlaceResult>((resolve) => {
       const div = document.createElement('div');
       const map = new google.maps.Map(div, {
         center: { lat: -33.866, lng: 151.196 },
@@ -30,7 +35,7 @@ export default {
   },
   getOauthToken() {
     const tokenUrl = `${GEOCODER_BASE_URL}/oauth/token`;
-    const params = {
+    const params: Record<string, any> = {
       grant_type: 'client_credentials',
     };
     const URLSearchParams = Object.keys(params)
@@ -52,12 +57,25 @@ export default {
       .then((resp) => resp.json())
       .then((data) => data.access_token);
   },
-  async getMatchingAddresses(text, country, maxCandidates = 5) {
+  async getMatchingAddresses<
+    T extends
+      | google.maps.places.AutocompletePrediction
+      | pitneybowes.GeosearchLocation,
+  >(
+    text: string,
+    country: string,
+    maxCandidates = 5,
+  ): Promise<
+    {
+      description: string;
+      data: T;
+    }[]
+  > {
     if (GEOCODER === 'pitney-bowes') {
       const geoCoderUrl = new URL(
         `${GEOCODER_BASE_URL}/location-intelligence/geosearch/v2/locations`,
       );
-      const params = {
+      const params: Record<string, any> = {
         searchText: text,
         country,
         maxCandidates,
@@ -77,13 +95,13 @@ export default {
           Authorization: `Bearer ${oauthToken}`,
         },
       })
-        .then((resp) => resp.json())
+        .then<pitneybowes.GeosearchLocations>((resp) => resp.json())
         .then((data) => data.location);
 
       return results.map((result) => {
         return {
           description: result.address.formattedAddress,
-          data: result,
+          data: result as T,
         };
       });
     } else if (GEOCODER === 'google') {
@@ -109,7 +127,7 @@ export default {
                 results.map((result) => {
                   return {
                     description: result.description,
-                    data: result,
+                    data: result as T,
                   };
                 }),
               );
@@ -124,7 +142,11 @@ export default {
     }
   },
 
-  getAddress(address_components, location, addressText) {
+  getAddress(
+    address_components: google.maps.GeocoderAddressComponent[],
+    location: google.maps.places.PlaceResult,
+    addressText: string,
+  ) {
     const parsedAddress = parser.parseLocation(addressText);
     const streetNumber =
       this.extractFromAddress(address_components, 'street_number') ||
@@ -161,7 +183,7 @@ export default {
       },
     };
   },
-  async getPlaceDetails(address, placeId = null) {
+  async getPlaceDetails(address: string, placeId = null) {
     if (GEOCODER === 'google') {
       return new Promise((resolve, reject) => {
         if (placeId) {
@@ -184,7 +206,12 @@ export default {
         }
       });
     } else if (GEOCODER === 'pitney-bowes') {
-      const [result] = await this.getMatchingAddresses(address, 'USA', 1);
+      const [result] =
+        await this.getMatchingAddresses<pitneybowes.GeosearchLocation>(
+          address,
+          'USA',
+          1,
+        );
       return {
         address_components: {
           address: result.data.address.mainAddressLine,
@@ -201,7 +228,7 @@ export default {
     }
   },
 
-  async getLocationDetails({ longitude, latitude }) {
+  async getLocationDetails({ longitude, latitude }: LatitudeLongitude) {
     if (GEOCODER === 'google') {
       const latlng = { lat: latitude, lng: longitude };
       return new Promise((resolve, reject) => {
@@ -250,7 +277,7 @@ export default {
       const geoCoderUrl = new URL(
         `${GEOCODER_BASE_URL}/location-intelligence/geocode-service/v1/transient/advanced/reverseGeocode`,
       );
-      const params = {
+      const params: Record<string, any> = {
         x: longitude,
         y: latitude,
       };
@@ -292,7 +319,10 @@ export default {
    * @param type key for desired address component
    * @returns {String} value, if found, for given type (key)
    */
-  extractFromAddress(components, type) {
+  extractFromAddress(
+    components: google.maps.GeocoderAddressComponent[],
+    type: string,
+  ) {
     return (
       components
         .filter((component) => component.types.includes(type))
