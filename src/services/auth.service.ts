@@ -3,6 +3,17 @@ import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import { omit } from 'lodash';
 
+export interface CCUJwtDecoded {
+  username: string;
+  iat: number;
+  exp: number;
+  jti: string;
+  user_id: number;
+  orig_iat: number;
+  aud: string;
+  iss: string;
+}
+
 const AuthService = {
   getUser() {
     return JSON.parse(localStorage.getItem('user'));
@@ -18,7 +29,7 @@ const AuthService = {
   getExpiry() {
     const user = localStorage.getItem('user');
     if (user) {
-      const decoded = jwt_decode(JSON.parse(user).access_token);
+      const decoded = jwt_decode<CCUJwtDecoded>(JSON.parse(user).access_token);
       return moment.unix(decoded.exp);
     }
 
@@ -29,7 +40,7 @@ const AuthService = {
     axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
   },
   updateUser(userClaims: Record<any, any>) {
-    const user = this.getUser();
+    const user = this.getUser()!;
     localStorage.setItem(
       'user',
       JSON.stringify({
