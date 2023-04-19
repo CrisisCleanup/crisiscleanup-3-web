@@ -11,18 +11,18 @@ const dbPromise = openDB('crisiscleanup', 3, {
 });
 
 const DbService = {
-  async setItem(key, value) {
+  async setItem(key: string, value: unknown) {
     const idbpDatabase = await dbPromise;
     return idbpDatabase.put('keyval', value, key);
   },
-  async getItem(key) {
+  async getItem(key: string): Promise<unknown> {
     const idbpDatabase = await dbPromise;
-    const entry = await idbpDatabase.get('keyval', key);
+    const entry = (await idbpDatabase.get('keyval', key)) as string;
     if (entry) {
       try {
-        return JSON.parse(entry);
+        return JSON.parse(entry) as Record<string, unknown>;
       } catch {
-        return entry;
+        return entry as unknown;
       }
     }
 
