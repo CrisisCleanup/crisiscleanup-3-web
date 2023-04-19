@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import { omit } from 'lodash';
 
-export interface CCUJwtDecoded {
+export type CCUJwtDecoded = {
   username: string;
   iat: number;
   exp: number;
@@ -12,16 +12,22 @@ export interface CCUJwtDecoded {
   orig_iat: number;
   aud: string;
   iss: string;
-}
+};
 
 const AuthService = {
   getUser() {
-    return JSON.parse(localStorage.getItem('user'));
+    const user = localStorage.getItem('user');
+    if (!user) {
+      console.error('No user found in local storage');
+      return null;
+    }
+
+    return JSON.parse(user) as Record<string, any>;
   },
   getToken() {
     const user = localStorage.getItem('user');
     if (user) {
-      return JSON.parse(user).access_token;
+      return JSON.parse(user).access_token as string;
     }
 
     return null;
@@ -35,11 +41,12 @@ const AuthService = {
 
     return moment();
   },
-  saveUser(user: Record<any, any>) {
+  saveUser(user: Record<string, any>) {
     localStorage.setItem('user', JSON.stringify(user));
-    axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
+    const accessToken = user.access_token as string;
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   },
-  updateUser(userClaims: Record<any, any>) {
+  updateUser(userClaims: Record<string, any>) {
     const user = this.getUser()!;
     localStorage.setItem(
       'user',
@@ -48,7 +55,8 @@ const AuthService = {
         user_claims: userClaims,
       }),
     );
-    axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
+    const accessToken = user.access_token as string;
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   },
   removeUser() {
     localStorage.removeItem('user');
