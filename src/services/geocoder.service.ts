@@ -28,6 +28,9 @@ export default {
       };
       const service = new google.maps.places.PlacesService(map);
       service.getDetails(request, (place, status) => {
+        if (!place || status !== google.maps.places.PlacesServiceStatus.OK) {
+          throw new Error('getGooglePlaceDetails: Place not found');
+        }
         resolve(place);
         div.remove();
       });
@@ -166,6 +169,9 @@ export default {
     const postal_code =
       this.extractFromAddress(address_components, 'postal_code') ||
       parsedAddress.zip;
+    if (!location.geometry) {
+      console.error("Can't get location geometry", location);
+    }
     return {
       address_components: {
         address: `${streetNumber} ${streetName}`,
@@ -178,8 +184,8 @@ export default {
         postal_code,
       },
       location: {
-        lat: location.geometry.location.lat(),
-        lng: location.geometry.location.lng(),
+        lat: location?.geometry?.location?.lat(),
+        lng: location?.geometry?.location?.lng(),
       },
     };
   },
@@ -189,12 +195,21 @@ export default {
         if (placeId) {
           this.getGooglePlaceDetails(placeId).then((place) => {
             const { address_components } = place;
+            if (!address_components) {
+              reject('No address_components');
+              return;
+            }
             resolve(this.getAddress(address_components, place, address));
           });
         } else {
           const geocoder = new google.maps.Geocoder();
           geocoder.geocode({ address }, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
+              if (!results || results.length === 0) {
+                console.error("getPlaceDetails: Can't find address", address);
+                reject(`Can't find address: ${status}`);
+                return;
+              }
               const location = results[0];
               const { address_components } = location;
               resolve(this.getAddress(address_components, location, address));
@@ -235,6 +250,11 @@ export default {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ location: latlng }, (results, status) => {
           if (status === google.maps.GeocoderStatus.OK) {
+            if (!results || results.length === 0) {
+              console.error('getLocationDetails: No results', results);
+              reject(`No results: ${status}`);
+              return;
+            }
             const location = results[0];
             const { address_components } = location;
             resolve({
