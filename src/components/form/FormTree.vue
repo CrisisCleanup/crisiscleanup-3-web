@@ -51,7 +51,7 @@
               v-if="field.help_t"
               v-tooltip="{
                 content: field.help_t,
-                triggers: ['hover'],
+                triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-72',
               }"
@@ -85,7 +85,7 @@
               v-tooltip="{
                 content: field.help_t,
                 html: true,
-                triggers: ['hover'],
+                triggers: ['click'],
                 popperClass: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
@@ -154,7 +154,7 @@
               v-if="field.help_t"
               v-tooltip="{
                 content: field.help_t,
-                triggers: ['hover'],
+                triggers: ['click'],
                 html: true,
                 popperClass: 'interactive-tooltip w-72',
               }"
@@ -192,7 +192,7 @@
             v-if="field.help_t"
             v-tooltip="{
               content: field.help_t,
-              triggers: ['hover'],
+              triggers: ['click'],
               html: true,
               popperClass: 'interactive-tooltip w-72',
             }"

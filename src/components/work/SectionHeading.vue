@@ -21,7 +21,7 @@
       v-if="tooltip"
       v-tooltip="{
         content: tooltip,
-        triggers: ['hover'],
+        triggers: ['click'],
         popperClass: 'interactive-tooltip w-72',
         html: true,
       }"

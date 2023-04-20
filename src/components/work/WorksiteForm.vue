@@ -94,8 +94,9 @@
           <ccu-icon
             v-tooltip="{
               content: `${$t('casesVue.auto_contact_frequency_help')}`,
-              triggers: ['hover'],
+              triggers: ['click'],
               popperClass: 'interactive-tooltip w-72',
+              html: true,
             }"
             :alt="$t('casesVue.auto_contact_frequency_help')"
             type="help"
