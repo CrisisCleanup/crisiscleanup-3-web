@@ -1,3 +1,4 @@
+import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import moment from 'moment';
 import Dashboard from './pages/Dashboard.vue';
@@ -16,6 +17,27 @@ import NotFound from '@/pages/NotFound.vue';
 import Location from '@/pages/Location.vue';
 import Profile from '@/pages/Profile.vue';
 import Downloads from '@/pages/Downloads.vue';
+
+declare module 'vue-router' {
+  type RouteMeta = {
+    /**
+     * The id of the route.
+     */
+    id?: string;
+    /**
+     * The layout to use for this route.
+     */
+    layout?: string;
+    /**
+     * Does this route require authentication?
+     */
+    noAuth?: boolean;
+    /**
+     * The scroll behavior for this route.
+     */
+    noscroll?: boolean;
+  };
+}
 
 const routes = [
   {
@@ -107,11 +129,11 @@ const routes = [
     component: NotFound,
     meta: { layout: 'unauthenticated', noAuth: true },
   },
-];
+] as RouteRecordRaw[];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes, // Short for `routes: routes`
+  routes,
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -138,7 +160,11 @@ router.beforeEach(async (to, from, next) => {
     if (store.getters['auth/isLoggedIn']) {
       // Orphaned Users can't really login this will navigate to a public landing page once it is built
       if (store.getters['auth/isOrphan']) {
-        next({ name: 'nav.request_access', query: { orphan: true } });
+        const requestAccessLocation: RouteLocationRaw = {
+          name: 'nav.request_access',
+          query: { orphan: String(true) },
+        };
+        next(requestAccessLocation);
         return;
       }
 
