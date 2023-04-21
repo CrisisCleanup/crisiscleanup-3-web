@@ -5,21 +5,6 @@ import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
 
 export default class CCUModel<T> extends Model {
-  // Static historyFields = {
-  //   invalidated_at: this.attr('', (value) => Date.parse(value)),
-  //   created_at: this.attr('', (value) => Date.parse(value)),
-  //   updated_at: this.attr('', (value) => Date.parse(value)),
-  //   created_by: this.number(),
-  //   updated_by: this.number(),
-  // };
-
-  id!: string;
-  invalidated_at?: Date;
-  created_at!: Date;
-  updated_at!: Date;
-  created_by!: number;
-  updated_by!: number;
-
   static entity = '';
 
   /**
@@ -53,8 +38,8 @@ export default class CCUModel<T> extends Model {
    * @returns {T}
    */
   static async fetchOrFindId(id: number | number[], save = true) {
-    const _ids = _.castArray(id);
-    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ''));
+    const _ids = _.castArray(id) as Array<number | string>;
+    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, '') as string);
     const resolvedIds = ids.filter((itemId) =>
       this.query().whereId(itemId).exists(),
     );
@@ -72,17 +57,26 @@ export default class CCUModel<T> extends Model {
 
   /**
    * Fetch all items from api.
-   * @param params - any additional query params.
-   * @param dataKey - data key to use.
    * @returns {Promise<Instance<CCUModel extends {new(...args: any[]): infer R} ? R : any>[]>}
+   * @param parameters
+   * @param _dataKey
    */
-  static async fetchAll(parameters?: Record<string, string>, dataKey?: string) {
-    const _dataKey = dataKey || 'results';
-    const _parameters = parameters || {};
+  static async fetchAll(
+    parameters?: Record<string, string>,
+    _dataKey = 'results',
+  ) {
+    const _parameters = parameters ?? {};
     await this.api().get(`/${this.entity}`, {
       dataKey: _dataKey,
       params: _parameters,
     });
     return this.query().all();
   }
+
+  id!: string;
+  invalidated_at?: Date;
+  created_at!: Date;
+  updated_at!: Date;
+  created_by!: number;
+  updated_by!: number;
 }
