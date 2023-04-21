@@ -1,7 +1,29 @@
-import { Model } from '@vuex-orm/core';
+import type { Config } from '@vuex-orm/plugin-axios';
+import CCUModel from '@/models/model';
 
-export default class EventLog extends Model {
+// Note: Api model of EventLog contains a lot of fields not being used in the web model.
+// To be updated by auto generated sdk in the future.
+export default class EventLog extends CCUModel<EventLog> {
   static entity = 'event_logs';
+
+  event_key!: string;
+  incident!: number;
+  event_last_event_log!: EventLog;
+  event_seconds_since_last_event!: number;
+  actor_key!: string;
+  actor_id!: number;
+  actor_model!: string;
+  actor_external_id!: string;
+  actor_external_resource!: string;
+  actor_last_event_log!: EventLog;
+  actor_seconds_since_last_event!: number;
+  actor_timer_is_active!: boolean;
+  actor_location!: string;
+  actor_location_name!: string;
+  actor_location_area!: string;
+  actor_blurred_location!: string;
+  actor_organization!: string;
+  action_key!: string;
 
   static fields() {
     return {
@@ -12,7 +34,7 @@ export default class EventLog extends Model {
     };
   }
 
-  static apiConfig = {
+  static apiConfig: Config = {
     actions: {
       create(
         key: string,
@@ -31,6 +53,6 @@ export default class EventLog extends Model {
           { save: false },
         );
       },
-    } as any,
+    },
   };
 }
