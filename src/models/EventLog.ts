@@ -1,10 +1,43 @@
-import type { Config } from '@vuex-orm/plugin-axios';
+import type { Config, Request } from '@vuex-orm/plugin-axios';
 import CCUModel from '@/models/model';
 
 // Note: Api model of EventLog contains a lot of fields not being used in the web model.
 // To be updated by auto generated sdk in the future.
 export default class EventLog extends CCUModel<EventLog> {
   static entity = 'event_logs';
+
+  static apiConfig: Config = {
+    actions: {
+      async create(
+        key: string,
+        incident: string,
+        url: string,
+        attr: Record<string, any>,
+      ) {
+        return (this as Request).post(
+          `/event_logs`,
+          {
+            event_key: key,
+            incident,
+            url,
+            attr,
+          },
+          {
+            save: false,
+          },
+        );
+      },
+    },
+  };
+
+  static fields() {
+    return {
+      attr: this.attr(''),
+      incident: this.attr(''),
+      url: this.attr(''),
+      event_key: this.attr({}),
+    };
+  }
 
   event_key!: string;
   incident!: number;
@@ -24,35 +57,4 @@ export default class EventLog extends CCUModel<EventLog> {
   actor_blurred_location!: string;
   actor_organization!: string;
   action_key!: string;
-
-  static fields() {
-    return {
-      attr: this.attr(''),
-      incident: this.attr(''),
-      url: this.attr(''),
-      event_key: this.attr({}),
-    };
-  }
-
-  static apiConfig: Config = {
-    actions: {
-      create(
-        key: string,
-        incident: string,
-        url: string,
-        attr: Record<string, any>,
-      ) {
-        return this.post(
-          `/event_logs`,
-          {
-            event_key: key,
-            incident,
-            url,
-            attr,
-          },
-          { save: false },
-        );
-      },
-    },
-  };
 }
