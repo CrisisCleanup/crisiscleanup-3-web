@@ -1,20 +1,8 @@
-// @ts-nocheck TODO(tabiodun): Fix this file
 /**
  * CrisisCleanup Base Vuex-ORM model.
  */
-
 import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
-import { QueryResult } from 'aws-sdk/clients/kendra';
-
-type BaseFieldsT = {
-  id: number;
-  invalidated_at?: Date;
-  created_at: Date;
-  updated_at: Date;
-  created_by: number;
-  updated_by: number;
-};
 
 export default class CCUModel<T> extends Model {
   // Static historyFields = {
@@ -25,21 +13,12 @@ export default class CCUModel<T> extends Model {
   //   updated_by: this.number(),
   // };
 
-  id: string;
+  id!: string;
   invalidated_at?: Date;
-  created_at: Date;
-  updated_at: Date;
-  created_by: number;
-  updated_by: number;
-
-  static baseFields = (omit: string[] = []): BaseFieldsT =>
-    _.omit(
-      {
-        // Id: this.number(''),
-        // ...this.historyFields,
-      },
-      omit,
-    );
+  created_at!: Date;
+  updated_at!: Date;
+  created_by!: number;
+  updated_by!: number;
 
   static entity = '';
 
