@@ -25,6 +25,13 @@ export default class CCUModel<T> extends Model {
   //   updated_by: this.number(),
   // };
 
+  id: string;
+  invalidated_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+  created_by: number;
+  updated_by: number;
+
   static baseFields = (omit: string[] = []): BaseFieldsT =>
     _.omit(
       {
