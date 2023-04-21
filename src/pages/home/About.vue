@@ -533,13 +533,13 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center justify-start">
-          <img src="@/assets/partners/ldscharities_logo.jpg" class="m-5" />
+          <img src="@/assets/partners/church_of_jesus_christ_logo.jpg" class="m-5" />
           <p class="text-xl text-center px-0.5 pb-5">
             <span class="font-bold"
               ><a
-                href="https://www.latterdaysaintcharities.org/"
+                href="https://www.churchofjesuschrist.org/serve/caring-for-those-in-need?lang=eng&cid=rdb_v_caring"
                 target="_blank"
-                >Latter-day Saint Charities</a
+                >The Church of Jesus Christ of Latter-day Saints</a
               ></span
             >
           </p>
