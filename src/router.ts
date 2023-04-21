@@ -19,7 +19,7 @@ import Profile from '@/pages/Profile.vue';
 import Downloads from '@/pages/Downloads.vue';
 
 declare module 'vue-router' {
-  type RouteMeta = {
+  interface RouteMeta {
     /**
      * The id of the route.
      */
@@ -36,7 +36,7 @@ declare module 'vue-router' {
      * The scroll behavior for this route.
      */
     noscroll?: boolean;
-  };
+  }
 }
 
 const routes = [
