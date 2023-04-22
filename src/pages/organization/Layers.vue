@@ -9,7 +9,7 @@
             icon="search"
             class="sm:w-72 w-full sm:mr-4"
             :placeholder="$t('actions.search')"
-            @input="getLocations"
+            @update:modelValue="getLocations"
           ></base-input>
           <div class="flex w-full">
             <base-select
