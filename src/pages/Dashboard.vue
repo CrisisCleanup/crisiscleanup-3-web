@@ -682,7 +682,7 @@ export default defineComponent({
         if (key === 'case_number') {
           key = 'id';
         }
-        query.orderBy(sorter.value.key, sorter.value.direction);
+        query.orderBy(key, sorter.value.direction);
       }
 
       if (Object.keys(columnSearch.value).length > 0) {
