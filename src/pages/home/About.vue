@@ -490,6 +490,19 @@
       <div class="partners-grid sm:grid-cols-6">
         <!-- StartCard -->
         <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/fdem_logo.jpg" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="https://www.facebook.com/FLSERT/" target="_blank"
+                >Florida Division of Emergency Management</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
           <img
             src="@/assets/partners/aws_logo.png"
             class="m-5"
@@ -561,19 +574,6 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center justify-start">
-          <img src="@/assets/partners/connectfirst_logo.png" class="m-5" />
-          <p class="text-xl text-center px-0.5 pb-5">
-            <span class="font-bold"
-              ><a href="http://www.connectfirst.com/" target="_blank"
-                >Connect First</a
-              ></span
-            >
-          </p>
-        </div>
-        <!-- End Card -->
-
-        <!-- StartCard -->
-        <div class="flex flex-col items-center justify-start">
           <img src="@/assets/partners/umcor_logo.jpg" class="m-5" />
           <p class="text-xl text-center px-0.5 pb-5">
             <span class="font-bold"
@@ -634,6 +634,72 @@
           </p>
         </div>
         <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/connectfirst_logo.png" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="http://www.connectfirst.com/" target="_blank"
+                >Connect First</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/nj_voad_logo.jpg" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="https://www.njvoad.org/" target="_blank"
+                >NJVOAD</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/sdema_logo.png" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="https://sdema.wildapricot.org/" target="_blank"
+                >SDEMA</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/hono_logo.png" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="https://www.handsonneworleans.org/" target="_blank"
+                >HandsOn New Orleans</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center justify-start">
+          <img src="@/assets/partners/nc_volunteerism_logo.png" class="m-5" />
+          <p class="text-xl text-center px-0.5 pb-5">
+            <span class="font-bold"
+              ><a href="https://www.nc.gov/working/volunteer-opportunities/volunteernc" target="_blank"
+                >NC Commission on Volunteerism and Community Service</a
+              ></span
+            >
+          </p>
+        </div>
+        <!-- End Card -->
+
       </div>
       <!-- Foundational Philosophies -->
       <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
