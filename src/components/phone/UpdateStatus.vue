@@ -44,14 +44,15 @@
 </template>
 
 <script>
-import PhoneStatus from '../../models/PhoneStatus';
-import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import PhoneStatus from '@/models/PhoneStatus';
+import useEmitter from '@/hooks/useEmitter';
 
 export default {
   name: 'UpdateStatus',
   setup() {
     const { t } = useI18n();
+    const { emitter } = useEmitter();
     const status = ref(null);
     const callNotes = ref('');
     const statuses = computed(() => PhoneStatus.all());
@@ -137,6 +138,10 @@ export default {
     async function updateNotes(e) {
       callNotes.value = e.target.value;
     }
+    emitter.on('phone:clear_call', () => {
+      callNotes.value = '';
+      status.value = null;
+    });
     return {
       status,
       callNotes,
@@ -152,5 +157,5 @@ export default {
 <style scoped lang="postcss">
 .status-wrapper {
   height: 18rem;
-};
+}
 </style>

@@ -630,6 +630,7 @@ export default {
         setPotentialFailedCall(null);
         await loadAgent();
         emitter.emit('phone_component:close');
+        emitter.emit('phone:clear_call');
         switchToCallTab();
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -913,7 +914,7 @@ export default {
 
       &--caller {
         width: 50vw;
-        @apply h-full;
+        height: max-content;
       }
       &--dialer {
         @apply h-full;
