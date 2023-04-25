@@ -9,7 +9,7 @@
             icon="search"
             class="sm:w-72 w-full sm:mr-4"
             :placeholder="$t('actions.search')"
-            @update:modelValue="getLocations"
+            @update:modelValue="debounce(getLocations, 100)"
           ></base-input>
           <div class="flex w-full">
             <base-select
@@ -56,6 +56,7 @@ import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
+import {debounce} from "lodash";
 
 export default defineComponent({
   name: 'Layers',
@@ -144,6 +145,7 @@ export default defineComponent({
       getLocations,
       handleTableChange,
       deleteLocation,
+      debounce,
     };
   },
 });

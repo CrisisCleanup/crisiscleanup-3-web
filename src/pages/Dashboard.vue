@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="flex flex-col">
+  <div v-if="!loading" :key="currentIncidentId" class="flex flex-col">
     <div class="flex self-end mr-4">
       <RedeployRequest />
       <InviteUsers class="mx-1" />
@@ -255,7 +255,7 @@
             :text="$t('dashboard.inbound_requests')"
             :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
             variant="text"
-            @clikc="pendingView = 'inbound'"
+            @click="pendingView = 'inbound'"
           />
 
           <base-button
@@ -264,7 +264,7 @@
             :text="$t('dashboard.outbound_requests')"
             :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
             variant="text"
-            @clikc="pendingView = 'outbound'"
+            @click="pendingView = 'outbound'"
           />
 
           <base-button
@@ -273,7 +273,7 @@
             :text="$t('dashboard.archived_requests')"
             :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
             variant="text"
-            @clikc="pendingView = 'archived'"
+            @click="pendingView = 'archived'"
           />
         </div>
         <div class="p-4">

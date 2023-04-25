@@ -44,7 +44,40 @@
     </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full items-center">
+        <ccu-icon
+          v-if="slotProps.item.approved_by"
+          v-tooltip="{
+            content: `
+          <div>Approved by: ${slotProps.item.approved_by}</div>
+          <div>Approved at: ${moment(slotProps.item.approved_at).format(
+            'ddd MMMM Do YYYY',
+          )}</div>
+        `,
+            triggers: ['hover'],
+            popperClass: 'interactive-tooltip w-72',
+            html: true,
+          }"
+          type="help"
+          size="lg"
+        />
+        <ccu-icon
+          v-if="slotProps.item.rejected_by"
+          v-tooltip="{
+            content: `
+          <div>Rejected by: ${slotProps.item.rejected_by}</div>
+          <div>Rejected at: ${moment(slotProps.item.rejected_at).format(
+            'ddd MMMM Do YYYY',
+          )}</div>
+        `,
+            triggers: ['hover'],
+            popperClass: 'interactive-tooltip w-72',
+            html: true,
+          }"
+          type="help"
+          size="lg"
+        />
         <base-button
+          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
           variant="solid"
@@ -57,6 +90,7 @@
           "
         />
         <base-button
+          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"
@@ -169,6 +203,7 @@ export default defineComponent({
       showContacts,
       approveOrganization,
       rejectOrganization,
+      moment,
       columns: [
         {
           title: t('ID'),

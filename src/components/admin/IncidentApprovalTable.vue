@@ -16,10 +16,10 @@
     <template #organization_statuses="slotProps">
       <div class="w-full flex items-center">
         <font-awesome-icon
+          v-if="slotProps.item.organization_profile_completed"
           class="mx-1 text-primary-dark"
           size="lg"
           icon="check-circle"
-          v-if="slotProps.item.organization_profile_completed"
         />
         <badge
           v-if="slotProps.item.is_verified"
@@ -49,10 +49,46 @@
     </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full items-center">
+        <ccu-icon
+          v-if="slotProps.item.approved_by"
+          v-tooltip="{
+            content: `
+          <div>Approved by: ${slotProps.item.approved_by}</div>
+          <div>Approved at: ${moment(slotProps.item.approved_at).format(
+            'ddd MMMM Do YYYY',
+          )}</div>
+        `,
+            triggers: ['hover'],
+            popperClass: 'interactive-tooltip w-72',
+            html: true,
+          }"
+          type="help"
+          size="lg"
+        />
+        <ccu-icon
+          v-if="slotProps.item.rejected_by"
+          v-tooltip="{
+            content: `
+          <div>Rejected by: ${slotProps.item.rejected_by}</div>
+          <div>Rejected at: ${moment(slotProps.item.rejected_at).format(
+            'ddd MMMM Do YYYY',
+          )}</div>
+        `,
+            triggers: ['hover'],
+            popperClass: 'interactive-tooltip w-72',
+            html: true,
+          }"
+          type="help"
+          size="lg"
+        />
         <base-button
+          v-if="
+            slotProps.item.is_verified &&
+            !slotProps.item.approved_by &&
+            !slotProps.item.rejected_by
+          "
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
-          v-if="slotProps.item.is_verified"
           variant="solid"
           size="small"
           class="mx-2"
@@ -63,12 +99,16 @@
           "
         />
         <base-button
+          v-if="
+            slotProps.item.is_verified &&
+            !slotProps.item.approved_by &&
+            !slotProps.item.rejected_by
+          "
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"
           size="small"
           class="mx-2"
-          v-if="slotProps.item.is_verified"
           :action="
             () => {
               rejectRequest(slotProps.item.id);
@@ -92,7 +132,8 @@ import { useI18n } from 'vue-i18n';
 import Table from '../Table.vue';
 import useDialogs from '../../hooks/useDialogs';
 import { momentFromNow } from '../../filters';
-import { IncidentRequest } from '@/models/types';
+import type { IncidentRequest } from '@/models/types';
+import moment from "moment";
 
 export default defineComponent({
   name: 'IncidentApprovalTable',
@@ -154,6 +195,7 @@ export default defineComponent({
       approveRequest,
       rejectRequest,
       momentFromNow,
+      moment,
       columns: [
         {
           title: t('incidentApprovalTable.organization_name'),

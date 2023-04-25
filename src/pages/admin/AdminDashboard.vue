@@ -9,7 +9,7 @@
         @update:modelValue="
           (value) => {
             globalSearch = value;
-            throttle(reloadDashBoard, 1000)();
+            debounce(reloadDashBoard, 1000)();
           }
         "
       ></base-input>
@@ -34,6 +34,45 @@
           </div>
           <base-button icon="sync" :action="getOrganizationsForApproval" />
         </div>
+        <div class="py-4 px-4 border-b flex items-center">
+          <base-button
+            class="mr-2 border-r pr-2"
+            size="medium"
+            :text="$t('~~Action Required')"
+            :class="[
+              organizationApprovalView === 'default' ? 'text-primary-dark' : '',
+            ]"
+            variant="text"
+            :action="() => setApprovalView('default')"
+          />
+
+          <base-button
+            class="mr-2 border-r pr-2"
+            size="medium"
+            :text="$t('~~Recently Approved')"
+            :class="[
+              organizationApprovalView === 'approved'
+                ? 'text-primary-dark'
+                : '',
+            ]"
+            variant="text"
+            :action="() => setApprovalView('approved')"
+          />
+
+          <base-button
+            class="mr-2"
+            size="medium"
+            :text="$t('~~Recently Rejected')"
+            :class="[
+              organizationApprovalView === 'rejected'
+                ? 'text-primary-dark'
+                : '',
+            ]"
+            variant="text"
+            :action="() => setApprovalView('rejected')"
+          />
+        </div>
+
         <div class="p-4">
           <OrganizationApprovalTable
             :organizations="organizationsForApproval"
@@ -49,6 +88,34 @@
             {{ $t('adminDashboard.redeploy_requests') }}
           </div>
           <base-button icon="sync" :action="getIncidentRequests" />
+        </div>
+        <div class="py-4 px-4 border-b flex items-center">
+          <base-button
+            class="mr-2 border-r pr-2"
+            size="medium"
+            :text="$t('~~Action Required')"
+            :class="[redeployView === 'default' ? 'text-primary-dark' : '']"
+            variant="text"
+            :action="() => setRedeployViewView('default')"
+          />
+
+          <base-button
+            class="mr-2 border-r pr-2"
+            size="medium"
+            :text="$t('~~Recently Approved')"
+            :class="[redeployView === 'approved' ? 'text-primary-dark' : '']"
+            variant="text"
+            :action="() => setRedeployViewView('approved')"
+          />
+
+          <base-button
+            class="mr-2"
+            size="medium"
+            :text="$t('~~Recently Rejected')"
+            :class="[redeployView === 'rejected' ? 'text-primary-dark' : '']"
+            variant="text"
+            :action="() => setRedeployViewView('rejected')"
+          />
         </div>
         <div class="p-4">
           <IncidentApprovalTable
@@ -84,12 +151,12 @@
             @update:modelValue="
               (value) => {
                 organizations.search = value;
-                throttle(getOrganizations, 1000)();
+                debounce(getOrganizations, 1000)();
               }
             "
           ></base-input>
         </div>
-        <div class="p-4" v-if="organizations.visible">
+        <div v-if="organizations.visible" class="p-4">
           <OrganizationsTable
             :organizations="organizations.data"
             :meta="organizations.meta"
@@ -122,12 +189,12 @@
             @update:modelValue="
               (value) => {
                 users.search = value;
-                throttle(getUsers, 1000)();
+                debounce(getUsers, 1000)();
               }
             "
           ></base-input>
         </div>
-        <div class="p-4" v-if="users.visible">
+        <div v-if="users.visible" class="p-4">
           <UsersTable
             :users="users.data"
             :meta="users.meta"
@@ -160,12 +227,12 @@
             @update:modelValue="
               (value) => {
                 ghostUsers.search = value;
-                throttle(getGhostUsers, 1000)();
+                debounce(getGhostUsers, 1000)();
               }
             "
           ></base-input>
         </div>
-        <div class="p-4" v-if="ghostUsers.visible">
+        <div v-if="ghostUsers.visible" class="p-4">
           <GhostUsersTable
             :users="ghostUsers.data"
             :meta="ghostUsers.meta"
@@ -198,12 +265,12 @@
             @update:modelValue="
               (value) => {
                 invitationRequests.search = value;
-                throttle(getInvitationRequests, 1000)();
+                debounce(getInvitationRequests, 1000)();
               }
             "
           ></base-input>
         </div>
-        <div class="p-4" v-if="invitationRequests.visible">
+        <div v-if="invitationRequests.visible" class="p-4">
           <InvitationRequestTable
             :requests="invitationRequests.data"
             :meta="invitationRequests.meta"
@@ -236,12 +303,12 @@
             @update:modelValue="
               (value) => {
                 invitations.search = value;
-                throttle(getInvitations, 1000)();
+                debounce(getInvitations, 1000)();
               }
             "
           ></base-input>
         </div>
-        <div class="p-4" v-if="invitations.visible">
+        <div v-if="invitations.visible" class="p-4">
           <InvitationTable
             :invitations="invitations.data"
             :meta="invitations.meta"
@@ -259,7 +326,7 @@
 
 <script>
 import { useStore } from 'vuex';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
@@ -369,6 +436,8 @@ export default {
       visible: true,
     });
     const organizationsForApproval = ref([]);
+    const organizationApprovalView = ref('default');
+    const redeployView = ref('default');
     const incident_requests = ref([]);
     const loading = ref(false);
     const defaultPagination = ref({
@@ -382,12 +451,35 @@ export default {
     );
     const statuses = computed(() => store.getters['enums/statuses']);
 
+    async function setApprovalView(view) {
+      organizationApprovalView.value = view;
+      return getOrganizationsForApproval();
+    }
+    async function setRedeployViewView(view) {
+      redeployView.value = view;
+      return getIncidentRequests();
+    }
     async function getOrganizationsForApproval() {
       if ($can('approve_orgs_full')) {
-        const parameters = {
-          approved_by__isnull: true,
-          rejected_by__isnull: true,
+        const parametersDict = {
+          default: {
+            approved_by__isnull: true,
+            rejected_by__isnull: true,
+          },
+          approved: {
+            approved_by__isnull: false,
+            sort: '-approved_at',
+          },
+          rejected: {
+            rejected_by__isnull: false,
+            sort: '-rejected_at',
+          },
         };
+
+        const parameters = {
+          ...parametersDict[organizationApprovalView.value],
+        };
+
         if (globalSearch.value) {
           parameters.search = globalSearch.value;
         }
@@ -407,6 +499,7 @@ export default {
       const parameters = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
+        sort: '-updated_at',
       };
       if (organizations.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || organizations.value.search;
@@ -432,6 +525,7 @@ export default {
       const parameters = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
+        sort: '-updated_at',
       };
       if (users.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || users.value.search;
@@ -455,6 +549,7 @@ export default {
       const parameters = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
+        sort: '-updated_at',
       };
       if (ghostUsers.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || ghostUsers.value.search;
@@ -481,6 +576,7 @@ export default {
         limit: pagination.pageSize,
         approved_by__isnull: true,
         rejected_by__isnull: true,
+        sort: '-requested_at',
       };
       if (invitationRequests.value.search || globalSearch.value) {
         parameters.search =
@@ -508,6 +604,7 @@ export default {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
         activated: false,
+        sort: '-created_at',
       };
       if (invitations.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || invitations.value.search;
@@ -530,11 +627,33 @@ export default {
     }
     async function getIncidentRequests() {
       if ($can('move_orgs')) {
+        const parametersDict = {
+          default: {
+            approved_by__isnull: true,
+            rejected_by__isnull: true,
+            organization__is_verified: true,
+            sort: '-updated_at',
+          },
+          approved: {
+            approved_by__isnull: false,
+            sort: '-approved_at',
+          },
+          rejected: {
+            rejected_by__isnull: false,
+            sort: '-rejected_at',
+          },
+        };
+
+        const parameters = {
+          ...parametersDict[redeployView.value],
+        };
+
+        const queryString = getQueryString(parameters);
         try {
           const response = await axios.get(
             `${
               import.meta.env.VITE_APP_API_BASE_URL
-            }/admins/incident_requests?organization__is_verified=true`,
+            }/admins/incident_requests?${queryString}`,
           );
           if (response.data) {
             incident_requests.value = [...response.data.results];
@@ -602,7 +721,11 @@ export default {
       defaultPagination,
       currentIncidentId,
       statuses,
-      throttle,
+      debounce,
+      organizationApprovalView,
+      redeployView,
+      setApprovalView,
+      setRedeployViewView,
     };
   },
 };
