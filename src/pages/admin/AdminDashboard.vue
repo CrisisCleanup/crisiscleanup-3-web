@@ -469,10 +469,12 @@ export default {
           approved: {
             approved_by__isnull: false,
             sort: '-approved_at',
+            limit: 10,
           },
           rejected: {
             rejected_by__isnull: false,
             sort: '-rejected_at',
+            limit: 10,
           },
         };
 
@@ -637,10 +639,12 @@ export default {
           approved: {
             approved_by__isnull: false,
             sort: '-approved_at',
+            limit: 10,
           },
           rejected: {
             rejected_by__isnull: false,
             sort: '-rejected_at',
+            limit: 10,
           },
         };
 
