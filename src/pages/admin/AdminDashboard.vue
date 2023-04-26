@@ -38,7 +38,7 @@
           <base-button
             class="mr-2 border-r pr-2"
             size="medium"
-            :text="$t('~~Action Required')"
+            :text="$t('adminDashboard.action_required')"
             :class="[
               organizationApprovalView === 'default' ? 'text-primary-dark' : '',
             ]"
@@ -49,7 +49,7 @@
           <base-button
             class="mr-2 border-r pr-2"
             size="medium"
-            :text="$t('~~Recently Approved')"
+            :text="$t('adminDashboard.recently_approved')"
             :class="[
               organizationApprovalView === 'approved'
                 ? 'text-primary-dark'
@@ -62,7 +62,7 @@
           <base-button
             class="mr-2"
             size="medium"
-            :text="$t('~~Recently Rejected')"
+            :text="$t('adminDashboard.recently_rejected')"
             :class="[
               organizationApprovalView === 'rejected'
                 ? 'text-primary-dark'
@@ -93,7 +93,7 @@
           <base-button
             class="mr-2 border-r pr-2"
             size="medium"
-            :text="$t('~~Action Required')"
+            :text="$t('adminDashboard.action_required')"
             :class="[redeployView === 'default' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('default')"
@@ -102,7 +102,7 @@
           <base-button
             class="mr-2 border-r pr-2"
             size="medium"
-            :text="$t('~~Recently Approved')"
+            :text="$t('adminDashboard.recently_approved')"
             :class="[redeployView === 'approved' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('approved')"
@@ -111,7 +111,7 @@
           <base-button
             class="mr-2"
             size="medium"
-            :text="$t('~~Recently Rejected')"
+            :text="$t('adminDashboard.recently_rejected')"
             :class="[redeployView === 'rejected' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('rejected')"
