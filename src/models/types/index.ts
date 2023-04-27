@@ -4,10 +4,13 @@ export type WorkType = {
   id: number;
   key: string;
   name_t: string;
+  description_t: string;
   status: string;
   claimed_by: number | undefined;
   work_type: string;
   case_number?: string;
+  commercial_value: number;
+  recur_default: string;
 };
 
 export type CaseFlag = {
