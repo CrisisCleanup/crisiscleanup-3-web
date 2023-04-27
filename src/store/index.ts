@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import VuexORM from '@vuex-orm/core';
+import * as VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
 import axios from 'axios';
 import { AuthService } from '../services/auth.service';
@@ -28,7 +28,7 @@ VuexORM.use(VuexORMAxios, {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
-  baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}`,
+  baseURL: `${import.meta.env.VITE_APP_API_BASE_URL as string}`,
 });
 export const store = createStore({
   modules: {
