@@ -314,7 +314,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { orderBy } from 'lodash';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -328,8 +328,9 @@ import { getGoogleMapsLocation } from '../../utils/map';
 import GeocoderService from '../../services/geocoder.service';
 import { What3wordsService } from '../../services/what3words.service';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import type { CaseFlag } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'CaseFlag',
   components: { OrganizationSearchInput },
   props: {
@@ -372,7 +373,7 @@ export default {
     const radioValue = ref(null);
     const newIncident = ref(null);
     const incidentNotFound = ref(false);
-    const currentFlag = ref({
+    const currentFlag = ref<CaseFlag>({
       reason_t: null,
       is_high_priority: false,
       notes: '',
@@ -512,7 +513,7 @@ export default {
       currentUser,
     };
   },
-};
+});
 </script>
 
 <style>
