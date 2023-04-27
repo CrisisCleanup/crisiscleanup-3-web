@@ -11,7 +11,6 @@ export type EnumsModuleState = {
   portal: Portal | undefined;
 };
 
-// Set root state as Record<string, any> for now
 const enumsModule: Module<EnumsModuleState, CCURootState> = {
   namespaced: true,
   state: {
@@ -19,7 +18,7 @@ const enumsModule: Module<EnumsModuleState, CCURootState> = {
     workTypes: [],
     locationTypes: [],
     phases: [],
-    portal: null,
+    portal: undefined,
   },
   getters: {
     statuses(state) {
