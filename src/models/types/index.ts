@@ -87,6 +87,14 @@ export type IncidentPhase = {
   is_active: boolean;
 } & CCUBaseFields;
 
+export type Portal = {
+  name: string;
+  portal_key: string;
+  tos_updated_at: Date;
+  default_currency: number;
+  default_language: number;
+} & CCUBaseFields;
+
 export type OrganizationRole = {
   id: number;
   name_t: string;
