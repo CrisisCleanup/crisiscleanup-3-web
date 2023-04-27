@@ -1,56 +1,66 @@
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
-import type { WorkType, Status } from '@/models/types';
+import type { Module } from 'vuex';
+import type { WorkType, Status, IncidentPhase, Portal } from '@/models/types';
 import type LocationType from '@/models/LocationType';
+import type { CCURootState } from '@/store/types';
 
-const AppState = {
-  statuses: [] as Status[],
-  workTypes: [] as WorkType[],
-  locationTypes: [] as LocationType[],
-  phases: [],
-  portal: null,
+export type EnumsModuleState = {
+  statuses: Status[];
+  workTypes: WorkType[];
+  locationTypes: LocationType[];
+  phases: IncidentPhase[];
+  portal: Portal | undefined;
 };
 
-// Getters
-const getters = {
-  statuses: (state: State) => state.statuses,
-  workTypes: (state: State) => state.workTypes,
-  portal: (state: State) => state.portal,
-  phases: (state: State) => state.phases,
-  locationTypes: (state: State) => state.locationTypes,
-  workTypeCommercialValues(state: State) {
-    return Object.assign(
-      {},
-      ...state.workTypes.map((s: any) => ({ [s.key]: s.commercial_value })),
-    );
-  },
-};
-
-// Actions
-const actions = {};
-
-// Mutations
-const mutations = {
-  setStatuses(state: State, statuses: any[]) {
-    state.statuses = statuses;
-  },
-  setWorkTypes(state: State, workTypes: any[]) {
-    state.workTypes = workTypes;
-  },
-  setLocationTypes(state: State, locationTypes: any[]) {
-    state.locationTypes = locationTypes;
-  },
-  setPhases(state: State, phases: any[]) {
-    state.phases = phases;
-  },
-  setPortal(state: State, portal: any[]) {
-    state.portal = portal;
-  },
-};
-
-export default {
+// Set root state as Record<string, any> for now
+const enumsModule: Module<EnumsModuleState, CCURootState> = {
   namespaced: true,
-  state: AppState,
-  getters,
-  actions,
-  mutations,
+  state: {
+    statuses: [],
+    workTypes: [],
+    locationTypes: [],
+    phases: [],
+    portal: null,
+  },
+  getters: {
+    statuses(state) {
+      return state.statuses;
+    },
+    workTypes(state) {
+      return state.workTypes;
+    },
+    portal(state) {
+      return state.portal;
+    },
+    phases(state) {
+      return state.phases;
+    },
+    locationTypes(state) {
+      return state.locationTypes;
+    },
+    workTypeCommercialValues(state) {
+      return Object.assign(
+        {},
+        ...state.workTypes.map((s) => ({ [s.key]: s.commercial_value })),
+      ) as Record<WorkType['key'], WorkType['commercial_value']>;
+    },
+  },
+  mutations: {
+    setStatuses(state, statuses: EnumsModuleState['statuses']) {
+      state.statuses = statuses;
+    },
+    setWorkTypes(state, workTypes: EnumsModuleState['workTypes']) {
+      state.workTypes = workTypes;
+    },
+    setLocationTypes(state, locationTypes: EnumsModuleState['locationTypes']) {
+      state.locationTypes = locationTypes;
+    },
+    setPhases(state, phases: EnumsModuleState['phases']) {
+      state.phases = phases;
+    },
+    setPortal(state, portal: EnumsModuleState['portal']) {
+      state.portal = portal;
+    },
+  },
 };
+
+export default enumsModule;
