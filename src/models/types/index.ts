@@ -83,7 +83,7 @@ export type IncidentPhase = {
   phase_name_t: string;
   description_t: string;
   list_order: number;
-  parent: IncidentPhase;
+  parent: number;
   is_active: boolean;
 } & CCUBaseFields;
 
