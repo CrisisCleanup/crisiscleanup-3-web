@@ -1008,7 +1008,7 @@ export default {
               import.meta.env.VITE_APP_API_BASE_URL
             }/admins/incident_requests?organization=${
               route.params.organization_id
-            }`,
+            }&approved_by__isnull=true&rejected_by__isnull=true`,
           ),
           users: await axios.get(
             `${import.meta.env.VITE_APP_API_BASE_URL}/users?organization=${
