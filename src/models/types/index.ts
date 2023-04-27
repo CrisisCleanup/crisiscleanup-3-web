@@ -10,6 +10,13 @@ export type WorkType = {
   case_number?: string;
 };
 
+export type CaseFlag = {
+  reason_t: undefined;
+  notes: string;
+  requested_action: string;
+  is_high_priority: boolean;
+};
+
 export type Status = {
   status_name_t: string;
   status: string;
