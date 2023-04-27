@@ -78,6 +78,15 @@ export type IncidentRequest = {
   incident: string;
 };
 
+export type IncidentPhase = {
+  phase_key: string;
+  phase_name_t: string;
+  description_t: string;
+  list_order: number;
+  parent: IncidentPhase;
+  is_active: boolean;
+} & CCUBaseFields;
+
 export type OrganizationRole = {
   id: number;
   name_t: string;
