@@ -19,6 +19,7 @@ import phone from './modules/phone';
 // import socket from './modules/socket';
 // import ui from './modules/ui';
 import map from './modules/map';
+import type { CCURootState } from '@/store/types';
 
 const debug = import.meta.env.NODE_ENV !== 'production';
 
@@ -30,7 +31,7 @@ VuexORM.use(VuexORMAxios, {
   },
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL as string}`,
 });
-export const store = createStore({
+export const store = createStore<CCURootState>({
   modules: {
     auth,
     acl,
