@@ -3,6 +3,7 @@
  */
 import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
+import type { CCUBaseFields } from '@/models/types';
 
 export default class CCUModel<T> extends Model {
   static entity = '';
@@ -73,10 +74,10 @@ export default class CCUModel<T> extends Model {
     return this.query().all();
   }
 
-  id!: string;
-  invalidated_at?: Date;
-  created_at!: Date;
-  updated_at!: Date;
-  created_by!: number;
-  updated_by!: number;
+  id!: CCUBaseFields['id'];
+  invalidated_at?: CCUBaseFields['invalidated_at'];
+  created_at!: CCUBaseFields['created_at'];
+  updated_at!: CCUBaseFields['updated_at'];
+  created_by!: CCUBaseFields['created_by'];
+  updated_by!: CCUBaseFields['updated_by'];
 }

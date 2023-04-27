@@ -1,5 +1,17 @@
 import type User from '../User';
 
+/**
+ * Base fields for all CCU models
+ */
+export type CCUBaseFields = {
+  id: string;
+  invalidated_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+  created_by: number;
+  updated_by: number;
+};
+
 export type WorkType = {
   id: number;
   key: string;
