@@ -80,6 +80,13 @@
             />
           </div>
         </div>
+        <tag
+          v-if="overDueFilterLabel"
+          closeable
+          class="m-1 p-1 w-max"
+          @closed="clearQuery"
+          >{{ overDueFilterLabel }}</tag
+        >
         <div
           v-if="!collapsedUtilityBar && !showingTable"
           class="flex justify-center items-center"
@@ -489,14 +496,13 @@ import WorksiteView from '../components/work/WorksiteView.vue';
 import useDialogs from '../hooks/useDialogs';
 import type { MapUtils } from '../hooks/worksite/useWorksiteMap';
 import useWorksiteMap from '../hooks/worksite/useWorksiteMap';
-import UnclaimCases from '@/components/UnclaimCases.vue';
 import { numeral } from '@/utils/helpers';
 import type Location from '@/models/Location';
 import UpdateCaseStatus from '@/components/UpdateCaseStatus.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
-import JsonWrapper from '@/components/JsonWrapper.vue';
 import ShareWorksite from '@/components/modals/ShareWorksite.vue';
 import useEmitter from '@/hooks/useEmitter';
+import Organization from '@/models/Organization';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -622,6 +628,23 @@ export default defineComponent({
         newStates,
       );
     }
+
+    const hasOverdueFilter = computed(() => {
+      return (
+        'work_type__claimed_by' in route.query &&
+        'work_type__status__in' in route.query &&
+        'created_at__lte' in route.query
+      );
+    });
+
+    const overDueFilterLabel = computed(() => {
+      if (hasOverdueFilter.value) {
+        return `${getOrganizationName(
+          route.query.work_type__claimed_by as string,
+        )} ${t('~~overdue cases')}`;
+      }
+      return '';
+    });
 
     const worksiteQuery = computed<Record<any, any>>(() => {
       const query = {
@@ -1269,6 +1292,12 @@ export default defineComponent({
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
 
+      if (route.query.work_type__claimed_by) {
+        await Organization.api().get(
+          `/organizations/${route.query.work_type__claimed_by}`,
+        );
+      }
+
       const states = currentUser?.value?.getStatesForIncident(
         currentIncidentId.value,
         true,
@@ -1390,6 +1419,18 @@ export default defineComponent({
       emitter.emit('phone_component:open', 'news');
     }
 
+    function getOrganizationName(id: string | number | (string | number)[]) {
+      const organization = Organization.find(id);
+      if (organization) {
+        return organization.name;
+      }
+      return '';
+    }
+
+    function clearQuery() {
+      router.replace({ query: undefined });
+    }
+
     return {
       addMarkerToMap,
       clearCase,
@@ -1462,6 +1503,9 @@ export default defineComponent({
       handleSelectedExisting,
       handleWorksiteSave,
       handleWorksiteNavigation,
+      overDueFilterLabel,
+      getOrganizationName,
+      clearQuery,
     };
   },
 });
