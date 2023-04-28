@@ -8,7 +8,7 @@
           <img src="../assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
         </a>
       </div>
-      <IncidentContact class="w-full md:w-52" />
+      <IncidentContact class="w-full md:w-max" />
     </div>
     <div
       :key="Object.keys(messages)"
@@ -56,13 +56,42 @@
     <div class="main w-screen md:w-auto sm:m-10 z-50">
       <slot />
     </div>
-    <div class="bottom"></div>
+    <div class="bottom">
+      <div v-if="route.name === 'nav.login'" class="flex flex-col m-8">
+        <div class="flex items-end md:justify-end gap-5">
+          <span v-for="item in footerRoutes" :key="item.key">
+            <a
+              v-if="item.external"
+              :href="item.route"
+              class="font-body font-display text-h2 text-crisiscleanup-dark-300"
+              target="_blank"
+            >
+              {{ lang[item.key] }}
+            </a>
+            <router-link
+              v-if="!item.external"
+              :to="item.route || '#'"
+              class="font-body font-display text-h2 text-crisiscleanup-dark-300"
+            >
+              {{ lang[item.key] }}
+            </router-link>
+          </span>
+        </div>
+        <a
+          class="w-40 block md:self-end mt-3"
+          target="_blank"
+          href="https://aws.amazon.com/government-education/nonprofits/disaster-response/"
+          ><img src="@/assets/powered_by_aws.png"
+        /></a>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { onBeforeMount, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import IncidentContact from '@/components/IncidentContact.vue';
 
@@ -72,6 +101,7 @@ export default defineComponent({
   setup() {
     const { t, messages } = useI18n();
     const { setupLanguage } = useSetupLanguage();
+    const route = useRoute();
 
     onBeforeMount(async () => {
       await setupLanguage();
@@ -109,6 +139,23 @@ export default defineComponent({
         external: true,
       },
     ];
+
+    const footerRoutes = [
+      {
+        key: 'contact',
+        route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
+        external: true,
+      },
+      {
+        key: 'terms',
+        route: '/terms',
+      },
+      {
+        key: 'privacy',
+        route: '/privacy',
+      },
+    ];
+
     const lang = reactive({
       home: t('publicNav.home'),
       aboutUs: t('publicNav.about_us'),
@@ -117,12 +164,16 @@ export default defineComponent({
       training: t('publicNav.training'),
       survivor: t('publicNav.survivor'),
       contact: t('publicNav.contact'),
+      privacy: t('publicNav.privacy'),
+      terms: t('publicNav.terms'),
     });
 
     return {
       routes: defaultRoutes,
+      footerRoutes,
       lang,
       messages,
+      route,
     };
   },
 });
@@ -217,7 +268,7 @@ export default defineComponent({
     'top top top'
     'side main main'
     'side main main'
-    'register bottom bottom';
+    'register . bottom';
   padding-bottom: env(safe-area-inset-bottom);
 }
 

@@ -4,10 +4,14 @@
       $t('homeVue.survivors_call')
     }}</base-text>
     <base-text font="display" variant="h2" class="help-contact">
-      <div v-if="incidentList && incidentList.length > 0">
-        <div v-for="incident in filterNumbers" :key="incident.id" class="ml-2">
+      <div v-if="incidentList && incidentList.length > 0" class="w-full">
+        <div
+          v-for="incident in filterNumbers(incidentList)"
+          :key="incident.id"
+          class="ml-2"
+        >
           {{ incident.short_name }}:
-          {{ getIncidentPhoneNumbers }}
+          {{ getIncidentPhoneNumbers(incident) }}
         </div>
       </div>
       <div v-else>
