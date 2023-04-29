@@ -3,7 +3,7 @@ import type { Config, Request } from '@vuex-orm/plugin-axios';
 import CCUModel from '@/models/base';
 import type Organization from '@/models/Organization';
 
-export default class WorksiteRequest extends CCUModel<WorksiteRequest> {
+export default class WorksiteRequest extends CCUModel {
   static entity = 'worksite_requests';
 
   static apiConfig: Config = {

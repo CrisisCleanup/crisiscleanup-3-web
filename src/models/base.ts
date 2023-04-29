@@ -5,7 +5,7 @@ import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
 import type { CCUBaseFields } from '@/models/types';
 
-export default class CCUModel<T> extends Model {
+export default class CCUModel extends Model {
   static entity = '';
 
   /**

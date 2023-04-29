@@ -5,7 +5,7 @@ import Organization from './Organization';
 import User from './User';
 import CCUModel from '@/models/base';
 
-export default class Worksite extends CCUModel<Worksite> {
+export default class Worksite extends CCUModel {
   static entity = 'worksites';
 
   id!: string;

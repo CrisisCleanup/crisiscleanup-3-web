@@ -3,7 +3,7 @@ import CCUModel from '@/models/base';
 
 // Note: Api model of EventLog contains a lot of fields not being used in the web model.
 // To be updated by auto generated sdk in the future.
-export default class EventLog extends CCUModel<EventLog> {
+export default class EventLog extends CCUModel {
   static entity = 'event_logs';
 
   static apiConfig: Config = {

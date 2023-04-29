@@ -1,6 +1,6 @@
 import CCUModel from '@/models/base';
 
-export default class PhoneStatus extends CCUModel<PhoneStatus> {
+export default class PhoneStatus extends CCUModel {
   static entity = 'phone_statuses';
 
   static fields() {

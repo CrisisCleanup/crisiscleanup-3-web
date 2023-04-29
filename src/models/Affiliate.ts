@@ -3,7 +3,7 @@ import Organization from './Organization';
 import type User from './User';
 import CCUModel from '@/models/base';
 
-export default class Affiliate extends CCUModel<Affiliate> {
+export default class Affiliate extends CCUModel {
   static entity = 'organization_affiliate_requests';
 
   id!: number;

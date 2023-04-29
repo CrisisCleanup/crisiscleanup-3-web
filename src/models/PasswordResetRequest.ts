@@ -1,7 +1,7 @@
 import moment from 'moment';
 import CCUModel from '@/models/base';
 
-export default class PasswordResetRequest extends CCUModel<PasswordResetRequest> {
+export default class PasswordResetRequest extends CCUModel {
   static entity = 'password_reset_requests';
 
   id!: string;

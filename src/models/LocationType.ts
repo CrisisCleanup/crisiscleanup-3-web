@@ -1,6 +1,6 @@
 import CCUModel from '@/models/base';
 
-export default class LocationType extends CCUModel<LocationType> {
+export default class LocationType extends CCUModel {
   static entity = 'location_types';
 
   id!: string;

@@ -3,7 +3,7 @@ import { DISASTER_ICONS } from '../constants';
 import Location from './Location';
 import CCUModel from '@/models/base';
 
-export default class Incident extends CCUModel<Incident> {
+export default class Incident extends CCUModel {
   static entity = 'incidents';
 
   id!: string;

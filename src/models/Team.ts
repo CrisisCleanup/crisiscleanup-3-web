@@ -4,7 +4,7 @@ import type { WorkType } from './types';
 import type User from './User';
 import CCUModel from '@/models/base';
 
-export default class Team extends CCUModel<Team> {
+export default class Team extends CCUModel {
   static entity = 'teams';
   id!: string;
   name!: string;

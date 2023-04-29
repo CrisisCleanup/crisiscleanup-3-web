@@ -4,7 +4,7 @@ import type Location from './Location';
 import CCUModel from '@/models/base';
 import type { CCUFileItem, UserContact } from '@/models/types';
 
-export default class Organization extends CCUModel<Organization> {
+export default class Organization extends CCUModel {
   static entity = 'organizations';
 
   static apiConfig: Config = {

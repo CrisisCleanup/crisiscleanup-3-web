@@ -1,6 +1,6 @@
 import CCUModel from '@/models/base';
 
-export default class Layer extends CCUModel<Layer> {
+export default class Layer extends CCUModel {
   static entity = 'layers';
 
   static fields() {

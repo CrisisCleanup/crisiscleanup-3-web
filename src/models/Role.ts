@@ -1,6 +1,6 @@
 import CCUModel from '@/models/base';
 
-export default class Role extends CCUModel<Role> {
+export default class Role extends CCUModel {
   static entity = 'roles';
 
   id!: number;

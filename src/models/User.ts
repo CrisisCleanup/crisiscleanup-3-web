@@ -9,7 +9,7 @@ import Language from './Language';
 import Role from './Role';
 import CCUModel from '@/models/base';
 
-export default class User extends CCUModel<User> {
+export default class User extends CCUModel {
   static entity = 'users';
 
   id!: string;
