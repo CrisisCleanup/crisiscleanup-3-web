@@ -1,5 +1,5 @@
 import { isArray, isNil, omitBy } from 'lodash';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
   static entity = 'phone_outbound';

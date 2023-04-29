@@ -1,5 +1,5 @@
 import LocationType from './LocationType';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class Location extends CCUModel<Location> {
   static entity = 'locations';

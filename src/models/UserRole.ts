@@ -2,7 +2,7 @@ import { Model } from '@vuex-orm/core';
 import type { Config } from '@vuex-orm/plugin-axios';
 import Role from './Role';
 import type User from './User';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class UserRole extends CCUModel<UserRole> {
   static entity = 'user_roles';

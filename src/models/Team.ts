@@ -2,7 +2,7 @@ import type { Config } from '@vuex-orm/plugin-axios';
 import type Incident from './Incident';
 import type { WorkType } from './types';
 import type User from './User';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class Team extends CCUModel<Team> {
   static entity = 'teams';

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { DISASTER_ICONS } from '../constants';
 import Location from './Location';
-import CCUModel from './model';
+import CCUModel from '@/models/base';
 
 export default class Incident extends CCUModel<Incident> {
   static entity = 'incidents';

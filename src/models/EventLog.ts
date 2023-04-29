@@ -1,5 +1,5 @@
 import type { Config, Request } from '@vuex-orm/plugin-axios';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 // Note: Api model of EventLog contains a lot of fields not being used in the web model.
 // To be updated by auto generated sdk in the future.

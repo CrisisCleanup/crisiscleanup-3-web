@@ -3,7 +3,7 @@
  */
 import detectBrowserLanguage from 'detect-browser-language';
 import _ from 'lodash';
-import CCUModel from './model';
+import CCUModel from '@/models/base';
 
 type LanguageTranslationResponse = {
   text: string;

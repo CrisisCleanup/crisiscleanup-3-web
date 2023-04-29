@@ -1,6 +1,6 @@
 import moment from 'moment';
 import User from './User';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class Invitation extends CCUModel<Invitation> {
   static entity = 'invitations';

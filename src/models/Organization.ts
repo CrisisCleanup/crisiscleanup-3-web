@@ -1,7 +1,7 @@
 import type { Config, Request } from '@vuex-orm/plugin-axios';
 import Incident from './Incident';
 import type Location from './Location';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 import type { CCUFileItem, UserContact } from '@/models/types';
 
 export default class Organization extends CCUModel<Organization> {

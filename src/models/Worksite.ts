@@ -3,7 +3,7 @@ import enums from '../store/modules/enums';
 import { getQueryString } from '../utils/urls';
 import Organization from './Organization';
 import User from './User';
-import CCUModel from './model';
+import CCUModel from '@/models/base';
 
 export default class Worksite extends CCUModel<Worksite> {
   static entity = 'worksites';

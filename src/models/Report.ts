@@ -1,6 +1,6 @@
 import moment from 'moment';
 import Role from './Role';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 export default class Report extends CCUModel<Report> {
   static entity = 'reports';
