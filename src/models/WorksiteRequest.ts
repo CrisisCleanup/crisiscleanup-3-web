@@ -26,7 +26,7 @@ export default class WorksiteRequest extends CCUModel<WorksiteRequest> {
         });
       },
       async cancelRequest(this: Request, id: string) {
-        return this.delete(`/worksite_requests/${id}`, {}, { save: false });
+        return this.delete(`/worksite_requests/${id}`, { save: false });
       },
     },
   };
