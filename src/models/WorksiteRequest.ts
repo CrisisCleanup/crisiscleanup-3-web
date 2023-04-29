@@ -1,16 +1,35 @@
-import { Model } from '@vuex-orm/core';
 import moment from 'moment';
+import type { Config, Request } from '@vuex-orm/plugin-axios';
+import CCUModel from '@/models/model';
 
-export default class WorksiteRequest extends Model {
+export default class WorksiteRequest extends CCUModel<WorksiteRequest> {
   static entity = 'worksite_requests';
 
-  token_expiration!: string;
-
-  created_at!: string;
-
-  approved_at!: string;
-
-  rejected_at!: string;
+  static apiConfig: Config = {
+    actions: {
+      async acceptRequest(this: Request, id: string, reason = 'Accept') {
+        const data = {
+          action: 'approve',
+          accepted_rejected_reason: reason,
+        };
+        return this.post(`/worksite_requests/${id}/respond`, data, {
+          save: false,
+        });
+      },
+      async rejectRequest(this: Request, id: string, reason = 'Reject') {
+        const data = {
+          action: 'reject',
+          accepted_rejected_reason: reason,
+        };
+        return this.post(`/worksite_requests/${id}/respond`, data, {
+          save: false,
+        });
+      },
+      async cancelRequest(this: Request, id: string) {
+        return this.delete(`/worksite_requests/${id}`, {}, { save: false });
+      },
+    },
+  };
 
   static fields() {
     return {
@@ -28,6 +47,18 @@ export default class WorksiteRequest extends Model {
       accepted_rejected_reason: this.attr(null),
     };
   }
+
+  // Fields
+  worksite_work_type!: string;
+  worksite!: string;
+  case_number!: string;
+  requested_by!: string;
+  requested_by_org!: string;
+  requested_to_org!: string;
+  token_expiration!: string;
+  approved_at!: string;
+  rejected_at!: string;
+  accepted_rejected_reason!: string;
 
   get status() {
     return moment(this.token_expiration) > moment() ? 'Requested' : 'Expired';
@@ -74,30 +105,4 @@ export default class WorksiteRequest extends Model {
   get has_response() {
     return Boolean(this.approved_at) || Boolean(this.rejected_at);
   }
-
-  static apiConfig = {
-    actions: {
-      acceptRequest(id: string, reason = 'Accept') {
-        const data = {
-          action: 'approve',
-          accepted_rejected_reason: reason,
-        };
-        return this.post(`/worksite_requests/${id}/respond`, data, {
-          save: false,
-        });
-      },
-      rejectRequest(id: string, reason = 'Reject') {
-        const data = {
-          action: 'reject',
-          accepted_rejected_reason: reason,
-        };
-        return this.post(`/worksite_requests/${id}/respond`, data, {
-          save: false,
-        });
-      },
-      cancelRequest(id: string) {
-        return this.delete(`/worksite_requests/${id}`, {}, { save: false });
-      },
-    },
-  } as any;
 }
