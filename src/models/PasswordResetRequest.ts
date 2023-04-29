@@ -1,7 +1,7 @@
-import { Model } from '@vuex-orm/core';
 import moment from 'moment';
+import CCUModel from '@/models/model';
 
-export default class PasswordResetRequest extends Model {
+export default class PasswordResetRequest extends CCUModel<PasswordResetRequest> {
   static entity = 'password_reset_requests';
 
   id!: string;

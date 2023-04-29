@@ -1,6 +1,6 @@
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class Layer extends Model {
+export default class Layer extends CCUModel<Layer> {
   static entity = 'layers';
 
   static fields() {

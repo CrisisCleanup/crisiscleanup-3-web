@@ -1,6 +1,6 @@
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class Role extends Model {
+export default class Role extends CCUModel<Role> {
   static entity = 'roles';
 
   id!: number;

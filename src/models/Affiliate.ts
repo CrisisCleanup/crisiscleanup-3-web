@@ -1,9 +1,9 @@
-import { Model } from '@vuex-orm/core';
 import { type Config } from '@vuex-orm/plugin-axios';
 import Organization from './Organization';
 import type User from './User';
+import CCUModel from '@/models/model';
 
-export default class Affiliate extends Model {
+export default class Affiliate extends CCUModel<Affiliate> {
   static entity = 'organization_affiliate_requests';
 
   id!: number;

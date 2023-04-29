@@ -1,7 +1,7 @@
 import { isArray, isNil, omitBy } from 'lodash';
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class PhoneOutbound extends Model {
+export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
   static entity = 'phone_outbound';
 
   phone_number!: string;
@@ -13,7 +13,7 @@ export default class PhoneOutbound extends Model {
   dnis1!: string;
 
   location_name!: string;
-  
+
   state_name!: string;
 
   static fields() {

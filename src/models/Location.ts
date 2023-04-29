@@ -1,7 +1,7 @@
-import { Model } from '@vuex-orm/core';
 import LocationType from './LocationType';
+import CCUModel from '@/models/model';
 
-export default class Location extends Model {
+export default class Location extends CCUModel<Location> {
   static entity = 'locations';
 
   id!: string;

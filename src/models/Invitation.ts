@@ -1,8 +1,8 @@
-import { Model } from '@vuex-orm/core';
 import moment from 'moment';
 import User from './User';
+import CCUModel from '@/models/model';
 
-export default class Invitation extends Model {
+export default class Invitation extends CCUModel<Invitation> {
   static entity = 'invitations';
 
   id!: string;
