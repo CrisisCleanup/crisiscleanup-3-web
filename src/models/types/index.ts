@@ -70,6 +70,7 @@ export type FormField = {
   if_selected_then_work_type: string;
   read_only_break_glass: boolean;
   recur_default: string;
+  phase: number;
 };
 
 export type IncidentRequest = {
