@@ -129,3 +129,11 @@ export type CCUFileItem = {
   notes: string | undefined;
   created_at: string;
 };
+
+export type UserContact = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+};
