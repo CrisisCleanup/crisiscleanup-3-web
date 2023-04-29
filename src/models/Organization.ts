@@ -20,13 +20,10 @@ export default class Organization extends CCUModel<Organization> {
         );
       },
       async deleteFile(this: Request, id: string, file: string) {
-        return this.delete(
-          `/organizations/${id}/files`,
-          {
-            data: { file },
-          },
-          { save: false },
-        );
+        return this.delete(`/organizations/${id}/files`, {
+          data: { file },
+          save: false,
+        });
       },
       async approve(this: Request, id: string, reason: string) {
         return this.post(
