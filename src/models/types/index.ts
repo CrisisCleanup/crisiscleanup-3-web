@@ -4,7 +4,7 @@ import type User from '../User';
  * Base fields for all CCU models
  */
 export type CCUBaseFields = {
-  id: string;
+  id: number;
   invalidated_at?: Date;
   created_at: Date;
   updated_at: Date;
