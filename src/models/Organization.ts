@@ -1,19 +1,55 @@
-import { Model } from '@vuex-orm/core';
+import type { Config, Request } from '@vuex-orm/plugin-axios';
 import Incident from './Incident';
 import type Location from './Location';
+import CCUModel from '@/models/model';
+import type { CCUFileItem, UserContact } from '@/models/types';
 
-export default class Organization extends Model {
+export default class Organization extends CCUModel<Organization> {
   static entity = 'organizations';
 
-  id!: string;
-  name!: string;
-  incidents!: any[];
-  files!: any[];
-  approved_roles!: any[];
-  approved_incidents!: string[];
-  primary_location!: Location;
-  secondary_location!: Location;
-  affiliates!: string[];
+  static apiConfig: Config = {
+    actions: {
+      async addFile(this: Request, id: string, file: string, type: string) {
+        return this.post(
+          `/organizations/${id}/files`,
+          {
+            file,
+            type_t: type,
+          },
+          { save: false },
+        );
+      },
+      async deleteFile(this: Request, id: string, file: string) {
+        return this.delete(
+          `/organizations/${id}/files`,
+          {
+            data: { file },
+          },
+          { save: false },
+        );
+      },
+      async approve(this: Request, id: string, reason: string) {
+        return this.post(
+          `/organizations/${id}/approve`,
+          { approve_reject_reason_t: reason },
+          { save: false },
+        );
+      },
+      async reject(
+        this: Request,
+        id: string,
+        reason: string,
+        note: string | undefined = undefined,
+      ) {
+        const data: Record<string, any> = { approve_reject_reason_t: reason };
+        if (note) {
+          data.rejection_note = note;
+        }
+
+        return this.post(`/organizations/${id}/reject`, data, { save: false });
+      },
+    },
+  };
 
   static fields() {
     return {
@@ -48,6 +84,35 @@ export default class Organization extends Model {
     };
   }
 
+  // Fields
+  name!: string;
+  url!: string;
+  facebook!: string;
+  twitter!: string;
+  affiliates!: number[];
+  primary_location!: Location;
+  secondary_location!: Location | undefined;
+  type_t!: string | undefined;
+  user_count!: number;
+  incidents!: number[];
+  approved_incidents!: number[];
+  approved_roles!: number[];
+  pending_incidents!: number[];
+  incident_primary_contacts!: number[];
+  primary_contacts!: UserContact[];
+  files!: CCUFileItem[];
+  custom_ops_message!: string | undefined;
+  custom_legal_tos!: string | undefined;
+  custom_legal_survivor_waiver!: string | undefined;
+  address!: string | undefined;
+  city!: string | undefined;
+  state!: string | undefined;
+  postal_code!: string | undefined;
+  phone1!: string | undefined;
+  phone2!: string | undefined;
+  email!: string | undefined;
+  donate_url!: string | undefined;
+
   get incident_list() {
     return Incident.query().whereIdIn(this.incidents).get();
   }
@@ -64,43 +129,4 @@ export default class Organization extends Model {
 
     return '';
   }
-
-  static apiConfig = {
-    actions: {
-      addFile(id: string, file: any, type: string) {
-        return this.post(
-          `/organizations/${id}/files`,
-          {
-            file,
-            type_t: type,
-          },
-          { save: false },
-        );
-      },
-      deleteFile(id: string, file: any) {
-        return this.delete(
-          `/organizations/${id}/files`,
-          {
-            data: { file },
-          },
-          { save: false },
-        );
-      },
-      approve(id: string, reason: string) {
-        return this.post(
-          `/organizations/${id}/approve`,
-          { approve_reject_reason_t: reason },
-          { save: false },
-        );
-      },
-      reject(id: string, reason: string, note: string | undefined = null) {
-        const data: Record<string, any> = { approve_reject_reason_t: reason };
-        if (note) {
-          data.rejection_note = note;
-        }
-
-        return this.post(`/organizations/${id}/reject`, data, { save: false });
-      },
-    } as any,
-  };
 }
