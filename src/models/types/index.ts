@@ -111,3 +111,21 @@ export type Message = {
   is_favorite: boolean;
   profile_picture_file: string;
 };
+
+export type CCUFileItem = {
+  id: number;
+  file: number;
+  filename: string;
+  url: string;
+  full_url: string;
+  blog_url: string;
+  large_thumbnail_url: string;
+  small_thumbnail_url: string;
+  filename_original: string;
+  file_type_t: string;
+  mime_content_type: string | undefined;
+  tag: string | undefined;
+  title: string | undefined;
+  notes: string | undefined;
+  created_at: string;
+};
