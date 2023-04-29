@@ -137,3 +137,12 @@ export type UserContact = {
   email: string;
   phone: string;
 };
+
+export type LocationJoin = {
+  object_id: number;
+  model: string;
+  location: number; // Location ID
+  tag: string | undefined;
+  title: string | undefined;
+  notes: string | undefined;
+} & CCUBaseFields;
