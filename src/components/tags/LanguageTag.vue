@@ -4,12 +4,12 @@
   </tag>
 </template>
 
-<script>
+<script lang="ts">
 import Language from '../../models/Language';
 import * as config from 'tailwind.config';
 import { computed, onMounted, ref } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'LanguageTag',
   props: {
     languageId: {
@@ -60,7 +60,7 @@ export default {
       styles,
     };
   },
-};
+});
 </script>
 
 <style scoped>

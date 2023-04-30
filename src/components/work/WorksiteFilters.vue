@@ -535,7 +535,7 @@
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from 'vuex';
 import { computed, onMounted, ref, watch } from 'vue';
 import LitepieDatepicker from 'litepie-datepicker';
@@ -553,7 +553,7 @@ import WorksiteTeamsFilter from '../../utils/data_filters/WorksiteTeamsFilter';
 import WorksiteDatesFilter from '../../utils/data_filters/WorksiteDatesFilter';
 import { getStatusName } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorksiteFilters',
   components: { datepicker: LitepieDatepicker },
   props: {
@@ -853,7 +853,7 @@ export default {
       getStatusName,
     };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -121,7 +121,8 @@
     </div>
   </section>
 </template>
-<script>
+
+<script lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment';
@@ -131,7 +132,7 @@ import { getErrorMessage } from '../../utils/errors';
 import Worksite from '../../models/Worksite';
 import { secondsToHm } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorksiteReportSection',
   props: {
     worksite: {
@@ -236,5 +237,5 @@ export default {
       secondsToHm,
     };
   },
-};
+});
 </script>

@@ -2,11 +2,11 @@
   <PageTabBar :tabs="tabs" />
 </template>
 
-<script>
+<script lang="ts">
 import { reactive } from 'vue';
 import PageTabBar from '../../layouts/page/PageTabBar.vue';
 
-export default {
+export default defineComponent({
   name: 'AdminPage',
   components: { PageTabBar },
   setup() {
@@ -38,7 +38,7 @@ export default {
     ]);
     return { tabs };
   },
-};
+});
 </script>
 
 <style scoped></style>

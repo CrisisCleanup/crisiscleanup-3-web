@@ -31,7 +31,7 @@ import AjaxTable from '@/components/AjaxTable.vue';
 import BaseText from "@/components/BaseText.vue";
 import moment from "moment/moment";
 
-export default {
+export default defineComponent({
   name: 'Downloads',
   components: {BaseText, AjaxTable },
   setup() {
@@ -53,7 +53,7 @@ export default {
       columns,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

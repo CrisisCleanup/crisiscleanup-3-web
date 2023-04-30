@@ -163,11 +163,11 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import Home from '@/layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'Terms',
   components: { Home },
   setup() {
@@ -262,7 +262,7 @@ export default {
       },
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

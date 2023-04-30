@@ -92,7 +92,7 @@ import RedeployRequest from '../modals/RedeployRequest.vue';
 import UserProfileMenu from './UserProfileMenu.vue';
 import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'Header',
   components: {
     RedeployRequest,
@@ -153,5 +153,5 @@ export default {
       showCurrentIncidentStates,
     };
   },
-};
+});
 </script>

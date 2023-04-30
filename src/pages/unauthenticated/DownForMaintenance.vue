@@ -18,8 +18,8 @@
   </section>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'DownForMaintenance',
   setup() {
     const deadline = ref(new Date(2021, 8, 7, 2, 0, 0));
@@ -51,7 +51,7 @@ export default {
       formattedCountdown,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

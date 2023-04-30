@@ -2,12 +2,12 @@
   <div :id="id" ref="chart"></div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import { sumBy } from 'lodash';
 
-export default {
+export default defineComponent({
   name: 'ReportPieChart',
   props: {
     data: {
@@ -206,7 +206,7 @@ export default {
       chart,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

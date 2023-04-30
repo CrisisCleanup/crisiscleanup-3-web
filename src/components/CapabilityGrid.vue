@@ -106,13 +106,14 @@
     />
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { useStore } from 'vuex';
 import { computed, onMounted, reactive, toRefs, ref } from 'vue';
 import axios from 'axios';
 import { childrenBy, groupBy } from '../utils/array';
 
-export default {
+export default defineComponent({
   name: 'CapabilityGrid',
   props: {
     organizationCapabilities: {
@@ -201,5 +202,5 @@ export default {
       dragImage,
     };
   },
-};
+});
 </script>

@@ -94,7 +94,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed, defineComponent } from 'vue';
 
 export default defineComponent({

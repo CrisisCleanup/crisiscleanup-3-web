@@ -32,7 +32,7 @@ import useTabs from '../../hooks/useTabs';
  * This component is utilized by the Page component.
  * This component should NOT be used directly.
  */
-export default {
+export default defineComponent({
   name: 'PageTabBar',
   props: {
     tabs: {
@@ -53,7 +53,7 @@ export default {
       }),
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

@@ -32,12 +32,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 import useEmitter from '../../hooks/useEmitter';
 
-export default {
+export default defineComponent({
   name: 'ManualDialer',
   props: {
     dialing: {
@@ -58,7 +58,7 @@ export default {
       phoneNumber,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

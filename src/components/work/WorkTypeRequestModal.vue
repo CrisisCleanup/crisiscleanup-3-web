@@ -104,12 +104,13 @@
     </template>
   </modal>
 </template>
-<script>
+
+<script lang="ts">
 import Organization from '../../models/Organization';
 import { onMounted, ref } from 'vue';
 import { getWorkTypeName } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorkTypeRequestModal',
   props: {
     workTypes: {
@@ -159,5 +160,5 @@ export default {
       getWorkTypeName,
     };
   },
-};
+});
 </script>

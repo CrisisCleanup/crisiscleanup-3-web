@@ -36,11 +36,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onBeforeMount, ref, watch } from 'vue';
 import useEmitter from '../../hooks/useEmitter';
 
-export default {
+export default defineComponent({
   name: 'PhoneComponentButton',
   props: {
     name: { type: String, default: null, required: true },
@@ -97,7 +97,7 @@ export default {
       toggleComponent,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss" scoped>

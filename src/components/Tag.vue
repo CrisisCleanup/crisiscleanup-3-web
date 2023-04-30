@@ -12,8 +12,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Tag',
   props: {
     closeable: {
@@ -21,7 +21,7 @@ export default {
       default: false,
     },
   },
-};
+});
 </script>
 
 <style scoped>

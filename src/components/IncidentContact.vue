@@ -20,11 +20,12 @@
     </base-text>
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import axios from 'axios';
 import { formatNationalNumber } from '@/filters';
 
-export default {
+export default defineComponent({
   name: 'IncidentContact',
   setup() {
     const incidentList = ref([]);
@@ -54,7 +55,7 @@ export default {
       getIncidentPhoneNumbers,
     };
   },
-};
+});
 </script>
 <style scoped>
 .grid--survivors {

@@ -9,10 +9,11 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import Agent from '../../components/phone/Agent.vue';
 
-export default {
+export default defineComponent({
   name: 'PhoneToolBar',
   components: { Agent },
   data() {
@@ -42,5 +43,5 @@ export default {
       default: () => {},
     },
   },
-};
+});
 </script>

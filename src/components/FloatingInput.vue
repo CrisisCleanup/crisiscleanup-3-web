@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-export default {
+export default defineComponent({
   name: 'FloatingInput',
   props: {
     modelValue: { type: String, default: '' },
   },
-};
+});
 </script>
 
 <style scoped>

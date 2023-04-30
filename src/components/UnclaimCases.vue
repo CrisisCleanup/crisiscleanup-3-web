@@ -40,10 +40,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'UnclaimCases',
   props: {
     selectedTableItems: { type: Set, default: null, required: false },
@@ -58,7 +58,7 @@ export default {
       updateStatusOnUnclaim,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

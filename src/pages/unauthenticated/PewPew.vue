@@ -470,7 +470,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import moment from 'moment';
 import axios from 'axios';
 import { useStore } from 'vuex';
@@ -495,7 +495,7 @@ import TotalCases from '@/components/live/TotalCases.vue';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar.vue';
 import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'PewPew',
   components: {
     PewPewNavBar,
@@ -828,7 +828,7 @@ export default {
       getWorkTypeName,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss">

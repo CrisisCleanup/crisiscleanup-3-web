@@ -308,7 +308,6 @@
           </base-text>
         </div>
         <!-- End Card -->
-
       </div>
 
       <!-- Major Contributors -->
@@ -546,7 +545,10 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center justify-start">
-          <img src="@/assets/partners/church_of_jesus_christ_logo.jpg" class="m-5" />
+          <img
+            src="@/assets/partners/church_of_jesus_christ_logo.jpg"
+            class="m-5"
+          />
           <p class="text-xl text-center px-0.5 pb-5">
             <span class="font-bold"
               ><a
@@ -692,14 +694,15 @@
           <img src="@/assets/partners/nc_volunteerism_logo.png" class="m-5" />
           <p class="text-xl text-center px-0.5 pb-5">
             <span class="font-bold"
-              ><a href="https://www.nc.gov/working/volunteer-opportunities/volunteernc" target="_blank"
+              ><a
+                href="https://www.nc.gov/working/volunteer-opportunities/volunteernc"
+                target="_blank"
                 >NC Commission on Volunteerism and Community Service</a
               ></span
             >
           </p>
         </div>
         <!-- End Card -->
-
       </div>
       <!-- Foundational Philosophies -->
       <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
@@ -834,15 +837,15 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import Home from '../../layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'AboutPage',
   components: {
     Home,
   },
-};
+});
 </script>
 
 <style scoped>

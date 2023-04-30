@@ -69,7 +69,7 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
 import { ref, reactive, nextTick } from 'vue';
@@ -77,7 +77,7 @@ import { useRouter, useRoute } from 'vue-router';
 import BaseButton from './BaseButton.vue';
 import { useI18n } from 'vue-i18n';
 
-export default {
+export default defineComponent({
   name: 'LoginForm',
   components: { BaseButton },
   props: {
@@ -142,7 +142,7 @@ export default {
       router,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

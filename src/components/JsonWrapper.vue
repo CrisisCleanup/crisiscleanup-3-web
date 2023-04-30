@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: "JsonWrapper",
   props: {
     jsonData: {
@@ -13,7 +13,7 @@ export default {
       required: true,
     },
   },
-};
+});
 </script>
 
 <style scoped></style>

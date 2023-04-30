@@ -35,10 +35,11 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { computed } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'CapabilityItem',
   props: {
     capability: {
@@ -73,7 +74,7 @@ export default {
       phases,
     };
   },
-};
+});
 </script>
 
 <style scoped>

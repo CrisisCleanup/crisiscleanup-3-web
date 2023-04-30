@@ -102,7 +102,7 @@
   </TitledCard>
 </template>
 
-<script>
+<script lang="ts">
 import {
   computed,
   onBeforeMount,
@@ -137,7 +137,7 @@ const AGENT_STATES = Object.freeze({
   ENGAGED: ['talking', 'text-crisiscleanup-teal'],
 });
 
-export default {
+export default defineComponent({
   name: 'Leaderboard',
   components: { TitledCard, LanguageTag, UserDetailsTooltip, Avatar },
   setup() {
@@ -277,5 +277,5 @@ export default {
       truncate,
     };
   },
-};
+});
 </script>

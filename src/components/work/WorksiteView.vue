@@ -366,7 +366,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import moment from 'moment';
 import Worksite from '../../models/Worksite';
@@ -396,7 +396,7 @@ import {
 } from '../../filters/index';
 import useCurrentUser from '../../hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'WorksiteView',
   components: {
     WorksiteNotes,
@@ -770,7 +770,7 @@ export default {
       formatRecurrence,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

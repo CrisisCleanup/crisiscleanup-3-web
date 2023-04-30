@@ -324,7 +324,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from 'vuex';
 import { debounce } from 'lodash';
 import { computed, onMounted, ref } from 'vue';
@@ -350,7 +350,7 @@ import useAcl from '../../hooks/useAcl';
 import useDialogs from '../../hooks/useDialogs';
 import ArcGisUploader from '@/components/admin/ArcGisUploader.vue';
 
-export default {
+export default defineComponent({
   name: 'AdminDashboard',
   components: {
     DatabaseAccess,
@@ -732,7 +732,7 @@ export default {
       setRedeployViewView,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

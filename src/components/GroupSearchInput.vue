@@ -22,11 +22,12 @@
     </template>
   </base-select>
 </template>
-<script>
+
+<script lang="ts">
 import axios from 'axios';
 import { getQueryString } from '../utils/urls';
 
-export default {
+export default defineComponent({
   name: 'GroupSearchInput',
   props: {
     modelValue: {
@@ -68,5 +69,5 @@ export default {
       onGroupSearch,
     };
   },
-};
+});
 </script>

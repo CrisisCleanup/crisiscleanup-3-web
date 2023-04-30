@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import User from '../../models/User';
 import Organization from '../../models/Organization';
 import { groupBy } from '../../utils/array';
@@ -47,7 +47,7 @@ import Worksite from '../../models/Worksite';
 import Timeline from '../../components/Timeline.vue';
 import EventTimeline from '../../components/EventTimeline.vue';
 
-export default {
+export default defineComponent({
   name: 'CaseHistory',
   components: { EventTimeline, Timeline },
   props: {
@@ -112,7 +112,7 @@ export default {
       return organization.name;
     },
   },
-};
+});
 </script>
 
 <style scoped>

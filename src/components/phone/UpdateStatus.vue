@@ -43,12 +43,12 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import PhoneStatus from '@/models/PhoneStatus';
 import useEmitter from '@/hooks/useEmitter';
 
-export default {
+export default defineComponent({
   name: 'UpdateStatus',
   setup() {
     const { t } = useI18n();
@@ -151,7 +151,7 @@ export default {
       updateNotes,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

@@ -14,11 +14,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { format as prettyFormat } from 'pretty-format';
 import { onMounted, ref } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'ItemEditor',
   props: {
     item: {
@@ -82,7 +82,7 @@ export default {
       updateProperty,
     };
   },
-};
+});
 </script>
 
 <style>

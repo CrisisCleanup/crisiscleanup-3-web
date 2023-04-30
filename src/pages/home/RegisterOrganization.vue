@@ -170,7 +170,7 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import { nextTick, reactive, toRefs } from 'vue';
 import { useToast } from 'vue-toastification';
@@ -184,7 +184,7 @@ import CapabilityGrid from '@/components/CapabilityGrid.vue';
 import useCapabilities from '@/hooks/useCapabilities';
 import BaseInput from '@/components/BaseInput.vue';
 
-export default {
+export default defineComponent({
   name: 'Register',
   components: {
     BaseInput,
@@ -303,7 +303,7 @@ export default {
       updateOrganizationIncident,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

@@ -394,7 +394,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
@@ -439,7 +439,7 @@ import usePhoneService from '@/hooks/phone/usePhoneService';
 import WorksiteTable from '@/components/work/WorksiteTable.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 
-export default {
+export default defineComponent({
   name: 'PhoneSystem',
   components: {
     WorksiteTable,
@@ -902,7 +902,7 @@ export default {
       onSaveCase,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss">

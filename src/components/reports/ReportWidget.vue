@@ -104,7 +104,7 @@ import ReportLineChart from '@/components/reports/ReportLineChart.vue';
 import ReportPieChart from '@/components/reports/ReportPieChart.vue';
 import ReportBarChart from '@/components/reports/ReportBarChart.vue';
 
-export default {
+export default defineComponent({
   name: 'ReportWidget',
   components: { ReportLineChart, ReportPieChart, ReportBarChart },
   props: {
@@ -164,5 +164,5 @@ export default {
       hasData,
     };
   },
-};
+});
 </script>

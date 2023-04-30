@@ -690,7 +690,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as L from 'leaflet';
 import { computed, nextTick, onMounted, reactive, toRefs } from 'vue';
 import axios from 'axios';
@@ -714,7 +714,7 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 import useDialogs from '../../hooks/useDialogs';
 import useCapabilities from '../../hooks/useCapabilities';
 
-export default {
+export default defineComponent({
   name: 'AdminOrganization',
   components: {
     FloatingInput,
@@ -1409,7 +1409,7 @@ export default {
       editLocation,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss" scoped>

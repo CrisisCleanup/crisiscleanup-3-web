@@ -57,13 +57,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Multiselect from '@vueform/multiselect';
 import { computed, h, nextTick, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { isEmpty as empty, kebabCase, xor } from 'lodash';
 
-export default {
+export default defineComponent({
   name: 'BaseSelect',
   components: {
     Multiselect,
@@ -312,7 +312,7 @@ export default {
       handleOpen,
     };
   },
-};
+});
 </script>
 
 <style src="@vueform/multiselect/themes/tailwind.css"></style>

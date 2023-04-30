@@ -59,14 +59,14 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import { useToast } from 'vue-toastification';
 import { useRoute } from 'vue-router';
 import Home from '@/layouts/Home.vue';
 import PasswordResetRequest from '@/models/PasswordResetRequest';
 import { getErrorMessage } from '@/utils/errors';
 
-export default {
+export default defineComponent({
   name: 'RequestPasswordReset',
   components: { Home },
   setup() {
@@ -115,7 +115,7 @@ export default {
       requestPasswordReset,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

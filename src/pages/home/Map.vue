@@ -42,7 +42,7 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import { reactive, toRefs, onMounted } from 'vue';
 import * as L from 'leaflet';
@@ -50,7 +50,7 @@ import Home from '@/layouts/Home.vue';
 import SimpleMap from '@/components/SimpleMap.vue';
 import useWorksiteMap from '@/hooks/worksite/useWorksiteMap';
 
-export default {
+export default defineComponent({
   name: 'Map',
   components: { Home, SimpleMap },
   setup() {
@@ -175,7 +175,7 @@ export default {
       reloadMap,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

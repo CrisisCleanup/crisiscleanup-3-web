@@ -11,7 +11,8 @@
     {{ $t(flagReason) }}
   </tag>
 </template>
-<script>
+
+<script lang="ts">
 const colorsDicts = {
   'flag.worksite_high_priority': '#367bc3',
   'flag.worksite_upset_client': '#00b3bf',
@@ -22,7 +23,7 @@ const colorsDicts = {
   'flag.worksite_wrong_incident': '#c457e7',
 };
 
-export default {
+export default defineComponent({
   name: 'Flag',
   props: {
     flagReason: {
@@ -47,5 +48,5 @@ export default {
       onRemove,
     };
   },
-};
+});
 </script>

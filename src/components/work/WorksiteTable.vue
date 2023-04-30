@@ -35,7 +35,7 @@
   </AjaxTable>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AjaxTable from '@/components/AjaxTable.vue';
@@ -45,7 +45,7 @@ import {
   getStatusName,
 } from '../../filters';
 
-export default {
+export default defineComponent({
   name: 'WorksiteTable',
   components: { AjaxTable },
 
@@ -94,12 +94,18 @@ export default {
       },
     ]);
     const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/worksites`;
-    return { columns, tableUrl, getColorForStatus, getWorkTypeName, getStatusName };
+    return {
+      columns,
+      tableUrl,
+      getColorForStatus,
+      getWorkTypeName,
+      getStatusName,
+    };
   },
   props: {
     worksiteQuery: { type: Object, default: null, required: false },
   },
-};
+});
 </script>
 
 <style scoped></style>

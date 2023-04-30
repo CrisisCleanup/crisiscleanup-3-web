@@ -98,7 +98,7 @@ import useAcl from '@/hooks/useAcl';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
-export default {
+export default defineComponent({
   name: 'Authenticated',
   components: {
     LoginForm,
@@ -397,7 +397,7 @@ export default {
       toggle,
     };
   },
-};
+});
 </script>
 
 <style scoped>

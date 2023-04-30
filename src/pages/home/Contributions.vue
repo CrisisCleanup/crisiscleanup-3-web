@@ -52,11 +52,11 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import { useI18n } from 'vue-i18n';
 import Home from '@/layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'Contributions',
   components: { Home },
   setup() {
@@ -71,7 +71,7 @@ export default {
       contrib,
     };
   },
-};
+});
 </script>
 
 <style scoped>

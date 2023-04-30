@@ -39,12 +39,13 @@
     {{ $t('info.no_items_found') }}
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { computed } from 'vue';
 import CapabilityItem from '@/components/CapabilityItem.vue';
 import { childrenBy, groupBy } from '@/utils/array';
 
-export default {
+export default defineComponent({
   name: 'Capability',
   components: { CapabilityItem },
   props: {
@@ -95,7 +96,7 @@ export default {
       hasParent,
     };
   },
-};
+});
 </script>
 <style scoped>
 .light {

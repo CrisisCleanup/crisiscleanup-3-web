@@ -32,8 +32,9 @@
     <slot name="action"></slot>
   </div>
 </template>
-<script>
-export default {
+
+<script lang="ts">
+export default defineComponent({
   name: 'SectionHeading',
   props: {
     count: {
@@ -45,5 +46,5 @@ export default {
       default: '',
     },
   },
-};
+});
 </script>

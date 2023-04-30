@@ -38,7 +38,7 @@
   </tabs>
 </template>
 
-<script>
+<script lang="ts">
 import { formatCmsItem } from '../../utils/helpers';
 import { onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
 import useDialogs from '../../hooks/useDialogs';
@@ -46,7 +46,8 @@ import CmsViewer from '../cms/CmsViewer.vue';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import axios from 'axios';
 import moment from 'moment';
-export default {
+
+export default defineComponent({
   name: 'PhoneNews',
   setup(props, { emit }) {
     const { component } = useDialogs();
@@ -122,7 +123,7 @@ export default {
       default: 'news_last_seen',
     },
   },
-};
+});
 </script>
 
 <style scoped>

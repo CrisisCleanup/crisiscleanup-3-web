@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { colors, templates } from '../icons/icons_templates';
@@ -79,7 +79,7 @@ import User from '../models/User';
 import useCurrentUser from '../hooks/useCurrentUser';
 import { getWorkTypeName } from '../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorksiteLegend',
   props: {
     availableWorkTypes: {
@@ -152,7 +152,7 @@ export default {
       getWorkTypeName,
     };
   },
-};
+});
 </script>
 
 <style>

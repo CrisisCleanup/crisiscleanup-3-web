@@ -2,11 +2,11 @@
   <div :id="id"></div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted } from 'vue';
 import * as d3 from 'd3';
 
-export default {
+export default defineComponent({
   name: 'ReportStackedBarChart',
   props: {
     data: {
@@ -203,7 +203,7 @@ export default {
         .style('opacity', '1');
     });
   },
-};
+});
 </script>
 
 <style scoped></style>

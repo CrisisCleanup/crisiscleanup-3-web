@@ -12,10 +12,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import VuePdfEmbed from 'vue-pdf-embed';
 
-export default {
+export default defineComponent({
   name: 'PdfViewer',
   components: { VuePdfEmbed },
   props: {
@@ -24,7 +24,7 @@ export default {
       required: true,
     },
   },
-};
+});
 </script>
 
 <style scoped></style>

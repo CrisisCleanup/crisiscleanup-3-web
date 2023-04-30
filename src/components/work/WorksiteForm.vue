@@ -377,7 +377,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { sortBy, uniqueId } from 'lodash';
 import moment from 'moment';
@@ -409,7 +409,7 @@ const AUTO_CONTACT_FREQUENCY_OPTIONS = [
   'formOptions.never',
 ];
 
-export default {
+export default defineComponent({
   name: 'WorksiteForm',
   components: {
     BaseSelect,
@@ -1354,7 +1354,7 @@ export default {
       supportedLanguages,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

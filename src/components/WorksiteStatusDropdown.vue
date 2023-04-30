@@ -49,13 +49,13 @@
   </v-popover>
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from 'vuex';
 import { computed, ref, nextTick, onMounted } from 'vue';
 import { getColorForStatus, getStatusName, getWorkTypeImage } from '../filters';
 import useWorktypeImages from '../hooks/worksite/useWorktypeImages';
 
-export default {
+export default defineComponent({
   name: 'WorksiteStatusDropdown',
   props: {
     currentWorkType: {
@@ -168,7 +168,7 @@ export default {
       currentItem,
     };
   },
-};
+});
 </script>
 
 <style>

@@ -81,7 +81,7 @@ import PhoneIndicator from './PhoneIndicator.vue';
 import usePhoneService from '@/hooks/phone/usePhoneService';
 import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'Agent',
   components: { PhoneIndicator, EditAgentModal, LanguageTag },
   setup(props, context) {
@@ -111,5 +111,5 @@ export default {
       hangup: phoneService.hangup,
     };
   },
-};
+});
 </script>

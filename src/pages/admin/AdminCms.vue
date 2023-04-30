@@ -177,7 +177,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
@@ -192,7 +192,7 @@ import DragDrop from '../../components/DragDrop.vue';
 import useDialogs from '../../hooks/useDialogs';
 import CmsViewer from '../../components/cms/CmsViewer.vue';
 
-export default {
+export default defineComponent({
   components: {
     DragDrop,
     Editor,
@@ -376,7 +376,7 @@ export default {
       },
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

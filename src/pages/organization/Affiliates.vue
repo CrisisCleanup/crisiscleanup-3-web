@@ -143,7 +143,8 @@ import User from '@/models/User';
 import Table from '@/components/Table.vue';
 import { Collection, Model } from '@vuex-orm/core';
 import OrganizationSearchInputVue from '@/components/OrganizationSearchInput.vue';
-export default {
+
+export default defineComponent({
   name: 'Affiliates',
   components: { Table, OrganizationSearchInputVue },
   setup(props) {
@@ -240,7 +241,7 @@ export default {
     onMounted(async () => {
       await getAffiliateRequests();
     });
-    
+
     return {
       showingAffiliateModal,
       organizationResults,
@@ -257,7 +258,7 @@ export default {
       onOrganizationSearch,
     };
   },
-};
+});
 </script>
 
 <style lang="postcss" scoped></style>

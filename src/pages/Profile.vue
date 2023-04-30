@@ -339,7 +339,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {computed, reactive, toRefs} from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRoute } from 'vue-router';
@@ -356,7 +356,7 @@ import useSetupLanguage from '@/hooks/useSetupLanguage';
 import useValidation from '@/hooks/useValidation';
 import ChangeOrganizationModal from '@/components/modals/ChangeOrganizationModal.vue';
 
-export default {
+export default defineComponent({
   name: 'Profile',
   components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
   setup() {
@@ -538,7 +538,7 @@ export default {
       form,
     };
   },
-};
+});
 </script>
 
 <style scoped>

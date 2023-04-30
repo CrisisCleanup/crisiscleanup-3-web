@@ -86,7 +86,7 @@ import Table from '@/components/Table.vue';
 import OrganizationActivityModal from '@/components/live/OrganizationActivityModal.vue';
 import type Organization from '@/models/Organization';
 
-export default {
+export default defineComponent({
   name: 'LiveOrganizationTable',
   components: { OrganizationActivityModal, CaseDonutChart, Table },
   props: {
@@ -239,7 +239,7 @@ export default {
       isCaseDonutChartDataEmpty,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

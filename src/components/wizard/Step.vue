@@ -2,10 +2,10 @@
   <div v-show="isActive"><slot></slot></div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, inject, onBeforeMount, ref, watch } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'Step',
   props: {
     name: { required: true, type: String },
@@ -38,7 +38,7 @@ export default {
     });
     return { index, isActive, href };
   },
-};
+});
 </script>
 
 <style scoped></style>

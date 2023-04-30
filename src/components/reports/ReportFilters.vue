@@ -80,7 +80,7 @@ import Organization from '@/models/Organization';
 import { getQueryString } from '@/utils/urls';
 import Incident from '@/models/Incident';
 
-export default {
+export default defineComponent({
   name: 'ReportFilters',
   props: {
     inputs: {
@@ -237,7 +237,7 @@ export default {
       onLocationSearch,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

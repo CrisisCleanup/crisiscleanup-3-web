@@ -83,7 +83,7 @@ interface StepProps {
   disabled: boolean;
   onSave: Function;
 }
-export default {
+export default defineComponent({
   name: 'Wizard',
   props: {
     stepDefaultClasses: {
@@ -198,7 +198,7 @@ export default {
       previousStep,
     };
   },
-};
+});
 </script>
 
 <style scoped>

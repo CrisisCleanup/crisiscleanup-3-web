@@ -68,7 +68,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import Highlighter from 'vue-highlight-words';
 // import Worksite from '../../models/Worksite';
 // import { getWorkTypeImage } from '../../filters';
@@ -81,7 +81,7 @@ import BaseInput from '../BaseInput.vue';
 import Worksite from '../../models/Worksite';
 import { getWorkTypeImage } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorksiteSearchInput',
   components: { BaseInput },
   props: {
@@ -276,7 +276,7 @@ export default {
       onBlur,
     };
   },
-};
+});
 </script>
 
 <style>

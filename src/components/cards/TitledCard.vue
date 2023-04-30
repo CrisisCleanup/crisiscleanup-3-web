@@ -21,7 +21,9 @@
                 :searchable="false"
                 :clearable="false"
                 @resize="calcDropdownWidth"
-                @update:modelValue="(payload) => $emit('update:dropdown', payload)"
+                @update:modelValue="
+                  (payload) => $emit('update:dropdown', payload)
+                "
                 v-bind="dropdown"
               >
                 <template #selected-option="{ option }">
@@ -43,7 +45,7 @@
   </Card>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import Card from './Card.vue';

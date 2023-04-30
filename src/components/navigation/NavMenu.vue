@@ -21,7 +21,7 @@
 import type { PropType } from 'vue';
 import NavButton from './NavButton.vue';
 
-export default {
+export default defineComponent({
   name: 'NavMenu',
   components: { NavButton },
   props: {
@@ -34,7 +34,7 @@ export default {
       default: () => ({}),
     },
   },
-};
+});
 </script>
 
 <style>

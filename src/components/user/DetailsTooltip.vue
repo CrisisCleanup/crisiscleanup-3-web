@@ -35,11 +35,11 @@
   </v-popover>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import User from '../../models/User';
 
-export default {
+export default defineComponent({
   name: 'UserDetailsTooltip',
   setup(props) {
     const asyncUser = ref(null);
@@ -74,7 +74,7 @@ export default {
       default: true,
     },
   },
-};
+});
 </script>
 
 <style></style>

@@ -2,12 +2,12 @@
   <div :id="id" class="relative"></div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import moment from 'moment';
 
-export default {
+export default defineComponent({
   name: 'ReportBarChart',
   props: {
     data: {
@@ -198,7 +198,7 @@ export default {
         });
     });
   },
-};
+});
 </script>
 
 <style scoped></style>

@@ -32,8 +32,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Spinner',
   props: {
     width: {
@@ -53,5 +53,5 @@ export default {
       default: '',
     },
   },
-};
+});
 </script>

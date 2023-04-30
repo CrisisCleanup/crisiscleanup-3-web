@@ -146,13 +146,13 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import Home from '@/layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'Privacy',
   components: { Home },
-};
+});
 </script>
 
 <style scoped lang="scss">

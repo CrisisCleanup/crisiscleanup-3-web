@@ -36,7 +36,7 @@
   </Table>
 </template>
 
-<script>
+<script lang="ts">
 import Table from '../components/Table.vue';
 import Organization from '../models/Organization';
 import User from '../models/User';

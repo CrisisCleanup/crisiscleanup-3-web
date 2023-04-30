@@ -37,13 +37,14 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { api as viewerApi } from 'v-viewer';
 import { computed } from 'vue';
 import useDialogs from '@/hooks/useDialogs';
 import PdfViewer from '@/components/PdfViewer.vue';
 
-export default {
+export default defineComponent({
   name: 'ImageModal',
   props: {
     imageList: {
@@ -93,7 +94,7 @@ export default {
       appearPdf,
     };
   },
-};
+});
 </script>
 
 <style src="viewerjs/dist/viewer.css"></style>

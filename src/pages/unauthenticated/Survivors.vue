@@ -331,7 +331,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
@@ -345,7 +345,7 @@ import WorksiteNotes from '@/components/work/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
 
-export default {
+export default defineComponent({
   name: 'Survivors',
   components: {
     WorksiteNotes,
@@ -596,7 +596,7 @@ export default {
       getFaqs,
     };
   },
-};
+});
 </script>
 
 <style scoped>

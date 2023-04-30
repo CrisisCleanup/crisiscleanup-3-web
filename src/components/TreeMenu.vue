@@ -60,10 +60,11 @@
     </li>
   </ul>
 </template>
-<script>
+
+<script lang="ts">
 import Avatar from '@/components/Avatar.vue';
 
-export default {
+export default defineComponent({
   name: 'TreeMenu',
   components: { Avatar },
   props: ['label', 'children', 'indent', 'data', 'selectedUsers'],
@@ -80,5 +81,5 @@ export default {
       return `https://avatars.dicebear.com/api/bottts/${props.data.first_name}.svg`;
     });
   },
-};
+});
 </script>

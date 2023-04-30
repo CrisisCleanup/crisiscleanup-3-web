@@ -11,13 +11,14 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import LoginForm from '../../components/LoginForm.vue';
 import Home from '../../layouts/Home.vue';
-export default {
+
+export default defineComponent({
   name: 'Login',
   components: { Home, LoginForm },
-};
+});
 </script>
 
 <style scoped></style>

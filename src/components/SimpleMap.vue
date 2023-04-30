@@ -94,10 +94,11 @@
     />
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import WorksiteLegend from './WorksiteLegend.vue';
 
-export default {
+export default defineComponent({
   name: 'SimpleMap',
   components: { WorksiteLegend },
   props: {
@@ -115,5 +116,5 @@ export default {
       default: () => ({}),
     },
   },
-};
+});
 </script>

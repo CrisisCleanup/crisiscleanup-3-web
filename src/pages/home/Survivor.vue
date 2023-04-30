@@ -63,16 +63,16 @@
   </Home>
 </template>
 
-<script>
+<script lang="ts">
 import Home from '@/layouts/Home.vue';
 
-export default {
+export default defineComponent({
   name: 'Survivor',
   components: { Home },
   data() {
     return {};
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

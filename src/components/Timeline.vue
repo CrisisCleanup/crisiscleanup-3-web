@@ -23,10 +23,11 @@
   </ol>
 </template>
 
-<script>
+<script lang="ts">
 import UserDetailsTooltip from '../components/user/DetailsTooltip.vue';
 import { formatDateString } from '../filters/index';
-export default {
+
+export default defineComponent({
   name: 'Timeline',
   components: { UserDetailsTooltip },
   props: {
@@ -38,7 +39,7 @@ export default {
   setup() {
     return { formatDateString };
   },
-};
+});
 </script>
 
 <style scoped></style>

@@ -109,13 +109,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { RRule } from 'rrule';
 import { isEqual } from 'lodash';
 import { useI18n } from 'vue-i18n';
 import { ref, defineComponent, onMounted } from 'vue';
 import moment from 'moment';
 import LitepieDatepicker from 'litepie-datepicker';
+
 export default defineComponent({
   name: 'RecurringSchedule',
   components: { datepicker: LitepieDatepicker },

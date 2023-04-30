@@ -49,10 +49,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'Slider',
   props: {
     value: {
@@ -128,7 +128,7 @@ export default {
       cssVars,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

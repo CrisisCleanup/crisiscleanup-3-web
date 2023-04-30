@@ -86,7 +86,7 @@ import { hash } from '../../utils/promise';
 import { forceFileDownload } from '../../utils/downloads';
 import DragDrop from '../DragDrop.vue';
 
-export default {
+export default defineComponent({
   name: 'WorksiteImport',
   components: { DragDrop, Table },
   setup() {
@@ -206,7 +206,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

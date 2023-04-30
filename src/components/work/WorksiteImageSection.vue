@@ -20,7 +20,8 @@
     </div>
   </section>
 </template>
-<script>
+
+<script lang="ts">
 import _ from 'lodash';
 import DragDrop from '../../components/DragDrop.vue';
 import Worksite from '../../models/Worksite';
@@ -30,7 +31,7 @@ import { uploadFile } from '../../utils/file';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
-export default {
+export default defineComponent({
   name: 'WorksiteImageSection',
   components: {
     DragDrop,
@@ -128,5 +129,5 @@ export default {
       deleteFile,
     };
   },
-};
+});
 </script>

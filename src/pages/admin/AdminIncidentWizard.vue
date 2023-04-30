@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -82,7 +82,7 @@ import IncidentForm from '@/components/admin/incidents/IncidentForm.vue';
 import IncidentFormBuilder from '@/components/admin/incidents/IncidentFormBuilder.vue';
 import IncidentLocationEditor from '@/components/admin/incidents/IncidentLocationEditor.vue';
 
-export default {
+export default defineComponent({
   name: 'AdminIncidentWizard',
   components: {
     IncidentLocationEditor,
@@ -277,5 +277,5 @@ export default {
       currentIncidentLocation,
     };
   },
-};
+});
 </script>

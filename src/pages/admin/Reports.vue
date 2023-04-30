@@ -84,7 +84,7 @@ import User from '@/models/User';
 import { groupBy } from '@/utils/array';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'Reports',
   setup() {
     const { t } = useI18n();
@@ -157,5 +157,5 @@ export default {
       requestReport,
     };
   },
-};
+});
 </script>

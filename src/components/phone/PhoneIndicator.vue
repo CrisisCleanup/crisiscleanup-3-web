@@ -13,13 +13,14 @@
     />
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { ICONS, ICON_MAP } from '../../constants';
 // import { theme } from '../../../tailwind.config.cjs'
 import useConnectFirst from '../../hooks/useConnectFirst';
 import { ref } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'PhoneIndicator',
   setup(_, context) {
     const { isTakingCalls } = useConnectFirst(context);
@@ -44,5 +45,5 @@ export default {
       icon,
     };
   },
-};
+});
 </script>

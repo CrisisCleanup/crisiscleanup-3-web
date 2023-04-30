@@ -10,10 +10,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import PageTabBar from './PageTabBar.vue';
 
-export default {
+export default defineComponent({
   name: 'PageLayout',
   components: { PageTabBar },
   props: {
@@ -24,7 +24,7 @@ export default {
       type: PageTabBar.props.tabs,
     },
   },
-};
+});
 </script>
 
 <style scoped></style>

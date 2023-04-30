@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-export default {
+export default defineComponent({
   name: 'TermsandConditionsModal',
   props: {
     organization: {
@@ -53,7 +53,7 @@ export default {
     },
   },
   emits: ['acceptedTerms'],
-};
+});
 </script>
 
 <style>

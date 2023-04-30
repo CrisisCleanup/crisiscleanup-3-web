@@ -102,7 +102,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
@@ -114,7 +114,7 @@ import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
 import { getWorkTypeName } from '@/filters/index';
 import IncidentContact from '@/components/IncidentContact.vue';
 
-export default {
+export default defineComponent({
   name: 'PrintToken',
   components: {
     IncidentContact,
@@ -216,7 +216,7 @@ export default {
       reloadFiles,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

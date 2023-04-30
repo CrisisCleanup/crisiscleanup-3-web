@@ -64,6 +64,7 @@
     </modal>
   </div>
 </template>
+
 <script lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -72,7 +73,7 @@ import axios from 'axios';
 import { getErrorMessage } from '../../utils/errors';
 import OrganizationSearchInput from '../OrganizationSearchInput.vue';
 
-export default {
+export default defineComponent({
   name: 'MergeOrganizations',
   components: { OrganizationSearchInput },
   setup() {
@@ -109,5 +110,5 @@ export default {
       mergeOrganizations,
     };
   },
-};
+});
 </script>

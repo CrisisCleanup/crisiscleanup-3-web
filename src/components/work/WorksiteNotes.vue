@@ -106,12 +106,13 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
 import { computed, ref } from 'vue';
 import moment from 'moment';
 import { momentFromNow } from '../../filters/index';
 
-export default {
+export default defineComponent({
   name: 'WorksiteNotes',
   props: {
     worksite: {
@@ -165,7 +166,7 @@ export default {
       momentFromNow,
     };
   },
-};
+});
 </script>
 <style lang="postcss" scoped>
 .notes-time {

@@ -19,13 +19,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { makeTableColumns } from '../../utils/table';
 import Table from '../../components/Table.vue';
 
-export default {
+export default defineComponent({
   name: 'TicketDashboard',
   components: { Table },
   setup() {
@@ -74,5 +74,5 @@ export default {
       tickets,
     };
   },
-};
+});
 </script>

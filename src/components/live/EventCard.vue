@@ -21,7 +21,7 @@
 <script lang="ts">
 import { momentFromNow } from '@/filters';
 
-export default {
+export default defineComponent({
   name: 'EventCard',
   props: {
     currentEvent: {
@@ -59,5 +59,5 @@ export default {
       momentFromNow,
     };
   },
-};
+});
 </script>
