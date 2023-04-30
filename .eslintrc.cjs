@@ -36,6 +36,7 @@ module.exports = {
   plugins: ['vue', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/consistent-type-imports': 'warn',
+    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
     'n/file-extension-in-import': 'off',
     'import/extensions': 0,
     'import/no-anonymous-default-export': 0,
