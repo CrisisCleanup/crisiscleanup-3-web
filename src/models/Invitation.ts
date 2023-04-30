@@ -1,20 +1,28 @@
 import moment from 'moment';
-import User from './User';
+import type { Config, Request } from '@vuex-orm/plugin-axios';
+import type { Fields } from '@vuex-orm/core';
 import CCUModel from '@/models/base';
+import type { UserContact } from '@/models/types';
 
 export default class Invitation extends CCUModel {
   static entity = 'invitations';
 
-  id!: string;
-  invitee_email!: string;
-  invitation_token!: string;
-  expires_at!: string;
-  created_at!: string;
-  invited_by!: User;
-  existing_user!: string;
-  organization!: string;
+  static apiConfig: Config = {
+    actions: {
+      async resendInvitation(this: Request, invitation: Invitation) {
+        return this.post(
+          `/invitations/${invitation.id}/resend`,
+          {},
+          { save: false },
+        );
+      },
+      async fetchById(this: Request, id: string) {
+        return this.get(`/invitations/${id}`);
+      },
+    },
+  };
 
-  static fields() {
+  static fields(): Fields {
     return {
       id: this.attr(''),
       invitee_email: this.string(''),
@@ -27,10 +35,18 @@ export default class Invitation extends CCUModel {
     };
   }
 
+  invitee_email!: string;
+  invitation_token!: string;
+  expires_at!: string;
+  invited_by!: UserContact;
+  existing_user!: UserContact | undefined;
+  organization!: number;
+
   get invitation_date() {
     if (this.created_at) {
       return moment(this.created_at).format('L');
     }
+
     return '';
   }
 
@@ -42,21 +58,7 @@ export default class Invitation extends CCUModel {
     if (moment(this.expires_at).isBefore(moment())) {
       return 'Expired';
     }
+
     return 'Pending';
   }
-
-  static apiConfig = {
-    actions: {
-      resendInvitation(invitation: Invitation) {
-        return this.post(
-          `/invitations/${invitation.id}/resend`,
-          {},
-          { save: false },
-        );
-      },
-      fetchById(id: string) {
-        return this.get(`/invitations/${id}`);
-      },
-    } as any,
-  };
 }
