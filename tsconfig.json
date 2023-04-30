@@ -18,6 +18,11 @@
     "allowJs": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "exclude": ["node_modules", "dist", "src/**/*.min.js"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.min.js",
+    "src/external/**/*.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
