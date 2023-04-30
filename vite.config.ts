@@ -29,7 +29,7 @@ export default defineConfig(async ({ command }) => {
           '@/hooks/useApi': ['useApi'],
         },
       ],
-      dts: 'src/auto-imports.d.ts',
+      dts: 'src/types/auto-imports.d.ts',
       dirs: ['src/stores'],
       vueTemplate: true,
       // Generate corresponding .eslintrc-auto-import.json file.
