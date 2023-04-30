@@ -27,5 +27,5 @@ jobs:
               read -r tool vers <<<"$line"
               key=$(tr '[:lower:]' '[:upper:]' <<<"$tool")
               echo "${key}_VERSION=${vers}"
-              echo "{key}_VERSION={vers}" >> $GITHUB_OUTPUT
+              echo "${key}_VERSION=${vers}" >> $GITHUB_OUTPUT
           done)<.tool-versions
