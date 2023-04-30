@@ -1,12 +1,23 @@
 /**
  * CrisisCleanup Base Vuex-ORM model.
  */
+import type { Fields } from '@vuex-orm/core';
 import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
 import type { CCUBaseFields } from '@/models/types';
 
 export default class CCUModel extends Model {
   static entity = '';
+
+  static fields(): Fields {
+    return {
+      id: this.attr(null),
+      invalidated_at: this.attr(null),
+      created_at: this.attr(null),
+      updated_at: this.attr(null),
+      ...this.commonRelations(),
+    };
+  }
 
   /**
    * Fetch and store item(s) by id.
@@ -72,6 +83,19 @@ export default class CCUModel extends Model {
       params: _parameters,
     });
     return this.query().all();
+  }
+
+  protected static commonRelations() {
+    return {
+      /**
+       * TODO: enabling these causes a circular dependency
+       * Maybe define User model in the same file to avoid this?
+       */
+      // created_by: this.belongsTo(User, 'created_by'),
+      // updated_by: this.belongsTo(User, 'updated_by'),
+      created_by: this.attr(null),
+      updated_by: this.attr(null),
+    };
   }
 
   id!: CCUBaseFields['id'];
