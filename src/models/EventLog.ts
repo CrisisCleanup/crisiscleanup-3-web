@@ -9,12 +9,13 @@ export default class EventLog extends CCUModel {
   static apiConfig: Config = {
     actions: {
       async create(
+        this: Request,
         key: string,
         incident: string,
         url: string,
         attr: Record<string, any>,
       ) {
-        return (this as Request).post(
+        return this.post(
           `/event_logs`,
           {
             event_key: key,
