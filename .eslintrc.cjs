@@ -55,6 +55,7 @@ const config = {
     '@typescript-eslint/naming-convention': 0,
     'import/no-unassigned-import': 0,
     'import/no-cycle': 0,
+    'import/named': 0,
   },
   overrides: [
     {
