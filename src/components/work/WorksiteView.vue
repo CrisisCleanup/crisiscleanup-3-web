@@ -35,7 +35,7 @@
                 >
                 <div>{{ worksite.phone1 }}</div>
               </div>
-              <div v-if="$can && $can('phone_agent')" class="flex-1">
+              <div v-if="can && can('phone_agent')" class="flex-1">
                 <base-button
                   ccu-icon="phone-classic"
                   icon-size="md"
@@ -395,6 +395,7 @@ import {
   getWorkTypeName,
 } from '../../filters/index';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import useAcl from '@/hooks/useAcl';
 
 export default defineComponent({
   name: 'WorksiteView',
@@ -423,6 +424,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const { t } = useI18n();
+    const { $can } = useAcl();
     const $toasted = useToast();
     const { prompt } = useDialogs();
     const route = useRoute();
@@ -768,6 +770,7 @@ export default defineComponent({
       getRecurrenceString,
       getWorkTypeName,
       formatRecurrence,
+      can: $can,
     };
   },
 });

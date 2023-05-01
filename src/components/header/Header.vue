@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div v-if="$can('development_mode')" class="flex gap-2">
+      <div v-if="can('development_mode')" class="flex gap-2">
         <base-button
           class="p-1.5"
           variant="solid"
@@ -57,7 +57,7 @@
       </div>
       <div class="flex h-full items-center">
         <div
-          v-if="$can && $can('phone_agent')"
+          v-if="can && can('phone_agent')"
           class="flex items-center header-item h-full"
         >
           <PhoneIndicator />
@@ -144,7 +144,7 @@ export default defineComponent({
     }
     const showRedeployModal = ref(false);
     return {
-      $can,
+      can: $can,
       showRedeployModal,
       showCurrentUser,
       $t: (text: string) => {
