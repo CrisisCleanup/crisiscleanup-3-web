@@ -1,4 +1,4 @@
-const eslintConfig = require('./.eslintrc.cjs');
+const path = require('node:path');
 
 /**
  * @type {import("@types/xo").Options}
@@ -6,9 +6,8 @@ const eslintConfig = require('./.eslintrc.cjs');
 const xoConfig = {
   prettier: true,
   envs: ['browser', 'es2022'],
-  rules: {
-    ...eslintConfig.rules,
-  },
+  extensions: ['vue', 'ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs'],
+  extends: [path.join(__dirname, '.eslintrc.cjs')],
 };
 
 module.exports = xoConfig;
