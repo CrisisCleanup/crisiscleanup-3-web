@@ -38,6 +38,7 @@ const config = {
   },
   plugins: ['vue', '@typescript-eslint'],
   rules: {
+    'camelcase': 'off',
     'no-warning-comments': 'off',
     'capitalized-comments': 'off',
     '@typescript-eslint/consistent-type-imports': 'warn',
