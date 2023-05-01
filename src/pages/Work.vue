@@ -641,7 +641,7 @@ export default defineComponent({
       if (hasOverdueFilter.value) {
         return `${getOrganizationName(
           route.query.work_type__claimed_by as string,
-        )} ${t('~~overdue cases')}`;
+        )} ${t('casesVue.overdue_cases')}`;
       }
       return '';
     });
