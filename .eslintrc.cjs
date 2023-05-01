@@ -1,6 +1,9 @@
 const path = require('path');
 
-module.exports = {
+/**
+ * @type {import("eslint").Linter.Config}
+ */
+const config = {
   env: {
     browser: true,
     es2021: true,
@@ -62,3 +65,5 @@ module.exports = {
     },
   ],
 };
+
+module.exports = config;
