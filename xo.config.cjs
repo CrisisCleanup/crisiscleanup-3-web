@@ -1,9 +1,14 @@
 const eslintConfig = require('./.eslintrc.cjs');
 
-module.exports = {
+/**
+ * @type {import("@types/xo").Options}
+ */
+const xoConfig = {
   prettier: true,
   envs: ['browser', 'es2022'],
   rules: {
     ...eslintConfig.rules,
   },
 };
+
+module.exports = xoConfig;
