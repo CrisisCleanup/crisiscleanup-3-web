@@ -1339,7 +1339,7 @@ export default defineComponent({
       const result = await selection({
         title: t('actions.generate_api_key'),
         content: t('adminOrganization.please_select_api_key_type'),
-        options: ['public', 'read'],
+        options: ['public', 'read', 'read_write'],
         placeholder: t('adminOrganization.key_type'),
       });
       if (result) {
