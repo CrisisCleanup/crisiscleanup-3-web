@@ -168,10 +168,10 @@
   "lint-staged": {
     "*.{vue,json,ts?(x)}": [
       "xo --fix",
-      "xo --prettier"
+      "prettier --write"
     ],
     "*.{y?(a)ml,?(m)js}": [
-      "xo --prettier"
+      "prettier --write"
     ]
   }
 }
