@@ -447,7 +447,7 @@
           @jumpToCase="jumpToCase"
           @savedWorksite="handleWorksiteSave"
           @closeWorksite="clearCase"
-          @navigateToWorksite="handleWorksiteNavigate"
+          @navigateToWorksite="handleWorksiteNavigation"
           @geocoded="addMarkerToMap"
         />
       </div>
