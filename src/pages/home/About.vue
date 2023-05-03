@@ -199,6 +199,22 @@
 
         <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
+          <img src="@/assets/headshots/ginanewby.jpg" class="m-5" />
+          <p class="text-3xl px-0.5 pb-5">
+            <span class="font-bold">Gina Newby</span><br />
+            {{ $t('about.gina_newby_title') }}
+          </p>
+          <base-text
+            variant="body"
+            class="pt-2"
+            v-html="$t('about.gina_newby_bio')"
+          >
+          </base-text>
+        </div>
+        <!-- End Card -->
+
+        <!-- StartCard -->
+        <div class="flex flex-col items-center px-5 sm:px-0">
           <img src="@/assets/headshots/bradenmars.jpg" class="m-5" />
           <p class="text-3xl px-0.5 pb-5">
             <span class="font-bold">Braden Mars</span><br />
@@ -240,22 +256,6 @@
             variant="body"
             class="pt-2"
             v-html="$t('about.dan_kaupilla_bio')"
-          >
-          </base-text>
-        </div>
-        <!-- End Card -->
-
-        <!-- StartCard -->
-        <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/ginanewby.jpg" class="m-5" />
-          <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Gina Newby</span><br />
-            {{ $t('about.gina_newby_title') }}
-          </p>
-          <base-text
-            variant="body"
-            class="pt-2"
-            v-html="$t('about.gina_newby_bio')"
           >
           </base-text>
         </div>
