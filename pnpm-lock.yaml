@@ -340,8 +340,8 @@ devDependencies:
     specifier: ^4.0.1
     version: 4.0.1
   happy-dom:
-    specifier: ^9.10.9
-    version: 9.10.9
+    specifier: ^8.9.0
+    version: 8.9.0
   husky:
     specifier: ^8.0.3
     version: 8.0.3
@@ -383,7 +383,7 @@ devDependencies:
     version: 3.4.1(vite@4.3.4)
   vitest:
     specifier: ^0.31.0
-    version: 0.31.0(happy-dom@9.10.9)(sass@1.62.1)
+    version: 0.31.0(happy-dom@8.9.0)(sass@1.62.1)
   vue-eslint-parser:
     specifier: ^9.2.0
     version: 9.2.0(eslint@8.39.0)
@@ -3532,7 +3532,7 @@ packages:
       magic-string: 0.30.0
       picocolors: 1.0.0
       std-env: 3.3.3
-      vitest: 0.31.0(happy-dom@9.10.9)(sass@1.62.1)
+      vitest: 0.31.0(happy-dom@8.9.0)(sass@1.62.1)
     dev: true
 
   /@vitest/expect@0.31.0:
@@ -6333,15 +6333,18 @@ packages:
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: true
 
-  /happy-dom@9.10.9:
-    resolution: {integrity: sha512-3RnOyu6buPMpDAyOpp8yfR5Xi/k2p5MhrDwlG/dgpVHkptFN5IqubdbGOQU5luB7ANh6a08GOuiB+Bo9JCzCBw==}
+  /happy-dom@8.9.0:
+    resolution: {integrity: sha512-JZwJuGdR7ko8L61136YzmrLv7LgTh5b8XaEM3P709mLjyQuXJ3zHTDXvUtBBahRjGlcYW0zGjIiEWizoTUGKfA==}
     dependencies:
       css.escape: 1.5.1
       he: 1.2.0
       iconv-lite: 0.6.3
+      node-fetch: 2.6.9
       webidl-conversions: 7.0.0
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
+    transitivePeerDependencies:
+      - encoding
     dev: true
 
   /hard-rejection@2.1.0:
@@ -9398,7 +9401,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vitest@0.31.0(happy-dom@9.10.9)(sass@1.62.1):
+  /vitest@0.31.0(happy-dom@8.9.0)(sass@1.62.1):
     resolution: {integrity: sha512-JwWJS9p3GU9GxkG7eBSmr4Q4x4bvVBSswaCFf1PBNHiPx00obfhHRJfgHcnI0ffn+NMlIh9QGvG75FlaIBdKGA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -9443,7 +9446,7 @@ packages:
       chai: 4.3.7
       concordance: 5.0.4
       debug: 4.3.4
-      happy-dom: 9.10.9
+      happy-dom: 8.9.0
       local-pkg: 0.4.3
       magic-string: 0.30.0
       pathe: 1.1.0

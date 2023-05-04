@@ -146,7 +146,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.11.0",
     "fake-indexeddb": "^4.0.1",
-    "happy-dom": "^9.10.9",
+    "happy-dom": "^8.9.0",
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
     "lint-staged": "^13.2.2",
