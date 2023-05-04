@@ -109,6 +109,7 @@ export default defineComponent({
         const [start, end] = queryParam.split('|');
         return [moment(start).toDate(), moment(end).toDate()];
       }
+
       return queryParam.split(',');
     };
 
@@ -129,6 +130,7 @@ export default defineComponent({
           query[key] = filters.value[key];
         }
       }
+
       return query;
     };
 
@@ -140,6 +142,7 @@ export default defineComponent({
           delete query[key];
         }
       }
+
       router.replace({ ...router.currentRoute, query } as any);
       emit('onFilter', query);
     };
@@ -177,13 +180,14 @@ export default defineComponent({
       emit('onPrint', query);
     };
 
-    const onLocationSearch = async () => {
+    const onLocationSearch = async (value: string) => {
       const params = {
         type__key__in:
           'boundary_political_us_county,boundary_political_us_state,boundary_political_us_city,boundary_political_us_zip_code,boundary_political_us_fema_region',
         incident_area: currentIncidentId.value,
         limit: 10,
         sort: 'name',
+        search: value,
       };
 
       const queryString = getQueryString(params);
@@ -193,12 +197,13 @@ export default defineComponent({
       return results.response.data.results;
     };
 
-    const onOrganizationSearch = async () => {
+    const onOrganizationSearch = async (value: string) => {
       const params = {
         incident: currentIncidentId.value,
         limit: 10,
         fields: 'id,name',
         sort: 'name',
+        search: value,
       };
 
       const queryString = getQueryString(params);
