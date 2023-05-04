@@ -8,6 +8,7 @@ const xoConfig = {
   envs: ['browser', 'es2022'],
   extensions: ['vue', 'ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs'],
   extends: [path.join(__dirname, '.eslintrc.cjs')],
+  ignore: ['src/external/**'],
 };
 
 module.exports = xoConfig;
