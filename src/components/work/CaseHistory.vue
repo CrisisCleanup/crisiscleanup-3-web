@@ -9,9 +9,7 @@
       </div>
       <div
         v-if="
-          worksite.work_types.filter((work_type) =>
-            Boolean(work_type.claimed_by),
-          ).length > 0
+          worksite.work_types.some((work_type) => Boolean(work_type.claimed_by))
         "
         class="my-4"
       >
@@ -28,10 +26,11 @@
         </div>
       </div>
       <EventTimeline
-        v-if="worksiteHistory.length > 0"
-        :events="worksiteHistory"
+        :key="user"
+        :user="user"
+        v-for="(timeline, user) in timelineUsers"
+        :events="timeline"
       />
-      <Timeline v-else :events="worksite.events" />
     </div>
   </div>
   <div v-else class="flex items-center justify-center h-full">
@@ -40,12 +39,13 @@
 </template>
 
 <script lang="ts">
-import User from '../../models/User';
-import Organization from '../../models/Organization';
-import { groupBy } from '../../utils/array';
-import Worksite from '../../models/Worksite';
-import Timeline from '../../components/Timeline.vue';
-import EventTimeline from '../../components/EventTimeline.vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import Timeline from '../Timeline.vue';
+import EventTimeline from '../EventTimeline.vue';
+import User from '@/models/User';
+import Organization from '@/models/Organization';
+import { groupBy } from '@/utils/array';
+import Worksite from '@/models/Worksite';
 
 export default defineComponent({
   name: 'CaseHistory',
@@ -60,57 +60,71 @@ export default defineComponent({
       default: null,
     },
   },
-  data() {
-    return {
-      worksite: {},
-      worksiteHistory: [],
-      ready: false,
-    };
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    users() {
-      return groupBy(this.worksite.events, 'created_by');
-    },
-    organizationsWithClaims() {
-      const claimedIds = this.worksite.work_types
+  setup(props, { emit }) {
+    const route = useRoute();
+    const router = useRouter();
+    const worksite = ref<Worksite>(new Worksite());
+    const worksiteHistory = ref([]);
+    const ready = ref(false);
+
+    const currentUser = computed(() => {
+      return User.find(props.worksiteId || route.params.id);
+    });
+
+    const users = computed(() => {
+      return groupBy(worksite?.value?.events, 'created_by');
+    });
+
+    const timelineUsers = computed(() => {
+      return groupBy(worksiteHistory.value, 'created_by');
+    });
+
+    const organizationsWithClaims = computed(() => {
+      const claimedIds = worksite?.value?.work_types
         .filter((workType) => Boolean(workType.claimed_by))
         .map((workType) => workType.claimed_by);
       const idSet = new Set(claimedIds);
-      return Array.from(idSet);
-    },
-  },
-  async mounted() {
-    this.ready = false;
-    try {
-      await Worksite.api().fetch(
-        this.worksiteId || this.$route.params.id,
-        this.incidentId || this.$route.params.incident_id,
-      );
+      return [...idSet];
+    });
 
-      const result = await Worksite.api().getHistory(this.worksiteId);
-      this.worksiteHistory = result.response.data;
-    } catch (e) {
-      await this.$router.push(
-        `/incident/${
-          this.incidentId || this.$route.params.incident_id
-        }/cases/new`,
-      );
-    } finally {
-      this.ready = true;
-    }
-    this.worksite = Worksite.find(this.worksiteId || this.$route.params.id);
-    if (this.$route.query.showOnMap) {
-      this.$emit('jumpToCase', this.worksiteId || this.$route.params.id);
-    }
-  },
-  methods: {
-    getOrganizationName(id) {
+    onMounted(async () => {
+      ready.value = false;
+      try {
+        await Worksite.api().fetch(
+          props.worksiteId || route.params.id,
+          props.incidentId || route.params.incident_id,
+        );
+
+        const result = await Worksite.api().getHistory(props.worksiteId);
+        worksiteHistory.value = result.response.data;
+      } catch {
+        await router.push(
+          `/incident/${props.incidentId || route.params.incident_id}/cases/new`,
+        );
+      } finally {
+        ready.value = true;
+      }
+      worksite.value = Worksite.find(props.worksiteId || route.params.id);
+      if (route.query.showOnMap) {
+        emit('jumpToCase', props.worksiteId || route.params.id);
+      }
+    });
+
+    const getOrganizationName = (id: string) => {
       const organization = Organization.find(id);
-      return organization.name;
-    },
+      return organization?.name;
+    };
+
+    return {
+      worksite,
+      worksiteHistory,
+      ready,
+      currentUser,
+      users,
+      organizationsWithClaims,
+      getOrganizationName,
+      timelineUsers,
+    };
   },
 });
 </script>

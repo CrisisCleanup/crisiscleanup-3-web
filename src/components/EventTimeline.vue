@@ -1,4 +1,5 @@
 <template>
+  <UserDetailsTooltip class="my-2" :user="user"></UserDetailsTooltip>
   <ol class="relative border-l border-gray-200 dark:border-gray-700 mx-2">
     <li v-for="event in events" :key="event.id" class="mb-10 ml-4">
       <div
@@ -8,10 +9,8 @@
         class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
         >{{ formatDateString(event.created_at, 'MM/DD/YYYY, h:mm:ss A') }}</time
       >
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        <UserDetailsTooltip :user="event.actor_id">
-          {{ getTranslation(event.past_tense_t, event.attr) }}
-        </UserDetailsTooltip>
+      <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+        {{ getTranslation(event.past_tense_t, event.attr) }}
       </h3>
       <p
         v-if="event.actor_location_name"
@@ -36,6 +35,9 @@ export default defineComponent({
     events: {
       type: Array,
       default: () => [],
+    },
+    user: {
+      type: Number,
     },
   },
   setup() {
