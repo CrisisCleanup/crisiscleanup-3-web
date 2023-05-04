@@ -451,6 +451,7 @@ export default defineComponent({
     const { t } = useI18n();
     const $toasted = useToast();
     const { confirm } = useDialogs();
+    const route = useRoute();
     const { emitter } = useEmitter();
     const dirtyFields = ref(new Set());
     const worksite = ref({});
@@ -1281,6 +1282,9 @@ export default defineComponent({
 
     onMounted(async () => {
       await initForm();
+      if (route.query.showOnMap) {
+        emit('jumpToCase', props.worksiteId);
+      }
     });
 
     return {

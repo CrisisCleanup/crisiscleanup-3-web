@@ -1389,9 +1389,10 @@ export default defineComponent({
     function handleWorksiteNavigation(id: number) {
       worksiteId.value = id;
       isEditing.value = true;
-      router.push(
-        `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
-      );
+      router.push({
+        path: `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
+        query: { showOnMap: true },
+      });
     }
 
     onMounted(async () => {
