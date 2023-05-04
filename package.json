@@ -18,11 +18,11 @@
     "build:app": "vite build",
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
-    "lint": "xo \"**/*.{vue,json,ts?(x)}\"",
-    "lint:fix": "xo --fix \"**/*.{vue,json,ts?(x)}\"",
+    "lint": "xo",
+    "lint:fix": "xo --fix",
     "lint:errors": "pnpm run lint --quiet",
     "lint:format": "pnpm run lint:fix && pnpm run format",
-    "format": "xo --prettier \"**/*.{vue,ts?(x),json,y?(a)ml}\"",
+    "format": "prettier --write \"**/*.{vue,ts?(x),js?(x),json,md,y?(a)ml}\"",
     "clean": "pnpm dlx rimraf dist \"**/coverage\"",
     "repair:clean-modules": "pnpm dlx rimraf node_modules",
     "repair:prune-pnpm": "pnpm run clean && pnpm run repair:clean-modules && pnpm store prune",
@@ -168,10 +168,10 @@
   "lint-staged": {
     "*.{vue,json,ts?(x)}": [
       "xo --fix",
-      "xo --prettier"
+      "prettier --write"
     ],
     "*.{y?(a)ml,?(m)js}": [
-      "xo --prettier"
+      "prettier --write"
     ]
   }
 }
