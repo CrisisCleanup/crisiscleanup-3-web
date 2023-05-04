@@ -59,7 +59,7 @@ describe('ArcGisUploader.vue', () => {
       },
     });
 
-    const vm = wrapper.vm;
+    const { vm } = wrapper;
 
     vm.url = 'https://example.com/sample-url';
     vm.prefix = 'prefix-';
@@ -79,7 +79,7 @@ describe('ArcGisUploader.vue', () => {
       new Error('Failed to import GIS data'),
     );
 
-    const vm = wrapper.vm;
+    const { vm } = wrapper;
 
     vm.url = 'https://example.com/sample-url';
     vm.prefix = 'prefix-';

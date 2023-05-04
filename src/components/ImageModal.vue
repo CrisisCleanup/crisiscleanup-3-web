@@ -78,6 +78,7 @@ export default defineComponent({
         },
       });
     }
+
     function appearModal(image, idx) {
       viewerApi({
         options: {
@@ -88,6 +89,7 @@ export default defineComponent({
         images: images.value,
       });
     }
+
     return {
       images,
       appearModal,

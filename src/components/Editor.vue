@@ -2,8 +2,8 @@
   <div>
     <div ref="editor"></div>
     <input
-      type="file"
       id="getFile"
+      type="file"
       class="hidden"
       @change="handleFileUpload($event)"
     />
@@ -44,6 +44,7 @@ export default defineComponent({
         uploading.value = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
       formData.append('type_t', 'fileTypes.other_file');
@@ -69,6 +70,7 @@ export default defineComponent({
         uploading.value = false;
       }
     }
+
     function update() {
       if (quillEditor.value) {
         context.emit(

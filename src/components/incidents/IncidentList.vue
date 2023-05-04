@@ -44,7 +44,7 @@
   <div v-else>No Incidents Found</div>
 </template>
 <script lang="ts">
-import { PropType } from 'vue';
+import type { PropType } from 'vue';
 
 export default defineComponent({
   name: 'IncidentList',
@@ -65,6 +65,7 @@ export default defineComponent({
       totalCalls += incident.calls;
       totalValue += incident.value;
     }
+
     return {
       totalCases,
       totalClaimed,

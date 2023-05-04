@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
-import BaseButton from "./BaseButton.vue";
+import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+import BaseButton from './BaseButton.vue';
 
 export default defineComponent({
   components: { BaseButton },
@@ -10,13 +10,13 @@ export default defineComponent({
 
     const loginUser = async () => {
       try {
-        const response = await store.dispatch("auth/login", {
-          email: "tobi@tobiabiodun.com",
-          password: "admin123",
+        const response = await store.dispatch('auth/login', {
+          email: 'tobi@tobiabiodun.com',
+          password: 'admin123',
         });
         console.log(response);
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        console.log(error);
       }
     };
 

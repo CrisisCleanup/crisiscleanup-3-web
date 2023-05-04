@@ -103,7 +103,6 @@ import ufo from './assets/disaster_icons/ufo.svg';
 import velociraptor from './assets/disaster_icons/velociraptor.svg';
 import bigfoot from './assets/disaster_icons/bigfoot.svg';
 import zombies from './assets/disaster_icons/zombies.svg';
-
 import alien from './assets/disaster_icons/alien.svg';
 import asteriod from './assets/disaster_icons/asteriod.svg';
 import dentist from './assets/disaster_icons/dentist.svg';

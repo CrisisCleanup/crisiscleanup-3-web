@@ -33,7 +33,7 @@ interface Event {
 
 interface EventCardType {
   event: Event;
-  color: string,
+  color: string;
   strokeColor: string;
 }
 
@@ -45,10 +45,12 @@ export default defineComponent({
     const $t = (text: string, attrs: Record<string, any>) => {
       return text ? t(text, attrs) : null;
     };
+
     const cards = ref<EventCardType[]>([]);
     function clearCards() {
       cards.value = [];
     }
+
     function getTranslation(tag: string, attr: Record<string, any>) {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]): [any, any] => [
@@ -58,6 +60,7 @@ export default defineComponent({
       );
       return $t(tag, translated_attrs);
     }
+
     function addCardComponent(card: EventCardType) {
       if (cards.value.length > 0) {
         const currentCardText = getTranslation(
@@ -71,6 +74,7 @@ export default defineComponent({
 
         if (currentCardText === previousCardText) return;
       }
+
       cards.value.unshift(card);
     }
 

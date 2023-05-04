@@ -18,7 +18,7 @@ export function getErrorMessage(error: any) {
     return i18n.global.t('info.error_500');
   }
 
-  const _errors = error.response.data.errors as { [key: string]: string }[];
+  const _errors = error.response.data.errors as Array<Record<string, string>>;
   const message = Array.isArray(_errors[0])
     ? _errors[0].message[0]
     : _errors[0].message;
@@ -31,6 +31,7 @@ export function getErrorMessage(error: any) {
       field = field === 'non_field_errors' ? '' : `${field}: `;
       response = `${response}${field}${e.message}<br>`;
     }
+
     return response;
   }
 

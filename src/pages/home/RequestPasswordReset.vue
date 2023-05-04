@@ -98,6 +98,7 @@ export default defineComponent({
           await $toasted.error(reset_request.invalid_message);
           return;
         }
+
         showSuccessModal.value = true;
       } catch (error) {
         await $toasted.error(getErrorMessage(error));

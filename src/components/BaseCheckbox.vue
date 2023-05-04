@@ -2,15 +2,15 @@
   <label class="checkbox-container" :style="containerStyle">
     <slot></slot>
     <input
+      ref="input"
       type="checkbox"
       :checked="modelValue"
-      ref="input"
       class="checkmark-input"
       :class="isInvalid ? 'checkmark-input-invalid' : ''"
       :disabled="disabled"
+      :required="required"
       @update:modelValue="update"
       @change="change"
-      :required="required"
     />
     <span class="checkmark" :style="checkmarkStyle"></span>
   </label>
@@ -21,6 +21,32 @@ import useLogEvent from '@/hooks/useLogEvent';
 
 export default defineComponent({
   name: 'BaseCheckbox',
+  props: {
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    ccuEvent: {
+      type: String,
+      default: '',
+    },
+    checkmarkStyle: {
+      type: String,
+      default: 'top: 0;left: 0;',
+    },
+    containerStyle: {
+      type: String,
+      default: 'display: block; padding-left: 30px;',
+    },
+  },
 
   setup(props, context) {
     const { logEvent } = useLogEvent();
@@ -54,32 +80,6 @@ export default defineComponent({
       update,
       change,
     };
-  },
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    ccuEvent: {
-      type: String,
-      default: '',
-    },
-    checkmarkStyle: {
-      type: String,
-      default: 'top: 0;left: 0;',
-    },
-    containerStyle: {
-      type: String,
-      default: 'display: block; padding-left: 30px;',
-    },
   },
 });
 </script>

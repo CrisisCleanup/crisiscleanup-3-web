@@ -175,6 +175,7 @@ export default defineComponent({
         }
       }
     }
+
     async function transfer() {
       try {
         await axios.post(
@@ -206,6 +207,7 @@ export default defineComponent({
         if (result === 'login') {
           await router.push('/login?accepted=true');
         }
+
         if (result === 'forgot') {
           await PasswordResetRequest.api().post(`/password_reset_requests`, {
             email: invitation.value.invitee_email,
@@ -216,11 +218,13 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function validatePassword() {
       if (userInfo.password !== userInfo.confirmPassword) {
         $toasted.error(t('invitationSignup.password_match_error'));
         return false;
       }
+
       return true;
     }
 

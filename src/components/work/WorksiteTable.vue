@@ -1,9 +1,9 @@
 <template>
   <AjaxTable
+    ref="table"
     :columns="columns"
     :url="tableUrl"
     :body-style="{ height: '24rem' }"
-    ref="table"
     class="mt-6 shadow-lg"
     :query="worksiteQuery"
     enable-selection
@@ -38,16 +38,19 @@
 <script lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import AjaxTable from '@/components/AjaxTable.vue';
 import {
   getColorForStatus,
   getWorkTypeName,
   getStatusName,
 } from '../../filters';
+import AjaxTable from '@/components/AjaxTable.vue';
 
 export default defineComponent({
   name: 'WorksiteTable',
   components: { AjaxTable },
+  props: {
+    worksiteQuery: { type: Object, default: null, required: false },
+  },
 
   setup() {
     const { t } = useI18n();
@@ -101,9 +104,6 @@ export default defineComponent({
       getWorkTypeName,
       getStatusName,
     };
-  },
-  props: {
-    worksiteQuery: { type: Object, default: null, required: false },
   },
 });
 </script>

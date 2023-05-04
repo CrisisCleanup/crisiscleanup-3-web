@@ -31,8 +31,8 @@
           <div class="modal-footer flex-shrink">
             <div class="flex items-center justify-center py-2 border-t">
               <div
-                class="flex flex-col items-center justify-center"
                 v-if="Object.keys(actions).length === 0"
+                class="flex flex-col items-center justify-center"
               >
                 <base-button
                   :alt="$t('actions.ok')"
@@ -44,13 +44,13 @@
                     }
                   "
                 >
-                  {{ $t("actions.ok") }}
+                  {{ $t('actions.ok') }}
                 </base-button>
               </div>
 
               <div
-                class="flex items-center justify-end w-full"
                 v-if="Object.keys(actions).length > 0"
+                class="flex items-center justify-end w-full"
               >
                 <base-button
                   v-for="(value, key) in actions"
@@ -77,33 +77,33 @@
 </template>
 
 <script lang="ts">
-import { closeDialog } from 'vue3-promise-dialog'
-import { defineComponent } from 'vue'
+import { closeDialog } from 'vue3-promise-dialog';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'MessageBox',
   props: {
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     content: {
       type: String,
-      default: ''
+      default: '',
     },
     actions: {
       type: Object,
-      default: () => {
-        return {}
-      }
-    }
+      default() {
+        return {};
+      },
+    },
   },
-  setup () {
+  setup() {
     return {
-      closeDialog
-    }
-  }
-})
+      closeDialog,
+    };
+  },
+});
 </script>
 
 <style scoped>

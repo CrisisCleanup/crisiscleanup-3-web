@@ -2,13 +2,13 @@
   <div class="floating-input relative">
     <input
       class="focus:outline-none rounded-md focus:border-gray-500 focus:shadow-sm w-full p-3 h-12"
+      v-bind="$attrs"
+      :value.prop="modelValue"
       @input="
         (e) => {
           $emit('update:modelValue', e.target.value);
         }
       "
-      v-bind="$attrs"
-      :value.prop="modelValue"
     />
     <label
       :for="$attrs.id"

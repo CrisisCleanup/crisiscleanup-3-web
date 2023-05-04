@@ -26,7 +26,7 @@
         </base-text>
         <draggable
           v-model="team.users"
-          itemKey="id"
+          item-key="id"
           group="people"
           handle=".handle"
           class="h-32 overflow-scroll w-3/4 border"
@@ -139,7 +139,7 @@
           ></base-input>
           <draggable
             v-model="usersList"
-            itemKey="id"
+            item-key="id"
             group="people"
             handle=".handle"
             class="h-96 overflow-scroll"
@@ -374,6 +374,7 @@ export default defineComponent({
         if (!_team) {
           throw new Error('Team not found. Something went wrong.');
         }
+
         if (teamWorksites.value.length > 0) {
           const promises = [];
           for (const w of teamWorksites.value) {
@@ -390,14 +391,17 @@ export default defineComponent({
               }
             }
           }
+
           await Promise.all(promises);
         }
+
         ctx.emit('saved');
         ctx.emit('close');
       } catch (error) {
         $toasted.error(getErrorMessage(error));
       }
     };
+
     const onSearch = () => {
       usersList.value = props.users.filter((user) => {
         return (
@@ -408,6 +412,7 @@ export default defineComponent({
         );
       });
     };
+
     const generateTeamName = () => {
       team.value.name = uniqueNamesGenerator({
         dictionaries: [colors, adjectives, animals],

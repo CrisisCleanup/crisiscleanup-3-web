@@ -6,7 +6,9 @@
     <div class="flex items-center justify-between mr-3">
       <div class="flex items-start justify-start">
         <div class="flex ml-4">
-          <base-text variant="bodysm" v-if="currentUser">{{ currentUser.mobile }}</base-text>
+          <base-text v-if="currentUser" variant="bodysm">{{
+            currentUser.mobile
+          }}</base-text>
         </div>
       </div>
       <div class="py-3">
@@ -60,14 +62,14 @@
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
       <ccu-icon
-        @click="hangup"
         v-if="(isOnCall || caller) && isOutboundCall"
         size="lg"
         class="ml-2"
         type="hangup"
+        @click="hangup"
       ></ccu-icon>
     </div>
-    <EditAgentModal @cancel="editingAgent = false" v-if="editingAgent" />
+    <EditAgentModal v-if="editingAgent" @cancel="editingAgent = false" />
   </div>
 </template>
 

@@ -340,7 +340,7 @@
 </template>
 
 <script lang="ts">
-import {computed, reactive, toRefs} from 'vue';
+import { computed, reactive, toRefs } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -397,6 +397,7 @@ export default defineComponent({
       if (currentUser.value) {
         return `${currentUser.value.first_name} ${currentUser.value.last_name}`;
       }
+
       return '';
     });
 
@@ -415,6 +416,7 @@ export default defineComponent({
     function handleSubmit(e) {
       e.preventDefault();
     }
+
     function setNotifications(key, value) {
       if (currentUser.value.preferences) {
         const preferences = {
@@ -436,11 +438,13 @@ export default defineComponent({
         );
       }
     }
+
     async function handleProfilePictureUpload(fileList) {
       if (fileList.length === 0) {
         state.uploading = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[0]);
       formData.append('type_t', 'fileTypes.user_profile_picture');
@@ -475,6 +479,7 @@ export default defineComponent({
         state.uploading = false;
       }
     }
+
     function updateUser(value, key) {
       User.update({
         where: currentUser.value.id,
@@ -483,15 +488,18 @@ export default defineComponent({
         },
       });
     }
+
     async function updateUserLanguage() {
       const { setupLanguage } = useSetupLanguage();
       await setupLanguage();
     }
+
     async function saveUser() {
       const isValid = form.value.reportValidity();
       if (!isValid) {
         return;
       }
+
       try {
         await User.api().patch(`/users/${currentUser.value.id}`, {
           ...User.find(currentUser.value.id).$toJson(),
@@ -506,9 +514,11 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function resetStates() {
       await User.api().clearUserStates();
     }
+
     async function resetPreferences() {
       await User.api().clearUserPreferences();
     }

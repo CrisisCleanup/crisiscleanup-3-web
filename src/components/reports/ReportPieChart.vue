@@ -39,6 +39,7 @@ export default defineComponent({
         minimumFractionDigits: 0,
       });
     }
+
     if (props.displayOptions.number_format === 'percentage') {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'percent',
@@ -46,6 +47,7 @@ export default defineComponent({
         maximumFractionDigits: 2,
       });
     }
+
     function renderPie(data, svg, index, toolTip) {
       const width = 100;
       const height = 80;
@@ -199,6 +201,7 @@ export default defineComponent({
       for (const [index, pieData] of data.entries()) {
         renderPie(pieData, svg, index, toolTip);
       }
+
       renderPie(data);
     });
 

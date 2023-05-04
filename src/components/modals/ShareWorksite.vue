@@ -1,8 +1,7 @@
 <template>
   <div class="p-3">
     <div class="mb-2">
-      <p>{{$t('shareWorksite.share_via_email_phone_intro')}}
-      </p>
+      <p>{{ $t('shareWorksite.share_via_email_phone_intro') }}</p>
     </div>
     <tag-input
       v-model="emails"
@@ -72,7 +71,8 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { createTags, TagInputData } from '@sipec/vue3-tags-input';
+import type { TagInputData } from '@sipec/vue3-tags-input';
+import { createTags } from '@sipec/vue3-tags-input';
 import _ from 'lodash';
 import UserSearchInput from '@/components/UserSearchInput.vue';
 import type User from '@/models/User';
@@ -104,7 +104,7 @@ export default defineComponent({
 
     function onSelectedUserEmail(user: User) {
       if (user.email) {
-        let extTags = createTags([{ text: user.email, tiClasses: [] }]);
+        const extTags = createTags([{ text: user.email, tiClasses: [] }]);
         emailsToShare.value = [...emailsToShare.value, ...extTags];
         emit('emailsUpdated', [
           ...new Set(emailsToShare.value.map((tag) => tag.text)),
@@ -114,7 +114,7 @@ export default defineComponent({
 
     function onSelectedUserPhone(user: User) {
       if (user.mobile) {
-        let extTags = createTags([{ text: user.mobile, tiClasses: [] }]);
+        const extTags = createTags([{ text: user.mobile, tiClasses: [] }]);
         phoneNumbersToShare.value = [...phoneNumbersToShare.value, ...extTags];
         emit('phoneNumbersUpdated', [
           ...new Set(phoneNumbersToShare.value.map((tag) => tag.text)),

@@ -9,10 +9,10 @@ export default class Location extends CCUModel {
   name!: string;
   notes!: string;
   shared!: string;
-  geom!: string | null;
-  poly!: string | null;
+  geom!: string | undefined;
+  poly!: string | undefined;
   attr!: Record<string, any>;
-  point!: string | null;
+  point!: string | undefined;
   joins!: string;
 
   static fields() {

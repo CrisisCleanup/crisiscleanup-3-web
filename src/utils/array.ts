@@ -7,8 +7,10 @@ export function groupBy<T extends Record<string, any>, K extends keyof T>(
     if (!result[item[key]]) {
       result[item[key]] = [];
     }
+
     result[item[key]].push(item);
   }
+
   return result;
 }
 
@@ -25,5 +27,6 @@ export function childrenBy<T extends Record<string, any>, K extends keyof T>(
   for (const item of array) {
     item.children = dict[item[key]];
   }
+
   return array;
 }

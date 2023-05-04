@@ -100,7 +100,7 @@ export default defineComponent({
     },
     options: {
       type: [Array, Function],
-      default: () => {
+      default() {
         return [];
       },
     },
@@ -180,6 +180,7 @@ export default defineComponent({
       if (props.modelValue !== null) {
         return empty(props.modelValue);
       }
+
       return isEmpty_.value;
     });
 
@@ -187,9 +188,11 @@ export default defineComponent({
       if (isFloated_.value === true) {
         return true;
       }
+
       if (isEmpty.value === false) {
         return true;
       }
+
       return isFloated_.value;
     });
 
@@ -220,6 +223,7 @@ export default defineComponent({
         isFloated_.value = false;
         inputLabel.value.classList.remove('focused');
       }
+
       if (props.multiple) {
         const current = props.modelValue || [];
         const currentValues = current
@@ -227,6 +231,7 @@ export default defineComponent({
           .filter(Boolean);
         emit('changed', xor(value, currentValues));
       }
+
       if (props.required) {
         isInvalid.value = isEmpty_.value;
       }
@@ -244,6 +249,7 @@ export default defineComponent({
         isFloated_.value = true;
         inputLabel.value.classList.add('focused');
       }
+
       nextTick(() => {
         const items = Array.prototype.slice.call(
           document.querySelectorAll('.vs__dropdown-option'),
@@ -260,6 +266,7 @@ export default defineComponent({
               : props.modelValue;
             return item.textContent.trim() === currentLabel;
           }
+
           return false;
         });
 
@@ -270,6 +277,7 @@ export default defineComponent({
         }
       });
     }
+
     function handleResize() {
       currentHeight_.value = inputRef.value.parentElement.clientHeight;
       emit('resize', currentHeight_.value);

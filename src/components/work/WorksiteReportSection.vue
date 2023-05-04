@@ -88,8 +88,8 @@
                 @click="editTimeEntry(entry)"
               />
               <font-awesome-icon
-                icon="check"
                 v-if="currentTimeEdit.id === entry.id"
+                icon="check"
                 :alt="$t('actions.save')"
                 size="md"
                 class="mx-1 text-green-600 cursor-pointer"
@@ -157,6 +157,7 @@ export default defineComponent({
           (type) => type.created_by_org === currentUser.organization.id,
         );
       }
+
       return [];
     });
 
@@ -167,6 +168,7 @@ export default defineComponent({
           (type) => type.created_by_org !== currentUser.organization.id,
         );
       }
+
       const volunteers = time.reduce((total, object) => {
         return total + object.volunteers;
       }, 0);
@@ -188,6 +190,7 @@ export default defineComponent({
         if (!isValid) {
           return;
         }
+
         await Worksite.api().addTime(
           props.worksite.id,
           moment.duration(Number(hoursPerVolunteer.value), 'hours').asSeconds(),
@@ -202,6 +205,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function saveTimeEntry() {
       try {
         await Worksite.api().updateTimeEntry(
@@ -215,6 +219,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function editTimeEntry(entry) {
       currentTimeEdit.value.id = entry.id;
       currentTimeEdit.value.seconds = entry.seconds;

@@ -36,6 +36,7 @@ describe('BaseButton', () => {
     const mockAction = () => {
       throw new Error('Exception!');
     };
+
     const wrapper = mountWithOptions({ action: mockAction });
     await wrapper.find('button').trigger('click');
     expect(mockAction).toThrow(Error);

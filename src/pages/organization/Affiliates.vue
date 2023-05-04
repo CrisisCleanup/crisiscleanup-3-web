@@ -78,11 +78,15 @@
         </template>
         <template #user_count="slotProps">
           <div class="text-center">
-            {{ slotProps.item.affiliate_organization?.user_count ?? '' }} member(s)
+            {{ slotProps.item.affiliate_organization?.user_count ?? '' }}
+            member(s)
           </div>
         </template>
         <template #actions="slotProps">
-          <div v-if="currentUser" class="flex mr-2 items-center justify-center w-full">
+          <div
+            v-if="currentUser"
+            class="flex mr-2 items-center justify-center w-full"
+          >
             <base-button
               v-if="
                 slotProps.item.approved_by ||
@@ -137,11 +141,11 @@
 </template>
 
 <script lang="ts">
+import type { Collection, Model } from '@vuex-orm/core';
 import Affiliate from '@/models/Affiliate';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import Table from '@/components/Table.vue';
-import { Collection, Model } from '@vuex-orm/core';
 import OrganizationSearchInputVue from '@/components/OrganizationSearchInput.vue';
 
 export default defineComponent({
@@ -152,45 +156,45 @@ export default defineComponent({
     const { t } = useI18n();
     const showingAffiliateModal = ref(false);
     const organizationResults = ref<Collection<Model>>();
-      const selectedAffiliate = ref<Affiliate | null>(null);
-      const loading = ref(false);
-      const currentRequestsColumns = ref([
-        {
-          title: t('affiliatesVue.affiliate'),
-          dataIndex: 'affiliate_organization',
-          key: 'name',
-          width: '2fr',
-        },
-        {
-          title: t('affiliatesVue.type'),
-          dataIndex: 'type_t',
-          key: 'type_t',
-          width: '1fr',
-        },
-        {
-          title: t('affiliatesVue.status'),
-          dataIndex: 'status',
-          key: 'status',
-          width: '1fr',
-        },
-        {
-          title: t('affiliatesVue.members'),
-          dataIndex: 'user_count',
-          key: 'user_count',
-          width: '1fr',
-        },
-        {
-          title: '',
-          dataIndex: 'actions',
-          key: 'actions',
-          width: '3fr',
-        },
-      ]);
+    const selectedAffiliate = ref<Affiliate | null>(null);
+    const loading = ref(false);
+    const currentRequestsColumns = ref([
+      {
+        title: t('affiliatesVue.affiliate'),
+        dataIndex: 'affiliate_organization',
+        key: 'name',
+        width: '2fr',
+      },
+      {
+        title: t('affiliatesVue.type'),
+        dataIndex: 'type_t',
+        key: 'type_t',
+        width: '1fr',
+      },
+      {
+        title: t('affiliatesVue.status'),
+        dataIndex: 'status',
+        key: 'status',
+        width: '1fr',
+      },
+      {
+        title: t('affiliatesVue.members'),
+        dataIndex: 'user_count',
+        key: 'user_count',
+        width: '1fr',
+      },
+      {
+        title: '',
+        dataIndex: 'actions',
+        key: 'actions',
+        width: '3fr',
+      },
+    ]);
 
-      const affiliates = computed(() => Affiliate.all());
-      const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const affiliates = computed(() => Affiliate.all());
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
 
-      const getAffiliateRequests = async () => {
+    const getAffiliateRequests = async () => {
       loading.value = true;
       await Affiliate.api().get('/organization_affiliate_requests', {
         dataKey: 'results',
@@ -204,21 +208,25 @@ export default defineComponent({
         },
       );
       loading.value = false;
-    }
+    };
+
     const rejectAffiliation = async (request: Affiliate) => {
       await Affiliate.api().rejectRequest(request);
       await getAffiliateRequests();
-    }
+    };
+
     const acceptAffiliation = async (request: Affiliate) => {
       await Affiliate.api().acceptRequest(request);
       await getAffiliateRequests();
-    }
+    };
+
     const sendAffiliateRequest = async (organization: Affiliate | null) => {
       await Affiliate.api().post('/organization_affiliate_requests', {
         affiliate: organization?.id,
       });
       await getAffiliateRequests();
-    }
+    };
+
     const removeAffiliation = async (affiliate: Affiliate) => {
       await Affiliate.api().delete(
         `/organization_affiliate_requests/${affiliate.id}`,
@@ -227,7 +235,8 @@ export default defineComponent({
         },
       );
       await getAffiliateRequests();
-    }
+    };
+
     const onOrganizationSearch = async (value: string) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
@@ -236,7 +245,7 @@ export default defineComponent({
         },
       );
       organizationResults.value = results.entities?.organizations || [];
-    }
+    };
 
     onMounted(async () => {
       await getAffiliateRequests();

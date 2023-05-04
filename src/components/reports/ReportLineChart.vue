@@ -45,6 +45,7 @@ export default defineComponent({
         minimumFractionDigits: 0,
       });
     }
+
     if (props.displayOptions.number_format === 'percentage') {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'percent',
@@ -116,7 +117,7 @@ export default defineComponent({
               values: chartData.map(function (d) {
                 return {
                   date: d[props.groupBy],
-                  amount: +d[name],
+                  amount: Number(d[name]),
                 };
               }),
             };
@@ -239,6 +240,7 @@ export default defineComponent({
                 ).format('ddd MMMM Do YYYY')}\n${displaytext}`,
               );
           }
+
           function mouseout() {
             hoverLine.style('stroke-opacity', 0);
             toolTip.style('visibility', 'hidden');

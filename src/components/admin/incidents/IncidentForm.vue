@@ -164,12 +164,12 @@ import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment-timezone';
 import { cloneDeep } from 'lodash';
+import type { VueDatePicker } from '@vuepic/vue-datepicker';
 import FloatingInput from '@/components/FloatingInput.vue';
 import { formatNationalNumber } from '@/filters';
 import { getErrorMessage } from '@/utils/errors';
 import useDialogs from '@/hooks/useDialogs';
 import type Incident from '@/models/Incident';
-import type { VueDatePicker } from '@vuepic/vue-datepicker';
 
 const INCIDENT_TYPES = [
   'contaminated_water',
@@ -263,6 +263,7 @@ export default defineComponent({
           await $toasted.error(error.message);
           return;
         }
+
         try {
           const { data }: { data: Ani } = await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/ani`,
@@ -308,6 +309,7 @@ export default defineComponent({
           currentAni.value = { ...currentAni.value };
         }
       }
+
       const aniResponse = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/ani?limit=200`,
       );

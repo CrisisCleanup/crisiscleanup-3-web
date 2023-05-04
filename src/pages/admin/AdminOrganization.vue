@@ -92,8 +92,8 @@
               }}</label>
             </div>
             <base-input
-              size="small"
               v-model="organization.facebook"
+              size="small"
               :placeholder="$t('profileOrg.facebook')"
             />
           </div>
@@ -103,8 +103,8 @@
               <label class="pr-3 text-xs">{{ $t('profileOrg.twitter') }}</label>
             </div>
             <base-input
-              size="small"
               v-model="organization.twitter"
+              size="small"
               :placeholder="$t('profileOrg.twitter')"
             />
           </div>
@@ -120,23 +120,23 @@
             class="input text-sm pb-4 sm:pb-0"
             size="large"
           />
-          <base-checkbox class="mb-4 sm:mb-0" v-model="organization.is_active">
+          <base-checkbox v-model="organization.is_active" class="mb-4 sm:mb-0">
             Is Active
           </base-checkbox>
           <base-checkbox
-            class="mb-4 sm:mb-0"
             v-model="organization.is_verified"
+            class="mb-4 sm:mb-0"
           >
             Org Verified
           </base-checkbox>
-          <base-checkbox class="mb-4 sm:mb-0" v-model="organization.publish">
+          <base-checkbox v-model="organization.publish" class="mb-4 sm:mb-0">
             Publish
           </base-checkbox>
           <base-select
+            v-model="organization.type_t"
             :placeholder="$t('profileOrg.organization_type')"
             class="my-2"
             :options="organizationTypes"
-            v-model="organization.type_t"
             select-classes="p-1"
             item-key="key"
             label="label"
@@ -146,22 +146,22 @@
             :placeholder="$t('adminOrganization.role')"
             class="my-2"
             :options="roles"
+            select-classes="p-1"
+            item-key="id"
+            label="name_t"
+            searchable
             @update:modelValue="
               (e) => {
                 roleToAdd = e;
                 currentRole = e;
               }
             "
-            select-classes="p-1"
-            item-key="id"
-            label="name_t"
-            searchable
           />
           <base-select
+            v-model="organization.approve_reject_reason_t"
             :placeholder="$t('orgApprovalTable.give_approve_reason')"
             class="my-2"
             :options="approveRejectReasons"
-            v-model="organization.approve_reject_reason_t"
             item-key="key"
             label="label"
             select-classes="p-1"
@@ -406,9 +406,9 @@
         {{ $t('adminOrganization.see_in_django') }}
       </base-link>
       <CapabilityGrid
+        :key="JSON.stringify(organizationCapabilities)"
         class="mt-3"
         :organization-capabilities="organizationCapabilities"
-        :key="JSON.stringify(organizationCapabilities)"
         @updated="
           (matrix) => {
             updatedOrganizationCapabilitiesMatrix = matrix;
@@ -504,11 +504,11 @@
                   "
                 />
                 <base-button
+                  v-if="request.is_verified"
                   :text="$t('actions.reject')"
                   variant="outline"
                   size="small"
                   class="mx-2 w-24"
-                  v-if="request.is_verified"
                   :action="
                     () => {
                       rejectIncidentRequest(request.id);
@@ -531,9 +531,9 @@
             "
           >
             <div
-              class="pr-3"
               v-for="incident in organization.approved_incidents"
               :key="`${incident.id}`"
+              class="pr-3"
             >
               {{ getIncidentName(incident, incidents) }}
             </div>
@@ -578,9 +578,9 @@
           </base-text>
           <div>
             <div
-              class="pr-3 flex items-center"
               v-for="group in groups"
               :key="`${group.id}`"
+              class="pr-3 flex items-center"
             >
               {{ group.name }}
               <ccu-icon
@@ -664,8 +664,8 @@
         v-if="showingApiKeyModal"
         :title="$t('adminOrganization.org_api_keys')"
         modal-classes="max-w-sm"
-        @close="showingApiKeyModal = false"
         closeable
+        @close="showingApiKeyModal = false"
       >
         <div class="flex flex-col items-center justify-center p-3">
           <FloatingInput
@@ -808,6 +808,7 @@ export default defineComponent({
           return logos[0].small_thumbnail_url;
         }
       }
+
       return '';
     });
 
@@ -823,6 +824,7 @@ export default defineComponent({
           ? [stateRefs.organization.value.secondary_location]
           : [];
       }
+
       return [];
     });
 
@@ -836,6 +838,7 @@ export default defineComponent({
           );
         });
       }
+
       return [];
     });
 
@@ -849,6 +852,7 @@ export default defineComponent({
           );
         });
       }
+
       return [];
     });
 
@@ -858,14 +862,14 @@ export default defineComponent({
       const response = await component({
         title: t('profileOrg.select_location'),
         component: LocationTool,
-        modalClasses: `w-${mq.current !== 'sm' ? '2/3' : 'full'}`,
+        modalClasses: `w-${mq.current === 'sm' ? 'full' : '2/3'}`,
         props: {
           organization: stateRefs.organization.value.id,
           class: classes,
           locations: existingLocation.value,
         },
         listeners: {
-          changed: (payload) => {
+          changed(payload) {
             setCurrentLocation(payload);
           },
         },
@@ -882,6 +886,7 @@ export default defineComponent({
         capabilities.find((c) => c.id === value).name_t
       );
     }
+
     function getIncidentName(value, incidents) {
       return incidents.length > 0 && incidents.find((c) => c.id === value).name;
     }
@@ -891,6 +896,7 @@ export default defineComponent({
         stateRefs.uploading.value = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
       formData.append('type_t', type);
@@ -934,11 +940,13 @@ export default defineComponent({
         stateRefs.uploading.value = false;
       }
     }
+
     function getContactView(request) {
       const contact = request.requested_by_contact;
       if (!request.requested_by_contact) {
         return '';
       }
+
       return `
           <div>Requested By</div>
           <div>${contact.first_name} ${contact.last_name}</div>
@@ -947,6 +955,7 @@ export default defineComponent({
           </p>
         `;
     }
+
     async function approveIncidentRequest(requestId) {
       await axios.post(
         `${
@@ -958,6 +967,7 @@ export default defineComponent({
       );
       await loadPageData();
     }
+
     async function rejectIncidentRequest(requestId) {
       await axios.post(
         `${
@@ -969,6 +979,7 @@ export default defineComponent({
       );
       await loadPageData();
     }
+
     async function loadPageData() {
       try {
         const pageData = await hash({
@@ -1069,6 +1080,7 @@ export default defineComponent({
       );
       return response.data.results;
     }
+
     async function approveOrganization(organizationId) {
       try {
         await Organization.api().approve(
@@ -1081,6 +1093,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function rejectOrganization(organizationId) {
       try {
         await Organization.api().reject(
@@ -1093,6 +1106,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function createTileLayer() {
       return L.tileLayer(mapTileLayer, {
         // tileSize: 512,
@@ -1100,6 +1114,7 @@ export default defineComponent({
         maxZoom: 19,
       });
     }
+
     async function saveCurrentLocation() {
       let { geometry } = stateRefs.currentPolygon.value.toGeoJSON();
       const { type, features } = stateRefs.currentPolygon.value.toGeoJSON();
@@ -1107,6 +1122,7 @@ export default defineComponent({
       if (stateRefs.settingLocation.value === 'secondary_location') {
         locationTypeKey = 'org_secondary_response_area';
       }
+
       const locationType = LocationType.query()
         .where('key', locationTypeKey)
         .get()[0];
@@ -1125,11 +1141,13 @@ export default defineComponent({
 
           break;
         }
+
         case 'Polygon': {
           location.poly = geometry;
 
           break;
         }
+
         case 'MultiPolygon': {
           location.geom = geometry;
 
@@ -1150,9 +1168,11 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function setCurrentLocation(location) {
       stateRefs.currentPolygon.value = location;
     }
+
     async function reloadMaps() {
       const {
         primary_location: primaryLocation,
@@ -1164,6 +1184,7 @@ export default defineComponent({
           if (layer instanceof L.TileLayer) {
             return;
           }
+
           stateRefs.primaryLocationMap.value.removeLayer(layer);
         });
         await Location.api().fetchById(primaryLocation);
@@ -1177,11 +1198,13 @@ export default defineComponent({
           weight: '1',
         }).addTo(stateRefs.primaryLocationMap.value);
       }
+
       if (secondaryLocation) {
         stateRefs.secondaryLocationMap.value.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
+
           stateRefs.secondaryLocationMap.value.removeLayer(layer);
         });
         await Location.api().fetchById(secondaryLocation);
@@ -1196,6 +1219,7 @@ export default defineComponent({
         }).addTo(stateRefs.secondaryLocationMap.value);
       }
     }
+
     async function saveRole() {
       if (stateRefs.roleToAdd.value) {
         await Promise.all(
@@ -1220,6 +1244,7 @@ export default defineComponent({
         );
       }
     }
+
     async function saveIncidents() {
       if (stateRefs.newIncidents.value.length > 0) {
         try {
@@ -1245,6 +1270,7 @@ export default defineComponent({
         }
       }
     }
+
     async function saveGroups() {
       if (stateRefs.newGroups.value.length > 0) {
         try {
@@ -1266,6 +1292,7 @@ export default defineComponent({
         }
       }
     }
+
     async function deleteGroup(group) {
       const result = await confirm({
         title: t('adminOrganization.remove_org_from_group'),
@@ -1296,6 +1323,7 @@ export default defineComponent({
       );
       await loadPageData();
     }
+
     async function saveOrganization() {
       try {
         await axios.put(
@@ -1323,18 +1351,22 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function copyUsers() {
       let text = '';
       for (const user of stateRefs.users.value) {
         text += `${user.first_name}\t${user.last_name}\t${user.email}\t${user.mobile}\t\n`;
       }
+
       await navigator.clipboard.writeText(text);
       $toasted.success(t('info.users_copied'));
     }
+
     async function copyApiKey() {
       await navigator.clipboard.writeText(stateRefs.apiKey.value);
       $toasted.success(t('adminOrganization.api_key_copied'));
     }
+
     async function generateApiKey() {
       const result = await selection({
         title: t('actions.generate_api_key'),

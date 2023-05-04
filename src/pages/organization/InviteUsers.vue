@@ -113,11 +113,9 @@ export default defineComponent({
     ]);
 
     const currentUser = computed(() => {
-      // eslint-disable-next-line unicorn/no-array-callback-reference
       return User.find(store.getters['auth/userId']);
     });
     const currentOrganization = computed(() => {
-      // eslint-disable-next-line unicorn/no-array-callback-reference
       return Organization.find(currentUser.value?.organization.id);
     });
 
@@ -138,15 +136,18 @@ export default defineComponent({
           if (_.isError(extTags)) {
             extTags = [];
           }
+
           console.log('extTags', extTags);
           console.log('tags', tags);
           tags = _.uniqBy([...tags, ...extTags], 'text');
           console.log('tags', tags);
         }
+
         if (_.isEmpty(tags)) {
           await $toasted.error(t('inviteTeammates.provide_valid_email'));
           return;
         }
+
         const _emails = tags.map((value) => value.text);
         await Promise.all(
           _emails.map((email) =>

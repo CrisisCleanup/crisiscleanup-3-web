@@ -100,9 +100,11 @@ export default defineComponent({
       if (moment().isAfter(AuthService.getExpiry())) {
         AuthService.removeUser();
       }
+
       if (import.meta.env.NODE_ENV === 'development') {
         eventsInterval.value = setInterval(pushCurrentEvents, 2000);
       }
+
       axios.interceptors.request.use((config) => {
         if (config.headers) {
           config.headers.CCU_PORTAL_KEY = import.meta.env.VITE_APP_PORTAL_KEY;
@@ -119,6 +121,7 @@ export default defineComponent({
           if (error.response && error.response.status === 401) {
             store.commit('auth/setShowLoginModal', true);
           }
+
           return Promise.reject(error);
         },
       );

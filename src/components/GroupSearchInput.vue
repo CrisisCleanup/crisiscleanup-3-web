@@ -6,14 +6,14 @@
     label="name"
     :object="true"
     :placeholder="$t('Group (optional)')"
+    :model-value="modelValue"
     @update:modelValue="
       (value) => {
         $emit('update:modelValue', value);
       }
     "
-    :model-value="modelValue"
   >
-    <template #option="{ option }" v-if="isAdmin">
+    <template v-if="isAdmin" #option="{ option }">
       <div
         class="flex justify-between text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
       >

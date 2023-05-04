@@ -10,7 +10,7 @@ import User from '@/models/User';
 
 export default function useSetupLanguage() {
   return {
-    setupLanguage: async () => {
+    async setupLanguage() {
       const { setLocaleMessage, locale } = i18n.global;
       let currentLanguage: string;
       const currentUser = User.find(store.getters['auth/userId']);
@@ -64,8 +64,10 @@ export default function useSetupLanguage() {
         } catch {
           // $log.error(e);
         }
+
         moment.locale(currentLanguage.split('-')[0]);
       }
+
       moment.locale(currentLanguage.split('-')[0]);
     },
   };

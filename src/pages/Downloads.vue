@@ -1,6 +1,8 @@
 <template>
   <div class="p-3">
-    <base-text variant="h1" class="my-3">{{ $t('nav.user_downloads') }}</base-text>
+    <base-text variant="h1" class="my-3">{{
+      $t('nav.user_downloads')
+    }}</base-text>
     <AjaxTable
       :url="tableUrl"
       :columns="columns"
@@ -26,14 +28,14 @@
 </template>
 
 <script lang="ts">
+import moment from 'moment/moment';
 import { makeTableColumns } from '@/utils/table';
 import AjaxTable from '@/components/AjaxTable.vue';
-import BaseText from "@/components/BaseText.vue";
-import moment from "moment/moment";
+import BaseText from '@/components/BaseText.vue';
 
 export default defineComponent({
   name: 'Downloads',
-  components: {BaseText, AjaxTable },
+  components: { BaseText, AjaxTable },
   setup() {
     const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/user_downloads`;
     const columns = makeTableColumns([
@@ -48,6 +50,7 @@ export default defineComponent({
         };
       }
     }
+
     return {
       tableUrl,
       columns,

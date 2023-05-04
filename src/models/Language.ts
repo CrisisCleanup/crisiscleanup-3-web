@@ -5,12 +5,12 @@ import detectBrowserLanguage from 'detect-browser-language';
 import _ from 'lodash';
 import CCUModel from '@/models/base';
 
-type LanguageTranslationResponse = {
+interface LanguageTranslationResponse {
   text: string;
   translated_text: string;
   source_subtag: string;
   target_subtag: string;
-};
+}
 
 export default class Language extends CCUModel {
   static entity = 'languages';

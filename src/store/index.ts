@@ -5,7 +5,6 @@ import axios from 'axios';
 import { AuthService } from '../services/auth.service';
 import auth from './modules/auth';
 import incident from './modules/incident';
-
 import database from './database';
 import acl from './modules/acl';
 import enums from './modules/enums';

@@ -25,15 +25,15 @@
       <div class="text-justify flex flex-col p-3 justify-center">
         <div>{{ $t('mergeOrganizations.organization_keep') }}</div>
         <OrganizationSearchInput
-          @selectedOrganization="keepOrganization = $event.id"
           include-inactive
           class="w-108"
+          @selectedOrganization="keepOrganization = $event.id"
         />
         <div>{{ $t('mergeOrganizations.organization_merge') }}</div>
         <OrganizationSearchInput
-          @selectedOrganization="mergeOrganization = $event.id"
           include-inactive
           class="w-108"
+          @selectedOrganization="mergeOrganization = $event.id"
         />
         <div>{{ $t('mergeOrganizations.merge_reason') }}</div>
         <textarea

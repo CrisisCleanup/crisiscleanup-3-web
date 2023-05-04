@@ -68,20 +68,23 @@
               <base-select
                 v-if="!loading"
                 :model-value="shapefileInfo[data.filename].shapefileKey"
+                :options="data.fields"
+                :placeholder="$t('layersVue.select_key_shapefile')"
+                select-classes="bg-white border w-full"
+                class="form-field"
                 @update:modelValue="
                   (value: string) => {
                     shapefileInfo[data.filename].shapefileKey = value;
                     shapefileInfo = { ...shapefileInfo };
                   }
                 "
-                :options="data.fields"
-                :placeholder="$t('layersVue.select_key_shapefile')"
-                select-classes="bg-white border w-full"
-                class="form-field"
               />
 
               <textarea
                 :model-value="shapefileInfo[data.filename].shapefileCustomName"
+                :placeholder="$t('layersVue.custom_name_template')"
+                rows="2"
+                class="form-field text-base w-full border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none"
                 @update:modelValue="
                   (event: any) => {
                     shapefileInfo[data.filename].shapefileCustomName =
@@ -89,9 +92,6 @@
                     shapefileInfo = { ...shapefileInfo };
                   }
                 "
-                :placeholder="$t('layersVue.custom_name_template')"
-                rows="2"
-                class="form-field text-base w-full border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none"
               />
             </div>
             <div class="w-1/2">
@@ -99,36 +99,36 @@
                 <base-select
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileType"
-                  @update:modelValue="
-                    (value: string) => {
-                      shapefileInfo[data.filename].shapefileType = value;
-                      shapefileInfo = { ...shapefileInfo };
-                    }
-                  "
                   :options="locationTypes"
                   item-key="id"
                   label="name_t"
                   select-classes="bg-white border w-full"
                   :placeholder="$t('layersVue.location_type')"
                   class="form-field"
+                  @update:modelValue="
+                    (value: string) => {
+                      shapefileInfo[data.filename].shapefileType = value;
+                      shapefileInfo = { ...shapefileInfo };
+                    }
+                  "
                 />
               </div>
               <div class="flex w-full">
                 <base-select
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileAccess"
-                  @update:modelValue="
-                    (value: string) => {
-                      shapefileInfo[data.filename].shapefileAccess = value;
-                      shapefileInfo = { ...shapefileInfo };
-                    }
-                  "
                   :options="['private', 'public', 'shared']"
                   item-key="id"
                   label="name_t"
                   select-classes="bg-white border w-full"
                   :placeholder="$t('layersVue.degree_of_sharing')"
                   class="form-field"
+                  @update:modelValue="
+                    (value: string) => {
+                      shapefileInfo[data.filename].shapefileAccess = value;
+                      shapefileInfo = { ...shapefileInfo };
+                    }
+                  "
                 />
               </div>
             </div>
@@ -190,10 +190,11 @@ export default defineComponent({
     });
 
     const shapefiles = computed(() => {
-      const value = shapefileStructure.value;
+      const { value } = shapefileStructure;
       if (!value) {
         return [];
       }
+
       return Object.keys(value).map((item) => {
         const { count, fields, sample } = value[item];
         return {
@@ -214,7 +215,10 @@ export default defineComponent({
           match.replace('{', '').replace('}', ''),
         );
         for (let i = 0; i <= replaceArray.length - 1; i++) {
-          if (shapefileStructure.value && shapefileStructure.value[filename].sample[replaceArray[i]]) {
+          if (
+            shapefileStructure.value &&
+            shapefileStructure.value[filename].sample[replaceArray[i]]
+          ) {
             returnString = returnString.replace(
               `{${replaceArray[i]}}`,
               shapefileStructure.value[filename].sample[replaceArray[i]],
@@ -222,13 +226,16 @@ export default defineComponent({
           }
         }
       }
+
       return returnString;
     }
+
     async function handleFileUpload(f: File[]) {
       fileList.value = f;
       if (f.length === 0) {
         return;
       }
+
       const formData = new FormData();
       formData.append('file', f[0]);
       const result = await axios.post(
@@ -244,10 +251,11 @@ export default defineComponent({
       shapefileStructure.value = result.data;
       if (shapefileStructure.value) {
         for (const key of Object.keys(shapefileStructure.value)) {
-        shapefileInfo.value[key] = { showingSampleModal: false };
-      }
+          shapefileInfo.value[key] = { showingSampleModal: false };
+        }
       }
     }
+
     async function uploadShapefile(filename: string) {
       if (!validateUpload(filename)) {
         return;
@@ -291,6 +299,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function validateUpload(filename: string) {
       if (
         !shapefileInfo.value[filename].shapefileCustomName &&

@@ -133,6 +133,7 @@ export default defineComponent({
       if (!props.value.data) {
         return false;
       }
+
       return (
         props.value.data.length > 0 || Object.keys(props.value.data).length > 0
       );

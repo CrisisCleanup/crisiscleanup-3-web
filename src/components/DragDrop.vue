@@ -69,7 +69,7 @@ export default defineComponent({
     onMounted(async () => {
       dragAndDropCapable.value = determineDragAndDropCapable();
       if (dragAndDropCapable.value && fileform.value) {
-        [
+        for (const evt of [
           'drag',
           'dragstart',
           'dragend',
@@ -77,7 +77,7 @@ export default defineComponent({
           'dragenter',
           'dragleave',
           'drop',
-        ].forEach((evt) => {
+        ]) {
           if (fileform.value) {
             fileform.value.addEventListener(
               evt,
@@ -88,7 +88,7 @@ export default defineComponent({
               false,
             );
           }
-        });
+        }
 
         const addDragOverClass = () => {
           if (fileform.value) {
@@ -107,6 +107,7 @@ export default defineComponent({
             for (let i = 0; i < e.dataTransfer.files.length; i++) {
               context.emit('files', [e.dataTransfer.files[i]]);
             }
+
             removeDragOverClass();
           }
         });

@@ -26,9 +26,9 @@
         </div>
       </div>
       <EventTimeline
+        v-for="(timeline, user) in timelineUsers"
         :key="user"
         :user="user"
-        v-for="(timeline, user) in timelineUsers"
         :events="timeline"
       />
     </div>
@@ -104,6 +104,7 @@ export default defineComponent({
       } finally {
         ready.value = true;
       }
+
       worksite.value = Worksite.find(props.worksiteId || route.params.id);
       if (route.query.showOnMap) {
         emit('jumpToCase', props.worksiteId || route.params.id);

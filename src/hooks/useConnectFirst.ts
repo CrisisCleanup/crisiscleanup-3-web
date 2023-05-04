@@ -48,7 +48,9 @@ export default function useConnectFirst(context: {
   const callState = computed(() => store.getters['phone/callState']);
   const callType = computed(() => store.getters['phone/callType']);
   const call = computed(() => store.getters['phone/call']);
-  const potentialFailedCall = computed(() => store.getters['phone/potentialFailedCall']);
+  const potentialFailedCall = computed(
+    () => store.getters['phone/potentialFailedCall'],
+  );
   const caller = computed(() => store.getters['phone/caller']);
   const incomingCall = computed(() => store.getters['phone/incomingCall']);
   const outgoingCall = computed(() => store.getters['phone/outgoingCall']);
@@ -128,7 +130,10 @@ export default function useConnectFirst(context: {
       return;
     }
 
-    if (!phoneService.loggedInAgentId) {
+    if (phoneService.loggedInAgentId) {
+      await setWorking();
+      context.emit('onLoggedIn');
+    } else {
       const password = import.meta.env.VITE_APP_PHONE_DEFAULT_PASSWORD;
 
       if (!currentAgent?.value?.agent_username) {
@@ -159,9 +164,6 @@ export default function useConnectFirst(context: {
           await loginPhone(false, status);
         }
       }
-    } else {
-      await setWorking();
-      context.emit('onLoggedIn');
     }
 
     phoneService.apiUpdateStats(phoneService.loggedInAgentId).catch(null);

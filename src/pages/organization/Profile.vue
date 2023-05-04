@@ -657,6 +657,7 @@ export default defineComponent({
           ? [currentOrganization.value.secondary_location]
           : [];
       }
+
       return [];
     });
     const logoUrl = computed(() => {
@@ -668,6 +669,7 @@ export default defineComponent({
           return logos[0].small_thumbnail_url;
         }
       }
+
       return '';
     });
     const termsOfService = computed(() => {
@@ -676,6 +678,7 @@ export default defineComponent({
           (file) => file.file_type_t === 'fileTypes.terms_of_service',
         );
       }
+
       return null;
     });
     const liabilityWaiver = computed(() => {
@@ -684,6 +687,7 @@ export default defineComponent({
           (file) => file.file_type_t === 'fileTypes.liability_waiver',
         );
       }
+
       return null;
     });
 
@@ -714,20 +718,24 @@ export default defineComponent({
       );
       organizationCapabilities.value = _organizationCapabilities.data.results;
     }
+
     function setCurrentLocation(location) {
       currentPolygon.value = location;
     }
+
     async function makePrimaryContact(user) {
       const role = Role.query().where('id', 3).first();
       if (!role) {
         throw new Error("Role not found: '3'. Can't make primary contact.");
       }
+
       await UserRole.api().post(`/user_roles`, {
         user_role: role.id,
         user: user.id,
       });
       await saveOrganization();
     }
+
     async function deletePrimaryContact(user) {
       const results = await UserRole.api().get(`/user_roles?user=${user.id}`, {
         dataKey: 'results',
@@ -741,9 +749,11 @@ export default defineComponent({
           "User role not found: '3'. Can't delete primary contact.",
         );
       }
+
       await UserRole.api().delete(`/user_roles/${currentUserRole.id}`, {});
       await saveOrganization();
     }
+
     async function reloadMaps() {
       const { primary_location, secondary_location } =
         currentOrganization.value;
@@ -752,6 +762,7 @@ export default defineComponent({
           if (layer instanceof L.TileLayer) {
             return;
           }
+
           primaryLocationMap.value.removeLayer(layer);
         });
         await Location.api().fetchById(primary_location);
@@ -759,6 +770,7 @@ export default defineComponent({
         if (!location) {
           throw new Error('Location not found. Cannot reload map.');
         }
+
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -768,11 +780,13 @@ export default defineComponent({
           weight: '1',
         }).addTo(primaryLocationMap.value);
       }
+
       if (secondary_location) {
         secondaryLocationMap.value.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
+
           secondaryLocationMap.value.removeLayer(layer);
         });
         await Location.api().fetchById(secondary_location);
@@ -787,6 +801,7 @@ export default defineComponent({
         }).addTo(secondaryLocationMap.value);
       }
     }
+
     async function saveOrganization() {
       try {
         await Organization.api().patch(
@@ -805,6 +820,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function saveCurrentLocation() {
       loading.value = true;
       let { geometry } = currentPolygon.value.toGeoJSON();
@@ -813,6 +829,7 @@ export default defineComponent({
       if (settingLocation.value === 'secondary_location') {
         locationTypeKey = 'org_secondary_response_area';
       }
+
       const locationType = LocationType.query()
         .where('key', locationTypeKey)
         .get()[0];
@@ -830,10 +847,12 @@ export default defineComponent({
           location.point = geometry;
           break;
         }
+
         case 'Polygon': {
           location.poly = geometry;
           break;
         }
+
         case 'MultiPolygon': {
           location.geom = geometry;
           break;
@@ -860,6 +879,7 @@ export default defineComponent({
         loading.value = false;
       }
     }
+
     function createTileLayer() {
       return L.tileLayer(mapTileLayer, {
         // tileSize: 512,
@@ -867,6 +887,7 @@ export default defineComponent({
         maxZoom: 19,
       });
     }
+
     function updateOrganization(value: any, key: string) {
       Organization.update({
         where: currentOrganization.value.id,
@@ -875,12 +896,14 @@ export default defineComponent({
         },
       });
     }
+
     async function deleteFile(file: File) {
       await Organization.api().deleteFile(currentOrganization.value.id, file);
       await Organization.api().get(
         `/organizations/${currentOrganization.value.id}`,
       );
     }
+
     async function handleFileUpload(
       fileList: FileList,
       type: string,
@@ -890,6 +913,7 @@ export default defineComponent({
         uploading.value = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
       formData.append('type_t', type);
@@ -935,6 +959,7 @@ export default defineComponent({
         uploading.value = false;
       }
     }
+
     function getIncidentName(value: string) {
       const incident = Incident.query().where('id', Number(value)).first();
       return incident ? incident.name : '';

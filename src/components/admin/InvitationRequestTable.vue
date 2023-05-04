@@ -5,8 +5,8 @@
     :body-style="{ height: '300px' }"
     :pagination="meta.pagination"
     :loading="loading"
-    @change="$emit('change', $event)"
     enable-pagination
+    @change="$emit('change', $event)"
   >
     <template #actions="slotProps">
       <base-button
@@ -54,7 +54,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -77,6 +77,7 @@ export default defineComponent({
       await $toasted.success(t('invitationsVue.invitation_request_accepted'));
       emit('reload');
     }
+
     async function rejectInvitationRequest(request: InvitationRequest) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await loadAllInvitationRequests();
@@ -106,7 +107,7 @@ export default defineComponent({
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1fr',
-          transformer: (field: string, item: InvitationRequest) => {
+          transformer(field: string, item: InvitationRequest) {
             return `${item.first_name} ${item.last_name}`;
           },
         },

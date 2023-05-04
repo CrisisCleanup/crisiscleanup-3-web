@@ -94,6 +94,7 @@ export default defineComponent({
         layer.addTo(mapUtils.getMap());
       }
     }
+
     function displayWorksite(worksite) {
       const popup = L.popup({ className: 'pixi-popup' });
       let popupContent = `<b>${worksite.address} (${worksite.case_number}</b>)`;

@@ -1,17 +1,17 @@
 <template>
   <div id="cms" class="bg-white p-3 cms">
     <base-input
-      :placeholder="$t('adminCMS.title')"
       v-model="cmsItem.title"
+      :placeholder="$t('adminCMS.title')"
       class="mb-2"
     />
     <template v-if="showHtml">
-      <Editor class="mb-2" v-model="cmsItem.content" :key="cmsItem.id" />
+      <Editor :key="cmsItem.id" v-model="cmsItem.content" class="mb-2" />
     </template>
     <base-input
       v-else
-      :placeholder="$t('adminCMS.content')"
       v-model="cmsItem.content"
+      :placeholder="$t('adminCMS.content')"
       class="mb-2"
     />
     <div class="mb-2 flex items-center">
@@ -46,8 +46,8 @@
       format="yyyy-MM-dd"
     ></datepicker>
     <base-input
-      :placeholder="$t('adminCMS.list_order')"
       v-model="cmsItem.list_order"
+      :placeholder="$t('adminCMS.list_order')"
       class="my-2 w-40"
       type="number"
     />
@@ -58,10 +58,10 @@
       :autocomplete-items="tagsAutoComplete"
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
-      @tags-changed="(newTags) => (tagsToAdd = newTags)"
       class="my-4"
+      @tags-changed="(newTags) => (tagsToAdd = newTags)"
     />
-    <base-checkbox class="pb-2" v-model="cmsItem.is_active">{{
+    <base-checkbox v-model="cmsItem.is_active" class="pb-2">{{
       $t('adminCMS.is_active')
     }}</base-checkbox>
 
@@ -121,11 +121,11 @@
     </div>
 
     <AjaxTable
+      ref="table"
       :enable-search="true"
       :columns="columns"
       :url="tableUrl"
       :query="query"
-      ref="table"
       class="mt-6 shadow-lg"
       @rowClick="(payload) => editItem(payload)"
     >
@@ -148,8 +148,8 @@
         </div>
       </template>
       <template
-        #actions="slotProps"
         v-if="columns.some((c) => c.key === 'actions')"
+        #actions="slotProps"
       >
         <div class="flex mr-2 justify-center w-full">
           <ccu-icon
@@ -168,8 +168,8 @@
       <template #tags="slotProps">
         <tag
           v-for="tag in slotProps.item.tags"
-          class="mx-1"
           :key="`${tag}:${slotProps.item.id}`"
+          class="mx-1"
           >{{ tag }}</tag
         >
       </template>
@@ -247,6 +247,7 @@ export default defineComponent({
       );
       tagsAutoComplete.value = response.data.map((t) => t.replaceAll('"', ''));
     }
+
     async function showPreview() {
       await component({
         title: t(`adminCMS.preview`),
@@ -260,6 +261,7 @@ export default defineComponent({
         },
       });
     }
+
     function editItem(payload) {
       cmsItem.value = {
         ...payload,
@@ -269,6 +271,7 @@ export default defineComponent({
         return { text: tag };
       });
     }
+
     async function saveItem() {
       try {
         if (cmsItem.value.id) {
@@ -291,6 +294,7 @@ export default defineComponent({
             },
           );
         }
+
         await $toasted.success(t('adminCMS.saved_item'));
         table.value.getData().catch(() => {});
         loadTags().catch(() => {});
@@ -298,6 +302,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function deleteItem(id) {
       await axios.delete(
         `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms/${id}`,
@@ -305,6 +310,7 @@ export default defineComponent({
       await $toasted.success(t('adminCMS.deleted_item'));
       table.value.getData();
     }
+
     function clearItem() {
       cmsItem.value = {
         content: '',
@@ -319,10 +325,12 @@ export default defineComponent({
       showHtml.value = false;
       tagsToAdd.value = [];
     }
+
     async function handleFileUpload(fileList) {
       if (fileList.length === 0) {
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
       formData.append('type_t', 'fileTypes.other_file');
@@ -371,7 +379,7 @@ export default defineComponent({
       handleFileUpload,
       uploading,
       moment,
-      $t: (text) => {
+      $t(text) {
         return text ? t(text) : null;
       },
     };

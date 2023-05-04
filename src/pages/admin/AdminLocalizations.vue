@@ -278,6 +278,7 @@ export default defineComponent({
           if (lang.id === englishLanguage?.id) {
             continue;
           }
+
           const translation = await translate(
             englishLocalization.text,
             'en-US',
@@ -311,7 +312,7 @@ export default defineComponent({
           modelValue: text.text,
         },
         listeners: {
-          'update:modelValue': (value: string) => {
+          'update:modelValue'(value: string) {
             text.text = value;
           },
         },
@@ -338,13 +339,11 @@ export default defineComponent({
           }`,
         );
         return loadLocalizationTexts(currentLocalization.value);
-      } else {
-        localizationTexts.value = localizationTexts.value.filter(function (
-          item,
-        ) {
-          return item !== text;
-        });
       }
+
+      localizationTexts.value = localizationTexts.value.filter(function (item) {
+        return item !== text;
+      });
     }
 
     function clearLocalization() {
@@ -401,6 +400,7 @@ export default defineComponent({
             group_label: `${currentLocalization.value.group}.${currentLocalization.value.label}`,
           });
         }
+
         currentLocalization.value = response.data;
         await saveLocalizationTexts();
         await $toasted.success(t('info.success'));
@@ -420,14 +420,14 @@ export default defineComponent({
               }/admins/localizations_text/${text.id}`,
               text,
             );
-          } else {
-            return axios.post(
-              `${
-                import.meta.env.VITE_APP_API_BASE_URL
-              }/admins/localizations_text`,
-              { ...text, localization: currentLocalization.value.id },
-            );
           }
+
+          return axios.post(
+            `${
+              import.meta.env.VITE_APP_API_BASE_URL
+            }/admins/localizations_text`,
+            { ...text, localization: currentLocalization.value.id },
+          );
         }),
       );
       await loadLocalizationTexts(currentLocalization.value);
@@ -451,7 +451,6 @@ export default defineComponent({
         },
       );
       localizationTexts.value = response.data.results;
-      return;
     }
 
     onMounted(async () => {

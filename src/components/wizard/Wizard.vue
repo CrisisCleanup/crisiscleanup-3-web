@@ -148,6 +148,7 @@ export default defineComponent({
       if (state.steps.length > 0) {
         return state.selectedIndex === 0;
       }
+
       return false;
     });
 
@@ -155,6 +156,7 @@ export default defineComponent({
       if (state.steps.length > 0) {
         return state.selectedIndex === state.steps.length - 1;
       }
+
       return false;
     });
 
@@ -172,6 +174,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
         return;
       }
+
       state.completedSteps.add(state.selectedIndex);
       for (let i = 0; i < state.steps.length; i++) {
         if (i === state.selectedIndex) {
@@ -180,6 +183,7 @@ export default defineComponent({
         }
       }
     }
+
     async function previousStep() {
       for (let i = 0; i < state.steps.length; i++) {
         if (i === state.selectedIndex) {

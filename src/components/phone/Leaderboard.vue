@@ -6,9 +6,9 @@
   >
     <div class="h-full overflow-y-scroll">
       <div
-        class="flex items-center justify-between p-2"
         v-for="rank in leaderboard"
         :key="rank.user"
+        class="flex items-center justify-between p-2"
       >
         <div class="flex">
           <div class="image">
@@ -29,15 +29,15 @@
               />
               <div class="flex">
                 <div
-                  class="flex flex-col pl-1"
                   v-for="l in getLanguageTags('en-US')"
                   :key="l"
+                  class="flex flex-col pl-1"
                 >
                   <LanguageTag class="text-bodyxsm" :language-subtag="l" />
                 </div>
               </div>
             </div>
-            <div class="info--org" v-if="rank.user.organization">
+            <div v-if="rank.user.organization" class="info--org">
               <base-text :style="{ lineHeight: '16px' }" variant="h4" regular>
                 {{ truncate(rank.user.organization.name, 28) }}
               </base-text>
@@ -67,9 +67,9 @@
             <div>{{ $t('phoneDashboard.total') }}</div>
           </template>
           <div
-            class="metric"
             v-for="m in ['inbound_calls', 'outbound_calls', 'total']"
             :key="m"
+            class="metric"
           >
             <base-text variant="h1" semi-bold>
               {{ padStart(rank[m], 2, '0') }}
@@ -79,8 +79,8 @@
       </div>
     </div>
     <div
-      class="flex items-center justify-between p-2 border-t"
       v-if="previous || next"
+      class="flex items-center justify-between p-2 border-t"
     >
       <base-button
         :disabled="!previous"
@@ -173,13 +173,16 @@ export default defineComponent({
       for (const ranking of leaderboard.value) {
         ranking.user = getUser(ranking.user);
       }
+
       buildLeaderboard();
     }
+
     async function getUsers(userIds) {
       await User.api().get(`/users?id__in=${userIds.join(',')}`, {
         dataKey: 'results',
       });
     }
+
     function buildLeaderboard() {
       for (const ranking of leaderboard.value) {
         if (agentStats.value) {
@@ -190,17 +193,22 @@ export default defineComponent({
             AGENT_STATES[agentState ? agentState.state : 'OFFLINE'];
           ranking.state_at = agentState ? agentState.state_at : null;
         }
+
         ranking.total = ranking.inbound_calls + ranking.outbound_calls;
       }
+
       leaderboard.value.sort((a, b) => b.total - a.total);
       leaderboard.value = [...leaderboard.value];
     }
+
     function getLanguageTags(locale) {
       return locale.split('#');
     }
+
     function getUser(id) {
       return User.find(id);
     }
+
     async function onDropdownUpdate(value) {
       await loadLeaderboard(value);
     }

@@ -1,5 +1,4 @@
 import { openDialog } from 'vue3-promise-dialog';
-
 import type { DefineComponent } from 'vue';
 import ComponentDialog from '../components/dialogs/ComponentDialog.vue';
 import MessageBox from '../components/dialogs/MessageBox.vue';
@@ -25,7 +24,9 @@ async function selection(props: Record<string, any>) {
   return openDialog(SelectionDialog, props);
 }
 
-async function organizationApproval(props: Record<string, any>): Promise<Record<string, any> | string> {
+async function organizationApproval(
+  props: Record<string, any>,
+): Promise<Record<string, any> | string> {
   return openDialog(OrganizationApprovalDialog, props);
 }
 

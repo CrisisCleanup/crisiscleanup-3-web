@@ -21,7 +21,7 @@ interface KDBushPoint {
 
 export default (
   map: L.Map,
-  markers: (Sprite & Worksite)[],
+  markers: Array<Sprite & Worksite>,
   visibleMarkerIds: string[],
 ) => {
   const textureMap: Record<string, Texture> = {};
@@ -150,10 +150,7 @@ export default (
     );
   }
 
-  function calcDist(
-    a: Feature<Point, Properties>,
-    b: Feature<Point, Properties>,
-  ) {
+  function calcDist(a: Feature<Point>, b: Feature<Point>) {
     const p1 = map.latLngToContainerPoint([
       a.geometry.coordinates[1],
       a.geometry.coordinates[0],

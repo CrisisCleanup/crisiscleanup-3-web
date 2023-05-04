@@ -58,6 +58,15 @@
             >
               <base-checkbox
                 draggable="true"
+                checkmark-style=""
+                container-style=""
+                class="border-b p-2 py-4 flex items-center justify-center cursor-pointer"
+                :class="
+                  isCapabilitySelected(phase.id, child.id)
+                    ? 'bg-crisiscleanup-grid-blue border-2 border-white'
+                    : ''
+                "
+                :model-value="isCapabilitySelected(phase.id, child.id)"
                 @dragstart="
                   (e) => {
                     e.dataTransfer.setDragImage(dragImage, null, null);
@@ -76,21 +85,12 @@
                     $emit('updated', { ...organizationCapabilityMatrix });
                   }
                 "
-                checkmark-style=""
-                container-style=""
-                class="border-b p-2 py-4 flex items-center justify-center cursor-pointer"
-                :class="
-                  isCapabilitySelected(phase.id, child.id)
-                    ? 'bg-crisiscleanup-grid-blue border-2 border-white'
-                    : ''
-                "
                 @update:modelValue="
                   (value) => {
                     setMatrixValue(value, phase.id, child.id);
                     $emit('updated', { ...organizationCapabilityMatrix });
                   }
                 "
-                :model-value="isCapabilitySelected(phase.id, child.id)"
               ></base-checkbox>
             </template>
           </template>
@@ -138,6 +138,7 @@ export default defineComponent({
         stateRefs.organizationCapabilityMatrix.value[phase].has(capabilityId)
       );
     }
+
     function setMatrixValue(value, phase, child) {
       if (value) {
         if (stateRefs.organizationCapabilityMatrix.value[phase]) {
@@ -157,11 +158,13 @@ export default defineComponent({
         ...stateRefs.organizationCapabilityMatrix.value,
       };
     }
+
     function getSelectedCount(capability) {
       let count = 0;
       if (!capability.children) {
         return 0;
       }
+
       for (const phase of phases.value) {
         for (const child of capability.children) {
           if (isCapabilitySelected(phase.id, child.id)) {
@@ -169,6 +172,7 @@ export default defineComponent({
           }
         }
       }
+
       return count;
     }
 

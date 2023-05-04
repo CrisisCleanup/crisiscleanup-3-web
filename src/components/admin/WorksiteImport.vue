@@ -6,11 +6,11 @@
     <div class="flex items-center justify-start">
       <DragDrop
         v-if="imports"
+        :key="imports.length"
         class="cursor-pointer w-32 py-2 mr-2"
         container-class="items-center justify-start cursor-pointer"
         :disabled="uploading"
         :multiple="false"
-        :key="imports.length"
         @files="
           (files) => {
             handleFileUpload(files);
@@ -104,16 +104,19 @@ export default defineComponent({
       });
       imports.value = pageData.imports.data.results;
     }
+
     async function handleFileUpload(fileList: File[]) {
       if (fileList.length === 0) {
         return;
       }
+
       const formData = new FormData();
       formData.append('file', fileList[0]);
       formData.append('type', uploadType.value);
       if (ignoreDuplicates.value) {
         formData.append('skip_duplicate_check', JSON.stringify(true));
       }
+
       uploading.value = true;
       await axios.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
@@ -128,6 +131,7 @@ export default defineComponent({
       uploading.value = false;
       await loadPageData();
     }
+
     async function downloadSuccessful(reportId: string) {
       try {
         const response = await axios.request({
@@ -143,6 +147,7 @@ export default defineComponent({
         // console.error(e)
       }
     }
+
     async function downloadFailed(reportId: string) {
       try {
         const response = await axios.request({

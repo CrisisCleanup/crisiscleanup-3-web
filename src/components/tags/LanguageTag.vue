@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import Language from '../../models/Language';
 import * as config from 'tailwind.config';
 import { computed, onMounted, ref } from 'vue';
+import Language from '../../models/Language';
 
 export default defineComponent({
   name: 'LanguageTag',
@@ -31,6 +31,7 @@ export default defineComponent({
           borderColor: theme.extend.colors['crisiscleanup-grey']['500'],
         };
       }
+
       const colorMap = {
         7: {
           color: theme.extend.colors['crisiscleanup-red']['300'],
@@ -50,6 +51,7 @@ export default defineComponent({
           .where('subtag', props.languageSubtag)
           .first();
       }
+
       if (!language.value && props.languageId) {
         language.value = await Language.fetchOrFindId(props.languageId);
       }

@@ -54,7 +54,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -98,6 +98,7 @@ export default defineComponent({
     const getLocationType = (type: string) => {
       return LocationType.find(type)?.name_t;
     };
+
     return {
       columns,
       getLocationType,

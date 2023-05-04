@@ -11,7 +11,7 @@ export default (
   async showUnclaimModal() {
     const { component } = useDialogs();
 
-    let options: Record<string, boolean> | null = {};
+    let options: Record<string, boolean> | undefined = {};
     const response = await component({
       title: i18n.global.t('actions.unclaim_cases'),
       component: UnclaimCases,
@@ -21,14 +21,14 @@ export default (
         selectedTableItems,
       },
       listeners: {
-        onUnclaimSelect: (payload: Record<string, boolean>) => {
+        onUnclaimSelect(payload: Record<string, boolean>) {
           options = payload;
         },
       },
     });
 
     if (response === 'ok' && options) {
-      const promises = [] as Promise<never>[];
+      const promises = [] as Array<Promise<never>>;
       for (const id of selectedTableItems.value) {
         promises.push(
           Worksite.api().unclaimWorksite(
@@ -38,6 +38,7 @@ export default (
           ),
         );
       }
+
       await Promise.allSettled(promises);
     }
 

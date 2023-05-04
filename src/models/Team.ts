@@ -10,7 +10,7 @@ export default class Team extends CCUModel {
   name!: string;
   notes!: string;
   users!: User[];
-  assigned_work_types!: Array<WorkType>;
+  assigned_work_types!: WorkType[];
   cases_area!: Record<string, unknown>;
   incident!: Incident;
 

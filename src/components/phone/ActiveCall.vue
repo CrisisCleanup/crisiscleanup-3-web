@@ -153,6 +153,7 @@ export default defineComponent({
     function getSVG(worktype: WorkType) {
       return getWorktypeSVG(worktype);
     }
+
     function setCase(caseObject: Record<string, any> | null) {
       context.emit('setCase', caseObject);
     }

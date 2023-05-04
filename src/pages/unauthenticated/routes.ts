@@ -58,7 +58,7 @@ const routes = [
   },
   {
     path: '/donate',
-    redirect: () => {
+    redirect() {
       window.location.href = 'https://www.paypal.com/paypalme/crisiscleanup';
     },
     meta: { layout: 'unauthenticated', noAuth: true },

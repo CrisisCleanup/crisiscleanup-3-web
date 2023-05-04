@@ -346,9 +346,9 @@ export default defineComponent({
         // override default bottom margin to make space for x-axis
         margin.bottom = 40;
         // add header columns to chartData array for d3 stacking
-        props.chartData.columns = !_.isEmpty(props.chartData)
-          ? _.keys(props.chartData[0])
-          : [];
+        props.chartData.columns = _.isEmpty(props.chartData)
+          ? []
+          : _.keys(props.chartData[0]);
         if (props.isStacked) {
           renderStackedChart();
         } else {

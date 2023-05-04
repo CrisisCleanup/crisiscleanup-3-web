@@ -2,8 +2,8 @@
   <div>
     <div class="flex items-center justify-between">
       <base-input
-        :model-value="search"
         v-if="enableSearch"
+        :model-value="search"
         icon="search"
         class="w-72 mx-4"
         :placeholder="$t('info.search_items')"
@@ -25,12 +25,12 @@
       :sorter="meta.sorter"
       enable-pagination
       :enable-selection="enableSelection"
-      @change="getData"
       :loading="loading"
+      @change="getData"
       @rowClick="(payload) => $emit('rowClick', payload)"
       @selectionChanged="(payload) => $emit('selectionChanged', payload)"
     >
-      <template v-for="(_, slot) of $slots" v-slot:[slot]="scope"
+      <template v-for="(_, slot) of $slots" #[slot]="scope"
         ><slot :name="slot" v-bind="scope"
       /></template>
     </Table>
@@ -39,16 +39,11 @@
 
 <script lang="ts">
 import { throttle } from 'lodash';
-import {
-  defineComponent,
-  onMounted,
-  PropType,
-  ref,
-  watch,
-} from 'vue';
-import Table from '../components/Table.vue';
+import type { PropType } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
+import axios from 'axios';
 import { getQueryString } from '../utils/urls';
-import axios from "axios";
+import Table from './Table.vue';
 
 interface TablePagination {
   pageSize: number;
@@ -91,19 +86,19 @@ export default defineComponent({
     },
     columns: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
     query: {
       type: Object as PropType<TableApiParameters>,
-      default: () => {
+      default() {
         return {};
       },
     },
     bodyStyle: {
       type: Object,
-      default: () => {
+      default() {
         return { height: '300px' };
       },
     },

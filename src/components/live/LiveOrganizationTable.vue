@@ -129,6 +129,7 @@ export default defineComponent({
         if (column.key === 'name') {
           column.title = 'Organization';
         }
+
         column.titleClass = 'small-font';
         column.class = 'small-font text-center';
         column.style = {
@@ -138,6 +139,7 @@ export default defineComponent({
           border: 0,
         };
       }
+
       return {
         columns,
       };
@@ -156,6 +158,7 @@ export default defineComponent({
       );
       return response.data;
     }
+
     async function getOrganizationCapabilities(organization_id: string) {
       const response = await axios.get(
         `${
@@ -164,6 +167,7 @@ export default defineComponent({
       );
       return response.data.results;
     }
+
     async function getOrganizationStatisticsByIncident(
       organization_id: string,
     ) {
@@ -192,6 +196,7 @@ export default defineComponent({
           return logos[0].small_thumbnail_url;
         }
       }
+
       return earthGlobe;
     }
 

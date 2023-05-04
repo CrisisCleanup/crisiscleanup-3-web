@@ -285,6 +285,7 @@ export default defineComponent({
       if (currentSearch.value) {
         queryParams.search = currentSearch.value;
       }
+
       usersLoading.value = true;
       const results = await User.api().get(
         `/users?${getQueryString(queryParams)}`,

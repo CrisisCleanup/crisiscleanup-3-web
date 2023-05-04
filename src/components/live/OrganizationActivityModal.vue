@@ -270,13 +270,13 @@ import { cachedGet } from '@/utils/promise';
 import CaseDonutChart from '@/components/live/CaseDonutChart.vue';
 import type { OrganizationRole } from '@/models/types';
 
-type OrganizationStatistic = {
+interface OrganizationStatistic {
   calls: number;
   reported_count: number;
   claimed_count: number;
   closed_count: number;
   commercial_value: number;
-};
+}
 
 export default defineComponent({
   name: 'OrganizationActivityModal',
@@ -339,6 +339,7 @@ export default defineComponent({
           border: 0,
         };
       }
+
       return {
         columns,
       };
@@ -350,12 +351,14 @@ export default defineComponent({
         (stat: OrganizationStatistic) => stat.commercial_value || 0,
       );
     }
+
     function getTotalCalls() {
       return _.sumBy(
         props.generalInfo.statistics,
         (stat: OrganizationStatistic) => stat.calls || 0,
       );
     }
+
     function getTotalCases() {
       return _.sumBy(
         props.generalInfo.statistics,
@@ -365,6 +368,7 @@ export default defineComponent({
           (stat.closed_count || 0),
       );
     }
+
     function getRoleNames(roleIds: number[]) {
       return _.join(
         _.map(roleIds, (id) => {
@@ -377,11 +381,13 @@ export default defineComponent({
         ', ',
       );
     }
+
     function closeModalAndResetState() {
       emit('close');
       state.isIncidentHidden = true;
       state.isCapabilityHidden = true;
     }
+
     function isDataEmpty(data: OrganizationStatistic) {
       return (
         (data.reported_count || 0) <= 0 &&

@@ -114,6 +114,7 @@ export default defineComponent({
       const { value } = e.target;
       emit('input', Number(value));
     }
+
     const cssVars = computed(() => {
       return {
         '--primary-color': props.primaryColor,

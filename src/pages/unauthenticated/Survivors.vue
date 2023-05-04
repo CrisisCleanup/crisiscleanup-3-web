@@ -390,6 +390,7 @@ export default defineComponent({
           county || ''
         } <br> ${postalCode || ''}`;
       }
+
       return '';
     });
 
@@ -416,22 +417,27 @@ export default defineComponent({
       state.imageList = fileList;
       state.showImgModal = true;
     }
+
     function updateWorkTypesHelpNeeded(value, workTypeToClaim) {
       if (value) {
         state.workTypeHelpNeeded.add(workTypeToClaim.id);
       } else {
         state.workTypeHelpNeeded.delete(workTypeToClaim.id);
       }
+
       state.workTypeHelpNeeded = new Set(state.workTypeHelpNeeded);
     }
+
     function unlockLocationFields() {
       state.hideDetailedAddressFields = false;
       state.addressSet = false;
     }
+
     async function confirmAddress() {
       state.survivorToken.confirm_address = true;
       await saveSurvivorToken();
     }
+
     async function locateMe() {
       state.gettingLocation = true;
       try {
@@ -444,6 +450,7 @@ export default defineComponent({
         state.errorStr = error.message;
       }
     }
+
     async function geocodeWorksite(latitude, longitude, skipAddress = false) {
       const geocode = await GeocoderService.getLocationDetails({
         latitude,
@@ -461,17 +468,20 @@ export default defineComponent({
           state.survivorToken.worksite[key] = geocode.address_components[key];
         }
       }
+
       state.survivorToken.worksite.location = {
         type: 'Point',
         coordinates: [longitude, latitude],
       };
       return geocode;
     }
+
     async function getLocation() {
       return new Promise((resolve, reject) => {
         if (!('geolocation' in navigator)) {
           reject(new Error('Geolocation is not available.'));
         }
+
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             resolve(pos);
@@ -482,12 +492,14 @@ export default defineComponent({
         );
       });
     }
+
     async function geocoderSearch(value) {
       state.geocoderResults = await GeocoderService.getMatchingAddresses(
         value,
         'USA',
       );
     }
+
     async function onGeocodeSelect(value) {
       const geocode = await GeocoderService.getPlaceDetails(
         value.description,
@@ -510,6 +522,7 @@ export default defineComponent({
       // this.$log.debug(geocode.location);
       // await this.updateWorksiteFields(geocode);
     }
+
     async function getSurvivorToken(filesOnly = false) {
       state.loading = true;
       try {
@@ -535,6 +548,7 @@ export default defineComponent({
         state.loading = false;
       }
     }
+
     async function saveSurvivorToken() {
       document.querySelector('#header').scrollIntoView();
       state.loading = true;
@@ -557,6 +571,7 @@ export default defineComponent({
           );
           state.currentNote = '';
         }
+
         await $toasted.success(t('survivorContact.case_update_success'));
         await getSurvivorToken();
       } catch (error) {
@@ -566,6 +581,7 @@ export default defineComponent({
         state.loading = false;
       }
     }
+
     async function getFaqs() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=faq`,

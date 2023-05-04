@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { useToast } from 'vue-toastification';
+import { debounce } from 'lodash';
 import LayerUploadTool from '@/components/locations/LayerUploadTool.vue';
 import LocationTable from '@/components/LocationTable.vue';
 import User from '@/models/User';
@@ -56,7 +57,6 @@ import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
-import {debounce} from "lodash";
 
 export default defineComponent({
   name: 'Layers',
@@ -95,9 +95,11 @@ export default defineComponent({
       if (currentSearch.value) {
         params.search = currentSearch.value;
       }
+
       if (locationTypeFilter.value) {
         params.type = locationTypeFilter.value;
       }
+
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
         {

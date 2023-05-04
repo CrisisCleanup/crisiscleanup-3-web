@@ -455,10 +455,12 @@ export default defineComponent({
       organizationApprovalView.value = view;
       return getOrganizationsForApproval();
     }
+
     async function setRedeployViewView(view) {
       redeployView.value = view;
       return getIncidentRequests();
     }
+
     async function getOrganizationsForApproval() {
       if ($can('approve_orgs_full')) {
         const parametersDict = {
@@ -496,6 +498,7 @@ export default defineComponent({
         organizationsForApproval.value = response.data.results;
       }
     }
+
     async function getOrganizations(data = {}) {
       const pagination = data.pagination || organizations.value.meta.pagination;
       const parameters = {
@@ -506,6 +509,7 @@ export default defineComponent({
       if (organizations.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || organizations.value.search;
       }
+
       const queryString = getQueryString(parameters);
 
       const response = await axios.get(
@@ -522,6 +526,7 @@ export default defineComponent({
         pagination: newPagination,
       };
     }
+
     async function getUsers(data = {}) {
       const pagination = data.pagination || users.value.meta.pagination;
       const parameters = {
@@ -532,6 +537,7 @@ export default defineComponent({
       if (users.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || users.value.search;
       }
+
       const queryString = getQueryString(parameters);
 
       const response = await axios.get(
@@ -546,6 +552,7 @@ export default defineComponent({
         pagination: newPagination,
       };
     }
+
     async function getGhostUsers(data = {}) {
       const pagination = data.pagination || ghostUsers.value.meta.pagination;
       const parameters = {
@@ -556,6 +563,7 @@ export default defineComponent({
       if (ghostUsers.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || ghostUsers.value.search;
       }
+
       const queryString = getQueryString(parameters);
 
       const response = await axios.get(
@@ -570,6 +578,7 @@ export default defineComponent({
         pagination: newPagination,
       };
     }
+
     async function getInvitationRequests(data = {}) {
       const pagination =
         data.pagination || invitationRequests.value.meta.pagination;
@@ -584,6 +593,7 @@ export default defineComponent({
         parameters.search =
           globalSearch.value || invitationRequests.value.search;
       }
+
       const queryString = getQueryString(parameters);
 
       const response = await axios.get(
@@ -600,6 +610,7 @@ export default defineComponent({
         pagination: newPagination,
       };
     }
+
     async function getInvitations(data = {}) {
       const pagination = data.pagination || invitations.value.meta.pagination;
       const parameters = {
@@ -611,6 +622,7 @@ export default defineComponent({
       if (invitations.value.search || globalSearch.value) {
         parameters.search = globalSearch.value || invitations.value.search;
       }
+
       const queryString = getQueryString(parameters);
 
       const response = await axios.get(
@@ -627,6 +639,7 @@ export default defineComponent({
         pagination: newPagination,
       };
     }
+
     async function getIncidentRequests() {
       if ($can('move_orgs')) {
         const parametersDict = {
@@ -667,6 +680,7 @@ export default defineComponent({
         }
       }
     }
+
     async function inviteUsers() {
       try {
         const emails = usersToInvite.value.split(',');
@@ -676,6 +690,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function reloadDashBoard() {
       await Promise.all([
         getOrganizationsForApproval(),
@@ -687,6 +702,7 @@ export default defineComponent({
         getInvitations({ pagination: defaultPagination.value }),
       ]);
     }
+
     async function showArcGisUploader() {
       await component({
         title: t('adminDashboard.arcgis_upload'),

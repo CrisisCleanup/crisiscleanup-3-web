@@ -47,7 +47,7 @@ export default defineComponent({
   props: {
     organization: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },

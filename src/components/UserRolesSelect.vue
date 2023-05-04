@@ -26,7 +26,7 @@ import type { PropType } from 'vue';
 import type { Collection } from '@vuex-orm/core';
 import Role from '@/models/Role';
 import UserRole from '@/models/UserRole';
-import User from '@/models/User';
+import type User from '@/models/User';
 
 export default defineComponent({
   name: 'UserRolesSelect',
@@ -56,6 +56,7 @@ export default defineComponent({
         .map((userRole) => userRole.role?.id)
         .filter(Boolean) as number[];
     }
+
     async function getUserRoles() {
       const results = await UserRole.api().get(
         `/user_roles?user=${props.user.id}`,
@@ -64,6 +65,7 @@ export default defineComponent({
       console.log('results', results);
       return (results.entities?.user_roles || []) as Collection<UserRole>;
     }
+
     function getRoleText(option: Role) {
       let text = option.name_t;
       const currentUserRole = userRoles.value.find(
@@ -72,6 +74,7 @@ export default defineComponent({
       if (currentUserRole && !currentUserRole.isApproved) {
         text = `${text} (${t('userRolesSelect.pending')})`;
       }
+
       return text;
     }
 
@@ -98,6 +101,7 @@ export default defineComponent({
           },
         });
       }
+
       for (const roleId of rolesToRemove) {
         payload.push({
           method: 'delete',
@@ -107,6 +111,7 @@ export default defineComponent({
           data: {},
         });
       }
+
       console.log('payload', payload);
       selectInputLoading.value = true;
       await Promise.all(

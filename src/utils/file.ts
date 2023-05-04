@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type PresignedPostUrlResponse = {
+interface PresignedPostUrlResponse {
   url: string;
   fields: {
     key: string;
@@ -8,7 +8,7 @@ type PresignedPostUrlResponse = {
     bucket: string;
   };
   filePath: string;
-};
+}
 
 export async function uploadToS3({
   fileContents,
@@ -39,6 +39,7 @@ export async function uploadFile(formData: FormData) {
   if (!upload || !(upload instanceof File)) {
     throw new Error('No file to upload');
   }
+
   const contentType = upload.type;
   const filename = upload.name;
   formData.delete('upload');

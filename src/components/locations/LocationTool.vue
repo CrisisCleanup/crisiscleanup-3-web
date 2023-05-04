@@ -315,7 +315,7 @@ export default defineComponent({
   props: {
     locations: {
       type: Array as PropType<string[]>,
-      default: () => {
+      default() {
         return [];
       },
     },
@@ -373,14 +373,15 @@ export default defineComponent({
     const stateRefs = toRefs(state);
 
     const { history, undo, redo } = useRefHistory(currentPolygon, {
-      dump: (poly: L.GeoJSON) => {
+      dump(poly: L.GeoJSON) {
         if (poly) {
           const [currentPolygonLayer] = poly.getLayers() as L.LayerGroup[];
           return currentPolygonLayer.toGeoJSON();
         }
+
         return null;
       },
-      parse: (geojson: GeoJsonObject) => {
+      parse(geojson: GeoJsonObject) {
         return L.geoJson(
           geojson,
           stateRefs.completedOptions.value as L.GeoJSONOptions,
@@ -398,11 +399,13 @@ export default defineComponent({
       stateRefs.map?.value?.pm.disableDraw();
       stateRefs.currentDraw.value = null;
     }
+
     function reset() {
       clearAll();
       toggleWorksites(false);
       toggleIncidents(false);
     }
+
     function toggleWorksites(value: boolean) {
       if (value) {
         mapUtils.showMarkers();
@@ -410,6 +413,7 @@ export default defineComponent({
         mapUtils.hideMarkers();
       }
     }
+
     function toggleIncidents(value: boolean) {
       if (value) {
         stateRefs.incidentLayer.value.addTo(mapUtils.getMap());
@@ -422,6 +426,7 @@ export default defineComponent({
           .removeLayer(stateRefs.incidentLayer.value as L.LayerGroup);
       }
     }
+
     async function getIncidentLocations(incidents: Incident[]) {
       stateRefs.incidentLayer.value = new L.LayerGroup();
       const incidentLocations = [];
@@ -430,6 +435,7 @@ export default defineComponent({
           incidentLocations.push(item.location);
         }
       }
+
       if (incidentLocations.length > 0) {
         const results = await Location.api().get(
           `/locations?id__in=${incidentLocations.join(',')}`,
@@ -454,6 +460,7 @@ export default defineComponent({
         }
       }
     }
+
     async function getWorksites({
       organization,
       incident,
@@ -478,6 +485,7 @@ export default defineComponent({
       mapUtils.hideMarkers();
       stateRefs.worksitesLoading.value = false;
     }
+
     function applyCurrentLayer(closePopup = true) {
       stateRefs.map?.value?.eachLayer((layer) => {
         if (layer instanceof L.Popup && !closePopup) {
@@ -493,6 +501,7 @@ export default defineComponent({
         ) {
           return;
         }
+
         stateRefs.map?.value?.removeLayer(layer);
       });
       if (currentPolygon.value) {
@@ -500,20 +509,24 @@ export default defineComponent({
         emit('changed', currentPolygon.value);
       }
     }
+
     function applyCurrentLayerUpload() {
       stateRefs.showingUploadModal.value = false;
       if (stateRefs.currentLayerUpload.value) {
         onLocationSelected(stateRefs.currentLayerUpload.value[0].id, true);
       }
     }
+
     function enableBuffer() {
       drawBuffer();
       showPopup(null);
     }
+
     function drawBuffer() {
       if (stateRefs.bufferedLayer.value) {
         stateRefs.bufferedLayer.value.removeFrom(stateRefs.map?.value as L.Map);
       }
+
       stateRefs.currentDraw.value = 'Buffer';
       if (currentPolygon.value) {
         const [currentPolygonLayer] =
@@ -533,6 +546,7 @@ export default defineComponent({
         stateRefs.bufferedLayer.value.addTo(stateRefs.map?.value as L.Map);
       }
     }
+
     function handleMapEvent(event: string, type: string) {
       if (event === 'cancel') {
         stateRefs.map?.value?.pm.disableDraw(type);
@@ -567,6 +581,7 @@ export default defineComponent({
             stateRefs.completedOptions.value as L.GeoJSONOptions,
           );
         }
+
         applyCurrentLayer();
       }
 
@@ -592,6 +607,7 @@ export default defineComponent({
               )
             : null;
         }
+
         applyCurrentLayer();
       }
 
@@ -606,6 +622,7 @@ export default defineComponent({
         applyCurrentLayer();
       }
     }
+
     function enableDraw(type: string) {
       stateRefs.map?.value?.pm.disableDraw(type);
       stateRefs.currentDraw.value = null;
@@ -644,6 +661,7 @@ export default defineComponent({
         stateRefs.currentDraw.value = null;
       });
     }
+
     async function onLocationSelected(selected: string, fit = false) {
       applyCurrentLayer();
       await Location.api().fetchById(selected);
@@ -665,6 +683,7 @@ export default defineComponent({
           (stateRefs.bufferedLayer.value as any).getBounds(),
         );
       }
+
       showPopup(null);
     }
 
@@ -713,6 +732,7 @@ export default defineComponent({
       if (newValue) {
         getWorksites({ organization: null, incident: newValue });
       }
+
       toggleWorksites(false);
     });
 
@@ -720,6 +740,7 @@ export default defineComponent({
       if (newValue) {
         getWorksites({ organization: newValue, incident: null });
       }
+
       const organization = Organization.find(newValue);
       const incidents = organization?.incident_list;
       getIncidentLocations(incidents || []);
@@ -763,6 +784,7 @@ export default defineComponent({
           stateRefs.map?.value?.pm.disableDraw();
           stateRefs.currentDraw.value = null;
         }
+
         if (e.originalEvent.keyCode === 27) {
           applyCurrentLayer(false);
           stateRefs.map?.value?.pm.disableDraw();
@@ -813,6 +835,7 @@ export default defineComponent({
         for (const location of props.locations) {
           locationPromises.push(onLocationLoaded(location));
         }
+
         await Promise.all(locationPromises);
       }
 

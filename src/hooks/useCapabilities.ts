@@ -5,7 +5,7 @@ import type Organization from '@/models/Organization';
 import type { Capability } from '@/models/types';
 
 async function saveCapabilities(
-  updatedOrganizationCapabilitiesMatrix: Set<number>[] | null,
+  updatedOrganizationCapabilitiesMatrix: Array<Set<number>> | undefined,
   organizationCapabilities: Capability[],
   organization: Organization,
   admin = false,
@@ -49,7 +49,7 @@ async function saveCapabilities(
   if (capabilitiesToRemove.length > 0) {
     try {
       await Promise.all(
-        capabilitiesToRemove.map((item) =>
+        capabilitiesToRemove.map(async (item) =>
           axios.delete(
             `${import.meta.env.VITE_APP_API_BASE_URL}/${
               admin ? 'admins/' : ''
@@ -65,7 +65,7 @@ async function saveCapabilities(
   if (capabilitiesToAdd.length > 0) {
     try {
       await Promise.all(
-        capabilitiesToAdd.map((item) =>
+        capabilitiesToAdd.map(async (item) =>
           axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/${
               admin ? 'admins/' : ''

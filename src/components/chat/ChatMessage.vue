@@ -52,9 +52,9 @@
           />
           <font-awesome-icon
             v-if="message.is_favorite"
-            @mouseover="showFavorite"
             :icon="['fa', 'star']"
             class="absolute top-1/2 right-2 mt-2"
+            @mouseover="showFavorite"
             @click="$emit('onUnfavorite', message)"
           />
         </div>
@@ -73,11 +73,12 @@
 </template>
 
 <script lang="ts">
-import UserDetailsTooltip from '../../components/user/DetailsTooltip.vue';
-import { PropType, ref } from 'vue';
-import { formatDateString } from '../../filters/index';
+import type { PropType } from 'vue';
+import { ref } from 'vue';
 import moment from 'moment';
-import { Message } from '@/models/types';
+import UserDetailsTooltip from '../user/DetailsTooltip.vue';
+import { formatDateString } from '../../filters/index';
+import type { Message } from '@/models/types';
 
 export default defineComponent({
   name: 'ChatMessage',

@@ -9,7 +9,7 @@ declare module 'leaflet-pixi-overlay' {
     redraw: (data?: any) => void;
   } & L.Layer;
 
-  type LeafletPixiOverlayOptions = {
+  interface LeafletPixiOverlayOptions {
     /**
      * @option pane: String = 'overlayPane'
      * @default 'overlayPane'
@@ -71,16 +71,16 @@ declare module 'leaflet-pixi-overlay' {
      * filter move events that should trigger a layer redraw
      */
     shouldRedrawOnMove?: (e: L.LeafletEvent) => boolean;
-  };
+  }
 
-  type LeafletPixiOverlayUtils = {
+  interface LeafletPixiOverlayUtils {
     latLngToLayerPoint(latLng: L.LatLngExpression, zoom?: number): L.Point;
     layerPointToLatLng(point: L.Point, zoom?: number): L.LatLng;
     getScale(zoom?: number): number;
     getRenderer(): PIXI.Renderer;
     getContainer(): PIXI.Container;
     getMap(): L.Map;
-  };
+  }
 
   module 'leaflet' {
     function pixiOverlay(

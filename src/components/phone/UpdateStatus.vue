@@ -135,9 +135,11 @@ export default defineComponent({
     async function updateStatus(statusId) {
       status.value = statusId;
     }
+
     async function updateNotes(e) {
       callNotes.value = e.target.value;
     }
+
     emitter.on('phone:clear_call', () => {
       callNotes.value = '';
       status.value = null;

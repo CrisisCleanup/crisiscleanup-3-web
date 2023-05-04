@@ -4,16 +4,14 @@ import {
   settings as PixiSettings,
   utils as pixiUtils,
 } from 'pixi.js';
-
 import * as L from 'leaflet';
 import 'leaflet-loading';
 // Import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
-
 import type Worksite from '../models/Worksite';
-import { PixiDisplayObjectWithCachedProps } from '@/utils/types/map';
+import { type PixiDisplayObjectWithCachedProps } from '@/utils/types/map';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -34,7 +32,7 @@ export const mapAttribution =
 
 export const getGoogleMapsLocation = (url: string) => {
   const regex = new RegExp('@(.*),(.*),');
-  const match = url.match(regex) || [0, 0];
+  const match = regex.exec(url) || [0, 0];
   const latitude = Number(match[1]);
   const longitude = Number(match[2]);
 
@@ -111,7 +109,7 @@ export function getMarkerLayer(
   const layer = (function () {
     let firstDraw = true;
     // Let prevCenter;
-    let frame: number | null = null;
+    let frame: number | undefined = null;
     const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
       function (utils) {
@@ -131,7 +129,7 @@ export function getMarkerLayer(
           // prevCenter = center;
         }
 
-        let start: number | null = null;
+        let start: number | undefined = null;
         const delta = 250;
 
         for (const markerSprite of container.children as PixiDisplayObjectWithCachedProps[]) {
@@ -202,7 +200,7 @@ export function getLiveLayer() {
     let firstDraw = true;
     let previousZoom: any;
     // Let prevCenter;
-    let frame: number | null = null;
+    let frame: number | undefined = null;
     const doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent);
     return L.pixiOverlay(
       function (utils) {
@@ -232,7 +230,7 @@ export function getLiveLayer() {
           }
         }
 
-        let start: number | null = null;
+        let start: number | undefined = null;
         const delta = 250;
 
         function createLineAnimation(

@@ -9,7 +9,6 @@ import {
   Texture,
   utils as pixiUtils,
 } from 'pixi.js';
-// eslint-disable-next-line import/named
 import { orderBy } from 'lodash';
 import type { Ref } from 'vue';
 import {
@@ -34,12 +33,12 @@ import type {
 import type Worksite from '@/models/Worksite';
 import type Incident from '@/models/Incident';
 
-export type MapUtils = {
+export interface MapUtils {
   getMap: () => L.Map;
-  getPixiContainer: () => Container | null;
-  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | null;
+  getPixiContainer: () => Container | undefined;
+  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | undefined;
   removeLayer: (key: string) => void;
-  reloadMap: (markers: (Sprite & Worksite & LiveSprite)[]) => void;
+  reloadMap: (markers: Array<Sprite & Worksite & LiveSprite>) => void;
   addMarkerToMap: (location: LatLng) => void;
   fitLocation: (location: Location) => void;
   jumpToCase: (worksite: Worksite, showPopup: boolean) => void;
@@ -52,12 +51,12 @@ export type MapUtils = {
   refreshVisibility: () => void;
   refreshTimeline: (index: number) => void;
   refreshSvi: (index: number) => void;
-  displayedWorkTypeSvgs: Ref<Record<string, any>[]>;
-};
+  displayedWorkTypeSvgs: Ref<Array<Record<string, any>>>;
+}
 
 export default (
-  markers: (Sprite & Worksite & LiveSprite)[],
-  liveEvents: (Sprite & Worksite)[],
+  markers: Array<Sprite & Worksite & LiveSprite>,
+  liveEvents: Array<Sprite & Worksite>,
   incident: Incident,
   cadence = 0.015,
   reloadFunction: () => PromiseLike<any>,
@@ -67,7 +66,7 @@ export default (
   let colorMode = 'dark';
   let currentEventIndex = 0;
   const textureMap: Record<string, Texture> = {};
-  const displayedWorkTypeSvgs = ref<Record<string, any>[]>([]);
+  const displayedWorkTypeSvgs = ref<Array<Record<string, any>>>([]);
   const visibleWorkTypes = computed(() => {
     const selectedWorkTypes = displayedWorkTypeSvgs.value
       .filter((s) => s.selected)
@@ -75,6 +74,7 @@ export default (
     if (selectedWorkTypes.length > 0) {
       return selectedWorkTypes;
     }
+
     return null;
   });
   const displayedWorkTypes: string[] = [];
@@ -130,14 +130,15 @@ export default (
   };
 
   function generatePoints(
-    liveMarkers: (Sprite & Worksite & LiveSprite)[],
+    liveMarkers: Array<Sprite & Worksite & LiveSprite>,
     markerSpeed: number,
   ) {
     if (eventsInterval.value) {
       clearInterval(eventsInterval.value);
     }
+
     eventsInterval.value = setInterval(
-      () => generateMarker(liveMarkers),
+      async () => generateMarker(liveMarkers),
       markerSpeed,
     );
   }
@@ -189,9 +190,10 @@ export default (
     if (!visibleWorkTypes.value) {
       return true;
     }
-    return !!(
+
+    return Boolean(
       visibleWorkTypes.value &&
-      visibleWorkTypes.value.includes(sprite.workTypeKey)
+        visibleWorkTypes.value.includes(sprite.workTypeKey),
     );
   }
 
@@ -245,11 +247,12 @@ export default (
   }
 
   async function generateMarker(
-    liveEventMarkers: (Sprite & Worksite & LiveSprite)[],
+    liveEventMarkers: Array<Sprite & Worksite & LiveSprite>,
   ) {
     if (isPaused.value) {
       return;
     }
+
     map.eachLayer(async (layer) => {
       if ((layer as L.Layer & PixiLayer).key === 'live_layer') {
         currentEventIndex++;
@@ -267,6 +270,7 @@ export default (
           (layer as L.Layer & PixiLayer).redraw();
           return;
         }
+
         const card: Record<string, any> = {
           classes: 'border w-full h-32 rounded my-2',
           event: marker,
@@ -376,6 +380,7 @@ export default (
             textureMap[color] = Texture.from(svg);
             texture = textureMap[color];
           }
+
           patientMarkerSprite.texture = texture;
           patientMarkerSprite.visible = true;
           patientMarkerSprite.color = color;
@@ -505,6 +510,7 @@ export default (
               textureMap[color] = Texture.from(svg);
               texture = textureMap[color];
             }
+
             patientMarkerSprite.texture = texture;
             patientMarkerSprite.visible = true;
             patientMarkerSprite.color = color;
@@ -535,7 +541,7 @@ export default (
     });
   }
 
-  function setupMap(worksiteMarkers: (Worksite & Sprite & LiveSprite)[]) {
+  function setupMap(worksiteMarkers: Array<Worksite & Sprite & LiveSprite>) {
     setLayer('dark');
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
@@ -551,6 +557,7 @@ export default (
         // this.$log.error(error);
       }
     }
+
     worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
     worksiteLayer.redraw();
 
@@ -560,7 +567,8 @@ export default (
 
     map.attributionControl.setPosition('bottomright');
   }
-  const reloadMap = (markers: (Sprite & Worksite & LiveSprite)[]) => {
+
+  const reloadMap = (markers: Array<Sprite & Worksite & LiveSprite>) => {
     if (map) {
       setupMap(markers);
       setLegend([...displayedWorkTypes]);
@@ -571,8 +579,8 @@ export default (
     return map;
   }
 
-  function getPixiContainer(): Container | null {
-    let container: Container | null = null;
+  function getPixiContainer(): Container | undefined {
+    let container: Container | undefined = null;
     map.eachLayer((layer) => {
       if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
         container = (layer as L.Layer & PixiLayer)._pixiContainer;
@@ -636,7 +644,7 @@ export default (
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
         onEachFeature(_: never, layer: L.Layer & PixiLayer) {
-          (layer as L.Layer & PixiLayer).location_id = location.id;
+          layer.location_id = location.id;
         },
       } as any);
       map.fitBounds(polygon.getBounds());
@@ -678,7 +686,7 @@ export default (
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
         onEachFeature(_: never, layer: L.Layer & PixiLayer) {
-          (layer as L.Layer & PixiLayer).location_id = locationId;
+          layer.location_id = locationId;
         },
       } as any);
       polygon.addTo(map);
@@ -705,7 +713,7 @@ export default (
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
         onEachFeature(_: never, layer: L.Layer & PixiLayer) {
-          (layer as L.Layer & PixiLayer).location_id = teamId;
+          layer.location_id = teamId;
         },
       } as any);
       polygon.addTo(map);
@@ -729,9 +737,9 @@ export default (
         (layer as L.Layer & PixiLayer).key === 'live_layer'
       ) {
         const container = (layer as L.Layer & PixiLayer)._pixiContainer;
-        for (const markerSprite of container.children as (Worksite &
-          Sprite &
-          LiveSprite)[]) {
+        for (const markerSprite of container.children as Array<
+          Worksite & Sprite & LiveSprite
+        >) {
           markerSprite.visible = markerSprite.index <= index;
         }
 
@@ -748,9 +756,9 @@ export default (
         (layer as L.Layer & PixiLayer).key === 'live_layer'
       ) {
         const container = (layer as L.Layer & PixiLayer)._pixiContainer;
-        const sprites = container.children as (Worksite &
-          Sprite &
-          LiveSprite)[];
+        const sprites = container.children as Array<
+          Worksite & Sprite & LiveSprite
+        >;
         const sviList = sprites.map((marker: any) => {
           return {
             id: marker.id,

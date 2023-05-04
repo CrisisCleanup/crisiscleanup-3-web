@@ -5,16 +5,16 @@
     :body-style="{ height: '300px' }"
     :pagination="meta.pagination"
     :loading="loading"
-    @change="$emit('change', $event)"
     enable-pagination
+    @change="$emit('change', $event)"
   >
     <template #statuses="slotProps">
       <div class="w-full flex items-center">
         <font-awesome-icon
+          v-if="slotProps.item.profile_completed"
           class="mx-1 text-primary-dark"
           size="lg"
           icon="check-circle"
-          v-if="slotProps.item.profile_completed"
         />
         <badge
           v-if="slotProps.item.is_verified"
@@ -37,6 +37,7 @@
     <template #actions="slotProps">
       <div class="flex mr-2 w-full items-center">
         <base-button
+          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
           variant="solid"
@@ -47,9 +48,9 @@
               approveOrganization(slotProps.item.id);
             }
           "
-          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
         />
         <base-button
+          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"
@@ -60,7 +61,6 @@
               rejectOrganization(slotProps.item.id);
             }
           "
-          v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
         />
         <base-link
           v-if="currentUser && currentUser.isAdmin"
@@ -89,7 +89,7 @@ import Organization from '../../models/Organization';
 import { cachedGet } from '../../utils/promise';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useDialogs from '../../hooks/useDialogs';
-import { OrganizationRole } from '@/models/types';
+import type { OrganizationRole } from '@/models/types';
 
 export default defineComponent({
   name: 'OrganizationsTable',
@@ -101,7 +101,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -115,11 +115,15 @@ export default defineComponent({
 
     function getHighestRole(roles: number[]) {
       if (roles.length > 0) {
-        const orgRole = organizationRoles.value.find((role: OrganizationRole) => roles.includes(role.id));
-        return orgRole ? orgRole.name_t: '';
+        const orgRole = organizationRoles.value.find((role: OrganizationRole) =>
+          roles.includes(role.id),
+        );
+        return orgRole ? orgRole.name_t : '';
       }
+
       return '';
     }
+
     async function getOrganizationContacts(organizationId: string) {
       const response = await axios.get(
         `${
@@ -128,22 +132,24 @@ export default defineComponent({
       );
       return response.data.results;
     }
+
     async function approveOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.approve_organization'),
         content: t('orgTable.give_approve_reason'),
       });
-      if (result && typeof(result) !== 'string') {
+      if (result && typeof result !== 'string') {
         await Organization.api().approve(organizationId, result.reason);
         emit('reload');
       }
     }
+
     async function rejectOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.reject_organization'),
         content: t('orgTable.give_reject_reason'),
       });
-      if (result && typeof(result) !== 'string') {
+      if (result && typeof result !== 'string') {
         await Organization.api().reject(
           organizationId,
           result.reason,

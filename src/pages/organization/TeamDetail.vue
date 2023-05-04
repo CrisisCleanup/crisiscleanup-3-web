@@ -2,8 +2,8 @@
   <div class="bg-white h-full h-84">
     <div class="flex justify-between">
       <div
-        class="font-semibold flex justify-between items-center h-12 px-3"
         v-if="team"
+        class="font-semibold flex justify-between items-center h-12 px-3"
       >
         {{ team.name }}
       </div>
@@ -34,7 +34,7 @@
         />
       </div>
     </div>
-    <tabs class="w-full" ref="tabs">
+    <tabs ref="tabs" class="w-full">
       <tab :name="`${$t('teams.manage_users')} (${allTeamUsers?.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
@@ -63,7 +63,7 @@
             ></base-button>
           </div>
         </div>
-        <div class="mt-2" v-if="allTeamUsers">
+        <div v-if="allTeamUsers" class="mt-2">
           <Table
             :columns="[
               {
@@ -93,12 +93,12 @@
             ]"
             :data="allTeamUsers"
             enable-selection
+            :body-style="{ height: '300px' }"
             @selectionChanged="
               (selectedItems) => {
                 selectedUsers = Array.from(selectedItems);
               }
             "
-            :body-style="{ height: '300px' }"
           >
             <template #name="slotProps">
               <div class="flex items-center">
@@ -213,8 +213,8 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
-            @click="toggleView('showingWorksiteMap')"
             data-cy="cases.mapButton"
+            @click="toggleView('showingWorksiteMap')"
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
@@ -222,8 +222,8 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
-            @click="toggleView('showingWorksiteTable')"
             data-cy="cases.tableButton"
+            @click="toggleView('showingWorksiteTable')"
           />
         </div>
         <div class="mt-2">
@@ -365,8 +365,8 @@
       v-if="showAddMembersModal"
       :title="$t('teams.add_members')"
       closeable
-      @close="showAddMembersModal = false"
       modal-classes="max-w-xl"
+      @close="showAddMembersModal = false"
     >
       <div class="px-5 py-2">
         <div class="py-2">
@@ -436,8 +436,8 @@
       v-if="showAddCasesModal"
       :title="$t('teams.assign_cases')"
       closeable
-      @close="showAddCasesModal = false"
       modal-classes="max-w-4xl"
+      @close="showAddCasesModal = false"
     >
       <div class="flex">
         <div class="w-1/3">
@@ -538,8 +538,8 @@
       v-if="showRenameModal"
       closeable
       :title="$t('actions.rename_team')"
-      @close="renameTeam"
       modal-classes="max-w-xl"
+      @close="renameTeam"
     >
       <base-input
         v-model="team.name"
@@ -555,6 +555,7 @@ import * as L from 'leaflet';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
 import type { PropType } from 'vue';
+import { GeoJSONObject } from '@turf/turf';
 import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
@@ -565,7 +566,6 @@ import { getQueryString } from '@/utils/urls';
 import Table from '@/components/Table.vue';
 import useDialogs from '@/hooks/useDialogs';
 import User from '@/models/User';
-import { GeoJSONObject } from '@turf/turf';
 
 export default defineComponent({
   name: 'TeamDetail',
@@ -658,6 +658,7 @@ export default defineComponent({
     const getUser = (id) => {
       return User.find(id);
     };
+
     const allTeamUsers = computed(
       () => team.value && team.value.users.map((u) => getUser(u)),
     );
@@ -685,6 +686,7 @@ export default defineComponent({
       );
       worksites.value = (results.entities?.worksites || []) as Worksite[];
     };
+
     const renameTeam = async () => {
       await Team.update({
         where: team.value?.id,
@@ -695,6 +697,7 @@ export default defineComponent({
       await updateCurrentTeam();
       showRenameModal.value = false;
     };
+
     const onUserSearch = () => {
       userResults.value = props.users.filter((user) => {
         return (
@@ -707,6 +710,7 @@ export default defineComponent({
         );
       });
     };
+
     const onCaseSearch = () => {
       caseResults.value = props.workTypes.filter((c) => {
         return (
@@ -719,6 +723,7 @@ export default defineComponent({
         );
       });
     };
+
     const addUsers = async () => {
       await Team.update({
         where: team.value?.id,
@@ -732,6 +737,7 @@ export default defineComponent({
       usersToAdd.value = [];
       showAddMembersModal.value = false;
     };
+
     const updateNotes = (value: string) => {
       Team.update({
         where: team.value?.id,
@@ -740,9 +746,11 @@ export default defineComponent({
         },
       });
     };
+
     const updateCurrentTeam = async () => {
       await Team.api().patch(`/teams/${team.value?.id}`, team.value?.$toJson());
     };
+
     const updateTeam = async (
       id: number | string,
       data: Record<string, any>,
@@ -750,12 +758,14 @@ export default defineComponent({
       console.log('updateTeam', id, data);
       await Team.api().patch(`/teams/${id}`, data);
     };
+
     const getWorksite = async (id: number) => {
       const {
         response: { data },
       } = await Worksite.api().get(`/worksites/${id}`);
       return data;
     };
+
     const addCases = async () => {
       if (casesToAdd.value?.length) {
         await Promise.all(
@@ -772,12 +782,14 @@ export default defineComponent({
           ),
         );
       }
+
       casesToAdd.value = [];
       showAddCasesModal.value = false;
       currentCaseSearch.value = '';
       await getClaimedWorksites();
       ctx.emit('reload');
     };
+
     const removeFromTeam = async (userIds: number[]) => {
       const newUsers = team.value?.users.filter((id) => !userIds.includes(id));
       await Team.update({
@@ -789,15 +801,18 @@ export default defineComponent({
       await updateCurrentTeam();
       ctx.emit('reload');
     };
+
     const removeWorksiteFromTeam = async (worksiteId: number) => {
       const worksite = await getWorksite(worksiteId);
 
-      const ids = worksite.work_types
-        .filter((t) => t.claimed_by === currentUser.value?.organization.id)
-        .map((wt) => wt.id);
+      const ids = new Set(
+        worksite.work_types
+          .filter((t) => t.claimed_by === currentUser.value?.organization.id)
+          .map((wt) => wt.id),
+      );
 
       const workTypesToDelete = (team.value?.assigned_work_types || []).filter(
-        (awt) => ids.includes(awt.id),
+        (awt) => ids.has(awt.id),
       );
       await Promise.all(
         workTypesToDelete.map((wt) => {
@@ -813,12 +828,14 @@ export default defineComponent({
       );
       ctx.emit('reload');
     };
+
     const toggleView = (
       view: 'showingWorksiteTable' | 'showingWorksiteMap',
     ) => {
       showingWorksiteTable.value = view === 'showingWorksiteTable';
       showingWorksiteMap.value = view === 'showingWorksiteMap';
     };
+
     const moveToDifferentTeam = async (userId) => {
       const _id: number = await selection({
         title: t('teams.move_teams'),
@@ -841,9 +858,11 @@ export default defineComponent({
         if (t) {
           await updateTeam(t.id, t.$toJson());
         }
+
         ctx.emit('reload');
       }
     };
+
     const deleteCurrentTeam = async () => {
       const result = await confirm({
         title: t('teams.delete_team'),
@@ -870,6 +889,7 @@ export default defineComponent({
       ctx.emit('reload');
       await router.push('/organization/teams');
     };
+
     const showOnMap = async (worksite: Worksite) => {
       const workType = Worksite.getWorkType(
         worksite.work_types,
@@ -885,6 +905,7 @@ export default defineComponent({
         },
       });
     };
+
     const statusValueChange = async (
       value: string,
       workType: Record<string, any>,
@@ -898,6 +919,7 @@ export default defineComponent({
         await Worksite.api().fetch(worksiteId);
       }
     };
+
     const showAllOnMap = async () => {
       await dialogComponent({
         title: t('teams.view_all_cases'),

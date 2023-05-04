@@ -270,6 +270,7 @@ export default defineComponent({
           user_ids.push(currentUser?.id);
         }
       }
+
       const response = await $http.get(
         `${
           import.meta.env.VITE_APP_API_BASE_URL
@@ -279,9 +280,11 @@ export default defineComponent({
       );
       claimedCases.value = groupBy(response.data.results, 'incident');
     }
+
     function setTabs(newTabs: null) {
       tabs.value = newTabs;
     }
+
     async function transferRequest() {
       await $http.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
@@ -295,6 +298,7 @@ export default defineComponent({
       );
       context.emit('cancel');
     }
+
     function setAllUsers(value: boolean) {
       if (value) {
         const user_ids = lineageUsers.value.map((user: User) => user.id);
@@ -303,6 +307,7 @@ export default defineComponent({
         selectedUsers.value = [];
       }
     }
+
     function setCases(value: boolean, cases: any[]) {
       const caseIds = cases.map((c: { id: string }) => c.id);
       if (value) {
@@ -313,20 +318,24 @@ export default defineComponent({
         );
       }
     }
+
     function addUser(userId: string) {
       selectedUsers.value.push(userId);
     }
+
     function removeUser(userId: string) {
       selectedUsers.value = selectedUsers.value.filter(
         (id: string) => id !== userId,
       );
     }
+
     function addUserTree(userId: string) {
       const userLineage = lineageUsers.value.filter((user: User) =>
         user.lineage.includes(userId),
       );
       selectedUsers.value.push(...userLineage.map((user: User) => user.id));
     }
+
     function removeUserTree(userId: string) {
       const userLineageIds = new Set(
         lineageUsers.value
@@ -337,12 +346,14 @@ export default defineComponent({
         (id: string) => !userLineageIds.has(id),
       );
     }
+
     function getIncidentName(value: string, incident_list: Incident[]) {
       return (
         incident_list.length > 0 &&
         incident_list.find((c) => Number(c.id) === Number(value))?.name
       );
     }
+
     onMounted(async () => {
       loading.value = true;
       await loadPageData();

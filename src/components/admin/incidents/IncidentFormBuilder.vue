@@ -133,6 +133,7 @@ export default defineComponent({
       list.value = [...fieldTree.value];
       emit('onUpdateForm', list.value);
     }
+
     async function getAvailableFields() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/incident_fields`,
@@ -145,6 +146,7 @@ export default defineComponent({
       );
       availableFields.value = response.data.results;
     }
+
     function updateField({ field_key, prop, value }: Record<string, any>) {
       const find = (list: FormField[]): FormField | null => {
         let i = 0;
@@ -154,6 +156,7 @@ export default defineComponent({
           if (list[i].field_key === field_key) {
             return list[i];
           }
+
           if (Array.isArray(list[i].children)) {
             found = find(list[i].children);
             if (found) {
@@ -161,6 +164,7 @@ export default defineComponent({
             }
           }
         }
+
         return null;
       };
 
@@ -169,6 +173,7 @@ export default defineComponent({
         (field as Record<string, any>)[prop] = value;
       }
     }
+
     const search = debounce(
       function (value) {
         elementSearch.value = value;

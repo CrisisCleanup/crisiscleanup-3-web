@@ -35,11 +35,14 @@ export default defineComponent({
           .map((number) => formatNationalNumber(String(number)))
           .join(', ');
       }
+
       return formatNationalNumber(String(incident.active_phone_number));
     }
+
     function filterNumbers(item) {
       return item.filter((filterItem) => filterItem.active_phone_number);
     }
+
     onMounted(async () => {
       const response = await axios.get(
         `${

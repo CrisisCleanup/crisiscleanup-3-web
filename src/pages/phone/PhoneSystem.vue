@@ -535,6 +535,7 @@ export default defineComponent({
           phone1: caller.value?.dnis,
         };
       }
+
       return {};
     });
     const callsWaiting = computed(function () {
@@ -555,6 +556,7 @@ export default defineComponent({
       if (worksiteId.value) {
         return Worksite.find(worksiteId.value);
       }
+
       return null;
     });
     const incidentsWithActivePhones = computed(() =>
@@ -575,8 +577,10 @@ export default defineComponent({
           .map((number) => formatNationalNumber(String(number)))
           .join(', ');
       }
+
       return formatNationalNumber(String(incident.active_phone_number));
     }
+
     async function completeCall({ status, notes }) {
       if (worksiteForm.value.dirtyFields.size > 0) {
         const result = await confirm({
@@ -616,6 +620,7 @@ export default defineComponent({
           if (worksiteId.value) {
             data = { ...data, cases: [worksiteId.value] };
           }
+
           await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/phone_inbound/${
               call.value.id
@@ -636,17 +641,21 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function setManualOutbound(phone) {
       emitter.emit('phone_component:open', 'dialer');
       emitter.emit('dialer:set_phone_number', formatNationalNumber(phone));
     }
+
     function clearCase() {
       worksiteId.value = null;
       isEditing.value = false;
     }
+
     function setTabs(t) {
       tabs.value = t;
     }
+
     function toggleView(view) {
       showingMap.value = false;
       showingTable.value = false;
@@ -656,10 +665,12 @@ export default defineComponent({
           init();
         });
       }
+
       if (view === 'showingTable') {
         showingTable.value = true;
       }
     }
+
     function onSelectExistingWorksite(worksite) {
       // only show worksite on map if on map view
       if (showingMap.value && !showingTable.value) {
@@ -672,20 +683,25 @@ export default defineComponent({
           query: {}, // clear query params
         });
       }
+
       worksiteId.value = worksite.id;
       isEditing.value = true;
     }
+
     async function addMarkerToMap(location) {
       mapUtils.value.addMarkerToMap(location);
     }
+
     async function jumpToCase() {
       toggleView('showingMap');
       mapUtils.value.jumpToCase(worksite.value, true);
     }
+
     function onSelectMarker(marker) {
       isEditing.value = true;
       worksiteId.value = marker.id;
     }
+
     async function getWorksites() {
       mapLoading.value = true;
       const response = await loadCasesCached({
@@ -695,6 +711,7 @@ export default defineComponent({
       allWorksiteCount.value = response.results.length;
       return response.results;
     }
+
     async function onLoggedIn() {
       if (
         serveOutbounds.value &&
@@ -703,14 +720,17 @@ export default defineComponent({
         if (remainingCallbacks.value + remainingCalldowns.value > 0) {
           await setWorking();
         }
+
         await dialNextOutbound();
       } else {
         await setAvailable();
       }
     }
+
     function onToggleOutbounds(value) {
       serveOutbounds.value = value;
     }
+
     function selectCase(worksite) {
       if (worksite) {
         setCurrentIncidentId(worksite.incident);
@@ -727,6 +747,7 @@ export default defineComponent({
       if (showingTable.value) {
         reloadTable();
       }
+
       if (showingMap.value) {
         getWorksites().then((markers) => {
           mapUtils.value.reloadMap(
@@ -748,6 +769,7 @@ export default defineComponent({
       );
       chatGroups.value = response.data.results;
     }
+
     function focusNewsTab() {
       emitter.emit('phone_component:close');
       // open the active call PhoneComponentButton
@@ -768,6 +790,7 @@ export default defineComponent({
         if (call.value) {
           await completeCall({ status: 23, notes: '' });
         }
+
         await phoneService.changeState('WORKING');
         await dialManualOutbound(phone_number);
       }
@@ -828,6 +851,7 @@ export default defineComponent({
       if (currentUser.isAdmin) {
         serveOutbounds.value = false;
       }
+
       await init();
     });
 

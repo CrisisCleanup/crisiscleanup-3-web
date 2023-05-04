@@ -9,14 +9,14 @@
           <div
             id="messages"
             ref="messagesBox"
+            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
             @wheel="handleWheel"
             @ontouchmove="handleWheel"
-            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
           >
             <ChatMessage
               v-for="message in sortedMessages"
-              :message="message"
               :key="message.id"
+              :message="message"
               @onFavorite="(message: any) => toggleFavorite(message, true)"
               @onUnfavorite="(message: any) => toggleFavorite(message, false)"
             />
@@ -41,10 +41,10 @@
             </div>
             <div class="flex flex-col">
               <base-input
-                text-area
-                @enter="sendMessage"
-                class=""
                 v-model="currentMessage"
+                text-area
+                class=""
+                @enter="sendMessage"
               />
               <div class="flex items-center justify-between py-2">
                 <base-checkbox v-model="urgent">
@@ -73,8 +73,8 @@
           >
             <ChatMessage
               v-for="favorite in favorites"
-              :message="favorite"
               :key="favorite.id"
+              :message="favorite"
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ import useCurrentUser from '../../hooks/useCurrentUser';
 import User from '../../models/User';
 import { useWebSockets } from '../../hooks/useWebSockets';
 import ChatMessage from './ChatMessage.vue';
-import { Message } from '@/models/types';
+import type { Message } from '@/models/types';
 
 export default defineComponent({
   name: 'Chat',
@@ -144,6 +144,7 @@ export default defineComponent({
         getMessages(sortedMessages.value[0].created_at, false);
       }
     }
+
     async function getMessages(before: string | null = null, scroll = true) {
       loadingMessages.value = true;
       const parameters = {
@@ -153,6 +154,7 @@ export default defineComponent({
       if (before && messages.value.length > 0) {
         parameters.created_at__lte = before;
       }
+
       const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
@@ -165,8 +167,10 @@ export default defineComponent({
           }
         });
       }
+
       loadingMessages.value = false;
     }
+
     async function getFavorites() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups/${
@@ -175,6 +179,7 @@ export default defineComponent({
       );
       favorites.value = response.data;
     }
+
     async function getUnreadMessagesCount() {
       loadingMessages.value = true;
       const parameters = {
@@ -185,12 +190,14 @@ export default defineComponent({
       if (currentUser?.states[props.stateKey]) {
         parameters.created_at__gte = currentUser.states[props.stateKey];
       }
+
       const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
       emit('unreadCount', response.data.count);
     }
+
     async function getUnreadUrgentMessagesCount() {
       loadingMessages.value = true;
       const parameters = {
@@ -201,12 +208,14 @@ export default defineComponent({
       if (currentUser?.states[props.stateKey]) {
         parameters.created_at__gte = currentUser.states[props.stateKey];
       }
+
       const queryString = getQueryString(parameters);
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
       emit('unreadUrgentCount', response.data.count);
     }
+
     function sendMessage() {
       sendToWebsocket({
         content: currentMessage.value,
@@ -219,7 +228,11 @@ export default defineComponent({
         {},
       );
     }
-    async function toggleFavorite(message: { id: any; is_favorite: boolean; }, state: any) {
+
+    async function toggleFavorite(
+      message: { id: any; is_favorite: boolean },
+      state: any,
+    ) {
       try {
         if (state) {
           await axios.post(
@@ -242,6 +255,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     function focusNewsTab() {
       emit('focusNewsTab');
     }

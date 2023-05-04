@@ -562,7 +562,7 @@ export default defineComponent({
         width: '2fr',
         searchable: true,
         searchSelect: true,
-        getSelectValues: (data) => {
+        getSelectValues(data) {
           const values = {};
           if (data && data.length > 0) {
             for (const item of data) {
@@ -570,6 +570,7 @@ export default defineComponent({
                 values[wt.work_type] = true;
               }
             }
+
             return Object.keys(values).map((key) => {
               return {
                 value: key,
@@ -577,6 +578,7 @@ export default defineComponent({
               };
             });
           }
+
           return [];
         },
         searchTitle: t('dashboard.all_time'),
@@ -630,8 +632,10 @@ export default defineComponent({
         if (key === 'case_number') {
           key = 'id';
         }
+
         query.orderBy(pendingSorter.value.key, pendingSorter.value.direction);
       }
+
       if (pendingView.value === 'inbound') {
         return query
           .where(
@@ -643,6 +647,7 @@ export default defineComponent({
           )
           .get();
       }
+
       if (pendingView.value === 'outbound') {
         return query
           .where(
@@ -654,12 +659,14 @@ export default defineComponent({
           )
           .get();
       }
+
       if (pendingView.value === 'archived') {
         return query
           .whereIdIn(archivedRequests)
           .orWhere('has_response', true)
           .get();
       }
+
       return [];
     });
     const statuses = computed(() => store.getters['enums/statuses']);
@@ -675,6 +682,7 @@ export default defineComponent({
           );
           return Boolean(claimed);
         }
+
         return false;
       });
       if (sorter.value.key) {
@@ -682,6 +690,7 @@ export default defineComponent({
         if (key === 'case_number') {
           key = 'id';
         }
+
         query.orderBy(key, sorter.value.direction);
       }
 
@@ -710,6 +719,7 @@ export default defineComponent({
         dataKey: 'results',
       });
     }
+
     async function getReportedWorkSites() {
       const params = {
         incident: currentIncidentId.value,
@@ -722,6 +732,7 @@ export default defineComponent({
         dataKey: 'results',
       });
     }
+
     async function getWorksiteRequests() {
       await WorksiteRequest.deleteAll();
       pendingViewLoading.value = true;
@@ -730,12 +741,14 @@ export default defineComponent({
       });
       pendingViewLoading.value = false;
     }
+
     async function getUserTransferRequests() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
       );
       transferRequests.value = response.data.results;
     }
+
     async function getUserReportWidgets() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/user_widgets`,
@@ -758,14 +771,17 @@ export default defineComponent({
           ),
         );
       }
+
       Promise.all(widgetPromises).then((results) => {
         const graphData = {};
         for (const { data } of results) {
           graphData[data.key] = transformWidgetData(data);
         }
+
         widgetsData.value = graphData;
       });
     }
+
     async function getWorksiteCount() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/worksites/count`,
@@ -779,6 +795,7 @@ export default defineComponent({
       );
       totalWorksites.value = response.data.count;
     }
+
     async function getClaimedCount() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/worksites/count`,
@@ -793,6 +810,7 @@ export default defineComponent({
       );
       totalClaimed.value = response.data.count;
     }
+
     async function getInProgressCount() {
       const openStatuses = statuses.value.filter(
         (status) => status.primary_state === 'open',
@@ -813,6 +831,7 @@ export default defineComponent({
       );
       totalInProgess.value = response.data.count;
     }
+
     async function getClosedCount() {
       const closedStatuses = statuses.value.filter(
         (status) => status.primary_state === 'closed',
@@ -843,6 +862,7 @@ export default defineComponent({
         await Worksite.api().fetch(worksiteId);
       }
     }
+
     function handleTableChange({
       sorter: incomingSorter,
       columnSearch: incomingColumnSearch,
@@ -850,13 +870,16 @@ export default defineComponent({
       sorter.value = { ...incomingSorter };
       columnSearch.value = { ...incomingColumnSearch };
     }
+
     function handlePendingTableChange({ sorter: incomingSorter }) {
       pendingSorter.value = { ...incomingSorter };
     }
+
     async function printWorksite(worksiteId) {
       const pdf = await Worksite.api().printWorksite(worksiteId);
       forceFileDownload(pdf.response);
     }
+
     async function inviteUsers() {
       try {
         const emails = usersToInvite.value.split(',');
@@ -866,6 +889,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function archiveRequest(id) {
       const preferences = currentUser.value.preferences || {};
       const archivedRequests = preferences.archived_worksite_requests || [];
@@ -874,6 +898,7 @@ export default defineComponent({
       });
       await getWorksiteRequests();
     }
+
     async function acceptRequest(id) {
       const result = await prompt({
         title: t('actions.approve_worksite_request'),
@@ -882,6 +907,7 @@ export default defineComponent({
       await WorksiteRequest.api().acceptRequest(id, result);
       await getWorksiteRequests();
     }
+
     async function rejectRequest(id) {
       const result = await prompt({
         title: t('actions.reject_worksite_request'),
@@ -890,6 +916,7 @@ export default defineComponent({
       await WorksiteRequest.api().rejectRequest(id, result);
       await getWorksiteRequests();
     }
+
     async function cancelRequest(id) {
       await WorksiteRequest.api().cancelRequest(id);
       await getWorksiteRequests();
@@ -923,6 +950,7 @@ export default defineComponent({
       if (currentIncidentId.value && !route.params.incident_id) {
         await router.replace(`/incident/${currentIncidentId.value}/dashboard`);
       }
+
       loading.value = true;
       await reloadDashBoard();
       loading.value = false;

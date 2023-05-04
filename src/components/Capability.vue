@@ -69,16 +69,19 @@ export default defineComponent({
     function changeHover(hoverItem) {
       hoverItem.value = hoverItem;
     }
+
     function organizationCapabilitiesForChild(capability) {
       return props.organizationCapabilities.filter(
         (item) => item.capability === capability.id,
       );
     }
+
     function hasCapability(capability) {
       return props.organizationCapabilities.some(
         (item) => item.capability === capability.id,
       );
     }
+
     function hasParent(capability) {
       return (
         capability.children &&

@@ -19,7 +19,7 @@ export default defineComponent({
   props: {
     workTypes: {
       type: Array as PropType<Record<string, any>[]>,
-      default: () => {
+      default() {
         return [];
       },
     },

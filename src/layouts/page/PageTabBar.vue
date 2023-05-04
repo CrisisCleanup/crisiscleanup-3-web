@@ -3,10 +3,10 @@
     <div ref="tabBar" :class="`page__tabbar border-t border-gray-300 flex`">
       <div
         v-for="(t, idx) in state.tabs"
+        :key="t.key"
         :class="`page__tab page__tab--${idx} page__tab--${
           idx === activeIndex ? 'active' : ''
         }`"
-        :key="t.key"
         @click="() => setTab(idx, t.route)"
       >
         <base-text variant="h3" weight="600">

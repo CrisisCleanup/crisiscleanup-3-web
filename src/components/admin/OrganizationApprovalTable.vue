@@ -134,7 +134,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -154,10 +154,12 @@ export default defineComponent({
       );
       return response.data.results;
     }
+
     function getIncidentName(id: string) {
       const incident = Incident.find(id);
       return incident && incident.name;
     }
+
     async function showContacts(organization: Organization) {
       const contacts = await getOrganizationContacts(organization.id);
       const contact = contacts.length > 0 ? contacts[0] : null;
@@ -172,6 +174,7 @@ export default defineComponent({
         `,
       });
     }
+
     async function approveOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.approve_organization'),
@@ -182,6 +185,7 @@ export default defineComponent({
         emit('reload');
       }
     }
+
     async function rejectOrganization(organizationId: string) {
       const result = await organizationApproval({
         title: t('actions.reject_organization'),
@@ -247,7 +251,7 @@ export default defineComponent({
           dataIndex: 'created_at',
           key: 'created_at',
           width: 'minmax(120px, 10%)',
-          transformer: (requested_at: Date) => {
+          transformer(requested_at: Date) {
             return moment(requested_at).fromNow();
           },
         },

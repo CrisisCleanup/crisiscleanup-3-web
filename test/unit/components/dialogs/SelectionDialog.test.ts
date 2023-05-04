@@ -74,10 +74,14 @@ describe('SelectionDialog.vue', () => {
     const footer = wrapper.find('.modal-footer');
     expect(footer.exists()).toBe(true);
 
-    const okButton = footer.findAllComponents(BaseButton).filter((button) => button.text() === 'OK');
+    const okButton = footer
+      .findAllComponents(BaseButton)
+      .filter((button) => button.text() === 'OK');
     expect(okButton.length).toBe(1);
 
-    const cancelButton = footer.findAllComponents(BaseButton).filter((button) => button.text() === 'Cancel');
+    const cancelButton = footer
+      .findAllComponents(BaseButton)
+      .filter((button) => button.text() === 'Cancel');
     expect(cancelButton.length).toBe(1);
   });
 });

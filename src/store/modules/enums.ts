@@ -3,13 +3,13 @@ import type { WorkType, Status, IncidentPhase, Portal } from '@/models/types';
 import type LocationType from '@/models/LocationType';
 import type { CCURootState } from '@/store/types';
 
-export type EnumsModuleState = {
+export interface EnumsModuleState {
   statuses: Status[];
   workTypes: WorkType[];
   locationTypes: LocationType[];
   phases: IncidentPhase[];
   portal: Portal | undefined;
-};
+}
 
 const enumsModule: Module<EnumsModuleState, CCURootState> = {
   namespaced: true,

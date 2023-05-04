@@ -122,6 +122,7 @@ export default defineComponent({
           savedIncident.value.id
         }/handbill`;
       }
+
       return null;
     });
 
@@ -131,6 +132,7 @@ export default defineComponent({
           savedIncident.value.locations.length - 1
         ];
       }
+
       return null;
     });
 
@@ -156,6 +158,7 @@ export default defineComponent({
       };
       loading.value = false;
     }
+
     async function saveIncidentFields() {
       const result = [];
       const stack = [...formFieldTree.value];
@@ -171,11 +174,13 @@ export default defineComponent({
             if (!child.phase) {
               child.phase = 4;
             }
+
             stack.push(child);
             continue;
           }
         }
       }
+
       loading.value = true;
 
       try {
@@ -190,6 +195,7 @@ export default defineComponent({
         loading.value = false;
       }
     }
+
     function updateIncident(value, key) {
       Incident.update({
         where: currentIncident.value.id,
@@ -198,6 +204,7 @@ export default defineComponent({
         },
       });
     }
+
     async function saveIncident() {
       let response;
       if (savedIncident.value?.id) {
@@ -219,6 +226,7 @@ export default defineComponent({
           },
         );
       }
+
       const incidentId = response.data.id;
 
       if (currentLocation.value?.id) {
@@ -240,11 +248,13 @@ export default defineComponent({
             ),
           );
         }
+
         await Promise.all(promises);
       }
 
       await loadIncident(incidentId);
     }
+
     async function deleteAniIncident(id) {
       await axios.delete(
         `${import.meta.env.VITE_APP_API_BASE_URL}/ani_incidents/${id}`,

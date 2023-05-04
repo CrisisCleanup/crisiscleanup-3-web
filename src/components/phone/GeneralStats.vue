@@ -86,7 +86,7 @@ export default defineComponent({
         modalClasses: 'bg-white max-w-3xl shadow',
         id: 'outbound_list',
         listeners: {
-          rowClick: (payload: Record<string, any>) => {
+          rowClick(payload: Record<string, any>) {
             emitter.emit('phone_component:close');
             emitter.emit('modal_component:close', 'outbound_list');
             emitter.emit('phone_component:open', 'dialer');
@@ -115,11 +115,12 @@ export default defineComponent({
               '1fr',
               t('phoneDashboard.incident'),
               {
-                transformer: (field: any) => {
+                transformer(field: any) {
                   const incident = Incident.find(field[0]);
                   if (incident) {
                     return `${incident.name}`;
                   }
+
                   return '';
                 },
               },
@@ -129,7 +130,7 @@ export default defineComponent({
               '1fr',
               t('phoneDashboard.last_called_at'),
               {
-                transformer: (field: any) => {
+                transformer(field: any) {
                   return moment(field).fromNow();
                 },
               },
@@ -184,6 +185,7 @@ export default defineComponent({
         if (statistics) {
           return { ...statistics, language: Language.find(key)?.name_t };
         }
+
         return { language: Language.find(key)?.name_t };
       });
     });

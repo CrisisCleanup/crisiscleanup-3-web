@@ -14,11 +14,11 @@
     /></base-text>
     <template #popper>
       <div class="tooltip-content">
-        <div class="text-base" v-if="userItem">{{ userItem.full_name }}</div>
-        <div class="text-xs" v-if="userItem">
+        <div v-if="userItem" class="text-base">{{ userItem.full_name }}</div>
+        <div v-if="userItem" class="text-xs">
           {{ userItem.organization.name }}
         </div>
-        <div class="mt-2" v-if="userItem">
+        <div v-if="userItem" class="mt-2">
           <font-awesome-icon icon="envelope" />
           <a :href="`mailto:${userItem.email}`" class="ml-1">{{
             userItem.email
@@ -41,22 +41,6 @@ import User from '../../models/User';
 
 export default defineComponent({
   name: 'UserDetailsTooltip',
-  setup(props) {
-    const asyncUser = ref(null);
-    const userItem = computed(() => {
-      return User.find(props.user);
-    });
-    onMounted(() => {
-      const user = User.find(props.user);
-      if (!user) {
-        User.api().get(`/users/${props.user}`, {});
-      }
-    });
-    return {
-      asyncUser,
-      userItem,
-    };
-  },
   props: {
     user: {
       type: Number,
@@ -73,6 +57,22 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+  },
+  setup(props) {
+    const asyncUser = ref(null);
+    const userItem = computed(() => {
+      return User.find(props.user);
+    });
+    onMounted(() => {
+      const user = User.find(props.user);
+      if (!user) {
+        User.api().get(`/users/${props.user}`, {});
+      }
+    });
+    return {
+      asyncUser,
+      userItem,
+    };
   },
 });
 </script>

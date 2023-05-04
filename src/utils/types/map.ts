@@ -1,7 +1,7 @@
 import type { LeafletPixiOverlayUtils } from 'leaflet-pixi-overlay';
 import type { Container, Texture, DisplayObject } from 'pixi.js';
 
-export type PixiLayer = {
+export interface PixiLayer {
   key: string;
   location_id: string;
   utils: LeafletPixiOverlayUtils;
@@ -10,13 +10,13 @@ export type PixiLayer = {
 
   _renderer: any;
   redraw: any;
-};
+}
 
-export type LayerGroup = {
+export interface LayerGroup {
   key: string;
-};
+}
 
-export type LiveGraphics = {
+export interface LiveGraphics {
   x1: number;
   y1: number;
   type: string;
@@ -26,9 +26,9 @@ export type LiveGraphics = {
   workTypeKey: string;
   currentPoint: number;
   live: boolean;
-};
+}
 
-export type LiveSprite = {
+export interface LiveSprite {
   id: number;
   svi: number;
   index: number;
@@ -46,7 +46,7 @@ export type LiveSprite = {
   patient_blurred_location: any;
   recipient_blurred_location: any;
   map_destination: 'actor' | 'patient' | 'recipient';
-};
+}
 
 export type PixiDisplayObjectWithCachedProps = {
   currentScale?: number;

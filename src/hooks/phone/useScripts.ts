@@ -26,11 +26,11 @@ const Scripts = Object.freeze({
   [CallType.CALLDOWN]: 'phoneDashboard.calldown_script',
 });
 
-type UseScriptsProps = {
+interface UseScriptsProps {
   callType: typeof CallType;
   incident: typeof Incident;
   recentWorksite?: Record<string, any>;
-};
+}
 
 export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   const _callType: Ref<keyof typeof CallType> = wrap(callType);

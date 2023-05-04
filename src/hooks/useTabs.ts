@@ -6,28 +6,29 @@ import {
   ref,
   computed,
   reactive,
-  Ref,
+  type Ref,
   watchEffect,
   onMounted,
   onBeforeUnmount,
   watch,
 } from 'vue';
 import _ from 'lodash';
+import { type Route } from 'vue-router';
+import type VueRouter from 'vue-router';
 import { useRoute, useRouter } from 'vue-router';
-import VueRouter, { Route } from 'vue-router';
 import { useOnResize } from 'vue-composable';
 // import Logger from '@/utils/log';
 
 interface Tab {
   key: string;
   title?: string;
-  route: string | {};
+  route: string | Record<string, unknown>;
 }
 
 interface UseTabProps {
   tabs: Tab[];
-  tabContainer: Ref<null | HTMLElement>;
-  tabSelector: Ref<null | HTMLElement>;
+  tabContainer: Ref<undefined | HTMLElement>;
+  tabSelector: Ref<undefined | HTMLElement>;
   useRoutes?: boolean;
 }
 
@@ -67,7 +68,7 @@ export default ({
     // Log.debug(tabContainer);
     if (!tabContainer || !tabContainer.value) return;
     const nodes = _.get(tabContainer.value, 'children', []);
-    if (!nodes.length) return;
+    if (nodes.length === 0) return;
     const activeTab: HTMLElement = nodes.item(activeIndex.value);
     // Log.debug(activeTab, activeIndex.value);
     // get scale multiplier (ratio of active tab to tab container width)
@@ -92,8 +93,8 @@ export default ({
   }));
 
   // grab router in case tabs are using routes.
-  let route: null | Ref<Route> = null;
-  let router: null | VueRouter;
+  let route: undefined | Ref<Route> = null;
+  let router: undefined | VueRouter;
   if (useRoutes) {
     route = useRoute();
     router = useRouter();
@@ -104,7 +105,7 @@ export default ({
     if (useRoutes && router && newRoute) {
       try {
         await router.replace(newRoute);
-      } catch (e) {
+      } catch {
         // Log.error('Failed to navigate tab!', e);
       }
     }
@@ -115,8 +116,12 @@ export default ({
   onMounted(() => {
     const { remove, width, height } = useOnResize(tabContainer, 100);
     removeResize = remove;
-    watch([width, height], () => updateSelector());
-    watchEffect(() => updateSelector());
+    watch([width, height], () => {
+      updateSelector();
+    });
+    watchEffect(() => {
+      updateSelector();
+    });
     if (useRoutes && router) {
       router.beforeEach((to, from, next) => {
         updateSelector();

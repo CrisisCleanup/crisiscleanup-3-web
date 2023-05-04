@@ -137,6 +137,7 @@ export default defineComponent({
       organizationResults.value = (results.entities?.organizations ||
         []) as Organization[];
     }
+
     const inviteUsers = async () => {
       let tags = _.defaultTo([...usersToInvite.value], []) as TagInputData[];
       try {
@@ -146,12 +147,15 @@ export default defineComponent({
           if (_.isError(extTags)) {
             extTags = [];
           }
+
           tags = _.uniqBy([...tags, ...extTags], 'text');
         }
+
         if (_.isEmpty(tags)) {
           await $toasted.error(t('inviteTeammates.provide_valid_email'));
           return;
         }
+
         const emailsGroup = tags.map((value) => value.text);
         await Promise.all(
           emailsGroup.map((email) =>

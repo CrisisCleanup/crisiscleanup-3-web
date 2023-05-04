@@ -551,6 +551,7 @@ export default defineComponent({
           backgroundColor: '#232323',
         };
       }
+
       return {
         color: '#232323',
         backgroundColor: 'white',
@@ -564,6 +565,7 @@ export default defineComponent({
           backgroundColor: '#242C36',
         };
       }
+
       return {
         color: '#232323',
         backgroundColor: 'white',
@@ -604,6 +606,7 @@ export default defineComponent({
           );
           return response.data.results;
         }
+
         const params = {
           sort: '-created_at',
         };
@@ -619,6 +622,7 @@ export default defineComponent({
         mapLoading.value = false;
       }
     }
+
     async function getLatestEvents() {
       const params = {
         limit: 100,
@@ -659,9 +663,11 @@ export default defineComponent({
     function refreshTimeline(index) {
       mapUtils.value?.refreshTimeline(index);
     }
+
     function refreshSvi(index) {
       mapUtils.value?.refreshSvi(index);
     }
+
     function refreshVisibility(index) {
       mapUtils.value?.refreshVisibility(index);
     }
@@ -682,6 +688,7 @@ export default defineComponent({
           .map((number) => formatNationalNumber(String(number)))
           .join(', ');
       }
+
       return formatNationalNumber(String(incident.active_phone_number));
     }
 
@@ -694,6 +701,7 @@ export default defineComponent({
       if (incident) {
         params.incident = incident;
       }
+
       const queryString = getQueryString(params);
 
       const response = await axios.get(
@@ -711,12 +719,14 @@ export default defineComponent({
           (siteInfoTimerData.activeInfoTab + 1) % totalTabs;
       }, ms);
     }
+
     function stopSiteInfoTabCirculationTimer() {
       if (siteInfoTimerData.isTimerActive) {
         clearInterval(siteInfoTimerData.timerId);
         siteInfoTimerData.isTimerActive = false;
       }
     }
+
     function startTabCirculationTimer(ms) {
       const totalTabs = 3; // total tabs present inside tabs component
       chartCirculationTimerData.timerId = setInterval(() => {
@@ -724,6 +734,7 @@ export default defineComponent({
           (chartCirculationTimerData.activeChartTab + 1) % totalTabs;
       }, ms);
     }
+
     function stopChartTabCirculationTimer() {
       if (chartCirculationTimerData.isTimerActive) {
         clearInterval(chartCirculationTimerData.timerId);

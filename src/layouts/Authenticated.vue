@@ -292,6 +292,7 @@ export default defineComponent({
         await logoutApp();
         return;
       }
+
       await Promise.all([
         Incident.api().get(
           '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
@@ -317,6 +318,7 @@ export default defineComponent({
       } catch {
         // TODO(tobi): Empty for now make this better
       }
+
       await getUserTransferRequests();
       await setupLanguage();
       store.commit('acl/setUserAcl', user.value.user_claims.id);
@@ -361,6 +363,7 @@ export default defineComponent({
         if (incident) {
           store.commit('incident/setCurrentIncidentId', false);
         }
+
         await router.push(`/`).catch(() => {});
       }
 

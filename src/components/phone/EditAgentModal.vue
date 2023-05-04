@@ -80,6 +80,7 @@ export default defineComponent({
       if (phoneNumber.value) {
         await updateCurrentUser(phoneNumber.value, 'mobile');
       }
+
       if (languages.value.length > 0) {
         await updateCurrentUser(null, 'primary_language');
         await updateCurrentUser(null, 'secondary_language');
@@ -87,6 +88,7 @@ export default defineComponent({
         await updateCurrentUser(primary_language, 'primary_language');
         await updateCurrentUser(secondary_language, 'secondary_language');
       }
+
       try {
         await saveCurrentUser();
         await loadAgent();

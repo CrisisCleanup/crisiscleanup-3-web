@@ -78,6 +78,7 @@ export default defineComponent({
           return profilePictures[0].small_thumbnail_url;
         }
       }
+
       return `https://avatars.dicebear.com/api/bottts/${props.data.first_name}.svg`;
     });
   },

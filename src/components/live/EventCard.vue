@@ -26,14 +26,14 @@ export default defineComponent({
   props: {
     currentEvent: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
   },
   setup() {
     const { t } = useI18n();
-    const $t = (text:string, attrs: Record<string, any>) => {
+    const $t = (text: string, attrs: Record<string, any>) => {
       return text ? t(text, attrs) : null;
     };
 
@@ -41,8 +41,10 @@ export default defineComponent({
       if (event_key) {
         return $t(`events.${event_key.replace(':', '_')}`, {});
       }
+
       return event_key;
     }
+
     function getTranslation(tag: string, attr: Record<string, any>) {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [

@@ -61,16 +61,16 @@
   </div>
 </template>
 <script lang="ts">
-import Organization from '../../models/Organization';
-import { getErrorMessage } from '../../utils/errors';
 import { computed, onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import { getErrorMessage } from '../../utils/errors';
+import Organization from '../../models/Organization';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import BaseSelect from '../BaseSelect.vue';
-import Incident from '@/models/Incident';
-import { IncidentRequest } from '@/models/types';
+import type Incident from '@/models/Incident';
+import type { IncidentRequest } from '@/models/types';
 
 export default defineComponent({
   name: 'RedeployRequest',
@@ -105,16 +105,17 @@ export default defineComponent({
         return incidents.value.filter((incident) => {
           if (currentOrganization.value) {
             return (
-            !currentOrganization.value.approved_incidents.includes(
-              incident.id,
-            ) &&
-            !incidentRequests.value
-              .map((request) => request.incident)
-              .includes(incident.id)
-          );
+              !currentOrganization.value.approved_incidents.includes(
+                incident.id,
+              ) &&
+              !incidentRequests.value
+                .map((request) => request.incident)
+                .includes(incident.id)
+            );
           }
         });
       }
+
       return [];
     });
 

@@ -12,13 +12,13 @@ type LocaleFormFieldsT = Record<
 export const groupBy =
   <T extends Record<string, any>, K extends keyof T>(key: K) =>
   (array: T[]): Record<T[K], T[]> =>
-    array.reduce((objectsByKeyValue, object) => {
+    array.reduce<Record<T[K], T[]>>((objectsByKeyValue, object) => {
       const value = object[key];
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(
         object,
       );
       return objectsByKeyValue;
-    }, {} as Record<T[K], T[]>);
+    }, {});
 
 export const buildForm = <T extends Record<string, any>, K extends keyof T>(
   key: K,
@@ -38,10 +38,10 @@ export const buildForm = <T extends Record<string, any>, K extends keyof T>(
 
 export const nest = <T extends Record<string, any>, K extends keyof T>(
   items: T[],
-  value: T[K] | null = null,
+  value: T[K] | undefined = null,
   link = 'field_parent_key',
   excluded: K[] = [],
-): Record<K, T & { children: T[] | null }>[] =>
+): Array<Record<K, T & { children: T[] | undefined }>> =>
   items
     .filter((item) => Boolean(item.field_key))
     .filter(
@@ -51,8 +51,8 @@ export const nest = <T extends Record<string, any>, K extends keyof T>(
 
 export const nestUsers = <T extends Record<string, any>, K extends keyof T>(
   items: T[],
-  referringUserId: T[K] | null = null,
-): Record<K, T & { label: string; children: T[] | null }>[] => {
+  referringUserId: T[K] | undefined = null,
+): Array<Record<K, T & { label: string; children: T[] | undefined }>> => {
   return items
     .filter((item) => {
       if (item.referring_user) {

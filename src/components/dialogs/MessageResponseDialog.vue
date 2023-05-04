@@ -37,8 +37,8 @@
 
           <div class="modal-footer flex-shrink">
             <div
-              class="flex items-center justify-center py-2 border-t"
               v-if="Object.keys(actions).length === 0"
+              class="flex items-center justify-center py-2 border-t"
             >
               <base-button
                 :alt="$t('actions.ok')"
@@ -50,7 +50,7 @@
                   }
                 "
               >
-                {{ $t("actions.ok") }}
+                {{ $t('actions.ok') }}
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
@@ -61,12 +61,12 @@
                   }
                 "
               >
-                {{ $t("actions.cancel") }}
+                {{ $t('actions.cancel') }}
               </base-button>
             </div>
             <div
-              class="flex items-center justify-center w-full py-2"
               v-if="Object.keys(actions).length > 0"
+              class="flex items-center justify-center w-full py-2"
             >
               <base-button
                 v-for="(value, key) in actions"
@@ -95,33 +95,33 @@
 </template>
 
 <script lang="ts">
-import {closeDialog} from "vue3-promise-dialog";
-import {defineComponent, ref} from "vue";
+import { closeDialog } from 'vue3-promise-dialog';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: "MessageResponseDialog",
+  name: 'MessageResponseDialog',
   props: {
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     content: {
       type: String,
-      default: "",
+      default: '',
     },
     actions: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
   },
   setup() {
-    const response = ref('')
+    const response = ref('');
     return {
       response,
       closeDialog,
-    }
+    };
   },
 });
 </script>

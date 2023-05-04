@@ -16,7 +16,7 @@ export default defineComponent({
   props: {
     location: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -36,6 +36,7 @@ export default defineComponent({
         maxZoom: 15,
       });
     }
+
     function addMarkerToMap() {
       const svgIcon = L.divIcon({
         className: 'crisiscleanup-map-marker',
@@ -79,6 +80,7 @@ export default defineComponent({
         } else {
           createTileLayer().addTo(map.value as L.Map);
         }
+
         markerLayer.value.addTo(map.value as L.Map);
         addMarkerToMap();
       });

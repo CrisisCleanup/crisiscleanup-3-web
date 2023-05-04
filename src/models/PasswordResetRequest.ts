@@ -24,6 +24,7 @@ export default class PasswordResetRequest extends CCUModel {
     if (this.requested_at) {
       return moment(this.requested_at).format('DD/MM/YYYY');
     }
+
     return '';
   }
 
@@ -31,6 +32,7 @@ export default class PasswordResetRequest extends CCUModel {
     if (this.expires_at) {
       return moment(this.expires_at).format('DD/MM/YYYY');
     }
+
     return '';
   }
 

@@ -8,7 +8,6 @@ import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
 import * as Sentry from '@sentry/vue';
 import { BrowserTracing } from '@sentry/tracing';
-
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast from 'vue-toastification';
 import type { PluginOptions as VueToastificationPluginOptions } from 'vue-toastification';
@@ -16,7 +15,6 @@ import { createI18n } from 'vue-i18n';
 import vSelect from 'vue-select';
 import App from './App.vue';
 import router from './router';
-
 import BaseButton from './components/BaseButton.vue';
 import BaseInput from './components/BaseInput.vue';
 import BaseText from './components/BaseText.vue';
@@ -24,7 +22,6 @@ import Badge from './components/Badge.vue';
 import Tag from './components/Tag.vue';
 import FormSelect from './components/FormSelect.vue';
 import Modal from './components/Modal.vue';
-
 import Authenticated from './layouts/Authenticated.vue';
 
 // Icons
@@ -34,7 +31,6 @@ import { store } from './store';
 
 // Toast
 import 'vue-toastification/dist/index.css';
-
 import 'vue-select/dist/vue-select.css';
 
 // Responsive
@@ -55,7 +51,6 @@ import Tabs from './components/tabs/Tabs.vue';
 import BaseRadio from './components/BaseRadio.vue';
 import Unauthenticated from './layouts/Unauthenticated.vue';
 import BaseLink from './components/BaseLink.vue';
-
 import { AuthService } from './services/auth.service';
 import TreeMenu from '@/components/TreeMenu.vue';
 

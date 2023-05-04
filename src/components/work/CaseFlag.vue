@@ -394,11 +394,12 @@ export default defineComponent({
         );
         await $toasted.success(t('flag.case_moved_success'));
         emit('reloadMap', props.worksiteId || route.params.id);
-        if (!props.incidentId) {
-          await router.push(`/incident/${route.params.incident_id}/cases/new`);
-        } else {
+        if (props.incidentId) {
           emit('clearCase');
+        } else {
+          await router.push(`/incident/${route.params.incident_id}/cases/new`);
         }
+
         return;
       }
 
@@ -406,14 +407,15 @@ export default defineComponent({
         props.worksiteId || route.params.id,
         currentFlag.value,
       );
-      if (!props.incidentId) {
+      if (props.incidentId) {
+        emit('reloadCase');
+      } else {
         await router.push(
           `/incident/${route.params.incident_id}/cases/${route.params.id}`,
         );
-      } else {
-        emit('reloadCase');
       }
     }
+
     function updateWorksite(value, key) {
       Worksite.update({
         where: props.worksiteId || route.params.id,
@@ -423,6 +425,7 @@ export default defineComponent({
       });
       worksite.value = Worksite.find(props.worksiteId || route.params.id);
     }
+
     async function updateWorksiteLocation() {
       const latLng = getGoogleMapsLocation(currentFlag.value.requested_action);
       const geocode = await GeocoderService.getLocationDetails(latLng);
@@ -447,12 +450,12 @@ export default defineComponent({
       );
       emit('reloadMap');
 
-      if (!props.incidentId) {
+      if (props.incidentId) {
+        emit('reloadCase');
+      } else {
         await router.push(
           `/incident/${route.params.incident_id}/cases/${route.params.id}`,
         );
-      } else {
-        emit('reloadCase');
       }
     }
 
@@ -470,10 +473,12 @@ export default defineComponent({
       } finally {
         ready.value = true;
       }
+
       worksite.value = Worksite.find(props.worksiteId || route.params.id);
       if (route.query.showOnMap) {
         emit('jumpToCase', props.worksiteId || route.params.id);
       }
+
       const organizationResults = await Organization.api().get(
         `/organizations?nearby_claimed=${worksite.value.longitude},${worksite.value.latitude}`,
         {

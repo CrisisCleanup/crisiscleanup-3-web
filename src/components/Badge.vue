@@ -14,22 +14,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "Badge",
+  name: 'Badge',
   props: {
     color: {
       type: String,
-      default: "",
+      default: '',
     },
     width: {
       type: String,
-      default: "",
+      default: '',
     },
     height: {
       type: String,
-      default: "",
+      default: '',
     },
   },
 });

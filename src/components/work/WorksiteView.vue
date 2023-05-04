@@ -16,7 +16,7 @@
         $t('caseForm.property_information')
       }}</SectionHeading>
       <section class="px-3 pb-3">
-        <WorksiteNotes @saveNote="saveNote" :worksite="worksite" />
+        <WorksiteNotes :worksite="worksite" @saveNote="saveNote" />
 
         <div class="flex flex-row">
           <div class="flex-1">
@@ -37,12 +37,12 @@
               </div>
               <div v-if="can && can('phone_agent')" class="flex-1">
                 <base-button
+                  v-tooltip="{ content: 'Call Number', html: true }"
                   ccu-icon="phone-classic"
                   icon-size="md"
                   size="xxs"
                   variant="outline"
                   class="worksite__dialer"
-                  v-tooltip="{ content: 'Call Number', html: true }"
                   :action="() => openDialerTab(worksite.phone1)"
                 />
               </div>
@@ -180,7 +180,7 @@
                         .join(', ')
                     }}
                   </div>
-                  <div class="recurrence" v-if="work_type.recur">
+                  <div v-if="work_type.recur" class="recurrence">
                     {{ getRecurrenceString(work_type.recur) }}
                     <br />
                     {{ $t('caseView.next') }}
@@ -203,8 +203,8 @@
               $t('caseView.claimed_by_my_org')
             }}</label>
             <template
-              :key="work_type.id"
               v-for="work_type in workTypesClaimedByOrganization"
+              :key="work_type.id"
             >
               <div class="work_type_section">
                 <span class="text-sm">{{
@@ -237,7 +237,7 @@
                       .join(', ')
                   }}
                 </div>
-                <div class="recurrence" v-if="work_type.recur">
+                <div v-if="work_type.recur" class="recurrence">
                   {{ getRecurrenceString(work_type.recur) }}
                   <br />
                   {{ $t('caseView.next') }}
@@ -251,8 +251,8 @@
               $t('caseView.unclaimed_work_types')
             }}</label>
             <template
-              :key="work_type.id"
               v-for="work_type in workTypesUnclaimed"
+              :key="work_type.id"
             >
               <div class="work_type_section">
                 <span class="text-sm">{{
@@ -285,7 +285,7 @@
                       .join(', ')
                   }}
                 </div>
-                <div class="recurrence" v-if="work_type.recur">
+                <div v-if="work_type.recur" class="recurrence">
                   {{ getRecurrenceString(work_type.recur) }}
                   <br />
                   {{ $t('caseView.next') }}
@@ -299,15 +299,15 @@
       <SectionHeading :count="5" class="mb-3">{{
         $t('caseView.report')
       }}</SectionHeading>
-      <WorksiteReportSection :worksite="worksite" :key="worksite.total_time" />
+      <WorksiteReportSection :key="worksite.total_time" :worksite="worksite" />
       <SectionHeading :count="6" class="mb-3">{{
         $t('caseForm.photos')
       }}</SectionHeading>
       <WorksiteImageSection
-        :worksite="worksite"
         :key="worksite.files"
-        class="px-3 pb-3"
         ref="worksiteImageSection"
+        :worksite="worksite"
+        class="px-3 pb-3"
       />
     </div>
 
@@ -369,32 +369,32 @@
 <script lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import moment from 'moment';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import Worksite from '../../models/Worksite';
 import { getErrorMessage } from '../../utils/errors';
 import Incident from '../../models/Incident';
-import WorksiteImageSection from '../../components/work/WorksiteImageSection.vue';
-import WorksiteReportSection from '../../components/work/WorksiteReportSection.vue';
-import SectionHeading from '../../components/work/SectionHeading.vue';
-import WorksiteNotes from '../../components/work/WorksiteNotes.vue';
 import WorksiteRequest from '../../models/WorksiteRequest';
 import { getQueryString } from '../../utils/urls';
 import Organization from '../../models/Organization';
 import { groupBy } from '../../utils/array';
-import Flag from '../../components/work/Flag.vue';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown.vue';
-import WorkTypeRequestModal from '../../components/work/WorkTypeRequestModal.vue';
+import WorksiteStatusDropdown from '../WorksiteStatusDropdown.vue';
 import User from '../../models/User';
-import { useI18n } from 'vue-i18n';
-import { useToast } from 'vue-toastification';
-import { useRoute, useRouter } from 'vue-router';
 import useDialogs from '../../hooks/useDialogs';
-import { useStore } from 'vuex';
 import {
   formatRecurrence,
   getRecurrenceString,
   getWorkTypeName,
 } from '../../filters/index';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import WorkTypeRequestModal from './WorkTypeRequestModal.vue';
+import Flag from './Flag.vue';
+import WorksiteNotes from './WorksiteNotes.vue';
+import SectionHeading from './SectionHeading.vue';
+import WorksiteReportSection from './WorksiteReportSection.vue';
+import WorksiteImageSection from './WorksiteImageSection.vue';
 import useAcl from '@/hooks/useAcl';
 
 export default defineComponent({
@@ -458,9 +458,10 @@ export default defineComponent({
 
     const cssVars = computed(() => {
       let { topHeight } = props;
-      if (worksite.value.flags.length) {
+      if (worksite.value.flags.length > 0) {
         topHeight += 25;
       }
+
       const formHeight = `${topHeight}px`;
       return {
         'grid-template-rows': `auto calc(100vh - ${formHeight} - var(--safe-area-inset-bottom)) 80px`,
@@ -473,6 +474,7 @@ export default defineComponent({
           currentUser.organization.affiliates.includes(type.claimed_by),
         );
       }
+
       return [];
     });
 
@@ -485,12 +487,13 @@ export default defineComponent({
         );
         return groupBy(list, 'claimed_by');
       }
+
       return [];
     });
 
     const worksiteRequests = computed(() => {
       return WorksiteRequest.query()
-        .where('worksite', parseInt(props.worksiteId))
+        .where('worksite', Number.parseInt(props.worksiteId))
         .get();
     });
 
@@ -521,12 +524,12 @@ export default defineComponent({
           (type) => type.claimed_by === null,
         );
       }
+
       return [];
     });
 
     const worksiteAddress = computed(() => {
       if (worksite.value) {
-        // eslint-disable-next-line camelcase
         const {
           address,
           city,
@@ -535,6 +538,7 @@ export default defineComponent({
         } = worksite.value;
         return `${address}, ${city}, ${state} ${postalCode}`;
       }
+
       return '';
     });
 
@@ -544,6 +548,7 @@ export default defineComponent({
       } else {
         workTypesToClaim.value.delete(workTypeToClaim.work_type);
       }
+
       workTypesToClaim.value = new Set(workTypesToClaim.value);
     }
 
@@ -648,6 +653,7 @@ export default defineComponent({
       if (organization) {
         return organization.name;
       }
+
       return '';
     }
 
@@ -666,15 +672,14 @@ export default defineComponent({
 
     function getFieldsForType(workType) {
       if (incident.value) {
-        const availableFields = worksite.value.form_data.map(
-          (data) => data.field_key,
+        const availableFields = new Set(
+          worksite.value.form_data.map((data) => data.field_key),
         );
         return incident.value.form_fields.filter((field) => {
           const parent = incident.value.form_fields.find((element) => {
             return element.field_key === field.field_parent_key;
           });
 
-          // eslint-disable-next-line camelcase
           let { if_selected_then_work_type } = field;
           if (parent) {
             if_selected_then_work_type = parent.if_selected_then_work_type;
@@ -682,11 +687,12 @@ export default defineComponent({
 
           return (
             if_selected_then_work_type === workType &&
-            availableFields.includes(field.field_key) &&
+            availableFields.has(field.field_key) &&
             field.html_type === 'checkbox'
           );
         });
       }
+
       return [];
     }
 
@@ -710,22 +716,24 @@ export default defineComponent({
         emit('caseLoaded');
         await getWorksiteRequests();
         if (Number(worksite.value.incident) !== Number(props.incidentId)) {
-          if (!props.incidentId) {
-            await router.push(`/incident/${route.params.incident_id}/work`);
-          } else {
+          if (props.incidentId) {
             emit('onResetForm');
+          } else {
+            await router.push(`/incident/${route.params.incident_id}/work`);
           }
         }
-      } catch (e) {
-        if (e.response?.status === 404) {
+      } catch (error) {
+        if (error.response?.status === 404) {
           await $toasted.error(t('caseView.deleted_notice'));
         }
-        if (!props.incidentId) {
-          await router.push(`/incident/${route.params.incident_id}/work`);
-        } else {
+
+        if (props.incidentId) {
           emit('onResetForm');
+        } else {
+          await router.push(`/incident/${route.params.incident_id}/work`);
         }
       }
+
       if (route.query.showOnMap) {
         emit('jumpToCase', props.worksiteId);
       }

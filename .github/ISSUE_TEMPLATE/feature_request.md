@@ -4,7 +4,6 @@ about: Suggest an idea for this project
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## Description
@@ -14,4 +13,3 @@ assignees: ''
 ## Steps to Reproduce
 
 ## Tasks
-

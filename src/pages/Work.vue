@@ -588,19 +588,24 @@ export default defineComponent({
           showingMap.value = true;
           showingTable.value = false;
         }
+
         if (states.showingTable) {
           showingTable.value = true;
           showingMap.value = false;
         }
+
         if (states.appliedFilters) {
           filterQuery.value = states.appliedFilters;
         }
+
         if (states.sviLevel) {
           sviSliderValue.value = states.sviLevel;
         }
+
         if (states.dateLevel) {
           dateSliderValue.value = states.dateLevel;
         }
+
         if (states.filters) {
           filters.value = {
             ...states.filters,
@@ -614,6 +619,7 @@ export default defineComponent({
       if (!data) {
         data = {};
       }
+
       const newStates = {
         showingMap: showingMap.value,
         showingTable: showingTable.value,
@@ -643,6 +649,7 @@ export default defineComponent({
           route.query.work_type__claimed_by as string,
         )} ${t('casesVue.overdue_cases')}`;
       }
+
       return '';
     });
 
@@ -655,6 +662,7 @@ export default defineComponent({
       if (currentSearch.value) {
         query.search = currentSearch.value;
       }
+
       return query;
     });
 
@@ -682,6 +690,7 @@ export default defineComponent({
       if (mapUtils) {
         mapUtils?.removeLayer('temp_markers');
       }
+
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
       mapUtils?.reloadMap(
@@ -704,6 +713,7 @@ export default defineComponent({
           updateUserState({});
         });
       }
+
       nextTick(() => {
         init();
       });
@@ -718,6 +728,7 @@ export default defineComponent({
       if (worksiteId.value) {
         return Worksite.find(worksiteId.value);
       }
+
       return null;
     });
 
@@ -727,6 +738,7 @@ export default defineComponent({
           currentUser?.value?.organization.affiliates.includes(type.claimed_by),
         );
       }
+
       return [];
     });
 
@@ -748,7 +760,7 @@ export default defineComponent({
         classes: 'w-full h-24 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {
-          updatedStatus: (payload: string) => {
+          updatedStatus(payload: string) {
             status = payload;
           },
         },
@@ -791,8 +803,10 @@ export default defineComponent({
             }
           }
         }
+
         await Promise.allSettled(promises);
       }
+
       loading.value = false;
       reloadTable();
     }
@@ -819,6 +833,7 @@ export default defineComponent({
           return (b.svi || 1) - (a.svi || 1);
         });
       }
+
       return list;
     });
 
@@ -857,6 +872,7 @@ export default defineComponent({
           return b.updated_at - a.updated_at;
         });
       }
+
       return list;
     });
 
@@ -873,6 +889,7 @@ export default defineComponent({
           'days',
         )} days ago`;
       }
+
       return '';
     });
 
@@ -886,6 +903,7 @@ export default defineComponent({
           'days',
         )} days ago`;
       }
+
       return '';
     });
 
@@ -893,6 +911,7 @@ export default defineComponent({
       if (sviSliderValue.value !== 100) {
         filterSvi(100);
       }
+
       const layer = mapUtils?.getCurrentMarkerLayer();
       const container = layer?._pixiContainer;
       const dl = getDatesList(container?.children?.length);
@@ -999,7 +1018,7 @@ export default defineComponent({
     async function shareWorksite(id: number) {
       loading.value = true;
       let noClaimText = '';
-      let worksiteToShare = await Worksite.find(id);
+      const worksiteToShare = await Worksite.find(id);
       const hasClaimedWorkType = worksiteToShare?.work_types.some((type) =>
         currentUser?.value?.organization.affiliates.includes(type.claimed_by),
       );
@@ -1036,13 +1055,14 @@ export default defineComponent({
         if (result.key === 'claimAndShare') {
           noClaimText = '';
         }
+
         if (result.key === 'shareNoClaim') {
           if (!result.response) {
             $toasted.error(t('casesVue.please_explain_why_no_claim'));
             return shareWorksite(id);
-          } else {
-            noClaimText = result.response;
           }
+
+          noClaimText = result.response;
         }
       }
 
@@ -1059,15 +1079,15 @@ export default defineComponent({
           worksite: id,
         },
         listeners: {
-          phoneNumbersUpdated: (value: string[]) => {
+          phoneNumbersUpdated(value: string[]) {
             phoneNumbers = value.map((number) =>
               String(number).replace(/\D/g, ''),
             );
           },
-          emailsUpdated: (value: string[]) => {
+          emailsUpdated(value: string[]) {
             emails = value;
           },
-          shareMessageUpdated: (value: string) => {
+          shareMessageUpdated(value: string) {
             shareMessage = value;
           },
         },
@@ -1090,7 +1110,7 @@ export default defineComponent({
     async function printWorksite(id: number) {
       loading.value = true;
       let file;
-      let worksiteToPrint = await Worksite.find(id);
+      const worksiteToPrint = await Worksite.find(id);
       const hasClaimedWorkType = worksiteToPrint?.work_types.some((type) =>
         currentUser?.value?.organization.affiliates.includes(type.claimed_by),
       );
@@ -1124,17 +1144,20 @@ export default defineComponent({
         if (result.key === 'claimAndPrint') {
           file = await Worksite.api().printWorksite(id, '');
         }
+
         if (result.key === 'printNoClaim') {
-          if (!result.response) {
-            $toasted.error(t('casesVue.please_explain_why_no_claim'));
-          } else {
+          if (result.response) {
             file = await Worksite.api().printWorksite(id, result.response);
+          } else {
+            $toasted.error(t('casesVue.please_explain_why_no_claim'));
           }
         }
       }
+
       if (file) {
         forceFileDownload(file.response);
       }
+
       loading.value = false;
       await reloadCase();
     }
@@ -1332,6 +1355,7 @@ export default defineComponent({
                 [_southWest.lat, _southWest.lng],
               ]);
             }
+
             filterSvi(sviSliderValue.value);
             nextTick(() => {
               // Used to trigger calculation of labels ofr updated slider
@@ -1371,18 +1395,19 @@ export default defineComponent({
     }
 
     function handleWorksiteSave(w: Worksite) {
-      if (!isEditing.value) {
+      if (isEditing.value) {
+        isEditing.value = true;
+        router.push(
+          `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
+        );
+      } else {
         worksiteId.value = w.id;
         mostRecentlySavedWorksite.value = w;
         nextTick(() => {
           clearCase();
         });
-      } else {
-        isEditing.value = true;
-        router.push(
-          `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
-        );
       }
+
       reloadMap();
     }
 
@@ -1399,6 +1424,7 @@ export default defineComponent({
       if (route.params.incident_id) {
         store.commit('incident/setCurrentIncidentId', route.params.incident_id);
       }
+
       if (route.params.id) {
         worksiteId.value = route.params.id;
         if (route?.meta?.id === 'work_case_edit') {
@@ -1407,11 +1433,13 @@ export default defineComponent({
           isViewing.value = true;
         }
       }
+
       loadStatesForUser();
       if (route.query.showTable) {
         showingTable.value = true;
         showingMap.value = false;
       }
+
       await init();
     });
     function focusNewsTab() {
@@ -1425,6 +1453,7 @@ export default defineComponent({
       if (organization) {
         return organization.name;
       }
+
       return '';
     }
 

@@ -9,7 +9,7 @@ export default defineComponent({
   name: 'Step',
   props: {
     name: { required: true, type: String },
-    onSave: { required: false, type: Function, default: () => {} },
+    onSave: { required: false, type: Function, default() {} },
     selected: { type: Boolean },
     disabled: { type: Boolean, default: false },
   },

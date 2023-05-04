@@ -4,7 +4,6 @@ about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
-
 ---
 
 ## Description
@@ -18,4 +17,3 @@ assignees: ''
 ## Steps to Reproduce
 
 ## Tasks
-

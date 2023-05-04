@@ -128,6 +128,7 @@ export default defineComponent({
           await $toasted.error('resetPassword.mismatch_passwords_try_again');
           return;
         }
+
         await PasswordResetRequest.api().reset(
           route.params.token,
           newPassword.value,

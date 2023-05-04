@@ -32,32 +32,32 @@
             <div
               v-if="worksite && worksite.isFavorite"
               class="svg-container cursor-pointer"
-              v-html="favoriteSvgActive"
               :title="$t('actions.not_member_of_my_org')"
               @click="() => toggleFavorite(false)"
+              v-html="favoriteSvgActive"
             ></div>
             <div
               v-else
               class="svg-container cursor-pointer"
-              v-html="favoriteSvgInactive"
               :title="$t('actions.member_of_my_org')"
               @click="() => toggleFavorite(true)"
+              v-html="favoriteSvgInactive"
             ></div>
           </base-button>
           <base-button class="mr-1">
             <div
               v-if="worksite && worksite.isHighPriority"
               class="svg-container cursor-pointer"
-              v-html="highPrioritySvgActive"
               :title="$t('actions.unmark_high_priority')"
               @click="() => toggleHighPriority(false)"
+              v-html="highPrioritySvgActive"
             ></div>
             <div
               v-else
               class="svg-container cursor-pointer"
-              v-html="highPrioritySvgInactive"
               :title="$t('actions.mark_high_priority')"
               @click="() => toggleHighPriority(true)"
+              v-html="highPrioritySvgInactive"
             ></div>
           </base-button>
         </div>
@@ -97,8 +97,8 @@
           size="small"
           class="p-1 py-2"
           type="download"
-          @click="$emit('onDownloadWorksite')"
           data-cy="cases.icons.download"
+          @click="$emit('onDownloadWorksite')"
         />
         <ccu-icon
           :alt="$t('actions.share')"
@@ -113,8 +113,8 @@
           size="small"
           class="p-1 py-2"
           type="print"
-          @click="$emit('onPrintWorksite')"
           data-cy="cases.icons.print"
+          @click="$emit('onPrintWorksite')"
         />
         <ccu-icon
           v-if="isViewingWorksite && canEdit"
@@ -131,13 +131,27 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
 import { templates } from '../../icons/icons_templates';
 import Worksite from '../../models/Worksite';
-import { useStore } from 'vuex';
 import { momentFromNow } from '../../filters';
 
 export default defineComponent({
   name: 'CaseHeader',
+  props: {
+    worksite: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    canEdit: {
+      type: Boolean,
+      default: false,
+    },
+    isViewingWorksite: { type: Boolean, default: null, required: false },
+    showCaseTabs: { type: Boolean, default: false, required: false },
+  },
   setup(props, { emit }) {
     const store = useStore();
     const currentIncidentId = computed(
@@ -182,9 +196,11 @@ export default defineComponent({
           props.worksite.favorite.id,
         );
       }
+
       await Worksite.api().fetch(props.worksite.id);
       emit('reloadMap');
     }
+
     async function toggleHighPriority(isHighPriority) {
       if (isHighPriority) {
         await Worksite.api().addFlag(props.worksite.id, {
@@ -203,6 +219,7 @@ export default defineComponent({
           ),
         );
       }
+
       await Worksite.api().fetch(props.worksite.id);
       emit('reloadMap');
     }
@@ -217,20 +234,6 @@ export default defineComponent({
       toggleHighPriority,
       momentFromNow,
     };
-  },
-  props: {
-    worksite: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
-    canEdit: {
-      type: Boolean,
-      default: false,
-    },
-    isViewingWorksite: { type: Boolean, default: null, required: false },
-    showCaseTabs: { type: Boolean, default: false, required: false },
   },
 });
 </script>

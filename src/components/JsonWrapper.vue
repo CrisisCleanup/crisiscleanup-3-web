@@ -6,7 +6,7 @@
 
 <script lang="ts">
 export default defineComponent({
-  name: "JsonWrapper",
+  name: 'JsonWrapper',
   props: {
     jsonData: {
       type: Object,

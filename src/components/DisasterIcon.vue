@@ -42,7 +42,7 @@ export default defineComponent({
     },
     currentIncident: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -64,6 +64,7 @@ export default defineComponent({
       if (props.currentIncident && props.currentIncident.incidentImage) {
         return props.currentIncident.incidentImage;
       }
+
       return Incident.getIncidentImage(props.currentIncident.incident_type);
     });
 
@@ -102,6 +103,7 @@ export default defineComponent({
         height_.value = props.height === null ? props.width : props.height;
         setSize();
       }
+
       ready.value = true;
     }
 

@@ -13,7 +13,7 @@
       @click="$emit('click')"
       @click.stop
     />
-    <template #popper v-if="actions.length > 0">
+    <template v-if="actions.length > 0" #popper>
       <div class="flex text-primary-dark" style="z-index: 1001">
         <base-button
           v-for="action in actions"
@@ -34,7 +34,7 @@
   </v-popover>
 </template>
 <script lang="ts">
-import { PropType } from 'vue';
+import type { PropType } from 'vue';
 
 export default defineComponent({
   name: 'MapButton',
@@ -68,8 +68,8 @@ export default defineComponent({
       default: false,
     },
     actions: {
-      type: Array as PropType<{id: string, text: string}[]>,
-      default: () => {
+      type: Array as PropType<{ id: string; text: string }[]>,
+      default() {
         return [];
       },
     },

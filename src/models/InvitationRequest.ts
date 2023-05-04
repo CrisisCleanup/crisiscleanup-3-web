@@ -1,5 +1,5 @@
 import moment from 'moment';
-import User from './User';
+import type User from './User';
 import CCUModel from '@/models/base';
 
 export default class InvitationRequest extends CCUModel {
@@ -41,6 +41,7 @@ export default class InvitationRequest extends CCUModel {
     if (this.requested_at) {
       return moment(this.requested_at).format('DD/MM/YYYY');
     }
+
     return '';
   }
 

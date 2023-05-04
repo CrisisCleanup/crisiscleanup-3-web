@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      py-2
-      px-3
-      bg-crisiscleanup-light-grey
-      flex
-      items-center
-      justify-between
-      text-base
-      font-semibold
-    "
+    class="py-2 px-3 bg-crisiscleanup-light-grey flex items-center justify-between text-base font-semibold"
   >
     <div class="flex items-center">
       <badge width="22px" height="22px" class="mr-2 bg-black text-white"

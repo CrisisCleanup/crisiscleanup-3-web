@@ -103,7 +103,7 @@ export default defineComponent({
     },
     tableBodyStyle: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -153,9 +153,11 @@ export default defineComponent({
         backgroundColor: fillColor,
       };
     }
+
     function getWorkTypeImg(worktype: string) {
       return getWorktypeSVG(worktype, 26);
     }
+
     function toStartCase(word: string) {
       return _.startCase(word);
     }

@@ -250,6 +250,7 @@ export default defineComponent({
           return context.emit('update:modelValue', newValue);
         }
       }
+
       context.emit('update:modelValue', value);
       isInvalid.value = !input?.value?.checkValidity();
       return value;

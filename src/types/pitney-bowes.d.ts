@@ -1,10 +1,10 @@
 export namespace pitneybowes {
-  export type Distance = {
+  export interface Distance {
     unit: string;
     value: string;
-  };
+  }
 
-  export type MatchedAddress = {
+  export interface MatchedAddress {
     formattedAddress: string;
     mainAddressLine: string;
     addressLastLine: string;
@@ -20,20 +20,20 @@ export namespace pitneybowes {
     streetName: string;
     unitType: string;
     unitValue: string;
-  };
+  }
 
-  export type Geometry = {
+  export interface Geometry {
     type: string;
     coordinates: number[];
-  };
+  }
 
-  export type GeosearchLocation = {
+  export interface GeosearchLocation {
     address: MatchedAddress;
     distance: Distance;
     geometry: Geometry;
-  };
+  }
 
-  export type GeosearchLocations = {
+  export interface GeosearchLocations {
     location: GeosearchLocation[];
-  };
+  }
 }

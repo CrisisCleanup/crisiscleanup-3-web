@@ -10,13 +10,13 @@ export default function useSiteStatistics(
   queryFilter: Record<string, any>,
   organizations: Ref<Organization[]>,
 ) {
-  const statsInterval = ref<ReturnType<typeof setInterval> | null>(null);
+  const statsInterval = ref<ReturnType<typeof setInterval> | undefined>(null);
   const currentSiteStats = ref<SiteStatistic[]>([]);
   const currentEngagement = ref(0);
   const circularBarplotData = ref([]);
   const barChartData = ref([]);
-  const totalCasesChartData = ref<Record<string, any>[]>([]);
-  const mapStatistics = ref<Record<string, any>[]>([]);
+  const totalCasesChartData = ref<Array<Record<string, any>>>([]);
+  const mapStatistics = ref<Array<Record<string, any>>>([]);
 
   function formatStatValue(value: string | number) {
     return Number(value).toFixed(0);
@@ -37,6 +37,7 @@ export default function useSiteStatistics(
     if (incident) {
       params.incident = incident;
     }
+
     const queryString = getQueryString(params);
 
     const response = await axios.get(
@@ -49,10 +50,12 @@ export default function useSiteStatistics(
         (response.data[0].three_day_velocity || 0) * 100;
     }
   }
+
   async function fetchSiteStatistics() {
     if (statsInterval.value) {
       clearInterval(statsInterval.value);
     }
+
     statsInterval.value = null;
 
     const { incident } = queryFilter.value;
@@ -60,6 +63,7 @@ export default function useSiteStatistics(
     if (incident) {
       params.incident = incident;
     }
+
     const queryString = getQueryString(params);
 
     const response = await axios.get(
@@ -87,6 +91,7 @@ export default function useSiteStatistics(
     if (incident) {
       params.incident = incident;
     }
+
     const queryString = getQueryString(params);
     const response = await axios.get(
       `${
@@ -106,6 +111,7 @@ export default function useSiteStatistics(
     if (incident) {
       params.incident = incident;
     }
+
     const queryString = getQueryString(params);
 
     const response = await axios.get(
@@ -203,6 +209,7 @@ export default function useSiteStatistics(
     if (incident) {
       params.incident = incident;
     }
+
     const queryString = getQueryString(params);
 
     const response = await axios.get(

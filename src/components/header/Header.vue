@@ -128,6 +128,7 @@ export default defineComponent({
         },
       });
     }
+
     async function showCurrentIncidentStates() {
       const states = currentUser?.value?.getStatesForIncident(
         props.currentIncident?.id,
@@ -142,12 +143,13 @@ export default defineComponent({
         },
       });
     }
+
     const showRedeployModal = ref(false);
     return {
       can: $can,
       showRedeployModal,
       showCurrentUser,
-      $t: (text: string) => {
+      $t(text: string) {
         return text ? t(text) : null;
       },
       showCurrentIncidentStates,

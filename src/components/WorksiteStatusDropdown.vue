@@ -7,11 +7,11 @@
     >
       <div
         v-if="useIcon"
-        class="case-svg-container mr-1 flex"
         ref="svgContainer"
+        class="case-svg-container mr-1 flex"
         v-html="workTypeImage"
       ></div>
-      <div class="tooltip-target" v-if="!hideName">
+      <div v-if="!hideName" class="tooltip-target">
         {{ getStatusName(currentWorkType.status) }}
       </div>
       <font-awesome-icon
@@ -60,7 +60,7 @@ export default defineComponent({
   props: {
     currentWorkType: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -105,6 +105,7 @@ export default defineComponent({
           ) {
             return false;
           }
+
           return true;
         })
         .map((status, index) => {
@@ -118,6 +119,7 @@ export default defineComponent({
       if (props.iconSize) {
         return getWorktypeSVG(props.currentWorkType, props.iconSize);
       }
+
       return getWorkTypeImage(props.currentWorkType);
     });
     const dropdownStyle = computed(() => {
@@ -143,6 +145,7 @@ export default defineComponent({
         currentItem.value += 1;
       }
     }
+
     function setSVGStyles() {
       if (!svgContainer.value) return;
       if (props.iconSize) {

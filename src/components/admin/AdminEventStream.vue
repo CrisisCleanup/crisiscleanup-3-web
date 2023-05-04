@@ -117,12 +117,14 @@ const AdminEventStream = defineComponent({
 
       return t(tag, translated_attrs);
     }
+
     const getEvents = async () => {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/events?limit=500`,
       );
       events.value = [...response.data.results];
     };
+
     const getEventLogs = async () => {
       eventStream.value = [];
       const query: Record<any, any> = {
@@ -132,6 +134,7 @@ const AdminEventStream = defineComponent({
       if (props.user) {
         query.created_by = props.user;
       }
+
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/all_events?${getQueryString(
           query,
@@ -139,6 +142,7 @@ const AdminEventStream = defineComponent({
       );
       eventStream.value = [...response.data.results];
     };
+
     const showUserEvents = async (userId: string, name: string) => {
       await component({
         title: `Events for User ${userId}: ${name}`,
@@ -151,6 +155,7 @@ const AdminEventStream = defineComponent({
         } as any,
       });
     };
+
     const showEventAttrs = async (stream: Record<string, any>) => {
       await component({
         title: `Event Attributes for Log: ${stream.id} | Key: ${stream.event_key}`,
@@ -161,6 +166,7 @@ const AdminEventStream = defineComponent({
         } as any,
       });
     };
+
     const showAll = async (stream: Record<string, any>) => {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/event_stream/${stream.id}`,

@@ -1,5 +1,5 @@
 <template>
-  <tabs class="" ref="tabs" tab-details-classes="h-full overflow-auto">
+  <tabs ref="tabs" class="" tab-details-classes="h-full overflow-auto">
     <tab :name="$t('phoneDashboard.news')">
       <ul>
         <li
@@ -39,16 +39,26 @@
 </template>
 
 <script lang="ts">
-import { formatCmsItem } from '../../utils/helpers';
 import { onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
+import axios from 'axios';
+import moment from 'moment';
+import { formatCmsItem } from '../../utils/helpers';
 import useDialogs from '../../hooks/useDialogs';
 import CmsViewer from '../cms/CmsViewer.vue';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import axios from 'axios';
-import moment from 'moment';
 
 export default defineComponent({
   name: 'PhoneNews',
+  props: {
+    cmsTag: {
+      type: String,
+      default: 'phone-news',
+    },
+    stateKey: {
+      type: String,
+      default: 'news_last_seen',
+    },
+  },
   setup(props, { emit }) {
     const { component } = useDialogs();
     const { currentUser } = useCurrentUser();
@@ -69,6 +79,7 @@ export default defineComponent({
         unreadCount.value = response.data.count;
         emit('unreadCount', response.data.count);
       }
+
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
           props.cmsTag
@@ -76,6 +87,7 @@ export default defineComponent({
       );
       news.value = response.data.results;
     }
+
     async function showDetails(newItem) {
       await component({
         title: formatCmsItem(newItem.title),
@@ -91,7 +103,7 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      newsInterval.value = setInterval(getNews, 10000);
+      newsInterval.value = setInterval(getNews, 10_000);
     });
 
     onBeforeUnmount(() => {
@@ -112,16 +124,6 @@ export default defineComponent({
       formatCmsItem,
       showDetails,
     };
-  },
-  props: {
-    cmsTag: {
-      type: String,
-      default: 'phone-news',
-    },
-    stateKey: {
-      type: String,
-      default: 'news_last_seen',
-    },
   },
 });
 </script>

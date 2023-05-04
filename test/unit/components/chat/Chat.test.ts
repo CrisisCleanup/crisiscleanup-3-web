@@ -9,12 +9,15 @@ class MockWebSocket {
   addEventListener() {
     return undefined;
   }
+
   removeEventListener() {
     return undefined;
   }
+
   send() {
     expect(true);
   }
+
   close() {
     return undefined;
   }
@@ -55,7 +58,7 @@ describe('Chat.vue', () => {
       components: {
         BaseInput,
         BaseButton,
-      }
+      },
     });
 
     await flushPromises();

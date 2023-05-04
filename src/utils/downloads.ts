@@ -24,7 +24,7 @@ export function forceFileDownload(response: AxiosResponse) {
 
 function convertToCSV(objectArray: any[] | string) {
   const array =
-    typeof objectArray !== 'object' ? JSON.parse(objectArray) : objectArray;
+    typeof objectArray === 'object' ? objectArray : JSON.parse(objectArray);
   let string_ = '';
 
   for (const element of array) {

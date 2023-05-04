@@ -111,11 +111,13 @@ export default defineComponent({
 
           break;
         }
+
         case 'Polygon': {
           location.poly = geometry;
 
           break;
         }
+
         case 'MultiPolygon': {
           location.geom = geometry;
 
@@ -145,7 +147,7 @@ export default defineComponent({
         classes: 'w-full h-144 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {
-          changed: (payload: L.GeoJSON) => {
+          changed(payload: L.GeoJSON) {
             polygon = payload;
           },
         },

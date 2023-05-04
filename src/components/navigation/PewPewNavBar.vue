@@ -138,15 +138,18 @@ export default defineComponent({
             iconProps.type = icon;
           }
         }
+
         const routeName = `${_routeRootKey}.${key}`;
         let _title = t(routeName);
         if (!_.isNil(title)) {
           _title = t(title);
         }
+
         let routeProps = route.to;
         if (!external && _.isNil(route)) {
           routeProps = { name: routeName };
         }
+
         return {
           ...value,
           iconProps,

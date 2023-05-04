@@ -3,8 +3,8 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createI18n } from 'vue-i18n';
-import ChatMessage from '@/components/chat/ChatMessage.vue';
 import { createStore } from 'vuex';
+import ChatMessage from '@/components/chat/ChatMessage.vue';
 
 describe('ChatMessage.vue', () => {
   let wrapper: VueWrapper<any>;

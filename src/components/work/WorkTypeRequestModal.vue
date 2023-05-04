@@ -106,8 +106,8 @@
 </template>
 
 <script lang="ts">
-import Organization from '../../models/Organization';
 import { onMounted, ref } from 'vue';
+import Organization from '../../models/Organization';
 import { getWorkTypeName } from '../../filters/index';
 
 export default defineComponent({
@@ -115,19 +115,19 @@ export default defineComponent({
   props: {
     workTypes: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
     initialSelection: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
     myOrganization: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },

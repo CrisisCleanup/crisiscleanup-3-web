@@ -39,6 +39,7 @@ export default defineComponent({
     function getColor() {
       return colorsDicts[props.flagReason];
     }
+
     function onRemove() {
       emit('onRemove');
     }

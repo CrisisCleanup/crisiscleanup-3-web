@@ -23,13 +23,13 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import DragDrop from '../../components/DragDrop.vue';
-import Worksite from '../../models/Worksite';
-import { getErrorMessage } from '../../utils/errors';
-import ImageModal from '../../components/ImageModal.vue';
-import { uploadFile } from '../../utils/file';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
+import DragDrop from '../DragDrop.vue';
+import Worksite from '../../models/Worksite';
+import { getErrorMessage } from '../../utils/errors';
+import ImageModal from '../ImageModal.vue';
+import { uploadFile } from '../../utils/file';
 
 export default defineComponent({
   name: 'WorksiteImageSection',
@@ -61,9 +61,11 @@ export default defineComponent({
     function changeImage(image) {
       emit('changeImage', image);
     }
+
     function imageClick(image) {
       emit('image-click', image);
     }
+
     async function saveToWorkSite(file, id, token) {
       if (props.isPrintToken) {
         await Worksite.api().addFileWithToken(token, file);
@@ -74,11 +76,13 @@ export default defineComponent({
         await Worksite.api().fetch(id);
       }
     }
+
     async function handleFileUpload(fileList) {
       if (fileList.length === 0) {
         uploading.value = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[0]);
       uploading.value = true;
@@ -91,6 +95,7 @@ export default defineComponent({
         } else {
           imageList.value.push(result.data);
         }
+
         emit('photosChanged');
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -98,6 +103,7 @@ export default defineComponent({
         uploading.value = false;
       }
     }
+
     async function deleteFile(fileId, id) {
       if (props.worksite.id) {
         if (props.isSurvivorToken) {
@@ -116,6 +122,7 @@ export default defineComponent({
         imageList.value.splice(i, 1);
         emit('popLocal', imageList.value);
       }
+
       emit('photosChanged');
     }
 

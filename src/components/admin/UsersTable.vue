@@ -5,8 +5,8 @@
     :body-style="{ height: '300px' }"
     :pagination="meta.pagination"
     :loading="loading"
-    @change="$emit('change', $event)"
     enable-pagination
+    @change="$emit('change', $event)"
   >
     <template #actions="slotProps">
       <base-button
@@ -58,7 +58,7 @@ import Role from '../../models/Role';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useDialogs from '../../hooks/useDialogs';
 import AdminEventStream from './AdminEventStream.vue';
-import User from '@/models/User';
+import type User from '@/models/User';
 
 export default defineComponent({
   name: 'UsersTable',
@@ -70,7 +70,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -90,8 +90,10 @@ export default defineComponent({
       if (query.length > 0) {
         return query[0].name_t;
       }
+
       return '';
     }
+
     async function loginAs(userId: string) {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
@@ -102,6 +104,7 @@ export default defineComponent({
       store.commit('auth/setUser', response.data);
       window.location.replace('/');
     }
+
     async function showUserEvents(user: User) {
       await component({
         title: `Events for User ${user.id}: ${user.first_name} ${user.last_name} ${user.email}`,

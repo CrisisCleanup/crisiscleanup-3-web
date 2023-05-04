@@ -4,7 +4,7 @@
 
 import _ from 'lodash';
 
-type ColumnT = {
+interface ColumnT {
   titleClass: string;
   class: string;
   style: { border: number };
@@ -14,7 +14,7 @@ type ColumnT = {
   title: string;
   width?: string;
   transformer?: (field: string, item: any) => string;
-};
+}
 
 /**
  * Create a singular column item while providing

@@ -459,6 +459,7 @@ export default defineComponent({
     const updateImage = (formData) => {
       updatedFiles.value.push(formData.id);
     };
+
     const contactFrequencyOptions = AUTO_CONTACT_FREQUENCY_OPTIONS.map(
       (key) => {
         return {
@@ -517,6 +518,7 @@ export default defineComponent({
         buildForm(null, groupBy('field_parent_key')(formFields), returnArray);
         return returnArray;
       }
+
       return [];
     });
 
@@ -529,6 +531,7 @@ export default defineComponent({
         const formFields = currentIncident.value.form_fields;
         return sortBy(nest(formFields), (o) => o.list_order);
       }
+
       return {};
     });
 
@@ -545,6 +548,7 @@ export default defineComponent({
           county || ''
         } <br> ${postalCode}`;
       }
+
       return '';
     });
 
@@ -607,8 +611,10 @@ export default defineComponent({
         for (const key of geocodeKeys) {
           updateWorksite(geocode.address_components[key], key);
         }
+
         return geocode;
       }
+
       updateWorksite(
         {
           type: 'Point',
@@ -630,6 +636,7 @@ export default defineComponent({
           emit('clearWorksite');
           return;
         }
+
         worksite.value = Worksite.find(props.worksiteId);
         addressSet.value = true;
       } else {
@@ -649,6 +656,7 @@ export default defineComponent({
             ...props.dataPrefill,
           };
         }
+
         worksite.value.incident = props.incidentId;
 
         if (props.pdaId) {
@@ -659,6 +667,7 @@ export default defineComponent({
           delete worksite.value.id;
         }
       }
+
       dynamicFields.value = worksite.value.form_data.reduce(function (
         map,
         object,
@@ -754,6 +763,7 @@ export default defineComponent({
       if (currentIncident.value.locationModels.length === 0) {
         return true;
       }
+
       let isWithinBounds = false;
 
       for (const l of currentIncident.value.locationModels) {
@@ -778,6 +788,7 @@ export default defineComponent({
           isWithinBounds = true;
         }
       }
+
       return isWithinBounds;
     }
 
@@ -891,8 +902,10 @@ export default defineComponent({
             ) {
               shouldSelectOnMap.value = true;
             }
+
             errors.push(errorMessage);
           }
+
           return errors;
         },
         [],
@@ -905,15 +918,18 @@ export default defineComponent({
         if (!isAddressValid.value) {
           $toasted.error(t('caseForm.no_lat_lon_error'));
         }
+
         for (const e of validationErrors) $toasted.error(e);
         return;
       }
+
       if (props.beforeSave) {
         const beforeSaveCheck = await props.beforeSave();
         if (!beforeSaveCheck) {
           return;
         }
       }
+
       if (location.value) {
         updateWorksite(
           {
@@ -932,6 +948,7 @@ export default defineComponent({
         );
         updateWorksite(what3words, 'what3words');
       }
+
       const fieldData = dynamicFields.value;
       const truthyValues = Object.keys(fieldData).filter((key) => {
         return Boolean(fieldData[key]) && fieldsArray.value.includes(key);
@@ -966,6 +983,7 @@ export default defineComponent({
           notesToSave.push(currentNote.value);
           currentNote.value = '';
         }
+
         if (worksite.value.id) {
           const data = { ...worksite.value };
           delete data.flags;
@@ -987,6 +1005,7 @@ export default defineComponent({
               requested_action: '',
             });
           }
+
           if (isFavorite.value) {
             await Worksite.api().favorite(worksite.value.id);
           }
@@ -1005,6 +1024,7 @@ export default defineComponent({
           for (const file of updatedFiles.value) {
             worksiteImageSection.value.saveToWorkSite(file, worksiteId);
           }
+
           if (isHighPriority.value) {
             await Worksite.api().addFlag(worksiteId, {
               reason_t: 'flag.worksite_high_priority',
@@ -1013,9 +1033,11 @@ export default defineComponent({
               requested_action: '',
             });
           }
+
           if (isFavorite.value) {
             await Worksite.api().favorite(worksiteId);
           }
+
           if (isWrongLocation.value) {
             await Worksite.api().addFlag(worksiteId, {
               reason_t: 'flag.worksite_wrong_location',
@@ -1024,8 +1046,10 @@ export default defineComponent({
               requested_action: '',
             });
           }
+
           worksite.value = Worksite.find(worksiteId);
         }
+
         await $toasted.success(t('caseForm.new_case_success'));
         dirtyFields.value = new Set();
         if (reload) {
@@ -1052,6 +1076,7 @@ export default defineComponent({
           updateWorksite('', 'address');
           return;
         }
+
         if (incidentResult === 'switchIncident') {
           updateWorksite(potentialIncidents.value[0].id, 'incident');
           await updateWorksiteFields(geocode);
@@ -1065,6 +1090,7 @@ export default defineComponent({
           return;
         }
       }
+
       await updateWorksiteFields(geocode);
     }
 
@@ -1120,12 +1146,14 @@ export default defineComponent({
       if (!isValid) {
         return;
       }
+
       try {
         await Worksite.api().claimWorksite(worksite.value.id, []);
         await $toasted.success(t('caseForm.claim_success'));
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
       }
+
       await Worksite.api().fetch(worksite.value.id);
       worksite.value = Worksite.find(worksite.value.id);
       emit('reloadTable');
@@ -1154,6 +1182,7 @@ export default defineComponent({
       if (key) {
         return key.field_value;
       }
+
       return '';
     }
 
@@ -1174,6 +1203,7 @@ export default defineComponent({
           return field.value === key.field_value;
         });
       }
+
       return '';
     }
 
@@ -1197,6 +1227,7 @@ export default defineComponent({
       if (key) {
         return key.field_value;
       }
+
       return false;
     }
 
@@ -1210,6 +1241,7 @@ export default defineComponent({
         if (!('geolocation' in navigator)) {
           reject(new Error('Geolocation is not available.'));
         }
+
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             resolve(pos);
@@ -1230,6 +1262,7 @@ export default defineComponent({
           worksite.value.location.coordinates[0],
         );
       }
+
       if (shouldSelectOnMap.value) {
         emit('geocoded', location);
       }

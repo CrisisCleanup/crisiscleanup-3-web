@@ -34,7 +34,7 @@ import type {
 import useLogEvent from '@/hooks/useLogEvent';
 
 type ButtonSize = 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
-type IconSize = typeof ICON_SIZES[number];
+type IconSize = (typeof ICON_SIZES)[number];
 
 export default defineComponent({
   name: 'BaseButton',
@@ -77,7 +77,7 @@ export default defineComponent({
       default: '',
     },
     ccuIcon: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
       default: '',
     },
     iconSize: {
@@ -85,7 +85,7 @@ export default defineComponent({
       default: '',
     },
     suffixIcon: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
       default: '',
     },
     selector: {
@@ -93,7 +93,7 @@ export default defineComponent({
       default: '',
     },
     variant: {
-      type: String as PropType<typeof VARIANTS[keyof typeof VARIANTS]>,
+      type: String as PropType<(typeof VARIANTS)[keyof typeof VARIANTS]>,
       default: '',
     },
     type: {
@@ -140,6 +140,7 @@ export default defineComponent({
       if (props.variant) {
         styleObject[props.variant] = true;
       }
+
       styleObject[props.variant] = true;
       return styleObject;
     });

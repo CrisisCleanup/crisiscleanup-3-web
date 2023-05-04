@@ -104,7 +104,7 @@ export default defineComponent({
       groupBy(reports.value, 'isSponsored'),
     );
     const reportsKeys = computed(() =>
-      [...Object.keys(reportsGrouped.value)].reverse(),
+      Object.keys(reportsGrouped.value).reverse(),
     );
 
     function requestReport(
@@ -115,9 +115,11 @@ export default defineComponent({
       if (sponsored === true) {
         return router.push(`/report/${report?.id}`);
       }
+
       if (!downloadType) {
         showRequestAccessModal.value = true;
       }
+
       EventLog.api().create(
         'request_report',
         currentIncidentId.value,

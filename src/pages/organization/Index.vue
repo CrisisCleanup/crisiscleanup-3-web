@@ -80,6 +80,7 @@ export default defineComponent({
         if (r.isActive) {
           r.class['router-link-active'] = true;
         }
+
         return r;
       });
     });

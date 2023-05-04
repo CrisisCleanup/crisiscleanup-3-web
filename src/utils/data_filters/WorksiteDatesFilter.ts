@@ -3,12 +3,12 @@ import { omitBy, isNull } from 'lodash';
 import { useI18n } from 'vue-i18n';
 import Filter from './Filter';
 
-type WorksiteDatesFilterPacked = {
+interface WorksiteDatesFilterPacked {
   created_at__gt?: string;
   created_at__lt?: string;
   updated_at__gt?: string;
   updated_at__lt?: string;
-};
+}
 export default class WorksiteDatesFilter extends Filter {
   packFunction() {
     const packed: WorksiteDatesFilterPacked = {};

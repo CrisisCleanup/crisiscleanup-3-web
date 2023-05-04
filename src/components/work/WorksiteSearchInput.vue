@@ -166,9 +166,11 @@ export default defineComponent({
         const sites = await searchWorksites(value, currentIncidentId.value);
         worksites = sites.data.results;
       }
+
       if (props.useGeocoder) {
         geocode = await geocoderSearch(value);
       }
+
       results.value = [
         {
           label: 'Search',

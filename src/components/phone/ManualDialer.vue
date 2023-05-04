@@ -15,10 +15,10 @@
         :placeholder="$t('phoneDashboard.code')"
       />
       <input
+        v-model="phoneNumber"
         type="text"
         class="h-10 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
         size="large"
-        v-model="phoneNumber"
         :placeholder="$t('phoneDashboard.phone_number')"
       />
     </div>

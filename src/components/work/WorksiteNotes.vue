@@ -8,7 +8,7 @@
       >
 
       <base-button
-        v-if="worksite.notes && worksite.notes.length"
+        v-if="worksite.notes && worksite.notes.length > 0"
         icon="caret-down"
         type="link"
         :text="
@@ -117,7 +117,7 @@ export default defineComponent({
   props: {
     worksite: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -137,6 +137,7 @@ export default defineComponent({
       if (!props.worksite.notes) {
         return [];
       }
+
       return [...props.worksite.notes].sort((a, b) => {
         return moment(b.created_at).unix() - moment(a.created_at).unix();
       });
@@ -148,6 +149,7 @@ export default defineComponent({
       addingNotes.value = false;
       currentNote.value = '';
     }
+
     function cancelNote() {
       addingNotes.value = false;
       emit('input', '');

@@ -29,20 +29,21 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable global-require */
-import { kebabCase } from "lodash";
-import { computed, defineComponent, PropType, ref } from "vue";
-import { ICON_MAP, ICON_SIZES, ICONS } from "../constants";
+import { kebabCase } from 'lodash';
+import type { PropType } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
+import type { ICON_SIZES, ICONS } from '../constants';
+import { ICON_MAP } from '../constants';
 
-type IconSize = typeof ICON_SIZES[number];
+type IconSize = (typeof ICON_SIZES)[number];
 
 export default defineComponent({
-  name: "BaseIcon",
+  name: 'BaseIcon',
 
   props: {
     type: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
-      default: "",
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
+      default: '',
     },
     fa: {
       type: Boolean,
@@ -50,19 +51,19 @@ export default defineComponent({
     },
     alt: {
       type: String,
-      default: "button",
+      default: 'button',
     },
     title: {
       type: String,
-      default: "",
+      default: '',
     },
     size: {
       type: String as PropType<IconSize>,
-      default: "",
+      default: '',
     },
     selector: {
       type: String,
-      default: "",
+      default: '',
     },
     withText: {
       type: Boolean,
@@ -78,40 +79,40 @@ export default defineComponent({
     },
     iconClasses: {
       type: String,
-      default: "",
+      default: '',
     },
     action: {
       type: Function as PropType<() => any>,
-      default: () => {},
+      default() {},
     },
     width: {
       type: String,
-      default: "",
+      default: '',
     },
     height: {
       type: String,
-      default: "",
+      default: '',
     },
   },
 
   setup(props) {
     const iconSelector = computed(
-      () => props.selector || `js-${kebabCase(props.alt)}`
+      () => props.selector || `js-${kebabCase(props.alt)}`,
     );
 
     const iconMap = ref(ICON_MAP);
 
     const styles = computed(() => {
       return {
-        "ccu-icon": true,
-        "cursor-pointer": true,
-        large: ["lg", "large"].includes(props.size),
-        medium: ["md", "medium"].includes(props.size),
-        small: ["sm", "small"].includes(props.size),
-        tiny: props.size === "tiny",
-        xs: props.size === "xs",
-        xxs: props.size === "xxs",
-        xl: props.size === "xl",
+        'ccu-icon': true,
+        'cursor-pointer': true,
+        large: ['lg', 'large'].includes(props.size),
+        medium: ['md', 'medium'].includes(props.size),
+        small: ['sm', 'small'].includes(props.size),
+        tiny: props.size === 'tiny',
+        xs: props.size === 'xs',
+        xxs: props.size === 'xxs',
+        xl: props.size === 'xl',
         text: props.withText === true,
         inverted: props.invertColor === true,
       };
@@ -121,11 +122,11 @@ export default defineComponent({
       const style = {};
 
       if (props.width) {
-        style["--width"] = `${props.width}px`;
+        style['--width'] = `${props.width}px`;
       }
 
       if (props.height) {
-        style["--height"] = `${props.height}px`;
+        style['--height'] = `${props.height}px`;
       }
 
       return style;

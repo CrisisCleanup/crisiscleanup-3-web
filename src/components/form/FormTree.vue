@@ -30,7 +30,7 @@
           <WorksiteStatusDropdown
             v-if="worksite.id && currentWorkType"
             class="block"
-            :phase="incident ? incident.phase: null"
+            :phase="incident ? incident.phase : null"
             :current-work-type="currentWorkType"
             @input="
               (value: string) => {
@@ -204,11 +204,11 @@
       </template>
     </div>
     <form-tree
-      v-show="showChildren"
       v-for="item in field.children"
+      v-show="showChildren"
+      :key="item.field_key"
       :children="item.children"
       :field="item"
-      :key="item.field_key"
       :worksite="worksite"
       :dynamic-fields="dynamicFields"
       @updateField="
@@ -225,17 +225,25 @@
   </div>
 </template>
 <script lang="ts">
-import SectionHeading from '../../components/work/SectionHeading.vue';
-import RecurringSchedule from '../../components/RecurringSchedule.vue';
-import Incident from '../../models/Incident';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown.vue';
-import { computed, onMounted, PropType, ref } from 'vue';
+import type { PropType } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import SectionHeading from '../work/SectionHeading.vue';
+import RecurringSchedule from '../RecurringSchedule.vue';
+import Incident from '../../models/Incident';
+import WorksiteStatusDropdown from '../WorksiteStatusDropdown.vue';
 import BaseSelect from '../BaseSelect.vue';
-import { FormField, WorkType } from '@/models/types';
+import type { FormField, WorkType } from '@/models/types';
 
 export default defineComponent({
+  name: 'FormTree',
+  components: {
+    BaseSelect,
+    WorksiteStatusDropdown,
+    SectionHeading,
+    RecurringSchedule,
+  },
   props: {
     worksite: {
       type: Object,
@@ -254,14 +262,7 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  emits: ["updateField", "updateWorkTypeStatus"],
-  components: {
-    BaseSelect,
-    WorksiteStatusDropdown,
-    SectionHeading,
-    RecurringSchedule,
-  },
-  name: 'FormTree',
+  emits: ['updateField', 'updateWorkTypeStatus'],
   setup(props, { emit }) {
     const showChildren = ref(true);
     const { t } = useI18n();
@@ -275,7 +276,8 @@ export default defineComponent({
     });
     const currentWorkType = computed(() => {
       return props.worksite.work_types.find(
-        (wt: WorkType) => wt.work_type === props.field.if_selected_then_work_type,
+        (wt: WorkType) =>
+          wt.work_type === props.field.if_selected_then_work_type,
       );
     });
     const hasSelectedChildren = computed(() => {
@@ -300,11 +302,14 @@ export default defineComponent({
 
         return key.field_value;
       }
+
       return '';
     }
+
     function getSectionCount(currentField: FormField) {
       return currentField.order_label;
     }
+
     function getSelectValuesList(defaultValues: Record<string, string>) {
       return Object.keys(defaultValues).map((key) => {
         return {
@@ -313,6 +318,7 @@ export default defineComponent({
         };
       });
     }
+
     function updateChildren(field: FormField, value: string) {
       if (!value) {
         field.children.forEach((child: FormField) => {
@@ -331,12 +337,14 @@ export default defineComponent({
         );
       }
 
-      const hasSelectedChildren = props.field.children.some((childField: FormField) => {
-        return (
-          childField.if_selected_then_work_type &&
-          Boolean(props.dynamicFields[childField.field_key])
-        );
-      });
+      const hasSelectedChildren = props.field.children.some(
+        (childField: FormField) => {
+          return (
+            childField.if_selected_then_work_type &&
+            Boolean(props.dynamicFields[childField.field_key])
+          );
+        },
+      );
       if (hasSelectedChildren) {
         showChildren.value = true;
       }

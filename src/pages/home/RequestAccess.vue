@@ -228,6 +228,7 @@ export default defineComponent({
       if (Language.browserLanguage && !state.primaryLanguage) {
         return Language.browserLanguage.id;
       }
+
       return state.primaryLanguage;
     });
 
@@ -246,6 +247,7 @@ export default defineComponent({
           if (!isValid) {
             return;
           }
+
           response = await InvitationRequest.api().post(
             `/invitation_requests`,
             {
@@ -261,10 +263,12 @@ export default defineComponent({
             },
           );
         }
+
         state.requestedToOrg = response.response.data.requested_to_organization;
         if (response.response.data.approved_at) {
           state.wasPreapproved = true;
         }
+
         state.showSuccessModal = true;
       } catch (error) {
         // this.$log.error(error);

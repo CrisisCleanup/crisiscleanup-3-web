@@ -4,7 +4,7 @@ import { store } from '../store';
 import User from '../models/User';
 import Incident from '../models/Incident';
 import { i18n } from '../main';
-import useEmitter from "@/hooks/useEmitter";
+import useEmitter from '@/hooks/useEmitter';
 
 const LANGUAGE_ID_MAPPING: Record<any, any> = {
   2: import.meta.env.VITE_APP_ENGLISH_PHONE_GATEWAY,
@@ -18,12 +18,12 @@ const LANGUAGE_ID_MAPPING: Record<any, any> = {
 // });
 export default class PhoneService {
   store!: any;
-  loggedInAgentId: string | undefined | null;
-  agent_id: string | undefined | null;
+  loggedInAgentId: string | undefined;
+  agent_id: string | undefined;
   callInfo: any;
   queueIds: any;
-  username: string | undefined | null;
-  password: string | undefined | null;
+  username: string | undefined;
+  password: string | undefined;
   cf: typeof AgentLibrary | undefined;
 
   constructor() {
@@ -62,7 +62,7 @@ export default class PhoneService {
     });
   }
 
-  async apiLogoutAgent(agentId: string | undefined | null) {
+  async apiLogoutAgent(agentId: string | undefined) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -71,7 +71,7 @@ export default class PhoneService {
     );
   }
 
-  async apiUpdateStats(agentId: string | undefined | null) {
+  async apiUpdateStats(agentId: string | undefined) {
     await axios.post(
       `${
         import.meta.env.VITE_APP_API_BASE_URL
@@ -257,15 +257,15 @@ export default class PhoneService {
 
   endCallFunction(info: any) {
     // Log.debug(info);
-    if (!info.callDts) {
+    if (info.callDts) {
+      this.store.commit('phone/setIncomingCall', null);
+      this.store.commit('phone/setOutgoingCall', null);
+    } else {
       this.store.commit(
         'phone/setPotentialFailedCall',
         this.store.getters['phone/call'],
       );
       this.store.commit('phone/clearCall');
-    } else {
-      this.store.commit('phone/setIncomingCall', null);
-      this.store.commit('phone/setOutgoingCall', null);
     }
 
     this.changeState('AWAY').then(null);
@@ -409,7 +409,7 @@ export default class PhoneService {
     });
   }
 
-  async dial(destination: string, callerId: string | null = null) {
+  async dial(destination: string, callerId: string | undefined = null) {
     return new Promise((resolve) => {
       this.cf.offhookInit((offhookInitResponse: any) => {
         // Log.debug('Offhook init response', offhookInitResponse);

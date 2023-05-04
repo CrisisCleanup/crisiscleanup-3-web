@@ -184,7 +184,7 @@ export default defineComponent({
         dataIndex: 'requested_at',
         key: 'requested_at',
         sortable: true,
-        transformer: (requested_at: Date) => {
+        transformer(requested_at: Date) {
           return moment(requested_at).format('L');
         },
       },
@@ -222,7 +222,7 @@ export default defineComponent({
         dataIndex: 'expires_at',
         key: 'expires_at',
         width: '1fr',
-        transformer: (expires_at: Date) => {
+        transformer(expires_at: Date) {
           return moment(expires_at).format('L');
         },
         sortable: true,
@@ -250,6 +250,7 @@ export default defineComponent({
         const { key, direction } = invitationRequestsSorter.value;
         return baseQuery.orderBy(key, direction).get();
       }
+
       return baseQuery.orderBy('id', 'desc').get();
     });
     const invitations = computed(() => {
@@ -257,6 +258,7 @@ export default defineComponent({
         const { key, direction } = invitationSorter.value;
         return Invitation.query().orderBy(key, direction).get();
       }
+
       return Invitation.query().orderBy('id', 'desc').get();
     });
 
@@ -265,6 +267,7 @@ export default defineComponent({
         dataKey: 'results',
       });
     }
+
     function exportInvitationsTable() {
       if (invitationsTable.value) {
         invitationsTable.value.exportTableCSV();
@@ -272,6 +275,7 @@ export default defineComponent({
         console.error('Invitations table ref not found');
       }
     }
+
     function exportInvitationRequestsTable() {
       if (invitationRequestsTable.value) {
         invitationRequestsTable.value.exportTableCSV();
@@ -279,32 +283,38 @@ export default defineComponent({
         console.error('Invitation Requests table ref not found');
       }
     }
+
     async function deleteExpiredInvitations() {
       const invitations = Invitation.query()
         .where('status', (status: string) => status === 'Expired')
         .get();
       await deleteInvitations(invitations);
     }
+
     async function loadAllInvitations() {
       await Invitation.api().get(`/invitations`, {
         dataKey: 'results',
       });
     }
+
     async function acceptInvitationRequest(request: Invitation) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await loadAllInvitationRequests();
       await $toasted.success(t('invitationsVue.invitation_request_accepted'));
     }
+
     async function rejectInvitationRequest(request: Invitation) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await loadAllInvitationRequests();
       await $toasted.success(t('invitationsVue.invitation_request_declined'));
     }
+
     async function resendInvitation(invitation: Invitation) {
       await Invitation.api().resendInvitation(invitation);
       await loadAllInvitations();
       await $toasted.success(t('invitationsVue.invitation_resent'));
     }
+
     async function deleteInvitations(invitations: Invitation[]) {
       await Promise.all(
         invitations.map((invitation) =>
@@ -316,6 +326,7 @@ export default defineComponent({
 
       await $toasted.success(t('invitationsVue.invitation_deleted'));
     }
+
     function handleInvitationsTableChange({
       sorter,
     }: {
@@ -323,6 +334,7 @@ export default defineComponent({
     }) {
       invitationSorter.value = { ...sorter };
     }
+
     function handleInvitationRequestsTableChange({
       sorter,
     }: {

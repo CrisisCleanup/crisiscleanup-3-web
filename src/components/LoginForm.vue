@@ -1,5 +1,5 @@
 <template>
-  <form @sumit.prevent="loginUser" class="logingrid grid-container">
+  <form class="logingrid grid-container" @sumit.prevent="loginUser">
     <div class="grid--title mb-3">
       <base-text
         font="display"
@@ -74,8 +74,8 @@ import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
 import { ref, reactive, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import BaseButton from './BaseButton.vue';
 import { useI18n } from 'vue-i18n';
+import BaseButton from './BaseButton.vue';
 
 export default defineComponent({
   name: 'LoginForm',
@@ -116,16 +116,15 @@ export default defineComponent({
           email: email.value,
           password: password.value,
         });
-      } catch (e) {
+      } catch {
         await $toasted.error(lang.invalidCreds);
       }
+
       if (props.redirect) {
         nextTick(async () => {
-          if (route.query.from) {
-            await router.replace(route.query.from);
-          } else {
-            await router.push('/dashboard');
-          }
+          await (route.query.from
+            ? router.replace(route.query.from)
+            : router.push('/dashboard'));
         });
       } else {
         store.commit('auth/setShowLoginModal', false);

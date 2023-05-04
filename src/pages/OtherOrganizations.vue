@@ -30,9 +30,9 @@
       :pagination="organizations.meta.pagination"
       :loading="loading"
       :sorter="otherOrgSorter"
-      @change="handleOtherOrgTableChange"
       class="bg-white border"
       has-row-details
+      @change="handleOtherOrgTableChange"
     >
       <template #rowDetails="slotProps">
         <div class="flex p-3">
@@ -70,8 +70,8 @@
             "
           >
             <base-text
-              variant="h2"
               v-if="slotProps.item.incident_primary_contacts.length > 0"
+              variant="h2"
             >
               {{ $t('otherOrganizations.incident_primary_contacts') }}
             </base-text>
@@ -94,7 +94,7 @@
         </div>
       </template>
       <template #approved_roles="slotProps">
-        <v-popover popperClass="w-80">
+        <v-popover popper-class="w-80">
           <base-text class="details-name" variant="body">
             <span :class="`tooltip-target cursor-pointer text-primary-dark`">{{
               getHighestRole(slotProps.item.approved_roles).name_t
@@ -206,7 +206,7 @@ export default defineComponent({
         dataIndex: 'incident_count',
         key: 'incident_count',
         sortable: true,
-        transformer: (item: number) => {
+        transformer(item: number) {
           return item || 0;
         },
         class: 'justify-center',
@@ -217,7 +217,7 @@ export default defineComponent({
         dataIndex: 'reported_count',
         key: 'reported_count',
         sortable: true,
-        transformer: (item: number) => {
+        transformer(item: number) {
           return item || 0;
         },
         class: 'justify-center',
@@ -228,7 +228,7 @@ export default defineComponent({
         dataIndex: 'claimed_count',
         key: 'claimed_count',
         sortable: true,
-        transformer: (item: number) => {
+        transformer(item: number) {
           return item || 0;
         },
         class: 'justify-center',
@@ -239,7 +239,7 @@ export default defineComponent({
         dataIndex: 'closed_count',
         key: 'closed_count',
         sortable: true,
-        transformer: (item: number) => {
+        transformer(item: number) {
           return item || 0;
         },
         class: 'justify-center',
@@ -261,7 +261,7 @@ export default defineComponent({
         class: 'justify-center',
         headerClass: 'justify-center',
         width: '150px',
-        transformer: (item: Date) => {
+        transformer(item: Date) {
           return moment(item).fromNow();
         },
       },
@@ -290,10 +290,11 @@ export default defineComponent({
         const { key, direction } = otherOrgSorter.value;
         if (direction === 'asc') {
           return a[key] > b[key] ? 1 : -1;
-        } else {
-          return a[key] < b[key] ? 1 : -1;
         }
+
+        return a[key] < b[key] ? 1 : -1;
       }
+
       return a.name > b.name ? 1 : -1; // default sort by name
     }
 
@@ -315,6 +316,7 @@ export default defineComponent({
         await getOrganizations(organizations.meta);
       }
     }
+
     async function getOrganizations(data: Record<string, any> = {}) {
       loading.value = true;
       const pagination = data.pagination || organizations.meta.pagination;
@@ -325,6 +327,7 @@ export default defineComponent({
       if (organizations.search) {
         params.search = organizations.search;
       }
+
       const queryString = getQueryString(params);
 
       const { data: orgData, isFinished } = ccuApi<{
@@ -340,6 +343,7 @@ export default defineComponent({
           console.error('Org data is not defined');
           return;
         }
+
         organizations.data = orgData.value.results.sort(otherOrgSorterFunc);
         const newPagination = {
           ...pagination,
@@ -351,6 +355,7 @@ export default defineComponent({
         loading.value = false;
       });
     }
+
     function getOpenStatuses() {
       enums.state.statuses.filter((status) => status.primary_state === 'open');
       const openStatuses = enums.state.statuses.filter(
@@ -358,12 +363,15 @@ export default defineComponent({
       );
       return openStatuses.map((status) => status.status).join(',');
     }
+
     function getHighestRole(roles: number[]) {
       if (roles.length > 0) {
         return organizationRoles.value.find((role) => roles.includes(role.id));
       }
+
       return {};
     }
+
     function onSearchInput() {
       throttle(getOrganizations, 1000)();
     }

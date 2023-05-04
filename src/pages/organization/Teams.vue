@@ -75,11 +75,11 @@
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
           <router-view
-            v-show="teams && teams.length"
+            v-show="teams && teams.length > 0"
+            :key="$route.params.team_id"
             :work-types="claimedWorktypes"
             :users="usersWithoutTeams"
             :teams="teams"
-            :key="$route.params.team_id"
             @reload="getData"
           ></router-view>
         </div>
@@ -87,11 +87,11 @@
     </div>
     <CreateTeamModal
       v-if="creatingTeam"
-      @close="creatingTeam = false"
-      @saved="getData"
       :users="usersWithoutTeams"
       :cases="claimedWorktypes"
       :teams="teams"
+      @close="creatingTeam = false"
+      @saved="getData"
     />
   </div>
 </template>
@@ -116,7 +116,9 @@ export default defineComponent({
     const usersWithoutTeams = ref<User[]>([]);
     const teams = ref<Team[]>([]);
 
-    const currentUser = computed(() => User.find(store.getters['auth/userId']) as User);
+    const currentUser = computed(
+      () => User.find(store.getters['auth/userId']) as User,
+    );
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'] as number,
     );
@@ -132,6 +134,7 @@ export default defineComponent({
           );
           return Boolean(claimed);
         }
+
         return false;
       });
       const worksites = query.get() as Worksite[];
@@ -157,12 +160,14 @@ export default defineComponent({
           }
         }
       }
+
       return workTypes;
     });
 
     const getUser = (id: number) => {
       return User.find(id);
     };
+
     const getTeams = async () => {
       const results = await Team.api().get(
         `/teams?search=${currentSearch.value || ''}&limit=500&incident=${
@@ -174,11 +179,13 @@ export default defineComponent({
       );
       teams.value = (results.entities?.teams || []) as Team[];
     };
+
     const getAssignedWorkTypes = (team: Team) => {
       return claimedWorktypes.value.filter((wt) => {
         return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
       });
     };
+
     const getCaseCompletion = (team: Team) => {
       const workTypes = getAssignedWorkTypes(team);
       if (workTypes && workTypes.length > 0) {
@@ -188,8 +195,10 @@ export default defineComponent({
             100,
         ).toFixed(0);
       }
+
       return 0;
     };
+
     const getClaimedWorksites = async () => {
       const params = {
         incident: currentIncidentId.value,
@@ -218,7 +227,8 @@ export default defineComponent({
         },
       );
       users.value = (results.entities?.users || []) as User[];
-      usersWithoutTeams.value = (usersWithoutTeamsResults.entities?.users || []) as User[];
+      usersWithoutTeams.value = (usersWithoutTeamsResults.entities?.users ||
+        []) as User[];
       await getTeams();
       await getClaimedWorksites();
     };

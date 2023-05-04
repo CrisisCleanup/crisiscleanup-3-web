@@ -52,7 +52,7 @@ describe('BaseSelect', () => {
         itemKey: 'id',
         label: 'name',
         searchable: true,
-        options: async () => {
+        async options() {
           const response = await axios.get(
             `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
           );

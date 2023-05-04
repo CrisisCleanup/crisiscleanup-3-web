@@ -278,6 +278,7 @@ export default defineComponent({
       if (selectedIncidentId.value) {
         return Incident.find(selectedIncidentId.value);
       }
+
       return null;
     });
     const incidents = computed(() => {
@@ -320,15 +321,18 @@ export default defineComponent({
         locationTool.value.reset();
       }
     };
+
     const downloadCurrentLocation = async () => {
       loading.value = true;
       const shapefile = await Location.api().download(route.params.location_id);
       forceFileDownload(shapefile.response);
       loading.value = false;
     };
+
     const setCurrentLocation = (location: Location) => {
       currentPolygon.value = location;
     };
+
     const deleteCurrentLocation = async () => {
       loading.value = true;
       try {
@@ -344,11 +348,13 @@ export default defineComponent({
         loading.value = false;
       }
     };
+
     const onSelectOrganization = async (value: Organization) => {
       selectedOrganization.value = value;
       if (currentLocation.value && !currentLocation.value.name) {
         currentLocation.value.name = `${selectedOrganization.value?.name} ${currentLocation.value.location_type?.name_t}`;
       }
+
       if (isPrimaryResponseArea.value && value.primary_location) {
         const result = await messageBox({
           title: t('locationVue.existing_location'),
@@ -374,12 +380,14 @@ export default defineComponent({
         }
       }
     };
+
     const onSelectIncident = async (value: string) => {
       selectedIncidentId.value = value;
       let incident = Incident.find(value);
       if (currentLocation.value && !currentLocation.value.name) {
         currentLocation.value.name = `${incident?.name} ${currentLocation.value.location_type?.name_t}`;
       }
+
       if (isIncidentRelated.value && incident?.locations.length) {
         await Incident.api().fetchById(value);
         incident = Incident.find(value);
@@ -412,6 +420,7 @@ export default defineComponent({
         }
       }
     };
+
     const onOrganizationSearch = async (value: string) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
@@ -423,11 +432,13 @@ export default defineComponent({
         []) as Array<Organization>;
       return organizationResults.value;
     };
+
     const saveLocation = async (goToNew: boolean) => {
       if (!form.value) {
         console.error('Form ref not found!');
         return;
       }
+
       const isValid = form.value.reportValidity();
       if (!isValid) {
         console.error('Form is not valid!');
@@ -459,11 +470,13 @@ export default defineComponent({
 
             break;
           }
+
           case 'Polygon': {
             currentLocation.value.poly = geometry;
 
             break;
           }
+
           case 'MultiPolygon': {
             currentLocation.value.geom = geometry;
 
@@ -510,6 +523,7 @@ export default defineComponent({
             );
           }
         }
+
         await $toasted.success(t('locationVue.location_saved'));
 
         if (goToNew) {
@@ -525,6 +539,7 @@ export default defineComponent({
         loading.value = false;
       }
     };
+
     const loadRelatedEntities = async () => {
       relatedOrganizations.value = [];
       relatedIncidents.value = [];
@@ -541,6 +556,7 @@ export default defineComponent({
           ] as Organization[];
         }
       }
+
       if (isSecondaryResponseArea.value) {
         const results = await Organization.api().get(
           `/organizations?secondary_location=${route.params.location_id}&fields=id,name`,
@@ -551,6 +567,7 @@ export default defineComponent({
         relatedOrganizations.value = (results.entities?.organizations ||
           []) as Organization[];
       }
+
       if (isIncidentRelated.value) {
         const incidentIds = currentLocation.value?.joins.map(
           (join) => join.object_id,
@@ -559,6 +576,7 @@ export default defineComponent({
         relatedIncidents.value = [...incidents] as Incident[];
       }
     };
+
     const detachLocationFromOrganization = async (
       organization: Organization,
     ) => {
@@ -566,12 +584,15 @@ export default defineComponent({
       if (isPrimaryResponseArea.value) {
         data.primary_location = null;
       }
+
       if (isSecondaryResponseArea.value) {
         data.secondary_location = null;
       }
+
       await Organization.api().patch(`/organizations/${organization.id}`, data);
       await loadLocation();
     };
+
     const detachLocationFromIncident = async (incident: Incident) => {
       await Incident.api().removeLocation(
         incident.id,
@@ -579,6 +600,7 @@ export default defineComponent({
       );
       await loadLocation();
     };
+
     const loadLocation = async () => {
       loading.value = true;
       await LocationType.api().get('/location_types', {
@@ -601,8 +623,10 @@ export default defineComponent({
       } else {
         reset();
       }
+
       loading.value = false;
     };
+
     onMounted(async () => {
       await loadLocation();
     });

@@ -67,16 +67,16 @@
               />
             </div>
             <base-input
-              text-area
               v-model="organization.where_are_you_working"
+              text-area
               class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
               :placeholder="$t('registerOrg.where_working')"
               required
             />
             <base-input
-              text-area
               v-model="organization.referral"
+              text-area
               class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
               :placeholder="$t('registerOrg.referral')"
@@ -273,8 +273,10 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
         return;
       }
+
       await router.push('/');
     }
+
     function updateOrganizationIncident(value) {
       nextTick(() => {
         state.organization.incident = value;

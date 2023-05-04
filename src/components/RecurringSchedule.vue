@@ -20,7 +20,7 @@
             @update:modelValue="logChange"
           />
         </div>
-        <div class="daily" v-if="frequency === $t('recurringSchedule.daily')">
+        <div v-if="frequency === $t('recurringSchedule.daily')" class="daily">
           <base-radio
             class="mr-10 pt-4"
             :name="$t('recurringSchedule.days')"
@@ -36,8 +36,8 @@
             <div class="flex items-center">
               {{ $t('recurringSchedule.every') }}
               <input
-                class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
                 v-model="dayInterval"
+                class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               />
               {{ $t('recurringSchedule.day_s') }}
             </div>
@@ -55,12 +55,12 @@
             "
           />
         </div>
-        <div class="weekly" v-if="frequency === $t('recurringSchedule.weekly')">
+        <div v-if="frequency === $t('recurringSchedule.weekly')" class="weekly">
           <div class="py-2">
             {{ $t('recurringSchedule.recur_every') }}
             <input
-              class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               v-model="weekInterval"
+              class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               @update:modelValue="logChange"
             />
             {{ $t('recurringSchedule.weeks_on') }}
@@ -85,6 +85,7 @@
             :alt="$t('recurringSchedule.calendar')"
           />
           <datepicker
+            v-model="endDate"
             input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
             wrapper-class="flex-grow"
             :formatter="{
@@ -93,7 +94,6 @@
             }"
             :placeholder="$t('recurringSchedule.select_end_date')"
             as-single
-            v-model="endDate"
             @update:modelValue="logChange"
           ></datepicker>
         </div>
@@ -102,8 +102,8 @@
     <base-button
       v-else
       text-variant="h3"
-      @click="showSchedule = true"
       class="text-primary-dark"
+      @click="showSchedule = true"
       >{{ $t('recurringSchedule.add_schedule') }}</base-button
     >
   </div>
@@ -155,6 +155,7 @@ export default defineComponent({
     function customFormatter(date) {
       return moment(date).format('ddd MMMM Do YYYY');
     }
+
     function logChange() {
       if (frequency.value === t('recurringSchedule.weekly')) {
         currentRRule.value = new RRule({
@@ -167,6 +168,7 @@ export default defineComponent({
             .map((day) => daysOfWeek[day]),
         }).toString();
       }
+
       if (frequency.value === t('recurringSchedule.daily')) {
         currentRRule.value = new RRule({
           freq: RRule.DAILY,
@@ -188,9 +190,10 @@ export default defineComponent({
     onMounted(() => {
       currentRRule.value = props.modelValue;
       const inverseDaysOfWeek = {};
-      Object.keys(daysOfWeek).forEach((key) => {
+      for (const key of Object.keys(daysOfWeek)) {
         inverseDaysOfWeek[daysOfWeek[key].toString()] = key;
-      });
+      }
+
       if (currentRRule.value) {
         const rule = RRule.fromString(currentRRule.value);
         if (rule.origOptions.freq === RRule.DAILY) {
@@ -209,13 +212,14 @@ export default defineComponent({
             dailyOption.value = t('recurringSchedule.every_weekday');
           }
         }
+
         if (rule.origOptions.freq === RRule.WEEKLY) {
           frequency.value = t('recurringSchedule.weekly');
           weekInterval.value = rule.origOptions.interval;
           endDate.value = rule.origOptions.until;
-          rule.origOptions.byweekday.forEach((weekday) => {
+          for (const weekday of rule.origOptions.byweekday) {
             selectedDays.value[inverseDaysOfWeek[weekday.toString()]] = true;
-          });
+          }
         }
       }
 

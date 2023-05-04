@@ -138,6 +138,7 @@ export default defineComponent({
           $toasted.error(t('profileUser.save_user_fail'));
           return;
         }
+
         await User.api().patch(`/users/${selectedUser.value.id}`, {
           ...selectedUser.value.$toJson(),
         });
@@ -147,6 +148,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function orphanUser() {
       const result = await messageBox({
         title: t('actions.remove_user'),
@@ -167,6 +169,7 @@ export default defineComponent({
           $toasted.error(t('profileUser.delete_user_fail'));
           return;
         }
+
         await User.api().orphan(selectedUser.value.id);
         await router.push(`/organization/users`);
       }

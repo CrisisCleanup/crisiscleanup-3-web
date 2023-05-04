@@ -20,11 +20,11 @@
                 }"
                 :searchable="false"
                 :clearable="false"
+                v-bind="dropdown"
                 @resize="calcDropdownWidth"
                 @update:modelValue="
                   (payload) => $emit('update:dropdown', payload)
                 "
-                v-bind="dropdown"
               >
                 <template #selected-option="{ option }">
                   <base-text

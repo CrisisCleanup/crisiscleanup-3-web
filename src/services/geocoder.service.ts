@@ -13,7 +13,7 @@ const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
 const GEOCODER = 'google' as GeocoderType;
 
 export default {
-  getGooglePlaceDetails(placeId: string) {
+  async getGooglePlaceDetails(placeId: string) {
     const sessionToken = store.getters['map/autocompleteToken'];
     return new Promise<google.maps.places.PlaceResult>((resolve) => {
       const div = document.createElement('div');
@@ -22,7 +22,7 @@ export default {
         zoom: 15,
       });
       const request = {
-        placeId: placeId,
+        placeId,
         fields: ['address_components', 'geometry'],
         sessionToken,
       };
@@ -31,12 +31,13 @@ export default {
         if (!place || status !== google.maps.places.PlacesServiceStatus.OK) {
           throw new Error('getGooglePlaceDetails: Place not found');
         }
+
         resolve(place);
         div.remove();
       });
     });
   },
-  getOauthToken() {
+  async getOauthToken() {
     const tokenUrl = `${GEOCODER_BASE_URL}/oauth/token`;
     const params: Record<string, any> = {
       grant_type: 'client_credentials',
@@ -57,7 +58,7 @@ export default {
         }`,
       },
     })
-      .then((resp) => resp.json())
+      .then(async (resp) => resp.json())
       .then((data) => data.access_token);
   },
   async getMatchingAddresses<
@@ -69,10 +70,10 @@ export default {
     country: string,
     maxCandidates = 5,
   ): Promise<
-    {
+    Array<{
       description: string;
       data: T;
-    }[]
+    }>
   > {
     if (GEOCODER === 'pitney-bowes') {
       const geoCoderUrl = new URL(
@@ -83,9 +84,8 @@ export default {
         country,
         maxCandidates,
       };
-      Object.keys(params).forEach((key) =>
-        geoCoderUrl.searchParams.append(key, params[key]),
-      );
+      for (const key of Object.keys(params))
+        geoCoderUrl.searchParams.append(key, params[key]);
 
       const oauthToken = await this.getOauthToken();
 
@@ -98,7 +98,7 @@ export default {
           Authorization: `Bearer ${oauthToken}`,
         },
       })
-        .then<pitneybowes.GeosearchLocations>((resp) => resp.json())
+        .then<pitneybowes.GeosearchLocations>(async (resp) => resp.json())
         .then((data) => data.location);
 
       return results.map((result) => {
@@ -107,7 +107,9 @@ export default {
           data: result as T,
         };
       });
-    } else if (GEOCODER === 'google') {
+    }
+
+    if (GEOCODER === 'google') {
       return new Promise((resolve) => {
         let sessionToken;
         if (store.getters['map/autocompleteToken']) {
@@ -116,6 +118,7 @@ export default {
           sessionToken = new google.maps.places.AutocompleteSessionToken();
           store.commit('map/setAutocompleteToken', sessionToken);
         }
+
         // Pass the token to the autocomplete service.
         const autocompleteService =
           new google.maps.places.AutocompleteService();
@@ -140,9 +143,9 @@ export default {
           },
         );
       });
-    } else {
-      return [];
     }
+
+    return [];
   },
 
   getAddress(
@@ -172,6 +175,7 @@ export default {
     if (!location.geometry) {
       console.error("Can't get location geometry", location);
     }
+
     return {
       address_components: {
         address: `${streetNumber} ${streetName}`,
@@ -199,6 +203,7 @@ export default {
               reject('No address_components');
               return;
             }
+
             resolve(this.getAddress(address_components, place, address));
           });
         } else {
@@ -210,6 +215,7 @@ export default {
                 reject(`Can't find address: ${status}`);
                 return;
               }
+
               const location = results[0];
               const { address_components } = location;
               resolve(this.getAddress(address_components, location, address));
@@ -220,7 +226,9 @@ export default {
           store.commit('map/setAutocompleteToken', null);
         }
       });
-    } else if (GEOCODER === 'pitney-bowes') {
+    }
+
+    if (GEOCODER === 'pitney-bowes') {
       const [result] =
         await this.getMatchingAddresses<pitneybowes.GeosearchLocation>(
           address,
@@ -255,6 +263,7 @@ export default {
               reject(`No results: ${status}`);
               return;
             }
+
             const location = results[0];
             const { address_components } = location;
             resolve({
@@ -293,7 +302,9 @@ export default {
           }
         });
       });
-    } else if (GEOCODER === 'pitney-bowes') {
+    }
+
+    if (GEOCODER === 'pitney-bowes') {
       const geoCoderUrl = new URL(
         `${GEOCODER_BASE_URL}/location-intelligence/geocode-service/v1/transient/advanced/reverseGeocode`,
       );
@@ -301,9 +312,8 @@ export default {
         x: longitude,
         y: latitude,
       };
-      Object.keys(params).forEach((key) =>
-        geoCoderUrl.searchParams.append(key, params[key]),
-      );
+      for (const key of Object.keys(params))
+        geoCoderUrl.searchParams.append(key, params[key]);
       const oauthToken = await this.getOauthToken();
       const [result] = await fetch(geoCoderUrl, {
         method: 'get',
@@ -314,7 +324,7 @@ export default {
           Authorization: `Bearer ${oauthToken}`,
         },
       })
-        .then((resp) => resp.json())
+        .then(async (resp) => resp.json())
         .then((data) => data.candidates);
 
       return {

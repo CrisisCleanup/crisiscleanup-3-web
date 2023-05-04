@@ -46,12 +46,12 @@ THE SOFTWARE.
  *  removed  <--  <--  <--  <--  <--  <--  <--  <--  <--  <--  <--  added
  */
 
-const NEWER = Symbol("newer");
-const OLDER = Symbol("older");
+const NEWER = Symbol('newer');
+const OLDER = Symbol('older');
 
 export class LRUMap {
   constructor(limit, entries) {
-    if (typeof limit !== "number") {
+    if (typeof limit !== 'number') {
       // called as (entries)
       entries = limit;
       limit = 0;
@@ -112,7 +112,7 @@ export class LRUMap {
       }
       entry = e;
       if (limit-- == 0) {
-        throw new Error("overflow");
+        throw new Error('overflow');
       }
     }
     this.newest = entry;
@@ -246,7 +246,7 @@ export class LRUMap {
   }
 
   forEach(fun, thisObj) {
-    if (typeof thisObj !== "object") {
+    if (typeof thisObj !== 'object') {
       thisObj = this;
     }
     let entry = this.oldest;
@@ -270,13 +270,13 @@ export class LRUMap {
 
   /** Returns a String representation */
   toString() {
-    var s = "",
+    var s = '',
       entry = this.oldest;
     while (entry) {
-      s += String(entry.key) + ":" + entry.value;
+      s += String(entry.key) + ':' + entry.value;
       entry = entry[NEWER];
       if (entry) {
-        s += " < ";
+        s += ' < ';
       }
     }
     return s;

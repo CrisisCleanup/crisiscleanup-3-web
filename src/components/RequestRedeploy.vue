@@ -75,6 +75,7 @@ export default defineComponent({
               .includes(incident.id),
         );
       }
+
       return [];
     });
     const selectedIncidentName = computed(() => {

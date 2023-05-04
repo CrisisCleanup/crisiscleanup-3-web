@@ -293,13 +293,14 @@ export default defineComponent({
         };
       });
     }
+
     async function editField(field: FormField) {
       await component({
         title: t('actions.edit'),
         component: ItemEditor,
         actionText: t('actions.done'),
         listeners: {
-          update: (payload: FormField) => {
+          update(payload: FormField) {
             emit('update', payload);
           },
         },
@@ -308,6 +309,7 @@ export default defineComponent({
         },
       });
     }
+
     function onListChange(change: {
       added: { element: { phase: number; children: FormField[] } };
     }) {
@@ -315,11 +317,13 @@ export default defineComponent({
         change.added.element.phase = 4;
         change.added.element.children = [];
       }
+
       internalList.value = [...internalList.value];
       nextTick(() => {
         emit('change', internalList.value);
       });
     }
+
     function deleteItem(field: { children: FormField[] }, key: string) {
       field.children = field.children.filter(
         (f: { field_key: string }) => f.field_key !== key,
@@ -328,6 +332,7 @@ export default defineComponent({
         emit('change', internalList.value);
       });
     }
+
     function onChildChange(
       field: { children: FormField[] },
       change: FormField[],
@@ -366,7 +371,7 @@ export default defineComponent({
       deleteItem,
       onChildChange,
       dragOptions,
-      translate: (text: any) => {
+      translate(text: any) {
         return text ? t(text) : null;
       },
     };

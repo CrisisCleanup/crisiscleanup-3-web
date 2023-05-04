@@ -13,19 +13,21 @@ export default function useLiveChart(
     const chartContainer = d3.select(`#${chartId}`);
     try {
       if (chartContainer) {
-        return +chartContainer.style('width').slice(0, -2) || 0;
+        return Number(chartContainer.style('width').slice(0, -2)) || 0;
       }
     } catch {
       return 0;
     }
+
     return 0;
   }
 
   function getHeight() {
     const chartContainer = d3.select(`#${chartId}`);
     if (chartContainer) {
-      return +chartContainer.style('height').slice(0, -2) || 0;
+      return Number(chartContainer.style('height').slice(0, -2)) || 0;
     }
+
     return 0;
   }
 
@@ -42,7 +44,7 @@ export default function useLiveChart(
   }
 
   (() => {
-    const chartContainer = document.querySelector(`#${chartId}`) as any;
+    const chartContainer = document.querySelector(`#${chartId}`);
 
     // define and attach ResizeObserver only if `hasAutoResizing` prop is true
     if (autoResize && chartContainer) {

@@ -26,10 +26,10 @@ export default class Filter {
   }
 
   get count() {
-    return this.getCount();
+    this.getCount();
   }
 
   get labels() {
-    return this.getFilterLabels();
+    this.getFilterLabels();
   }
 }

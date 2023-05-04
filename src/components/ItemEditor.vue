@@ -52,6 +52,7 @@ export default defineComponent({
 
       return common(object1, object2);
     }
+
     function updateProperty(prop, value) {
       try {
         currentObject.value[prop] = JSON.parse(value);
@@ -71,6 +72,7 @@ export default defineComponent({
       for (const key of Object.keys(currentObject.value)) {
         updateProperty(key, currentObject.value[key]);
       }
+
       delete currentObject.value.children;
     });
 

@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import { omit } from 'lodash';
 
-export type CCUJwtDecoded = {
+export interface CCUJwtDecoded {
   username: string;
   iat: number;
   exp: number;
@@ -12,7 +12,7 @@ export type CCUJwtDecoded = {
   orig_iat: number;
   aud: string;
   iss: string;
-};
+}
 
 const AuthService = {
   getUser() {

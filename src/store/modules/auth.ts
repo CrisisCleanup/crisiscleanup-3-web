@@ -58,10 +58,7 @@ const actions = {
 const mutations = {
   setUser(state: State, user: User) {
     state.user = user;
-    if (!user) {
-      Sentry.setUser(null);
-      AuthService.removeUser();
-    } else {
+    if (user) {
       AuthService.saveUser(user);
       Sentry.setUser({
         ...state.user,
@@ -69,6 +66,9 @@ const mutations = {
         username: state.user.email,
         email: state.user.email,
       });
+    } else {
+      Sentry.setUser(null);
+      AuthService.removeUser();
     }
   },
   setShowLoginModal(state: State, toggle: boolean) {

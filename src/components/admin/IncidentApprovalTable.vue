@@ -129,11 +129,11 @@
 <script lang="ts">
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
+import moment from 'moment';
 import Table from '../Table.vue';
 import useDialogs from '../../hooks/useDialogs';
 import { momentFromNow } from '../../filters';
 import type { IncidentRequest } from '@/models/types';
-import moment from "moment";
 
 export default defineComponent({
   name: 'IncidentApprovalTable',
@@ -145,7 +145,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -167,6 +167,7 @@ export default defineComponent({
         `,
       });
     }
+
     async function approveRequest(requestId: string) {
       await axios.post(
         `${
@@ -178,6 +179,7 @@ export default defineComponent({
       );
       emit('reload');
     }
+
     async function rejectRequest(requestId: string) {
       await axios.post(
         `${

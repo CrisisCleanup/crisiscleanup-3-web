@@ -1,28 +1,30 @@
 import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet/dist/leaflet.css';
-import type { Sprite } from 'pixi.js';
-import { type Container } from 'pixi.js';
+import type { Sprite, type Container } from 'pixi.js';
 import type { LatLng, HeatLayer, LeafletMouseEvent } from 'leaflet';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '../../utils/map';
 import Location from '../../models/Location';
-import { i18n } from '@/main';
 import useRenderedMarkers from './useRenderedMarkers';
+import { i18n } from '@/main';
 import type { LayerGroup, PixiLayer } from '@/utils/types/map';
 import type Worksite from '@/models/Worksite';
 import useEmitter from '@/hooks/useEmitter';
 import '@/external/Leaflet.GoogleMutant/index';
 import { templates } from '@/icons/icons_templates';
 
-export type MapUtils = {
+export interface MapUtils {
   getMap: () => L.Map;
-  getPixiContainer: () => Container | null;
-  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | null;
+  getPixiContainer: () => Container | undefined;
+  getCurrentMarkerLayer: () => (L.Layer & PixiLayer) | undefined;
   removeLayer: (key: string) => void;
-  reloadMap: (newMarkers: (Sprite & Worksite)[], visibleIds: string[]) => void;
+  reloadMap: (
+    newMarkers: Array<Sprite & Worksite>,
+    visibleIds: string[],
+  ) => void;
   addMarkerToMap: (location: LatLng) => void;
   fitLocation: (location: Location) => void;
-  jumpToCase: (worksite: Worksite | null, showPopup: boolean) => void;
+  jumpToCase: (worksite: Worksite | undefined, showPopup: boolean) => void;
   applyLocation: (locationId: string, value: boolean) => void;
   applyTeamGeoJson: (teamId: string, value: boolean, geom: any) => void;
   addHeatMap: (points: LatLng[]) => void;
@@ -30,14 +32,14 @@ export type MapUtils = {
   loadMarker: (marker: Sprite & Worksite, index: number) => void;
   hideMarkers: () => void;
   showMarkers: () => void;
-};
+}
 
 const DEFAULT_MAP_BOUNDS = [
   [17.644_022_027_872_726, -122.783_144_702_938_76],
   [50.792_047_064_406_866, -69.872_988_452_938_74],
 ];
 export default (
-  markers: (Sprite & Worksite)[],
+  markers: Array<Sprite & Worksite>,
   visibleMarkerIds: string[],
   onMarkerClick: (marker: Sprite & Worksite) => void,
   onLoadMarkers: (fn: { workTypes: Record<string, any> }) => void,
@@ -49,6 +51,7 @@ export default (
     index,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
   ) => {};
+
   const map = L.map('map', {
     zoomControl: false,
   }).fitBounds(mapBounds || DEFAULT_MAP_BOUNDS);
@@ -72,7 +75,7 @@ export default (
   };
 
   function setupMap(
-    worksiteMarkers: (Sprite & Worksite)[],
+    worksiteMarkers: Array<Sprite & Worksite>,
     visibleIds: string[],
   ) {
     removeLayer('marker_layer');
@@ -109,7 +112,7 @@ export default (
 
   onLoadMarkers(setupMap(markers, visibleMarkerIds));
   const reloadMap = (
-    newMarkers: (Sprite & Worksite)[],
+    newMarkers: Array<Sprite & Worksite>,
     visibleIds: string[],
   ) => {
     if (map) {
@@ -121,7 +124,7 @@ export default (
     return map;
   }
 
-  function getPixiContainer(): Container | null {
+  function getPixiContainer(): Container | undefined {
     let container = null;
     map.eachLayer((layer) => {
       if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
@@ -131,8 +134,8 @@ export default (
     return container;
   }
 
-  function getCurrentMarkerLayer(): (L.Layer & PixiLayer) | null {
-    let l: (L.Layer & PixiLayer) | null = null;
+  function getCurrentMarkerLayer(): (L.Layer & PixiLayer) | undefined {
+    let l: (L.Layer & PixiLayer) | undefined = null;
     map.eachLayer((layer) => {
       if ((layer as L.Layer & PixiLayer).key === 'marker_layer') {
         l = layer as L.Layer & PixiLayer;
@@ -196,14 +199,17 @@ export default (
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
         onEachFeature(_: never, layer: L.Layer & PixiLayer) {
-          (layer as L.Layer & PixiLayer).location_id = location.id;
+          layer.location_id = location.id;
         },
       } as any);
       map.fitBounds(polygon.getBounds());
     }
   }
 
-  const jumpToCase = async (worksite: Worksite | null, showPopup = true) => {
+  const jumpToCase = async (
+    worksite: Worksite | undefined,
+    showPopup = true,
+  ) => {
     const container = getPixiContainer();
     if (map && worksite && container) {
       container.visible = false;
@@ -265,7 +271,7 @@ export default (
       const polygon = L.geoJSON(geojsonFeature, {
         weight: '1',
         onEachFeature(_: never, layer: L.Layer & PixiLayer) {
-          (layer as L.Layer & PixiLayer).location_id = teamId;
+          layer.location_id = teamId;
         },
       } as any);
       polygon.addTo(map);

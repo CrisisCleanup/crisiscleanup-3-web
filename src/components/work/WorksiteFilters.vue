@@ -559,19 +559,19 @@ export default defineComponent({
   props: {
     incident: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     currentFilters: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     locations: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
@@ -623,6 +623,7 @@ export default defineComponent({
           );
         });
       }
+
       return [];
     });
     const fieldsCount = computed(() => {
@@ -770,20 +771,24 @@ export default defineComponent({
         }
       }
     }
+
     function setOpenClosed(value, status) {
       filters.value.statusGroups.data.open = false;
       filters.value.statusGroups.data.closed = false;
       if (value) {
         filters.value.statusGroups.data[status] = value;
       }
+
       filters.value.statusGroups.data = {
         ...filters.value.statusGroups.data,
       };
     }
+
     function expandSection(key) {
       expanded.value[key] = !expanded.value[key];
       expanded.value = { ...expanded.value };
     }
+
     function getFieldsForType(workType) {
       if (props.incident && props.incident.form_fields) {
         return props.incident.form_fields.filter((field) => {
@@ -795,11 +800,14 @@ export default defineComponent({
           if (parent) {
             if_selected_then_work_type = parent.if_selected_then_work_type;
           }
+
           return if_selected_then_work_type === workType;
         });
       }
+
       return [];
     }
+
     function clearAllFilters() {
       filters.value = {
         fields: new WorksiteFieldsFilter('fields', {}),

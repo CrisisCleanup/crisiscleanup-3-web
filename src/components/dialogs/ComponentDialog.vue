@@ -31,8 +31,8 @@
               <component
                 :is="dynamicComponent"
                 v-bind="props"
-                v-on="listeners"
                 :class="classes"
+                v-on="listeners"
               />
             </div>
           </div>
@@ -68,24 +68,6 @@ import useEmitter from '../../hooks/useEmitter';
 
 export default defineComponent({
   name: 'ComponentDialog',
-  setup(props) {
-    const { emitter } = useEmitter();
-
-    emitter.on('modal_component:close', (key) => {
-      if (key === props.id) {
-        closeDialog('ok');
-      }
-    });
-
-    const dynamicComponent = computed(() => {
-      return props.component;
-    });
-
-    return {
-      dynamicComponent,
-      closeDialog,
-    };
-  },
   props: {
     id: {
       type: String,
@@ -97,7 +79,7 @@ export default defineComponent({
     },
     component: {
       type: [Function],
-      default: () => {},
+      default() {},
     },
     classes: {
       type: String,
@@ -121,16 +103,34 @@ export default defineComponent({
     },
     props: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     listeners: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
+  },
+  setup(props) {
+    const { emitter } = useEmitter();
+
+    emitter.on('modal_component:close', (key) => {
+      if (key === props.id) {
+        closeDialog('ok');
+      }
+    });
+
+    const dynamicComponent = computed(() => {
+      return props.component;
+    });
+
+    return {
+      dynamicComponent,
+      closeDialog,
+    };
   },
 });
 </script>

@@ -157,6 +157,7 @@ export default defineComponent({
         await $toasted.error(getErrorMessage(error));
       }
     }
+
     async function getPrintToken() {
       loading.value = true;
       try {
@@ -177,6 +178,7 @@ export default defineComponent({
         loading.value = false;
       }
     }
+
     async function save() {
       try {
         const data = {
@@ -185,6 +187,7 @@ export default defineComponent({
         for (const workType of data.work_types) {
           delete workType.work_type;
         }
+
         await axios.patch(
           `${import.meta.env.VITE_APP_API_BASE_URL}/print_tokens/${
             route.params.token

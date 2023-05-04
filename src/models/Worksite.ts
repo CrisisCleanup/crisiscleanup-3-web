@@ -37,7 +37,7 @@ export default class Worksite extends CCUModel {
   work_types!: any[];
 
   favorite!: boolean;
-  favorite_id!: string | null;
+  favorite_id!: string | undefined;
   svi!: number;
   language!: number;
 
@@ -231,6 +231,7 @@ export default class Worksite extends CCUModel {
             },
           );
         }
+
         const eventUserIds = worksite.response.data.events
           .map((event) => event.created_by)
           .filter(
@@ -242,6 +243,7 @@ export default class Worksite extends CCUModel {
             dataKey: 'results',
           });
         }
+
         return worksite;
       },
       async find_or_fetch(id, { resolve = true }) {

@@ -224,6 +224,7 @@ export default defineComponent({
           svgs.push(document.querySelector(`#d3Chart-${key} > svg`)?.outerHTML);
         }
       }
+
       await printAllWidgets(svgs);
     }
 

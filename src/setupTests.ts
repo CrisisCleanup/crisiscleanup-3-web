@@ -22,7 +22,7 @@ vi.mock('vue-json-viewer', () => {
 vi.mock('vue3-mq');
 
 class MockWorker {
-  private url: string;
+  private readonly url: string;
   private onmessage: (p: { data: any }) => void;
   constructor(stringUrl: string) {
     this.url = stringUrl;
@@ -61,7 +61,7 @@ const tableData = [
 export const restHandlers = [
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({
@@ -72,7 +72,7 @@ export const restHandlers = [
   ),
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({
@@ -96,7 +96,7 @@ export const restHandlers = [
   ),
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups/1/my_favorites`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({
@@ -107,13 +107,13 @@ export const restHandlers = [
   ),
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/users/undefined`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(ctx.status(200), ctx.json({}));
     },
   ),
   rest.get(
     `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({
@@ -127,7 +127,7 @@ export const restHandlers = [
 
   rest.post(
     `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_import`,
-    (req, res, ctx) => {
+    async (req, res, ctx) => {
       return res(ctx.status(200));
     },
   ),
@@ -136,7 +136,7 @@ export const restHandlers = [
     `${
       import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_successes`,
-    (req, res, ctx: any) => {
+    async (req, res, ctx: any) => {
       return res(
         ctx.status(200),
         ctx.blob(
@@ -152,7 +152,7 @@ export const restHandlers = [
     `${
       import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_failures`,
-    (req, res, ctx: any) => {
+    async (req, res, ctx: any) => {
       return res(
         ctx.status(200),
         ctx.blob(
@@ -168,10 +168,16 @@ export const restHandlers = [
 const server = setupServer(...restHandlers);
 
 // Start server before all tests
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+});
 
 //  Close server after all tests
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
 // Reset handlers after each test `important for test isolation`
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+});

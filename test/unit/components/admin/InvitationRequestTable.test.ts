@@ -56,7 +56,7 @@ describe('InvitationRequestTable', () => {
         mocks: {
           $t: (key: string) => key,
           $toasted: {
-            success: () => {},
+            success() {},
           },
         },
       },

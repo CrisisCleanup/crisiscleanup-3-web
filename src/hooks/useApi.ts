@@ -8,12 +8,12 @@ type UseAxiosReturnType<T = any, R = AxiosResponse<T>, D = any> = ReturnType<
   typeof useAxios<T, R, D>
 >;
 
-export type WrappedUseAxiosReturn<
+export interface WrappedUseAxiosReturn<
   T = any,
   R = AxiosResponse<T>,
   D = any,
   E extends UseAxiosReturnType<T, R, D> = UseAxiosReturnType<T, R, D>,
-> = {
+> {
   response: E['response'];
   data: E['data'];
   isFinished: E['isFinished'];
@@ -22,7 +22,7 @@ export type WrappedUseAxiosReturn<
   error: E['error'];
   abort: E['abort'];
   success: E['then'];
-};
+}
 
 export type UseApiReturn = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,

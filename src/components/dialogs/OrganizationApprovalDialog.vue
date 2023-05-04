@@ -23,17 +23,17 @@
 
           <div class="modal-body flex-grow p-3">
             <base-select
+              v-model="response.reason"
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow select"
               :options="approveRejectReasons"
-              v-model="response.reason"
               item-key="key"
               label="label"
             ></base-select>
             <base-input
+              v-model="response.note"
               class="my-2"
               text-area
-              v-model="response.note"
               :rows="3"
               :placeholder="$t('adminOrganization.rejection_note')"
             />

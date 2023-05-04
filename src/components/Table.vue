@@ -269,12 +269,12 @@ import useLogEvent from '@/hooks/useLogEvent';
 
 export type TableColumnSearch = Record<string, any>;
 export type TableColumnFilters = Record<string, any>;
-export type TablePagination = {
+export interface TablePagination {
   current?: number;
   page?: number;
   pageSize?: number;
   total?: number;
-};
+}
 export type TableSorterObject<T = Record<string, unknown>> = Record<
   string,
   unknown
@@ -282,19 +282,19 @@ export type TableSorterObject<T = Record<string, unknown>> = Record<
   key?: keyof T;
   direction?: 'asc' | 'desc';
 };
-export type TableChangeEmitItem<T = Record<string, unknown>> = {
+export interface TableChangeEmitItem<T = Record<string, unknown>> {
   sorter?: TableSorterObject<T>;
   pagination?: TablePagination;
   filters?: TableColumnFilters;
   columnSearch?: TableColumnSearch;
-};
+}
 
 export default defineComponent({
   name: 'Table',
   props: {
     columns: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
@@ -307,19 +307,19 @@ export default defineComponent({
     },
     pagination: {
       type: Object as PropType<TablePagination>,
-      default: () => {
+      default() {
         return {};
       },
     },
     sorter: {
       type: Object as PropType<TableSorterObject>,
-      default: (): TableSorterObject => {
+      default(): TableSorterObject {
         return {};
       },
     },
     columnSearch: {
       type: Object as PropType<TableColumnSearch>,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -330,19 +330,19 @@ export default defineComponent({
     hasRowDetails: Boolean,
     rowStyle: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     headerStyle: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     bodyStyle: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
@@ -427,9 +427,11 @@ export default defineComponent({
       if (props.hasRowDetails) {
         columnWidths.unshift('35px');
       }
+
       if (props.enableSelection) {
         columnWidths.unshift('35px');
       }
+
       return columnWidths.join(' ');
     });
 
@@ -462,17 +464,21 @@ export default defineComponent({
       } else {
         selectedItems.value.delete(item.id);
       }
+
       selectedItems.value = new Set(selectedItems.value);
       emit('selectionChanged', selectedItems.value);
     }
+
     function setShowingDetails(item) {
       if (showingDetails.value.has(item.id)) {
         showingDetails.value.delete(item.id);
       } else {
         showingDetails.value.add(item.id);
       }
+
       showingDetails.value = new Set(showingDetails.value);
     }
+
     function setAllChecked(value) {
       if (value) {
         selectedItems.value = new Set(props.data.map((item) => item.id));
@@ -481,8 +487,10 @@ export default defineComponent({
         selectedItems.value = new Set();
         emit('allDeselected', selectedItems.value);
       }
+
       emit('selectionChanged', selectedItems.value);
     }
+
     function pageChangeHandle(value) {
       let newPage;
       switch (value) {
@@ -490,14 +498,17 @@ export default defineComponent({
           newPage = props.pagination.current + 1;
           break;
         }
+
         case 'previous': {
           newPage = props.pagination.current - 1;
           break;
         }
+
         default: {
           newPage = value;
         }
       }
+
       const columnSearch = { ...internalColumnSearch.value };
 
       const pagination = {
@@ -511,6 +522,7 @@ export default defineComponent({
       };
       emit('change', { pagination, filter, sorter, columnSearch });
     }
+
     function onSelectPageSize(pageSize) {
       const columnSearch = { ...internalColumnSearch.value };
       const pagination = {
@@ -524,6 +536,7 @@ export default defineComponent({
       };
       emit('change', { pagination, filter, sorter, columnSearch });
     }
+
     function sort(key) {
       const columnSearch = { ...internalColumnSearch.value };
       const sorter = { ...props.sorter };
@@ -541,6 +554,7 @@ export default defineComponent({
       );
       emit('change', { pagination, filter, sorter, columnSearch });
     }
+
     function onSearch() {
       const columnSearch = { ...internalColumnSearch.value };
       const sorter = { ...props.sorter };
@@ -550,6 +564,7 @@ export default defineComponent({
       const filter = {};
       emit('change', { pagination, filter, sorter, columnSearch });
     }
+
     function rowClick(item, event) {
       const hasClass = (className) =>
         event.target.className.includes &&
@@ -566,8 +581,10 @@ export default defineComponent({
       ) {
         return;
       }
+
       emit('rowClick', item);
     }
+
     function exportTableCSV() {
       const headers = {};
       const headersColumns = props.columns.filter((column) =>
@@ -582,10 +599,12 @@ export default defineComponent({
         for (const column of headersColumns) {
           response[column.key] = object[column.key];
         }
+
         return response;
       });
       exportCSVFile(headers, data, 'export');
     }
+
     async function handleColumnAction(column, data, item) {
       if (column.action) {
         await column.action(data, item);

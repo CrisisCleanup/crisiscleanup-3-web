@@ -17,10 +17,10 @@
       </slot>
     </div>
     <div
+      v-show="showComponent"
       class="phone-system-action__content"
       :class="componentClass"
       :style="componentStyle"
-      v-show="showComponent"
     >
       <div class="phone-system-action__close">
         <ccu-icon
@@ -83,7 +83,7 @@ export default defineComponent({
       (newValue, oldValue) => {
         if (newValue && !oldValue) {
           emit('open');
-          //TODO: Fix scrolling
+          // TODO: Fix scrolling
           // const el = this.$parent.$refs.phoneButtons;
           // const rect = el.getBoundingClientRect();
           // this.top = `${parseInt(rect.top + window.scrollY)}px`;
