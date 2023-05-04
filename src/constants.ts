@@ -115,6 +115,15 @@ import lightning from './assets/disaster_icons/lightning.svg';
 import piranha from './assets/disaster_icons/piranha.svg';
 import sharknado from './assets/disaster_icons/sharknado.svg';
 import trex from './assets/disaster_icons/trex.svg';
+import baby from './assets/disaster_icons/baby.svg';
+import blackhole from './assets/disaster_icons/blackhole.svg';
+import darth from './assets/disaster_icons/darth.svg';
+import doll from './assets/disaster_icons/doll.svg';
+import hazmat from './assets/disaster_icons/hazmat.svg';
+import rat from './assets/disaster_icons/rat.svg';
+import robot from './assets/disaster_icons/robot.svg';
+import snake from './assets/disaster_icons/snake.svg';
+import spider from './assets/disaster_icons/spider.svg';
 
 export const EASTER_EGG_DISASTER_ICONS = {
   bigfoot,
@@ -133,6 +142,15 @@ export const EASTER_EGG_DISASTER_ICONS = {
   piranha,
   sharknado,
   trex,
+  baby,
+  blackhole,
+  darth,
+  doll,
+  hazmat,
+  rat,
+  robot,
+  snake,
+  spider,
 };
 export const DISASTER_ICONS: Record<string, any> = {
   'contaminated-water': contaminatedWater,
