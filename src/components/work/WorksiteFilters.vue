@@ -22,7 +22,7 @@
         >
           <template v-for="(filter, key) in filters">
             <template
-              v-for="(label, identifier) in filter.labels"
+              v-for="(label, identifier) in filter.getFilterLabels()"
               :key="key + identifier"
             >
               <tag
