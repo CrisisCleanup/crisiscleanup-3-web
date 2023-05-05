@@ -1,4 +1,3 @@
-/* eslint-disable */
 const colors: Record<string, Record<string, any>> = {
   open_unassigned_unclaimed: {
     fillColor: '#d0021b',
@@ -998,7 +997,7 @@ const map_marker = `<svg
   </g>
 </svg>`;
 
-const wood_chipping = `<svg width="31" height="26" viewBox="0 0 31 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+const wood_chipping = `<svg width="100" height="45" viewBox="0 0 31 26" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M5.43164 7.57617H18.0994C20.3086 7.57617 22.0994 9.36703 22.0994 11.5762V15.1524H5.43164V7.57617Z" fill="{{fillColor}}" stroke="{{strokeColor}}"/>
   <path d="M13.3867 10.2285L24.554 21.5171C25.182 22.1518 24.7265 23.2287 23.8337 23.2204L23.112 23.2136C22.8478 23.2111 22.5953 23.1041 22.4097 22.9161L12.0015 12.3714L13.3867 10.2285Z" fill="{{fillColor}}" stroke="{{strokeColor}}"/>
   <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1142 23.4862C13.4156 23.4862 15.2812 21.6206 15.2812 19.3193C15.2812 17.0179 13.4156 15.1523 11.1142 15.1523C8.81287 15.1523 6.94727 17.0179 6.94727 19.3193C6.94727 21.6206 8.81287 23.4862 11.1142 23.4862ZM11.1143 21.9712C12.5788 21.9712 13.766 20.784 13.766 19.3195C13.766 17.855 12.5788 16.6678 11.1143 16.6678C9.64983 16.6678 8.46263 17.855 8.46263 19.3195C8.46263 20.784 9.64983 21.9712 11.1143 21.9712Z" fill="{{fillColor}}" stroke="{{strokeColor}}"/>
