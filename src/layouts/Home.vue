@@ -34,27 +34,26 @@
         </span>
       </div>
     </div>
-    <div
-      v-if="!hideRegister"
-      class="register flex items-center justify-center m-8 w-max"
-    >
-      <div class="grid--actions mb-4 flex flex-col w-full">
-        <base-text
-          font="display"
-          variant="h2"
-          :weight="300"
-          class="text-crisiscleanup-dark-500 w-full"
-          >{{ $t('publicNav.relief_orgs_only') }}</base-text
-        >
-        <base-button
-          variant="solid"
-          size="large"
-          class="w-full"
-          :action="() => $router.push('/register')"
-        >
-          {{ $t('actions.register') }}
-        </base-button>
-      </div>
+    <div class="register flex items-center justify-center m-8 w-max">
+      <slot name="register">
+        <div class="grid--actions mb-4 flex flex-col w-full">
+          <base-text
+            font="display"
+            variant="h2"
+            :weight="300"
+            class="text-crisiscleanup-dark-500 w-full"
+            >{{ $t('publicNav.relief_orgs_only') }}</base-text
+          >
+          <base-button
+            variant="solid"
+            size="large"
+            class="w-full"
+            :action="() => $router.push('/register')"
+          >
+            {{ $t('actions.register') }}
+          </base-button>
+        </div>
+      </slot>
     </div>
     <div class="main w-screen md:w-auto sm:m-10 z-50">
       <slot />
@@ -171,17 +170,12 @@ export default defineComponent({
       terms: t('publicNav.terms'),
     });
 
-    // Hide register button on pages where the user is already registering or accepting an invitation
-    const hideRegister =
-      route.name === 'nav.register' || route.name === 'nav.invitation_token';
-
     return {
       routes: defaultRoutes,
       footerRoutes,
       lang,
       messages,
       route,
-      hideRegister,
     };
   },
 });
