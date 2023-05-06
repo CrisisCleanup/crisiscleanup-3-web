@@ -448,7 +448,7 @@ export default defineComponent({
       const formData = new FormData();
       formData.append('upload', fileList[0]);
       formData.append('type_t', 'fileTypes.user_profile_picture');
-      this.uploading = true;
+      state.uploading = true;
       try {
         const result = await axios.post(
           `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
