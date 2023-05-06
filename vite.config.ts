@@ -24,6 +24,7 @@ export default defineConfig(async ({ command }) => {
         'vue-i18n',
         'vue/macros',
         'vuex',
+        'vitest', // see: https://vitest.dev/config/#globals
         '@vueuse/core',
         {
           '@/hooks/useApi': ['useApi'],
