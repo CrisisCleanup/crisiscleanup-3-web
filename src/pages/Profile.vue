@@ -507,7 +507,7 @@ export default defineComponent({
           states: { ...currentUser.value.states },
         });
         await $toasted.success(t('profileUser.save_user_success'));
-        this.mode = 'view';
+        state.mode = 'view';
         await updateUserLanguage();
         window.location.reload();
       } catch (error) {
