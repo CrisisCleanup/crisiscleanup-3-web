@@ -7,3 +7,4 @@ coverage
 .pnpm-debug.log
 pnpm-lock.yaml
 **/auto-imports.d.ts
+.eslintrc-auto-import.json

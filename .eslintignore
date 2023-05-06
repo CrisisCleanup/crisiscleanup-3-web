@@ -7,3 +7,4 @@ node_modules
 coverage
 pnpm-debug.log
 **/auto-imports.d.ts
+.eslintrc-auto-import.json
