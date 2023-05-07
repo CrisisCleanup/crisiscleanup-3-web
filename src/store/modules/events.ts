@@ -1,49 +1,47 @@
-// Import axios from 'axios';
+import type { Getter, Module } from 'vuex';
+import type { CCURootState } from '@/store/types';
+import type EventLog from '@/models/EventLog';
 
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+export interface EventsModuleState {
+  events: EventLog[]; // this type may need to be changed
+}
 
-const EventState = {
-  events: [],
-};
-
-// Getters
-const getters = {
-  getEvents(state: State) {
-    return state.events;
-  },
-};
-
-// Actions
-const actions = {
-  async pushEvents({ commit, getters: { getEvents } }: State) {
-    const events = getEvents;
-    if (events.length === 0 || import.meta.env.NODE_ENV !== 'development') {
-      return null;
-    }
-
-    // Const response = await axios.post(
-    //   `${import.meta.env.VITE_APP_API_BASE_URL}/events_new`,
-    //   events,
-    // );
-    commit('setEvents', []);
-    return {};
-  },
-};
-
-// Mutations
-const mutations = {
-  setEvents(state: State, events: any[]) {
-    state.events = events;
-  },
-  addEvent(state: State, event: any) {
-    state.events = [...state.events, event];
-  },
-};
-
-export default {
+const eventsModule: Module<EventsModuleState, CCURootState> = {
   namespaced: true,
-  state: EventState,
-  getters,
-  actions,
-  mutations,
+  state: {
+    events: [],
+  },
+  getters: {
+    getEvents(state) {
+      return state.events;
+    },
+  },
+  actions: {
+    async pushEvents(ctx) {
+      const events = ctx.getters.getEvents as Getter<
+        EventsModuleState,
+        CCURootState
+      >;
+      if (events.length === 0 || import.meta.env.NODE_ENV !== 'development') {
+        return null;
+      }
+
+      // Const response = await axios.post(
+      //   `${import.meta.env.VITE_APP_API_BASE_URL}/events_new`,
+      //   events,
+      // );
+      ctx.commit('setEvents', []);
+      return {};
+    },
+  },
+  mutations: {
+    setEvents(state, events: EventLog[]) {
+      state.events = events;
+    },
+    addEvent(state, event: EventLog) {
+      state.events = [...state.events, event];
+    },
+  },
 };
+
+export default eventsModule;
