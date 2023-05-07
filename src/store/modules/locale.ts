@@ -1,26 +1,22 @@
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type { Module } from 'vuex';
+import type { CCURootState } from '@/store/types';
 
-const AppState = {
-  language: null,
-};
+export interface LocaleModuleState {
+  language: string | undefined;
+}
 
-// Getters
-const getters = {};
-
-// Actions
-const actions = {};
-
-// Mutations
-const mutations = {
-  setLanguage(state: State, language: any) {
-    state.language = language;
+const localeModule: Module<LocaleModuleState, CCURootState> = {
+  namespaced: true,
+  state: {
+    language: null,
+  },
+  getters: {},
+  actions: {},
+  mutations: {
+    setLanguage(state, language: LocaleModuleState['language']) {
+      state.language = language;
+    },
   },
 };
 
-export default {
-  namespaced: true,
-  state: AppState,
-  getters,
-  actions,
-  mutations,
-};
+export default localeModule;
