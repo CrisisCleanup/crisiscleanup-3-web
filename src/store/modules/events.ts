@@ -35,7 +35,7 @@ const eventsModule: Module<EventsModuleState, CCURootState> = {
     },
   },
   mutations: {
-    setEvents(state, events: EventLog[]) {
+    setEvents(state, events: EventsModuleState['events']) {
       state.events = events;
     },
     addEvent(state, event: EventLog) {
