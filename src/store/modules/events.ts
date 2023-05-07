@@ -22,7 +22,7 @@ const eventsModule: Module<EventsModuleState, CCURootState> = {
         EventsModuleState,
         CCURootState
       >;
-      if (events.length === 0 || import.meta.env.NODE_ENV !== 'development') {
+      if (events.length === 0 || import.meta.env.MODE !== 'development') {
         return null;
       }
 
