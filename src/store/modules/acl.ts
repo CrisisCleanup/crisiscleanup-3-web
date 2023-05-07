@@ -20,9 +20,6 @@ const aclModule: Module<AclModuleState, CCURootState> = {
   },
   actions: {},
   mutations: {
-    addRule(state, { key, value }: Record<string, any>) {
-      state.acl.addRule(key, value);
-    },
     setUserAcl(state, user_id: any) {
       const user = User.find(user_id)!;
       const { permissions, beta_features } = user;
