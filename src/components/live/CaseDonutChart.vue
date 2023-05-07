@@ -30,9 +30,9 @@ export default defineComponent({
 
     onMounted(() => {
       // set the dimensions and margins of the graph
-      const width = 35;
+      const width = 50;
       const height = width;
-      const margin = width / 10;
+      const margin = width / 8;
 
       // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
       const radius = Math.min(width, height) / 2 - margin;
@@ -56,6 +56,16 @@ export default defineComponent({
       const pie = d3.pie().value((d: string[]) => d[1]);
 
       const data_ready = pie(Object.entries(props.chartData));
+
+      // show overall total number of cases in the center of the donut chart
+      svg
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        // .attr('transform', `translate(0, ${height / 10})`)
+        .attr('font-size', '0.4rem')
+        .attr('fill', '#ffffff')
+        .text((d) => `${t(d3.sum(data_ready, (d) => d.data[1]))}`);
 
       // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
       svg

@@ -48,10 +48,10 @@
         </span>
       </template>
       <template #reported_count="slotProps">
-        <div class="w-full flex justify-end">
+        <div class="w-full flex justify-center">
           <CaseDonutChart
             v-if="!isCaseDonutChartDataEmpty(slotProps.item)"
-            class="w-8 h-8"
+            class="w-12 h-12"
             :chart-id="`case-donut-chart-${slotProps.item.id}`"
             :chart-data="{
               reportedCases: slotProps.item.reported_count || 0,
@@ -61,7 +61,7 @@
               completedCases: slotProps.item.closed_count || 0,
             }"
           />
-          <span v-else class="w-8 h-8 flex items-center justify-center">
+          <span v-else class="w-12 h-12 flex items-center justify-center">
             0<span class="pew-pew-blue">*</span>
           </span>
         </div>
