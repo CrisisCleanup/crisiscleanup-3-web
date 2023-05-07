@@ -42,6 +42,7 @@ export default class EventLog extends CCUModel {
 
   event_key!: string;
   incident!: number;
+  attr!: Record<string, any>;
   event_last_event_log!: EventLog;
   event_seconds_since_last_event!: number;
   actor_key!: string;
