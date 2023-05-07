@@ -1,26 +1,22 @@
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type { Module } from 'vuex';
+import type { CCURootState } from '@/store/types';
 
-const AppState = {
-  worksitesLoading: false,
-};
+export interface LoadingModuleState {
+  worksitesLoading: boolean;
+}
 
-// Getters
-const getters = {};
-
-// Actions
-const actions = {};
-
-// Mutations
-const mutations = {
-  setWorksitesLoading(state: State, worksitesLoading: boolean) {
-    state.worksitesLoading = worksitesLoading;
+const loadingModule: Module<LoadingModuleState, CCURootState> = {
+  namespaced: true,
+  state: {
+    worksitesLoading: false,
+  },
+  getters: {},
+  actions: {},
+  mutations: {
+    setWorksitesLoading(state, worksitesLoading: boolean) {
+      state.worksitesLoading = worksitesLoading;
+    },
   },
 };
 
-export default {
-  namespaced: true,
-  state: AppState,
-  getters,
-  actions,
-  mutations,
-};
+export default loadingModule;
