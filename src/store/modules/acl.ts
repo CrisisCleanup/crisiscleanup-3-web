@@ -32,11 +32,9 @@ const aclModule: Module<AclModuleState, CCURootState> = {
 
       state.acl.rule(
         `development_mode`,
-        ['development', 'staging'].includes(import.meta.env.NODE_ENV),
+        ['development', 'staging'].includes(import.meta.env.MODE),
       );
       state.acl.rule(`app_stage.${import.meta.env.VITE_APP_STAGE}`, true);
-
-      console.log('currentState', state);
 
       Sentry.setUser({
         ...state.user,
