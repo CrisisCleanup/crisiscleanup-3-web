@@ -8,7 +8,7 @@ export interface LocaleModuleState {
 const localeModule: Module<LocaleModuleState, CCURootState> = {
   namespaced: true,
   state: {
-    language: null,
+    language: undefined,
   },
   getters: {},
   actions: {},
