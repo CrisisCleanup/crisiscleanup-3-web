@@ -1,30 +1,26 @@
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
+import type { Module } from 'vuex';
+import type { CCURootState } from '@/store/types';
 
-const mapState = {
-  autocompleteToken: null,
-};
+export interface MapModuleState {
+  autocompleteToken: string | undefined;
+}
 
-// Getters
-const getters = {
-  autocompleteToken(state: State) {
-    return state.autocompleteToken;
-  },
-};
-
-// Actions
-const actions = {};
-
-// Mutations
-const mutations = {
-  setAutocompleteToken(state: State, token: string) {
-    state.autocompleteToken = token;
-  },
-};
-
-export default {
+const mapModule: Module<MapModuleState, CCURootState> = {
   namespaced: true,
-  state: mapState,
-  getters,
-  actions,
-  mutations,
+  state: {
+    autocompleteToken: undefined,
+  },
+  getters: {
+    autocompleteToken(state) {
+      return state.autocompleteToken;
+    },
+  },
+  actions: {},
+  mutations: {
+    setAutocompleteToken(state, token: MapModuleState['autocompleteToken']) {
+      state.autocompleteToken = token;
+    },
+  },
 };
+
+export default mapModule;
