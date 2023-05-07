@@ -1,34 +1,37 @@
-import type State from '@vuex-orm/core/dist/src/model/contracts/State';
-import Incident from '../../models/Incident';
+import type { Module } from 'vuex';
+import type { CCURootState } from '@/store/types';
+import Incident from '@/models/Incident';
 
-const AppState = {
-  currentIncidentId: null,
-};
+export interface IncidentModuleState {
+  currentIncidentId: number | undefined;
+}
 
-// Getters
-const getters = {
-  currentIncidentId: (state: State) => state.currentIncidentId,
-
-  currentIncident: (state: State) =>
-    state.currentIncidentId ? Incident.find(state.currentIncidentId) : null,
-};
-
-// Actions
-const actions = {};
-
-// Mutations
-const mutations = {
-  setCurrentIncidentId(state: State, currentIncidentId: string) {
-    state.currentIncidentId = currentIncidentId
-      ? Number.parseInt(currentIncidentId)
-      : currentIncidentId;
+const incidentModule: Module<IncidentModuleState, CCURootState> = {
+  namespaced: true,
+  state: {
+    currentIncidentId: undefined,
+  },
+  getters: {
+    currentIncidentId(state) {
+      return state.currentIncidentId;
+    },
+    currentIncident(state) {
+      return state.currentIncidentId
+        ? Incident.find(state.currentIncidentId)
+        : null;
+    },
+  },
+  actions: {},
+  mutations: {
+    setCurrentIncidentId(
+      state,
+      currentIncidentId: IncidentModuleState['currentIncidentId'],
+    ) {
+      state.currentIncidentId = currentIncidentId
+        ? Number(currentIncidentId.toString())
+        : currentIncidentId;
+    },
   },
 };
 
-export default {
-  namespaced: true,
-  state: AppState,
-  getters,
-  actions,
-  mutations,
-};
+export default incidentModule;
