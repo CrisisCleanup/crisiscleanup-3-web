@@ -20,12 +20,13 @@ const aclModule: Module<AclModuleState, CCURootState> = {
   },
   actions: {},
   mutations: {
-    setUserAcl(state, user_id: any) {
+    setUserAcl(state, user_id: number) {
       const user = User.find(user_id)!;
       const { permissions, beta_features } = user;
-      Object.keys(permissions).forEach((permissionKey: string) => {
+      for (const permissionKey of Object.keys(permissions)) {
         state.acl.rule(permissionKey, user.permissions[permissionKey]);
-      });
+      }
+
       for (const feature of beta_features) {
         state.acl.rule(`beta_feature.${feature}`, true);
       }
@@ -37,7 +38,6 @@ const aclModule: Module<AclModuleState, CCURootState> = {
       state.acl.rule(`app_stage.${import.meta.env.VITE_APP_STAGE}`, true);
 
       Sentry.setUser({
-        ...state.user,
         id: user.id,
         username: user.email,
         email: user.email,
