@@ -888,7 +888,8 @@ export default defineComponent({
     }
 
     function getIncidentName(value, incidents) {
-      return incidents.length > 0 && incidents.find((c) => c.id === value).name;
+      let incident = incidents.find((c) => c.id === value);
+      return incidents.length > 0 && incident?.name;
     }
 
     async function handleFileUpload(fileList, type, deleteOldFiles = true) {
