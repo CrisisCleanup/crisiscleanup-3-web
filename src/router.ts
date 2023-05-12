@@ -151,7 +151,7 @@ router.beforeEach(async (to, from, next) => {
     next();
   } else if (to.matched.some((record) => record.meta.admin)) {
     if (!store.getters['auth/isAdmin']) {
-      next({ name: 'nav.dashboard' });
+      next('/');
       return;
     }
 
