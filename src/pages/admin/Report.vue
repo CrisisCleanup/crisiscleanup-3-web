@@ -109,9 +109,16 @@ export default defineComponent({
             },
           },
         );
-        graphData.value = Object.entries(response.data);
+        graphData.value = Object.entries(response.data.widget_data);
       } catch (error) {
-        await $toasted.error(getErrorMessage(error));
+        if (error.response.status === 403) {
+          graphData.value = null;
+          await $toasted.error(
+            t(error.response.data.data.rule.availability_statement_t),
+          );
+        } else {
+          await $toasted.error(getErrorMessage(error));
+        }
       } finally {
         loading.value = false;
       }
