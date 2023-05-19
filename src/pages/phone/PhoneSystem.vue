@@ -265,11 +265,17 @@
               icon-class="p-1"
             >
               <template #component>
-                <div class="flex items-center justify-center p-3">
+                <div class="flex items-center justify-center p-3 gap-2">
                   <base-button
                     size="medium"
                     :text="$t('phoneDashboard.reset_phone_system')"
                     :action="resetPhoneSystem"
+                    class="text-white bg-crisiscleanup-red-200"
+                  ></base-button>
+                  <base-button
+                    size="medium"
+                    :text="$t('~~Report Bug')"
+                    :action="reportBug"
                     class="text-white bg-crisiscleanup-red-200"
                   ></base-button>
                 </div>
@@ -438,6 +444,8 @@ import { getErrorMessage } from '@/utils/errors';
 import usePhoneService from '@/hooks/phone/usePhoneService';
 import WorksiteTable from '@/components/work/WorksiteTable.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
+import AdminEventStream from '@/components/admin/AdminEventStream.vue';
+import BugReport from '@/components/BugReport.vue';
 
 export default defineComponent({
   name: 'PhoneSystem',
@@ -464,7 +472,7 @@ export default defineComponent({
   setup(props, context) {
     const { t } = useI18n();
     const $toasted = useToast();
-    const { confirm } = useDialogs();
+    const { confirm, component } = useDialogs();
     const { emitter } = useEmitter();
     const router = useRouter();
     const store = useStore();
@@ -796,6 +804,20 @@ export default defineComponent({
       }
     }
 
+    async function reportBug() {
+      await component({
+        id: 'phone_bug_modal',
+        title: t(`~~Report Bug`),
+        component: BugReport,
+        classes: 'w-full h-96 overflow-auto',
+        modalClasses: 'bg-white max-w-3xl shadow p-3',
+        hideFooter: true,
+        props: {
+          type: 'phone',
+        },
+      });
+    }
+
     async function init() {
       phoneService.apiGetQueueStats().then((response) => {
         setGeneralStats({ ...response.data });
@@ -924,6 +946,7 @@ export default defineComponent({
       showUnclaimModal,
       reloadTable,
       onSaveCase,
+      reportBug,
     };
   },
 });

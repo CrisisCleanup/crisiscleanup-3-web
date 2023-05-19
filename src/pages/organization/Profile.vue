@@ -440,7 +440,9 @@
             class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
-            :value="termsOfService ? termsOfService.filename_original : ''"
+            :model-value="
+              termsOfService ? termsOfService.filename_original : ''
+            "
           ></base-input>
           <ccu-icon
             v-if="termsOfService"
@@ -448,7 +450,7 @@
             size="small"
             class="p-1 py-2"
             type="trash"
-            @click.native="
+            @click="
               () => {
                 deleteFile(termsOfService.file);
               }
@@ -503,7 +505,9 @@
             class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
-            :value="liabilityWaiver ? liabilityWaiver.filename_original : ''"
+            :model-value="
+              liabilityWaiver ? liabilityWaiver.filename_original : ''
+            "
           ></base-input>
           <ccu-icon
             v-if="liabilityWaiver"
