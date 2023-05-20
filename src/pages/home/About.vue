@@ -294,24 +294,6 @@
         <!-- End Card -->
 
         <!-- StartCard -->
-<!--
-        <div class="flex flex-col items-center px-5 sm:px-0">
-          <img src="@/assets/headshots/andyroosna.png" class="m-5" />
-          <p class="text-3xl px-0.5 pb-5">
-            <span class="font-bold">Andy Roosna</span><br />
-            {{ $t('about.andy_roosna_title') }}
-          </p>
-          <base-text
-            variant="body"
-            class="pt-2"
-            v-html="$t('about.andy_roosna_bio')"
-          >
-          </base-text>
-        </div>
--->
-        <!-- End Card -->
-
-        <!-- StartCard -->
         <div class="flex flex-col items-center px-5 sm:px-0">
           <img src="@/assets/headshots/marktregellas.jpg" class="m-5" />
           <p class="text-3xl px-0.5 pb-5">
