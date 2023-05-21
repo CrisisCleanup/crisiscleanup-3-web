@@ -1,20 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors');
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: {
-    content: [
-      './src/**/*.html',
-      './src/**/*.vue',
-      './node_modules/litepie-datepicker/**/*.js',
-    ],
-    // These options are passed through directly to PurgeCSS
-    options: {
-      safelist: {
-        standard: [/^bg/],
-      },
-    },
-  },
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
