@@ -26,6 +26,7 @@
     "clean": "pnpm dlx rimraf dist \"**/coverage\"",
     "repair:clean-modules": "pnpm dlx rimraf node_modules",
     "repair:prune-pnpm": "pnpm run clean && pnpm run repair:clean-modules && pnpm store prune",
+    "e2e:install": "playwright install --with-deps",
     "test": "vitest",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
