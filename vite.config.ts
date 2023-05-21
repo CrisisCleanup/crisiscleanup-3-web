@@ -42,21 +42,14 @@ export default defineConfig(async ({ command }) => {
       },
     }),
     // https://github.com/antfu/vite-plugin-inspect
-    // Visit http://localhost:3333/__inspect/ to see the inspector
     inspect(),
     // https://github.com/webfansplz/vite-plugin-vue-inspector
-    // Press Meta+Shift to see the inspector
     inspector(),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
   configs.push(
     {
-      // Css: {
-      //   postcss: {
-      //     plugins: postcssConfig.plugins,
-      //   },
-      // },
       optimizeDeps: {
         include: ['tailwind.config'],
       },
