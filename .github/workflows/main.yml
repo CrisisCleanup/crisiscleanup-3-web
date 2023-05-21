@@ -99,35 +99,28 @@ jobs:
 
   test-e2e:
     name: Test E2E 💻 🧪
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     needs: [versions]
-    # disabled till we have e2e tests
-    if: false
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache
-          key: cypress-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-
       - uses: pnpm/action-setup@v2
         with:
           version: ${{ needs.versions.outputs.PNPM_VERSION }}
-
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
-      - run: pnpm install
-
-      - name: Cypress PNPM Patch
-        run: cp pnpm-lock.yaml package-lock.json
-
-      - name: Cypress
-        uses: cypress-io/github-action@v4
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install Playwright Browsers
+        run: pnpm run e2e:install
+      - name: Run Playwright tests
+        run: pnpm run test:e2e
+      - uses: actions/upload-artifact@v3
+        if: always()
         with:
-          install-command: echo
-          build: pnpm run build
-          start: pnpm run test:e2e
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
