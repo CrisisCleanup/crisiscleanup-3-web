@@ -10,7 +10,7 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveURL(/.*\/login/);
 });
 
-test.only('should login', async ({ page }) => {
+test('should login', async ({ page }) => {
   await page.goto('https://app.dev.crisiscleanup.io/');
   await page.goto('https://app.dev.crisiscleanup.io/login?from=/');
   await page.getByPlaceholder('Email').click();
