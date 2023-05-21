@@ -48,13 +48,18 @@
             "
           />
         </div>
-        <div
-          v-for="incident in incidentsWithActivePhones"
-          :key="incident.id"
-          class="ml-2"
-        >
-          {{ incident.short_name }}:
-          {{ getIncidentPhoneNumbers(incident) }}
+        <template v-if="incidentsWithActivePhones.length > 0">
+          <div
+            v-for="incident in incidentsWithActivePhones"
+            :key="incident.id"
+            class="ml-2"
+          >
+            {{ incident.short_name }}:
+            {{ getIncidentPhoneNumbers(incident) }}
+          </div>
+        </template>
+        <div class="flex-grow bg-red-500" v-else>
+          {{ $t('homeVue.phone_or_website') }}
         </div>
       </div>
       <PhoneToolBar
