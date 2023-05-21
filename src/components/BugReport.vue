@@ -62,12 +62,12 @@ import type { CCUFileItem } from '@/models/types';
 export default {
   components: { DragDrop },
   props: {
-    type: {
+    reportType: {
       type: String,
       default: 'phone',
     },
   },
-  setup(props: { type: string }) {
+  setup(props) {
     const ccuApi = useApi();
     const $toasted = useToast();
     const store = useStore();
@@ -111,7 +111,7 @@ export default {
         data: {
           title: bug.value.title,
           description: bug.value.description,
-          type: props.type,
+          type: props.reportType,
           attr: store.state.phone,
           states: currentUser?.states,
           preferences: currentUser?.preferences,

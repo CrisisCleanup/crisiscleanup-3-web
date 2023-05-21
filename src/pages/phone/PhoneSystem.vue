@@ -58,7 +58,7 @@
             {{ getIncidentPhoneNumbers(incident) }}
           </div>
         </template>
-        <div class="flex-grow bg-red-500" v-else>
+        <div v-else class="flex-grow bg-red-500">
           {{ $t('homeVue.phone_or_website') }}
         </div>
       </div>
@@ -818,7 +818,8 @@ export default defineComponent({
         modalClasses: 'bg-white max-w-3xl shadow p-3',
         hideFooter: true,
         props: {
-          type: 'phone',
+          // eslint-disable-next-line vue/require-prop-type-constructor, vue/require-default-prop
+          reportType: 'phone',
         },
       });
     }
