@@ -142,3 +142,8 @@ modules.xml
 # Quokka
 .quokka
 /deploy.sh
+
+# Playwright E2E Testing
+/test-results/
+/playwright-report/
+/playwright/.cache/
