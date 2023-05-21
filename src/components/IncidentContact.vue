@@ -1,8 +1,8 @@
 <template>
   <div class="grid--survivors">
-    <base-text font="display" variant="h1">{{
-      $t('homeVue.survivors_call')
-    }}</base-text>
+    <base-text font="display" variant="h1">
+      {{ $t('homeVue.survivors_call') }}
+    </base-text>
     <base-text font="display" variant="h2" class="help-contact">
       <div v-if="incidentList && incidentList.length > 0" class="w-full">
         <div
@@ -14,53 +14,55 @@
           {{ getIncidentPhoneNumbers(incident) }}
         </div>
       </div>
-      <div v-else>
+      <div v-else-if="isLoading">
         <spinner />
+      </div>
+      <div v-else>
+        {{ $t('homeVue.phone_or_website') }}
       </div>
     </base-text>
   </div>
 </template>
 
-<script lang="ts">
-import axios from 'axios';
+<script lang="ts" setup>
 import { formatNationalNumber } from '@/filters';
 
-export default defineComponent({
-  name: 'IncidentContact',
-  setup() {
-    const incidentList = ref([]);
-    function getIncidentPhoneNumbers(incident) {
-      if (Array.isArray(incident.active_phone_number)) {
-        return incident.active_phone_number
-          .map((number) => formatNationalNumber(String(number)))
-          .join(', ');
-      }
-
-      return formatNationalNumber(String(incident.active_phone_number));
-    }
-
-    function filterNumbers(item) {
-      return item.filter((filterItem) => filterItem.active_phone_number);
-    }
-
-    onMounted(async () => {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_APP_API_BASE_URL
-        }/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at`,
-      );
-      incidentList.value = response.data.results;
-    });
-
-    return {
-      incidentList,
-      filterNumbers,
-      getIncidentPhoneNumbers,
-    };
+const ccuApi = useApi();
+const fieldsToFetch = [
+  'id',
+  'name',
+  'short_name',
+  'active_phone_number',
+  'start_at',
+];
+const { isLoading, data } = ccuApi(
+  '/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at',
+  {
+    method: 'GET',
+    params: {
+      fields: fieldsToFetch.join(','),
+      limit: 200,
+      sort: '-start_at',
+    },
   },
-});
+);
+const incidentList = computed(() => data.value?.results);
+function getIncidentPhoneNumbers(incident) {
+  if (Array.isArray(incident.active_phone_number)) {
+    return incident.active_phone_number
+      .map((number) => formatNationalNumber(String(number)))
+      .join(', ');
+  }
+
+  return formatNationalNumber(String(incident.active_phone_number));
+}
+
+function filterNumbers(item) {
+  return item.filter((filterItem) => filterItem.active_phone_number);
+}
 </script>
-<style scoped>
+
+<style lang="postcss" scoped>
 .grid--survivors {
   @apply bg-crisiscleanup-yellow-700 my-4 text-center p-4;
   //min-width: 205px;
