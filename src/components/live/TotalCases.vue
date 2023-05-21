@@ -250,13 +250,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="postcss">
-::v-deep .stroke--active {
+:deep(.stroke--active) {
   stroke: #ffffff;
   stroke-width: 2px;
   transition: all 10ms;
 }
 
-::v-deep .stroke--inactive {
+:deep(.stroke--inactive) {
   stroke: transparent;
   stroke-width: 0;
   transition: all 500ms;

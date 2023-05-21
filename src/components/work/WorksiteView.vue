@@ -821,11 +821,11 @@ button.worksite__dialer {
   @apply rounded-full;
 }
 
-button.worksite__dialer >>> img.ccu-icon {
+button.worksite__dialer :deep(img.ccu-icon) {
   transition: filter 300ms ease;
 }
 
-button.worksite__dialer:hover >>> img.ccu-icon {
+button.worksite__dialer:hover :deep(img.ccu-icon) {
   filter: brightness(0) invert(1);
 }
 </style>
