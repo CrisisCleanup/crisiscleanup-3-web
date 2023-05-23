@@ -4,7 +4,6 @@
       <base-input
         v-model="url"
         data-testid="testUrl"
-        data-testid="testArcGisUploaderArcgisUrl"
         class="w-full"
         :placeholder="$t('arcGisUploader.arcgis_url')"
       ></base-input>
