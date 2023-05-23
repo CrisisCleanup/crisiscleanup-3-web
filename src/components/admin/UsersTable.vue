@@ -12,7 +12,7 @@
       <base-button
         :text="$t('actions.login_as')"
         :alt="$t('actions.login_as')"
-        data-testid="testLoginAs"
+        data-testid="testLoginAsButton"
         variant="solid"
         size="small"
         class="mx-2"
@@ -25,7 +25,7 @@
       <base-button
         :text="$t('actions.see_events')"
         :alt="$t('actions.see_events')"
-        data-testid="testSeeEvents"
+        data-testid="testSeeEventsButton"
         variant="solid"
         size="small"
         class="mx-2"

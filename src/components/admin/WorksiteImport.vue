@@ -20,7 +20,7 @@
         <base-button
           class="cursor-pointer px-3 py-1"
           variant="solid"
-          data-testid="testUploadCsv"
+          data-testid="testUploadCsvFile"
           :show-spinner="uploading"
           :disabled="uploading"
           :text="$t('actions.upload_csv')"
@@ -29,12 +29,12 @@
       </DragDrop>
       <base-checkbox
         v-model="ignoreDuplicates"
-        data-testid="testIgnoreDuplicates"
+        data-testid="testIgnoreDuplicatesCheckbox"
         >{{ $t('worksiteImport.ignore_duplicates') }}
       </base-checkbox>
       <base-select
         v-model="uploadType"
-        data-testid="testUploadType"
+        data-testid="testUploadTypeSelect"
         :options="['worksite', 'pda']"
         select-classes="bg-white border w-64 mx-2"
         :placeholder="$t('worksiteImport.upload_type')"
@@ -50,7 +50,7 @@
             :alt="`${$t('worksiteImport.successful_imports')} (${
               slotProps.item.success_count
             })`"
-            data-testid="testSuccessfulImports"
+            data-testid="testSuccessfulImportsButton"
             variant="solid"
             size="small"
             class="mx-2"
@@ -67,7 +67,7 @@
             :alt="`${$t('worksiteImport.failed_imports')} (${
               slotProps.item.failed_count
             })`"
-            data-testid="testFailedImports"
+            data-testid="testFailedImportsButton"
             variant="outline"
             size="small"
             class="mx-2"

@@ -34,7 +34,7 @@
     >
       <ccu-icon
         :alt="$t('actions.edit')"
-        data-testid="js-break-glass"
+        data-testid="testBreakGlassButton"
         type="edit"
         size="small"
         class="js-break-glass"

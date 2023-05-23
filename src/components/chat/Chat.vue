@@ -8,7 +8,7 @@
         <div class="message-container">
           <div
             id="messages"
-            data-testid="testMessages"
+            data-testid="testMessagesContent"
             ref="messagesBox"
             class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
             @wheel="handleWheel"
@@ -34,7 +34,7 @@
             >
               <ccu-icon
                 :alt="$t('chat.urgent')"
-                data-testid="testIsUrgentHighlight"
+                data-testid="testIsUrgentStyle"
                 size="small"
                 type="attention-red"
                 class="mr-1"
@@ -44,7 +44,7 @@
             <div class="flex flex-col">
               <base-input
                 v-model="currentMessage"
-                data-testid="testCurrentMessage"
+                data-testid="testCurrentMessageContent"
                 text-area
                 class=""
                 @enter="sendMessage"
@@ -58,7 +58,7 @@
                 </base-checkbox>
                 <span
                   class="italic cursor-pointer"
-                  data-testid="testFocusNewsTab"
+                  data-testid="testFocusNewsTabLink"
                   @click="focusNewsTab"
                 >{{
                   $t('chat.read_faq_first')
@@ -66,7 +66,7 @@
                 <div class="flex">
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
-                    data-testid="testSendMessage"
+                    data-testid="testSendMessageButton"
                     :disabled="!Boolean(currentMessage)"
                     ccu-icon="plane"
                     :action="sendMessage"
@@ -84,7 +84,7 @@
           >
             <ChatMessage
               v-for="favorite in favorites"
-              data-testid="testFavorites"
+              data-testid="testFavoritesContent"
               :key="favorite.id"
               :message="favorite"
             />

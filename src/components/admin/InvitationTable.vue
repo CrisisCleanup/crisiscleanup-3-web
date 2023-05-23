@@ -13,8 +13,8 @@
         :href="`/invitation_token/${slotProps.item.invitation_token}`"
         text-variant="bodysm"
         class="px-2"
-        data-testid="testActivate"
-        >{{ $t('actions.activate') }}</base-link
+        data-testid="testActivateButton"
+      >{{ $t('actions.activate') }}</base-link
       >
     </template>
     <template #organization="slotProps">
@@ -31,7 +31,7 @@
         <base-button
           size="small"
           variant="solid"
-          data-testid="testReInvite"
+          data-testid="testReInviteButton"
           class="m-1 mx-2 text-black font-light text-xs py-1 px-3"
           :action="
             () => {

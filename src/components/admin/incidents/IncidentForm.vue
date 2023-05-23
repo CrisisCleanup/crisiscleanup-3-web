@@ -3,7 +3,7 @@
     <div class="form-row flex w-full">
       <FloatingInput
         v-model="currentIncident.name"
-        data-testid="testCurrentIncidentName"
+        data-testid="testCurrentIncidentNameTextInput"
         class="mr-2 w-3/4 sm:w-full"
         :placeholder="$t('incidentBuilder.incident_name')"
         required
@@ -12,14 +12,14 @@
     <div class="form-row flex flex-col gap-2 sm:flex-row w-full">
       <FloatingInput
         v-model="currentIncident.short_name"
-        data-testid="testCurrentIncidentShortName"
+        data-testid="testCurrentIncidentShortNameTextInput"
         class="flex-1"
         :placeholder="$t('incidentBuilder.incident_short_name')"
         required
       />
       <base-select
         v-model="currentIncident.timezone"
-        data-testid="testCurrentIncidentTimezone"
+        data-testid="testCurrentIncidentTimezoneSelect"
         :options="timezoneNames"
         class="flex-1"
         :placeholder="$t('incidentBuilder.timezone')"
@@ -30,7 +30,7 @@
     <div class="form-row flex">
       <datepicker
         v-model="currentIncident.start_at"
-        data-testid="testCurrentIncidentStartAt"
+        data-testid="testCurrentIncidentStartAtTextInput"
         :timezone="currentIncident.timezone"
         :placeholder="$t('actions.start')"
         class="h-12 mr-2"
@@ -51,7 +51,7 @@
     <div class="form-row">
       <base-select
         v-model="currentIncident.incident_type"
-        data-testid="testCurrentIncidentIncidentType"
+        data-testid="testCurrentIncidentIncidentTypeSelect"
         :options="incidentTypeOptions"
         searchable
         class="bg-white"
@@ -65,7 +65,7 @@
     <div class="form-row">
       <base-checkbox 
         v-model="currentIncident.auto_contact"
-        data-testid="testCurrentIncidentAutoContact"
+        data-testid="testCurrentIncidentAutoContactCheckbox"
         class="mb-3"
       >
         {{ $t('incidentBuilder.auto_contact') }}
@@ -73,7 +73,7 @@
 
       <base-checkbox
         v-model="currentIncident.turn_on_release"
-        data-testid="testCurrentIncidentTurnOnRelease"
+        data-testid="testCurrentIncidentTurnOnReleaseCheckbox"
         class="mb-3"
       >
         {{ $t('incidentBuilder.turn_on_release') }}
@@ -81,7 +81,7 @@
 
       <base-checkbox
         v-model="currentIncident.is_archived"
-        data-testid="testCurrentIncidentIsArchived"
+        data-testid="testCurrentIncidentIsArchivedCheckbox"
         class="mb-3"
       >
         {{ $t('incidentBuilder.archived') }}
@@ -91,7 +91,7 @@
     <hr class="mb-4" />
     <base-checkbox
       v-model="currentAni.use_hotline"
-      data-testid="testCurrentAniUseHotline"
+      data-testid="testCurrentAniUseHotlineCheckbox"
       class="mb-3"
     >
       {{ $t('incidentBuilder.use_hotline') }}
@@ -135,7 +135,7 @@
         />
         <base-select
           v-model="currentAni.timezone"
-          data-testid="testCurrentAniTimezone"
+          data-testid="testCurrentAniTimezoneSelect"
           :options="timezoneNames"
           class="w-44"
           :placeholder="$t('incidentBuilder.timezone')"
@@ -152,7 +152,7 @@
       <div class="form-row flex">
         <datepicker
           v-model="currentAni.start_at"
-          data-testid="testCurrentAniStartAt"
+          data-testid="testCurrentAniStartAtSelect"
           :timezone="currentAni.timezone"
           :placeholder="$t('actions.start')"
           v-bind="datePickerDefaultProps"
@@ -171,7 +171,7 @@
       <div class="form-row flex">
         <datepicker
           v-model="currentAni.end_at"
-          data-testid="testCurrentAniEndAt"
+          data-testid="testCurrentAniEndAtSelect"
           :timezone="currentAni.timezone"
           :placeholder="$t('actions.end')"
           v-bind="datePickerDefaultProps"

@@ -25,7 +25,7 @@
           <div class="modal-body flex-grow p-3">
             <base-select
               v-model="response.reason"
-              data-testid="testApproveRejectReasons"
+              data-testid="testApproveRejectReasonsSelect"
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow select"
               :options="approveRejectReasons"
@@ -34,7 +34,7 @@
             ></base-select>
             <base-input
               v-model="response.note"
-              data-testid="testResponseNote"
+              data-testid="testRejectionNoteTextInput"
               class="my-2"
               text-area
               :rows="3"
@@ -46,7 +46,7 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
-                data-testid="testOk"
+                data-testid="testOkButton"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -59,7 +59,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
-                data-testid="testCancel"
+                data-testid="testCancelButton"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {

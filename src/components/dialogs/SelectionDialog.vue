@@ -23,14 +23,14 @@
             </div>
           </div>
 
-          <div class="modal-body flex-grow p-3" data-testid="testContent">
+          <div class="modal-body flex-grow p-3" data-testid="testContentDiv">
             <div>
               {{ content }}
             </div>
             <div>
               <base-select
                 v-model="response"
-                data-testid="testResponse"
+                data-testid="testResponseSelect"
                 :placeholder="placeholder"
                 class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 :options="options"
@@ -44,7 +44,7 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
-                data-testid="testOk"
+                data-testid="testOkButton"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -57,7 +57,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
-                data-testid="testCancel"
+                data-testid="testCancelButton"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {

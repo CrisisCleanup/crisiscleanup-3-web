@@ -12,7 +12,7 @@
       <base-button
         size="small"
         type="bare"
-        data-testid="testReject"
+        data-testid="testRejectButton"
         class="m-1 mx-2 border-2 border-black text-black px-3 py-1"
         :action="
           () => {
@@ -25,7 +25,7 @@
       <base-button
         size="small"
         variant="solid"
-        data-testid="testAccept"
+        data-testid="testAcceptButton"
         class="m-1 mx-2 text-black text-xs px-3 py-1"
         :action="
           () => {

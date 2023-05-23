@@ -30,7 +30,7 @@
             <div>
               <textarea
                 v-model="response"
-                data-testid="testResponse"
+                data-testid="testResponseTextarea"
                 class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 rows="4"
               />
@@ -44,7 +44,7 @@
             >
               <base-button
                 :alt="$t('actions.ok')"
-                data-testid="testOk"
+                data-testid="testOkButton"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -57,7 +57,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
-                data-testid="testCancel"
+                data-testid="testCancelButton"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
@@ -74,7 +74,7 @@
             >
               <base-button
                 v-for="(value, key) in actions"
-                data-testid="testButtonAction"
+                data-testid="testButtonActionButton"
                 :key="key"
                 :alt="value.text"
                 :variant="value.type"

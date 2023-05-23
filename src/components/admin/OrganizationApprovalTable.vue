@@ -78,7 +78,7 @@
         />
         <base-button
           v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
-          data-testid="testApprove"
+          data-testid="testApproveButton"
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
           variant="solid"
@@ -92,7 +92,7 @@
         />
         <base-button
           v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
-          data-testid="testReject"
+          data-testid="testRejectButton"
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"

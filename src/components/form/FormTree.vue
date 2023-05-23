@@ -5,6 +5,7 @@
         <SectionHeading
           :count="getSectionCount(field)"
           :tooltip="field.help_t"
+          :data-testid="`test${field.label_t}HelpTooltip`"
           class="mb-3"
           >{{ field.label_t }}
         </SectionHeading>
@@ -22,6 +23,7 @@
                 showChildren = !showChildren;
               }
             "
+            :data-testid="`test${field.field_key}Checkbox`"
           >
             <div class="text-base font-semibold">
               {{ field.label_t }}
@@ -30,6 +32,7 @@
           <WorksiteStatusDropdown
             v-if="worksite.id && currentWorkType"
             class="block"
+            :data-testid="`test${worksite.id && currentWorkType}WorktypeStatusSelect`"
             :phase="incident ? incident.phase : null"
             :current-work-type="currentWorkType"
             @input="
@@ -56,6 +59,7 @@
                 popperClass: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
+              :data-testid="`test${field.label_t}HelpTooltip`"
               type="help"
               size="large"
             />
@@ -65,6 +69,7 @@
             :options="
               field.values || getSelectValuesList(field.values_default_t)
             "
+            :data-testid="`test${field.field_key}Select`"
             item-key="value"
             label="name_t"
             select-classes="h-12 border"
@@ -82,6 +87,7 @@
             <span>{{ field.label_t }}</span>
             <ccu-icon
               v-if="field.help_t"
+              :data-testid="`test${field.field_key}HelpTooltip`"
               v-tooltip="{
                 content: field.help_t,
                 html: true,
@@ -102,6 +108,7 @@
             :options="
               field.values || getSelectValuesList(field.values_default_t)
             "
+            :data-testid="`test${field.field_key}Select`"
             item-key="value"
             label="name_t"
             select-classes="bg-white border text-xs role-select p-1 form-multiselect"
@@ -121,6 +128,7 @@
           <base-input
             :model-value="dynamicFields[field.field_key]"
             :tooltip="field.help_t"
+            :data-testid="`test${field.field_key}TextInput`"
             size="large"
             :break-glass="field.read_only_break_glass"
             :placeholder="field.placeholder_t || field.label_t"
@@ -138,6 +146,7 @@
           <RecurringSchedule
             :model-value="dynamicFields[field.field_key] || field.recur_default"
             :is-default="!dynamicFields[field.field_key]"
+            :data-testid="`test${field.field_key}CronSelect`"
             @update:modelValue="
               (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -159,6 +168,7 @@
                 popperClass: 'interactive-tooltip w-72',
               }"
               :alt="$t('actions.help_alt')"
+              :data-testid="`test${field.field_key}HelpTooltip`"
               type="help"
               size="large"
             />
@@ -169,6 +179,7 @@
             :rows="4"
             :model-value="dynamicFields[field.field_key]"
             :placeholder="field.placeholder_t || field.label_t"
+            :data-testid="`test${field.field_key}TextArea`"
             @update:modelValue="
               (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -181,6 +192,7 @@
         <div :key="field.field_key" class="form-field flex items-center">
           <base-checkbox
             :model-value="dynamicFields[field.field_key]"
+            :data-testid="`test${field.field_key}Checkbox`"
             @update:modelValue="
               (value: string) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -190,6 +202,7 @@
           </base-checkbox>
           <ccu-icon
             v-if="field.help_t"
+            :data-testid="`test${field.field_key}HelpTooltip`"
             v-tooltip="{
               content: field.help_t,
               triggers: ['click'],
