@@ -87,6 +87,7 @@
             !slotProps.item.approved_by &&
             !slotProps.item.rejected_by
           "
+          data-testid="testApprove"
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
           variant="solid"
@@ -104,6 +105,7 @@
             !slotProps.item.approved_by &&
             !slotProps.item.rejected_by
           "
+          data-testid="testReject"
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"
@@ -117,6 +119,7 @@
         />
         <base-link
           :href="`/admin/organization/${slotProps.item.organization}`"
+          data-testid="testEditOrganization"
           text-variant="bodysm"
         >
           {{ $t('actions.edit_organization') }}

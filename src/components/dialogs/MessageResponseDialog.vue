@@ -11,6 +11,7 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelIcon"
                 size="xs"
                 type="cancel"
                 @click.native="
@@ -29,6 +30,7 @@
             <div>
               <textarea
                 v-model="response"
+                data-testid="testResponse"
                 class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 rows="4"
               />
@@ -42,6 +44,7 @@
             >
               <base-button
                 :alt="$t('actions.ok')"
+                data-testid="testOk"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -54,6 +57,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
+                data-testid="testCancel"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
@@ -70,6 +74,7 @@
             >
               <base-button
                 v-for="(value, key) in actions"
+                data-testid="testButtonAction"
                 :key="key"
                 :alt="value.text"
                 :variant="value.type"

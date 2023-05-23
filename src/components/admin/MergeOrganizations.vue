@@ -3,6 +3,7 @@
     <base-button
       :text="$t('mergeOrganizations.merge_organizations')"
       :alt="$t('mergeOrganizations.merge_organizations')"
+      data-testid="testShowMergeModalTrue"
       variant="solid"
       size="medium"
       :action="
@@ -14,6 +15,7 @@
     <modal
       v-if="showMergeModal"
       modal-classes="bg-white max-w-md shadow"
+      data-testid="testShowMergeModalFalse"
       :title="$t('mergeOrganizations.merge_organizations')"
       closeable
       @close="
@@ -27,17 +29,20 @@
         <OrganizationSearchInput
           include-inactive
           class="w-108"
+          data-testid="testKeepOrganization"
           @selectedOrganization="keepOrganization = $event.id"
         />
         <div>{{ $t('mergeOrganizations.organization_merge') }}</div>
         <OrganizationSearchInput
           include-inactive
           class="w-108"
+          data-testid="testMergeOrganization"
           @selectedOrganization="mergeOrganization = $event.id"
         />
         <div>{{ $t('mergeOrganizations.merge_reason') }}</div>
         <textarea
           v-model="mergeReason"
+          data-testid="testMergeReason"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
           rows="4"
         />
@@ -46,6 +51,7 @@
         <base-button
           :text="$t('actions.cancel')"
           :alt="$t('actions.cancel')"
+          data-testid="testCancel"
           class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
           :action="
             () => {
@@ -55,6 +61,7 @@
         />
         <base-button
           variant="solid"
+          data-testid="testMergeOrganizations"
           :action="mergeOrganizations"
           :text="$t('mergeOrganizations.merge_organizations')"
           :alt="$t('mergeOrganizations.merge_organizations')"

@@ -15,6 +15,7 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancel"
                 size="xs"
                 type="cancel"
                 @click="
@@ -42,6 +43,7 @@
               <div class="flex flex-col items-center justify-center">
                 <base-button
                   :alt="$t('actions.ok')"
+                  data-testid="testOk"
                   variant="solid"
                   size="lg"
                   :action="

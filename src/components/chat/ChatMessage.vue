@@ -12,10 +12,12 @@
               :dark="false"
               :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
               :user="message.created_by"
+              data-testid="testCreatedBy"
             />
             <span
               v-if="moment(message.created_at).isSame(moment(), 'day')"
               class="opacity-40 text-xs ml-1"
+              data-testid="testCreatedAt"
               :title="message.created_at"
               >{{ formatDateString(message.created_at, 'h:mm A') }}</span
             >
@@ -30,6 +32,7 @@
             <div class="text-crisiscleanup-chat-red flex items-center">
               <ccu-icon
                 :alt="$t('chat.urgent')"
+                data-testid="testIsUrgentHighlight"
                 size="small"
                 type="attention-red"
                 class="mr-1"
@@ -46,12 +49,14 @@
           </div>
           <font-awesome-icon
             v-if="showFavorite"
+            data-testid="testShowFavorite"
             :icon="['far', 'star']"
             class="absolute top-1/2 right-2 mt-2"
             @click="$emit('onFavorite', message)"
           />
           <font-awesome-icon
             v-if="message.is_favorite"
+            data-testid="testIsFavorite"
             :icon="['fa', 'star']"
             class="absolute top-1/2 right-2 mt-2"
             @mouseover="showFavorite"

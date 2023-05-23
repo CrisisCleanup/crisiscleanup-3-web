@@ -10,6 +10,7 @@
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelIcon"
                 size="xs"
                 type="cancel"
                 @click.native="
@@ -24,6 +25,7 @@
           <div class="modal-body flex-grow p-3">
             <base-select
               v-model="response.reason"
+              data-testid="testApproveRejectReasons"
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow select"
               :options="approveRejectReasons"
@@ -32,6 +34,7 @@
             ></base-select>
             <base-input
               v-model="response.note"
+              data-testid="testResponseNote"
               class="my-2"
               text-area
               :rows="3"
@@ -43,6 +46,7 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
+                data-testid="testOk"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -55,6 +59,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
+                data-testid="testCancel"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {

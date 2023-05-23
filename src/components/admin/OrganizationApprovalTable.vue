@@ -78,6 +78,7 @@
         />
         <base-button
           v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
+          data-testid="testApprove"
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
           variant="solid"
@@ -91,6 +92,7 @@
         />
         <base-button
           v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
+          data-testid="testReject"
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
           variant="outline"
@@ -104,6 +106,7 @@
         />
         <base-link
           v-if="currentUser && currentUser.isAdmin"
+          data-testid="testOrganizationLink"
           :href="`/admin/organization/${slotProps.item.id}`"
           text-variant="bodysm"
           class="px-1"

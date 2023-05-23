@@ -11,6 +11,7 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelIcon"
                 size="xs"
                 type="cancel"
                 @click="
@@ -22,13 +23,14 @@
             </div>
           </div>
 
-          <div class="modal-body flex-grow p-3">
+          <div class="modal-body flex-grow p-3" data-testid="testContent">
             <div>
               {{ content }}
             </div>
             <div>
               <base-select
                 v-model="response"
+                data-testid="testResponse"
                 :placeholder="placeholder"
                 class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 :options="options"
@@ -42,6 +44,7 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
+                data-testid="testOk"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
@@ -54,6 +57,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
+                data-testid="testCancel"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {

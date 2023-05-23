@@ -4,6 +4,7 @@
       <div class="flex items-center justify-between w-full mr-4">
         <base-input
           v-model="currentLocation.name"
+          data-testid="testCurrentLocationName"
           type="text"
           class="input m-2 w-108"
           size="small"
@@ -26,6 +27,7 @@
           <base-radio
             class="m-4"
             label="shared"
+            data-testid="testCurrentLocationShared"
             :name="$t('locationVue.shared')"
             :model-value="currentLocation.shared"
             @update:modelValue="currentLocation.shared = $event"
@@ -33,6 +35,7 @@
           <base-radio
             class="m-4"
             label="private"
+            data-testid="testCurrentLocationPrivate"
             :name="$t('locationVue.private')"
             :model-value="currentLocation.shared"
             @update:modelValue="currentLocation.shared = $event"
@@ -40,6 +43,7 @@
           <base-radio
             class="m-4"
             label="public"
+            data-testid="testCurrentLocationPublic"
             :name="$t('locationVue.public')"
             :model-value="currentLocation.shared"
             @update:modelValue="currentLocation.shared = $event"

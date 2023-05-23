@@ -8,6 +8,7 @@
         <div class="message-container">
           <div
             id="messages"
+            data-testid="testMessages"
             ref="messagesBox"
             class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
             @wheel="handleWheel"
@@ -33,6 +34,7 @@
             >
               <ccu-icon
                 :alt="$t('chat.urgent')"
+                data-testid="testIsUrgentHighlight"
                 size="small"
                 type="attention-red"
                 class="mr-1"
@@ -42,20 +44,29 @@
             <div class="flex flex-col">
               <base-input
                 v-model="currentMessage"
+                data-testid="testCurrentMessage"
                 text-area
                 class=""
                 @enter="sendMessage"
               />
               <div class="flex items-center justify-between py-2">
-                <base-checkbox v-model="urgent">
+                <base-checkbox
+                  v-model="urgent"
+                  data-testid="testIsUrgentCheckbox"
+                >
                   {{ $t('chat.urgent') }}
                 </base-checkbox>
-                <span class="italic cursor-pointer" @click="focusNewsTab">{{
+                <span
+                  class="italic cursor-pointer"
+                  data-testid="testFocusNewsTab"
+                  @click="focusNewsTab"
+                >{{
                   $t('chat.read_faq_first')
                 }}</span>
                 <div class="flex">
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
+                    data-testid="testSendMessage"
                     :disabled="!Boolean(currentMessage)"
                     ccu-icon="plane"
                     :action="sendMessage"
@@ -73,6 +84,7 @@
           >
             <ChatMessage
               v-for="favorite in favorites"
+              data-testid="testFavorites"
               :key="favorite.id"
               :message="favorite"
             />

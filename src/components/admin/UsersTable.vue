@@ -12,6 +12,7 @@
       <base-button
         :text="$t('actions.login_as')"
         :alt="$t('actions.login_as')"
+        data-testid="testLoginAs"
         variant="solid"
         size="small"
         class="mx-2"
@@ -24,6 +25,7 @@
       <base-button
         :text="$t('actions.see_events')"
         :alt="$t('actions.see_events')"
+        data-testid="testSeeEvents"
         variant="solid"
         size="small"
         class="mx-2"
@@ -40,6 +42,7 @@
     <template #organization="slotProps">
       <base-link
         v-if="currentUser && currentUser.isAdmin && slotProps.item.organization"
+        data-testid="testOrganizationLink"
         :href="`/admin/organization/${slotProps.item.organization.id}`"
         text-variant="bodysm"
         class="px-2"
