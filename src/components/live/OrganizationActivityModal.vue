@@ -9,6 +9,7 @@
         v-if="generalInfo.avatar"
         :src="generalInfo.avatar"
         class="col-span-2 w-10 h-10 rounded-full mr-3"
+        data-testid="testGeneralInfoAvatarIcon"
       />
 
       <div class="col-span-5">
@@ -17,6 +18,7 @@
           <a
             v-if="generalInfo.url"
             :href="generalInfo.url"
+            data-testid="testGeneralInfoUrlLink"
             class="ml-1"
             target="_blank"
           >
@@ -28,6 +30,7 @@
       <font-awesome-icon
         class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
         icon="times"
+        data-testid="testCloseModalAndResetStateIcon"
         @click="closeModalAndResetState"
       />
     </div>
@@ -35,7 +38,10 @@
     <div class="p-1 border-b border-crisiscleanup-dark-300">
       <div class="grid grid-cols-2">
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 text-bodyxsm"
+            data-testid="testPewPewTypeDiv"
+          >
             {{ $t('pewPew.type') }}
             <ccu-icon
               v-tooltip="{
@@ -59,7 +65,10 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 text-bodyxsm"
+            data-testid="testPewPewRoleDiv"
+          >
             {{ $t('pewPew.role') }}
             <ccu-icon
               v-tooltip="{
@@ -85,7 +94,10 @@
       </div>
       <div class="grid grid-cols-4 gap-1 mt-2">
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm"
+            data-testid="testPewPewIncidentsDiv"
+          >
             {{ $t('pewPew.incidents') }}
             <ccu-icon
               v-tooltip="{
@@ -103,7 +115,10 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm"
+            data-testid="testPewPewCasesDiv"
+          >
             {{ $t('pewPew.cases') }}
             <ccu-icon
               v-tooltip="{
@@ -121,7 +136,10 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm"
+            data-testid="testPewPewCallsDiv"
+          >
             {{ $t('pewPew.calls') }}
             <ccu-icon
               v-tooltip="{
@@ -139,7 +157,10 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div
+            class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm"
+            data-testid="testPewPewValueDiv"
+          >
             {{ $t('pewPew.value') }}
             <ccu-icon
               v-tooltip="{
@@ -160,6 +181,7 @@
     <section class="incidents-section">
       <div
         class="flex justify-between items-center cursor-pointer"
+        data-testid="testPewPewIncidentsDiv"
         @click="
           isIncidentHidden = !isIncidentHidden;
           isCapabilityHidden = true;
@@ -188,13 +210,19 @@
             {{ slotProps.item.name }}
           </template>
           <template #calls="slotProps">
-            <span class="w-full flex justify-center">
+            <span
+              class="w-full flex justify-center"
+              data-testid="testCallsCountContent"
+            >
               {{ nFormatter(slotProps.item.calls || 0)
               }}<span class="pew-pew-blue">*</span>
             </span>
           </template>
           <template #commercial_value="slotProps">
-            <span class="w-full flex justify-end">
+            <span
+              class="w-full flex justify-end"
+              data-testid="testCommercialValueContent"
+            >
               ${{ nFormatter(slotProps.item.commercial_value || 0)
               }}<span class="pew-pew-blue">*</span>
             </span>
@@ -202,6 +230,7 @@
           <template #reported_count="slotProps">
             <CaseDonutChart
               v-if="!isDataEmpty(slotProps.item)"
+              data-testid="testCasesCountsContent"
               class="w-8 h-8"
               :chart-id="`case-donut-org-modal-${slotProps.item.id}`"
               :chart-data="{
@@ -223,9 +252,13 @@
       </transition>
     </section>
 
-    <section class="capabilities-section">
+    <section
+      class="capabilities-section"
+      data-testid="testPewPewCapabilitiesContent"
+    >
       <div
         class="flex justify-between items-center cursor-pointer"
+        data-testid="testCapabilityDiv"
         @click="
           isCapabilityHidden = !isCapabilityHidden;
           isIncidentHidden = true;

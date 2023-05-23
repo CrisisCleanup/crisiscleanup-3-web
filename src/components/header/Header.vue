@@ -6,6 +6,7 @@
           <DisasterIcon
             v-if="currentIncident && currentIncident.incidentImage"
             :current-incident="currentIncident"
+            data-testid="testDisasterIcon"
           />
         </div>
         <div class="flex flex-col ml-2 md:w-84 lg:w-84">
@@ -14,6 +15,7 @@
             :model-value="currentIncident?.id"
             :options="incidents"
             :clearable="false"
+            data-testid="testIncidentSelectorSelect"
             searchable
             container-classes="relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none"
             select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded p-2"
@@ -45,12 +47,14 @@
         <base-button
           class="p-1.5"
           variant="solid"
+          data-testid="testDebugUserButton"
           :text="$t('actions.debug_user')"
           :action="showCurrentUser"
         />
         <base-button
           class="p-1.5"
           variant="solid"
+          data-testid="testDebugIncidentStatesButton"
           :text="$t('actions.debug_incident_states')"
           :action="showCurrentIncidentStates"
         />
@@ -59,6 +63,7 @@
         <div
           v-if="can && can('phone_agent')"
           class="flex items-center header-item h-full"
+          data-testid="testPhoneIndicatorDiv"
         >
           <PhoneIndicator />
         </div>
@@ -66,6 +71,7 @@
         <UserProfileMenu
           class="header-item"
           @auth:logout="() => $emit('auth:logout')"
+          data-testid="testLogoutLink"
         />
       </div>
     </div>
@@ -73,6 +79,7 @@
       v-if="showRedeployModal"
       :hide-trigger="true"
       :open-modal="true"
+      data-testid="testRedeployRequestButton"
       @close="showRedeployModal = false"
     />
   </div>

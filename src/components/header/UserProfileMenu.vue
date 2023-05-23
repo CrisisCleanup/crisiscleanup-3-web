@@ -12,12 +12,14 @@
         <Avatar
           :initials="currentUser ? currentUser.first_name : undefined"
           :url="currentUser && currentUser.profilePictureUrl"
+          data-testid="testAvatarIcon"
           class="p-1"
           size="small"
         />
         <base-text variant="h3" class="p-3" regular :class="[...styles.title]">
           <span
             class="font-h3 text-h3 font-normal subpixel-antialiased"
+            data-testid="testCurrentUserFullNameContent"
             :class="styles.title"
             >{{ currentUser && currentUser.full_name }}
             <font-awesome-icon class="cursor-pointer" icon="caret-down" />
@@ -27,7 +29,7 @@
       <template #popper>
         <div class="flex flex-col">
           <base-button
-            data-testid="auth.userprofile.profile"
+            data-testid="testUserprofileProfileLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.profile')"
             :action="
@@ -37,7 +39,7 @@
             "
           />
           <base-button
-            data-testid="auth.userprofile.downloads"
+            data-testid="testUserprofileDownloadsLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.downloads')"
             :action="
@@ -47,7 +49,7 @@
             "
           />
           <base-button
-            data-testid="auth.userprofile.logout"
+            data-testid="testUserprofileLogoutLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('actions.logout')"
             :action="() => $emit('auth:logout')"

@@ -10,6 +10,7 @@
         :is-loading="isOrgActivityModalLoading"
         :general-info="orgInfo.generalInfo"
         :styles="overlayStyles"
+        data-testid="testOrganizationActivityModalDiv"
         @close="isOrgActivityModalHidden = true"
       />
     </div>
@@ -27,23 +28,33 @@
           class="w-6 mr-2 rounded-full"
           :src="getLogoUrl(slotProps.item)"
           :alt="$t('profileOrg.organization_logo')"
+          data-testid="testOrganizationLogoIcon"
         />
         <span class="truncate w-32">{{ slotProps.item.name }}</span>
       </template>
       <template #incident_count="slotProps">
-        <span class="w-full flex justify-end">
+        <span
+          class="w-full flex justify-end"
+          data-testid="testIncidentCountContent"
+        >
           {{ nFormatter(slotProps.item.incident_count)
           }}<span class="pew-pew-blue">*</span>
         </span>
       </template>
       <template #commercial_value="slotProps">
-        <span class="w-full flex justify-end">
+        <span
+          class="w-full flex justify-end"
+          data-testid="testCommercialValueContent"
+        >
           ${{ nFormatter(slotProps.item.commercial_value)
           }}<span class="pew-pew-blue">*</span>
         </span>
       </template>
       <template #calls_count="slotProps">
-        <span class="w-full flex justify-end">
+        <span
+          class="w-full flex justify-end"
+          data-testid="testCallsCountContent"
+        >
           {{ nFormatter(slotProps.item.calls_count) }}
         </span>
       </template>
@@ -69,6 +80,7 @@
     </Table>
     <small
       class="py-1 px-8 small-font italic leading-3 text-center text-black absolute bottom-0 ribbon-gradient"
+      data-testid="testPewPewOrgDisclaimerContent"
     >
       {{ $t('pewPew.org_disclaimer') }}
     </small>
