@@ -131,7 +131,7 @@
           <base-checkbox
             :model-value="selectedItems.has(item.id)"
             class="mb-5 js-select-item"
-            data-cy="tableview_actionSelect"
+            data-testid="tableview_actionSelect"
             @update:modelValue="
               (value) => {
                 setChecked(item, value);

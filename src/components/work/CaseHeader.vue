@@ -97,7 +97,7 @@
           size="small"
           class="p-1 py-2"
           type="download"
-          data-cy="cases.icons.download"
+          data-testid="cases.icons.download"
           @click="$emit('onDownloadWorksite')"
         />
         <ccu-icon
@@ -105,7 +105,7 @@
           size="small"
           class="p-1 py-2"
           type="share"
-          data-cy="cases.icons.share"
+          data-testid="cases.icons.share"
           @click="$emit('onShareWorksite')"
         />
         <ccu-icon
@@ -113,7 +113,7 @@
           size="small"
           class="p-1 py-2"
           type="print"
-          data-cy="cases.icons.print"
+          data-testid="cases.icons.print"
           @click="$emit('onPrintWorksite')"
         />
         <ccu-icon

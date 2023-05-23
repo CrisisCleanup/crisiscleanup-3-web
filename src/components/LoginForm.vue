@@ -26,7 +26,7 @@
         :placeholder="lang.email"
         size="xlarge"
         type="email"
-        data-cy="loginForm.email"
+        data-testid="loginForm.email"
       />
     </div>
     <div class="grid--password my-4">
@@ -37,7 +37,7 @@
         :placeholder="lang.password"
         size="xlarge"
         type="password"
-        data-cy="loginForm.password"
+        data-testid="loginForm.password"
       />
     </div>
     <div class="grid--forgot my-2">
@@ -50,7 +50,7 @@
         variant="solid"
         size="large"
         class="w-full"
-        data-cy="loginForm.login"
+        data-testid="loginForm.login"
         :action="loginUser"
       >
         {{ lang.login }}

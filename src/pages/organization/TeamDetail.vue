@@ -213,7 +213,7 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
-            data-cy="cases.mapButton"
+            data-testid="cases.mapButton"
             @click="toggleView('showingWorksiteMap')"
           />
           <ccu-icon
@@ -222,7 +222,7 @@
             class="mr-4 cursor-pointer"
             :class="showingWorksiteTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
-            data-cy="cases.tableButton"
+            data-testid="cases.tableButton"
             @click="toggleView('showingWorksiteTable')"
           />
         </div>

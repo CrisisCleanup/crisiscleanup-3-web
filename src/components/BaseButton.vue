@@ -6,7 +6,7 @@
     type="submit"
     :size="size"
     :title="buttonTitle"
-    :data-cy="buttonSelector"
+    :data-testid="buttonSelector"
     @click.prevent="performAction"
   >
     <font-awesome-icon

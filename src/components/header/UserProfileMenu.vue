@@ -6,7 +6,7 @@
     <v-popover
       popper-class="menu-popover"
       placement="bottom-end"
-      data-cy="auth.userprofile"
+      data-testid="auth.userprofile"
     >
       <div class="profile-menu__body flex cursor-pointer items-center">
         <Avatar
@@ -27,7 +27,7 @@
       <template #popper>
         <div class="flex flex-col">
           <base-button
-            data-cy="auth.userprofile.profile"
+            data-testid="auth.userprofile.profile"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.profile')"
             :action="
@@ -37,7 +37,7 @@
             "
           />
           <base-button
-            data-cy="auth.userprofile.downloads"
+            data-testid="auth.userprofile.downloads"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.downloads')"
             :action="
@@ -47,7 +47,7 @@
             "
           />
           <base-button
-            data-cy="auth.userprofile.logout"
+            data-testid="auth.userprofile.logout"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('actions.logout')"
             :action="() => $emit('auth:logout')"

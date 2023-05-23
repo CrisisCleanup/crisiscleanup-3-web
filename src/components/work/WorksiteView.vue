@@ -351,7 +351,7 @@
         size="medium"
         variant="solid"
         class="m-1 text-black p-3 px-4 flex-grow"
-        data-cy="caseview-actions-done"
+        data-testid="caseview-actions-done"
         :text="$t('actions.done')"
         :action="
           () => {

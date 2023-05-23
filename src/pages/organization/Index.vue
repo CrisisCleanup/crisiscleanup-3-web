@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full" data-cy="myorg-dashboard">
+  <div class="flex flex-col h-full" data-testid="myorg-dashboard">
     <div
       class="h-max bg-white mx-5 border-t flex justify-around text-crisiscleanup-grey-700"
     >
@@ -9,7 +9,7 @@
           :key="`myorg-nav-${r.name}`"
           :to="`/organization/${r.name}`"
           class="flex justify-center mx-2 cursor-pointer"
-          :data-cy="`myorg-nav-${r.name}`"
+          :data-testid="`myorg-nav-${r.name}`"
           :class="r.class ? r.class : null"
         >
           <span class="p-3">

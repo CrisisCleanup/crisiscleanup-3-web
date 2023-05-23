@@ -23,7 +23,7 @@
     <template #footer>
       <div class="flex items-center justify-center py-2 border-t">
         <base-button
-          data-cy="termsmodal.acceptBtn"
+          data-testid="termsmodal.acceptBtn"
           :text="$t('actions.accept')"
           :alt="$t('actions.accept')"
           variant="solid"

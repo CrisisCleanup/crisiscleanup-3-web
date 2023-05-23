@@ -357,7 +357,7 @@
       <base-button
         size="medium"
         variant="solid"
-        data-cy="worksite-formaction-save"
+        data-testid="worksite-formaction-save"
         class="flex-grow"
         :action="saveWorksite"
         :text="$t('actions.save')"
