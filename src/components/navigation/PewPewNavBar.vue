@@ -3,12 +3,14 @@
     <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
       <img
         v-if="colorMode === 'dark'"
+        data-testid="testPewPewLogoIcon"
         src="@/assets/cc-pew-pew-logo.gif"
         :alt="$t('nav.crisis_cleanup')"
         class="h-8"
       />
       <img
         v-else
+        data-testid="testCrisiscleanupLogoIcon"
         src="@/assets/ccu-logo-black-500w.png"
         :alt="$t('nav.crisis_cleanup')"
         class="h-16"
@@ -18,13 +20,21 @@
     <template v-for="r in navRoutes" :key="r.title">
       <a v-if="r.external" :alt="r.title" :href="r.route" target="_blank">
         <div class="pewpew__navlink">
-          <ccu-icon :linked="true" v-bind="r.iconProps" />
+          <ccu-icon
+            :linked="true"
+            :data-testid="`test${r.title}Button`"
+            v-bind="r.iconProps"
+          />
           {{ r.title }}
         </div>
       </a>
       <a v-else :href="r.routeProps">
         <div class="pewpew__navlink">
-          <ccu-icon :linked="true" v-bind="r.iconProps" />
+          <ccu-icon
+            :data-testid="`test${r.title}Icon`"
+            :linked="true"
+            v-bind="r.iconProps"
+          />
           {{ r.title }}
         </div>
       </a>
@@ -37,6 +47,7 @@
       <base-button
         class="text-black text-xs font-semibold flex flex-grow p-1"
         variant="solid"
+        data-testid="testRegisterButton"
         :action="() => $router.push({ name: 'nav.register' })"
       >
         {{ $t('actions.register') }}

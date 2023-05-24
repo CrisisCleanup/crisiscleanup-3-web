@@ -4,11 +4,12 @@
     :to="route.to"
     class="menu-item router-link p-2 border-b border-t border-gray-800"
     :class="{ 'router-link-active': isActive }"
-    :data-testid="`navigation.${route.key}`"
+    :data-testid="`test${route.key}Link`"
   >
     <div :key="route.key" class="flex flex-col items-center relative">
       <badge
         v-if="route.newBadge"
+        data-testid="testNewBadgeIcon"
         width="2rem"
         height="1rem"
         class="text-white bg-crisiscleanup-red-700 mx-1 absolute -top-0.5 -right-8 p-3"
@@ -17,6 +18,7 @@
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
+        :data-testid="$t(`test${route.key}Link`)"
         v-bind="iconProps"
         :linked="true"
       />
