@@ -5,7 +5,7 @@
     @close="$emit('cancel')"
   >
     <template #header>
-      <div class="text-lg border-b p-3">
+      <div class="text-lg border-b p-3" data-testid="testUpdateAgentDiv">
         {{ $t('editAgentModal.update_agent') }}
       </div>
     </template>
@@ -13,11 +13,16 @@
     <div class="p-5">
       <div class="section flex flex-col justify-around">
         <!-- Phone # -->
-        <base-text :weight="200" class="section-header">
+        <base-text
+          :weight="200"
+          class="section-header"
+          data-testid="testPhoneNumberContent"
+        >
           {{ $t('editAgentModal.phone_number') }}
         </base-text>
         <base-input
           :model-value="phoneNumber"
+          data-testid="testPhoneNumberTextInput"
           size="medium"
           placeholder="+1 (000) 000-0000"
           :validator="validatePhoneNumber"
@@ -25,12 +30,17 @@
         />
       </div>
       <div class="section flex flex-col">
-        <base-text :weight="200" class="section-header">
+        <base-text
+          :weight="200"
+          class="section-header"
+          data-testid="testLanguagesContent"
+        >
           {{ $t('editAgentModal.languages') }}
         </base-text>
         <!-- Language -->
         <base-select
           class="flex-grow border border-crisiscleanup-dark-100"
+          data-testid="testLanguagesSelect"
           :model-value="languages"
           multiple
           :options="supportedLanguages"
@@ -47,6 +57,7 @@
       <div class="flex p-3 my-6 justify-center mb-3 footer">
         <base-button
           variant="solid"
+          data-testid="testSaveButton"
           size="large"
           :action="() => updateUserNeeded()"
           >{{ $t('actions.save') }}</base-button
