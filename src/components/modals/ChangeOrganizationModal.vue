@@ -5,7 +5,10 @@
     @close="$emit('cancel')"
   >
     <template #header>
-      <div class="text-lg border-b p-3">
+      <div
+        data-testid="testChangeOrganizationDiv"
+        class="text-lg border-b p-3"
+      >
         {{ $t('userTransfer.change_organization') }}
       </div>
     </template>
@@ -14,30 +17,39 @@
     </div>
     <div v-else class="p-3">
       <div v-if="page === 'start'">
-        <base-text variant="h2" :weight="400" class="text-center">
+        <base-text
+          variant="h2"
+          data-testid="testWhereMoveToContent"
+          :weight="400"
+          class="text-center"
+        >
           {{ $t('userTransfer.where_move_to') }}
         </base-text>
         <div class="flex justify-center text-base my-10">
           <div
             class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey hidden"
+            data-testid="testMoveNewOrganizationdiv"
             @click="page = 'new'"
           >
             {{ $t('userTransfer.move_new_organization') }}
             <ccu-icon
               size="lg"
               type="right"
+              data-testid="testMoveNewOrganizationIcon"
               class="mt-3"
               :alt="$t('userTransfer.move_new_organization')"
             />
           </div>
           <div
             class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey"
+            data-testid="testMoveExistingOrganizationDiv"
             @click="page = 'existing'"
           >
             {{ $t('userTransfer.move_existing_organization') }}
             <ccu-icon
               size="lg"
               type="right"
+              data-testid="testMoveExistingOrganizationIcon"
               class="mt-3"
               :alt="$t('userTransfer.move_existing_organization')"
             />
@@ -47,30 +59,43 @@
 
       <div v-if="page === 'existing'">
         <tabs ref="tabs" class="">
-          <tab :name="$t('userTransfer.select_organization')">
-            <div class="text-base mt-1 mb-3">
+          <tab 
+            :name="$t('userTransfer.select_organization')"
+            data-testid="testSelectOrganizationTabDiv"
+          >
+            <div
+              class="text-base mt-1 mb-3"
+              data-testid="testPleaseSelectTargetOrganizationDiv"
+            >
               {{ $t('userTransfer.please_select_target_organization') }}
             </div>
             <OrganizationSearchInput
               class="w-108"
               size="large"
+              data-testid="testOrganizationSearchInputSelect"
               @selectedOrganization="selectedOrganization = $event.id"
             />
           </tab>
           <tab
             :name="$t('userTransfer.select_users')"
             :disabled="!selectedOrganization"
+            data-testid="testSelectUsersTabDiv"
           >
             <div class="h-72 overflow-auto py-2">
               <div class="pb-2">
                 {{ $t('userTransfer.select_users') }}
                 {{ selectedOrganization && selectedOrganization.name }}
               </div>
-              <base-checkbox class="pb-2" @input="setAllUsers">{{
+              <base-checkbox
+                class="pb-2"
+                data-testid="testSelectAllUsersCheckbox"
+                @input="setAllUsers"
+              >{{
                 $t('actions.select_all')
               }}</base-checkbox>
               <tree-menu
                 v-for="user in nestedUsers"
+                data-testid="testNestedUsersMenu"
                 :key="`${user.id}`"
                 :children="user.children"
                 :label="user.label"
@@ -87,6 +112,7 @@
           <tab
             :name="$t('userTransfer.select_cases')"
             :disabled="!selectedOrganization"
+            data-testid="testSelectCasesTabDiv"
           >
             <div class="h-72 overflow-auto py-2">
               <div class="pb-2">
@@ -94,14 +120,19 @@
                 <div class="">
                   <div
                     v-for="(cases, incident) in claimedCases"
+                    data-testid="testClaimedCasesDiv"
                     :key="incident"
                     class="py-2 border-b"
                   >
-                    <div class="text-base py-2">
+                    <div
+                      class="text-base py-2"
+                      data-testid="testIncidentDiv"
+                    >
                       {{ getIncidentName(incident, incidents) }}
                     </div>
                     <base-checkbox
                       class="pb-2"
+                      data-testid="testSelectAllCasesCheckbox"
                       @input="
                         (value: boolean) => {
                           setCases(value, cases);
@@ -113,11 +144,13 @@
                     >
                     <div
                       v-for="work_type in cases"
+                      data-testid="testWorkTypeDiv"
                       :key="`${work_type.id}`"
                       class="border-t py-1"
                     >
                       <base-checkbox
                         class="pb-2"
+                        data-testid="testWorkTypeCheckbox"
                         :value="selectedCases.includes(work_type.id)"
                         @input="
                           (value: boolean) => {
@@ -153,6 +186,7 @@
     <div slot="footer" class="flex items-center justify-center py-2 border-t">
       <base-button
         v-if="page === 'start'"
+        data-testid="testCancelButton"
         :text="$t('actions.cancel')"
         :alt="$t('actions.cancel')"
         variant="outline"
@@ -167,6 +201,7 @@
       </base-button>
       <base-button
         v-if="page !== 'start'"
+        data-testid="testBackLink"
         :text="$t('actions.back')"
         :alt="$t('actions.back')"
         variant="outline"
@@ -183,6 +218,7 @@
       </base-button>
       <base-button
         v-if="page !== 'start' && tabs && !tabs.isLast"
+        data-testid="testNextLink"
         :text="$t('actions.next')"
         :alt="$t('actions.next')"
         variant="solid"
@@ -199,6 +235,7 @@
       </base-button>
       <base-button
         v-if="tabs && tabs.isLast"
+        data-testid="testMoveButton"
         :text="$t('actions.move')"
         :alt="$t('actions.move')"
         variant="solid"

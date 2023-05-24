@@ -2,6 +2,7 @@
   <div>
     <base-button
       v-if="!hideTrigger"
+      data-testid="testRequestRedeployButton"
       variant="outline"
       class="mx-1 px-3 py-1"
       :text="$t('requestRedeploy.request_redeploy')"
@@ -10,6 +11,7 @@
     ></base-button>
     <modal
       v-if="showRedeployModal"
+      data-testid="testShowRedeployModal"
       modal-classes="bg-white max-w-lg shadow"
       :title="$t('requestRedeploy.request_redeploy')"
       closeable
@@ -21,12 +23,16 @@
       "
     >
       <div class="text-justify flex flex-col p-3 justify-center">
-        <div class="my-3">
+        <div
+          data-testid="testChooseAnIncidentDiv"
+          class="my-3"
+        >
           {{ $t('requestRedeploy.choose_an_incident') }}
         </div>
         <BaseSelect
           :model-value="selectedIncidentId"
           :options="incident_list"
+          data-testid="testSelectIncidentSelect"
           searchable
           select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
           item-key="id"
@@ -40,6 +46,7 @@
           <base-button
             :text="$t('actions.cancel')"
             :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
             class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
             :action="
               () => {
@@ -50,6 +57,7 @@
           />
           <base-button
             variant="solid"
+            data-testid="testSubmitButton"
             :action="requestIncident"
             :text="$t('actions.submit')"
             :alt="$t('actions.submit')"

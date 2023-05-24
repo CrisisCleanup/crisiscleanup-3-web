@@ -4,6 +4,7 @@
       <div class="flex">
         <DragDrop
           class="border w-72 bg-white"
+          data-testid="testDragDropShpKmlFile"
           :choose-title="$t('dragDrop.choose_files')"
           :drag-title="$t('layersVue.drag_drop_shp_kml')"
           @files="handleFileUpload"
@@ -13,8 +14,11 @@
               {{ key }}
             </div>
 
-            <div class="text-underline text-primary-dark">
-              {{ $t('Choose another file') }}
+            <div
+              class="text-underline text-primary-dark"
+              data-testid="testChooseAnotherFileDiv"
+            >
+              {{ $t('layersVue.choose_another_file') }}
             </div>
           </template>
         </DragDrop>
@@ -32,6 +36,7 @@
               <base-button
                 :text="$t('actions.see_sample')"
                 :alt="$t('actions.see_sample')"
+                data-testid="testSeeSampleButton"
                 size="small"
                 class="border border-black px-2 py-1"
                 :action="
@@ -44,6 +49,7 @@
               <modal
                 v-if="shapefileInfo[data.filename].showingSampleModal"
                 modal-classes="bg-white max-w-lg shadow"
+                data-testid="testShowingSampleModal"
                 @close="
                   () => {
                     shapefileInfo[data.filename].showingSampleModal = false;
@@ -70,6 +76,7 @@
                 :model-value="shapefileInfo[data.filename].shapefileKey"
                 :options="data.fields"
                 :placeholder="$t('layersVue.select_key_shapefile')"
+                data-testid="testSelectKeyShapefileSelect"
                 select-classes="bg-white border w-full"
                 class="form-field"
                 @update:modelValue="
@@ -83,6 +90,7 @@
               <textarea
                 :model-value="shapefileInfo[data.filename].shapefileCustomName"
                 :placeholder="$t('layersVue.custom_name_template')"
+                data-testid="testCustomNameTemplateTextarea"
                 rows="2"
                 class="form-field text-base w-full border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none"
                 @update:modelValue="
@@ -100,6 +108,7 @@
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileType"
                   :options="locationTypes"
+                  data-testid="testShapefileTypeSelect"
                   item-key="id"
                   label="name_t"
                   select-classes="bg-white border w-full"
@@ -118,6 +127,7 @@
                   v-if="!loading"
                   :model-value="shapefileInfo[data.filename].shapefileAccess"
                   :options="['private', 'public', 'shared']"
+                  data-testid="testDegreeOfSharingSelect"
                   item-key="id"
                   label="name_t"
                   select-classes="bg-white border w-full"
@@ -136,6 +146,7 @@
           <div>
             <base-checkbox
               v-model="shapefileInfo[data.filename].combineLocations"
+              data-testid="testCombineToSingleObjectCheckbox"
             >
               {{ $t('layersVue.combine_to_single_object') }}
             </base-checkbox>
@@ -152,6 +163,7 @@
                   uploadShapefile(data.filename);
                 }
               "
+              data-testid="testUploadButton"
               variant="solid"
               size="medium"
             />

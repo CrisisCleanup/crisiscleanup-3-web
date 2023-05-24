@@ -6,6 +6,7 @@
     <tag-input
       v-model="emails"
       v-model:tags="emailsToShare"
+      data-testid="testManuallyEnterEmailsTextInput"
       :placeholder="$t('shareWorksite.manually_enter_emails')"
       :validation="emailValidation"
       :add-on-key="[13, 32, ',']"
@@ -22,6 +23,7 @@
 
     <UserSearchInput
       :placeholder="$t('shareWorksite.search_emails')"
+      data-testid="testSearchEmailsSearch"
       class="my-1"
       @selectedUser="onSelectedUserEmail"
     />
@@ -31,6 +33,7 @@
     <tag-input
       v-model="phoneNumbers"
       v-model:tags="phoneNumbersToShare"
+      data-testid="testManuallyEnterPhonesTextInput"
       :placeholder="$t('shareWorksite.manually_enter_phones')"
       :validation="phoneValidation"
       :add-on-key="[13, 32, ',']"
@@ -47,6 +50,7 @@
 
     <UserSearchInput
       :placeholder="$t('shareWorksite.search_phones')"
+      data-testid="testSearchPhonesSearch"
       class="my-1"
       display-prop="mobile"
       @selectedUser="onSelectedUserPhone"
@@ -54,6 +58,7 @@
 
     <base-input
       :model-value="shareMessage"
+      data-testid="testAddMessageToInviteTextarea"
       text-area
       :disabled="false"
       :rows="6"

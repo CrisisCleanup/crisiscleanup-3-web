@@ -1,6 +1,7 @@
 <template>
   <v-popover
     :auto-hide="false"
+    data-testid="testMapButtonPopoverModal"
     popper-class="layer-action-popover"
     placement="bottom-start"
     :disabled="disabled || actions.length === 0"
@@ -9,6 +10,7 @@
       :alt="title || buttonText"
       :class="['map-button', buttonClass, selected ? 'selected' : '']"
       :type="icon"
+      :data-testid="`test${title || buttonText}Icon`"
       size="xl"
       @click="$emit('click')"
       @click.stop
@@ -17,6 +19,7 @@
       <div class="flex text-primary-dark" style="z-index: 1001">
         <base-button
           v-for="action in actions"
+          :data-testid="`test${action.id}Button`"
           :key="`${action.id}`"
           :text="action.text"
           :alt="action.text"

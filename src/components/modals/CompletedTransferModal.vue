@@ -1,12 +1,16 @@
 <template>
   <modal
     :title="$t('userTransfer.you_have_been_moved')"
+    data-testid="testYouHaveBeenMovedModal"
     modal-classes="max-w-lg h-64"
     closeable
     @cancel="$emit('close')"
   >
     <div class="p-3">
-      <div v-if="currentUser && requestingUser">
+      <div
+        v-if="currentUser && requestingUser"
+        data-testid="testYouHaveBeenMovedToDiv"
+      >
         {{ $t('userTransfer.you_have_been_moved_to') }}
         {{ currentUser.organization.name }} {{ $t('userTransfer.by') }}
         {{ requestingUser.first_name }} {{ requestingUser.last_name }} ({{
@@ -20,6 +24,7 @@
     <div slot="footer" class="p-3 flex items-center justify-center">
       <base-button
         variant="outline"
+        data-testid="testMoveBackButton"
         :action="goBack"
         :text="$t('actions.move_back')"
         class="ml-2 p-3 px-6 text-xs"
@@ -27,6 +32,7 @@
       <base-button
         :action="stay"
         :text="$t('actions.stay')"
+        data-testid="testStayButton"
         variant="solid"
         class="ml-2 p-3 px-6 text-xs"
       />

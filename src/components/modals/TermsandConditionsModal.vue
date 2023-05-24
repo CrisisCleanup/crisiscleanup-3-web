@@ -1,6 +1,7 @@
 <template>
   <modal
     :title="$t('termsConditionsModal.terms_conditions_title')"
+    data-testid="testTermsConditionsTitleModal"
     modal-classes="max-w-lg h-auto terms-modal"
   >
     <div class="overflow-auto">
@@ -23,7 +24,7 @@
     <template #footer>
       <div class="flex items-center justify-center py-2 border-t">
         <base-button
-          data-testid="termsmodal.acceptBtn"
+          data-testid="testTermsmodalAcceptButton"
           :text="$t('actions.accept')"
           :alt="$t('actions.accept')"
           variant="solid"

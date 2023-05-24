@@ -3,6 +3,7 @@
     <base-button
       :text="$t('usersVue.invite_new_user')"
       :alt="$t('usersVue.invite_new_user')"
+      data-testid="testInviteNewUserButton"
       variant="solid"
       class="mx-1 px-3 py-1"
       :action="
@@ -13,6 +14,7 @@
     />
     <modal
       v-if="showInviteModal"
+      data-testid="testInviteUserModal"
       modal-classes="bg-white max-w-2xl shadow"
       :title="$t('usersVue.invite_user')"
       closeable
@@ -24,13 +26,17 @@
       "
     >
       <div class="text-justify flex flex-col p-3 justify-center">
-        <div class="my-3">
+        <div
+          class="my-3"
+          data-testid="testInviteTeammatesInstructionsDiv"
+        >
           {{ $t('inviteTeammates.invite_teammates_instructions') }}
         </div>
         <div class="mb-4">
           <tag-input
             v-model="emails"
             v-model:tags="usersToInvite"
+            data-testid="testUserEmailsToInviteTextInput"
             :placeholder="$t('usersVue.emails')"
             :validation="validation"
             :add-on-key="[13, 32, ',']"
@@ -46,6 +52,7 @@
         >
           <OrganizationSearchInput
             class="w-108"
+            data-testid="testOrganizationSearchTextInput"
             :allowed-organization-ids="
               currentOrganization ? currentOrganization.affiliates : []
             "
@@ -61,6 +68,7 @@
           <base-button
             :text="$t('actions.cancel')"
             :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
             class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
             :action="
               () => {
@@ -70,6 +78,7 @@
           />
           <base-button
             variant="solid"
+            data-testid="testSubmitInvitesButton"
             :action="() => inviteUsers()"
             :text="$t('actions.submit_invites')"
             :alt="$t('actions.submit_invites')"
