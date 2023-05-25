@@ -1,5 +1,10 @@
 <template>
-  <tag :style="[styles]" class="tag-item tag--language" v-bind="$attrs">
+  <tag
+    :style="[styles]"
+    :data-testid="`test${language.shortName}Icon`"
+    class="tag-item tag--language"
+    v-bind="$attrs"
+  >
     {{ language && language.shortName }}
   </tag>
 </template>

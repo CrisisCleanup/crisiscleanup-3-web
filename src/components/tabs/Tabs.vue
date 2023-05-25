@@ -3,6 +3,7 @@
     <ul class="tabs-header flex h-full w-auto">
       <li
         v-for="(tab, index) in tabs"
+        :data-testid="`test${index}Tab`"
         :key="index"
         :class="{
           'is-active': index === selectedIndex,

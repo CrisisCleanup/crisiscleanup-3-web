@@ -3,6 +3,7 @@
     <div class="actions flex my-4 justify-end items-center">
       <base-button
         class="text-base font-thin mx-1"
+        data-testid="testDownloadWidgetCsvButton"
         ccu-icon="download"
         icon-size="small"
         variant="outline"
@@ -13,6 +14,7 @@
       />
       <base-button
         class="text-base font-thin mx-1"
+        data-testid="testPrintWidgetButton"
         ccu-icon="print"
         icon-size="small"
         variant="outline"
@@ -25,6 +27,7 @@
       />
       <base-checkbox
         v-if="allowAdd"
+        data-testid="testAddToDashboardCheckbox"
         class="text-sm mx-1"
         :model-value="availableWidgets.includes(widgetKey)"
         @update:modelValue="
@@ -43,6 +46,7 @@
     <div v-if="value.type === 'pie'" class="grid grid-flow-col">
       <ReportPieChart
         :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportPieChart${widgetKey}Chart`"
         :key="JSON.stringify(currentFilters)"
         :data="
           Object.entries(value.data).map(([reportKey, reportValue]) => ({
@@ -61,6 +65,7 @@
     >
       <ReportLineChart
         :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportLineChart${widgetKey}Chart`"
         :key="JSON.stringify(currentFilters)"
         :data="value.data"
         :display-options="value.display_options"
@@ -74,6 +79,7 @@
     >
       <ReportBarChart
         :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportBarChart${widgetKey}Chart`"
         :key="JSON.stringify(currentFilters)"
         :data="value.data"
         :report-name="widgetKey"

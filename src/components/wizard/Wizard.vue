@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col">
     <div class="steps h-12">
-      <div class="flex items-center h-full justify-evenly bg-white">
+      <div
+        class="flex items-center h-full justify-evenly bg-white"
+        data-testid="testStepsDiv"
+      >
         <div
           v-for="(step, index) in steps"
           :key="step.props.name"
@@ -21,6 +24,7 @@
             <div v-if="completedSteps.has(selectedIndex)">
               <ccu-icon
                 :alt="$t('incidentBuilder.completed')"
+                data-testid="testIncidentBuilderCompletedIcon"
                 type="completed"
                 size="small"
               />
@@ -50,6 +54,7 @@
         :disabled="isFirst"
         :text="$t('actions.previous_step')"
         :alt="$t('actions.previous_step')"
+        data-testid="testPreviousStepButton"
         variant="outline"
         class="p-2"
         :action="previousStep"
@@ -57,6 +62,7 @@
       <base-button
         :text="isLast ? $t('Done') : $t('actions.save_next')"
         :alt="isLast ? $t('Done') : $t('actions.save_next')"
+        data-testid="testSaveOrNextButton"
         variant="solid"
         class="p-2"
         :action="nextStep"

@@ -6,6 +6,7 @@
         <div v-if="input.filter === 'timerange'" :key="input" class="my-1">
           <datepicker
             v-model="filters[input.field]"
+            data-testid="testDatePickerInput"
             range
             auto-apply
             format="yyyy-MM-dd"
@@ -14,6 +15,7 @@
         <div v-if="input.filter === 'organizations'" :key="input" class="my-1">
           <base-select
             v-model="filters[input.field]"
+            data-testid="testOrganizationSearchSelect"
             searchable
             multiple
             item-key="id"
@@ -26,6 +28,7 @@
         <div v-if="input.filter === 'work_types'" :key="input" class="my-1">
           <base-select
             v-model="filters[input.field]"
+            data-testid="testWorkTypesSelect"
             searchable
             multiple
             item-key="key"
@@ -38,6 +41,7 @@
         <div v-if="input.filter === 'location'" :key="input" class="my-1">
           <base-select
             v-model="filters[input.field]"
+            data-testid="testLocationSelect"
             searchable
             item-key="id"
             label="name"
@@ -51,18 +55,21 @@
     <div class="flex mt-4 justify-end">
       <base-button
         variant="outline"
+        data-testid="testPrintReportButton"
         :action="printReport"
         :text="$t('actions.print')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
         variant="solid"
+        data-testid="testDownloadCSVButton"
         :action="downloadCSV"
         :text="$t('actions.download_csv')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
         variant="solid"
+        data-testid="testApplyFiltersButton"
         :action="applyFilters"
         :text="$t('actions.run_report')"
         class="ml-2 p-3 px-6 text-xs"
