@@ -1,6 +1,9 @@
 <template>
   <form class="bg-white flex flex-col">
-    <div class="flex flex-col flex-wrap text-center status-wrapper">
+    <div 
+      class="flex flex-col flex-wrap text-center status-wrapper"
+      data-testid="testStatusSelectorDiv"
+    >
       <div v-for="(section, index) in sortedValues" :key="index">
         <div>
           <div class="font-bold">
@@ -21,6 +24,7 @@
     </div>
     <textarea
       :model-value="callNotes"
+      data-testid="testCallNoteTextarea"
       rows="3"
       class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
       :placeholder="$t('phoneDashboard.notes')"
@@ -28,6 +32,7 @@
     ></textarea>
     <base-button
       class="self-end"
+      data-testid="testCompleteCallButton"
       size="small"
       variant="solid"
       :action="

@@ -1,6 +1,9 @@
 <template>
   <tabs ref="tabs" class="" tab-details-classes="h-full overflow-auto">
-    <tab :name="$t('phoneDashboard.news')">
+    <tab
+      :name="$t('phoneDashboard.news')"
+      data-testid="testPhoneNewsDiv"
+    >
       <ul>
         <li
           v-for="newItem in news"

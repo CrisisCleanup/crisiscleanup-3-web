@@ -2,6 +2,7 @@
   <div class="phone-system-action">
     <div
       class="phone-system-action__button"
+      data-testid="testPhoneSystemActionButtonDiv"
       :class="showComponent ? 'phone-system-action__button--active' : ''"
       @click="toggleComponent"
     >
@@ -9,6 +10,7 @@
         <div class="phone-system-action__icon">
           <ccu-icon
             v-if="icon"
+            data-testid="testPhoneSystemActionIcon"
             :type="icon"
             :class="iconClass"
             :size="iconSize"
@@ -18,6 +20,7 @@
     </div>
     <div
       v-show="showComponent"
+      data-testid="testPhoneSystemActionContentDiv"
       class="phone-system-action__content"
       :class="componentClass"
       :style="componentStyle"
@@ -25,6 +28,7 @@
       <div class="phone-system-action__close">
         <ccu-icon
           :alt="$t('actions.cancel')"
+          data-testid="testPhoneSystemActionCloseIcon"
           size="xs"
           type="cancel"
           class="phone-system-action__close-icon"

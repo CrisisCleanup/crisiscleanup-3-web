@@ -2,6 +2,7 @@
   <TitledCard
     :title="$t('phoneDashboard.leaderboard')"
     :dropdown="dropdownProps"
+    data-testid="testLeaderboardDiv"
     @update:dropdown="onDropdownUpdate"
   >
     <div class="h-full overflow-y-scroll">
@@ -15,6 +16,7 @@
             <Avatar
               :initials="rank.user.full_name"
               :url="rank.user && rank.user.profilePictureUrl"
+              data-testid="testAvatarIcon"
               size="xsmall"
               inner-classes="shadow"
             />
@@ -26,6 +28,7 @@
                 :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
                 :user="rank.user.id"
                 :name-style="nameTextStyle"
+                data-testid="testUserInfoTooltip"
               />
               <div class="flex">
                 <div
@@ -62,9 +65,9 @@
         </div>
         <div class="grid grid-cols-3 gap-x-4">
           <template v-if="true">
-            <div>{{ $t('phoneDashboard.inbound') }}</div>
-            <div>{{ $t('phoneDashboard.outbound') }}</div>
-            <div>{{ $t('phoneDashboard.total') }}</div>
+            <div data-testid="testInboundCountDiv">{{ $t('phoneDashboard.inbound') }}</div>
+            <div data-testid="testOutboundCountDiv">{{ $t('phoneDashboard.outbound') }}</div>
+            <div data-testid="testTotalCountdiv">{{ $t('phoneDashboard.total') }}</div>
           </template>
           <div
             v-for="m in ['inbound_calls', 'outbound_calls', 'total']"
@@ -84,6 +87,7 @@
     >
       <base-button
         :disabled="!previous"
+        data-testid="testPreviousButton"
         class="bg-crisiscleanup-light-smoke w-6 h-6"
         variant="solid"
         icon-size="xs"
@@ -92,6 +96,7 @@
       />
       <base-button
         ccu-icon="arrow-right"
+        data-testid="testNextButton"
         icon-size="xs"
         class="bg-crisiscleanup-light-smoke w-6 h-6"
         variant="solid"

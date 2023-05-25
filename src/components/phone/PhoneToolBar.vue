@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="flex-grow">
+    <div class="flex-grow" data-testid="testPhoneToolBarDiv">
       <Agent
         class="border-b shadow"
         @onLoggedIn="onLoggedIn"

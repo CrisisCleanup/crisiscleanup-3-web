@@ -10,6 +10,7 @@
         :body-style="{ overflow: 'auto', ...tableBodyStyle }"
         :columns="historyCols"
         :data="historyData"
+        data-testid="testAgentStatsTable"
         @rowClick="
           (item) => {
             if ($mq === 'sm') $emit('rowClick', item);
@@ -19,6 +20,7 @@
         <template #incident="{ item }">
           <div
             class="sm:justify-center flex flex-grow"
+            data-testid="testIncidentdiv"
             :title="item.incident && item.incident.name"
           >
             <DisasterIcon
@@ -38,6 +40,7 @@
             <ccu-icon
               type="phone-classic"
               size="sm"
+              data-testid="testPhoneClassicicon"
               :alt="$t('phoneDashboard.last_10_calls')"
             />
             <base-text class="pl-1">
@@ -49,12 +52,14 @@
           <div class="flex flex-col">
             <div
               v-for="caseItem in slotProps.item.cases"
+              :data-testid="`testCaseItemId${caseItem.id}Div`"
               :key="`${caseItem.id}`"
               class="inline-flex items-center flex-row py-1 justify-start"
             >
               <base-link
                 class="mx-1"
-                :to="`/incident/${caseItem.incident}/cases/${caseItem.id}?showOnMap=true`"
+                :data-testid="`testCaseItemId${caseItem.id}Link`"
+                :to="`/incident/${caseItem.incident}/work/${caseItem.id}?showOnMap=true`"
               >
                 {{ caseItem.case_number }}
               </base-link>

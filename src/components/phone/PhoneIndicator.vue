@@ -1,10 +1,12 @@
 <template>
   <div
     :key="isTakingCalls"
+    data-testid="testIsTakingCallsDiv"
     class="flex h-8 w-8 items-center justify-center relative"
   >
     <object
       ref="icon"
+      data-testid="testIsTakingCallsIcon"
       class="cursor-pointer"
       type="image/svg+xml"
       :data="ICON_MAP.phone"

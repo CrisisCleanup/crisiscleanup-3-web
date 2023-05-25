@@ -1,14 +1,22 @@
 <template>
   <div class="text-center flex flex-col items-center">
-    <base-text variant="h2" class="my-1">{{
-      $t('phoneDashboard.manual_dialer')
-    }}</base-text>
-    <base-text class="my-1">{{
-      $t('phoneDashboard.manual_dial_hidden_caller_id')
-    }}</base-text>
+    <base-text
+      variant="h2"
+      class="my-1"
+      data-testid="testManualDialerContent"
+    >
+      {{$t('phoneDashboard.manual_dialer')}}
+    </base-text>
+    <base-text
+      class="my-1"
+      data-testid="testManualDialHiddenCallerIdContent"
+    >
+      {{$t('phoneDashboard.manual_dial_hidden_caller_id')}}
+    </base-text>
     <div class="grid grid-cols-4 my-1">
       <base-select
         v-model="countryCode"
+        data-testid="testCountryCodeSelect"
         :options="[$t('+1')]"
         indicator-icon="caret-down"
         class="col-span-2 text-sm"
@@ -16,6 +24,7 @@
       />
       <input
         v-model="phoneNumber"
+        data-testid="testPhoneNumberTextInput"
         type="text"
         class="h-10 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
         size="large"
@@ -24,6 +33,7 @@
     </div>
     <base-button
       variant="solid"
+      data-testid="testDialingButton"
       class="px-5 py-1 my-3"
       :text="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
       :disabled="dialing"
