@@ -2,10 +2,12 @@
   <div
     v-if="ready"
     class="bg-white flex flex-col flex-grow justify-between p-3 main-container w-full"
+    data-testid="testFlagDiv"
   >
     <div class="w-full overflow-auto">
       <base-select
         v-model="currentFlag.reason_t"
+        data-testid="testFlagChooseProblemSelect"
         :options="flagTypes"
         :placeholder="$t('flag.choose_problem')"
         select-classes="bg-white border w-full h-12"
@@ -16,22 +18,31 @@
         <div class="my-3 py-5 border-t border-b">
           <base-checkbox
             v-model="currentFlag.is_high_priority"
+            data-testid="testCurrentFlagIsHighPriorityCheckbox"
             class="text-crisiscleanup-red-700"
           >
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
         <div>
-          <p class="my-3">
+          <p
+            class="my-3"
+            data-testid="testFlagPleaseDescribeWhyHighPriorityContent"
+          >
             {{ $t('flag.please_describe_why_high_priority') }}
           </p>
           <textarea
             v-model="currentFlag.notes"
+            data-testid="testCurrentFlagIsHighPriorityNotesTextarea"
             rows="4"
             class="block w-full border outline-none"
           />
 
-          <base-text variant="h2" class="py-2">
+          <base-text
+            variant="h2"
+            class="py-2"
+            data-testid="testFlagNearbyOrganizationsContent"
+          >
             {{ $t('flag.nearby_organizations') }}
           </base-text>
           <div>
@@ -44,6 +55,7 @@
           </div>
           <div
             v-for="organization in organizationsWithClaimsInArea"
+            data-testid="testFlagNearbyOrganizationsDiv"
             :key="`${organization.id}`"
           >
             <v-popover popper-class="contact-popover" placement="top-end">
@@ -110,13 +122,20 @@
           </div>
         </div>
       </div>
-      <div v-if="currentFlag.reason_t === 'flag.worksite_wrong_incident'">
+      <div
+        v-if="currentFlag.reason_t === 'flag.worksite_wrong_incident'"
+        data-testid="testFlagWorksiteWrongIncidentDiv"
+      >
         <div>
-          <p class="my-3">
+          <p
+            class="my-3"
+            data-testid="testFlagChooseCorrectIncidentContent"
+          >
             {{ $t('flag.choose_correct_incident') }}
           </p>
           <base-select
             v-model="newIncident"
+            data-testid="testFlagChooseCorrectIncidentSelect"
             :options="incidents"
             searchable
             select-classes="bg-white w-full h-12"
@@ -125,15 +144,22 @@
           />
           <base-checkbox
             v-model="incidentNotFound"
+            data-testid="testIncidentNotFoundCheckbox"
             class="text-crisiscleanup-red-700"
           >
             {{ $t('flag.incident_not_listed') }}
           </base-checkbox>
         </div>
       </div>
-      <div v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'">
+      <div
+        v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'"
+        data-testid="testFlagWorksiteWrongLocationDiv"
+      >
         <div class="text-sm">
-          <p class="mt-5 font-semibold">
+          <p
+            class="mt-5 font-semibold"
+            data-testid="testFlagMoveCasePinContent"
+          >
             {{ $t('flag.move_case_pin') }}
           </p>
           <div>
@@ -145,6 +171,7 @@
           </div>
           <base-input
             v-model="currentFlag.requested_action"
+            data-testid="testFlagGoogleMapUrlTextInput"
             :placeholder="$t('flag.google_map_url')"
           />
           <p class="mt-5 mb-3">
@@ -152,19 +179,27 @@
           </p>
           <base-button
             class="text-white bg-black w-full p-2"
+            data-testid="testFlagLocationUnknownButton"
             :action="flagWorksite"
             :alt="$t('flag.location_unknown')"
             >{{ $t('flag.location_unknown') }}</base-button
           >
         </div>
       </div>
-      <div v-if="currentFlag.reason_t === 'flag.worksite_upset_client'">
+      <div
+        v-if="currentFlag.reason_t === 'flag.worksite_upset_client'"
+        data-testid="testFlagWorksiteUpsetClientDiv"
+      >
         <div class="border-b py-5">
-          <p class="my-3">
+          <p
+            class="my-3"
+            data-testid="testFlagExplainWhyClientUpsetDiv"
+          >
             {{ $t('flag.explain_why_client_upset') }}
           </p>
           <textarea
             v-model="currentFlag.notes"
+            data-testid="testCurrentFlagNotesUpsetTextarea"
             rows="4"
             class="block w-full border outline-none"
           />
@@ -175,6 +210,7 @@
             <div class="flex mt-2">
               <base-radio
                 class="mr-10"
+                data-testid="testFlagDoesIssueInvolveYouYesRadio"
                 name="Yes"
                 label="Yes"
                 :model-value="radioValue"
@@ -182,6 +218,7 @@
               />
               <base-radio
                 class="mr-10"
+                data-testid="testFlagDoesIssueInvolveYouNoRadio"
                 name="No"
                 label="No"
                 :model-value="radioValue"
@@ -196,6 +233,7 @@
           </p>
           <OrganizationSearchInput
             size="large"
+            data-testid="testOrganizationSearchInputSelect"
             @selectedOrganization="
               (value) => {
                 selectedOrganizations = new Set(
@@ -214,17 +252,21 @@
           </div>
         </div>
       </div>
-      <div v-if="currentFlag.reason_t === 'flag.worksite_abuse'">
+      <div
+        v-if="currentFlag.reason_t === 'flag.worksite_abuse'"
+        data-testid="testFlagWorksiteAbuseDiv"
+      >
         <div class="mt-8">
-          <p class="my-3">
+          <p class="my-3" data-testid="testFlagWorksiteAbuseContent">
             {{ $t('flag.organizations_complaining_about') }}
           </p>
           <autocomplete
             icon="search"
+            data-testid="testOrganizationSearch"
             :suggestions="organizationResults"
             display-property="name"
             size="large"
-            placeholder="Organizations"
+            :placeholder="$t('flag.organizations')"
             clear-on-selected
             @selected="
               (value) => {
@@ -233,13 +275,14 @@
             "
             @search="onOrganizationSearch"
           />
-          <p class="my-3">
+          <p class="my-3" data-testid="testMustContactOrgFirstContent">
             {{ $t('flag.must_contact_org_first') }}
           </p>
           <p class="my-3">{{ $t('flag.have_you_contacted_org') }}</p>
           <div class="flex mt-2">
             <base-radio
               class="mr-10"
+              data-testid="testFlagHaveYouContactedOrgYesRadio"
               name="Yes"
               label="Yes"
               :model-value="radioValue"
@@ -247,13 +290,14 @@
             />
             <base-radio
               class="mr-10"
+              data-testid="testFlagHaveYouContactedOrgNoRadio"
               name="No"
               label="No"
               :model-value="radioValue"
               @update:modelValue="radioValue = $event"
             />
           </div>
-          <p class="my-3">
+          <p class="my-3" data-testid="testFlagOutcomeOfContactTextarea">
             {{ $t('flag.outcome_of_contact') }}
           </p>
           <textarea rows="4" class="block w-full border outline-none" />
@@ -263,11 +307,14 @@
           </p>
           <textarea
             v-model="currentFlag.notes"
+            data-testid="testCurrentFlagNotesContactOrganizationTextarea"
             rows="4"
             class="block w-full border outline-none"
           />
 
-          <p class="my-3">{{ $t('flag.suggested_outcome') }}</p>
+          <p class="my-3" data-testid="testFlagSuggestedOutcomeContactOrganizationTextarea">
+            {{ $t('flag.suggested_outcome') }}
+          </p>
           <textarea
             v-model="currentFlag.requested_action"
             rows="4"
@@ -283,6 +330,7 @@
     <div v-if="currentFlag.reason_t" class="flex justify-center items-center">
       <base-button
         size="medium"
+        data-testid="testCancelButton"
         class="m-1 text-black p-3 px-4 border-2 border-black flex-1"
         :text="$t('actions.cancel')"
         :alt="$t('actions.cancel')"
@@ -294,6 +342,7 @@
       />
       <base-button
         v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'"
+        data-testid="testUpdateLocationButton"
         size="medium"
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light flex-1"
@@ -303,6 +352,7 @@
       />
       <base-button
         v-else
+        data-testid="testSubmitButton"
         size="medium"
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light flex-1"

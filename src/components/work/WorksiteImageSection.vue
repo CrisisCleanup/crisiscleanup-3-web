@@ -2,6 +2,7 @@
   <section class="flex">
     <DragDrop
       class="w-20 h-20 border-solid border-2"
+      data-testid="testImageUploaderFile"
       :disabled="uploading"
       @files="handleFileUpload"
     >
@@ -15,6 +16,7 @@
       <ImageModal
         :image-list="worksite.files ? worksite.files : imageList"
         :disable-modal="disableModal"
+        data-testid="testImageUploaderModal"
         @removeImage="deleteFile"
       />
     </div>

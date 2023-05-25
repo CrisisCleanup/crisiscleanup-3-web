@@ -1,20 +1,29 @@
 <template>
   <div>
-    <div v-if="showCaseTabs" class="h-12 flex items-center justify-start px-2">
+    <div
+      v-if="showCaseTabs"
+      data-testid="testNewCaseDiv"
+      class="h-12 flex items-center justify-start px-2"
+    >
       <div
         class="flex items-center cursor-pointer"
+        data-testid="testCloseWorksiteDiv"
         @click="() => $emit('closeWorksite')"
       >
         <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
-        <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+        <span class="px-1 mt-0.5" data-testid="testNewCaseContent">
+          {{ $t('casesVue.new_case') }}
+        </span>
       </div>
       <div
         v-if="worksite && worksite.id"
+        data-testid="testCaseDiv"
         class="h-full p-3 flex items-center justify-center border-b-2 border-primary-light"
       >
-        Case {{ worksite && worksite.case_number }}
+        {{ $t('casesVue.case') }} {{ worksite && worksite.case_number }}
         <ccu-icon
           :alt="$t('actions.cancel')"
+          data-testid="testCloseWorksiteIcon"
           size="xs"
           type="cancel"
           class="ml-2"
@@ -31,6 +40,7 @@
           <base-button class="mr-1">
             <div
               v-if="worksite && worksite.isFavorite"
+              data-testid="testIsMemberOfMyOrgIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.not_member_of_my_org')"
               @click="() => toggleFavorite(false)"
@@ -39,6 +49,7 @@
             <div
               v-else
               class="svg-container cursor-pointer"
+              data-testid="testIsNotMemberOfMyOrgIcon"
               :title="$t('actions.member_of_my_org')"
               @click="() => toggleFavorite(true)"
               v-html="favoriteSvgInactive"
@@ -47,6 +58,7 @@
           <base-button class="mr-1">
             <div
               v-if="worksite && worksite.isHighPriority"
+              data-testid="testIsHighPriorityIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.unmark_high_priority')"
               @click="() => toggleHighPriority(false)"
@@ -54,6 +66,7 @@
             ></div>
             <div
               v-else
+              data-testid="testIsNotHighPriorityIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.mark_high_priority')"
               @click="() => toggleHighPriority(true)"
@@ -72,6 +85,7 @@
       <div v-if="worksite && worksite.id" class="flex items-center">
         <ccu-icon
           :alt="$t('actions.flag')"
+          data-testid="testFlagIcon"
           size="small"
           class="p-1 py-2"
           type="flag"
@@ -79,6 +93,7 @@
         />
         <ccu-icon
           :alt="$t('actions.jump_to_case')"
+          data-testid="testJumpToCaseIcon"
           size="small"
           class="p-1 py-2"
           type="go-case"
@@ -86,6 +101,7 @@
         />
         <ccu-icon
           :alt="$t('actions.history')"
+          data-testid="testHistoryIcon"
           size="small"
           class="p-1 py-2"
           :fa="true"
@@ -94,6 +110,7 @@
         />
         <ccu-icon
           :alt="$t('actions.download')"
+          data-testid="testDownloadIcon"
           size="small"
           class="p-1 py-2"
           type="download"
@@ -102,6 +119,7 @@
         />
         <ccu-icon
           :alt="$t('actions.share')"
+          data-testid="testShareIcon"
           size="small"
           class="p-1 py-2"
           type="share"
@@ -110,6 +128,7 @@
         />
         <ccu-icon
           :alt="$t('actions.print')"
+          data-testid="testPrintIcon"
           size="small"
           class="p-1 py-2"
           type="print"
@@ -118,6 +137,7 @@
         />
         <ccu-icon
           v-if="isViewingWorksite && canEdit"
+          data-testid="testEditIcon"
           :alt="$t('actions.edit')"
           class="border p-2 bg-primary-light"
           size="small"

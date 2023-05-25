@@ -1,7 +1,14 @@
 <template>
-  <div v-if="ready" class="bg-white grid intake-view overflow-auto">
+  <div
+    v-if="ready"
+    class="bg-white grid intake-view overflow-auto"
+    data-testid="testCaseHistoryDiv"
+  >
     <div class="p-3">
-      <div class="my-4 pb-6 border-b">
+      <div
+        class="my-4 pb-6 border-b"
+        data-testid="testDoNotShareContactWarningDiv"
+      >
         <span>
           <strong>{{ $t('caseHistory.do_not_share_contact_warning') }}</strong
           >{{ $t('caseHistory.do_not_share_contact_explanation') }}

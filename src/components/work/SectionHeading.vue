@@ -10,6 +10,7 @@
     </div>
     <ccu-icon
       v-if="tooltip"
+      data-testid="testHelpTooltip"
       v-tooltip="{
         content: tooltip,
         triggers: ['click'],

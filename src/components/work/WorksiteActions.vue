@@ -3,6 +3,7 @@
     <div v-if="pdas && pdas.length > 0" class="mt-2">
       <base-checkbox
         class="pb-2"
+        data-testid="testPdaHeatmapCheckbox"
         :model-value="showingHeatMap"
         @update:modelValue="
           showingHeatMap = $event;
@@ -18,6 +19,7 @@
               html: true,
               popperClass: 'interactive-tooltip w-72',
             }"
+            data-testid="testPdaHeatmapIcon"
             class="w-5 h-5"
             src="../../assets/red-cross-logo.jpg"
           />
@@ -27,6 +29,7 @@
     <v-popover placement="bottom-start">
       <base-button
         slot="btn"
+        data-testid="testLayersButton"
         variant="text"
         class="text-base font-thin mx-2"
         :text="$t('casesVue.layers')"
@@ -42,7 +45,7 @@
         </div>
 
         <v-menu placement="right-start" trigger="hover" instant-move>
-          <div class="menu-item">
+          <div class="menu-item" data-testid="testBoundaryPoliticalUsStateDiv">
             {{ $t('locationTypes.boundary_political_us_state') }}
           </div>
 
@@ -57,6 +60,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testBoundaryPoliticalUsStateCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(state.id, value);
@@ -70,7 +74,7 @@
           </template>
         </v-menu>
         <v-menu placement="right-start" trigger="hover" instant-move>
-          <div class="menu-item">
+          <div class="menu-item" data-testid="testBoundaryPoliticalUsCongressDiv">
             {{ $t('locationTypes.boundary_political_us_congress') }}
           </div>
 
@@ -85,6 +89,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testBoundaryPoliticalUsCongressCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(district.id, value);
@@ -98,7 +103,7 @@
           </template>
         </v-menu>
         <v-menu placement="right-start" trigger="hover" instant-move>
-          <div class="menu-item">
+          <div class="menu-item" data-testid="testBoundaryPoliticalUsCountyDiv">
             {{ $t('locationTypes.boundary_political_us_county') }}
           </div>
 
@@ -113,6 +118,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testBoundaryPoliticalUsCountyCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(county.id, value);
@@ -126,7 +132,7 @@
           </template>
         </v-menu>
         <v-menu placement="right-start" trigger="hover" instant-move>
-          <div class="menu-item">
+          <div class="menu-item" data-testid="testIncidentDiv">
             {{ $t('casesVue.incident') }}
           </div>
 
@@ -144,6 +150,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testIncidentCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(location.id, value);
@@ -166,6 +173,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testPrimaryResponseAreaCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(
@@ -196,6 +204,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testSecondaryResponseAreaCheckbox"
                     @update:modelValue="
                       (value) => {
                         applyLocation(
@@ -230,6 +239,7 @@
                         ? 'user_ui-turn-off_layer'
                         : 'user_ui-turn-on_layer'
                     "
+                    data-testid="testFiltersButton"
                     @update:modelValue="
                       (value) => {
                         applyLocation(location.id, value);
@@ -246,6 +256,7 @@
     </v-popover>
     <base-button
       class="text-base font-thin mx-2"
+      data-testid="testWorksiteFiltersButton"
       ccu-icon="filters"
       icon-size="medium"
       icon-classes="w-4"
@@ -275,6 +286,7 @@
     />
     <base-button
       class="text-base font-thin mx-2"
+      data-testid="testDownloadCsvButton"
       ccu-icon="download"
       icon-size="medium"
       icon-classes="w-4"
