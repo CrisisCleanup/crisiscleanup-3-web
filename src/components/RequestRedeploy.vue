@@ -3,6 +3,7 @@
     <div>
       <base-select
         v-model="selectedIncidentId"
+        data-testid="testSelectIncidentSelect"
         :placeholder="$t('locationVue.select_incident')"
         :label="$t('locationVue.select_incident')"
         :options="incidentList"
@@ -25,6 +26,7 @@
     </div>
     <base-button
       variant="solid"
+      data-testid="testRequestIncidentButton"
       :action="requestIncident"
       :text="$t('actions.submit')"
       :alt="$t('actions.submit')"

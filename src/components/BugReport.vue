@@ -3,13 +3,15 @@
     <fieldset class="gap-3 flex flex-col">
       <base-input
         v-model="bug.title"
-        placeholder="Title"
+        data-testid="testBugTitleTextInput"
+        :placeholder="$t('bugReport.title')"
         type="text"
         required
       />
       <base-input
         v-model="bug.description"
-        placeholder="Description"
+        data-testid="testBugDescriptionTextInput"
+        :placeholder="$t('bugReport.description')"
         text-area
         required
         rows="5"
@@ -18,6 +20,7 @@
       <div class="flex gap-2">
         <DragDrop
           class="w-20 h-20 border-solid border-2"
+          data-testid="testBugUploadFile"
           :disabled="uploading"
           @files="handleFileUpload"
         >
@@ -40,6 +43,7 @@
 
     <base-button
       variant="solid"
+      data-testid="testSubmitButton"
       :action="submitForm"
       class="p-3"
       :text="$t('actions.submit')"

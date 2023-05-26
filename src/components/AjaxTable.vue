@@ -3,6 +3,7 @@
     <div class="flex items-center justify-between">
       <base-input
         v-if="enableSearch"
+        data-testid="testTableSearchTextInput"
         :model-value="search"
         icon="search"
         class="w-72 mx-4"
@@ -23,6 +24,7 @@
       :body-style="bodyStyle"
       :pagination="meta.pagination"
       :sorter="meta.sorter"
+      data-testid="testTableContent"
       enable-pagination
       :enable-selection="enableSelection"
       :loading="loading"

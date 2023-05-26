@@ -1,6 +1,7 @@
 <template>
   <div
     class="badge flex items-center justify-center rounded-full"
+    data-testid="testBadgeDiv"
     :style="{
       backgroundColor: color,
       width: width || '10px',

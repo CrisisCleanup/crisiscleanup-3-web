@@ -23,6 +23,7 @@
       <div>
         <span
           v-if="title"
+          :data-testid="`testSlider${title}Input`"
           class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
           >{{ title }}</span
         >

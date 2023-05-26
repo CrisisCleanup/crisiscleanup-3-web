@@ -11,6 +11,7 @@
       <img
         :src="url"
         :alt="initials"
+        data-testid="testAvatarIcon"
         class="object-cover object-center w-full h-full visible group-hover:hidden"
       />
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid--survivors">
+  <div class="grid--survivors" data-testid="testSurvivorContactDiv">
     <base-text font="display" variant="h1">
       {{ $t('homeVue.survivors_call') }}
     </base-text>
@@ -7,6 +7,7 @@
       <div v-if="incidentList && incidentList.length > 0" class="w-full">
         <div
           v-for="incident in filterNumbers(incidentList)"
+          data-testid="testIncidentPhoneDiv"
           :key="incident.id"
           class="ml-2"
         >
@@ -15,9 +16,9 @@
         </div>
       </div>
       <div v-else-if="isLoading">
-        <spinner />
+        <spinner data-testid="testSpinnerLoadingIcon" />
       </div>
-      <div v-else>
+      <div v-else data-testid="testNoPhoneDiv">
         {{ $t('homeVue.phone_or_website') }}
       </div>
     </base-text>

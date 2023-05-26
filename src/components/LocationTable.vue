@@ -15,6 +15,7 @@
       <div class="flex mr-2 justify-center w-full">
         <ccu-icon
           :alt="$t('actions.edit')"
+          data-testid="testEditButton"
           size="small"
           type="edit"
           class="mx-2"
@@ -26,6 +27,7 @@
         />
         <ccu-icon
           :alt="$t('actions.delete')"
+          data-testid="testDeleteButton"
           size="small"
           type="trash"
           class="mx-2"

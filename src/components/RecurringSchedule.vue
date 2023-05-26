@@ -11,6 +11,7 @@
         <div>
           <base-select
             v-model="frequency"
+            data-testid="testScheduleFrequencySelect"
             :options="[
               $t('recurringSchedule.daily'),
               $t('recurringSchedule.weekly'),
@@ -23,6 +24,7 @@
         <div v-if="frequency === $t('recurringSchedule.daily')" class="daily">
           <base-radio
             class="mr-10 pt-4"
+            data-testid="testDailyOptionRadio"
             :name="$t('recurringSchedule.days')"
             :label="$t('recurringSchedule.days')"
             :model-value="dailyOption"
@@ -37,6 +39,7 @@
               {{ $t('recurringSchedule.every') }}
               <input
                 v-model="dayInterval"
+                data-testid="testDayIntervalTextInput"
                 class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               />
               {{ $t('recurringSchedule.day_s') }}
@@ -44,6 +47,7 @@
           </base-radio>
           <base-radio
             class="mr-10 py-2"
+            data-testid="testEveryWeekdayIntervalRadio"
             :name="$t('recurringSchedule.every_weekday')"
             :label="$t('recurringSchedule.every_weekday')"
             :model-value="dailyOption"
@@ -80,12 +84,14 @@
         <div class="flex items-center justify-start border w-full">
           <ccu-icon
             class="h-10"
+            data-testid="testCalendarIcon"
             type="calendar"
             size="xl"
             :alt="$t('recurringSchedule.calendar')"
           />
           <datepicker
             v-model="endDate"
+            data-testid="testEndDatePickerInput"
             input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
             wrapper-class="flex-grow"
             :formatter="{
@@ -101,6 +107,7 @@
     </form>
     <base-button
       v-else
+      data-testid="testAddScheduleButton"
       text-variant="h3"
       class="text-primary-dark"
       @click="showSchedule = true"

@@ -15,6 +15,7 @@
       <div class="zoom-control flex flex-col mb-5">
         <base-button
           text=""
+          data-testid="testZoomInButton"
           icon="plus"
           icon-size="xs"
           ccu-event="user_ui-zoom-in"
@@ -29,6 +30,7 @@
         />
         <base-button
           text=""
+          data-testid="testZoomOutButton"
           icon="minus"
           icon-size="xs"
           ccu-event="user_ui-zoom-out"
@@ -51,6 +53,7 @@
           placement: 'right-start',
           html: true,
         }"
+        data-testid="testZoomToMakeInteractiveButton"
         text=""
         :title="$t('worksiteMap.zoom_to_interactive')"
         :alt="$t('worksiteMap.zoom_to_interactive')"
@@ -73,6 +76,7 @@
           placement: 'right-start',
           html: true,
         }"
+        data-testid="testZoomToIncidentButton"
         text=""
         :title="$t('worksiteMap.zoom_to_incident')"
         :alt="$t('worksiteMap.zoom_to_incident')"
@@ -89,6 +93,7 @@
     </div>
     <WorksiteLegend
       v-if="showZoomButtons || showLegend"
+      data-testid="testShowLegendDiv"
       :key="availableWorkTypes"
       :available-work-types="availableWorkTypes"
     />

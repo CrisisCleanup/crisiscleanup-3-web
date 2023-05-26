@@ -1,6 +1,7 @@
 <template>
   <div
     class="grid"
+    data-testid="testCapabilityGridDiv"
     :style="`grid-template-columns: max-content repeat(${phases.length}, [col-start] minmax(auto, 200px) [col-end])`"
   >
     <template v-for="capability in capabilitiesTree" :key="capability.id">
@@ -31,6 +32,7 @@
         </div>
         <div
           v-for="phase in phases"
+          :data-testid="`testCapability${capability.id}Phase${phase.phase_key}Div`"
           :key="`${capability.id}:${phase.phase_key}`"
           class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center mb-1 cursor-pointer"
           @click="
@@ -58,6 +60,7 @@
             >
               <base-checkbox
                 draggable="true"
+                :data-testid="`testCapability${child.id}Phase${phase.id}Checkbox`"
                 checkmark-style=""
                 container-style=""
                 class="border-b p-2 py-4 flex items-center justify-center cursor-pointer"

@@ -5,6 +5,7 @@
   >
     <object
       v-if="randomEasterEgg"
+      data-testid="testRandomEasterEggIcon"
       ref="icon"
       type="image/svg+xml"
       class="easter-egg"
@@ -14,6 +15,7 @@
     ></object>
     <object
       v-else
+      data-testid="testIncidentImageIcon"
       ref="icon"
       type="image/svg+xml"
       class="standard-icon"

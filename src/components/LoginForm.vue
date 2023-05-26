@@ -3,6 +3,7 @@
     <div class="grid--title mb-3">
       <base-text
         font="display"
+        data-testid="testLoginTextContent"
         variant="h1"
         class="text-crisiscleanup-dark-500 text-5xl"
         >{{ lang.login }}</base-text
@@ -11,6 +12,7 @@
     <div class="grid--sub">
       <base-text
         variant="h1"
+        data-testid="testSigninTextContent"
         :weight="300"
         font="display"
         class="text-crisiscleanup-dark-500 text-3xl mb-12"
@@ -21,6 +23,7 @@
     <div class="grid--email my-4">
       <base-input
         v-model="email"
+        data-testid="testEmailTextInput"
         required
         autocomplete="email"
         :placeholder="lang.email"
@@ -32,6 +35,7 @@
     <div class="grid--password my-4">
       <base-input
         v-model="password"
+        data-testid="testPasswordTextInput"
         required
         autocomplete="password"
         :placeholder="lang.password"
@@ -41,13 +45,18 @@
       />
     </div>
     <div class="grid--forgot my-2">
-      <base-link :to="nav.request_password_reset" text-variant="h2">{{
-        lang.forgot
-      }}</base-link>
+      <base-link
+        :to="nav.request_password_reset"
+        data-testid="testRequestPasswordResetLink"
+        text-variant="h2"
+      >
+        {{lang.forgot}}
+      </base-link>
     </div>
     <div class="grid--login my-4">
       <base-button
         variant="solid"
+        data-testid="testLoginButton"
         size="large"
         class="w-full"
         data-testid="loginForm.login"
@@ -59,6 +68,7 @@
     <div class="grid--request my-4">
       <base-button
         variant="outline"
+        data-testid="testRequestAccessButton"
         size="large"
         class="w-full"
         :action="() => router.push('/request_access')"

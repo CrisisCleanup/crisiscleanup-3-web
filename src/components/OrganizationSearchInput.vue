@@ -1,6 +1,7 @@
 <template>
   <Multiselect
     :placeholder="$t('registerOrg.organization_name')"
+    data-testid="testOrganizationNameSelect"
     label="name"
     :filter-results="false"
     :min-chars="1"

@@ -2,6 +2,7 @@
   <div class="flex justify-end p-2 gap-2 items-center">
     <a
       class="p-2 bg-primary-light border-primary-light"
+      data-testid="testDownloadLink"
       :href="pdf.full_url"
       :download="pdf.filename_original"
       >{{ $t('actions.download') }}</a

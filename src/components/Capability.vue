@@ -1,5 +1,9 @@
 <template>
-  <div v-if="capabilities.length > 0" class="mt-1">
+  <div
+    v-if="capabilities.length > 0"
+    class="mt-1"
+    data-testid="testCapabilityTableDiv"
+  >
     <div v-for="(capability, index) in capabilitiesTree" :key="index">
       <template v-if="hasParent(capability)">
         <div class="selected rounded">
@@ -13,6 +17,7 @@
           >
             <div
               v-for="phase in phases"
+              :data-testid="`testCapability${capability.name_t}Phasep${hase.id}Item`"
               :key="phase.id"
               class="col-span-1 text-crisiscleanup-dark-300 truncate"
               :class="hoverItem === 'normal' + index ? 'light' : ''"

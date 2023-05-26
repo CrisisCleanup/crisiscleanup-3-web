@@ -1,5 +1,6 @@
 <template>
-  <UserDetailsTooltip class="my-2" :user="user"></UserDetailsTooltip>
+  <UserDetailsTooltip class="my-2" data-testid="testUserDetailsTooltip" :user="user">
+  </UserDetailsTooltip>
   <ol class="relative border-l border-gray-200 dark:border-gray-700 mx-2">
     <li v-for="event in events" :key="event.id" class="mb-10 ml-4">
       <div

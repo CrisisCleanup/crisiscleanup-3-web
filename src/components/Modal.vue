@@ -16,6 +16,7 @@
                 <span class="text-base font-bold">{{ title }}</span>
                 <ccu-icon
                   :alt="$t('actions.cancel')"
+                  data-testid="testModalCancelIcon"
                   size="xs"
                   type="cancel"
                   @click.native="
@@ -32,6 +33,7 @@
           <div class="modal-body">
             <ccu-icon
               v-if="closeable && !title"
+              data-testid="testModalCancel2Icon"
               :alt="$t('actions.cancel')"
               size="xs"
               type="cancel"
@@ -53,6 +55,7 @@
               <div class="flex items-center justify-center py-2 border-t">
                 <base-button
                   :alt="$t('actions.ok')"
+                  data-testid="testModalOkButton"
                   variant="solid"
                   class="px-6 p-3"
                   :action="
