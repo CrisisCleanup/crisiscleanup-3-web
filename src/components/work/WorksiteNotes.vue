@@ -1,5 +1,5 @@
 <template>
-  <div class="worksite-notes">
+  <div class="worksite-notes" data-testid="testWorksiteNotesDiv">
     <div class="flex items-center justify-between">
       <label
         v-if="worksite.notes && worksite.notes.length > 0"
@@ -9,6 +9,7 @@
 
       <base-button
         v-if="worksite.notes && worksite.notes.length > 0"
+        data-testid="testShowAllNotesButton"
         icon="caret-down"
         type="link"
         :text="
@@ -24,6 +25,7 @@
     <template v-for="(note, index) in sortedNotes">
       <div
         v-if="index < 4 || showingAllNotes"
+        data-testid="testShowNotesDiv"
         :key="`${note.id}`"
         class="my-1 p-1 flex items-start bg-opacity-50 rounded"
         :class="
@@ -50,6 +52,7 @@
     <div v-if="canAdd" class="flex items-center justify-between">
       <base-button
         v-if="!addingNotes"
+        data-testid="testAddNoteButton"
         class="my-1 text-primary-dark"
         type="link"
         :text="$t('caseView.add_note')"
@@ -58,6 +61,7 @@
       >
         <ccu-icon
           type="sticky-note-solid"
+          data-testid="testStickyNoteIcon"
           class="text-primary-dark filter-yellow mr-1"
           size="sm"
         />
@@ -80,6 +84,7 @@
       {{ $t('caseView.note') }}
       <base-input
         text-area
+        data-testid="testCurrentNoteTextarea"
         :value="currentNote"
         :rows="3"
         @update:modelValue="
@@ -92,12 +97,14 @@
       <div class="flex items-center justify-between">
         <base-button
           class="my-1"
+          data-testid="testCancelNoteButton"
           type="bare"
           :text="$t('actions.cancel')"
           :action="cancelNote"
         />
         <base-button
           class="my-1 text-primary-dark"
+          data-testid="testSaveNoteButton"
           type="link"
           :text="$t('actions.add')"
           :action="saveNote"

@@ -15,7 +15,7 @@
     @selectionChanged="(payload) => $emit('selectionChanged', payload)"
   >
     <template #work_types="slotProps">
-      <div class="flex flex-col">
+      <div class="flex flex-col" data-testid="testWorksiteTableDiv">
         <div
           v-for="work_type in slotProps.item.work_types"
           :key="`${work_type.id}`"

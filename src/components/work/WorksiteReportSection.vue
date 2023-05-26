@@ -3,6 +3,7 @@
     <form ref="timeForm" class="w-full grid grid-cols-7 gap-2">
       <base-input
         v-model="volunteersToAdd"
+        data-testid="testVolunteersToAddTextInput"
         input-classes="text-xs"
         :placeholder="$t('caseView.volunteers')"
         required
@@ -12,6 +13,7 @@
       />
       <base-input
         v-model="hoursPerVolunteer"
+        data-testid="testHoursPerVolunteerTextInput"
         :placeholder="$t('caseView.hours_per_volunteer')"
         input-classes="text-xs"
         required
@@ -23,12 +25,17 @@
       <base-button
         :text="$t('actions.add')"
         :alt="$t('actions.add')"
+        data-testid="testAddTimeButton"
         variant="solid"
         class="p-1 col-span-2"
         :action="addTime"
       />
     </form>
-    <div v-if="worksite.total_volunteers" class="my-2">
+    <div
+      v-if="worksite.total_volunteers"
+      class="my-2"
+      data-testid="testTotalVolunteersDiv"
+    >
       <div class="my-1">{{ $t('caseView.volunteer_hour_reports') }}</div>
       <table class="table-fixed text-xs w-full">
         <thead>
@@ -81,6 +88,7 @@
             <td class="">
               <ccu-icon
                 v-if="!currentTimeEdit.id"
+                data-testid="testCurrentTimeEditIcon"
                 :alt="$t('actions.edit')"
                 size="md"
                 class="p-1 w-5"
@@ -89,6 +97,7 @@
               />
               <font-awesome-icon
                 v-if="currentTimeEdit.id === entry.id"
+                data-testid="testCurrentTimeSaveIcon"
                 icon="check"
                 :alt="$t('actions.save')"
                 size="md"

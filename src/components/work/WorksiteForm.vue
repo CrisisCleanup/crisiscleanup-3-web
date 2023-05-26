@@ -1,12 +1,13 @@
 <template>
   <form v-if="ready" ref="form" class="form h-full" @submit.prevent>
-    <div class="form-content">
+    <div class="form-content" data-testid="testIntakeFormDiv">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
       <section class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
+          data-testid="testNameTextInput"
           selector="js-worksite-name"
           display-property="name"
           :placeholder="$t('formLabels.name')"
@@ -21,6 +22,7 @@
       <div class="form-field">
         <base-input
           :model-value="worksite.phone1"
+          data-testid="testPhone1TextInput"
           selector="js-worksite-phone1"
           size="large"
           required
@@ -40,6 +42,7 @@
       <div v-if="worksite.phone2 || addAdditionalPhone" class="form-field">
         <base-input
           :model-value="worksite.phone2"
+          data-testid="testPhone2TextInput"
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
@@ -57,6 +60,7 @@
       </div>
       <base-button
         v-else
+        data-testid="testAddPhoneLink"
         class="mx-3 text-primary-dark"
         type="link"
         :text="$t('caseView.add_phone')"
@@ -66,6 +70,7 @@
       <div class="form-field">
         <base-input
           :model-value="worksite.email"
+          data-testid="testEmailTextInput"
           selector="js-worksite-email"
           size="large"
           :placeholder="$t('formLabels.email')"
@@ -79,6 +84,7 @@
         <base-select
           :model-value="worksite.language"
           :options="supportedLanguages"
+          data-testid="testPrimaryLanguageTextInput"
           class="bg-white"
           select-classes="h-12 border"
           item-key="id"
@@ -106,6 +112,7 @@
         <base-select
           :model-value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
+          data-testid="testAutoContactFrequencySelect"
           class="bg-white"
           select-classes="h-12 border"
           item-key="value"
@@ -128,6 +135,8 @@
             html: true,
           }"
           :alt="$t('caseForm.location_instructions')"
+          data-testid="testLocationInstructionsIcon
+"
           type="help"
           size="large"
         />
@@ -141,6 +150,7 @@
           <div class="flex items-start">
             <ccu-icon
               type="pin"
+              data-testid="testLocationIcon"
               class="mr-1"
               size="small"
               style="margin-top: 3px"
@@ -151,6 +161,7 @@
           <div class="flex">
             <ccu-icon
               type="trash"
+              data-testid="testClearLocationIcon"
               size="small"
               class="mx-1"
               :alt="$t('actions.clear_location')"
@@ -158,6 +169,7 @@
             />
             <ccu-icon
               type="edit"
+              data-testid="testManuallyEditAddressIcon"
               size="small"
               class="mx-1"
               :alt="$t('caseView.manually_edit_address')"
@@ -167,6 +179,7 @@
         </div>
         <base-input
           v-else-if="shouldSelectOnMap"
+          data-testid="testFullAddressTextInput"
           :model-value="worksite.address"
           name="worksite.address"
           selector="js-worksite-address"
@@ -181,6 +194,7 @@
         />
         <WorksiteSearchInput
           v-else
+          data-testid="testWorksiteSearchInputInput"
           :value="worksite.address"
           selector="js-worksite-address"
           display-property="description"
@@ -202,6 +216,7 @@
         <div class="form-field">
           <base-input
             :model-value="worksite.city"
+            data-testid="testCityTextInput"
             selector="js-worksite-city"
             size="large"
             :placeholder="$t('formLabels.city')"
@@ -212,6 +227,7 @@
         <div class="form-field">
           <base-input
             :model-value="worksite.county"
+            data-testid="testCountyTextInput"
             name="county"
             selector="js-worksite-county"
             size="large"
@@ -223,6 +239,7 @@
         <div class="form-field">
           <base-input
             name="state"
+            data-testid="testStateTextInput"
             :model-value="worksite.state"
             selector="js-worksite-state"
             size="large"
@@ -234,6 +251,7 @@
         <div class="form-field">
           <base-input
             name="zip"
+            data-testid="testPostalCodeTextInput"
             :model-value="worksite.postal_code"
             selector="js-worksite-postal-code"
             size="large"
@@ -246,6 +264,7 @@
       <div class="form-field">
         <base-input
           :model-value="worksite.what3words"
+          data-testid="testWhat3WordsTextInput"
           size="large"
           :placeholder="$t('formLabels.what3words')"
           :required="!worksite.location"
@@ -256,6 +275,7 @@
         <div class="flex justify-around items-center p-2 text-gray-700">
           <base-button
             type="bare"
+            data-testid="testUseMyLocationButton"
             icon="street-view"
             class=""
             :action="locateMe"
@@ -271,6 +291,7 @@
           >
             <base-button
               type="bare"
+              data-testid="testToggleSelectOnMapButton"
               icon="map"
               class=""
               :action="toggleSelectOnMap"
@@ -280,27 +301,41 @@
         </div>
         <WorksiteNotes
           :worksite="worksite"
+          data-testid="testSaveNoteInput"
           @saveNote="saveNote"
           @input="currentNote = $event"
         />
         <div v-if="!worksite.isWrongLocation" class="my-1 py-1">
-          <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
+          <base-checkbox
+            v-model="isWrongLocation"
+            class="text-primary-dark"
+            data-testid="testAddressProblemsCheckbox"
+          >
             {{ $t('caseForm.address_problems') }}
           </base-checkbox>
         </div>
         <div v-if="!worksite.isHighPriority" class="my-1 py-1">
-          <base-checkbox v-model="isHighPriority" class="text-primary-dark">
+          <base-checkbox
+            v-model="isHighPriority"
+            class="text-primary-dark"
+            data-testid="testIsHighPriorityCheckbox"
+          >
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
         <div v-if="!worksite.isFavorite" class="my-1 py-1">
-          <base-checkbox v-model="isFavorite" class="text-primary-dark">
+          <base-checkbox
+            v-model="isFavorite"
+            class="text-primary-dark"
+            data-testid="testMemberOfMyOrgCheckbox"
+          >
             {{ $t('actions.member_of_my_org') }}
           </base-checkbox>
         </div>
       </div>
       <form-tree
         v-for="field in fieldTree"
+        :data-testid='`testDynamicForm${field.field_key}TextInput`'
         :key="field.field_key"
         :field="field"
         :worksite="worksite"
@@ -326,6 +361,7 @@
         <WorksiteReportSection
           :key="worksite.total_time"
           :worksite="worksite"
+          data-testid="testWorksiteTotalTimeDiv"
           @timeAdded="reloadWorksite"
         />
         <SectionHeading :count="6" class="mb-3"
@@ -333,6 +369,7 @@
         </SectionHeading>
         <WorksiteImageSection
           :key="worksite.files"
+          data-testid="testWorksiteImageSectionDiv"
           ref="worksiteImageSection"
           class="px-3 pb-3"
           :worksite="worksite"
@@ -344,6 +381,7 @@
     <div class="form-footer flex justify-between p-3 gap-2">
       <base-button
         size="medium"
+        data-testid="testCloseWorksiteButton"
         class="flex-grow"
         variant="outline"
         :action="
@@ -356,6 +394,7 @@
       />
       <base-button
         size="medium"
+        data-testid="testSaveButton"
         variant="solid"
         data-testid="worksite-formaction-save"
         class="flex-grow"
@@ -364,6 +403,7 @@
       />
       <base-button
         v-if="!disableClaimAndSave"
+        data-testid="testSaveClaimButton"
         size="medium"
         variant="solid"
         class="flex-grow"
