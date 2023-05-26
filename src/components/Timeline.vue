@@ -3,6 +3,7 @@
     <li v-for="event in events" :key="event.id" class="mb-10 ml-4">
       <div
         class="absolute w-3 h-3 bg-gray-200 rounded-full -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
+        :data-testid="`testEvent${event.id}Div`"
       ></div>
       <time
         class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"

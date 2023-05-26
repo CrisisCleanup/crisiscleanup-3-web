@@ -5,6 +5,7 @@
     :options="onUserSearch"
     :min-chars="1"
     :add-option-on="['enter', 'tab']"
+    data-testid="testUserSearchSelect"
     value-prop="id"
     object
     searchable

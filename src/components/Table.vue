@@ -11,6 +11,7 @@
       >
         <base-checkbox
           class="mb-5 js-select-all"
+          data-testid="testSetAllCheckedCheckbox"
           @update:modelValue="setAllChecked"
         />
       </div>
@@ -20,6 +21,7 @@
       ></div>
       <div
         v-for="column of columns"
+        :data-testid="`testColumn${column.key}Div`"
         :key="column.key"
         class="p-2 border-b flex items-center cursor-pointer header-column"
         :class="column.headerClass || []"
@@ -35,6 +37,7 @@
         <slot :name="`${column.key}-title`" :column="column">
           <base-text
             class="text-crisiscleanup-grey-700"
+            :data-testid="`testColumn${column.key}TitleContent`"
             :class="column.titleClass && column.titleClass"
             variant="h3"
             regular
@@ -49,6 +52,7 @@
               sorter.direction === 'asc'
             "
             :alt="$t('actions.sort_ascending')"
+            :data-testid="`testColumnSortAscending${column.key}Icon`"
             size="small"
             type="up"
           />
@@ -58,11 +62,13 @@
               sorter.direction === 'desc'
             "
             :alt="$t('actions.sort_descending')"
+            :data-testid="`testColumnSortDescending${column.key}Icon`"
             size="small"
             type="down"
           />
           <ccu-icon
             v-else
+            :data-testid="`testColumnSortable${column.key}Icon`"
             :alt="$t('actions.sortable')"
             size="small"
             type="updown"
@@ -78,6 +84,7 @@
           <template v-if="column.searchable">
             <base-select
               v-if="column.searchSelect"
+              :data-testid="`testColumn${column.key}Search`"
               class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
               :options="column ? column.getSelectValues(data) : []"
               item-key="value"
@@ -92,6 +99,7 @@
             ></base-select>
             <base-input
               v-else
+              :data-testid="`testColumn${column.key}TextInput`"
               :placeholder="column.title"
               :model-value="internalColumnSearch[column.key]"
               input-style="width: 100%"
@@ -115,6 +123,7 @@
       </div>
       <div
         v-for="item of data"
+        :data-testid="`testDataItem${item.id}Content`"
         :key="item.id"
         :style="gridStyleRow"
         class="hover:bg-crisiscleanup-light-grey border-b js-table-row"
@@ -130,6 +139,7 @@
         >
           <base-checkbox
             :model-value="selectedItems.has(item.id)"
+            :data-testid="`testDataItem${item.id}Checkbox`"
             class="mb-5 js-select-item"
             data-testid="tableview_actionSelect"
             @update:modelValue="
@@ -152,6 +162,7 @@
         </div>
         <div
           v-for="column of columns"
+          :data-testid="`tesColumn${column.key}Column`"
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
           :class="column.class || []"
@@ -190,6 +201,7 @@
       </div>
       <div
         v-if="data.length === 0"
+        data-testid="testNoItemsFoundDiv"
         class="p-2 text-crisiscleanup-grey-700 italic"
       >
         {{ $t('info.no_items_found') }}
@@ -205,6 +217,7 @@
           :model-value="pagination.pageSize"
           :options="pageSizes"
           :clearable="false"
+          data-testid="testPaginationPagesizeSelect"
           class="w-32"
           select-classes="sm:w-24 bg-white border vue-select-up"
           @update:modelValue="onSelectPageSize"
@@ -221,6 +234,7 @@
             "
             :text="$t('tableVue.prev')"
             :alt="$t('tableVue.prev')"
+            data-testid="testPaginationPrevButton"
             icon="caret-left"
             class="mr-3 text-base js-prev"
           />
@@ -251,6 +265,7 @@
             "
             :text="$t('tableVue.next')"
             :alt="$t('tableVue.next')"
+            data-testid="testPaginationNextButton"
             suffix-icon="caret-right"
             class="text-base js-next"
           />

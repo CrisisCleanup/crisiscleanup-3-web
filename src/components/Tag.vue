@@ -2,6 +2,7 @@
   <div class="tag flex items-center px-1 justify-center text-xs">
     <ccu-icon
       v-if="closeable"
+      data-testid="testCancelIcon"
       :alt="$t('actions.cancel')"
       size="xxs"
       class="mx-1"

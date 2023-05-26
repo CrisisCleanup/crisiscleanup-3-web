@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3 flex flex-col">
+  <div class="p-3 flex flex-col" data-testid="testBulkUnclaimReassignStatusDiv">
     <span class="text-base pb-3">
       {{
         $t('casesVue.bulk_unclaim_reassign_status', {
@@ -9,6 +9,7 @@
     </span>
     <base-checkbox
       class="mb-5"
+      data-testid="testBulkUnclaimNoChangeStatusCheckbox"
       :model-value="unchangedStatusOnUnclaim"
       @update:modelValue="
         () => {
@@ -24,6 +25,7 @@
     >
     <base-checkbox
       class="mb-5"
+      data-testid="testBulkUnclaimOpenUnassignedStatusCheckbox"
       :model-value="updateStatusOnUnclaim"
       @update:modelValue="
         () => {

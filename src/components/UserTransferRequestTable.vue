@@ -10,6 +10,7 @@
         <base-button
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
+          :data-testid="`testApproveUser${slotProps.item.id}TransferRequestButton`"
           variant="solid"
           size="small"
           class="mx-2"
@@ -22,6 +23,7 @@
         <base-button
           :text="$t('actions.reject')"
           :alt="$t('actions.reject')"
+          :data-testid="`testRejectUser${slotProps.item.id}TransferRequestButton`"
           variant="outline"
           size="small"
           class="mx-2"

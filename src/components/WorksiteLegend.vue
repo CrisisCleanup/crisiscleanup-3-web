@@ -2,6 +2,7 @@
   <div>
     <div
       v-if="showingLegend"
+      data-testid="testShowingLegendDiv"
       style="z-index: 1001"
       class="legend absolute legend-landscape bottom-0 w-72 bg-white border-2 p-2"
     >
@@ -9,6 +10,7 @@
         <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
         <font-awesome-icon
           icon="minus"
+          data-testid="testHideLegendIcon"
           size="1x"
           class="cursor-pointer"
           :title="$t('worksiteMap.hide_legend')"

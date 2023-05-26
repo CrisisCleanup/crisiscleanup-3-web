@@ -2,6 +2,7 @@
   <div class="p-3 flex flex-col">
     <base-select
       class="bg-white h-12 mb-3 w-120 absolute"
+      data-testid="testSelectStatusSelect"
       :options="displayStatuses"
       searchable
       item-key="status"

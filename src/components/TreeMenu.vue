@@ -2,6 +2,7 @@
   <ul class="tree-menu text-sm" :class="`ml-${indent * 2}`">
     <base-checkbox
       :model-value="selectedUsers.includes(data.id)"
+      :data-testid="`testAddRemoveUser${data.id}Checkbox`"
       @update:modelValue="
         (value) => {
           if (value) {
@@ -12,7 +13,7 @@
         }
       "
     >
-      <div class="flex">
+      <div class="flex" :data-testid="`testAUser${data.id}InfoDiv`">
         <Avatar
           :initials="data.first_name"
           :url="profilePictureUrl"
