@@ -5,7 +5,11 @@
     >
       <div class="grid--logo logo w-24 md:w-52">
         <a href="/">
-          <img src="../assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
+          <img
+            src="../assets/ccu-logo-black-500w.png"
+            data-testid="testLogoIcon"
+            alt="Crisis Cleanup"
+          />
         </a>
       </div>
       <IncidentContact class="w-full md:w-max" />
@@ -18,6 +22,7 @@
         <span v-for="item in routes" :key="item.key">
           <a
             v-if="item.external"
+            :data-testid="`testNavRoute${item.key}Link`"
             :href="item.route"
             class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
             target="_blank"
@@ -46,6 +51,7 @@
           >
           <base-button
             variant="solid"
+            data-testid="testRegisterButton"
             size="large"
             class="w-full"
             :action="() => $router.push('/register')"
@@ -58,7 +64,7 @@
     <div class="main w-screen md:w-auto sm:m-10 z-50">
       <slot />
     </div>
-    <div class="bottom">
+    <div class="bottom" data-testid="testBottomSectionDiv">
       <div v-if="route.name === 'nav.login'" class="flex flex-col m-8">
         <div class="flex items-end md:justify-end gap-5">
           <span v-for="item in footerRoutes" :key="item.key">
@@ -81,9 +87,10 @@
         </div>
         <a
           class="w-40 block md:self-end mt-3"
+          data-testid="testAwsLink"
           target="_blank"
           href="https://aws.amazon.com/government-education/nonprofits/disaster-response/"
-          ><img src="@/assets/powered_by_aws.png"
+          ><img src="@/assets/powered_by_aws.png" data-testid="testAwsImgIcon"
         /></a>
       </div>
     </div>

@@ -6,7 +6,12 @@
     <slot></slot>
   </template>
   <div v-else class="flex h-screen items-center justify-center">
-    <font-awesome-icon size="xl" icon="spinner" spin />
+    <font-awesome-icon
+      data-testid="testSpinnerLoadingIcon"
+      size="xl"
+      icon="spinner"
+      spin
+    />
   </div>
 </template>
 

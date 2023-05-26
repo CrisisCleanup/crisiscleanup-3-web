@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper unauthenticated">
+  <div class="wrapper unauthenticated" data-testid="testIsUnauthenticatedDiv">
     <slot />
   </div>
 </template>

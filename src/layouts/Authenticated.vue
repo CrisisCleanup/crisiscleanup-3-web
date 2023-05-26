@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!loading && currentIncident" class="layout">
+  <div
+    v-if="!loading && currentIncident"
+    class="layout"
+    data-testid="testIsAuthenticatedDiv"
+  >
     <div
       class="sidebar h-full overflow-auto"
       :class="{ 'slide-over': slideOverVisible }"
@@ -7,6 +11,7 @@
       <div v-if="slideOverVisible" class="flex items-center justify-end p-1.5">
         <font-awesome-icon
           icon="times"
+          data-testid="testAuthenticatedToggleIcon"
           class="menu-button mx-2 cursor-pointer text-white self-end"
           size="2xl"
           @click="toggle"
@@ -22,6 +27,7 @@
     <div class="header p-1 flex items-center">
       <font-awesome-icon
         icon="bars"
+        data-testid="testHamburgerIcon"
         class="menu-button mx-3 cursor-pointer"
         size="2xl"
         @click="toggle"
@@ -45,12 +51,14 @@
     <template v-if="showAcceptTermsModal">
       <TermsandConditionsModal
         :organization="currentOrganization"
+        data-testid="testShowAcceptTermsModal"
         @acceptedTerms="acceptTermsAndConditions"
       />
     </template>
     <div v-if="transferRequest">
       <CompletedTransferModal
         :transfer-request="transferRequest"
+        data-testid="testCompletedTransferModal"
         @close="
           () => {
             transferRequest = null;

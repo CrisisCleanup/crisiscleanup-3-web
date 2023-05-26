@@ -3,6 +3,7 @@
     <div class="flex flex-col items-center justify-between">
       <base-input
         :model-value="globalSearch"
+        data-testid="testGlobalSearch"
         icon="search"
         class="w-full mx-4"
         :placeholder="$t('actions.search_everywhere')"
@@ -20,23 +21,29 @@
         <DatabaseAccess class="mx-3 my-1" />
         <base-button
           :text="$t('adminDashboard.arcgis_upload')"
+          data-testid="testArcgisUploadButton"
           variant="solid"
           size="medium"
           :action="showArcGisUploader"
         />
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testPendingOrganizationsDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="py-4 px-4 flex items-center justify-between border-b">
           <div class="text-gray-500">
             {{ $t('adminDashboard.pending_organizations') }}
           </div>
-          <base-button icon="sync" :action="getOrganizationsForApproval" />
+          <base-button
+            icon="sync"
+            :action="getOrganizationsForApproval"
+            data-testid="testRefreshPendingOrganizationsButton"
+          />
         </div>
         <div class="py-4 px-4 border-b flex items-center">
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testPendingOrganizationsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
             :class="[
@@ -48,6 +55,7 @@
 
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testPendingOrganizationsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
             :class="[
@@ -61,6 +69,7 @@
 
           <base-button
             class="mr-2"
+            data-testid="testPendingOrganizationsRecentlyRejectedButton"
             size="medium"
             :text="$t('adminDashboard.recently_rejected')"
             :class="[
@@ -81,7 +90,7 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testRedeployRequestsDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="py-4 px-4 flex items-center justify-between border-b">
           <div class="text-gray-500">
@@ -92,6 +101,7 @@
         <div class="py-4 px-4 border-b flex items-center">
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testRedeployRequestsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
             :class="[redeployView === 'default' ? 'text-primary-dark' : '']"
@@ -101,6 +111,7 @@
 
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testRedeployRequestsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
             :class="[redeployView === 'approved' ? 'text-primary-dark' : '']"
@@ -110,6 +121,7 @@
 
           <base-button
             class="mr-2"
+            data-testid="testRedeployRequestsRecentlyRejectedButton"
             size="medium"
             :text="$t('adminDashboard.recently_rejected')"
             :class="[redeployView === 'rejected' ? 'text-primary-dark' : '']"
@@ -125,10 +137,10 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testWorksiteImportDiv">
       <WorksiteImport class="m-4 pt-2 shadow bg-white w-full"></WorksiteImport>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testOrganizationsDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="p2-4 px-2 border-b flex items-center">
           <span class="flex items-center">
@@ -145,6 +157,7 @@
           </span>
           <base-input
             :model-value="organizations.search"
+            data-testid="testOrganizationsSearch"
             icon="search"
             class="w-72 mx-4"
             :placeholder="$t('actions.search')"
@@ -166,12 +179,13 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testUsersDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="p2-4 px-2 border-b flex items-center">
           <span class="flex items-center">
             <base-button
               class="text-4xl mx-3"
+              data-testid="testUsersSearch"
               :action="
                 () => {
                   users.visible = !users.visible;
@@ -204,12 +218,13 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testGhostUsersDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="p2-4 px-2 border-b flex items-center">
           <span class="flex items-center">
             <base-button
               class="text-4xl mx-3"
+              data-testid="testGhostUsersSearch"
               :action="
                 () => {
                   ghostUsers.visible = !ghostUsers.visible;
@@ -242,12 +257,13 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testInvitationRequestsDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="p2-4 px-2 border-b flex items-center">
           <span class="flex items-center">
             <base-button
               class="text-4xl mx-3"
+              data-testid="testInvitationRequestsSearch"
               :action="
                 () => {
                   invitationRequests.visible = !invitationRequests.visible;
@@ -280,12 +296,13 @@
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" data-testid="testInvitationsDiv">
       <div class="m-4 pt-2 shadow bg-white w-full">
         <div class="p2-4 px-2 border-b flex items-center">
           <span class="flex items-center">
             <base-button
               class="text-4xl mx-3"
+              data-testid="testInvitationsSearch"
               :action="
                 () => {
                   invitations.visible = !invitations.visible;
