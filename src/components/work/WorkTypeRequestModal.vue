@@ -6,7 +6,7 @@
     @close="$emit('onCancel')"
   >
     <div class="px-6 py-3">
-      <div class="font-xs my-2">
+      <div class="font-xs my-2" data-testid="testPleaseAddRespectfulNoteDiv">
         <span
           v-html="
             $t('workTypeRequestModal.request_modal_instructions', {
@@ -37,6 +37,7 @@
       <template v-for="organization in organizations">
         <div
           v-for="contact in organization.incident_primary_contacts"
+          :data-testid="`testOrganization${organization.name}ContactDiv`"
           :key="contact.email"
         >
           {{ contact.first_name }} {{ contact.last_name }} ({{
@@ -79,6 +80,7 @@
         <base-button
           :text="$t('actions.cancel')"
           :alt="$t('actions.cancel')"
+          data-testid="testCancelButton"
           class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
           :action="
             () => {
@@ -88,6 +90,7 @@
         />
         <base-button
           variant="solid"
+          data-testid="testRequestButton"
           :action="
             () => {
               $emit('onRequest', {
