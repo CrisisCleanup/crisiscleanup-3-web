@@ -15,6 +15,7 @@
             {{ $t('registerOrg.choose_a_disaster') }}
             <base-select
               :model-value="organization.incident"
+              data-testid="testIncidentSelect"
               class="m-3"
               :options="incidents"
               searchable
@@ -34,6 +35,7 @@
             <div class="flex flex-wrap">
               <OrganizationSearchInput
                 size="large"
+                data-testid="testOrganizationNameSearch"
                 class="form-field"
                 allow-new
                 required
@@ -48,6 +50,7 @@
               />
               <base-input
                 v-model="organization.url"
+                data-testid="testOrganizationUrlTextInput"
                 type="text"
                 class="form-field"
                 size="large"
@@ -55,12 +58,14 @@
               />
               <base-input
                 v-model="organization.facebook"
+                data-testid="testOrganizationFacebookTextInput"
                 class="form-field"
                 size="large"
                 :placeholder="$t('registerOrg.facebook')"
               />
               <base-input
                 v-model="organization.twitter"
+                data-testid="testOrganizationTwitterTextInput"
                 class="form-field"
                 size="large"
                 :placeholder="$t('registerOrg.twitter')"
@@ -68,6 +73,7 @@
             </div>
             <base-input
               v-model="organization.where_are_you_working"
+              data-testid="testOrganizationWhereAreYouWorkingTextInput"
               text-area
               class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
@@ -76,6 +82,7 @@
             />
             <base-input
               v-model="organization.referral"
+              data-testid="testOrganizationReferralTextInput"
               text-area
               class="text-base w-4/5 placeholder-crisiscleanup-dark-200 outline-none my-3 p-2 resize-none"
               rows="4"
@@ -89,6 +96,7 @@
             <div class="flex flex-wrap">
               <base-input
                 v-model="user.first_name"
+                data-testid="testPrimaryContactFirstNameTextInput"
                 type="text"
                 class="form-field"
                 size="large"
@@ -97,6 +105,7 @@
               />
               <base-input
                 v-model="user.last_name"
+                data-testid="testPrimaryContactLastNameTextInput"
                 type="text"
                 class="form-field"
                 size="large"
@@ -105,6 +114,7 @@
               />
               <base-input
                 v-model="user.email"
+                data-testid="testPrimaryContactEmailTextInput"
                 type="email"
                 class="form-field"
                 size="large"
@@ -113,6 +123,7 @@
               />
               <base-input
                 v-model="user.mobile"
+                data-testid="testPrimaryContactMobileTextInput"
                 class="form-field"
                 size="large"
                 :validator="validatePhoneNumber"
@@ -130,6 +141,7 @@
             ></div>
             <CapabilityGrid
               class="text-sm mt-3"
+              data-testid="testCapabilityMatrixInput"
               @updated="
                 (matrix) => {
                   updatedOrganizationCapabilitiesMatrix = matrix;
@@ -140,6 +152,7 @@
 
           <base-checkbox
             v-model="organization.publish"
+            data-testid="testOrganizationPublishCheckbox"
             class="text-base activities-checkbox"
           >
             <div>
@@ -149,6 +162,7 @@
 
           <base-checkbox
             v-model="organization.accepted_terms"
+            data-testid="testAcceptedTermsCheckbox"
             class="text-base activities-checkbox"
             required
           >
@@ -159,6 +173,7 @@
         </ol>
         <base-button
           size="large"
+          data-testid="testSignUpButton"
           class="px-5 py-2 m-1 self-center md:w-108 lg:w-108 m-auto mb-20 sm:w-full"
           variant="solid"
           :text="$t('actions.sign_up')"

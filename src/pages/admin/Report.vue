@@ -6,6 +6,7 @@
     ></div>
     <ReportFilters
       v-if="report"
+      data-testid="testReportFiltersContent"
       :key="currentIncidentId"
       :inputs="report.inputs"
       @onFilter="runReport"
@@ -15,6 +16,7 @@
     <font-awesome-icon v-if="loading" size="xl" icon="spinner" spin />
     <div
       v-for="[key, value] in Object.entries(transformedData)"
+      :data-testid="`testReportCard${key}Div`"
       v-else
       :key="key"
       class="flex flex-col justify-center my-10 ml-8"
@@ -24,6 +26,7 @@
           (value.data.length > 0 || Object.keys(value.data).length > 0) &&
           value.type !== 'pie'
         "
+        data-testid="testReportWidgetContent"
         :current-filters="currentFilters"
         :widget-key="key"
         :value="value"

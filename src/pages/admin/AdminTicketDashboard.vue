@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2">
+  <div class="my-2" data-testid="testTicketDashboardDiv">
     <Table
       :columns="ticketTable.columns"
       :data="tickets"

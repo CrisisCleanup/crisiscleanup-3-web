@@ -1,6 +1,6 @@
 <template>
   <Home>
-    <div class="grid--main m-10">
+    <div class="grid--main m-10" data-testid="testContributionsDiv">
       <div class="text-4xl mb-5">
         {{ $t('contrib.ccu_contributor_agreements') }}
       </div>

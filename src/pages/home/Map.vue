@@ -10,6 +10,7 @@
 
       <base-select
         :model-value="selectedIncident"
+        data-testid="testIncidentSelect"
         class="form-field"
         :options="incidents"
         style="z-index: 10000; position: relative"
@@ -32,6 +33,7 @@
           :map-loading="false"
           :available-work-types="availableWorkTypes"
           :show-legend="Object.keys(availableWorkTypes)"
+          data-testid="testSimpleMapContent"
         />
       </div>
 

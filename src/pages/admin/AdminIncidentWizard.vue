@@ -1,5 +1,8 @@
 <template>
-  <div class="relative h-full w-full flex flex-col">
+  <div
+    class="relative h-full w-full flex flex-col"
+    data-testid="testGeneralIncidentInfoDiv"
+  >
     <div v-if="savedIncident" class="text-2xl font-bold text-center my-2">
       {{ savedIncident.id }}: {{ savedIncident.name }}
     </div>
@@ -55,6 +58,7 @@
               <base-button
                 :text="$t('actions.create')"
                 :alt="$t('actions.create')"
+                data-testid="testCreateButton"
                 variant="solid"
                 class="px-2 py-1"
                 :action="() => {}"

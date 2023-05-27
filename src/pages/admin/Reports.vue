@@ -2,7 +2,8 @@
   <div v-if="!loading">
     <modal
       v-if="showRequestAccessModal"
-      title="Reports Activation"
+      data-testid="testShowRequestAccessModalModal"
+      :title="$t('reportsVue.reports_activation')"
       modal-classes="w-108"
       @close="showRequestAccessModal = false"
     >

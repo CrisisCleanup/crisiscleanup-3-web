@@ -1,6 +1,6 @@
 <template>
   <Home>
-    <div class="grid--main m-10 sm:px-0">
+    <div class="grid--main m-10 sm:px-0" data-testid="testPrivacyDiv">
       <div class="text-4xl">
         {{ $t('privacy.privacy_and_security_policy') }}
       </div>
