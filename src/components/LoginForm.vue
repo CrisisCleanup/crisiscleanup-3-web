@@ -59,7 +59,7 @@
         data-testid="testLoginButton"
         size="large"
         class="w-full"
-        data-testid="loginForm.login"
+        :alt="$t('actions.login')"
         :action="loginUser"
       >
         {{ lang.login }}
@@ -71,6 +71,7 @@
         data-testid="testRequestAccessButton"
         size="large"
         class="w-full"
+        :alt="$t('actions.request_access')"
         :action="() => router.push('/request_access')"
       >
         {{ lang.request }}

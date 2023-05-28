@@ -110,6 +110,7 @@
       data-testid="testAddScheduleButton"
       text-variant="h3"
       class="text-primary-dark"
+      :alt="$t('recurringSchedule.add_schedule')"
       @click="showSchedule = true"
       >{{ $t('recurringSchedule.add_schedule') }}</base-button
     >

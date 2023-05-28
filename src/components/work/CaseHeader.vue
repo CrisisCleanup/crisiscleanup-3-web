@@ -43,6 +43,7 @@
               data-testid="testIsMemberOfMyOrgIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.not_member_of_my_org')"
+              :alt="$t('actions.not_member_of_my_org')"
               @click="() => toggleFavorite(false)"
               v-html="favoriteSvgActive"
             ></div>
@@ -51,6 +52,7 @@
               class="svg-container cursor-pointer"
               data-testid="testIsNotMemberOfMyOrgIcon"
               :title="$t('actions.member_of_my_org')"
+              :alt="$t('actions.member_of_my_org')"
               @click="() => toggleFavorite(true)"
               v-html="favoriteSvgInactive"
             ></div>
@@ -61,6 +63,7 @@
               data-testid="testIsHighPriorityIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.unmark_high_priority')"
+              :alt="$t('actions.unmark_high_priority')"
               @click="() => toggleHighPriority(false)"
               v-html="highPrioritySvgActive"
             ></div>
@@ -69,6 +72,7 @@
               data-testid="testIsNotHighPriorityIcon"
               class="svg-container cursor-pointer"
               :title="$t('actions.mark_high_priority')"
+              :alt="$t('actions.mark_high_priority')"
               @click="() => toggleHighPriority(true)"
               v-html="highPrioritySvgInactive"
             ></div>

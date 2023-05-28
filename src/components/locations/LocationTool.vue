@@ -182,6 +182,7 @@
                 }
               "
               :text="$t('actions.cancel')"
+              :alt="$t('actions.cancel')"
               data-testid="testCancelButton"
               variant="outline"
               class="ml-2 p-3 px-6 text-xs"
@@ -190,6 +191,7 @@
               variant="solid"
               :action="applyCurrentLayerUpload"
               :text="$t('actions.apply')"
+              :alt="$t('actions.apply')"
               data-testid="testApplyButton"
               class="ml-2 p-3 px-6 text-xs"
             />
@@ -255,6 +257,7 @@
         </div>
         <base-button
           :text="$t('actions.save')"
+          :alt="$t('actions.save')"
           data-testid="testBufferSaveButton"
           variant="solid"
           class="flex-grow px-3 py-1 my-1"
@@ -270,6 +273,7 @@
         <div class="flex text-primary-dark">
           <base-button
             :text="$t('actions.add')"
+            :alt="$t('actions.add')"
             data-testid="testAddPolyButton"
             ccu-event="user_ui-draw-add"
             :action="
@@ -282,6 +286,7 @@
           />
           <base-button
             :text="$t('actions.subtract')"
+            :alt="$t('actions.subtract')"
             data-testid="testSubtractPolyButton"
             ccu-event="user_ui-draw-subtract"
             :action="

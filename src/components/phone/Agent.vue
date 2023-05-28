@@ -45,6 +45,7 @@
         size="medium"
         :disabled="true"
         :text="$t('phoneDashboard.on_call')"
+        :alt="$t('phoneDashboard.on_call')"
         class="text-white bg-crisiscleanup-dark-400 bg-opacity-40"
       ></base-button>
       <base-button
@@ -54,6 +55,7 @@
         size="medium"
         :action="loginPhone"
         :text="$t('phoneDashboard.start_taking_calls')"
+        :alt="$t('phoneDashboard.start_taking_calls')"
       ></base-button>
       <base-button
         v-else-if="!isOnCall"
@@ -62,6 +64,7 @@
         size="medium"
         :action="setAway"
         :text="$t('phoneDashboard.stop_taking_calls')"
+        :alt="$t('phoneDashboard.stop_taking_calls')"
       ></base-button>
       <base-checkbox
         v-if="currentUser && currentUser.isAdmin"

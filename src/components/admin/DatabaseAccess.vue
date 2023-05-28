@@ -27,6 +27,7 @@
     </modal>
     <base-button
       :text="$t('databaseAccess.database_access')"
+      :alt="$t('databaseAccess.database_access')"
       variant="solid"
       size="medium"
       :action="

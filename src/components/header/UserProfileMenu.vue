@@ -12,6 +12,7 @@
         <Avatar
           :initials="currentUser ? currentUser.first_name : undefined"
           :url="currentUser && currentUser.profilePictureUrl"
+          :alt="currentUser && currentUser.full_name"
           data-testid="testAvatarIcon"
           class="p-1"
           size="small"
@@ -32,6 +33,7 @@
             data-testid="testUserprofileProfileLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.profile')"
+            :alt="$t('nav.profile')"
             :action="
               () => {
                 $router.push(`/profile`);
@@ -42,6 +44,7 @@
             data-testid="testUserprofileDownloadsLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('nav.downloads')"
+            :alt="$t('nav.downloads')"
             :action="
               () => {
                 $router.push(`/downloads`);
@@ -52,6 +55,7 @@
             data-testid="testUserprofileLogoutLink"
             class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :text="$t('actions.logout')"
+            :alt="$t('actions.logout')"
             :action="() => $emit('auth:logout')"
           />
         </div>

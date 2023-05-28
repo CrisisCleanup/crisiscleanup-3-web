@@ -70,6 +70,7 @@
                     :disabled="!Boolean(currentMessage)"
                     ccu-icon="plane"
                     :action="sendMessage"
+                    :alt="$t('actions.send_message')"
                   />
                 </div>
               </div>

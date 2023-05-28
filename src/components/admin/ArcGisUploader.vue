@@ -31,6 +31,7 @@
       data-testid="testImportGisButton"
       :action="importGis"
       :text="$t('actions.import')"
+      :alt="$t('actions.import')"
       class="p-3 px-6 text-xs"
     />
   </div>

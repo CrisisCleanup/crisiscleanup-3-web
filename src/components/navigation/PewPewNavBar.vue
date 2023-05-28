@@ -48,6 +48,7 @@
         class="text-black text-xs font-semibold flex flex-grow p-1"
         variant="solid"
         data-testid="testRegisterButton"
+        :alt="$t('actions.register')"
         :action="() => $router.push({ name: 'nav.register' })"
       >
         {{ $t('actions.register') }}

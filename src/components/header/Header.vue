@@ -49,6 +49,7 @@
           variant="solid"
           data-testid="testDebugUserButton"
           :text="$t('actions.debug_user')"
+          :alt="$t('actions.debug_user')"
           :action="showCurrentUser"
         />
         <base-button
@@ -56,6 +57,7 @@
           variant="solid"
           data-testid="testDebugIncidentStatesButton"
           :text="$t('actions.debug_incident_states')"
+          :alt="$t('actions.debug_incident_states')"
           :action="showCurrentIncidentStates"
         />
       </div>

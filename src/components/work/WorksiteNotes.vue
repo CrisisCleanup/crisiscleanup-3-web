@@ -15,6 +15,9 @@
         :text="
           showingAllNotes ? $t('actions.some_notes') : $t('actions.all_notes')
         "
+        :alt="
+          showingAllNotes ? $t('actions.some_notes') : $t('actions.all_notes')
+        "
         :action="
           () => {
             showingAllNotes = !showingAllNotes;
@@ -100,6 +103,7 @@
           data-testid="testCancelNoteButton"
           type="bare"
           :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
           :action="cancelNote"
         />
         <base-button
@@ -107,6 +111,7 @@
           data-testid="testSaveNoteButton"
           type="link"
           :text="$t('actions.add')"
+          :alt="$t('actions.add')"
           :action="saveNote"
         />
       </div>

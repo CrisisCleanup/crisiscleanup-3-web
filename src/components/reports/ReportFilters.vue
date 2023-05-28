@@ -58,6 +58,7 @@
         data-testid="testPrintReportButton"
         :action="printReport"
         :text="$t('actions.print')"
+        :alt="$t('actions.print')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
@@ -65,6 +66,7 @@
         data-testid="testDownloadCSVButton"
         :action="downloadCSV"
         :text="$t('actions.download_csv')"
+        :alt="$t('actions.download_csv')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
@@ -72,6 +74,7 @@
         data-testid="testApplyFiltersButton"
         :action="applyFilters"
         :text="$t('actions.run_report')"
+        :alt="$t('actions.run_report')"
         class="ml-2 p-3 px-6 text-xs"
       />
     </div>

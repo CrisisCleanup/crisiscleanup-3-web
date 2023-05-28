@@ -14,7 +14,7 @@
       }
     "
   />
-  <base-button icon="sync" :action="getEventLogs" />
+  <base-button icon="sync" :action="getEventLogs" :alt="$t('adminDashboard.sync_events')" />
   <ul class="list-none m-0 p-0">
     <li v-for="stream in eventStream" :key="stream.event_key" class="mb-2">
       <div v-if="stream.attr" class="grid grid-flow-col auto-cols-max">

@@ -27,11 +27,13 @@
         data-testid="testMoveBackButton"
         :action="goBack"
         :text="$t('actions.move_back')"
+        :alt="$t('actions.move_back')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
         :action="stay"
         :text="$t('actions.stay')"
+        :alt="$t('actions.stay')"
         data-testid="testStayButton"
         variant="solid"
         class="ml-2 p-3 px-6 text-xs"

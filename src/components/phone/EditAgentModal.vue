@@ -59,6 +59,7 @@
           variant="solid"
           data-testid="testSaveButton"
           size="large"
+          :alt="$t('actions.save')"
           :action="() => updateUserNeeded()"
           >{{ $t('actions.save') }}</base-button
         >

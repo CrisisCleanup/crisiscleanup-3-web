@@ -53,6 +53,7 @@
                   size="xxs"
                   variant="outline"
                   class="worksite__dialer"
+                  :alt="$t('formLabels.call_number')"
                   :action="() => openDialerTab(worksite.phone1)"
                 />
               </div>
@@ -77,6 +78,7 @@
             class="ml-2 p-1 px-3 text-xs"
             variant="solid"
             :text="$t('actions.claim_all_alt')"
+            :alt="$t('actions.claim_all_alt')"
             :action="
               () => {
                 return claimWorkType(
@@ -92,6 +94,7 @@
               class="ml-2 p-1 px-3 text-xs"
               variant="solid"
               :text="$t('actions.release_all')"
+              :alt="$t('actions.release_all')"
               :action="
                 () => {
                   return releaseWorkType(
@@ -105,6 +108,7 @@
               class="ml-2 p-1 px-3 border-black border-2 border-black text-xs"
               data-testid="testRequestAllButton"
               :text="$t('actions.request_all')"
+              :alt="$t('actions.request_all')"
               :action="
                 () => {
                   requestingWorkTypes = true;
@@ -164,6 +168,7 @@
                     class="ml-2 p-1 px-3 text-xs"
                     variant="solid"
                     :text="$t('actions.release')"
+                    :alt="$t('actions.release')"
                     :action="
                       () => {
                         return releaseWorkType([work_type.work_type]);
@@ -185,6 +190,7 @@
                         }
                       "
                       :text="$t('actions.request')"
+                      :alt="$t('actions.request')"
                       class="ml-2 p-1 px-3 text-xs"
                     />
                     <div
@@ -255,6 +261,7 @@
                     }
                   "
                   :text="$t('actions.unclaim')"
+                  :alt="$t('actions.unclaim')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
                 <div class="work-list">
@@ -305,6 +312,7 @@
                     }
                   "
                   :text="$t('actions.claim')"
+                  :alt="$t('actions.claim')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
                 <div class="work-list">
@@ -347,6 +355,7 @@
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black flex-grow"
         :text="$t('actions.unclaim')"
+        :alt="$t('actions.unclaim')"
         :action="
           () => {
             return unclaimWorkType();
@@ -360,6 +369,7 @@
         variant="solid"
         class="m-1 text-black p-3 px-4 flex-grow"
         :text="$t('actions.claim')"
+        :alt="$t('actions.claim')"
         :action="
           () => {
             showingClaimModal = true;
@@ -372,6 +382,7 @@
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black flex-grow"
         :text="$t('actions.request')"
+        :alt="$t('actions.request')"
         :action="
           () => {
             requestingWorkTypes = true;
@@ -386,6 +397,7 @@
         class="m-1 text-black p-3 px-4 flex-grow"
         data-testid="caseview-actions-done"
         :text="$t('actions.done')"
+        :alt="$t('actions.done')"
         :action="
           () => {
             $emit('closeWorksite');

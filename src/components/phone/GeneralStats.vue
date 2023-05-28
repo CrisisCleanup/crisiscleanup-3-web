@@ -33,6 +33,7 @@
           class="text-primary-dark underline"
           data-testid="testShowOutboundsModalButton"
           :text="remainingCallbacks || 0"
+          :alt="remainingCallbacks || 0"
           :action="showOutboundsModal"
         ></base-button>
       </div>
@@ -46,6 +47,7 @@
           class="text-primary-dark underline"
           data-testid="testShowOutboundsModalCalldownButton"
           :text="remainingCalldowns || 0"
+          :alt="remainingCalldowns || 0"
           :action="() => showOutboundsModal('calldown')"
         ></base-button>
       </div>

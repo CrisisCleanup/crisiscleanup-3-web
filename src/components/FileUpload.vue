@@ -60,6 +60,7 @@
     </modal>
     <base-button
       :text="$t('fileUpload.file_uploader')"
+      :alt="$t('fileUpload.file_uploader')"
       variant="solid"
       size="medium"
       :action="

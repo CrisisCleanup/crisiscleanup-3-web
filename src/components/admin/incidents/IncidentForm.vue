@@ -38,6 +38,7 @@
       ></datepicker>
       <base-button
         :text="$t('actions.start_now')"
+        :alt="$t('actions.start_now')"
         data-testid="testCurrentIncidentStartAtButton"
         class="min-w-max px-3"
         variant="solid"
@@ -159,6 +160,7 @@
         ></datepicker>
         <base-button
           :text="$t('actions.start_now')"
+          :alt="$t('actions.start_now')"
           class="min-w-max px-3"
           variant="solid"
           :action="

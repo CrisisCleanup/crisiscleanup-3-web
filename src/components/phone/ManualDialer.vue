@@ -36,6 +36,7 @@
       data-testid="testDialingButton"
       class="px-5 py-1 my-3"
       :text="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
+      :alt="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
       :disabled="dialing"
       :action="() => $emit('onDial', `${countryCode}${phoneNumber}`)"
     ></base-button>

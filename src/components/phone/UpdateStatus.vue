@@ -35,6 +35,7 @@
       data-testid="testCompleteCallButton"
       size="small"
       variant="solid"
+      :alt="$t('phoneDashboard.complete_call')"
       :action="
         () =>
           $emit('onCompleteCall', {
