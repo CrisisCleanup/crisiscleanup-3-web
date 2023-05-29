@@ -1,8 +1,11 @@
 <template>
   <Home>
     <div class="grid--main">
-      <div class="w-2/3">
-        <div class="text-5xl">{{ $t('Forgot your password?') }}</div>
+      <div
+        class="w-2/3"
+        data-testid="testForgotYourPasswordOrResetDiv"
+      >
+        <div class="text-5xl">{{ $t('resetPassword.forgot_your_password_or_reset') }}</div>
         <div class="text-2xl font-light">
           {{ $t('resetPassword.enter_email_for_reset_instructions') }}
         </div>
@@ -10,6 +13,7 @@
       <form ref="form" class="w-108 flex flex-col" autocomplete="off">
         <base-input
           v-model="email"
+          data-testid="testYourEmailTextInput"
           type="email"
           class="input"
           size="large"
@@ -19,6 +23,7 @@
 
         <base-button
           size="large"
+          data-testid="testSendResetPasswordInstructionsButton"
           class="px-5 py-2 m-1 flex-grow"
           variant="solid"
           :text="$t('actions.send_reset_password_instructions')"
@@ -28,6 +33,7 @@
       </form>
       <modal
         v-if="showSuccessModal"
+        data-testid="testResetSuccessModal"
         modal-classes="bg-white w-1/2 h-108 shadow p-3"
         closeable
         @close="$router.push('/login')"
@@ -43,6 +49,7 @@
           <base-button
             :text="$t('actions.got_it')"
             :alt="$t('actions.got_it')"
+            data-testid="testGotItButton"
             size="large"
             variant="solid"
             class="mt-10"

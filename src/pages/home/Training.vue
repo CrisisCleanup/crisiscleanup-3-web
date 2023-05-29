@@ -1,6 +1,6 @@
 <template>
   <Home>
-    <div class="grid--main mb-60 sm:mb-0">
+    <div class="grid--main mb-60 sm:mb-0" data-testid="testTrainingDiv">
       <!--- Title --->
       <div class="flex flex-col m-5 pb-8">
         <h1 class="text-5xl px-0.5 text-crisiscleanup-dark-500 font-bold">
@@ -18,6 +18,7 @@
           <div class="video-container">
             <iframe
               class="resp-video"
+              data-testid="testMandatoryTrainingVideoIframe"
               width="100%"
               height="100%"
               src="https://www.youtube.com/embed/ot4LZjtK0xo"
@@ -47,6 +48,7 @@
           <div class="video-container">
             <iframe
               class="resp-video"
+              data-testid="testSupplimentPhoneTrainingIframe"
               width="100%"
               height="100%"
               src="https://www.youtube.com/embed/dp_1A1qVSog"
@@ -76,6 +78,7 @@
           <div class="video-container">
             <iframe
               class="resp-video"
+              data-testid="testCalldownTrainingIframe"
               width="100%"
               height="100%"
               src="https://www.youtube.com/embed/HqXm2s5Dy3c"
@@ -105,6 +108,7 @@
           <div class="video-container">
             <iframe
               class="resp-video"
+              data-testid="testCcuDuringCovidIframe"
               width="100%"
               height="100%"
               src="https://www.youtube.com/embed/vWFI7udFmik"

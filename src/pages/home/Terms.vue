@@ -1,6 +1,6 @@
 <template>
   <Home>
-    <div class="grid--main m-10 sm:px-0">
+    <div class="grid--main m-10 sm:px-0" data-testid="testTermsDiv">
       <h1 class="text-4xl" v-html="terms.terms_and_conditions"></h1>
       <div class="row mb-6">
         <h3>1. {{ $t('terms.preamble') }}</h3>

@@ -1,12 +1,18 @@
 <template>
   <Home>
-    <div class="grid--main overflow-auto">
+    <div
+      class="grid--main overflow-auto"
+      data-testid="testRequestAccessJoinOrganizationDiv"
+    >
       <div class="w-2/3">
         <div class="text-5xl">
           {{ $t('requestAccess.join_organization') }}
         </div>
         <div class="text-2xl font-light">
-          <div v-if="route.query.organization">
+          <div
+            v-if="route.query.organization"
+            data-testid="testOrgAlreadyHasAccountDiv"
+          >
             {{
               $t('requestAccess.org_already_has_account', {
                 organization: route.query.organization,
@@ -15,6 +21,7 @@
           </div>
           <base-text
             v-if="route.query.orphan"
+            data-testid="testOrphanAlreadyRemovedEnterEmailForNewOrgContent"
             variant="body"
             weight="700"
             class="mt-4 mb-1"
@@ -29,6 +36,7 @@
       <form ref="form" class="w-108 flex flex-col" autocomplete="off">
         <base-input
           v-model="requestedTo"
+          data-testid="testExistingMemberEmailTextInput"
           size="large"
           class="input"
           type="search"
@@ -41,6 +49,7 @@
           </base-text>
           <base-input
             v-model="email"
+            data-testid="testYourEmailTextInput"
             type="search"
             class="input"
             size="large"
@@ -49,6 +58,7 @@
           />
           <base-input
             v-model="firstName"
+            data-testid="testFirstNameTextInput"
             type="search"
             class="input"
             size="large"
@@ -57,6 +67,7 @@
           />
           <base-input
             v-model="lastName"
+            data-testid="testLastNameTextInput"
             type="search"
             class="input"
             size="large"
@@ -65,14 +76,16 @@
           />
           <base-input
             v-model="title"
+            data-testid="testTitleTextInput"
             type="title"
             autocomplete="title"
             class="input"
             size="large"
-            placeholder="Title"
+            :placeholder="$t('invitationSignup.title')"
           />
           <base-input
             v-model="mobile"
+            data-testid="testMobileTextInput"
             type="search"
             class="input"
             size="large"
@@ -81,6 +94,7 @@
           />
           <base-input
             v-model="password"
+            data-testid="testPw1TextInput"
             type="password"
             class="input"
             size="large"
@@ -90,6 +104,7 @@
           />
           <base-input
             v-model="confirmPassword"
+            data-testid="testPw2TextInput"
             type="password"
             autocomplete="new-password"
             class="input"
@@ -100,6 +115,7 @@
           <base-select
             class=""
             size="large"
+            data-testid="testPrimaryLanguageSelect"
             :value="selectedLanguage"
             :options="languages"
             item-key="id"
@@ -111,6 +127,7 @@
         </fieldset>
         <base-button
           size="large"
+          data-testid="testRequestAccessButton"
           class="px-5 py-2 m-1 flex-grow"
           variant="solid"
           :text="$t('actions.request_access')"
@@ -123,6 +140,7 @@
       </base-text>
       <modal
         v-if="showSuccessModal"
+        data-testid="testRequestAccessSuccessModal"
         modal-classes="bg-white w-1/2 h-108 shadow p-3"
         closeable
         @close="$router.push('/login')"
@@ -164,6 +182,7 @@
             <base-button
               :text="$t('actions.got_it')"
               :alt="$t('actions.got_it')"
+              data-testid="testGotItButton"
               size="large"
               variant="solid"
               class="mt-10"
