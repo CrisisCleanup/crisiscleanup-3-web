@@ -41,7 +41,6 @@
         :placeholder="lang.password"
         size="xlarge"
         type="password"
-        data-testid="loginForm.password"
       />
     </div>
     <div class="grid--forgot my-2">

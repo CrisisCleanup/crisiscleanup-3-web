@@ -10,7 +10,6 @@
             :class="showingMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
             ccu-event="user_ui-view-map"
-            data-testid="cases.mapButton"
             @click="toggleView('showingMap')"
           />
           <ccu-icon
@@ -20,7 +19,6 @@
             :class="showingTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
             ccu-event="user_ui-view-table"
-            data-testid="cases.tableButton"
             @click="toggleView('showingTable')"
           />
         </div>

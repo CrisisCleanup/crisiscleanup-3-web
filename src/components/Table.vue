@@ -141,7 +141,6 @@
             :model-value="selectedItems.has(item.id)"
             :data-testid="`testDataItem${item.id}Checkbox`"
             class="mb-5 js-select-item"
-            data-testid="tableview_actionSelect"
             @update:modelValue="
               (value) => {
                 setChecked(item, value);

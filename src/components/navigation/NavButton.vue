@@ -18,7 +18,7 @@
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
-        :data-testid="$t(`test${route.key}Link`)"
+        :data-testid="$t(`test${route.key}Icon`)"
         v-bind="iconProps"
         :linked="true"
       />

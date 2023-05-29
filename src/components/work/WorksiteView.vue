@@ -395,7 +395,6 @@
         data-testid="testCloseWorksiteButton"
         variant="solid"
         class="m-1 text-black p-3 px-4 flex-grow"
-        data-testid="caseview-actions-done"
         :text="$t('actions.done')"
         :alt="$t('actions.done')"
         :action="

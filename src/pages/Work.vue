@@ -15,7 +15,6 @@
               :class="showingMap ? 'filter-yellow' : 'filter-gray'"
               type="map"
               ccu-event="user_ui-view-map"
-              data-testid="cases.mapButton"
               @click="() => showMap(true)"
             />
             <ccu-icon
@@ -25,7 +24,6 @@
               :class="showingTable ? 'filter-yellow' : 'filter-gray'"
               type="table"
               ccu-event="user_ui-view-table"
-              data-testid="cases.tableButton"
               @click="showTable"
             />
             <span v-if="allWorksiteCount" class="font-thin">
@@ -242,7 +240,6 @@
               :text="$t('actions.print_claimed')"
               :alt="$t('actions.print_claimed')"
               :action="printSelectedWorksites"
-              data-testid="worksiteview_actionBatchPrint"
             />
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
@@ -259,7 +256,6 @@
                   downloadWorksites(Array.from(selectedTableItems));
                 }
               "
-              data-testid="worksiteview_actionBatchDownload"
             />
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
