@@ -114,7 +114,6 @@
         />
         <ccu-icon
           :alt="$t('actions.download')"
-          data-testid="testDownloadIcon"
           size="small"
           class="p-1 py-2"
           type="download"
@@ -123,7 +122,6 @@
         />
         <ccu-icon
           :alt="$t('actions.share')"
-          data-testid="testShareIcon"
           size="small"
           class="p-1 py-2"
           type="share"
@@ -132,7 +130,6 @@
         />
         <ccu-icon
           :alt="$t('actions.print')"
-          data-testid="testPrintIcon"
           size="small"
           class="p-1 py-2"
           type="print"

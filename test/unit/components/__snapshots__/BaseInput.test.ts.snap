@@ -11,7 +11,6 @@ exports[`BaseInput > should render correctly and match snapshot 1`] = `
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    data-cy=""
     data-v-82c69faf=""
     pattern=".*"
     placeholder=""
@@ -36,7 +35,6 @@ exports[`BaseInput > should render correctly and match snapshot when required an
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    data-cy=""
     data-v-82c69faf=""
     pattern=".*"
     placeholder=""
@@ -62,7 +60,6 @@ exports[`BaseInput > should render correctly and match snapshot when required an
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    data-cy=""
     data-v-82c69faf=""
     pattern=".*"
     placeholder=""
@@ -93,7 +90,6 @@ exports[`BaseInput > should render correctly and match snapshot with label 1`] =
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large border-none"
-    data-cy=""
     data-v-82c69faf=""
     pattern=".*"
     placeholder=""

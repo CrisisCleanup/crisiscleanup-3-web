@@ -7,7 +7,6 @@
       :is="textArea ? 'textarea' : 'input'"
       ref="input"
       :class="[inputClasses, defaultInputClasses, selector]"
-      :data-testid="selector"
       :style="[cssVars, inputStyle]"
       :type="passwordView || type || 'search'"
       :value.prop="modelValue"

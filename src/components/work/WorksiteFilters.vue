@@ -1,7 +1,6 @@
 <template>
   <modal
     v-if="show"
-    data-testid="testFiltersModal"
     modal-classes="bg-white max-w-2xl shadow"
     modal-style="min-height: 60%"
     data-testid="testFiltersModal"

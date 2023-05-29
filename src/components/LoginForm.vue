@@ -29,7 +29,6 @@
         :placeholder="lang.email"
         size="xlarge"
         type="email"
-        data-testid="loginForm.email"
       />
     </div>
     <div class="grid--password my-4">
