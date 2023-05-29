@@ -1,5 +1,9 @@
 <template>
-  <div v-if="selectedUser" class="h-full w-full flex flex-col">
+  <div
+    v-if="selectedUser"
+    class="h-full w-full flex flex-col"
+    data-testid="testUserViewDiv"
+  >
     <div class="flex justify-between border-b px-3 py-1">
       <div class="font-semibold flex justify-between items-center h-16">
         {{ selectedUser.full_name }}
@@ -7,6 +11,7 @@
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
           :alt="$t('actions.edit')"
+          data-testid="testEditIcon"
           type="edit"
           class="mx-2"
           size="small"
@@ -14,6 +19,7 @@
         />
         <ccu-icon
           :alt="$t('userView.remove_user')"
+          data-testid="testRemoveUserIcon"
           type="trash"
           class="mx-2"
           size="small"
@@ -25,10 +31,11 @@
       <div class="flex sm:flex-row flex-col">
         <img
           class="rounded-full profile-image mr-16"
+          data-testid="testProfilePictureIcon"
           :src="selectedUser.profilePictureUrl"
           :alt="$t('userView.profile_picture')"
         />
-        <div class="w-full">
+        <div class="w-full" data-testid="testUserDetailsDiv">
           <div class="flex flex-wrap items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
@@ -85,6 +92,7 @@
             <UserRolesSelect
               :key="JSON.stringify(selectedUser)"
               :user="selectedUser"
+              data-testid="testUserRolesSelect"
             />
           </div>
         </div>
@@ -92,6 +100,7 @@
     </div>
     <UserEditModal
       v-if="isEditing"
+      data-testid="testUserEditModal"
       :user="selectedUser"
       @close="isEditing = false"
       @save="saveUser"

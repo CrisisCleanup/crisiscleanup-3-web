@@ -5,6 +5,7 @@
         <div class="flex py-2">
           <base-input
             v-model="currentSearch"
+            data-testid="testUserSearch"
             icon="search"
             class="w-84 mr-4"
             :placeholder="$t('actions.search')"
@@ -34,6 +35,7 @@
               <div class="bg-white shadow w-108" style="z-index: 1001">
                 <div
                   class="flex items-center bg-crisiscleanup-light-grey p-1 px-2 w-full flex-wrap"
+                  data-testid="testUserFiltersDiv"
                 >
                   {{ $t('usersVue.filters') }}
                   <template v-for="(filter, key) in filters">
@@ -60,6 +62,7 @@
                   <div class="w-40 border-r">
                     <div
                       class="p-3 px-4 cursor-pointer"
+                      data-testid="testFilterRoleDiv"
                       :class="{
                         'border-l-2 border-l-black':
                           currentFilterSection === 'role',
@@ -75,6 +78,7 @@
                     </div>
                     <div
                       class="p-3 px-4 cursor-pointer"
+                      data-testid="testFilterInvitedByDiv"
                       :class="{
                         'border-l-2 border-l-black':
                           currentFilterSection === 'invited_by',
@@ -91,10 +95,11 @@
                   </div>
                   <div class="w-64 p-2">
                     <div v-if="currentFilterSection === 'role'">
-                      Role
+                      {{ $t('usersVue.role') }}
                       <div v-for="role in roles" :key="`${role.id}`">
                         <base-checkbox
                           v-model="filters.roles.data[role.id]"
+                          :data-testid="`testUserRole${role.id}Checkbox`"
                           class="block my-1"
                           @update:model-value="onFilter"
                           >{{ role.name_t }}
@@ -102,15 +107,17 @@
                       </div>
                     </div>
                     <div v-if="currentFilterSection === 'invited_by'">
-                      Invited By
+                      {{ $t('usersVue.invited_by') }}
                       <UserSearchInput
                         :placeholder="$t('usersVue.search_users')"
+                        data-testid="testUserInvitedBySearch"
                         class="my-1"
                         @selectedUser="onSelectedUser"
                       />
 
                       <div
                         v-for="user in filters.invitedBy.data"
+                        :data-testid="`testUserInvitedByResults${user.id}Div`"
                         :key="`${user.id}`"
                       >
                         {{ user.full_name }}
@@ -128,6 +135,7 @@
         <div class="sm:w-96 w-full flex flex-col h-full">
           <Table
             class="border text-xs flex-grow"
+            data-testid="testUserTable"
             :data="users"
             :columns="columns"
             :loading="usersLoading"
@@ -142,6 +150,7 @@
               <div class="p-2 flex items-center">
                 <img
                   class="rounded-full mr-2 user-image"
+                  data-testid="testUserProfilePictureIcon"
                   :src="slotProps.item.profilePictureUrl"
                   :alt="$t('usersVue.profile_picture')"
                 />
@@ -157,10 +166,14 @@
               </div>
             </template>
             <template #actions="slotProps">
-              <div class="flex items-center justify-end w-full">
+              <div
+                class="flex items-center justify-end w-full"
+                data-testid="testUserEmailDiv"
+              >
                 <a :href="`mailto:${slotProps.item.email}`">
                   <ccu-icon
                     :alt="$t('actions.chat')"
+                    data-testid="testUserChatIcon"
                     type="chat"
                     class="mx-1"
                     size="large"
@@ -169,6 +182,7 @@
                 <a :href="`tel:${slotProps.item.mobile}`">
                   <ccu-icon
                     :alt="$t('actions.call')"
+                    data-testid="testUserCallIcon"
                     type="call"
                     class="mx-1"
                     size="small"

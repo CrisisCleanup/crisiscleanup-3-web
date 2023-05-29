@@ -10,6 +10,7 @@
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
           :alt="$t('actions.jump_to_case')"
+          data-testid="testJumpToCaseIcon"
           size="small"
           class="p-2"
           type="go-case"
@@ -17,6 +18,7 @@
         />
         <ccu-icon
           :alt="$t('actions.delete')"
+          data-testid="testDeleteTeamIcon"
           type="trash"
           class="p-2"
           size="small"
@@ -28,6 +30,7 @@
         />
         <img
           :alt="$t('actions.rename_team')"
+          data-testid="testRenameTeamIcon"
           src="@/assets/icons/edit.svg"
           class="cursor-pointer p-2"
           @click="showRenameModal = true"
@@ -39,6 +42,7 @@
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
+            data-testid="testAddMembersButton"
             type="link"
             :text="$t('teams.add_members')"
             :alt="$t('teams.add_members')"
@@ -51,6 +55,7 @@
           <div>
             <base-button
               variant="outline"
+              data-testid="testRemoveFromTeamButton"
               class="px-2 py-1"
               :text="$t('teams.remove_from_team')"
               :alt="$t('teams.remove_from_team')"
@@ -93,6 +98,7 @@
               },
             ]"
             :data="allTeamUsers"
+            data-testid="testAllTeamUsersTable"
             enable-selection
             :body-style="{ height: '300px' }"
             @selectionChanged="
@@ -106,6 +112,7 @@
                 <Avatar
                   :initials="slotProps.item.first_name"
                   :url="slotProps.item.profilePictureUrl"
+                  :data-testid="`testFirstName${slotProps.item.id}Div`"
                   classes="mb-1"
                   size="xsmall"
                 />
@@ -114,13 +121,19 @@
             </template>
             <template #email="slotProps">
               <span>
-                <font-awesome-icon icon="envelope" />
+                <font-awesome-icon
+                  icon="envelope"
+                  :data-testid="`testEnvelope${slotProps.item.id}Icon`"
+                />
                 {{ slotProps.item.email }}
               </span>
             </template>
             <template #phone1="slotProps">
               <span>
-                <font-awesome-icon icon="phone" />
+                <font-awesome-icon
+                  icon="phone"
+                  :data-testid="`testPhone${slotProps.item.id}Icon`"
+                />
                 {{ slotProps.item.mobile }}
               </span>
             </template>
@@ -129,13 +142,15 @@
                 <v-popover placement="bottom-end" :triggers="['click']">
                   <ccu-icon
                     :alt="$t('teams.settings')"
+                    data-testid="testTeamsSettingsIcon"
                     size="medium"
                     type="settings"
                   />
                   <template #popper>
-                    <ul class="overflow-auto w-40">
+                    <ul class="overflow-auto w-40" data-testid="testTeamsEmailsDiv">
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testSendUserEmailLink"
                       >
                         <font-awesome-icon icon="envelope"></font-awesome-icon>
                         <a :href="`mailto:${slotProps.item.email}`">{{
@@ -144,6 +159,7 @@
                       </li>
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testEditUserProfileLink"
                       >
                         <font-awesome-icon icon="user"></font-awesome-icon>
                         <a :href="`/organization/users/${slotProps.item.id}`">
@@ -152,6 +168,7 @@
                       </li>
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testMoveToAnotherTeamLink"
                         @click="
                           () => {
                             moveToDifferentTeam(slotProps.item.id);
@@ -163,6 +180,7 @@
                       </li>
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testRemoveFromTeamLink"
                         @click="
                           () => {
                             removeFromTeam([slotProps.item.id]);
@@ -184,6 +202,7 @@
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
+            data-testid="testAssignedClaimedCasesPlusButton"
             type="link"
             :text="$t('teams.assigned_claimed_cases_plus')"
             :alt="$t('teams.assigned_claimed_cases_plus')"
@@ -195,6 +214,7 @@
           />
           <base-button
             variant="outline"
+            data-testid="testRemoveFromTeam2Button"
             class="px-2 py-1"
             :text="$t('teams.remove_from_team')"
             :alt="$t('teams.remove_from_team')"
@@ -211,6 +231,7 @@
         <div class="flex" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
+            data-testid="testMapViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingWorksiteMap ? 'filter-yellow' : 'filter-gray'"
@@ -219,6 +240,7 @@
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
+            data-testid="testTableViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingWorksiteTable ? 'filter-yellow' : 'filter-gray'"
@@ -229,6 +251,7 @@
         <div class="mt-2">
           <Table
             v-if="showingWorksiteTable"
+            data-testid="testWorksiteTable"
             :columns="[
               {
                 title: '',
@@ -285,11 +308,13 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in slotProps.item.work_types"
+                  :data-testid="`testWorksiteDetails${work_type.id}Div`"
                   :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
                     class="block"
+                    :data-testid="`testWorkTypeStatus${work_type.id}Select`"
                     :current-work-type="work_type"
                     use-icon
                     hide-name
@@ -306,6 +331,7 @@
               <div class="flex items-start">
                 <ccu-icon
                   :alt="$t('actions.jump_to_case')"
+                  :data-testid="`testJumpToCase${slotProps.item.id}Icon`"
                   size="small"
                   class="p-1 py-2"
                   type="go-case"
@@ -320,6 +346,7 @@
                 >
                   <ccu-icon
                     :alt="$t('teams.settings')"
+                    data-testid="testTeamsSettings2Icon"
                     size="medium"
                     type="settings"
                   />
@@ -327,6 +354,7 @@
                     <ul class="overflow-auto w-40">
                       <li
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testRemoveFromTeam3Button"
                         @click="
                           () => {
                             removeWorksiteFromTeam(slotProps.item.id);
@@ -343,6 +371,7 @@
           </Table>
           <WorkTypeMap
             v-if="showingWorksiteMap"
+            data-testid="testMapView2Content"
             class="w-full h-96"
             :work-types="mapAssignedWorkTypes"
             :polygon="caseArea"
@@ -352,6 +381,7 @@
       <tab :name="$t('teams.notes')">
         <base-input
           :value="team?.notes"
+          data-testid="testTeamsNotesTextInput"
           text-area
           :rows="4"
           :placeholder="$t('teams.notes')"
@@ -363,6 +393,7 @@
 
     <modal
       v-if="showAddMembersModal"
+      data-testid="testMembersModal"
       :title="$t('teams.add_members')"
       closeable
       modal-classes="max-w-xl"
@@ -374,6 +405,7 @@
         </div>
         <base-input
           v-model="currentUserSearch"
+          data-testid="testChooseMembersSearch"
           icon="search"
           class="w-64 mr-4 mb-6"
           :placeholder="$t('actions.search')"
@@ -385,11 +417,13 @@
             v-for="user in userResults.filter(
               (user) => !team.users.includes(user.id),
             )"
+            :data-testid="`testUserResults${user.id}Div`"
             :key="`${user.id}`"
             class="border-t pt-2"
           >
             <base-checkbox
               :value="usersToAdd.includes(user.id)"
+              :data-testid="`testSelectUser${user.id}Checkbox`"
               @input="
                 (value) => {
                   if (value) {
@@ -422,11 +456,13 @@
           "
           :text="$t('actions.cancel')"
           :alt="$t('actions.cancel')"
+          data-testid="testCancelButton"
           variant="outline"
           class="ml-2 p-3 px-6 text-xs"
         />
         <base-button
           variant="solid"
+          data-testid="testAddButton"
           :action="addUsers"
           :text="$t('actions.add')"
           :alt="$t('actions.add')"
@@ -436,6 +472,7 @@
     </modal>
     <modal
       v-if="showAddCasesModal"
+      data-testid="testAddCasesModal"
       :title="$t('teams.assign_cases')"
       closeable
       modal-classes="max-w-4xl"
@@ -445,6 +482,7 @@
         <div class="w-1/3">
           <WorkTypeMap
             class="w-full h-96"
+            data-testid="testWorkTypeMapDiv"
             :work-types="mapWorkTypes"
           ></WorkTypeMap>
         </div>
@@ -454,6 +492,7 @@
           </div>
           <base-input
             v-model="currentCaseSearch"
+            data-testid="testCaseSearch"
             icon="search"
             class="w-64 mr-4 mb-6"
             :placeholder="$t('actions.search')"
@@ -462,6 +501,7 @@
           <div class="h-64 overflow-auto">
             <div
               v-for="worksite in assignableWorksites"
+              :data-testid="`testAssignableWorksiteDetail${worksite.id}Div`"
               :key="`${worksite.id}`"
               class="border-t last:border-b py-3 px-3 bg-white"
               style="
@@ -471,6 +511,7 @@
               "
             >
               <base-checkbox
+                :data-testid="`testAssignableWorksite${worksite.id}Checkbox`"
                 @input="
                   (value) => {
                     const ids = worksite.work_types
@@ -491,11 +532,13 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in worksite.work_types"
+                  :data-testid="`testWorkTypeList${work_type.id}Div`"
                   :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
                     class="block"
+                    :data-testid="`testWorkTypeDropdown${work_type.id}Select`"
                     :current-work-type="work_type"
                     use-icon
                     hide-name
@@ -525,11 +568,13 @@
             "
             :text="$t('actions.cancel')"
             :alt="$t('actions.cancel')"
+            data-testid="testCancel2Button"
             variant="outline"
             class="ml-2 p-3 px-6 text-xs"
           />
           <base-button
             variant="solid"
+            data-testid="testAddCases2Button"
             :action="addCases"
             :text="$t('actions.add')"
             :alt="$t('actions.add')"
@@ -540,6 +585,7 @@
     </modal>
     <modal
       v-if="showRenameModal"
+      data-testid="testRenameTeam2Modal"
       closeable
       :title="$t('actions.rename_team')"
       modal-classes="max-w-xl"
@@ -547,6 +593,7 @@
     >
       <base-input
         v-model="team.name"
+        data-testid="testTeamsNameTextInput"
         :placeholder="$t('teams.name')"
         class="w-64 m-6"
       />
