@@ -1,0 +1,160 @@
+<template>
+  <div class="m-3">
+    <AjaxTable
+      class="border p-2"
+      :url="tableUrl"
+      :columns="columns"
+      :key="tableQuery"
+      :query="tableQuery"
+      :body-style="{ height: 'max-content' }"
+      enable-search
+    >
+      <template #created_at="slotProps">
+        <div :title="slotProps.item.created_at">
+          {{ momentFromNow(slotProps.item.created_at) }}
+        </div>
+      </template>
+      <template #user="slotProps">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          <UserDetailsTooltip :user="slotProps.item.created_by">
+          </UserDetailsTooltip>
+        </h3>
+      </template>
+      <template
+        v-if="columns.some((c) => c.key === 'actions')"
+        #actions="slotProps"
+      >
+        <div class="flex mr-2 justify-center w-full">
+          <base-button
+            :action="
+              () => {
+                showAttr(slotProps.item);
+              }
+            "
+            variant="solid"
+            size="small"
+            class="text-xs mx-2"
+            :text="$t('~~Show attr')"
+            :alt="$t('~~Show attr')"
+          />
+          <base-button
+            :action="
+              () => {
+                showAttr(slotProps.item, 'states');
+              }
+            "
+            variant="solid"
+            size="small"
+            class="text-xs mx-2"
+            :text="$t('~~Show states')"
+            :alt="$t('~~Show states')"
+          />
+          <base-button
+            :action="
+              () => {
+                showPreview(slotProps.item);
+              }
+            "
+            variant="solid"
+            size="small"
+            class="text-xs mx-2"
+            :text="$t('~~Show preview')"
+            :alt="$t('~~Show preview')"
+          />
+          <base-button
+            size="small"
+            class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
+            :text="$t('~~Resolve')"
+            :action="() => resolveBug(slotProps.item.id)"
+          />
+        </div>
+      </template>
+    </AjaxTable>
+  </div>
+</template>
+
+<script lang="ts">
+import { useI18n } from 'vue-i18n';
+import axios from 'axios';
+import moment from 'moment/moment';
+import { momentFromNow } from '../../filters';
+import { makeTableColumns } from '@/utils/table';
+import CmsViewer from '@/components/cms/CmsViewer.vue';
+import useDialogs from '@/hooks/useDialogs';
+import AjaxTable from '@/components/AjaxTable.vue';
+import JsonWrapper from '@/components/JsonWrapper.vue';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
+import User from '@/models/User';
+import useCurrentUser from '@/hooks/useCurrentUser';
+
+export default defineComponent({
+  name: 'AdminBugs',
+  components: { UserDetailsTooltip, AjaxTable },
+  setup() {
+    const { currentUser } = useCurrentUser();
+    const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/bug_reports`;
+    const tableQuery = ref({
+      resolved_at__isnull: true,
+    });
+    const columns = makeTableColumns([
+      ['title', '0.75fr', 'Title'],
+      ['created_at', '0.5fr', 'Created At'],
+      ['user', '0.5fr', 'User'],
+      ['actions', '1fr', ' '],
+    ]);
+    const { component } = useDialogs();
+    const { t } = useI18n();
+
+    async function showPreview(bug: { title: any; description: any }) {
+      await component({
+        title: t(`~~Bug Preview`),
+        component: CmsViewer,
+        classes: 'w-full h-96 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          title: bug.title,
+          content: bug.description,
+          image: bug.files.length > 0 && bug.files[0].blog_url,
+        },
+      });
+    }
+
+    const showAttr = async (item: Record<string, any>, prop = 'attr') => {
+      await component({
+        title: `Bug attr for bug: ${item.id}`,
+        component: JsonWrapper,
+        classes: 'w-full h-96',
+        props: {
+          jsonData: item[prop],
+        } as any,
+      });
+    };
+
+    const getUser = (id: number) => {
+      return User.find(id);
+    };
+    const resolveBug = async (id: number) => {
+      await axios.patch(`${tableUrl}/${id}`, {
+        resolved_by: currentUser.id,
+        resolved_at: moment().toISOString(),
+      });
+      tableQuery.value = {
+        ...tableQuery.value,
+      };
+    };
+
+    return {
+      tableUrl,
+      columns,
+      showPreview,
+      showAttr,
+      getUser,
+      resolveBug,
+      tableQuery,
+    };
+  },
+  methods: { momentFromNow },
+});
+</script>
+
+<style scoped></style>

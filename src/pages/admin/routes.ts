@@ -8,6 +8,7 @@ import AdminTicketDashboard from './AdminTicketDashboard.vue';
 // import AdminCosts from '@/pages/admin/AdminCosts.vue';
 import AdminIncidentWizard from './AdminIncidentWizard.vue';
 import AdminLocalizations from '@/pages/admin/AdminLocalizations.vue';
+import AdminBugs from "@/pages/admin/AdminBugs.vue";
 
 const routes = [
   {
@@ -69,6 +70,11 @@ const routes = [
         path: 'incident_wizard/:incident_id',
         name: 'nav.incident_wizard_detail',
         component: AdminIncidentWizard,
+      },
+      {
+        path: 'bugs',
+        name: 'nav.bugs',
+        component: AdminBugs,
       },
     ],
   },

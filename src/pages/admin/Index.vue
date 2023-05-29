@@ -35,6 +35,9 @@ export default defineComponent({
       reactive({
         key: 'nav.localizations',
       }),
+      reactive({
+        key: 'nav.bugs',
+      }),
     ]);
     return { tabs };
   },

@@ -266,10 +266,12 @@
               name="reset"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--reset"
-              icon="logout"
-              icon-size="small"
-              icon-class="p-1"
             >
+              <template #button>
+                <div class="w-full h-full flex items-center justify-center">
+                  <ccu-icon :fa="true" type="bug" class="p-1" size="medium" />
+                </div>
+              </template>
               <template #component>
                 <div class="flex items-center justify-center p-3 gap-2">
                   <base-button
