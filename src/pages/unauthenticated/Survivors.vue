@@ -176,6 +176,7 @@
           class="text-gray-700 pt-3 w-full p-5 mt-5 border text-2xl"
           :action="locateMe"
           :text="$t('caseForm.use_my_location')"
+          :alt="$t('caseForm.use_my_location')"
         />
         <LocationViewer
           :key="JSON.stringify(survivorToken.worksite.location)"
@@ -313,6 +314,7 @@
         "
         :action="saveSurvivorToken"
         :text="$t('actions.save')"
+        :alt="$t('actions.save')"
       />
 
       <div class="text-xl my-2 font-bold">

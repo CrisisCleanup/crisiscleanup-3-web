@@ -34,12 +34,17 @@
                   class="text-center pb-4 cursor-pointer"
                   :show-spinner="uploading"
                   :disabled="uploading"
+                  :alt="$t('actions.change_photo')"
                   >{{ $t('actions.change_photo') }}
                 </base-button>
               </DragDrop>
 
-              <base-button variant="solid" class="py-2 px-4"
-                >{{ $t('actions.view_id_badge') }}
+              <base-button
+                variant="solid"
+                class="py-2 px-4"
+                :alt="$t('actions.view_id_badge')"
+              >
+                {{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
             <div class="user-form p-10 sm:p-8">
@@ -224,6 +229,7 @@
                 <base-button
                   variant="solid"
                   class="px-4 py-1"
+                  :alt="$t('actions.change_password')"
                   :action="
                     () => {
                       $router.push(`/password/new?email=${currentUser.email}`);
@@ -245,6 +251,7 @@
                   <base-button
                     variant="solid"
                     class="px-4 py-1"
+                    :alt="$t('profileUser.change_organization')"
                     :action="
                       () => {
                         showChangeOrganizationModal = true;
@@ -306,6 +313,7 @@
                 <h3 class="pb-4">{{ $t('profileUser.troubleshooting') }}</h3>
                 <base-button
                   :text="$t('profileUser.reset_user_states')"
+                  :alt="$t('profileUser.reset_user_states')"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetStates"
@@ -315,6 +323,7 @@
                 </p>
                 <base-button
                   :text="$t('profileUser.reset_user_preferences')"
+                  :alt="$t('profileUser.reset_user_preferences')"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetPreferences"

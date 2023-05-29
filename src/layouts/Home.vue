@@ -54,6 +54,7 @@
             data-testid="testRegisterButton"
             size="large"
             class="w-full"
+            :alt="$t('actions.register')"
             :action="() => $router.push('/register')"
           >
             {{ $t('actions.register') }}

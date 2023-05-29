@@ -117,8 +117,12 @@
       </div>
       <!-- View Details Button -->
       <div class="flex justify-around py-2">
-        <base-button variant="solid" class="py-2 px-3"
-          >{{ $t('about.view_details') }}
+        <base-button
+          variant="solid"
+          class="py-2 px-3"
+          :alt="$t('about.view_details')"
+        >
+          {{ $t('about.view_details') }}
         </base-button>
       </div>
       <!-- Info Card w/ Sketch -->

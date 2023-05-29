@@ -47,6 +47,7 @@
       :action="submitForm"
       class="p-3"
       :text="$t('actions.submit')"
+      :alt="$t('actions.submit')"
     />
   </form>
 </template>

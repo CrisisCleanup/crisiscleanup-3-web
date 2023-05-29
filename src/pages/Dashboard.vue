@@ -253,6 +253,7 @@
             class="mr-2 border-r pr-2"
             size="medium"
             :text="$t('dashboard.inbound_requests')"
+            :alt="$t('dashboard.inbound_requests')"
             :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
             variant="text"
             @click="pendingView = 'inbound'"
@@ -262,6 +263,7 @@
             class="mr-2 border-r pr-2"
             size="medium"
             :text="$t('dashboard.outbound_requests')"
+            :alt="$t('dashboard.outbound_requests')"
             :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
             variant="text"
             @click="pendingView = 'outbound'"
@@ -271,6 +273,7 @@
             class="mr-2"
             size="medium"
             :text="$t('dashboard.archived_requests')"
+            :alt="$t('dashboard.archived_requests')"
             :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
             variant="text"
             @click="pendingView = 'archived'"
@@ -323,11 +326,13 @@
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
                     :text="$t('actions.accept')"
+                    :alt="$t('actions.accept')"
                     :action="() => acceptRequest(slotProps.item.id)"
                   />
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
                     :text="$t('actions.reject')"
+                    :alt="$t('actions.reject')"
                     :action="() => rejectRequest(slotProps.item.id)"
                   />
                 </div>
@@ -335,6 +340,7 @@
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
                     :text="$t('actions.cancel')"
+                    :alt="$t('actions.cancel')"
                     :action="() => cancelRequest(slotProps.item.id)"
                   />
                 </div>
@@ -342,6 +348,7 @@
                   <base-button
                     class="px-2 py-1 mx-2 border-black border"
                     :text="$t('actions.ignore')"
+                    :alt="$t('actions.ignore')"
                     :action="() => archiveRequest(slotProps.item.id)"
                   />
                 </div>
@@ -350,6 +357,7 @@
                     class="px-2 py-1 mx-2"
                     variant="solid"
                     :text="$t('actions.history')"
+                    :alt="$t('actions.history')"
                   />
                 </div>
               </div>

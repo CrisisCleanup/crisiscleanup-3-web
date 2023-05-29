@@ -53,6 +53,7 @@
               variant="outline"
               class="px-2 py-1"
               :text="$t('teams.remove_from_team')"
+              :alt="$t('teams.remove_from_team')"
               :disabled="selectedUsers?.length === 0"
               :action="
                 () => {
@@ -196,6 +197,7 @@
             variant="outline"
             class="px-2 py-1"
             :text="$t('teams.remove_from_team')"
+            :alt="$t('teams.remove_from_team')"
             :disabled="selectedWorksites?.length === 0"
             :action="
               () => {
@@ -421,6 +423,7 @@
             }
           "
           :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
           variant="outline"
           class="ml-2 p-3 px-6 text-xs"
         />
@@ -428,6 +431,7 @@
           variant="solid"
           :action="addUsers"
           :text="$t('actions.add')"
+          :alt="$t('actions.add')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>
@@ -522,6 +526,7 @@
               }
             "
             :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
             variant="outline"
             class="ml-2 p-3 px-6 text-xs"
           />
@@ -529,6 +534,7 @@
             variant="solid"
             :action="addCases"
             :text="$t('actions.add')"
+            :alt="$t('actions.add')"
             class="ml-2 p-3 px-6 text-xs"
           />
         </div>

@@ -14,11 +14,13 @@
               v-if="currentLocalization.id"
               data-testid="testDeleteAllButton"
               :action="deleteAll"
+              :alt="$t('actions.delete')"
               class="px-2 py-1 bg-crisiscleanup-dark-red text-white"
               >{{ $t('actions.delete') }}
             </base-button>
             <base-button
               :action="clearLocalization"
+              :alt="$t('actions.clear')"
               data-testid="testClearLocalizationButton"
               variant="outline"
               class="px-2 py-1"
@@ -26,6 +28,7 @@
             </base-button>
             <base-button
               :action="saveLocalization"
+              :alt="$t('actions.save')"
               data-testid="testSaveLocalizationButton"
               variant="solid"
               class="px-2 py-1"
@@ -33,6 +36,7 @@
             </base-button>
             <base-button
               :action="saveAndClear"
+              :alt="$t('actions.save_and_clear')"
               data-testid="testSaveAndClearButton"
               variant="solid"
               class="px-2 py-1"
@@ -78,6 +82,7 @@
           <div class="flex items-center gap-2">
             <base-button
               :action="addNewText"
+              :alt="$t('actions.new')"
               data-testid="testNewButton"
               variant="outline"
               class="px-2 py-1"
@@ -85,6 +90,7 @@
             </base-button>
             <base-button
               :action="autoTranslate"
+              :alt="$t('actions.generate_translations')"
               data-testid="testGenerateTranslationsButton"
               variant="outline"
               class="px-2 py-1"

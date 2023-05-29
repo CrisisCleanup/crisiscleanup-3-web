@@ -23,6 +23,11 @@
             ? $t('adminCMS.toggle_regular_mode')
             : $t('adminCMS.toggle_advanced_mode')
         "
+        :alt="
+          showHtml
+            ? $t('adminCMS.toggle_regular_mode')
+            : $t('adminCMS.toggle_advanced_mode')
+        "
         data-testid="testToggleRegularAdvancedModeButton"
         variant="link"
         :action="
@@ -118,6 +123,7 @@
         variant="outline"
         :action="clearItem"
         :text="$t('actions.clear')"
+        :alt="$t('actions.clear')"
       />
       <base-button
         type="bare"
@@ -126,6 +132,7 @@
         variant="solid"
         :action="showPreview"
         :text="$t('actions.show_preview')"
+        :alt="$t('actions.show_preview')"
       />
       <base-button
         type="bare"
@@ -134,6 +141,7 @@
         variant="solid"
         :action="saveItem"
         :text="$t('actions.save')"
+        :alt="$t('actions.save')"
       />
     </div>
 

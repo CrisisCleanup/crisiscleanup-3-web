@@ -22,6 +22,7 @@
         <template v-if="!organization.approved_by && !organization.rejected_by">
           <base-button
             :text="$t('actions.approve')"
+            :alt="$t('actions.approve')"
             data-testid="testApproveOrganizationButton"
             variant="solid"
             size="medium"
@@ -34,6 +35,7 @@
           />
           <base-button
             :text="$t('actions.reject')"
+            :alt="$t('actions.reject')"
             data-testid="testRejectOrganizationButton"
             variant="outline"
             size="medium"
@@ -197,6 +199,7 @@
             </base-text>
             <base-button
               :text="$t('actions.generate_api_key')"
+              :alt="$t('actions.generate_api_key')"
               data-testid="testGenerateApiKeyButton"
               variant="solid"
               size="medium"
@@ -249,6 +252,7 @@
                   <base-button
                     class="text-center pb-4 cursor-pointer"
                     data-testid="testUpdateLogoButton"
+                    :alt="$t('actions.update_logo')"
                     :show-spinner="uploading"
                     :disabled="uploading"
                     >{{ $t('actions.update_logo') }}
@@ -323,6 +327,7 @@
             <base-button
               :action="copyUsers"
               :text="$t('actions.copy_users')"
+              :alt="$t('actions.copy_users')"
               variant="solid"
               size="small"
             />
@@ -479,6 +484,7 @@
             />
             <base-button
               :text="$t('actions.add')"
+              :alt="$t('actions.add')"
               data-testid="testAddIncidentButton"
               size="large"
               variant="solid"
@@ -534,6 +540,7 @@
                   v-if="request.is_verified"
                   data-testid="testApproveIncidentButton"
                   :text="$t('actions.approve')"
+                  :alt="$t('actions.approve')"
                   variant="solid"
                   size="small"
                   class="mx-2 w-24"
@@ -547,6 +554,7 @@
                   v-if="request.is_verified"
                   data-testid="testRejectIncidentButton"
                   :text="$t('actions.reject')"
+                  :alt="$t('actions.reject')"
                   variant="outline"
                   size="small"
                   class="mx-2 w-24"
@@ -597,6 +605,7 @@
             />
             <base-button
               :text="$t('actions.add')"
+              :alt="$t('actions.add')"
               data-testid="testGroupToAddButton"
               size="large"
               variant="solid"
@@ -653,6 +662,7 @@
             v-if="organization.primary_location"
             data-testid="testEditPrimaryResponseAreaButton"
             :text="$t('profileOrg.edit_response_area')"
+            :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
             class="px-2 py-1"
             :action="
@@ -667,6 +677,7 @@
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
+            :alt="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 editLocation('primary_location');
@@ -685,6 +696,7 @@
             v-if="organization.secondary_location"
             data-testid="testEditSecondaryResponseAreaButton"
             :text="$t('profileOrg.edit_response_area')"
+            :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
             class="px-2 py-1"
             :action="
@@ -699,6 +711,7 @@
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
+            :alt="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 editLocation('secondary_location');
@@ -727,6 +740,7 @@
           <base-button
             :action="copyApiKey"
             :text="$t('actions.copy_key')"
+            :alt="$t('actions.copy_key')"
             data-testid="testCopyKeyButton"
             variant="solid"
             size="medium"

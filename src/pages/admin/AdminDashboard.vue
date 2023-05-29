@@ -21,6 +21,7 @@
         <DatabaseAccess class="mx-3 my-1" />
         <base-button
           :text="$t('adminDashboard.arcgis_upload')"
+          :alt="$t('adminDashboard.arcgis_upload')"
           data-testid="testArcgisUploadButton"
           variant="solid"
           size="medium"
@@ -37,6 +38,7 @@
           <base-button
             icon="sync"
             :action="getOrganizationsForApproval"
+            :alt="$t('adminDashboard.refresh_pending_organizations')"
             data-testid="testRefreshPendingOrganizationsButton"
           />
         </div>
@@ -46,6 +48,7 @@
             data-testid="testPendingOrganizationsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
+            :alt="$t('adminDashboard.action_required')"
             :class="[
               organizationApprovalView === 'default' ? 'text-primary-dark' : '',
             ]"
@@ -58,6 +61,7 @@
             data-testid="testPendingOrganizationsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
+            :alt="$t('adminDashboard.recently_approved')"
             :class="[
               organizationApprovalView === 'approved'
                 ? 'text-primary-dark'
@@ -72,6 +76,7 @@
             data-testid="testPendingOrganizationsRecentlyRejectedButton"
             size="medium"
             :text="$t('adminDashboard.recently_rejected')"
+            :alt="$t('adminDashboard.recently_rejected')"
             :class="[
               organizationApprovalView === 'rejected'
                 ? 'text-primary-dark'
@@ -96,7 +101,12 @@
           <div class="text-gray-500">
             {{ $t('adminDashboard.redeploy_requests') }}
           </div>
-          <base-button icon="sync" :action="getIncidentRequests" />
+          <base-button
+            icon="sync"
+            data-testid="testRefreshRedeployRequestsButton"
+            :action="getIncidentRequests"
+            :alt="$t('adminDashboard.refresh_incident_redeploy_requests')"
+          />
         </div>
         <div class="py-4 px-4 border-b flex items-center">
           <base-button
@@ -104,6 +114,7 @@
             data-testid="testRedeployRequestsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
+            :alt="$t('adminDashboard.action_required')"
             :class="[redeployView === 'default' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('default')"
@@ -114,6 +125,7 @@
             data-testid="testRedeployRequestsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
+            :alt="$t('adminDashboard.recently_approved')"
             :class="[redeployView === 'approved' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('approved')"
@@ -124,6 +136,7 @@
             data-testid="testRedeployRequestsRecentlyRejectedButton"
             size="medium"
             :text="$t('adminDashboard.recently_rejected')"
+            :alt="$t('adminDashboard.recently_rejected')"
             :class="[redeployView === 'rejected' ? 'text-primary-dark' : '']"
             variant="text"
             :action="() => setRedeployViewView('rejected')"
@@ -146,6 +159,7 @@
           <span class="flex items-center">
             <base-button
               class="text-4xl mx-3"
+              :alt="$t('adminDashboard.organizations')"
               :action="
                 () => {
                   organizations.visible = !organizations.visible;
@@ -186,6 +200,7 @@
             <base-button
               class="text-4xl mx-3"
               data-testid="testUsersSearch"
+              :alt="$t('adminDashboard.users')"
               :action="
                 () => {
                   users.visible = !users.visible;
@@ -225,6 +240,7 @@
             <base-button
               class="text-4xl mx-3"
               data-testid="testGhostUsersSearch"
+              :alt="$t('adminDashboard.ghost_users')"
               :action="
                 () => {
                   ghostUsers.visible = !ghostUsers.visible;
@@ -264,6 +280,7 @@
             <base-button
               class="text-4xl mx-3"
               data-testid="testInvitationRequestsSearch"
+              :alt="$t('adminDashboard.invitation_requests')"
               :action="
                 () => {
                   invitationRequests.visible = !invitationRequests.visible;
@@ -303,6 +320,7 @@
             <base-button
               class="text-4xl mx-3"
               data-testid="testInvitationsSearch"
+              :alt="$t('adminDashboard.invitations')"
               :action="
                 () => {
                   invitations.visible = !invitations.visible;

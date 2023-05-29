@@ -15,6 +15,7 @@
           <span>{{ $t('teams.team_management') }}</span>
           <base-button
             :text="$t('teams.create_new_team')"
+            :alt="$t('teams.create_new_team')"
             variant="solid"
             size="small"
             :action="

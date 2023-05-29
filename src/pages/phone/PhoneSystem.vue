@@ -98,6 +98,7 @@
                     variant="solid"
                     class="px-2 text-black mt-1"
                     :text="$t('phoneDashboard.try_again')"
+                    :alt="$t('phoneDashboard.try_again')"
                   />
                 </div>
                 <tabs ref="tabs" :details="false" @mounted="setTabs">
@@ -274,12 +275,14 @@
                   <base-button
                     size="medium"
                     :text="$t('phoneDashboard.reset_phone_system')"
+                    :alt="$t('phoneDashboard.reset_phone_system')"
                     :action="resetPhoneSystem"
                     class="text-white bg-crisiscleanup-red-200"
                   ></base-button>
                   <base-button
                     size="medium"
-                    :text="$t('~~Report Bug')"
+                    :text="$t('phoneDashboard.report_bug')"
+                    :alt="$t('phoneDashboard.report_bug')"
                     :action="reportBug"
                     class="text-white bg-crisiscleanup-red-200"
                   ></base-button>
@@ -353,12 +356,14 @@
             }
           "
           :text="$t('casesVue.show_map')"
+          :alt="$t('casesVue.show_map')"
         />
       </div>
       <div v-if="showingDetails" class="phone-system__form-toggler">
         <base-button
           icon="arrow-left"
           :icon-size="medium"
+          :alt="$t('actions.history')"
           :action="
             () => {
               showHistory = false;

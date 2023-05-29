@@ -51,6 +51,7 @@
                   <base-button
                     class="text-center pb-4 cursor-pointer"
                     :show-spinner="uploading"
+                    :alt="$t('actions.update_logo')"
                     :disabled="uploading"
                     >{{ $t('actions.update_logo') }}
                   </base-button>

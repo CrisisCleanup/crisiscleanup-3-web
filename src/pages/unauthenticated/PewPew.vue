@@ -145,12 +145,14 @@
                     class="text-xs p-1 w-20 text-black rounded"
                     variant="solid"
                     :text="$t('actions.register')"
+                    :alt="$t('actions.register')"
                     :action="() => $router.push('/register')"
                   />
                   <base-button
                     class="text-xs ml-2 p-1 w-20 rounded"
                     variant="outline-dark"
                     :text="$t('actions.login')"
+                    :alt="$t('actions.login')"
                     :action="() => $router.push('/login')"
                   />
                 </template>

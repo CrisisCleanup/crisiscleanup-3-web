@@ -126,6 +126,7 @@
       <template #overdue_count="slotProps">
         <base-button
           class="text-primary-dark underline"
+          :alt="slotProps.item.overdue_count || 0"
           :action="
             () => {
               $router.push(

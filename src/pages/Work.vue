@@ -376,6 +376,7 @@
             }
           "
           :text="$t('casesVue.show_map')"
+          :alt="$t('casesVue.show_map')"
         />
       </div>
       <div v-if="showingDetails" class="work-page__form-toggler">
@@ -388,6 +389,7 @@
               showFlags = false;
             }
           "
+          :alt="$t('actions.history')"
         />
         <span v-if="showHistory" class="text-base">{{
           $t('actions.history')
