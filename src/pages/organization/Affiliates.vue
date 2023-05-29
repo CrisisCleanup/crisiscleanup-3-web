@@ -11,11 +11,13 @@
           "
           :text="$t('affiliatesVue.add_affiliate')"
           :alt="$t('affiliatesVue.add_affiliate')"
+          data-testid="testAddAffiliateButton"
           variant="solid"
           class="px-2 py-1"
         />
         <modal
           v-if="showingAffiliateModal"
+          data-testid="testRequestAffiliateModal"
           :title="$t('affiliatesVue.request_affiliate')"
           modal-classes="w-1/2"
           @close="
@@ -27,12 +29,19 @@
             <div class="font-xs my-2">
               {{ $t('affiliatesVue.request_affiliate') }}
             </div>
-            <OrganizationSearchInputVue v-model="selectedAffiliate" />
+            <OrganizationSearchInputVue
+              v-model="selectedAffiliate"
+              data-testid="testSelectedAffiliateSearch"
+            />
             <div class="my-3">
               <div class="font-xs my-2">
                 {{ $t('affiliatesVue.request_reason') }}
               </div>
-              <textarea rows="4" class="block w-full border outline-none" />
+              <textarea
+                rows="4"
+                class="block w-full border outline-none"
+                data-testid="testRequestReasonTextArea"
+              />
             </div>
           </div>
 
@@ -46,10 +55,12 @@
               "
               :text="$t('actions.cancel')"
               :alt="$t('actions.cancel')"
+              data-testid="testCancelButton"
               class="ml-2 p-3 px-6 text-xs border border-black"
             />
             <base-button
               variant="solid"
+              data-testid="testInviteButton"
               :action="
                 () => {
                   sendAffiliateRequest(selectedAffiliate);
@@ -66,6 +77,7 @@
       </div>
       <Table
         class="border text-xs"
+        data-testid="testAffiliatesTable"
         :data="affiliates"
         :columns="currentRequestsColumns"
         :loading="loading"
@@ -92,6 +104,7 @@
                 slotProps.item.approved_by ||
                 slotProps.item.organization === currentUser.organization.id
               "
+              :data-testid="`testUnaffiliate${slotProps.item}Button`"
               size="small"
               class="m-1 mx-2 text-xs px-3 border border-black"
               :action="
@@ -107,6 +120,7 @@
                 !slotProps.item.approved_by &&
                 slotProps.item.affiliate === currentUser.organization.id
               "
+              :data-testid="`testAccept${slotProps.item}Button`"
               size="small"
               class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
               :action="
@@ -122,6 +136,7 @@
                 !slotProps.item.approved_by &&
                 slotProps.item.affiliate === currentUser.organization.id
               "
+              :data-testid="`testReject${slotProps.item}Button`"
               size="small"
               type="bare"
               class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"

@@ -1,6 +1,7 @@
 <template>
   <modal
     :title="$t('teams.create_new_team')"
+    data-testid="testCreateTeamModal"
     modal-classes="max-w-6xl"
     @close="$emit('close')"
   >
@@ -8,6 +9,7 @@
       <div class="p-2 flex flex-col justify-between items-start w-full">
         <input
           v-model="team.name"
+          data-testid="testTeamNameTextInput"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
           :required="true"
           type="search"
@@ -15,6 +17,7 @@
         />
         <base-button
           class="my-3 text-primary-dark underline"
+          data-testid="testSuggestNameButton"
           type="link"
           :text="$t('teams.suggest_name')"
           :alt="$t('teams.suggest_name')"
@@ -26,6 +29,7 @@
         </base-text>
         <draggable
           v-model="team.users"
+          data-testid="testTeamUsersDrag"
           item-key="id"
           group="people"
           handle=".handle"
@@ -40,6 +44,7 @@
               <div class="handle" style="width: 15px; margin-top: 2px">
                 <ccu-icon
                   icon-classes="cursor-move"
+                  data-testid="testTeamUsers.DragIcon"
                   :alt="$t('actions.drag')"
                   size="medium"
                   type="drag"
@@ -57,6 +62,7 @@
         </draggable>
         <base-button
           class="my-3 text-primary-dark underline"
+          data-testid="testAddMembersButton"
           type="link"
           :text="$t('teams.add_members')"
           :alt="$t('teams.add_members')"
@@ -68,6 +74,7 @@
         }}</base-text>
         <draggable
           v-model="teamWorksites"
+          data-testid="testTeamWorksitesDrag"
           item-key="id"
           group="cases"
           handle=".handle"
@@ -85,6 +92,7 @@
               <div class="handle" style="width: 15px; margin-top: 2px">
                 <ccu-icon
                   icon-classes="cursor-move"
+                  data-testid="testWorksitesDragIcon"
                   :alt="$t('actions.drag')"
                   size="medium"
                   type="drag"
@@ -117,6 +125,7 @@
         </draggable>
         <base-button
           class="my-3 text-primary-dark underline"
+          data-testid="testAssignCasesButton"
           type="link"
           :text="$t('teams.assign_cases')"
           :alt="$t('teams.assign_cases')"
@@ -132,6 +141,7 @@
           </base-text>
           <base-input
             v-model="currentSearch"
+            data-testid="testSearchDragMembersSearch"
             icon="search"
             class="w-84 mr-4 mb-6"
             :placeholder="$t('actions.search')"
@@ -139,6 +149,7 @@
           ></base-input>
           <draggable
             v-model="usersList"
+            data-testid="testUsersListDrag"
             item-key="id"
             group="people"
             handle=".handle"
@@ -178,6 +189,7 @@
           </base-text>
           <base-input
             v-model="currentCaseSearch"
+            data-testid="testCurrentCaseSearchSearch"
             icon="search"
             class="w-84 mr-4 mb-6"
             :placeholder="$t('actions.search')"
@@ -185,6 +197,7 @@
           ></base-input>
           <draggable
             v-model="worksites"
+            data-testid="testWorksitesDrag"
             item-key="id"
             group="cases"
             handle=".handle"
@@ -239,6 +252,7 @@
       <div class="flex py-4 justify-center items-center">
         <base-button
           :alt="$t('actions.cancel')"
+          data-testid="testCancelButton"
           class="px-4 p-2 border border-black mx-2"
           :action="
             () => {
@@ -250,6 +264,7 @@
         </base-button>
         <base-button
           :alt="$t('actions.create')"
+          data-testid="testCreateButton"
           variant="solid"
           class="px-4 p-2 mx-2"
           :action="saveTeam"

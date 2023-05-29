@@ -14,6 +14,7 @@
           <InviteUsers class="mx-1" />
           <base-button
             size="small"
+            data-testid="testExportInvitationRequestsButton"
             :text="$t('actions.download')"
             :alt="$t('actions.download')"
             class="table-action-button"
@@ -25,6 +26,7 @@
       </div>
       <Table
         ref="invitationRequestsTable"
+        data-testid="testInvitationRequestsTable"
         class="border text-xs"
         :data="invitationRequests"
         :columns="currentRequestsColumns"
@@ -36,6 +38,7 @@
           <div class="flex mr-2 justify-end w-full">
             <base-button
               size="small"
+              data-testid="testIgnoreButton"
               class="m-1 mx-2 text-xs px-3 py-1"
               :action="() => {}"
               :text="$t('actions.ignore')"
@@ -43,6 +46,7 @@
             />
             <base-button
               size="small"
+              :data-testid="`testReject${slotProps.item}Button`"
               type="bare"
               class="m-1 mx-2 border-2 border-black text-black px-3 py-1"
               :action="
@@ -55,6 +59,7 @@
             />
             <base-button
               size="small"
+              :data-testid="`testAccept${slotProps.item}Button`"
               variant="solid"
               class="m-1 mx-2 text-black text-xs px-3 py-1"
               :action="
@@ -78,6 +83,7 @@
         <div class="flex">
           <base-button
             size="small"
+            data-testid="testExportInvitationsButton"
             :text="$t('actions.download')"
             :alt="$t('actions.download')"
             class="table-action-button"
@@ -87,6 +93,7 @@
           />
           <base-button
             size="small"
+            data-testid="testDeleteExpiredInvitationsButton"
             :text="$t('actions.delete_expired')"
             :alt="$t('actions.delete_expired')"
             class="table-action-button"
@@ -98,6 +105,7 @@
       </div>
       <Table
         ref="invitationsTable"
+        data-testid="testInvitationsTable"
         class="border text-xs mt-4"
         :data="invitations"
         :columns="invitationsColumns"
@@ -109,6 +117,7 @@
           <div class="flex mr-2 justify-center w-full">
             <base-button
               size="small"
+              :data-testid="`testReInvite${slotProps.item}Button`"
               variant="solid"
               class="m-1 mx-2 text-black font-light text-xs py-1 px-3"
               :action="
@@ -125,6 +134,7 @@
           <div class="flex mr-2 justify-center">
             <ccu-icon
               :alt="$t('actions.delete_invitation')"
+              :data-testid="`testDeleteInvitation${slotProps.item}Button`"
               type="trash"
               size="small"
               @click="() => deleteInvitations([slotProps.item])"

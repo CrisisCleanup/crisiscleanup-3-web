@@ -3,6 +3,7 @@
     <base-button
       :text="$t('usersVue.invite_new_user')"
       :alt="$t('usersVue.invite_new_user')"
+      data-testid="testInviteNewUserButton"
       variant="solid"
       size="medium"
       :action="
@@ -13,6 +14,7 @@
     />
     <modal
       v-if="showInviteModal"
+      data-testid="testShowInviteModal"
       modal-classes="bg-white max-w-2xl shadow"
       :title="$t('usersVue.invite_user')"
       closeable
@@ -31,6 +33,7 @@
           <tag-input
             v-model="emails"
             v-model:tags="usersToInvite"
+            data-testid="testUsersToInviteTextInput"
             :placeholder="$t('usersVue.emails')"
             :validation="validation"
             :add-on-key="[13, 32, ',']"
@@ -41,6 +44,7 @@
         <div v-if="isAdmin || currentOrganization.affiliates.length > 1">
           <OrganizationSearchInput
             class="w-108"
+            data-testid="testOrganizationSearch"
             :allowed-organization-ids="currentOrganization.affiliates"
             :is-admin="isAdmin"
             @selectedOrganization="selectedOrganization = $event.id"
@@ -52,11 +56,13 @@
           <base-button
             :text="$t('actions.cancel')"
             :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
             class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
             :action="() => (showInviteModal = false)"
           />
           <base-button
             variant="solid"
+            data-testid="testSubmitInvitesButton"
             :action="() => inviteUsers()"
             :text="$t('actions.submit_invites')"
             :alt="$t('actions.submit_invites')"

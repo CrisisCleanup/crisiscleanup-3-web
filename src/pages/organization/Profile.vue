@@ -3,6 +3,7 @@
     <base-button
       variant="solid"
       class="px-4 py-2 self-end mt-6"
+      data-testid="testSaveButton"
       :text="$t('actions.save')"
       :alt="$t('actions.save')"
       :action="saveOrganization"
@@ -21,6 +22,7 @@
               <div v-if="!logoUrl">
                 <DragDrop
                   class="w-full sm:w-84 h-16 text-center mr-6 border border-dashed"
+                  data-testid="testOrganizationLogoFile"
                   container-class="flex-row items-center justify-center"
                   :choose-title="$t('profileOrg.upload_org_logo')"
                   :drag-title="$t('profileOrg.logo_specs')"
@@ -35,11 +37,13 @@
               <div v-else>
                 <img
                   class="w-full sm:w-84"
+                  data-testid="testOrganizationLogoIcon"
                   :src="logoUrl"
                   :alt="$t('profileOrg.organization_logo')"
                 />
                 <DragDrop
                   class="text-primary-dark cursor-pointer"
+                  data-testid="testOrganizationLogo2File"
                   :disabled="uploading"
                   :multiple="false"
                   @files="
@@ -50,6 +54,7 @@
                 >
                   <base-button
                     class="text-center pb-4 cursor-pointer"
+                    data-testid="testUpdateLogoButton"
                     :show-spinner="uploading"
                     :alt="$t('actions.update_logo')"
                     :disabled="uploading"
@@ -62,6 +67,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testOrganizationNameTextInput"
               :placeholder="$t('profileOrg.organization_name')"
               :value="currentOrganization.name"
               required
@@ -71,6 +77,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testAddressTextInput"
               :placeholder="$t('profileOrg.address')"
               :value="currentOrganization.address"
               required
@@ -80,6 +87,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testUrlTextInput"
               :placeholder="$t('profileOrg.url')"
               :value="currentOrganization.url"
               required
@@ -89,6 +97,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testEmailTextInput"
               :placeholder="$t('profileOrg.email')"
               :value="currentOrganization.email"
               required
@@ -98,6 +107,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testPhoneTextInput"
               :placeholder="$t('profileOrg.phone')"
               :value="currentOrganization.phone1"
               required
@@ -107,6 +117,7 @@
           <div class="form-row">
             <base-select
               :placeholder="$t('profileOrg.organization_type')"
+              data-testid="testOrganizationTypeTextInput"
               class="w-full sm:w-84 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :model-value="currentOrganization.type_t"
@@ -124,7 +135,7 @@
           </base-text>
         </template>
         <div class="px-5 py-3">
-          <div class="form-row">
+          <div class="form-row" data-testid="testPrimaryContactsDiv">
             <div class="font-semibold">
               {{ $t('profileOrg.primary_contacts') }}
             </div>
@@ -147,6 +158,7 @@
                 <div>
                   <a
                     :href="`mailto:${contact.email}`"
+                    :data-testid="`testEmail${contact.email}Link`"
                     :title="contact.email"
                     :alt="contact.email"
                   >
@@ -156,6 +168,7 @@
                 <div>
                   <a
                     v-show="contact.mobile"
+                    :data-testid="`testMobile${contact.mobile}Link`"
                     :href="`tel:${contact.mobile}`"
                     :title="contact.mobile"
                     :alt="contact.mobile"
@@ -165,6 +178,7 @@
                 </div>
                 <ccu-icon
                   :alt="$t('actions.delete')"
+                  :data-testid="`testDelete${contact.email}Button`"
                   class="ml-1"
                   size="xs"
                   type="cancel"
@@ -180,6 +194,7 @@
             <UserSearchInput
               :key="JSON.stringify(organization.primary_contacts)"
               :placeholder="$t('profileOrg.add_primary_contacts')"
+              data-testid="testAddPrimaryContactsSearch"
               @selectedUser="(user) => makePrimaryContact(user)"
             />
           </div>
@@ -194,6 +209,7 @@
               </div>
               <base-input
                 class="w-full sm:w-84"
+                data-testid="testFacebookTextInput"
                 size="small"
                 :value="currentOrganization.facebook"
                 :placeholder="$t('profileOrg.facebook')"
@@ -209,6 +225,7 @@
               </div>
               <base-input
                 class="w-full sm:w-84"
+                data-testid="testTwitterTextInput"
                 size="small"
                 :value="currentOrganization.twitter"
                 :placeholder="$t('profileOrg.twitter')"
@@ -219,6 +236,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-full sm:w-84"
+              data-testid="testDonationUrlTextInput"
               :placeholder="$t('profileOrg.donation_url')"
               :value="currentOrganization.donate_url"
               required
@@ -237,6 +255,7 @@
         </template>
         <CapabilityGrid
           :key="JSON.stringify(organizationCapabilities)"
+          data-testid="testCapabilitiesMatrixInput"
           class="px-5 py-3"
           :organization-capabilities="organizationCapabilities"
           @updated="
@@ -247,7 +266,10 @@
         />
       </Card>
     </div>
-    <div class="mt-6 grid sm:grid-cols-2 gap-x-6">
+    <div
+      class="mt-6 grid sm:grid-cols-2 gap-x-6"
+      data-testid="testCurrentIncidentsContent"
+    >
       <Card>
         <template #header>
           <base-text class="px-5 py-3">
@@ -265,7 +287,10 @@
         <div class="px-5 py-1 font-semibold">
           {{ $t('profileOrg.approved') }}
         </div>
-        <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
+        <div
+          class="px-5 py-1 grid grid-cols-2 gap-x-6"
+          data-testid="testApprovedIncidentsDiv"
+        >
           <div
             v-for="incident in currentOrganization.approved_incidents"
             :key="`${incident}`"
@@ -276,7 +301,10 @@
         <div class="px-5 py-1 font-semibold">
           {{ $t('profileOrg.pending') }}
         </div>
-        <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
+        <div
+          class="px-5 py-1 grid grid-cols-2 gap-x-6"
+          data-testid="testPendingIncidentsDiv"
+        >
           <div
             v-for="incident in currentOrganization.pending_incidents"
             :key="`${incident}`"
@@ -299,6 +327,7 @@
         >
           <base-button
             v-if="currentOrganization.primary_location"
+            data-testid="testEditPrimaryLocationButton"
             :text="$t('profileOrg.edit_response_area')"
             :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
@@ -312,6 +341,7 @@
           ></base-button>
           <base-button
             v-else
+            data-testid="testAddPrimaryLocationButton"
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
@@ -328,6 +358,7 @@
           <base-button
             :text="$t('profileOrg.contact_help_change_response')"
             :alt="$t('profileOrg.contact_help_change_response')"
+            data-testid="testContactHelpChangeResponseButton"
             variant="solid"
             class="px-2 py-1"
             disabled
@@ -347,6 +378,7 @@
         >
           <base-button
             v-if="currentOrganization.secondary_location"
+            data-testid="testEditSecondaryLocationButton"
             :text="$t('profileOrg.edit_response_area')"
             :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
@@ -360,6 +392,7 @@
           ></base-button>
           <base-button
             v-else
+            data-testid="testAddSecondaryLocationButton"
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
@@ -376,6 +409,7 @@
           <base-button
             :text="$t('profileOrg.contact_help_change_response')"
             :alt="$t('profileOrg.contact_help_change_response')"
+            data-testid="testContactHelpChangeResponse2Button"
             variant="solid"
             class="px-2 py-1"
             disabled
@@ -385,6 +419,7 @@
       </Card>
       <modal
         v-if="showingLocationModal"
+        data-testid="testSelectLocationModal"
         :title="$t('profileOrg.select_location')"
         modal-style="height: 90%"
         modal-classes="sm:w-3/5"
@@ -406,6 +441,7 @@
         {{ $t('profileOrg.custom_materials') }}
         <base-button
           variant="solid"
+          data-testid="testSaveButton"
           class="px-4 py-2"
           :text="$t('actions.save')"
           :alt="$t('actions.save')"
@@ -420,6 +456,7 @@
           :value="currentOrganization.custom_ops_message"
           :placeholder="$t('profileOrg.add_work_order_instructions')"
           :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
+          data-testid="testCustomOpsMessageTextArea"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="
@@ -438,6 +475,7 @@
           />
           <base-input
             size="small"
+            data-testid="testAddCustomTosTextInput"
             class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
@@ -447,6 +485,7 @@
           ></base-input>
           <ccu-icon
             v-if="termsOfService"
+            data-testid="testDeleteIcon"
             :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
@@ -460,6 +499,7 @@
         </div>
         <DragDrop
           class="cursor-pointer w-full sm:w-64 py-2"
+          data-testid="testTermsOfServiceFile"
           container-class="items-start"
           :disabled="
             uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
@@ -473,6 +513,7 @@
         >
           <base-button
             class="cursor-pointer px-3 py-1"
+            data-testid="testAddTermsButton"
             variant="solid"
             :text="$t('actions.add_terms')"
             :alt="$t('actions.add_terms')"
@@ -487,6 +528,7 @@
           :value="currentOrganization.custom_legal_tos"
           :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
           :placeholder="$t('profileOrg.add_tos_text')"
+          data-testid="testCustomLegalTosTextArea"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="(e) => updateOrganization(e.target.value, 'custom_legal_tos')"
@@ -503,6 +545,7 @@
           />
           <base-input
             size="small"
+            data-testid="testAddCustomLiabilityInput"
             class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
@@ -512,6 +555,7 @@
           ></base-input>
           <ccu-icon
             v-if="liabilityWaiver"
+            data-testid="testDeleteLiabilityWaiverButton"
             :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
@@ -525,6 +569,7 @@
         </div>
         <DragDrop
           class="cursor-pointer w-full sm:w-64 py-2"
+          data-testid="testLiabilityWaiverFile"
           container-class="items-start"
           :disabled="
             uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
@@ -538,6 +583,7 @@
         >
           <base-button
             class="cursor-pointer px-3 py-1"
+            data-testid="testCustomSurvivorWaiverButton"
             variant="solid"
             :text="$t('profileOrg.custom_survivor_waiver')"
             :alt="$t('profileOrg.custom_survivor_waiver')"
@@ -552,6 +598,7 @@
           :value="currentOrganization.custom_legal_survivor_waiver"
           :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
           :placeholder="$t('profileOrg.add_survivor_waiver_text')"
+          data-testid="testAddSurvivorWaiverTextTextArea"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
           @input="

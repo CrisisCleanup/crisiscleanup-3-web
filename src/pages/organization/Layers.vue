@@ -6,6 +6,7 @@
         <div class="flex flex-col sm:flex-row items-center">
           <base-input
             v-model="currentSearch"
+            data-testid="testGetLocationsSearch"
             icon="search"
             class="sm:w-72 w-full sm:mr-4"
             :placeholder="$t('actions.search')"
@@ -14,6 +15,7 @@
           <div class="flex w-full">
             <base-select
               v-model="locationTypeFilter"
+              data-testid="testLocationTypeFilterSelect"
               :options="locationTypes"
               class="w-full sm:w-64 border border-crisiscleanup-dark-100"
               item-key="id"
@@ -25,6 +27,7 @@
             <base-button
               :text="$t('actions.create_location')"
               :alt="$t('actions.create_location')"
+              data-testid="testCreateLocationButton"
               variant="solid"
               size="small"
               :action="
@@ -40,6 +43,7 @@
         :locations="locations"
         :meta="locationsMeta"
         :loading="locationsLoading"
+        data-testid="testLocationsTable"
         @change="handleTableChange"
         @deleteLocation="deleteLocation"
       />
