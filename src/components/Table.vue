@@ -162,7 +162,7 @@
         </div>
         <div
           v-for="column of columns"
-          :data-testid="`tesColumn${column.key}Column`"
+          :data-testid="`testColumn${column.key && item.id}Column`"
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
           :class="column.class || []"
