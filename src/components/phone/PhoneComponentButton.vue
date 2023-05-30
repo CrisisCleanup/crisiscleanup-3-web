@@ -29,7 +29,6 @@
       <div class="phone-system-action__close">
         <ccu-icon
           :alt="$t('actions.cancel')"
-          :alt="$t('actions.cancel')"
           data-testid="testPhoneSystemActionCloseIcon"
           size="xs"
           type="cancel"
