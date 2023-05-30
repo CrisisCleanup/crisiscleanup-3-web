@@ -177,6 +177,7 @@
                       <img
                         src="https://simpleicons.org/icons/facebook.svg"
                         class="w-8 mr-4"
+                        :alt="$t('profileUser.facebook')"
                       />
                       <label class="pr-3">{{
                         $t('profileUser.facebook')
@@ -202,6 +203,7 @@
                       <img
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
+                        :alt="$t('profileUser.twitter')"
                       />
                       <label class="pr-3">{{
                         $t('profileUser.twitter')

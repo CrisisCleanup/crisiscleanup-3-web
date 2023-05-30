@@ -10,7 +10,6 @@
           html: true,
         }"
         :invert-color="true"
-        :alt="$t('actions.help_alt')"
         :data-testid="`testCapability${capability.description_t}Tooltip`"
         type="help"
         size="medium"

@@ -14,6 +14,7 @@
         <div class="flex items-center justify-start absolute left-0 top-0 px-2">
           <badge
             class="ml-1 mr-3"
+            :title="getStatusName(option.status)"
             :color="getColorForStatus(option.status, true)"
           />
           {{ getStatusName(option.status) }}
@@ -23,6 +24,7 @@
         <div class="flex items-center justify-start">
           <badge
             class="ml-1 mr-3"
+            :title="getStatusName(option.status)"
             :color="getColorForStatus(option.status, true)"
           />
           {{ getStatusName(option.status) }}

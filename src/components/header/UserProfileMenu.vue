@@ -23,7 +23,11 @@
             data-testid="testCurrentUserFullNameContent"
             :class="styles.title"
             >{{ currentUser && currentUser.full_name }}
-            <font-awesome-icon class="cursor-pointer" icon="caret-down" />
+            <font-awesome-icon
+              class="cursor-pointer"
+              icon="caret-down"
+              :alt="$t('nav.show_options')"
+            />
           </span>
         </base-text>
       </div>

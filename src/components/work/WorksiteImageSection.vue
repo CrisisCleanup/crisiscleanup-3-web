@@ -8,7 +8,12 @@
     >
       <div class="flex items-center justify-center">
         <font-awesome-icon v-if="uploading" size="lg" icon="spinner" spin />
-        <font-awesome-icon v-else size="lg" icon="camera" />
+        <font-awesome-icon
+          v-else
+          size="lg"
+          icon="camera"
+          :alt="$t('formLabels.upload_photos')"
+        />
       </div>
     </DragDrop>
 

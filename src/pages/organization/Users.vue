@@ -29,7 +29,7 @@
                   {{ filterCount }}
                 </span>
               </div>
-              <font-awesome-icon icon="sort" class="ml-20" />
+              <font-awesome-icon icon="sort" class="ml-20" :alt="$t('actions.sort')" />
             </div>
             <template #popper>
               <div class="bg-white shadow w-108" style="z-index: 1001">

@@ -24,6 +24,7 @@
         >
           <badge
             class="mx-1"
+            :title="getStatusName(work_type.status)"
             :color="
               getColorForStatus(work_type.status, Boolean(work_type.claimed_by))
             "

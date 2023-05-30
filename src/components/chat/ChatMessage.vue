@@ -49,6 +49,7 @@
           </div>
           <font-awesome-icon
             v-if="showFavorite"
+            :alt="$t('chat.show_favorite')"
             data-testid="testShowFavoriteContent"
             :icon="['far', 'star']"
             class="absolute top-1/2 right-2 mt-2"
@@ -56,6 +57,7 @@
           />
           <font-awesome-icon
             v-if="message.is_favorite"
+            :alt="$t('chat.is_favorite')"
             data-testid="testIsFavoriteIcon"
             :icon="['fa', 'star']"
             class="absolute top-1/2 right-2 mt-2"

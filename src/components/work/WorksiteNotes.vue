@@ -65,6 +65,7 @@
         <ccu-icon
           type="sticky-note-solid"
           data-testid="testStickyNoteIcon"
+          :alt="$t('caseView.add_note_alt')"
           class="text-primary-dark filter-yellow mr-1"
           size="sm"
         />

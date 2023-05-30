@@ -22,13 +22,17 @@
             class="ml-1"
             target="_blank"
           >
-            <font-awesome-icon icon="external-link-alt" />
+            <font-awesome-icon
+              icon="external-link-alt"
+              :alt="$t('pewPew.link_to_organization')"
+            />
           </a>
         </div>
       </div>
 
       <font-awesome-icon
         class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
+        :alt="$t('actions.close')"
         icon="times"
         data-testid="testCloseModalAndResetStateIcon"
         @click="closeModalAndResetState"
@@ -190,6 +194,7 @@
         <span>{{ $t('pewPew.incidents') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
+          :alt="$t('pewPew.show_incidents')"
           :class="isIncidentHidden ? 'rotate-0' : 'rotate-180'"
           icon="chevron-down"
           size="lg"
@@ -267,6 +272,7 @@
         <span>{{ $t('pewPew.capabilities') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
+          :alt="$t('pewPew.show_capabilities')"
           :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"
           icon="chevron-down"
           size="lg"

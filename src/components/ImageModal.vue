@@ -13,6 +13,8 @@
               >
                 <font-awesome-icon
                   icon="file-pdf"
+                  data-testid="testPdfIcon"
+                  :alt="$t('imageModal.upload_pdf_ok')"
                   size="3x"
                   class="cursor-pointer"
                 />

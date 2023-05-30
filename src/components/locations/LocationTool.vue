@@ -146,6 +146,7 @@
           style="height: 37px"
           data-testid="testUploadLayerPlusButton"
           :text="$t('locationTool.upload_layer_plus')"
+          :alt="$t('locationTool.upload_layer_plus')"
           :action="
             () => {
               showingUploadModal = true;

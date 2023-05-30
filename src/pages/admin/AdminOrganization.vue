@@ -527,7 +527,7 @@
                   }"
                 >
                   <ccu-icon
-                    :alt="$t('actions.help_alt')"
+                    :alt="$t('adminOrganization.pending_requests')"
                     type="info"
                     size="small"
                     class="mr-2"

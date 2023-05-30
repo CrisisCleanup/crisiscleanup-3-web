@@ -12,6 +12,7 @@
       <div class="w-full flex items-center text-primary-dark">
         <font-awesome-icon
           v-if="slotProps.item.profile_completed"
+          :title="$t('adminOrganization.profile_completed')"
           class="mx-1"
           size="lg"
           icon="check-circle"

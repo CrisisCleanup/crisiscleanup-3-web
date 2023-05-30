@@ -64,7 +64,12 @@
         :key="queue.queueId"
         class="flex p-2 items-center justify-between"
       >
-        <ccu-icon with-text type="phone-plus" size="xl">
+        <ccu-icon
+          with-text
+          :alt="$t('phoneDashboard.total_people_waiting')"
+          type="phone-plus"
+          size="xl"
+        >
           <base-text
             >{{ $t('phoneDashboard.total_people_waiting') }}({{
               queue.language

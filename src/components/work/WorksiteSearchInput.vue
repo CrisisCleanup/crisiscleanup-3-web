@@ -62,7 +62,7 @@
       :class="iconClasses"
     >
       <ccu-icon
-        :alt="$t('actions.help_alt')"
+        :alt="$t('worksiteSearchInput.search_help')"
         :type="tooltip ? 'info' : icon"
         size="small"
       />

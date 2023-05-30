@@ -78,13 +78,13 @@
                       {{ contact.first_name }} {{ contact.last_name }}
                     </div>
                     <div class="mt-2">
-                      <font-awesome-icon icon="envelope" />
+                      <font-awesome-icon icon="envelope" :alt="$t('actions.email')" />
                       <a :href="`mailto:${contact.email}`" class="ml-1">{{
                         contact.email
                       }}</a>
                     </div>
                     <div v-if="contact.mobile">
-                      <font-awesome-icon icon="phone" />
+                      <font-awesome-icon icon="phone" :alt="$t('actions.call')" />
                       <a :href="`tel:${contact.mobile}`" class="ml-1">{{
                         contact.mobile
                       }}</a>
@@ -104,13 +104,13 @@
                       {{ contact.first_name }} {{ contact.last_name }}
                     </div>
                     <div class="mt-2">
-                      <font-awesome-icon icon="envelope" />
+                      <font-awesome-icon icon="envelope" :alt="$t('actions.email')" />
                       <a :href="`mailto:${contact.email}`" class="ml-1">{{
                         contact.email
                       }}</a>
                     </div>
                     <div v-if="contact.mobile">
-                      <font-awesome-icon icon="phone" />
+                      <font-awesome-icon icon="phone" :alt="$t('actions.call')" />
                       <a :href="`tel:${contact.mobile}`" class="ml-1">{{
                         contact.mobile
                       }}</a>

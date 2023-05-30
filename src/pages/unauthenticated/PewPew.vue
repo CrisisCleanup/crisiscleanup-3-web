@@ -285,8 +285,16 @@
                       class="cursor-pointer"
                       @click="isLegendHidden = !isLegendHidden"
                     >
-                      <font-awesome-icon v-if="!isLegendHidden" icon="minus" />
-                      <font-awesome-icon v-else icon="plus" />
+                      <font-awesome-icon
+                        v-if="!isLegendHidden"
+                        icon="minus"
+                        :alt="$t('worksiteMap.hide_legend')"
+                      />
+                      <font-awesome-icon
+                        v-else
+                        icon="plus"
+                        :alt="$t('worksiteMap.show_legend')"
+                      />
                     </span>
                   </div>
                   <transition name="fade">

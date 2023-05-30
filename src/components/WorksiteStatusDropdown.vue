@@ -17,6 +17,7 @@
       </div>
       <font-awesome-icon
         class="tooltip-target"
+        :alt="$t('actions.select_status')"
         :class="size === 'sm' ? '' : 'mx-1'"
         size="sm"
         icon="chevron-down"

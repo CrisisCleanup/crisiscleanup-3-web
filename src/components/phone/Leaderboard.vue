@@ -92,6 +92,7 @@
         variant="solid"
         icon-size="xs"
         ccu-icon="arrow-left"
+        :alt="$t('actions.previous')"
         :action="() => loadLeaderboard(null, previous)"
       />
       <base-button
@@ -100,6 +101,7 @@
         icon-size="xs"
         class="bg-crisiscleanup-light-smoke w-6 h-6"
         variant="solid"
+        :alt="$t('actions.next')"
         :disabled="!next"
         :action="() => loadLeaderboard(null, next)"
       />

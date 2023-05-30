@@ -113,6 +113,7 @@
               name="dialer"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--dialer"
+              :alt="$t('phoneDashboard.manual_dialer')"
               icon="dialer"
               icon-size="small"
               icon-class="bg-black p-1"

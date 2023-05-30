@@ -44,7 +44,6 @@
           html: true,
         }"
         data-testid="testCmsHelpIcon"
-        :alt="$t('actions.help_alt')"
         type="help"
         size="large"
       />

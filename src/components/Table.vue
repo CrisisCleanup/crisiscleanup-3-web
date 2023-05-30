@@ -155,6 +155,7 @@
           <font-awesome-icon
             class="cursor-pointer"
             size="md"
+            :alt="showingDetails.has(item.id) ? $t('actions.hide_options') : $t('actions.show_options')"
             :icon="showingDetails.has(item.id) ? 'caret-up' : 'caret-down'"
             @click="setShowingDetails(item)"
           />

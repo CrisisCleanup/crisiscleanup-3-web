@@ -19,7 +19,11 @@
           <div class="flex flex-row items-center">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-lightblue-900">
-                <img src="../assets/icons/cases.svg" style="height: 50px" />
+                <img
+                  src="../assets/icons/cases.svg"
+                  style="height: 50px"
+                  :alt="$t('dashboard.my_claimed_cases')"
+                />
               </div>
             </div>
             <div class="flex-1 text-right md:text-center">
@@ -48,7 +52,11 @@
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-yellow-900">
-                <img src="../assets/icons/cases.svg" style="height: 50px" />
+                <img
+                  src="../assets/icons/cases.svg"
+                  style="height: 50px"
+                  :alt="$t('dashboard.total_claimed')"
+                />
               </div>
             </div>
             <div class="flex-1 text-right md:text-center">
@@ -81,7 +89,11 @@
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-orange-600">
-                <img src="../assets/icons/cases.svg" style="height: 50px" />
+                <img
+                  src="../assets/icons/cases.svg"
+                  style="height: 50px"
+                  :alt="$t('dashboard.in_progress')"
+                />
               </div>
             </div>
             <div class="flex-1 text-right md:text-center">
@@ -118,7 +130,11 @@
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-green-900">
-                <img src="../assets/icons/cases.svg" style="height: 50px" />
+                <img
+                  src="../assets/icons/cases.svg"
+                  style="height: 50px"
+                  :alt="$t('dashboard.closed')"
+                />
               </div>
             </div>
             <div class="flex-1 text-right md:text-center">

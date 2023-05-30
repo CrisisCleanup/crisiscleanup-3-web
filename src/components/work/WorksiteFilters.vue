@@ -350,6 +350,7 @@
                   :data-testid="`testWorkType${f.key}Icon`"
                   class="cursor-pointer"
                   size="md"
+                  :alt="expanded[f.key] ? $t('actions.hide_options') : $t('actions.show_options')"
                   :icon="expanded[f.key] ? 'caret-up' : 'caret-down'"
                   @click="expandSection(f.key)"
                 />

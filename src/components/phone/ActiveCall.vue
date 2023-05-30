@@ -117,6 +117,7 @@
     <ccu-icon
       v-if="(isOnCall || caller) && isOutboundCall"
       data-testid="testHangupIcon"
+      :alt="$t('actions.hangup')"
       size="lg"
       class="ml-2"
       type="hangup"

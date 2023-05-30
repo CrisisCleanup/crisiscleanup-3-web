@@ -11,6 +11,7 @@
       <div v-if="slideOverVisible" class="flex items-center justify-end p-1.5">
         <font-awesome-icon
           icon="times"
+          :alt="$t('nav.hide_navigation')"
           data-testid="testAuthenticatedToggleIcon"
           class="menu-button mx-2 cursor-pointer text-white self-end"
           size="2xl"
@@ -27,6 +28,7 @@
     <div class="header p-1 flex items-center">
       <font-awesome-icon
         icon="bars"
+        :alt="$t('nav.show_navigation')"
         data-testid="testHamburgerIcon"
         class="menu-button mx-3 cursor-pointer"
         size="2xl"

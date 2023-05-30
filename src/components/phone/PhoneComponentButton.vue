@@ -11,6 +11,7 @@
           <ccu-icon
             v-if="icon"
             data-testid="testPhoneSystemActionIcon"
+            :alt="$t('phoneDashboard.call_this_person')"
             :type="icon"
             :class="iconClass"
             :size="iconSize"
@@ -27,6 +28,7 @@
     >
       <div class="phone-system-action__close">
         <ccu-icon
+          :alt="$t('actions.cancel')"
           :alt="$t('actions.cancel')"
           data-testid="testPhoneSystemActionCloseIcon"
           size="xs"

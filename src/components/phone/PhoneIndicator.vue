@@ -9,6 +9,7 @@
       data-testid="testIsTakingCallsIcon"
       class="cursor-pointer"
       type="image/svg+xml"
+      :alt="$t('phoneDashboard.taking_calls')"
       :data="ICON_MAP.phone"
       @loadeddata="setSvgStyle"
       @load="setSvgStyle"

@@ -72,6 +72,7 @@
           >
             <font-awesome-icon
               :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
+              :alt="collapsedUtilityBar ? $t('actions.show_options') : $t('actions.hide_options')"
               class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
               size="xl"
               @click="collapsedUtilityBar = !collapsedUtilityBar"
@@ -136,6 +137,7 @@
             >
               <font-awesome-icon
                 :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
+                :alt="collapsedForm ? $t('actions.show_options') : $t('actions.hide_options')"
                 class="px-0.5 py-2 ml-1.5"
                 size="large"
                 @click="collapsedForm = !collapsedForm"
@@ -175,7 +177,7 @@
                       >{{ unreadUrgentChatCount }}</span
                     >
                   </div>
-                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
+                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" :alt="$t('chat.chat')" />
                 </div>
               </template>
               <template #component>
@@ -214,7 +216,7 @@
                       >{{ unreadNewsCount }}</span
                     >
                   </div>
-                  <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
+                  <ccu-icon type="news" class="p-1 ml-1.5" size="large" :alt="$t('phoneDashboard.news')" />
                 </div>
               </template>
               <template #component>
