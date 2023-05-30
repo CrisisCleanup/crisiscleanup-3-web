@@ -1,7 +1,7 @@
 <template>
   <tag
     :style="[styles]"
-    :data-testid="`test${language.shortName}Icon`"
+    :data-testid="`test${language?.shortName}Icon`"
     class="tag-item tag--language"
     v-bind="$attrs"
   >
