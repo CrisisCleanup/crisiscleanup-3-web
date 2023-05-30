@@ -32,7 +32,9 @@
           <WorksiteStatusDropdown
             v-if="worksite.id && currentWorkType"
             class="block"
-            :data-testid="`test${worksite.id && currentWorkType}WorktypeStatusSelect`"
+            :data-testid="`test${
+              worksite.id && currentWorkType
+            }WorktypeStatusSelect`"
             :phase="incident ? incident.phase : null"
             :current-work-type="currentWorkType"
             @input="

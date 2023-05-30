@@ -10,7 +10,7 @@
           html: true,
         }"
         :invert-color="true"
-        :data-testid="`testCapability${capability.description_t}Tooltip`"
+        :data-testid="`testCapability${capability.name_t}Tooltip`"
         type="help"
         size="medium"
       />

@@ -30,7 +30,7 @@
       >
         <div
           v-for="status in displayStatuses"
-          :data-testid="`testStatus${status.selectionKey}Div`"
+          :data-testid="`testStatus${status.id}Div`"
           :key="`${status.id}`"
           class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
           :class="{ selected: currentItem === status.selectionKey }"

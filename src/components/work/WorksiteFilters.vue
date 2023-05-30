@@ -24,10 +24,10 @@
           <template v-for="(filter, key) in filters">
             <template
               v-for="(label, identifier) in filter.getFilterLabels()"
-              :data-testid="`testFilters${key + identifier}Label`"
               :key="key + identifier"
             >
               <tag
+                :data-testid="`testFilters${label}Label`"
                 closeable
                 class="m-1"
                 @closed="

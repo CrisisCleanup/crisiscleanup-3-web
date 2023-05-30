@@ -17,7 +17,7 @@
           >
             <div
               v-for="phase in phases"
-              :data-testid="`testCapability${capability.name_t}Phasep${hase.id}Item`"
+              :data-testid="`testCapability${capability.name_t}Phase${phase.id}Item`"
               :key="phase.id"
               class="col-span-1 text-crisiscleanup-dark-300 truncate"
               :class="hoverItem === 'normal' + index ? 'light' : ''"
