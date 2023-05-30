@@ -2,9 +2,11 @@
   <div
     id="top"
     class="logo flex items-center justify-between p-3 border border-b"
+    data-testid="testPrintTokenDiv"
   >
     <img
       id="header"
+      data-testid="testCcuLogoIcon"
       src="@/assets/ccu-logo-black-500w.png"
       style="height: 53px"
     />
@@ -16,15 +18,17 @@
         {{ $t('printToken.thank_you_for_helping') }}
       </div>
       <div class="text-2xl font-light">
-        <div>
+        <div data-testid="testCaseNumberDiv">
           {{ $t('printToken.case_number') }}:
           {{ printToken.case_number }}
         </div>
-        <div>
+        <div data-testid="testCaseNameDiv">
           {{ $t('printToken.resident_name') }}:
           {{ printToken.case_name }}
         </div>
-        <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
+        <div data-testid="testAddressDiv">
+          {{ $t('printToken.address') }}: {{ fullAddress }}
+        </div>
       </div>
     </div>
     <div class="grid--main w-screen">
@@ -35,6 +39,7 @@
         <div class="flex flex-wrap justify-center items-center max-w-2xl">
           <div
             v-for="work_type in printToken.work_types"
+            :data-testid="`testWorkType${work_type.id}Div`"
             :key="`${work_type.id}`"
             class="mx-1"
           >
@@ -61,24 +66,34 @@
           <span class="text-sm">{{ $t('printToken.notes') }}</span>
           <textarea
             v-model="printToken.status_notes"
+            data-testid="testStatusContent"
             rows="3"
             class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
           />
 
           <span class="text-sm">{{ $t('printToken.num_volunteers') }}</span>
-          <base-input v-model="printToken.number_of_volunteers" type="number" />
+          <base-input
+            v-model="printToken.number_of_volunteers"
+            type="number"
+            data-testid="testNumVolunteersTextInput"
+          />
 
           <span class="text-sm">{{
             $t('printToken.hours_per_volunteer')
           }}</span>
           <base-input
             v-model="printToken.hours_per_volunteer"
+            data-testid="testHoursPerVolunteerTextInput"
             type="number"
             pattern="^\d*(\.\d{0,2})?$"
           />
 
           <span class="text-sm">{{ $t('printToken.your_email') }}</span>
-          <base-input v-model="printToken.email" type="email" />
+          <base-input
+            v-model="printToken.email"
+            type="email"
+            data-testid="testYourEmailTextInput"
+          />
 
           <div>
             <base-text>{{ $t('printToken.photos') }}</base-text>
@@ -86,11 +101,13 @@
               :key="printToken.files"
               :worksite="printToken"
               :is-print-token="true"
+              data-testid="testPhotosFile"
               @photosChanged="reloadFiles"
             />
           </div>
           <base-button
             variant="solid"
+            data-testid="testSaveButton"
             :action="save"
             class="my-2 font-light p-5 w-full"
             :text="$t('actions.save')"

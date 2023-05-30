@@ -1,7 +1,12 @@
 <template>
-  <div v-if="survivorToken" class="survivors-page h-full overflow-auto main">
+  <div
+    v-if="survivorToken"
+    class="survivors-page h-full overflow-auto main"
+    data-testid="testSurvivorsDiv"
+  >
     <div
       v-if="survivorToken.worksite && survivorToken.worksite.invalidated_at"
+      data-testid="testInvalidatedTokenDiv"
       class="bg-red-300 text-2xl"
     >
       {{ $t('survivorContact.deleted_notice') }}
@@ -9,24 +14,31 @@
     <div id="top" class="logo flex justify-center p-3 border border-b">
       <img
         id="header"
+        data-testid="testCcuLogoIcon"
         src="@/assets/ccu-logo-black-500w.png"
         style="height: 53px"
       />
     </div>
     <section v-if="survivorToken" class="main p-8">
-      <div class="text-2xl text-center mb-3 font-bold">
+      <div
+        class="text-2xl text-center mb-3 font-bold"
+        data-testid="testCaseNumberDiv"
+      >
         {{ $t('survivorContact.case_number') }}:
         {{ survivorToken.worksite.case_number }}
       </div>
-      <div class="text-lg mb-1">{{ survivorToken.worksite.name }}:</div>
+      <div class="text-lg mb-1" data-testid="testNameDiv">
+        {{ survivorToken.worksite.name }}:
+      </div>
       <div class="text-lg" v-html="$t(survivorToken.survivor_message)"></div>
       <div>
-        <div class="text-lg font-bold my-2">
+        <div class="text-lg font-bold my-2" data-testid="testDoYouNeedHelpDiv">
           {{ $t('survivorContact.do_you_need_help') }}
         </div>
         <div class="flex flex-col mt-2">
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testHelpNeededRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.help_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -40,6 +52,7 @@
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testHelpNotNeededRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.help_not_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -53,6 +66,7 @@
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testAlreadyHelpedRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.already_helped'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -66,6 +80,7 @@
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testAlreadyHelpedHelpNeededRadio"
             :class="[
               survivorToken.status_t ===
               'survivorContact.already_helped_help_needed'
@@ -94,6 +109,7 @@
               </div>
               <base-checkbox
                 v-for="work_type_help_needed in survivorToken.work_types"
+                :data-testid="`testWorkTypeHelpNeeded${work_type_help_needed.id}Checkbox`"
                 :key="work_type_help_needed.id"
                 class="mb-3"
                 :model-value="workTypeHelpNeeded.has(work_type_help_needed.id)"
@@ -121,7 +137,7 @@
 
       <div v-if="!survivorToken.address_confirmed_at" class="pt-2">
         <div>
-          <div class="text-lg my-2 font-bold">
+          <div class="text-lg my-2 font-bold" data-testid="testUnconfirmedAddressDiv">
             {{ $t('survivorContact.confirm_address_instructions') }}
           </div>
           <div
@@ -131,6 +147,7 @@
             <div class="flex items-start">
               <ccu-icon
                 type="pin"
+                data-testid="testLocationIcon"
                 class="mr-1"
                 size="small"
                 style="margin-top: 3px"
@@ -141,12 +158,14 @@
             <div class="flex">
               <base-button
                 class="px-3 py-1 bg-crisiscleanup-green-700 text-white mx-1"
+                data-testid="testConfirmAddressButton"
                 :text="$t('survivorContact.confirm_address')"
                 :alt="$t('survivorContact.confirm_address')"
                 :action="confirmAddress"
               />
               <base-button
                 variant="solid"
+                data-testid="testEditAddressButton"
                 class="px-3 py-1 mx-1"
                 :text="$t('survivorContact.edit_address')"
                 :alt="$t('survivorContact.edit_address')"
@@ -156,6 +175,7 @@
           </div>
           <WorksiteSearchInput
             v-else
+            data-testid="testFullAddressSearch"
             :value="survivorToken.worksite.address"
             selector="js-worksite-address"
             display-property="description"
@@ -172,6 +192,7 @@
         </div>
         <base-button
           type="bare"
+          data-testid="testUseMyLocationButton"
           icon="street-view"
           class="text-gray-700 pt-3 w-full p-5 mt-5 border text-2xl"
           :action="locateMe"
@@ -181,6 +202,7 @@
         <LocationViewer
           :key="JSON.stringify(survivorToken.worksite.location)"
           :location="survivorToken.worksite.location"
+          data-testid="testLocationViewerDiv"
           class="h-84 mt-4 w-full"
           use-google-maps
           @updatedLocation="(latLng) => geocodeWorksite(latLng.lat, latLng.lng)"
@@ -193,6 +215,7 @@
         >
           <ccu-icon
             type="privacy"
+            data-testid="testAddressConfirmedIcon"
             class="mr-2"
             size="small"
             style="margin-top: 3px"
@@ -212,6 +235,7 @@
           :key="JSON.stringify(survivorToken)"
           :worksite="survivorToken"
           :is-survivor-token="true"
+          data-testid="testUploadPhotosFile"
           @photosChanged="() => getSurvivorToken(true)"
           @image-click="showImage"
         />
@@ -222,10 +246,12 @@
         <div
           class="text-lg my-2 font-bold"
           v-html="$t('survivorContact.how_often_update')"
+          data-testid="testAutoContactFrequencyDiv"
         ></div>
         <div class="w-full flex text-center text-lg">
           <div
             class="w-1/3 border-t border-b border-r rounded-l-xl p-3"
+            data-testid="testAutoContactFrequencyOftenDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.often'
@@ -241,6 +267,7 @@
           </div>
           <div
             class="w-1/3 border-t border-b border-r p-3"
+            data-testid="testAutoContactFrequencyNotOftenDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.not_often'
@@ -256,6 +283,7 @@
           </div>
           <div
             class="w-1/3 border rounded-r-xl p-3"
+            data-testid="testAutoContactFrequencyNeverDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.never'
@@ -291,6 +319,7 @@
 
         <textarea
           v-model="currentNote"
+          data-testid="testAddNoteTextArea"
           rows="5"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
           :placeholder="$t('survivorContact.notes')"
@@ -300,6 +329,7 @@
 
       <base-checkbox
         v-if="!survivorToken.tos_accepted_at"
+        data-testid="testAcceptTermsCheckbox"
         v-model="survivorToken.accept_terms"
         class="block my-1 text-xl"
       >
@@ -308,6 +338,7 @@
 
       <base-button
         class="w-full p-5 mt-5 text-2xl"
+        data-testid="testSaveButton"
         variant="solid"
         :disabled="
           !survivorToken.accept_terms && !survivorToken.tos_accepted_at
@@ -324,6 +355,7 @@
         <li v-for="faq in faqs" :key="faq.id">
           <div
             class="text-lg my-1 font-bold"
+            :data-testid="`testFaq${faq.id}Div`"
             v-html="$t(formatCmsItem(faq.title))"
           ></div>
           <div class="text-lg" v-html="$t(formatCmsItem(faq.content))"></div>

@@ -13,6 +13,11 @@
         In the meantime, let's both just take a moment to appreciate just how
         awesome you are... Yep, you're awesome.
       </p>
+      <p>
+        If anything unusual is happening, we will share details on our 
+        <a href="http://blog.crisiscleanup.org" target="_blank" title="Crisis Cleanup Blog">
+        blog.</a>
+      </p>
       <p>&mdash; The Team</p>
     </div>
   </section>

@@ -1,5 +1,9 @@
 <template>
-  <div class="pewpew h-screen w-screen" :style="styles">
+  <div
+    class="pewpew h-screen w-screen"
+    :style="styles"
+    data-testid="testPewPewDiv"
+  >
     <div class="grid grid-cols-12 relative h-full w-full">
       <div class="h-full">
         <PewPewNavBar :color-mode="colorMode" />
@@ -21,6 +25,7 @@
                   siteInfoTimerData.isTimerActive &&
                   siteInfoTimerData.activeInfoTab === 0
                 "
+                data-testid="testPewPewLiveTab"
                 class="absolute mx-1 left-0 right-0"
                 :style="{ top: '2rem', bottom: 0 }"
               >
@@ -34,6 +39,7 @@
                   <div class="h-40 w-full">
                     <SiteActivityGauge
                       v-if="currentSiteStats.length > 0"
+                      data-testid="testCurrentEngagementChart"
                       :key="currentEngagement"
                       class="h-full w-full"
                       :chart-data="currentEngagement"
@@ -58,6 +64,7 @@
                   siteInfoTimerData.isTimerActive &&
                   siteInfoTimerData.activeInfoTab === 1
                 "
+                data-testid="testSiteStatsTab"
                 class="absolute mx-1 left-0 right-0"
                 :style="{ top: '2rem', bottom: 0 }"
               >
@@ -67,6 +74,7 @@
                   <div class="">
                     <div
                       v-for="(stat, index) in currentSiteStats"
+                      :data-testid="`testSiteStats${stat.id}Div`"
                       :key="stat.id"
                       class="mb-2"
                     >
@@ -81,7 +89,7 @@
                               popperClass: 'interactive-tooltip w-auto',
                             }"
                             :invert-color="true"
-                            :alt="$t('actions.help_alt')"
+                            :data-testid="`testSiteStats${stat.id}Icon`"
                             type="help"
                             size="medium"
                           />
@@ -102,7 +110,7 @@
                               popperClass: 'interactive-tooltip w-auto',
                             }"
                             :invert-color="true"
-                            :alt="$t('actions.help_alt')"
+                            :data-testid="`testSiteStats2${stat.id}Icon`"
                             type="help"
                             size="medium"
                           />
@@ -129,12 +137,16 @@
                 class="my-2 col-span-8 flex justify-center items-center text-black font-bold ribbon-gradient"
               >
                 <div v-if="incidentList.length > 0">
-                  <div v-for="incident in incidentList" :key="incident.id">
+                  <div
+                    v-for="incident in incidentList"
+                    :key="incident.id"
+                    :data-testid="`testIncident${incident.id}Div`"
+                  >
                     {{ incident.short_name }}:
                     {{ getIncidentPhoneNumbers(incident) }}
                   </div>
                 </div>
-                <div v-else>
+                <div v-else data-testid="testPewPewBannerDiv">
                   {{ $t('homeVue.pew_pew_banner') }}
                 </div>
               </div>
@@ -143,6 +155,7 @@
                 <template v-if="!isLoggedIn">
                   <base-button
                     class="text-xs p-1 w-20 text-black rounded"
+                    data-testid="testRegisterButton"
                     variant="solid"
                     :text="$t('actions.register')"
                     :alt="$t('actions.register')"
@@ -150,6 +163,7 @@
                   />
                   <base-button
                     class="text-xs ml-2 p-1 w-20 rounded"
+                    data-testid="testLoginButton"
                     variant="outline-dark"
                     :text="$t('actions.login')"
                     :alt="$t('actions.login')"
@@ -159,12 +173,13 @@
                 <template v-else>
                   <UserProfileMenu
                     invert
+                    data-testid="testLogoutLink"
                     @auth:logout="() => $store.dispatch('auth/logout')"
                   />
                 </template>
               </div>
             </div>
-            <div class="h-12 mt-3 flex text-xs">
+            <div class="h-12 mt-3 flex text-xs" data-testid="testIncidentSelectedDiv">
               <div
                 class="live-tab px-6"
                 :class="incidentId ? '' : 'live-tab--selected'"
@@ -178,6 +193,7 @@
               </div>
               <router-link
                 v-for="i in incidents"
+                :data-testid="`testIncident${i.id}Div`"
                 :key="i.id"
                 :to="{
                   name: 'nav.pew',
@@ -190,7 +206,12 @@
                     : ''
                 "
               >
-                <DisasterIcon class="mx-2" :current-incident="i" />
+                <DisasterIcon
+                  class="mx-2"
+                  :data-testid="`testDisaster${i.id}Icon`"
+                  :current-incident="i"
+                  :alt="i.short_name"
+                />
                 {{ i.short_name }}
               </router-link>
             </div>
@@ -198,11 +219,13 @@
               <div class="relative h-full select-none col-span-7">
                 <div
                   id="map"
+                  data-testid="testMapDiv"
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
                 <div
                   v-if="mapLoading"
+                  data-testid="testMapLoadingDiv"
                   style="z-index: 1001"
                   class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
                 >
@@ -214,6 +237,7 @@
                 >
                   <Slider
                     primary-color="#FECE09"
+                    data-testid="testSviSliderDiv"
                     :value="100"
                     :from="$t('svi.most_vulnerable')"
                     :to="$t('svi.everyone')"
@@ -231,6 +255,7 @@
                   <div class="zoom-control flex flex-col mb-5">
                     <base-button
                       text=""
+                      data-testid="testZoomInButton"
                       icon="plus"
                       icon-size="xs"
                       ccu-event="user_ui-zoom-in"
@@ -241,6 +266,7 @@
                     />
                     <base-button
                       text=""
+                      data-testid="testZoomOutButton"
                       icon="minus"
                       icon-size="xs"
                       ccu-event="user_ui-zoom-out"
@@ -259,6 +285,7 @@
                   <transition-group
                     ref="incidentScroll"
                     name="incidentScroll"
+                    data-testid="testCurrentEventIncidentScrollDiv"
                     tag="div"
                   >
                     <div
@@ -287,11 +314,13 @@
                     >
                       <font-awesome-icon
                         v-if="!isLegendHidden"
+                        data-testid="testHideLegendIcon"
                         icon="minus"
                         :alt="$t('worksiteMap.hide_legend')"
                       />
                       <font-awesome-icon
                         v-else
+                        data-testid="testShowLegendIcon"
                         icon="plus"
                         :alt="$t('worksiteMap.show_legend')"
                       />
@@ -304,6 +333,7 @@
                     >
                       <div
                         v-for="entry in displayedWorkTypeSvgs"
+                        :data-testid="`testLegendSvgs${entry.key}Div`"
                         :key="entry.key"
                         class="flex items-center mb-1 cursor-pointer p-1 hover:border-white border"
                         :class="
@@ -334,6 +364,7 @@
                   <div class="relative">
                     <img
                       src="@/assets/cc-logo.svg"
+                      data-testid="testCcuLogoIcon"
                       alt="crisis-cleanup-logo"
                       class="absolute p-3 h-16 right-0 bottom-0 opacity-20"
                     />
@@ -343,6 +374,7 @@
                   >
                     <div
                       v-for="item in mapStatistics"
+                      :data-testid="`testMapStatItem${item['title']}Div`"
                       :key="item['title']"
                       class="p-1 px-3 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md"
                       :style="item['style']"
@@ -361,6 +393,7 @@
                     <div class="flex justify-center items-center mr-2">
                       <base-button
                         v-if="!isPaused"
+                        data-testid="testPauseGeneratePointsButton"
                         class="w-8 h-8 rounded-full focus:outline-none border p-2"
                         :action="pauseGeneratePoints"
                         icon="pause"
@@ -369,6 +402,7 @@
                       </base-button>
                       <base-button
                         v-else
+                        data-testid="testResumeGeneratePointsButton"
                         class="w-8 h-8 rounded-full focus:outline-none border p-2"
                         :action="resumeGeneratePoints"
                         icon="play"
@@ -378,6 +412,7 @@
                     </div>
                     <Slider
                       v-if="markersLength > 0"
+                      data-testid="testUpdatedSliderDiv"
                       :key="markersLength"
                       :value="markersLength - 1"
                       :min="0"
@@ -402,11 +437,13 @@
                   :query-filter="queryFilter"
                   :styles="styles"
                   :overlay-styles="overlayStyles"
+                  data-testid="testLiveOrganizationTableDiv"
                   class="row-span-7 relative"
                 />
                 <div class="row-span-5">
                   <tabs
                     ref="tabs"
+                    data-testid="testStopChartTabCirculationTimerTab"
                     class="relative h-full m-1"
                     tab-classes="text-xs"
                     tab-default-classes="flex items-center justify-center text-center h-10 cursor-pointer px-2"
@@ -416,6 +453,7 @@
                     <LightTab
                       :name="$t('reports.pp_call_volume_title')"
                       :alt="$t('reports.pp_call_volume_description')"
+                      data-testid="testPpCallVolumeTab"
                       class="chart-tab"
                       :selected="
                         chartCirculationTimerData.isTimerActive &&
@@ -425,6 +463,7 @@
                       <div class="chart-container rounded-tr-xl h-72">
                         <CircularBarplot
                           v-if="circularBarplotData.length > 0"
+                          data-testid="testPpCallTimesChart"
                           :key="circularBarplotData"
                           class="h-full h-full"
                           :chart-data="circularBarplotData"
@@ -436,6 +475,7 @@
                     <LightTab
                       :name="$t('reports.pp_total_cases_title')"
                       :alt="$t('reports.pp_total_cases_description')"
+                      data-testid="testTotalCasesTab"
                       class="chart-tab"
                       :selected="
                         chartCirculationTimerData.isTimerActive &&
@@ -445,6 +485,7 @@
                       <div class="chart-container rounded-t-xl">
                         <TotalCases
                           :key="totalCasesChartData"
+                          data-testid="testTotalCasesChart"
                           class="h-full w-full"
                           :margin-all="30"
                           :chart-data="totalCasesChartData"
@@ -453,6 +494,7 @@
                     </LightTab>
                     <LightTab
                       :name="$t('reports.completion_rate')"
+                      data-testid="testCompletionRateChart"
                       class="chart-tab"
                       :selected="
                         chartCirculationTimerData.isTimerActive &&

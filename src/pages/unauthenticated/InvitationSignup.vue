@@ -2,11 +2,15 @@
   <Home>
     <form
       v-if="invitation && invitation.existing_user"
+      data-testid="testInvitationTransferFormDiv"
       ref="form"
       class="form w-108 flex flex-col"
       @submit.prevent="transfer"
     >
-      <div class="text-2xl font-light">
+      <div
+        class="text-2xl font-light"
+        data-testid="testInvitingToTransferConfirmDiv"
+      >
         {{
           $t('invitationSignup.inviting_to_transfer_confirm', {
             user: invitation.inviter,
@@ -17,6 +21,7 @@
       </div>
       <base-select
         v-model="transferOption"
+        data-testid="testTransferOptionSelect"
         :options="[
           {
             key: 'users',
@@ -38,6 +43,7 @@
       />
       <base-button
         size="large"
+        data-testid="testTransferButton"
         class="px-5 py-2 m-2 flex-grow"
         variant="solid"
         :text="$t('actions.transfer')"
@@ -52,7 +58,11 @@
       class="form w-108 flex flex-col"
       @submit.prevent="acceptInvite"
     >
-      <div v-if="invitation" class="text-2xl font-light">
+      <div
+        v-if="invitation"
+        class="text-2xl font-light"
+        data-testid="testUserInvitedJoinCcuDiv"
+      >
         {{
           $t('invitationSignup.user_invited_join_ccu', {
             user: invitation.inviter,
@@ -61,6 +71,7 @@
       </div>
       <base-input
         v-model="first_name"
+        data-testid="testFirstNameTextInput"
         type="text"
         class="input"
         size="large"
@@ -69,6 +80,7 @@
       />
       <base-input
         v-model="last_name"
+        data-testid="testLastNameTextInput"
         type="text"
         class="input"
         size="large"
@@ -77,6 +89,7 @@
       />
       <base-input
         v-model="title"
+        data-testid="testTitleTextInput"
         type="text"
         class="input"
         size="large"
@@ -84,6 +97,7 @@
       />
       <base-input
         v-model="mobile"
+        data-testid="testMobileTextInput"
         type="text"
         class="input"
         size="large"
@@ -92,6 +106,7 @@
       />
       <base-input
         v-model="password"
+        data-testid="testPasswordTextInput"
         type="password"
         class="input"
         size="large"
@@ -100,6 +115,7 @@
       />
       <base-input
         ref="confirm_password"
+        data-testid="testConfirmPasswordTextInput"
         v-model="confirmPassword"
         type="password"
         class="input"
@@ -109,6 +125,7 @@
       />
       <base-button
         size="large"
+        data-testid="testAcceptInviteButton"
         class="px-5 py-2 m-2 flex-grow"
         variant="solid"
         :text="$t('actions.accept_invite')"

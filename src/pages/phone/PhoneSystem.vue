@@ -5,6 +5,7 @@
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
+            data-testid="testPhoneMapViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingMap ? 'filter-yellow' : 'filter-gray'"
@@ -14,6 +15,7 @@
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
+            data-testid="testPhoneTableViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingTable ? 'filter-yellow' : 'filter-gray'"
@@ -31,6 +33,7 @@
         <div class="flex justify-start w-auto">
           <WorksiteSearchInput
             :value="search"
+            data-testid="testWorksiteSearch"
             icon="search"
             display-property="name"
             :placeholder="$t('actions.search')"
@@ -49,6 +52,7 @@
         <template v-if="incidentsWithActivePhones.length > 0">
           <div
             v-for="incident in incidentsWithActivePhones"
+            :data-testid="`testIncidentWithActiveAni${incident.id}Div`"
             :key="incident.id"
             class="ml-2"
           >
@@ -70,9 +74,15 @@
       <div class="phone-system__main-content">
         <div v-show="showingMap" class="phone-system__main-content--map">
           <SimpleMap :key="showingMap" :map-loading="mapLoading" />
-          <div ref="phoneButtons" class="phone-system__actions">
+          <div
+            ref="phoneButtons"
+            class="phone-system__actions"
+            data-testid="testPhoneButtonsDiv"
+          >
             <PhoneComponentButton
               name="caller"
+              data-testid="testPhoneComponentCallerButton"
+              :alt="$t('phoneDashboard.availability_indicator')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--caller"
             >
@@ -88,11 +98,13 @@
               <template #component>
                 <div
                   v-if="potentialFailedCall"
+                  data-testid="testPotentialFailedCallDiv"
                   class="bg-red-500 mt-6 text-white p-1.5"
                 >
                   {{ $t('phoneDashboard.ended_early') }}
                   <base-button
                     :action="retryFailedCall"
+                    data-testid="testRetryFailedCallButton"
                     variant="solid"
                     class="px-2 text-black mt-1"
                     :text="$t('phoneDashboard.try_again')"
@@ -101,16 +113,25 @@
                 </div>
                 <tabs ref="tabs" :details="false" @mounted="setTabs">
                   <tab ref="callTab" :name="$t('phoneDashboard.active_call')">
-                    <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
+                    <ActiveCall
+                      :case-id="worksiteId"
+                      @setCase="selectCase"
+                      data-testid="testActiveCallDiv"
+                    />
                   </tab>
                   <tab ref="statusTab" :name="$t('phoneDashboard.call_status')">
-                    <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
+                    <UpdateStatus
+                      class="p-2"
+                      @onCompleteCall="completeCall"
+                      data-testid="testUpdateStatusCompleteCallDiv"
+                    />
                   </tab>
                 </tabs>
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
               name="dialer"
+              data-testid="testPhoneComponentDialerButton"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--dialer"
               :alt="$t('phoneDashboard.manual_dialer')"
@@ -121,6 +142,7 @@
               <template #component>
                 <ManualDialer
                   class="p-2"
+                  data-testid="testManualDialerDiv"
                   style="z-index: 1002"
                   :dialing="dialing"
                   @onDial="dialManualOutbound"
@@ -129,6 +151,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="chat"
+              data-testid="testPhoneComponentChatButton"
+              :alt="$t('chat.chat')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--chat"
               @open="
@@ -145,7 +169,11 @@
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
-                  <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
+                  <div
+                    v-if="unreadChatCount"
+                    class="absolute top-0 left-0 m-1"
+                    data-testid="testUnreadChatCountDiv"
+                  >
                     <span
                       class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
                       >{{ unreadChatCount }}</span
@@ -154,13 +182,19 @@
                   <div
                     v-if="unreadUrgentChatCount"
                     class="absolute top-0 right-0 my-1 -mx-1"
+                    data-testid="testUnreadUrgentChatCountDiv"
                   >
                     <span
                       class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadUrgentChatCount }}</span
                     >
                   </div>
-                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
+                  <ccu-icon
+                    type="chat"
+                    class="p-1 ml-1.5"
+                    size="large"
+                    :alt="$t('chat.chat')"
+                  />
                 </div>
               </template>
               <template #component>
@@ -177,6 +211,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="news"
+              data-testid="testPhoneComponentNewsButton"
+              :alt="$t('phoneDashboard.news')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--news"
               @open="
@@ -192,7 +228,11 @@
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
-                  <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
+                  <div
+                    v-if="unreadNewsCount"
+                    class="absolute top-0 left-0 m-1"
+                    data-testid="testUnreadNewsCountDiv"
+                  >
                     <span
                       class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadNewsCount }}</span
@@ -207,6 +247,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               v-if="callHistory"
+              data-testid="testPhoneComponentHistoryButton"
+              :alt="$t('phoneDashboard.call_history')"
               name="history"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--history"
@@ -217,6 +259,7 @@
               <template #component>
                 <CallHistory
                   :calls="callHistory"
+                  data-testid="testCallHistoryDiv"
                   @rowClick="
                     ({ mobile }) => {
                       setManualOutbound(mobile);
@@ -227,6 +270,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="stats"
+              data-testid="testPhoneComponentStatsButton"
+              :alt="$t('phoneDashboard.stats')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--stats"
             >
@@ -246,6 +291,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="leaderboard"
+              data-testid="testPhoneComponentLeaderboardButton"
+              :alt="$t('phoneDashboard.leaderboard')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--leaderboard"
               icon="leaderboard"
@@ -254,7 +301,13 @@
             >
               <template #button>
                 <div class="w-full h-full flex items-center justify-center">
-                  <ccu-icon :fa="true" type="users" class="p-1" size="medium" />
+                  <ccu-icon
+                    :fa="true"
+                    type="users"
+                    class="p-1"
+                    size="medium"
+                    :alt="$t('phoneDashboard.leaderboard')"
+                  />
                 </div>
               </template>
               <template #component>
@@ -263,6 +316,8 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="reset"
+              data-testid="testPhoneComponentResetButton"
+              :alt="$t('phoneDashboard.reset_phone_system')"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--reset"
             >
@@ -275,6 +330,7 @@
                 <div class="flex items-center justify-center p-3 gap-2">
                   <base-button
                     size="medium"
+                    data-testid="testResetPhoneSystemButton"
                     :text="$t('phoneDashboard.reset_phone_system')"
                     :alt="$t('phoneDashboard.reset_phone_system')"
                     :action="resetPhoneSystem"
@@ -282,6 +338,7 @@
                   ></base-button>
                   <base-button
                     size="medium"
+                    data-testid="testReportBugButton"
                     :text="$t('phoneDashboard.report_bug')"
                     :alt="$t('phoneDashboard.report_bug')"
                     :action="reportBug"
@@ -296,6 +353,7 @@
           <div class="flex justify-end items-center">
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
+              data-testid="testUnclaimButton"
               :class="
                 selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
@@ -324,6 +382,7 @@
     <div class="phone-system__form h-full min-h-0">
       <CaseHeader
         v-if="worksite"
+        data-testid="testCaseHeaderDiv"
         :worksite="worksite"
         class="p-2 border-l border-r"
         can-edit
@@ -337,6 +396,7 @@
         <div class="flex items-center cursor-pointer">
           <ccu-icon
             :alt="$t('casesVue.new_case')"
+            data-testid="testNewCaseIcon"
             type="active"
             size="small"
             :action="() => selectCase(null)"
@@ -345,6 +405,7 @@
         </div>
         <base-button
           v-if="$mq === 'sm'"
+          data-testid="testShowMapIcon"
           type="bare"
           icon="map"
           class="text-gray-700 pt-2"
@@ -363,6 +424,7 @@
       <div v-if="showingDetails" class="phone-system__form-toggler">
         <base-button
           icon="arrow-left"
+          data-testid="testShowHistoryButton"
           :icon-size="medium"
           :alt="$t('actions.history')"
           :action="
@@ -378,11 +440,13 @@
       <div class="h-auto min-h-0">
         <CaseHistory
           v-if="showHistory"
+          data-testid="testHistoryDiv"
           :incident-id="currentIncidentId"
           :worksite-id="worksiteId"
         ></CaseHistory>
         <WorksiteForm
           v-else
+          data-testid="testWorksiteFormDiv"
           ref="worksiteForm"
           :key="worksiteId"
           :incident-id="String(currentIncidentId)"
