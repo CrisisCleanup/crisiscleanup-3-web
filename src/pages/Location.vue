@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full relative">
+  <div class="flex h-full relative" data-testid="testLocationdiv">
     <div
       v-if="loading"
       style="z-index: 1001"
@@ -9,15 +9,24 @@
     </div>
     <div v-else class="mx-2 flex flex-col pt-2 w-84">
       <div class="flex items-center justify-between">
-        <div v-if="isNew" class="font-bold">
+        <div
+          v-if="isNew"
+          class="font-bold"
+          data-testid="testNewLocationDiv"
+        >
           {{ $t('actions.new_location') }}
         </div>
-        <div v-else class="font-bold w-4/5">
+        <div
+          v-else
+          class="font-bold w-4/5"
+          data-testid="testEditLocationDiv"
+        >
           {{ $t('actions.edit') }} {{ currentLocation && currentLocation.name }}
         </div>
         <div class="flex">
           <ccu-icon
             v-show="false"
+            data-testid="testEditLocationIcon"
             :alt="$t('actions.edit_location')"
             size="small"
             class="p-1 py-2"
@@ -25,6 +34,7 @@
           />
           <ccu-icon
             v-if="!isNew"
+            data-testid="testDownloadAsShapefileIcon"
             :alt="$t('locationVue.download_as_shapefile')"
             size="small"
             class="p-1 py-2"
@@ -33,6 +43,7 @@
           />
           <ccu-icon
             v-show="false"
+            data-testid="testShareLocationIcon"
             v-if="!isNew"
             :alt="$t('actions.share_location')"
             size="small"
@@ -41,6 +52,7 @@
           />
           <ccu-icon
             v-if="!isNew"
+            data-testid="testDeleteIcon"
             :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
@@ -57,6 +69,7 @@
         <div class="flex flex-col">
           <base-input
             v-model="currentLocation.name"
+            data-testid="testCurrentLocationNameTextInput"
             type="text"
             class="input my-2"
             size="large"
@@ -65,6 +78,7 @@
           />
           <base-select
             v-if="!loading"
+            data-testid="testLocationTypeTextInput"
             :model-value="currentLocation.type"
             :options="locationTypes"
             item-key="id"
@@ -83,6 +97,7 @@
             <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
               <base-select
                 label="name"
+                data-testid="testSearchForOrganizationSelect"
                 item-key="id"
                 :options="onOrganizationSearch"
                 :placeholder="$t('locationVue.search_for_organization')"
@@ -96,6 +111,7 @@
               <base-select
                 :value="selectedIncidentId"
                 :options="incidents"
+                data-testid="testIncidentSelect"
                 searchable
                 item-key="id"
                 label="name"
@@ -117,12 +133,14 @@
               }}</base-text>
               <div
                 v-for="organization in relatedOrganizations"
+                :data-testid="`testOrganizationResults${organization.id}Div`"
                 :key="`${organization.id}`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ organization.name }}
                 <ccu-icon
                   type="trash"
+                  :data-testid="`testClearLocationFromOrganization${organization.id}Icon`"
                   size="small"
                   :alt="$t('actions.clear_location')"
                   @click="
@@ -139,12 +157,14 @@
               }}</base-text>
               <div
                 v-for="incident in relatedIncidents"
+                :data-testid="`testIncidentResults${incident.id}Div`"
                 :key="`${incident.id}`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ incident.name }}
                 <ccu-icon
                   type="trash"
+                  :data-testid="`testRelatedIncidents${incident.id}Div`"
                   size="small"
                   :alt="$t('actions.clear_location')"
                   @click="() => detachLocationFromIncident(incident)"
@@ -155,6 +175,7 @@
 
           <textarea
             v-model="currentLocation.notes"
+            data-testid="testLocationNotesTextArea"
             class="text-base my-2 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
             rows="4"
             :placeholder="$t('locationVue.notes')"
@@ -164,18 +185,21 @@
             <div class="flex flex-wrap mt-2">
               <base-radio
                 v-model="currentLocation.shared"
+                data-testid="testSharedRadio"
                 class="mr-4"
                 label="shared"
                 :name="$t('locationVue.shared')"
               />
               <base-radio
                 v-model="currentLocation.shared"
+                data-testid="testPrivateRadio"
                 class="mr-4"
                 label="private"
                 :name="$t('locationVue.private')"
               />
               <base-radio
                 v-model="currentLocation.shared"
+                data-testid="testPublicRadio"
                 class="mr-4"
                 label="public"
                 :name="$t('locationVue.public')"
@@ -190,6 +214,7 @@
           <div class="h-48 overflow-auto">
             <div
               v-for="incident in selectedOrganization.incident_list"
+              :data-testid="`testOrganizationIncidents${incident.id}Div`"
               :key="`${incident.id}`"
             >
               {{ incident.name }}
@@ -200,11 +225,13 @@
           <base-button
             :text="$t('actions.reset')"
             :alt="$t('actions.reset')"
+            data-testid="testResetButton"
             class="border border-black p-2 mr-1"
           />
           <base-button
             :text="$t('actions.save_location')"
             :alt="$t('actions.save_location')"
+            data-testid="testSaveLocationButton"
             class="p-2 mr-1"
             variant="solid"
             :action="saveLocation"
@@ -213,6 +240,7 @@
             v-if="isNew"
             :text="$t('actions.save_and_new')"
             :alt="$t('actions.save_and_new')"
+            data-testid="testSaveAndNewButton"
             class="p-2"
             variant="solid"
             :action="() => saveLocation(true)"

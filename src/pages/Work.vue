@@ -10,6 +10,7 @@
           >
             <ccu-icon
               :alt="$t('casesVue.map_view')"
+              data-testid="testMapViewIcon"
               size="medium"
               class="mr-4 cursor-pointer"
               :class="showingMap ? 'filter-yellow' : 'filter-gray'"
@@ -19,6 +20,7 @@
             />
             <ccu-icon
               :alt="$t('casesVue.table_view')"
+              data-testid="testTableViewIcon"
               size="medium"
               class="mr-4 cursor-pointer"
               :class="showingTable ? 'filter-yellow' : 'filter-gray'"
@@ -27,11 +29,17 @@
               @click="showTable"
             />
             <span v-if="allWorksiteCount" class="font-thin">
-              <span v-if="allWorksiteCount === filteredWorksiteCount">
+              <span
+                v-if="allWorksiteCount === filteredWorksiteCount"
+                data-testid="testCaseCountContent"
+              >
                 {{ $t('casesVue.cases') }}
                 {{ numeral(allWorksiteCount) }}
               </span>
-              <span v-else>
+              <span
+                v-else
+                data-testid="testCaseCountFilteredContent"
+              >
                 {{ $t('casesVue.cases') }}
                 {{ numeral(filteredWorksiteCount) }} of
                 {{ numeral(allWorksiteCount) }}
@@ -39,6 +47,7 @@
             </span>
             <WorksiteSearchInput
               :value="currentSearch"
+              data-testid="testWorksiteSearch"
               icon="search"
               display-property="name"
               :placeholder="$t('actions.search')"
@@ -73,6 +82,7 @@
             <font-awesome-icon
               :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
               :alt="collapsedUtilityBar ? $t('actions.show_options') : $t('actions.hide_options')"
+              data-testid="testCollapseUtilityBarIcon"
               class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
               size="xl"
               @click="collapsedUtilityBar = !collapsedUtilityBar"
@@ -81,6 +91,7 @@
         </div>
         <tag
           v-if="overDueFilterLabel"
+          data-testid="testOverDueFilterLabelDiv"
           closeable
           class="m-1 p-1 w-max"
           @closed="clearQuery"
@@ -92,6 +103,7 @@
         >
           <Slider
             primary-color="#dadada"
+            data-testid="testSviSliderInput"
             secondary-color="white"
             :value="sviSliderValue"
             :from="$t('svi.most_vulnerable')"
@@ -105,6 +117,7 @@
           />
           <Slider
             track-size="8px"
+            data-testid="testUpdatedSliderInput"
             handle-size="12px"
             primary-color="#dadada"
             secondary-color="white"
@@ -124,6 +137,7 @@
         <div v-if="showingMap" class="work-page__main-content--map">
           <SimpleMap
             :map-loading="mapLoading"
+            data-testid="testSimpleMapdiv"
             show-zoom-buttons
             :available-work-types="availableWorkTypes"
             @onZoomIn="zoomIn"
@@ -138,6 +152,7 @@
               <font-awesome-icon
                 :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
                 :alt="collapsedForm ? $t('actions.show_options') : $t('actions.hide_options')"
+                data-testid="testCollapsedFormIcon"
                 class="px-0.5 py-2 ml-1.5"
                 size="large"
                 @click="collapsedForm = !collapsedForm"
@@ -145,6 +160,7 @@
             </div>
             <PhoneComponentButton
               name="chat"
+              data-testid="testPhoneComponentChatButton"
               class="work-page__action"
               component-class="work-page__action-content work-page__action-content--chat"
               @open="
@@ -162,7 +178,11 @@
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
-                  <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
+                  <div
+                    v-if="unreadChatCount"
+                    class="absolute top-0 left-0 m-1"
+                    data-testid="testUnreadChatCountDiv"
+                  >
                     <span
                       class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
                       >{{ unreadChatCount }}</span
@@ -183,6 +203,7 @@
               <template #component>
                 <Chat
                   v-if="selectedChat"
+                  data-testid="testChatDiv"
                   :chat="selectedChat"
                   :state-key="`chat_${selectedChat.id}_last_seen`"
                   @unreadCount="unreadChatCount = $event"
@@ -195,6 +216,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="news"
+              data-testid="testPhoneComponentNewsDiv"
               class="work-page__action"
               component-class="work-page__action-content work-page__action-content--news"
               @open="
@@ -210,7 +232,11 @@
                 <div
                   class="w-full h-full flex items-center justify-center relative"
                 >
-                  <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
+                  <div
+                    v-if="unreadNewsCount"
+                    class="absolute top-0 left-0 m-1"
+                    data-testid="testUnreadNewsCountDiv"
+                  >
                     <span
                       class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
                       >{{ unreadNewsCount }}</span
@@ -233,6 +259,7 @@
           <div class="flex items-center justify-end">
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
+              data-testid="testPrintClaimedButton"
               :class="
                 selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
@@ -245,6 +272,7 @@
             />
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
+              data-testid="testDownloadButton"
               :class="
                 selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
@@ -261,6 +289,7 @@
             />
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
+              data-testid="testUnclaimButton"
               :class="
                 selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
@@ -274,6 +303,7 @@
             </base-button>
             <base-button
               icon="sync"
+              data-testid="testUpdateStatusButton"
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
                 selectedTableItems && selectedTableItems.size === 0
@@ -339,7 +369,12 @@
           class="flex h-full items-center cursor-pointer border-b-2 border-primary-light p-3"
           @click="() => clearCase()"
         >
-          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
+          <ccu-icon
+            :alt="$t('casesVue.new_case')"
+            type="active"
+            size="small"
+            data-testid="testNewCaseIcon"
+          />
           <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
         </div>
         <div
@@ -353,6 +388,7 @@
           }}
           <ccu-icon
             :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
             size="xs"
             type="cancel"
             class="ml-2"
@@ -365,6 +401,7 @@
         </div>
         <base-button
           v-if="$mq === 'sm'"
+          data-testid="testShowMapButton"
           type="bare"
           icon="map"
           class="text-gray-700 pt-2"
@@ -380,6 +417,7 @@
       <div v-if="showingDetails" class="work-page__form-toggler">
         <base-button
           icon="arrow-left"
+          data-testid="testHistoryButton"
           icon-size="medium"
           :action="
             () => {
@@ -398,11 +436,13 @@
       <div class="h-auto min-h-0">
         <CaseHistory
           v-if="showHistory"
+          data-testid="testShowHistoryDiv"
           :incident-id="Number(currentIncidentId)"
           :worksite-id="worksiteId"
         ></CaseHistory>
         <CaseFlag
           v-else-if="showFlags"
+          data-testid="testShowFlagsDiv"
           :incident-id="String(currentIncidentId)"
           :worksite-id="worksiteId"
           @reloadCase="
@@ -421,6 +461,7 @@
         ></CaseFlag>
         <WorksiteView
           v-else-if="isViewing"
+          data-testid="testWorksiteFormDiv"
           :key="worksiteId"
           :worksite-id="worksiteId"
           :incident-id="String(currentIncidentId)"

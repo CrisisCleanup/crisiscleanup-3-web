@@ -1,5 +1,10 @@
 <template>
-  <div v-if="!loading" :key="currentIncidentId" class="flex flex-col">
+  <div
+    v-if="!loading"
+    :key="currentIncidentId"
+    class="flex flex-col"
+    data-testid="testDashboarddiv"
+  >
     <div class="flex self-end mr-4">
       <RedeployRequest />
       <InviteUsers class="mx-1" />
@@ -7,6 +12,7 @@
 
     <div
       class="grid grid-rows-4 grid-cols-1 md:grid-rows-2 md:grid-cols-2 xl:grid-rows-1 xl:grid-cols-4"
+      data-testid="testMetricCardMyClaimedCasesDiv"
     >
       <div
         class="p-3 cursor-pointer h-full w-full"
@@ -21,12 +27,16 @@
               <div class="rounded-full p-1 bg-crisiscleanup-lightblue-900">
                 <img
                   src="../assets/icons/cases.svg"
+                  data-testid="testMyClaimedCasesIcon"
                   style="height: 50px"
                   :alt="$t('dashboard.my_claimed_cases')"
                 />
               </div>
             </div>
-            <div class="flex-1 text-right md:text-center">
+            <div
+              class="flex-1 text-right md:text-center"
+              data-testid="testMyClaimedCasesDiv"
+            >
               <h5 class="uppercase text-grey-900">
                 {{ $t('dashboard.my_claimed_cases') }} ({{
                   currentIncident.name
@@ -48,18 +58,23 @@
         <!--Metric Card-->
         <div
           class="h-full bg-crisiscleanup-yellow-100 rounded-lg shadow-lg relative"
+          data-testid="testMetricCardTotalClaimedDiv"
         >
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-yellow-900">
                 <img
                   src="../assets/icons/cases.svg"
+                  data-testid="testTotalClaimedIcon"
                   style="height: 50px"
                   :alt="$t('dashboard.total_claimed')"
                 />
               </div>
             </div>
-            <div class="flex-1 text-right md:text-center">
+            <div
+              class="flex-1 text-right md:text-center"
+              data-testid="testMyClaimedCasesDiv"
+            >
               <h5 class="uppercase text-grey-900">
                 {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
               </h5>
@@ -85,18 +100,25 @@
         @click="$router.push(`/incident/${currentIncidentId}/work`)"
       >
         <!--Metric Card-->
-        <div class="h-full bg-orange-400 rounded-lg shadow-lg relative">
+        <div
+          class="h-full bg-orange-400 rounded-lg shadow-lg relative"
+          data-testid="testMetricCardInProgressDiv"
+        >
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-orange-600">
                 <img
                   src="../assets/icons/cases.svg"
+                  data-testid="testInProgressIcon"
                   style="height: 50px"
                   :alt="$t('dashboard.in_progress')"
                 />
               </div>
             </div>
-            <div class="flex-1 text-right md:text-center">
+            <div
+              class="flex-1 text-right md:text-center"
+              data-testid="testInProgressDiv"
+            >
               <h5 class="uppercase text-grey-900">
                 {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
               </h5>
@@ -126,18 +148,23 @@
         <!--Metric Card-->
         <div
           class="h-full bg-crisiscleanup-green-100 rounded-lg shadow-lg relative"
+          data-testid="testMetricCardClosedDiv"
         >
           <div class="flex flex-row items-center p-5">
             <div class="flex-shrink pr-4">
               <div class="rounded-full p-1 bg-crisiscleanup-green-900">
                 <img
                   src="../assets/icons/cases.svg"
+                  data-testid="testClosedIcon"
                   style="height: 50px"
                   :alt="$t('dashboard.closed')"
                 />
               </div>
             </div>
-            <div class="flex-1 text-right md:text-center">
+            <div
+              class="flex-1 text-right md:text-center"
+              data-testid="testClosedDiv"
+            >
               <h5 class="uppercase text-grey-900">
                 {{ $t('dashboard.closed') }} ({{ currentIncident.name }})
               </h5>
@@ -167,6 +194,7 @@
         <div class="p-4">
           <Table
             class=""
+            data-testid="testClaimedWorksitesTable"
             :data="claimedWorksites"
             :columns="columns"
             :sorter="sorter"
@@ -179,6 +207,7 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in slotProps.item.work_types"
+                  :data-testid="`testWorkType${work_type.id}Div`"
                   :key="work_type.id"
                   class="mx-1"
                 >
@@ -198,6 +227,7 @@
             <template #case_number="slotProps">
               <router-link
                 class=""
+                :data-testid="`testWorksiteCaseNumber${slotProps.item.id}Link`"
                 :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
@@ -207,6 +237,7 @@
             <template #phone="slotProps">
               <router-link
                 class=""
+                :data-testid="`testWorksitePhone${slotProps.item.id}Link`"
                 :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
@@ -216,6 +247,7 @@
             <template #full_address="slotProps">
               <router-link
                 class=""
+                :data-testid="`testWorksiteFullAddress${slotProps.item.id}Link`"
                 :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
@@ -225,6 +257,7 @@
             <template #name="slotProps">
               <router-link
                 class=""
+                :data-testid="`testWorksiteName${slotProps.item.id}Link`"
                 :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                 tag="div"
               >
@@ -235,11 +268,13 @@
               <div class="flex">
                 <router-link
                   class=""
+                  :data-testid="`testWorksiteActions${slotProps.item.id}Link`"
                   :to="`/incident/${$route.params.incident_id}/work/${slotProps.item.id}?showOnMap=true`"
                   tag="div"
                 >
                   <ccu-icon
                     :alt="$t('actions.jump_to_case')"
+                    :data-testid="`testJumpToCase${slotProps.item.id}Icon`"
                     size="medium"
                     class="p-1 py-2 w-8"
                     type="go-case"
@@ -248,6 +283,7 @@
                 </router-link>
                 <ccu-icon
                   :alt="$t('actions.print')"
+                  :data-testid="`testPrint${slotProps.item.id}Icon`"
                   size="medium"
                   class="p-1 py-2 w-8"
                   type="print"
@@ -260,13 +296,17 @@
       </div>
     </div>
     <div class="flex">
-      <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+        data-testid="testCaseTransferRequestsDiv"
+      >
         <div class="py-4 px-4 text-gray-500 border-b">
           {{ $t('dashboard.case_transfer_requests') }}
         </div>
         <div class="py-4 px-4 border-b flex items-center">
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testInboundRequestsButton"
             size="medium"
             :text="$t('dashboard.inbound_requests')"
             :alt="$t('dashboard.inbound_requests')"
@@ -277,6 +317,7 @@
 
           <base-button
             class="mr-2 border-r pr-2"
+            data-testid="testOutboundRequestsButton"
             size="medium"
             :text="$t('dashboard.outbound_requests')"
             :alt="$t('dashboard.outbound_requests')"
@@ -287,6 +328,7 @@
 
           <base-button
             class="mr-2"
+            data-testid="testArchivedRequestsButton"
             size="medium"
             :text="$t('dashboard.archived_requests')"
             :alt="$t('dashboard.archived_requests')"
@@ -298,6 +340,7 @@
         <div class="p-4">
           <Table
             class=""
+            data-testid="testWorksiteRequestsTable"
             :data="worksiteRequests"
             :columns="pendingCasesColumns"
             :sorter="pendingSorter"
@@ -306,7 +349,10 @@
             @change="handlePendingTableChange"
           >
             <template #worksite_work_type="slotProps">
-              <div class="flex items-center w-full">
+              <div
+                class="flex items-center w-full"
+                data-testid="testWorksiteWwtspDiv"
+              >
                 <div
                   class="flex p-1 items-center justify-center"
                   :style="{
@@ -324,12 +370,18 @@
               </div>
             </template>
             <template #organization="slotProps">
-              <div class="flex flex-col">
+              <div
+                class="flex flex-col"
+                data-testid="testWorksiteOrganizationDiv"
+              >
                 {{ slotProps.item.requested_to_org.name }}
               </div>
             </template>
             <template #work_type="slotProps">
-              <div class="flex flex-col">
+              <div
+                class="flex flex-col"
+                data-testid="testWorksiteWorkTypeDiv"
+              >
                 {{ slotProps.item.worksite_work_type }}
               </div>
             </template>
@@ -337,16 +389,19 @@
               <div class="flex items-center justify-start">
                 <div
                   v-if="pendingView === 'inbound'"
+                  data-testid="testWorksiteActionsInboundDiv"
                   class="flex items-center justify-start"
                 >
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
+                    data-testid="testAcceptButton"
                     :text="$t('actions.accept')"
                     :alt="$t('actions.accept')"
                     :action="() => acceptRequest(slotProps.item.id)"
                   />
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                    data-testid="testRejectButton"
                     :text="$t('actions.reject')"
                     :alt="$t('actions.reject')"
                     :action="() => rejectRequest(slotProps.item.id)"
@@ -355,6 +410,7 @@
                 <div v-if="pendingView === 'outbound'">
                   <base-button
                     class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                    data-testid="testCancelButton"
                     :text="$t('actions.cancel')"
                     :alt="$t('actions.cancel')"
                     :action="() => cancelRequest(slotProps.item.id)"
@@ -363,6 +419,7 @@
                 <div v-if="pendingView !== 'archived'">
                   <base-button
                     class="px-2 py-1 mx-2 border-black border"
+                    data-testid="testIgnoreButton"
                     :text="$t('actions.ignore')"
                     :alt="$t('actions.ignore')"
                     :action="() => archiveRequest(slotProps.item.id)"
@@ -371,6 +428,7 @@
                 <div v-if="pendingView === 'archived'">
                   <base-button
                     class="px-2 py-1 mx-2"
+                    data-testid="testHistoryButton"
                     variant="solid"
                     :text="$t('actions.history')"
                     :alt="$t('actions.history')"
@@ -390,6 +448,7 @@
         <div class="p-4">
           <UserTransferRequestTable
             :requests="transferRequests"
+            data-testid="testUserTransferRequestTable"
             @reload="getUserTransferRequests"
           />
         </div>

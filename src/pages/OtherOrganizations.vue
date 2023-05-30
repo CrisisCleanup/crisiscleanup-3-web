@@ -4,7 +4,7 @@
       class="sm:w-3/5 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
     >
       <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
-      <div>
+      <div data-testid="testDoNotSharePublicDiv">
         <base-text variant="h2" :weight="600">
           {{ $t('otherOrganizations.do_not_share_public') }}
         </base-text>
@@ -16,6 +16,7 @@
 
     <base-input
       v-model="organizations.search"
+      data-testid="testOrganizationsSearchTextInput"
       icon="search"
       class="sm:w-84 my-2"
       :placeholder="$t('actions.search')"
@@ -26,6 +27,7 @@
       :columns="columns"
       :data="organizations.data"
       :body-style="{ height: '300px' }"
+      data-testid="testOrganizationsDataTable"
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
@@ -35,7 +37,7 @@
       @change="handleOtherOrgTableChange"
     >
       <template #rowDetails="slotProps">
-        <div class="flex p-3">
+        <div class="flex p-3" data-testid="testPrimaryContactsDiv">
           <div class="mr-4">
             <base-text variant="h2">
               {{ $t('otherOrganizations.primary_contacts') }}
@@ -95,7 +97,11 @@
       </template>
       <template #approved_roles="slotProps">
         <v-popover popper-class="w-80">
-          <base-text class="details-name" variant="body">
+          <base-text
+            class="details-name"
+            variant="body"
+            data-testid="testApprovedRolesContent"
+          >
             <span :class="`tooltip-target cursor-pointer text-primary-dark`">{{
               getHighestRole(slotProps.item.approved_roles).name_t
             }}</span>
@@ -126,6 +132,7 @@
       <template #overdue_count="slotProps">
         <base-button
           class="text-primary-dark underline"
+          data-testid="testOverdueCountButton"
           :alt="slotProps.item.overdue_count || 0"
           :action="
             () => {

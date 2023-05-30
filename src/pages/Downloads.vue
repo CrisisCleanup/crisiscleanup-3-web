@@ -7,12 +7,14 @@
       :url="tableUrl"
       :columns="columns"
       :body-style="{ height: '30rem' }"
+      data-testid="testDownloadsTable"
       class="border"
     >
       <template #file="{ item }">
         <div v-if="item.file">
           <base-link
             :href="item.file.csv_url"
+            :data-testid="`testDownloads${item.file}Div`"
             text-variant="bodysm"
             class="px-2"
             :download="item.file.filename_original"
