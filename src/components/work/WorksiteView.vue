@@ -351,7 +351,7 @@
     <div class="form-footer flex justify-between p-3 gap-2">
       <base-button
         v-if="workTypesClaimedByOrganization.length > 0"
-        :data-testid="`testUnclaim${work_type.work_type}Button`"
+        :data-testid="`testUnclaimButton`"
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black flex-grow"
         :text="$t('actions.unclaim')"
@@ -364,7 +364,7 @@
       />
       <base-button
         v-if="workTypesUnclaimed.length > 0"
-        :data-testid="`testClaim${work_type.work_type}Button`"
+        :data-testid="`testClaimButton`"
         size="medium"
         variant="solid"
         class="m-1 text-black p-3 px-4 flex-grow"
@@ -378,7 +378,7 @@
       />
       <base-button
         v-if="workTypesClaimedByOthersUnrequested.length > 0"
-        :data-testid="`testRequest${work_type.work_type}Button`"
+        :data-testid="`testRequestButton`"
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black flex-grow"
         :text="$t('actions.request')"
