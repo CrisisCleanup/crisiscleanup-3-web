@@ -31,6 +31,7 @@
       @change="getData"
       @rowClick="(payload) => $emit('rowClick', payload)"
       @selectionChanged="(payload) => $emit('selectionChanged', payload)"
+      v-bind="$attrs"
     >
       <template v-for="(_, slot) of $slots" #[slot]="scope"
         ><slot :name="slot" v-bind="scope"
@@ -140,7 +141,7 @@ export default defineComponent({
       const response = await axios.get(`${props.url}`, {
         params,
       });
-      data.value = response.data.results;
+      data.value = response.data.results || response.data;
       meta.value.pagination = {
         ...pagination,
         total: response.data.count,

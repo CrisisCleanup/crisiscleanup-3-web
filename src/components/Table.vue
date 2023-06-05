@@ -193,7 +193,7 @@
           v-if="hasRowDetails"
           v-show="showingDetails.has(item.id)"
           :style="`grid-column-start: 1; grid-column-end: ${
-            columns.length + 1
+            columns.length + 2
           };`"
         >
           <slot name="rowDetails" :item="item"></slot>

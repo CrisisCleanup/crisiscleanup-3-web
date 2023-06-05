@@ -1,14 +1,25 @@
 <template>
   <div class="m-3">
     <AjaxTable
+      :key="tableQuery"
       class="border p-2"
       :url="tableUrl"
       :columns="columns"
-      :key="tableQuery"
       :query="tableQuery"
       :body-style="{ height: 'max-content' }"
       enable-search
+      has-row-details
     >
+      <template #rowDetails="slotProps">
+        <AgentHistory
+          v-if="slotProps.item.agent"
+          class="w-full bg-white"
+          :agent-id="slotProps.item.agent"
+        />
+        <div v-else class="p-2 text-crisiscleanup-grey-700 italic">
+          {{ $t('~~No Agent Found') }}
+        </div>
+      </template>
       <template #created_at="slotProps">
         <div :title="slotProps.item.created_at">
           {{ momentFromNow(slotProps.item.created_at) }}
@@ -86,10 +97,11 @@ import JsonWrapper from '@/components/JsonWrapper.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import User from '@/models/User';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import AgentHistory from '@/components/admin/AgentHistory.vue';
 
 export default defineComponent({
   name: 'AdminBugs',
-  components: { UserDetailsTooltip, AjaxTable },
+  components: { AgentHistory, UserDetailsTooltip, AjaxTable },
   setup() {
     const { currentUser } = useCurrentUser();
     const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/bug_reports`;
