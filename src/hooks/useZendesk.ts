@@ -129,13 +129,9 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
     watch(
       () => config,
       (newValue) => {
-        zeWindow.value.zE(
-          ZendeskTarget.WEB_WIDGET,
-          ZendeskCommand.UPDATE_SETTINGS,
-          newValue,
-        );
+        zE(ZendeskTarget.WEB_WIDGET, ZendeskCommand.UPDATE_SETTINGS, newValue);
       },
-      { deep: true, immediate: true, flush: 'post' },
+      { deep: true, immediate: true },
     );
 
     // Suppress form on certain routes.
