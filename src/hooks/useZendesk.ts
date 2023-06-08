@@ -134,24 +134,6 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
       { deep: true, immediate: true },
     );
 
-    // Suppress form on certain routes.
-    const route = useRoute();
-    const suppressContactForm = computed(
-      () => /\/s\/(.*)/gm.exec(route.fullPath) !== null,
-    );
-    watch(
-      suppressContactForm,
-      (newValue) => {
-        if (
-          config.webWidget?.contactForm &&
-          config?.webWidget?.contactForm?.suppress !== newValue
-        ) {
-          config.webWidget.contactForm.suppress = newValue;
-        }
-      },
-      { immediate: true },
-    );
-
     return {
       config,
       zeWindow,

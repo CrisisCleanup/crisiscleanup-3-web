@@ -130,7 +130,7 @@ export default defineComponent({
     });
 
     // Setup zendesk.
-    useProvideZendesk({
+    const zendesk = useProvideZendesk({
       webWidget: {
         color: { theme: '#fece09' },
         position: { horizontal: 'left', vertical: 'bottom' },
@@ -138,6 +138,22 @@ export default defineComponent({
         contactForm: {},
       },
     });
+    // Suppress help form on certain routes.
+    const suppressContactForm = computed(
+      () => /\/s\/(.*)/gm.exec(route.fullPath) !== null,
+    );
+    watch(
+      suppressContactForm,
+      (newValue) => {
+        if (
+          zendesk.config.webWidget?.contactForm &&
+          zendesk.config?.webWidget?.contactForm?.suppress !== newValue
+        ) {
+          zendesk.config.webWidget.contactForm.suppress = newValue;
+        }
+      },
+      { immediate: true },
+    );
 
     return {
       layout,
