@@ -97,6 +97,9 @@ dependencies:
   '@vueuse/integrations':
     specifier: ^10.1.2
     version: 10.1.2(axios@1.4.0)(jwt-decode@3.1.2)(vue@3.3.4)
+  '@vueuse/shared':
+    specifier: ^10.1.2
+    version: 10.1.2(vue@3.3.4)
   '@vuex-orm/core':
     specifier: ^0.36.4
     version: 0.36.4(vuex@4.1.0)

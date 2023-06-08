@@ -64,6 +64,7 @@
     "@vuepic/vue-datepicker": "^3.6.8",
     "@vueuse/core": "^10.1.2",
     "@vueuse/integrations": "^10.1.2",
+    "@vueuse/shared": "^10.1.2",
     "@vuex-orm/core": "^0.36.4",
     "@vuex-orm/plugin-axios": "^0.9.4",
     "axios": "^1.4.0",
