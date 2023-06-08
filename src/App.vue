@@ -8,6 +8,7 @@ import { useStore } from 'vuex';
 import { DialogWrapper } from 'vue3-promise-dialog';
 import { cachedGet, hash } from './utils/promise';
 import { AuthService } from './services/auth.service';
+import { useProvideZendesk } from '@/hooks';
 
 export default defineComponent({
   name: 'App',
@@ -128,6 +129,16 @@ export default defineComponent({
       await getEnums();
     });
 
+    // Setup zendesk.
+    useProvideZendesk({
+      webWidget: {
+        color: { theme: '#fece09' },
+        position: { horizontal: 'left', vertical: 'bottom' },
+        offset: { horizontal: '-0.5rem' },
+        contactForm: {},
+      },
+    });
+
     return {
       layout,
     };
@@ -145,6 +156,7 @@ export default defineComponent({
 <style lang="scss">
 $dp__input_padding: 11px 12px !default;
 @import '@vuepic/vue-datepicker/src/VueDatePicker/style/main.scss';
+
 .crisiscleanup-map-marker svg {
   width: 40px;
   height: 40px;
