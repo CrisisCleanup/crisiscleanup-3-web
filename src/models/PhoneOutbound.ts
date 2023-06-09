@@ -16,6 +16,8 @@ export default class PhoneOutbound extends CCUModel {
 
   state_name!: string;
 
+  latest_status!: string;
+
   static fields() {
     return {
       id: this.attr(''),

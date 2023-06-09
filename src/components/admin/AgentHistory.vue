@@ -51,12 +51,14 @@
 
 <script lang="ts">
 import axios from 'axios';
+import { get } from 'lodash';
 import type PhoneOutbound from '@/models/PhoneOutbound';
 import { hash } from '@/utils/promise';
 import AjaxTable from '@/components/AjaxTable.vue';
 import JsonWrapper from '@/components/JsonWrapper.vue';
 import useDialogs from '@/hooks/useDialogs';
 import { makeTableColumns } from '@/utils/table';
+import PhoneStatus from '@/models/PhoneStatus';
 
 export default {
   name: 'AgentHistory',
@@ -78,7 +80,19 @@ export default {
         }/status_history`,
         columns: makeTableColumns([
           ['phone_number', '1fr', 'Phone Number'],
-          ['status', '1fr', 'Status'],
+          [
+            'status',
+            '1fr',
+            'Status',
+            {
+              transformer: (_: string, item) =>
+                get(
+                  PhoneStatus.find(item.status),
+                  'substatus_name_t',
+                  'Unknown',
+                ),
+            },
+          ],
           ['notes', '2fr', 'Notes'],
           ['created_at', '1fr', 'Created At'],
         ]),
@@ -101,7 +115,19 @@ export default {
         }/outbound_history`,
         columns: makeTableColumns([
           ['phone_number', '1fr', 'Phone Number'],
-          ['latest_status', '1fr', 'Latest Status'],
+          [
+            'latest_status',
+            '1fr',
+            'Latest Status',
+            {
+              transformer: (_: string, item: PhoneOutbound) =>
+                get(
+                  PhoneStatus.find(item.latest_status),
+                  'substatus_name_t',
+                  'Unknown',
+                ),
+            },
+          ],
           ['completion', '1fr', 'Completion'],
           ['updated_at', '1fr', 'Updated At'],
         ]),
