@@ -137,7 +137,7 @@ export default {
         }
       }
 
-      $toasted.success(t('~~Created bug successfully'));
+      $toasted.success(t('info.created_bug'));
       return emitter.emit('modal_component:close', 'phone_bug_modal');
     };
 

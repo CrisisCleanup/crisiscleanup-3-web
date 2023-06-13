@@ -17,7 +17,7 @@
           :agent-id="slotProps.item.agent"
         />
         <div v-else class="p-2 text-crisiscleanup-grey-700 italic">
-          {{ $t('~~No Agent Found') }}
+          {{ $t('adminBugs.no_agent_found') }}
         </div>
       </template>
       <template #created_at="slotProps">
@@ -45,8 +45,8 @@
             variant="solid"
             size="small"
             class="text-xs mx-2"
-            :text="$t('~~Show attr')"
-            :alt="$t('~~Show attr')"
+            :text="$t('actions.show_attr')"
+            :alt="$t('actions.show_attr')"
           />
           <base-button
             :action="
@@ -57,8 +57,8 @@
             variant="solid"
             size="small"
             class="text-xs mx-2"
-            :text="$t('~~Show states')"
-            :alt="$t('~~Show states')"
+            :text="$t('actions.show_states')"
+            :alt="$t('actions.show_states')"
           />
           <base-button
             :action="
@@ -69,13 +69,13 @@
             variant="solid"
             size="small"
             class="text-xs mx-2"
-            :text="$t('~~Show preview')"
-            :alt="$t('~~Show preview')"
+            :text="$t('actions.show_details')"
+            :alt="$t('actions.show_details')"
           />
           <base-button
             size="small"
             class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
-            :text="$t('~~Resolve')"
+            :text="$t('actions.resolve')"
             :action="() => resolveBug(slotProps.item.id)"
           />
         </div>
@@ -119,7 +119,7 @@ export default defineComponent({
 
     async function showPreview(bug: { title: any; description: any }) {
       await component({
-        title: t(`~~Bug Preview`),
+        title: t(`adminBugs.bug_details`),
         component: CmsViewer,
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',

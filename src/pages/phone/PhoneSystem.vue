@@ -882,7 +882,7 @@ export default defineComponent({
     async function reportBug() {
       await component({
         id: 'phone_bug_modal',
-        title: t(`~~Report Bug`),
+        title: t(`phoneDashboard.report_bug`),
         component: BugReport,
         classes: 'w-full h-96 overflow-auto',
         modalClasses: 'bg-white max-w-3xl shadow p-3',
