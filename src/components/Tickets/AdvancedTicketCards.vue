@@ -149,6 +149,8 @@ const getAgentList = () => {
         });
         agentDropdown.value.push(response.data.users[i].name);
       }
+
+      getCurrentLoggedInUser();
     });
 };
 
@@ -178,12 +180,20 @@ onMounted(() => {
   }
 
   getComments();
-  // getAgentList();
+  getAgentList();
   isLoading.value = false;
 });
 </script>
 
 <template>
+  <div
+    class="ticket__container-a grid grid-cols-6 grid-rows-6 border rounded-md shadow-xl"
+  >
+    <div class="profile__column-a col-span-2 border-right">
+      <div class="user-profile"></div>
+    </div>
+    <div></div>
+  </div>
   <div class="ticket__container">
     <div class="ticket__header">
       <div class="submitter-info">
@@ -286,8 +296,7 @@ onMounted(() => {
         :options="agentDropdown"
       />
       <BaseButton
-        variant="primary"
-        text="Reassign Ticket"
+        title="Reassign Ticket"
         class="reassign-button"
         :action="() => reAssignTicket"
       />
@@ -298,8 +307,7 @@ onMounted(() => {
       <div class="buttons__container">
         <template v-for="status in ['open', 'pending', 'solved']" :key="status">
           <BaseButton
-            size="md"
-            :text="status.charAt(0).toUpperCase() + status.slice(1)"
+            :title="status.charAt(0).toUpperCase() + status.slice(1)"
             :class="[status, 'w-1/3']"
             :action="() => replyToTicket(status)"
           />

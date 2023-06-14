@@ -13,6 +13,9 @@ import BaseText from '@/components/BaseText.vue';
 // import MultiSelect from 'primevue/multiselect'
 import BaseSelect from '@/components/BaseSelect.vue';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
+import AdvancedTicketCards from '@/components/Tickets/AdvancedTicketCards.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import card from '@/components/cards/Card.vue';
 
 export interface Macro {
   label: string;
@@ -48,6 +51,7 @@ export interface Filter {
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
+const userIdsFilter = ref();
 
 const usersAndTicketsMerged = ref();
 const usersRelatedToTickets = ref();
@@ -57,6 +61,11 @@ const isLoading = ref(false);
 const macros = ref([]);
 const tickets = ref([]);
 const selectedFilters = ref([]);
+const advancedTicketInfo = ref<boolean>(false);
+const changeCardView = () => {
+  advancedTicketInfo.value = !advancedTicketInfo.value;
+};
+
 const filters = ref([
   {
     label: 'Ticket Status',
@@ -87,6 +96,9 @@ const changeStatusFilter = (status: string) => {
 const parseUserIdsFromTickets = (tickets) => {
   try {
     requesterIdList.value = tickets.map((ticket) => ticket.requester_id);
+    userIdsFilter.value = requesterIdList.value
+      .map((id) => `user_ids=${id}`)
+      .join('&');
   } catch (error) {
     console.log(error);
   }
@@ -94,13 +106,14 @@ const parseUserIdsFromTickets = (tickets) => {
 
 const getUsersRelatedToTickets = () => {
   axiosInstance
-    .get('/users/show_many.json', {
-      params: {
-        ids: requesterIdList.value.join(','),
+    .get(`/users?${userIdsFilter.value}`, {
+      param: {
+        user_ids: [34_343, 343_434, 3434],
       },
     })
     .then((response) => {
-      usersRelatedToTickets.value = response.data.users;
+      usersRelatedToTickets.value = response;
+      console.log(usersRelatedToTickets.value);
     })
     .catch((error) => {
       console.error('Error fetching tickets:', error);
@@ -163,17 +176,6 @@ const computedTicketData = computed(() => {
   return tickets.value;
 });
 
-// const results = ref([]);
-
-// const fetchData = async () => {
-//   axiosInstance
-//     .get('/search?query=status<solved', {
-//
-//     }).then((response)=> {
-//       console.log(response)
-//   })
-// };
-
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -234,19 +236,41 @@ onMounted(() => {
       option-group-children="items"
       placeholder="Select a Filter"
     />
+
+    <BaseButton
+      :action="() => changeCardView()"
+      class="md:col-span-4 bg-primary-light text-white"
+      size="md"
+    >
+      <template #default>{{
+        advancedTicketInfo ? 'Advanced' : 'Classic'
+      }}</template>
+    </BaseButton>
   </div>
 
-  <div v-if="tickets" class="tickets__container">
+  <div v-show="tickets && !advancedTicketInfo" class="tickets__container">
     <div v-for="(item, idx) in computedTicketData" :key="`${item.id}-${idx}`">
       <TicketCards
         v-if="item.description && usersRelatedToTickets"
         :key="`${item.id}-${idx}`"
-        :users="usersRelatedToTickets"
+        :users="usersRelatedToTickets.data"
         :ticket-data="item"
         @re-fetch-ticket="fetchTickets"
       />
     </div>
   </div>
+
+  <!--  <div v-show="tickets && advancedTicketInfo" class="tickets__container-advanced">-->
+  <!--    <div v-for="(item, idx) in computedTicketData" :key="`${item.id}-${idx}`">-->
+  <!--    <AdvancedTicketCards-->
+  <!--      v-if="item.description && usersRelatedToTickets"-->
+  <!--      :key="`${item.id}-${idx}`"-->
+  <!--      :users="usersRelatedToTickets.data"-->
+  <!--      :ticket-data="item"-->
+  <!--      @re-fetch-ticket="fetchTickets"-->
+  <!--    />-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <style lang="postcss" scoped>
@@ -255,6 +279,9 @@ onMounted(() => {
 }
 .tickets__container {
   @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+.tickets__container-advanced {
+  @apply grid grid-cols-1;
 }
 .new {
   color: #c19700;
