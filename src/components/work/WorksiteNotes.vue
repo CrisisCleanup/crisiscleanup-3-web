@@ -28,8 +28,8 @@
     <template v-for="(note, index) in sortedNotes">
       <div
         v-if="index < 4 || showingAllNotes"
-        data-testid="testShowNotesDiv"
         :key="`${note.id}`"
+        data-testid="testShowNotesDiv"
         class="my-1 p-1 flex items-start bg-opacity-50 rounded"
         :class="
           note.is_survivor
@@ -48,8 +48,8 @@
         ><span
           class="font-hairline w-64 cursor-pointer"
           :class="expandedNotes[note.id] ? '' : 'max-lines'"
-          >{{ note.note }}</span
-        >
+          v-html="note.note"
+        ></span>
       </div>
     </template>
     <div v-if="canAdd" class="flex items-center justify-between">

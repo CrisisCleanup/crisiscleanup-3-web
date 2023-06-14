@@ -55,8 +55,8 @@
           </div>
           <div
             v-for="organization in organizationsWithClaimsInArea"
-            data-testid="testFlagNearbyOrganizationsDiv"
             :key="`${organization.id}`"
+            data-testid="testFlagNearbyOrganizationsDiv"
           >
             <v-popover popper-class="contact-popover" placement="top-end">
               <span class="text-yellow-600 tooltip-target cursor-pointer">{{
@@ -78,13 +78,19 @@
                       {{ contact.first_name }} {{ contact.last_name }}
                     </div>
                     <div class="mt-2">
-                      <font-awesome-icon icon="envelope" :alt="$t('actions.email')" />
+                      <font-awesome-icon
+                        icon="envelope"
+                        :alt="$t('actions.email')"
+                      />
                       <a :href="`mailto:${contact.email}`" class="ml-1">{{
                         contact.email
                       }}</a>
                     </div>
                     <div v-if="contact.mobile">
-                      <font-awesome-icon icon="phone" :alt="$t('actions.call')" />
+                      <font-awesome-icon
+                        icon="phone"
+                        :alt="$t('actions.call')"
+                      />
                       <a :href="`tel:${contact.mobile}`" class="ml-1">{{
                         contact.mobile
                       }}</a>
@@ -104,13 +110,19 @@
                       {{ contact.first_name }} {{ contact.last_name }}
                     </div>
                     <div class="mt-2">
-                      <font-awesome-icon icon="envelope" :alt="$t('actions.email')" />
+                      <font-awesome-icon
+                        icon="envelope"
+                        :alt="$t('actions.email')"
+                      />
                       <a :href="`mailto:${contact.email}`" class="ml-1">{{
                         contact.email
                       }}</a>
                     </div>
                     <div v-if="contact.mobile">
-                      <font-awesome-icon icon="phone" :alt="$t('actions.call')" />
+                      <font-awesome-icon
+                        icon="phone"
+                        :alt="$t('actions.call')"
+                      />
                       <a :href="`tel:${contact.mobile}`" class="ml-1">{{
                         contact.mobile
                       }}</a>
@@ -127,10 +139,7 @@
         data-testid="testFlagWorksiteWrongIncidentDiv"
       >
         <div>
-          <p
-            class="my-3"
-            data-testid="testFlagChooseCorrectIncidentContent"
-          >
+          <p class="my-3" data-testid="testFlagChooseCorrectIncidentContent">
             {{ $t('flag.choose_correct_incident') }}
           </p>
           <base-select
@@ -191,10 +200,7 @@
         data-testid="testFlagWorksiteUpsetClientDiv"
       >
         <div class="border-b py-5">
-          <p
-            class="my-3"
-            data-testid="testFlagExplainWhyClientUpsetDiv"
-          >
+          <p class="my-3" data-testid="testFlagExplainWhyClientUpsetDiv">
             {{ $t('flag.explain_why_client_upset') }}
           </p>
           <textarea
@@ -213,16 +219,16 @@
                 data-testid="testFlagDoesIssueInvolveYouYesRadio"
                 name="Yes"
                 label="Yes"
-                :model-value="radioValue"
-                @update:modelValue="radioValue = $event"
+                :model-value="currentFlag.attr.involves_you"
+                @update:modelValue="currentFlag.attr.involves_you = $event"
               />
               <base-radio
                 class="mr-10"
                 data-testid="testFlagDoesIssueInvolveYouNoRadio"
                 name="No"
                 label="No"
-                :model-value="radioValue"
-                @update:modelValue="radioValue = $event"
+                :model-value="currentFlag.attr.involves_you"
+                @update:modelValue="currentFlag.attr.involves_you = $event"
               />
             </div>
           </div>
@@ -260,21 +266,25 @@
           <p class="my-3" data-testid="testFlagWorksiteAbuseContent">
             {{ $t('flag.organizations_complaining_about') }}
           </p>
-          <autocomplete
-            icon="search"
-            data-testid="testOrganizationSearch"
-            :suggestions="organizationResults"
-            display-property="name"
+          <OrganizationSearchInput
             size="large"
-            :placeholder="$t('flag.organizations')"
-            clear-on-selected
-            @selected="
+            data-testid="testOrganizationSearch"
+            @selectedOrganization="
               (value) => {
-                abusingOrganization = value;
+                selectedOrganizations = new Set(
+                  selectedOrganizations.add(value.id),
+                );
               }
             "
-            @search="onOrganizationSearch"
           />
+          <div class="py-5">
+            <div
+              v-for="organization in selectedOrganizations"
+              :key="`${organization.id}`"
+            >
+              {{ organization.name }}
+            </div>
+          </div>
           <p class="my-3" data-testid="testMustContactOrgFirstContent">
             {{ $t('flag.must_contact_org_first') }}
           </p>
@@ -285,16 +295,20 @@
               data-testid="testFlagHaveYouContactedOrgYesRadio"
               name="Yes"
               label="Yes"
-              :model-value="radioValue"
-              @update:modelValue="radioValue = $event"
+              :model-value="currentFlag.attr.have_you_contacted_org"
+              @update:modelValue="
+                currentFlag.attr.have_you_contacted_org = $event
+              "
             />
             <base-radio
               class="mr-10"
               data-testid="testFlagHaveYouContactedOrgNoRadio"
               name="No"
               label="No"
-              :model-value="radioValue"
-              @update:modelValue="radioValue = $event"
+              :model-value="currentFlag.attr.have_you_contacted_org"
+              @update:modelValue="
+                currentFlag.attr.have_you_contacted_org = $event
+              "
             />
           </div>
           <p class="my-3" data-testid="testFlagOutcomeOfContactTextarea">
@@ -312,7 +326,10 @@
             class="block w-full border outline-none"
           />
 
-          <p class="my-3" data-testid="testFlagSuggestedOutcomeContactOrganizationTextarea">
+          <p
+            class="my-3"
+            data-testid="testFlagSuggestedOutcomeContactOrganizationTextarea"
+          >
             {{ $t('flag.suggested_outcome') }}
           </p>
           <textarea
@@ -418,7 +435,6 @@ export default defineComponent({
     const ready = ref(false);
     const selectedOrganizations = ref(new Set());
     const organizationsWithClaimsInArea = ref([]);
-    const abusingOrganization = ref(null);
     const flagType = ref(null);
     const radioValue = ref(null);
     const newIncident = ref(null);
@@ -428,6 +444,7 @@ export default defineComponent({
       is_high_priority: false,
       notes: '',
       requested_action: '',
+      attr: {},
     });
 
     async function flagWorksite() {
@@ -452,6 +469,8 @@ export default defineComponent({
 
         return;
       }
+
+      currentFlag.value.attr.organizations = [...selectedOrganizations.value];
 
       await Worksite.api().addFlag(
         props.worksiteId || route.params.id,
@@ -555,7 +574,6 @@ export default defineComponent({
       ready,
       selectedOrganizations,
       organizationsWithClaimsInArea,
-      abusingOrganization,
       flagType,
       radioValue,
       newIncident,
