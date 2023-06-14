@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center">
     <font-awesome-icon :size="size" icon="spinner" spin />
-    <div class="my-3">{{ $t(randomQuote) }}</div>
+    <div v-if="showQuote" class="my-3">{{ $t(randomQuote) }}</div>
   </div>
 </template>
 
