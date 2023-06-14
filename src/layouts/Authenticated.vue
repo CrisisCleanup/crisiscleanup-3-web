@@ -76,7 +76,7 @@
     </div>
   </div>
   <div v-else class="flex h-screen items-center justify-center">
-    <font-awesome-icon size="xl" icon="spinner" spin />
+    <spinner show-quote />
   </div>
 </template>
 

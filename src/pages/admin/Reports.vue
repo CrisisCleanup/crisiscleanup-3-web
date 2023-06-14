@@ -69,7 +69,7 @@
     </div>
   </div>
   <div v-else class="flex h-full items-center justify-center">
-    <font-awesome-icon size="xl" icon="spinner" spin />
+    <spinner />
   </div>
 </template>
 

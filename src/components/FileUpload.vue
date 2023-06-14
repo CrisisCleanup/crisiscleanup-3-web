@@ -52,7 +52,7 @@
           @files="handleFileUpload"
         >
           <template v-if="uploading">
-            <font-awesome-icon size="xl" icon="spinner" spin />
+            <spinner />
           </template>
         </DragDrop>
       </div>

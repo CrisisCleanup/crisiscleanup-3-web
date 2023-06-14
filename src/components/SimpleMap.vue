@@ -5,7 +5,7 @@
       style="z-index: 1001"
       class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
     >
-      <spinner />
+      <spinner show-quote />
     </div>
     <div
       v-if="showZoomButtons"

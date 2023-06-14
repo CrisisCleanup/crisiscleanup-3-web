@@ -9,18 +9,10 @@
     </div>
     <div v-else class="mx-2 flex flex-col pt-2 w-84">
       <div class="flex items-center justify-between">
-        <div
-          v-if="isNew"
-          class="font-bold"
-          data-testid="testNewLocationDiv"
-        >
+        <div v-if="isNew" class="font-bold" data-testid="testNewLocationDiv">
           {{ $t('actions.new_location') }}
         </div>
-        <div
-          v-else
-          class="font-bold w-4/5"
-          data-testid="testEditLocationDiv"
-        >
+        <div v-else class="font-bold w-4/5" data-testid="testEditLocationDiv">
           {{ $t('actions.edit') }} {{ currentLocation && currentLocation.name }}
         </div>
         <div class="flex">
@@ -43,8 +35,8 @@
           />
           <ccu-icon
             v-show="false"
-            data-testid="testShareLocationIcon"
             v-if="!isNew"
+            data-testid="testShareLocationIcon"
             :alt="$t('actions.share_location')"
             size="small"
             class="p-1 py-2"
@@ -133,8 +125,8 @@
               }}</base-text>
               <div
                 v-for="organization in relatedOrganizations"
-                :data-testid="`testOrganizationResults${organization.id}Div`"
                 :key="`${organization.id}`"
+                :data-testid="`testOrganizationResults${organization.id}Div`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ organization.name }}
@@ -157,8 +149,8 @@
               }}</base-text>
               <div
                 v-for="incident in relatedIncidents"
-                :data-testid="`testIncidentResults${incident.id}Div`"
                 :key="`${incident.id}`"
+                :data-testid="`testIncidentResults${incident.id}Div`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ incident.name }}
@@ -214,8 +206,8 @@
           <div class="h-48 overflow-auto">
             <div
               v-for="incident in selectedOrganization.incident_list"
-              :data-testid="`testOrganizationIncidents${incident.id}Div`"
               :key="`${incident.id}`"
+              :data-testid="`testOrganizationIncidents${incident.id}Div`"
             >
               {{ incident.name }}
             </div>

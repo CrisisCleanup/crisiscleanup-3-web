@@ -229,7 +229,7 @@
                   style="z-index: 1001"
                   class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
                 >
-                  <font-awesome-icon size="xl" icon="spinner" spin />
+                  <spinner />
                 </div>
                 <div
                   style="z-index: 1001"

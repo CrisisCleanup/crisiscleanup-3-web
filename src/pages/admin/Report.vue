@@ -13,7 +13,7 @@
       @onCSV="runCsvReport"
       @onPrint="printReport"
     />
-    <font-awesome-icon v-if="loading" size="xl" icon="spinner" spin />
+    <spinner v-if="loading" size="xl" />
     <div
       v-for="[key, value] in Object.entries(transformedData)"
       :data-testid="`testReportCard${key}Div`"

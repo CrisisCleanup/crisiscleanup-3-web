@@ -119,7 +119,7 @@
         v-if="loading"
         class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
       >
-        <spinner />
+        <spinner show-quote />
       </div>
       <div
         v-for="item of data"

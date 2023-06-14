@@ -1,57 +1,60 @@
 <template>
-  <div class="loader loader--style3 flex flex-col items-center" title="2">
-    <svg
-      id="loader-1"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      :width="width"
-      :height="height"
-      viewBox="0 0 50 50"
-      style="enable-background: new 0 0 50 50"
-      xml:space="preserve"
-    >
-      <path
-        :fill="color"
-        d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
-      >
-        <animateTransform
-          attributeType="xml"
-          attributeName="transform"
-          type="rotate"
-          from="0 25 25"
-          to="360 25 25"
-          dur="0.6s"
-          repeatCount="indefinite"
-        />
-      </path>
-    </svg>
-    <span v-if="message">{{ message }}</span>
+  <div class="flex flex-col items-center justify-center">
+    <font-awesome-icon :size="size" icon="spinner" spin />
+    <div class="my-3">{{ $t(randomQuote) }}</div>
   </div>
 </template>
 
 <script lang="ts">
+import { sample } from 'lodash';
+
+const RANDOM_QUOTES = [
+  'info.loading_perpetual_motion',
+  'info.loading_break_from_reality',
+  'info.loading_quantum_physics',
+  'info.loading_time_illusion',
+  'info.loading_universe_spinning',
+  'info.loading_patience_virtue',
+  'info.loading_olympic_games',
+  'info.loading_sit_back_relax',
+  'info.loading_circles_captivating',
+  'info.loading_warning_circus',
+  'info.loading_spinner_mission',
+  'info.loading_getting_sleepy',
+  'info.loading_grasshopper_zen_mode',
+  'info.loading_think_i_can',
+  'info.loading_spinner_nobody_sees',
+  'info.loading_twist_twirl_almost_there',
+  'info.loading_watch_learn_dance',
+  'info.loading_magic_in_progress',
+  'info.loading_ufo',
+  'info.loading_spin_me_right_round',
+  'info.loading_politician',
+  'info.loading_tick_tock',
+  'info.loading_patience_padawan',
+  'info.loading_revving_engines',
+  'info.loading_stay_calm_spin_on',
+  'info.loading_sprinkle_magic',
+  'info.loading_pirouettes',
+  'info.loading_dj_remix',
+];
+
 export default defineComponent({
   name: 'Spinner',
   props: {
-    width: {
+    size: {
       type: String,
-      default: '40px',
+      default: 'xl',
     },
-    height: {
-      type: String,
-      default: '40px',
+    showQuote: {
+      type: Boolean,
     },
-    color: {
-      type: String,
-      default: '#000',
-    },
-    message: {
-      type: String,
-      default: '',
-    },
+  },
+  setup() {
+    const randomQuote = ref<string>(sample(RANDOM_QUOTES));
+    return {
+      randomQuote,
+    };
   },
 });
 </script>

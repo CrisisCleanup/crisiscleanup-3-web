@@ -13,7 +13,7 @@
       </div>
     </template>
     <div v-if="loading" class="flex h-full items-center justify-center">
-      <font-awesome-icon size="xl" icon="spinner" spin />
+      <spinner />
     </div>
     <div v-else class="p-3">
       <div v-if="page === 'start'">
@@ -59,7 +59,7 @@
 
       <div v-if="page === 'existing'">
         <tabs ref="tabs" class="">
-          <tab 
+          <tab
             :name="$t('userTransfer.select_organization')"
             data-testid="testSelectOrganizationTabDiv"
           >

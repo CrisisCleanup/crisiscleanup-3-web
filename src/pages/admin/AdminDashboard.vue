@@ -355,7 +355,7 @@
     </div>
   </div>
   <div v-if="false" class="flex h-screen items-center justify-center">
-    <font-awesome-icon size="xl" icon="spinner" spin />
+    <spinner />
   </div>
 </template>
 

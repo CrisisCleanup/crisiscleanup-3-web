@@ -7,7 +7,7 @@
       @files="handleFileUpload"
     >
       <div class="flex items-center justify-center">
-        <font-awesome-icon v-if="uploading" size="lg" icon="spinner" spin />
+        <spinner v-if="uploading" size="lg" />
         <font-awesome-icon
           v-else
           size="lg"

@@ -25,7 +25,7 @@
           @files="handleFileUpload"
         >
           <div class="flex items-center justify-center">
-            <font-awesome-icon v-if="uploading" size="lg" icon="spinner" spin />
+            <spinner v-if="uploading" size="lg" />
             <font-awesome-icon v-else size="lg" icon="camera" />
           </div>
         </DragDrop>
@@ -60,7 +60,6 @@ import { getErrorMessage } from '@/utils/errors';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useEmitter from '@/hooks/useEmitter';
 import DragDrop from '@/components/DragDrop.vue';
-import ImageModal from '@/components/ImageModal.vue';
 import { uploadFile } from '@/utils/file';
 import type { CCUFileItem } from '@/models/types';
 

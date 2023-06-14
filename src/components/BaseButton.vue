@@ -9,12 +9,7 @@
     :data-testid="buttonSelector"
     @click.prevent="performAction"
   >
-    <font-awesome-icon
-      v-if="loading || showSpinner"
-      size="sm"
-      icon="spinner"
-      spin
-    />
+    <spinner v-if="loading || showSpinner" size="sm" />
     <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
     <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
     <slot>{{ text }}</slot>

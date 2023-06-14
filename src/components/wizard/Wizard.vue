@@ -45,7 +45,7 @@
         <slot></slot>
       </div>
       <div v-if="loading" class="flex h-full items-center justify-center">
-        <font-awesome-icon size="xl" icon="spinner" spin />
+        <spinner show-quote/>
       </div>
     </div>
 

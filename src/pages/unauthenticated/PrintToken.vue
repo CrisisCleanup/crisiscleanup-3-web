@@ -33,7 +33,7 @@
     </div>
     <div class="grid--main w-screen">
       <div v-if="loading" class="flex h-screen items-center justify-center">
-        <font-awesome-icon size="xl" icon="spinner" spin />
+        <spinner show-quote />
       </div>
       <div v-else class="flex flex-col items-center">
         <div class="flex flex-wrap justify-center items-center max-w-2xl">
