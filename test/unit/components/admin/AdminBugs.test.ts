@@ -61,9 +61,9 @@ describe('AdminBugs.vue', () => {
 
     const baseButtons = firstRow.findAllComponents(BaseButton);
     expect(baseButtons.length).toBe(4);
-    expect(baseButtons[0].props('text')).toBe('~~Show attr');
-    expect(baseButtons[1].props('text')).toBe('~~Show states');
-    expect(baseButtons[2].props('text')).toBe('~~Show preview');
-    expect(baseButtons[3].props('text')).toBe('~~Resolve');
+    expect(baseButtons[0].props('text')).toBe('actions.show_attr');
+    expect(baseButtons[1].props('text')).toBe('actions.show_states');
+    expect(baseButtons[2].props('text')).toBe('actions.show_details');
+    expect(baseButtons[3].props('text')).toBe('actions.resolve');
   });
 });
