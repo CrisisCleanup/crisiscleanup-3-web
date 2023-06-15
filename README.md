@@ -40,10 +40,34 @@ the [.tool-versions](.tool-versions) file.
 
 ```bash
 # Add all the plugins to asdf.
-$ cat .tool-versions | awk '{print $1}' | xargs -I _ asdf plugin add _
+cat .tool-versions | awk '{print $1}' | xargs -I _ asdf plugin add _
+
 # Install all according to .tool-versions.
-$ asdf install
+asdf install
 ```
+
+**OR**
+
+#### RTX
+
+_Note: You can also use [`asdf`](https://github.com/asdf-vm/asdf) if you already have it installed and working_
+
+- Install [rtx](https://github.com/jdxcode/rtx) (asdf clone in rust).
+
+- Follow instructions on hooking rtx into your shell [here](https://github.com/jdxcode/rtx#quickstart)
+
+- After installing `rtx`, add all the plugins found in the [.tool-versions](.tool-versions) file.
+
+  ```bash
+  # Add all the plugins.
+  cat .tool-versions | awk '{print $1}' | xargs -I _ rtx plugin add _
+
+  # Install all according to .tool-versions.
+  rtx install
+  ```
+
+- You should now have all the tools required (defined in [.tool-versions](.tool-versions)) to run this project.
+
 
 Performing this step should install all tools required to run this project.
 
@@ -58,6 +82,8 @@ Performing this step should install all tools required to run this project.
 > For more detailed instructions on asdf + direnv setup, please refer to [this guide](https://docs.arroyodev.com/setups/setup-asdf-direnv/)
 
 Setup the project with `direnv` by creating a `.envrc.local` file with the following:
+
+Example 1:
 
 ```bash
 #!/usr/bin/env bash
@@ -76,6 +102,38 @@ dotenv .env.staging
 # Prod
 # dotenv .env.prod
 ```
+
+Example 2:
+
+```bash
+#!/usr/bin/env bash
+
+# Options: staging | dev | proxy | prod | test | sample
+export CCU_ENV="${CCU_ENV:-staging}"
+env_file=".env"
+
+# check if env variable is set
+if [ -n "$CCU_ENV" ]; then
+  env_file=".env.$CCU_ENV"
+fi
+
+if [ ! -f "$env_file" ]; then
+  log_error "Environment file $env_file not found"
+  exit 1
+fi
+
+log_status "----------------------------------------------------------"
+log_status "Loading environment variables from $env_file"
+log_status "----------------------------------------------------------"
+dotenv "$env_file"
+
+# Env Vars
+export VUE_EDITOR=webstorm
+
+# More Env Vars ...
+```
+
+See [`.env.sample`](.env.sample) for an example.
 
 #### Dependencies
 
@@ -104,8 +162,7 @@ pnpm run test
 
 # Show coverage
 pnpm run test:cov
+
+# Run e2e tests
+pnpm run test:e2e
 ```
-
-#### Environment Variables
-
-Setup the project environment by creating a `.env` file. See [`.env.sample`](.env.sample) for an example.
