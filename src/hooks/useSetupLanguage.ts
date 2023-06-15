@@ -38,9 +38,15 @@ export default function useSetupLanguage() {
           subtag: string;
         }> = response?.data?.results ?? [];
 
-        const availableLanguages = _availableLanguages.map((l) => l.subtag);
+        const availableLanguages = new Set(
+          _availableLanguages.map((l) => l.subtag),
+        );
+        const isEnglish = currentLanguage.startsWith('en');
         const isSpanish = currentLanguage.startsWith('es');
-        if (isSpanish && !availableLanguages.includes(currentLanguage)) {
+        if (isEnglish && !availableLanguages.has(currentLanguage)) {
+          currentLanguage = 'en-US';
+        }
+        if (isSpanish && !availableLanguages.has(currentLanguage)) {
           currentLanguage = 'es';
         }
       } catch (error) {
