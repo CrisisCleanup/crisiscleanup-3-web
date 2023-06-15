@@ -22,7 +22,7 @@ dependencies:
     version: 3.0.3(@fortawesome/fontawesome-svg-core@6.4.0)(vue@3.3.4)
   '@geoman-io/leaflet-geoman-free':
     specifier: ^2.14.2
-    version: 2.14.2(leaflet@1.9.3)
+    version: 2.14.2(leaflet@1.9.4)
   '@pixi/constants':
     specifier: 6.5.8
     version: 6.5.8
@@ -126,8 +126,8 @@ dependencies:
     specifier: ^4.2.3
     version: 4.2.3
   d3:
-    specifier: ^7.8.4
-    version: 7.8.4
+    specifier: ^7.8.5
+    version: 7.8.5
   d3-array:
     specifier: ^2.12.1
     version: 2.12.1
@@ -141,8 +141,8 @@ dependencies:
     specifier: ^3.3.0
     version: 3.3.0
   dayjs:
-    specifier: ^1.11.7
-    version: 1.11.7
+    specifier: ^1.11.8
+    version: 1.11.8
   detect-browser-language:
     specifier: 0.0.2
     version: 0.0.2
@@ -165,8 +165,8 @@ dependencies:
     specifier: ^3.0.0
     version: 3.0.0
   leaflet:
-    specifier: ^1.9.3
-    version: 1.9.3
+    specifier: ^1.9.4
+    version: 1.9.4
   leaflet-draw:
     specifier: ^1.0.4
     version: 1.0.4
@@ -175,7 +175,7 @@ dependencies:
     version: 0.1.24
   leaflet-pixi-overlay:
     specifier: ^1.9.4
-    version: 1.9.4(leaflet@1.9.3)(pixi.js@6.5.9)
+    version: 1.9.4(leaflet@1.9.4)(pixi.js@6.5.9)
   leaflet.gridlayer.googlemutant:
     specifier: ^0.14.0
     version: 0.14.0
@@ -183,11 +183,11 @@ dependencies:
     specifier: ^0.2.0
     version: 0.2.0
   libphonenumber-js:
-    specifier: ^1.10.30
-    version: 1.10.30
+    specifier: ^1.10.36
+    version: 1.10.36
   litepie-datepicker:
     specifier: ^1.0.14
-    version: 1.0.14(dayjs@1.11.7)(tailwindcss@3.3.2)(vue@3.3.4)
+    version: 1.0.14(dayjs@1.11.8)(tailwindcss@3.3.2)(vue@3.3.4)
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -1021,7 +1021,7 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@geoman-io/leaflet-geoman-free@2.14.2(leaflet@1.9.3):
+  /@geoman-io/leaflet-geoman-free@2.14.2(leaflet@1.9.4):
     resolution: {integrity: sha512-6lIyG8RvSVdFjVjiQgBPyNASjymSyqzsiUeBW0pA+q41lB5fAg4SDC6SfJvWdEyDHa81Jb5FWjUkCc9O+u0gbg==}
     peerDependencies:
       leaflet: ^1.2.0
@@ -1030,7 +1030,7 @@ packages:
       '@turf/kinks': 6.5.0
       '@turf/line-intersect': 6.5.0
       '@turf/line-split': 6.5.0
-      leaflet: 1.9.3
+      leaflet: 1.9.4
       lodash: 4.17.21
       polygon-clipping: 0.15.3
     dev: false
@@ -4932,8 +4932,8 @@ packages:
       internmap: 1.0.1
     dev: false
 
-  /d3-array@3.2.3:
-    resolution: {integrity: sha512-JRHwbQQ84XuAESWhvIPaUV4/1UYTBOLiOPGWqgFDHZS1D5QN9c57FbH3QpEnQMYiOXNzKUQyGTZf+EVO7RT5TQ==}
+  /d3-array@3.2.4:
+    resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
     engines: {node: '>=12'}
     dependencies:
       internmap: 2.0.3
@@ -4975,7 +4975,7 @@ packages:
     resolution: {integrity: sha512-4EzFTRIikzs47RGmdxbeUvLWtGedDUNkTcmzoeyg4sP/dvCexO47AaQL7VKy/gul85TOxw+IBgA8US2xwbToNA==}
     engines: {node: '>=12'}
     dependencies:
-      d3-array: 3.2.3
+      d3-array: 3.2.4
     dev: false
 
   /d3-delaunay@6.0.4:
@@ -5190,11 +5190,11 @@ packages:
       d3-transition: 3.0.1(d3-selection@3.0.0)
     dev: false
 
-  /d3@7.8.4:
-    resolution: {integrity: sha512-q2WHStdhiBtD8DMmhDPyJmXUxr6VWRngKyiJ5EfXMxPw+tqT6BhNjhJZ4w3BHsNm3QoVfZLY8Orq/qPFczwKRA==}
+  /d3@7.8.5:
+    resolution: {integrity: sha512-JgoahDG51ncUfJu6wX/1vWQEqOflgXyl4MaHqlcSruTez7yhaRKR9i8VjjcQGeS2en/jnFivXuaIMnseMMt0XA==}
     engines: {node: '>=12'}
     dependencies:
-      d3-array: 3.2.3
+      d3-array: 3.2.4
       d3-axis: 3.0.0
       d3-brush: 3.0.0
       d3-chord: 3.0.1
@@ -5248,8 +5248,8 @@ packages:
       time-zone: 1.0.0
     dev: true
 
-  /dayjs@1.11.7:
-    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
+  /dayjs@1.11.8:
+    resolution: {integrity: sha512-LcgxzFoWMEPO7ggRv1Y2N31hUf2R0Vj7fuy/m+Bg1K8rr+KAs1AEy4y9jd5DXe8pbHgX+srkHNS7TH6Q6ZhYeQ==}
     dev: false
 
   /de-indent@1.0.2:
@@ -5362,7 +5362,7 @@ packages:
   /delaunator@5.0.0:
     resolution: {integrity: sha512-AyLvtyJdbv/U1GkiS6gUUzclRoAY4Gs75qkMygJJhU75LW4DNuSF2RMzpxs9jw9Oz1BobHjTdkG3zdP55VxAqw==}
     dependencies:
-      robust-predicates: 3.0.1
+      robust-predicates: 3.0.2
     dev: false
 
   /delayed-stream@1.0.0:
@@ -7272,13 +7272,13 @@ packages:
     resolution: {integrity: sha512-svOFGs01hbjJpRVY6L6HpaQeLuHIFOmXtGARg3cUzH/lYu2xpRtkYScmDgsQa4vUw4qKS0XvZck0u1E/rRliQQ==}
     dev: false
 
-  /leaflet-pixi-overlay@1.9.4(leaflet@1.9.3)(pixi.js@6.5.9):
+  /leaflet-pixi-overlay@1.9.4(leaflet@1.9.4)(pixi.js@6.5.9):
     resolution: {integrity: sha512-ntSoBULBIlmkLKie2T8/OS6Rh+WpVr+RSeLZUb6DJmO/EhkhwJg6tFUGTQOhJinfixkWF6lc3zpsMd5vg/daWQ==}
     peerDependencies:
       leaflet: '>=0.7'
       pixi.js: '>=4.6'
     dependencies:
-      leaflet: 1.9.3
+      leaflet: 1.9.4
       pixi.js: 6.5.9
     dev: false
 
@@ -7290,8 +7290,8 @@ packages:
     resolution: {integrity: sha512-Cd5PbAA/rX3X3XKxfDoUGi9qp78FyhWYurFg3nsfhntcM/MCNK08pRkf4iEenO1KNqwVPKCmkyktjW3UD+h9bQ==}
     dev: false
 
-  /leaflet@1.9.3:
-    resolution: {integrity: sha512-iB2cR9vAkDOu5l3HAay2obcUHZ7xwUBBjph8+PGtmW/2lYhbLizWtG7nTeYht36WfOslixQF9D/uSIzhZgGMfQ==}
+  /leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
     dev: false
 
   /levn@0.4.1:
@@ -7302,8 +7302,8 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /libphonenumber-js@1.10.30:
-    resolution: {integrity: sha512-PLGc+xfrQrkya/YK2/5X+bPpxRmyJBHM+xxz9krUdSgk4Vs2ZwxX5/Ow0lv3r9PDlDtNWb4u+it8MY5rZ0IyGw==}
+  /libphonenumber-js@1.10.36:
+    resolution: {integrity: sha512-NCPWES1poiS4NSzIS49mxHM5hCkSWov8wFICRKfL9narzimqAXlnAgNloHCt0BukZHbWt8TIStCdzLy7LXBYpQ==}
     dev: false
 
   /lie@3.1.1:
@@ -7368,7 +7368,7 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /litepie-datepicker@1.0.14(dayjs@1.11.7)(tailwindcss@3.3.2)(vue@3.3.4):
+  /litepie-datepicker@1.0.14(dayjs@1.11.8)(tailwindcss@3.3.2)(vue@3.3.4):
     resolution: {integrity: sha512-u1BAsvLv5r7grMrKbRXKXPfk5okiYJBF247PWr5MGmbVxxWmDCoqQWtMdaHrQUzA/BQiU6J6L1nri0QkJISjyA==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -7376,7 +7376,7 @@ packages:
       tailwindcss: ^2.0.3
       vue: ^3.0.5
     dependencies:
-      dayjs: 1.11.7
+      dayjs: 1.11.8
       tailwindcss: 3.3.2
       vue: 3.3.4
     dev: false
@@ -8675,8 +8675,8 @@ packages:
     resolution: {integrity: sha512-l4NwboJM74Ilm4VKfbAtFeGq7aEjWL+5kVFcmgFA2MrdnQWx9iE/tUGvxY5HyMI7o/WpSIUFLbC5fbeaHgSCYg==}
     dev: false
 
-  /robust-predicates@3.0.1:
-    resolution: {integrity: sha512-ndEIpszUHiG4HtDsQLeIuMvRsDnn8c8rYStabochtUeCvfuvNptb5TUbVD68LRAILPX7p9nqQGh4xJgn3EHS/g==}
+  /robust-predicates@3.0.2:
+    resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
     dev: false
 
   /rollup@3.25.1:
