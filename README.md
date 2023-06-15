@@ -81,9 +81,17 @@ Performing this step should install all tools required to run this project.
 
 > For more detailed instructions on asdf + direnv setup, please refer to [this guide](https://docs.arroyodev.com/setups/setup-asdf-direnv/)
 
-Setup the project with `direnv` by creating a `.envrc.local` file with the following:
+
+##### Environment
+
+See [`.envrc`](.envrc) file for list of environment varibles needed for this project. Create `.envrc.local` file
+with the required env vars from `.envrc` file.
+
+Here are some `.envrc.local` file examples:
 
 Example 1:
+
+You may use `.env` file to load variables with `dotenv`. See [`.env.sample`](.env.sample) for an example.
 
 ```bash
 #!/usr/bin/env bash
@@ -132,8 +140,6 @@ export VUE_EDITOR=webstorm
 
 # More Env Vars ...
 ```
-
-See [`.env.sample`](.env.sample) for an example.
 
 #### Dependencies
 
