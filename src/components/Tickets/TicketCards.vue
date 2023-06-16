@@ -364,8 +364,9 @@ onMounted(() => {
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl text-white"
       >
         {{ type.name }}
-        <hr class="border-gray-400" />
       </div>
+      <hr class="border-gray-400" />
+
       <div class="flex items-center justify-center">
         <BaseButton
           :action="() => loginAs()"
@@ -373,8 +374,8 @@ onMounted(() => {
           variant="primary"
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
-        <hr class="border-gray-400" />
       </div>
+      <hr class="border-gray-400" />
       <div
         v-for="stats in userStats"
         :key="stats.org"
@@ -387,8 +388,8 @@ onMounted(() => {
             <span class="text-lg">{{ value }}</span>
           </template>
         </BaseText>
-        <hr class="border-gray-400" />
       </div>
+      <hr class="border-gray-400" />
       <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
         <BaseText class="text-center">Recent Events:</BaseText>
         <div>
@@ -414,12 +415,12 @@ onMounted(() => {
               userEmailMapFunction(ticketData.requester_id) || ticketData.email
             }}
           </BaseText>
-          <BaseButton
-            action=""
-            class="border border-black rounded-md font-bold"
-            text="Create Github Issue"
-          />
         </div>
+        <BaseButton
+          action=""
+          class="border border-black rounded-md font-bold"
+          text="Create Github Issue"
+        />
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
@@ -528,7 +529,7 @@ onMounted(() => {
                 :action="() => addMacro"
                 text="Add Macro"
                 variant="primary"
-                class="text-white p-2 mx-4 my-1 text-xl rounded-md"
+                class="p-2 mx-4 my-1 text-xl rounded-md"
               />
             </div>
             <Table
