@@ -361,17 +361,19 @@ onMounted(() => {
         ]"
         :key="type.name"
         :style="`background-color: ${type.color}`"
-        class="user-type border rounded-md text-center p-2 mx-4 my-1 text-xl text-white"
+        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl text-white"
       >
         {{ type.name }}
+        <hr class="border-gray-400" />
       </div>
       <div class="flex items-center justify-center">
         <BaseButton
           :action="() => loginAs()"
           text="Ghost In"
           variant="primary"
-          class="text-white p-2 mx-4 my-1 text-xl rounded-md w-full"
+          class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
+        <hr class="border-gray-400" />
       </div>
       <div
         v-for="stats in userStats"
@@ -385,6 +387,7 @@ onMounted(() => {
             <span class="text-lg">{{ value }}</span>
           </template>
         </BaseText>
+        <hr class="border-gray-400" />
       </div>
       <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
         <BaseText class="text-center">Recent Events:</BaseText>
@@ -411,6 +414,11 @@ onMounted(() => {
               userEmailMapFunction(ticketData.requester_id) || ticketData.email
             }}
           </BaseText>
+          <BaseButton
+            action=""
+            class="border border-black rounded-md font-bold"
+            text="Create Github Issue"
+          />
         </div>
         <div class="ticket-link">
           <a
@@ -490,10 +498,9 @@ onMounted(() => {
             placeholder="Ticket Reply"
           />
           <BaseButton
-            class="rounded-sm m-2"
+            class="rounded-md mx-2"
             :action="showMacroModal"
-            size="sm"
-            text="Macros"
+            text="Manage Macros"
             variant="primary"
           />
         </div>
@@ -554,7 +561,7 @@ onMounted(() => {
         />
         <BaseButton
           variant="primary"
-          text="Reassign Ticket"
+          text="Assign"
           class="reassign-button"
           :action="() => reAssignTicket"
         />
@@ -574,18 +581,6 @@ onMounted(() => {
               :action="() => replyToTicket(status)"
             />
           </template>
-          <div class="flex items-center justify-center">
-            <BaseButton
-              :action="() => console.log('creating github draft')"
-              class="p-4 border border-black rounded-md w-20"
-            >
-              <template #default>
-                <img
-                  alt="github icon"
-                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-                /> </template
-            ></BaseButton>
-          </div>
         </div>
       </div>
     </div>
@@ -606,10 +601,10 @@ onMounted(() => {
   .ticket__header {
     @apply grid grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
     .submitter-info {
-      @apply col-span-2 text-left;
+      @apply col-span-1 text-left;
     }
     .ticket-link {
-      @apply text-center flex items-center rounded-md justify-center bg-primary-light text-white;
+      @apply text-center flex items-center rounded-md justify-center bg-primary-light;
     }
     .ticket-status {
       @apply text-center flex items-center rounded-md justify-center font-bold;
@@ -643,15 +638,15 @@ onMounted(() => {
     @apply px-4 py-2 border-y-2 border-gray-400;
   }
   .assigned-to__container {
-    @apply grid grid-cols-1 md:grid-cols-4 px-4 py-2 row-span-2 border-b-2 border-gray-400;
+    @apply grid grid-cols-12 px-4 py-2 row-span-2 border-b-2 border-gray-400 flex items-center justify-center;
     .header {
-      @apply flex gap-2 items-center justify-center md:col-span-4 my-2;
+      @apply flex gap-2 items-center justify-center md:col-span-12 my-2;
     }
     .agent-selection {
-      @apply md:col-span-4 my-2;
+      @apply md:col-span-11 my-2;
     }
     .reassign-button {
-      @apply md:col-span-4 p-2 rounded-md;
+      @apply md:col-span-1 p-4 rounded-md mx-2 my-2;
     }
   }
 
