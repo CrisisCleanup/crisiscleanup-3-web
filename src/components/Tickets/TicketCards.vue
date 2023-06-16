@@ -70,13 +70,6 @@ const macros = ref([
 ]);
 const macroColumns = [
   {
-    key: 'id',
-    title: 'ID',
-    sortable: true,
-    searchable: true,
-    width: '1fr',
-  },
-  {
     key: 'name',
     title: 'Name',
     sortable: true,
@@ -86,6 +79,13 @@ const macroColumns = [
   {
     key: 'description',
     title: 'Description',
+    sortable: true,
+    searchable: false,
+    width: '1fr',
+  },
+  {
+    key: 'template',
+    title: 'Template',
     sortable: true,
     searchable: false,
     width: '1fr',
@@ -124,6 +124,10 @@ const userEmailMapFunction = (id: number) => {
 const assignedUser = computed(() => {
   return _.find(agentList.value, { id: props.ticketData?.assignee_id });
 });
+const assignedTo = computed(() => {
+  return assignedUser.value ? assignedUser.value.name : 'None'
+})
+
 const replyToTicket = (replyStatus: string) => {
   axiosInstance
     .put(`/tickets/${props.ticketData.id}`, {
@@ -212,7 +216,10 @@ const messageHighlights = (item) => {
 
   return 'bg-gray-400';
 };
-
+const eventsModal = ref(false)
+const showEventsModal = () => {
+  eventsModal.value = !eventsModal.value
+}
 const showMacroModal = () => {
   macroModalVisibility.value = !macroModalVisibility.value;
 };
@@ -223,21 +230,10 @@ const selectedMacro = computed(() => {
   });
 });
 
-const addMacro = () => {
-  console.log('coming soon');
-};
-
-const editMacro = (macroId) => {
-  const _macro = macros.value.find((m) => m.id === macroId);
-
-  if (_macro) {
-    // Perform your desired operations on the macro object
-    console.log('Editing macro:', _macro);
-    // Additional logic...
-  } else {
-    console.log('Macro not found');
-  }
-};
+const executeMacro = (macro) => {
+  showMacroModal();
+  ticketReply.value = macro.template
+}
 
 const formatKey = (key: string) => {
   return key
@@ -288,21 +284,22 @@ async function getCCUser() {
       });
       ccUser.value = _response.entities.users[0];
 
-      userStats[0].org = ccUser.value.organization.name;
-      userStats[0].roles = ccUser.value.roles;
-      userStats[0].email = ccUser.value.email;
-      userStats[0].phone = ccUser.value.mobile;
-      userStats[0].ccAge = formatDateString(
-        ccUser.value.accepted_terms_timestamp,
-        'MM/DD/YYYY, h:mm:ss A',
-      );
-      userStats[0].os =  ccUser.value.states.userAgent.os?.name + ' ' + ccUser.value.states.userAgent.os?.version
-      userStats[0].browser = ccUser.value.states.userAgent?.browser.name + ' ' + ccUser.value.states.userAgent?.browser.version
+      userStats[0] = {
+        org: ccUser.value.organization?.name ?? '',
+        roles: ccUser.value.roles ?? [],
+        email: ccUser.value.email ?? '',
+        phone: ccUser.value.mobile ?? '',
+        ccAge: formatDateString(ccUser.value.accepted_terms_timestamp, 'MM/DD/YYYY, h:mm:ss A'),
+        os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}` ?? '',
+        browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}` ?? '',
+      };
+
     }
   } catch (error) {
     console.log(error);
   }
 }
+
 
 // async function loginAs(userId: string) {
 //   console.log('waiting on merged user data to get user id')
@@ -316,12 +313,19 @@ async function getCCUser() {
 //   window.location.replace('/');
 // }
 
-watch(
-  () => selectedMacroId.value,
-  () => {
-    ticketReply.value = selectedMacro.value.template;
-  },
-);
+
+const isUserType = computed(() => {
+  const _usertypes = [
+    { name: 'User', color: '#3498DB' },
+    { name: 'Ghost', color: '#F39C12' },
+    { name: 'Survivor', color: '#27AE60' },
+  ];
+
+  return _usertypes.map((type) => ({
+    name: type.name,
+    color: type.color,
+  }));
+});
 
 onMounted(() => {
   isLoading.value = true;
@@ -355,14 +359,10 @@ onMounted(() => {
         }}</BaseText>
       </div>
       <div
-        v-for="type in [
-          { name: 'User', color: '#3498DB' },
-          { name: 'Ghost', color: '#F39C12' },
-          { name: 'Survivor', color: '#27AE60' },
-        ]"
+        v-for="type in isUserType"
         :key="type.name"
-        :style="`background-color: ${type.color}`"
-        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl text-white"
+        :style="`border-color: ${type.color}; color: ${type.color}`"
+        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
         {{ type.name }}
       </div>
@@ -371,7 +371,7 @@ onMounted(() => {
       <div class="flex items-center justify-center">
         <BaseButton
           :action="() => loginAs()"
-          text="Ghost In"
+          text="Login As"
           variant="primary"
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
@@ -402,7 +402,20 @@ onMounted(() => {
           Cleanup User
           <span class="font-bold">Create Case W774 in Hurricane Nicole</span>
         </div>
+        <BaseButton :action="()=> showEventsModal()" text="More Events" variant="primary" class="p-1 rounded-md"/>
       </div>
+      <modal
+        v-if="eventsModal"
+        closeable
+        title="Events"
+        class="p-10"
+        @close="showEventsModal()"
+      >
+        <template #default>
+          <BaseInput type="search" />
+          Plan to add all events related to user here
+        </template>
+      </modal>
     </div>
     <div class="col-span-12 md:col-span-9">
       <div class="ticket__header">
@@ -425,6 +438,7 @@ onMounted(() => {
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+            target="_blank"
           >
             Zendesk</a
           >
@@ -474,7 +488,6 @@ onMounted(() => {
           <BaseText>{{ item.body }}</BaseText>
 
           <div v-if="item.attachments[0]" class="attachments-container">
-            <hr />
             <span class="attachments__header">Attachments</span>
             <div class="attachments__items">
               <div
@@ -482,7 +495,7 @@ onMounted(() => {
                 :key="attachment_idx"
                 class="flex flex-col items-center justify-center border"
               >
-                <a :href="attachment.content_url" target="_blank ">
+                <a :href="attachment.content_url" target="_blank">
                   <img :src="attachment.content_url" class="w-14 h-14" />
                 </a>
               </div>
@@ -504,23 +517,23 @@ onMounted(() => {
             <BaseButton
               class="rounded-md mx-2 py-4 "
               :action="showMacroModal"
-              text="Manage Macros"
+              text="Apply Macro"
               variant="primary"
             />
           </div>
 
         </div>
 
-        <BaseSelect
-          class="my-2"
-          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
-          placeholder="Apply Macro"
-          :options="macros"
-          :model-value="selectedMacroId"
-          item-key="id"
-          label="name"
-          @update:model-value="(v) => (selectedMacroId = v)"
-        />
+<!--        <BaseSelect-->
+<!--          class="my-2"-->
+<!--          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"-->
+<!--          placeholder="Apply Macro"-->
+<!--          :options="macros"-->
+<!--          :model-value="selectedMacroId"-->
+<!--          item-key="id"-->
+<!--          label="name"-->
+<!--          @update:model-value="(v) => (selectedMacroId = v)"-->
+<!--        />-->
         <modal
           v-if="macroModalVisibility"
           closeable
@@ -529,18 +542,10 @@ onMounted(() => {
           @close="showMacroModal()"
         >
           <template #default>
-            <div class="flex justify-end">
-              <BaseButton
-                :action="() => addMacro"
-                text="Add Macro"
-                variant="primary"
-                class="p-2 mx-4 my-1 text-xl rounded-md"
-              />
-            </div>
             <Table
               :columns="macroColumns"
               :data="macros"
-              @row-click="(v) => editMacro(v.id)"
+              @row-click="(v) => executeMacro(v)"
             />
           </template>
         </modal>
@@ -550,10 +555,11 @@ onMounted(() => {
         <div class="header">
           <!--        <img src="" class="w-10 h-10 rounded-md" />-->
           <BaseText
+            variant="h1"
             >Assigned To:
-            <span class="font-bold">{{
-              assignedUser ? assignedUser.name : 'None'
-            }}</span></BaseText
+            <span class="font-bold text-xl">{{
+              assignedTo
+              }}</span></BaseText
           >
         </div>
         <BaseSelect
@@ -565,7 +571,9 @@ onMounted(() => {
           item-key="id"
           :options="agents"
           @update:model-value="(v) => (selectedAgent = v)"
+
         />
+
         <BaseButton
           variant="primary"
           text="Assign"
@@ -596,7 +604,7 @@ onMounted(() => {
 
 <style scoped>
 .ticket__container {
-  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12 overflow-hidden;
+  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12 ;
 
   .cc__user-info {
     @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
@@ -630,9 +638,9 @@ onMounted(() => {
       @apply rounded-lg p-2 m-4;
 
       .attachments-container {
-        @apply mt-4;
+        @apply my-4 border-t-4;
         .attachments__header {
-          @apply font-bold;
+          @apply font-bold text-black;
         }
         .attachments__items {
           @apply flex gap-4 my-4;
