@@ -6,7 +6,7 @@ import type { Page } from '@playwright/test';
  * @param testIdIdentifier
  */
 export async function getAllTestIds(page: Page, testIdIdentifier = 'testid') {
-  const locators = await page.$$(`[data-${testIdIdentifier}]`);
+  const locators = await page.getByTestId(/.*/).all();
   const dataTestIds = await Promise.all(
     locators.map(async (e) => e.getAttribute(`data-${testIdIdentifier}`)),
   );
