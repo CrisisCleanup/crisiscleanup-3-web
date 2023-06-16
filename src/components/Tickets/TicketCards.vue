@@ -256,6 +256,7 @@ const userStats = [
     phone: null,
     totalTickets: null,
     os: null,
+    browser: null,
   },
 ];
 
@@ -295,6 +296,8 @@ async function getCCUser() {
         ccUser.value.accepted_terms_timestamp,
         'MM/DD/YYYY, h:mm:ss A',
       );
+      userStats[0].os =  ccUser.value.states.userAgent.os?.name + ' ' + ccUser.value.states.userAgent.os?.version
+      userStats[0].browser = ccUser.value.states.userAgent?.browser.name + ' ' + ccUser.value.states.userAgent?.browser.version
     }
   } catch (error) {
     console.log(error);
@@ -337,8 +340,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--    {{ccUser}}-->
-
   <div class="ticket__container">
     <div class="cc__user-info">
       <div class="cc_user">
@@ -355,9 +356,9 @@ onMounted(() => {
       </div>
       <div
         v-for="type in [
-          { name: 'Survivor', color: '#3498DB' },
+          { name: 'User', color: '#3498DB' },
           { name: 'Ghost', color: '#F39C12' },
-          { name: 'Worksite', color: '#27AE60' },
+          { name: 'Survivor', color: '#27AE60' },
         ]"
         :key="type.name"
         :style="`background-color: ${type.color}`"
@@ -425,10 +426,10 @@ onMounted(() => {
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
           >
-            Launch Ticket</a
+            Zendesk</a
           >
         </div>
-        <div :class="[ticketData.status, 'ticket-status']">
+        <div :class="[ticketData.status + '-tag', 'ticket-status text-xl']">
           {{ capitalizeFirstLetter(ticketData.status) }}
         </div>
       </div>
@@ -491,19 +492,23 @@ onMounted(() => {
       </div>
 
       <div class="ticket-reply">
-        <div class="grid grid-cols-12">
+        <div class="grid grid-cols-12 grid-rows-4">
           <BaseInput
             v-model="ticketReply"
             text-area
-            class="w-full h-full col-span-11"
+            class="w-full h-full col-span-11 row-span-4"
+            rows="6"
             placeholder="Ticket Reply"
           />
-          <BaseButton
-            class="rounded-md mx-2"
-            :action="showMacroModal"
-            text="Manage Macros"
-            variant="primary"
-          />
+          <div class="row-span-4 flex justify-center items-center">
+            <BaseButton
+              class="rounded-md mx-2 py-4 "
+              :action="showMacroModal"
+              text="Manage Macros"
+              variant="primary"
+            />
+          </div>
+
         </div>
 
         <BaseSelect
@@ -552,7 +557,8 @@ onMounted(() => {
           >
         </div>
         <BaseSelect
-          v-model="selectedAgent"
+          :model-value="selectedAgent"
+          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
           class="agent-selection"
           label="name"
           placeholder="Select Agent"
@@ -681,6 +687,24 @@ onMounted(() => {
   color: #6b6b6b;
   background: #e8e4e4;
 }
+
+
+.new-tag {
+  color: #c19700;
+}
+
+.open-tag {
+  color: #0042ed;
+}
+
+.solved-tag {
+  color: #f21b1b;
+}
+
+.pending-tag {
+  color: #6b6b6b;
+}
+
 
 ::-webkit-scrollbar {
   width: 10px;
