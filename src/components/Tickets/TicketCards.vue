@@ -259,8 +259,17 @@ const userStats = [
   },
 ];
 
+const submittedFrom = computed(() => {
+  const _separator = 'Submitted from:';
+  const parsed = props.ticketData.description.split(_separator)[1]?.trim();
+  return parsed || '';
+});
 const formatDateString = (date: string, format: string) => {
   return moment(date).format(format);
+};
+
+const formatTicketTime = (date: string) => {
+  return moment(date).fromNow();
 };
 
 const ccUser = ref();
@@ -417,8 +426,13 @@ onMounted(() => {
 
       <div class="subject-date__container">
         <BaseText class="">
-          <span class="text-base font-bold">Created on: </span>
-          {{ new Date(ticketData.created_at) }}</BaseText
+          <span class="text-base font-bold">Created:</span>
+          {{ formatTicketTime(ticketData.created_at) }}</BaseText
+        >
+        <hr />
+        <BaseText>
+          <span class="text-base font-bold"> Submitted From: </span>
+          {{ submittedFrom }}</BaseText
         >
         <hr />
         <BaseText>
