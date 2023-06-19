@@ -289,7 +289,7 @@ async function getCCUser() {
       props.ticketData.custom_fields.find(
         (field) => field.id === 16_781_124_470_797,
       )?.value || null;
-    if (_userId !== null && !_userId.includes('@')) {
+    if (_userId !== null) {
       const _response = await User.api().get(`/users?id__in=${_userId}`, {
         dataKey: 'results',
       });
