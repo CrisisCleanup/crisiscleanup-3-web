@@ -21,7 +21,7 @@ export default defineComponent({
         key: 'nav.admin_event_stream',
       }),
       reactive({
-        key: 'nav.admin_ticket_dashboard',
+        key: 'nav.admin_tickets',
       }),
       reactive({
         key: 'nav.costs',
