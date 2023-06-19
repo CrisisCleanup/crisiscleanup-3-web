@@ -1,6 +1,5 @@
-import process from 'node:process';
 import { test, expect } from '@playwright/test';
-import { testTitleWithTags, getAllTestIds } from './utils';
+import { testTitleWithTags, getAllTestIds, getLoginCredentials } from './utils';
 
 test.describe('LoginPage', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,12 +10,7 @@ test.describe('LoginPage', () => {
   test(
     testTitleWithTags('should login', ['slow', 'primary']),
     async ({ page }) => {
-      const email = process.env.TEST_APP_EMAIL;
-      const password = process.env.TEST_APP_PASSWORD;
-      if (!email || !password) {
-        throw new Error('Cant login. Email or password not defined.');
-      }
-
+      const { email, password } = getLoginCredentials();
       const emailField = page.getByPlaceholder('Email');
       const passwordField = page.getByPlaceholder('Password');
       const loginSubmitButton = page.getByTestId('testLoginButton');
