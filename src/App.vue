@@ -9,6 +9,8 @@ import { DialogWrapper } from 'vue3-promise-dialog';
 import { cachedGet, hash } from './utils/promise';
 import { AuthService } from './services/auth.service';
 import { useProvideZendesk } from '@/hooks';
+import User from '@/models/User';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default defineComponent({
   name: 'App',
@@ -98,6 +100,15 @@ export default defineComponent({
     );
 
     onMounted(async () => {
+      const currentUser = computed(() =>
+        User.find(store.getters['auth/userId']),
+      );
+      watch(currentUser, (newCurrentUser) => {
+        console.log('newcurrent', newCurrentUser);
+        zendesk.config.webWidget.contactForm.fields[0].prefill['*'] =
+          JSON.stringify(newCurrentUser.id);
+      });
+
       if (moment().isAfter(AuthService.getExpiry())) {
         AuthService.removeUser();
       }
@@ -129,6 +140,7 @@ export default defineComponent({
       await getEnums();
     });
 
+    // 360042012811
     // Setup zendesk.
     const zendesk = useProvideZendesk({
       webWidget: {
@@ -142,6 +154,7 @@ export default defineComponent({
         },
       },
     });
+
     // Suppress help form on certain routes.
     const suppressContactForm = computed(
       () => /\/s\/(.*)/gm.exec(route.fullPath) !== null,
