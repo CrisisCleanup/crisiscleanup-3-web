@@ -1,21 +1,11 @@
 <script lang="ts" setup>
 import axios from 'axios';
 import _ from 'lodash';
-import {
-  computed,
-  defineEmits,
-  defineProps,
-  onMounted,
-  ref,
-  withDefaults,
-} from 'vue';
-import BaseText from '@/components/BaseText.vue';
-// import MultiSelect from 'primevue/multiselect'
-import BaseSelect from '@/components/BaseSelect.vue';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
-import AdvancedTicketCards from '@/components/Tickets/AdvancedTicketCards.vue';
-import BaseButton from '@/components/BaseButton.vue';
-import card from '@/components/cards/Card.vue';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import { makeTableColumns } from '@/utils/table';
+import Table from '@/components/Table.vue';
+import Modal from '@/components/Modal.vue';
 
 export interface Macro {
   label: string;
@@ -53,45 +43,45 @@ const axiosInstance = axios.create({
 });
 const userIdsFilter = ref();
 
-const usersAndTicketsMerged = ref();
 const usersRelatedToTickets = ref();
 const requesterIdList = ref();
 const ticketTotals = ref();
 const isLoading = ref(false);
-const macros = ref([]);
 const tickets = ref([]);
-const selectedFilters = ref([]);
-const advancedTicketInfo = ref<boolean>(false);
-const changeCardView = () => {
-  advancedTicketInfo.value = !advancedTicketInfo.value;
-};
-
-const filters = ref([
-  {
-    label: 'Ticket Status',
-    statuses: [
-      { label: 'New', value: 'New' },
-      { label: 'Open', value: 'Open' },
-      { label: 'Pending', value: 'Pending' },
-      { label: 'Solved', value: 'Solved' },
-    ],
-  },
-  {
-    label: 'Assigned Agents',
-    agents: [
-      { label: 'Triston', value: 'Triston' },
-      { label: 'Braden', value: 'Braden' },
-      { label: 'Ross', value: 'Ross' },
-      { label: 'Deep', value: 'Deep' },
-      { label: 'Angelo', value: 'Angelo' },
-    ],
-  },
+// const selectedFilters = ref([]);
+const { currentUser } = useCurrentUser();
+const agents = ref([
+  { id: 411_677_450_351, name: 'Triston Lewis' },
+  { id: 1, name: 'Aarron Titus' },
+  { id: 2, name: 'Ross Arroyo' },
+  { id: 3, name: 'Gina Newby' },
 ]);
+// const filters = ref([
+//   {
+//     label: 'Ticket Status',
+//     statuses: [
+//       { label: 'New', value: 'New' },
+//       { label: 'Open', value: 'Open' },
+//       { label: 'Pending', value: 'Pending' },
+//       { label: 'Solved', value: 'Solved' },
+//     ],
+//   },
+//   {
+//     label: 'Assigned Agents',
+//     agents: [
+//       { label: 'Triston', value: 'Triston' },
+//       { label: 'Braden', value: 'Braden' },
+//       { label: 'Ross', value: 'Ross' },
+//       { label: 'Deep', value: 'Deep' },
+//       { label: 'Angelo', value: 'Angelo' },
+//     ],
+//   },
+// ]);
 
-const selectedTicketStatusFilter = ref('');
-const changeStatusFilter = (status: string) => {
-  selectedTicketStatusFilter.value = status;
-};
+// const selectedTicketStatusFilter = ref('');
+// const changeStatusFilter = (status: string) => {
+//   selectedTicketStatusFilter.value = status;
+// };
 
 const parseUserIdsFromTickets = (tickets) => {
   try {
@@ -106,14 +96,9 @@ const parseUserIdsFromTickets = (tickets) => {
 
 const getUsersRelatedToTickets = () => {
   axiosInstance
-    .get(`/users?${userIdsFilter.value}`, {
-      param: {
-        user_ids: [34_343, 343_434, 3434],
-      },
-    })
+    .get(`/users?${userIdsFilter.value}`, {})
     .then((response) => {
       usersRelatedToTickets.value = response;
-      console.log(usersRelatedToTickets.value);
     })
     .catch((error) => {
       console.error('Error fetching tickets:', error);
@@ -140,137 +125,161 @@ const fetchTickets = () => {
     });
 };
 
-const ticketStatusClasses = {
-  '': 'bg-purple-200',
-  new: 'border border-primary-light border-2',
-  open: 'border border-primary-light border-2',
-  pending: 'border border-primary-light border-2',
+// const ticketStatusClasses = {
+//   '': 'bg-purple-200',
+//   new: 'border border-primary-light border-2',
+//   open: 'border border-primary-light border-2',
+//   pending: 'border border-primary-light border-2',
+// };
+
+// const getStatusFilterClass = (status) => {
+//   if (selectedTicketStatusFilter.value === status) {
+//     return ticketStatusClasses[selectedTicketStatusFilter.value];
+//   }
+//
+//   return '';
+// };
+
+// const computedTicketData = computed(() => {
+// const _allowed = ref(['status']);
+
+//   const raw = {
+//     status: selectedTicketStatusFilter.value,
+//   };
+//
+//   const filtered = Object.keys(raw)
+//     .filter((key) => _allowed.value.includes(key))
+//     .reduce((obj, key) => {
+//       obj[key] = raw[key];
+//       return obj;
+//     }, {});
+//
+//   if (selectedTicketStatusFilter.value !== '') {
+//     return _.filter(tickets.value, filtered);
+//   }
+//
+//   return tickets.value;
+// });
+
+const columns = makeTableColumns([
+  ['id', '5%', 'Id'],
+  ['created_at', '10%', 'Created'],
+  ['account_type', '5%', 'Account Type'],
+  ['roles', '5%', 'Roles'],
+  ['app', '5%', 'App'],
+  ['requester_id', '15%', 'Requester Id'],
+  ['description', '45%', 'Description'],
+  ['advanced_ticket', '5%', 'Advanced Ticket'],
+  ['zendesk', '5%', 'Zendesk'],
+]);
+
+const activeTicket = ref();
+const ticketModal = ref();
+const showTicketModal = (ticket) => {
+  ticketModal.value = !ticketModal.value;
+  activeTicket.value = ticket;
 };
-
-const getStatusFilterClass = (status) => {
-  if (selectedTicketStatusFilter.value === status) {
-    return ticketStatusClasses[selectedTicketStatusFilter.value];
-  }
-
-  return '';
-};
-
-const allowed = ref(['status']);
-
-const computedTicketData = computed(() => {
-  const raw = {
-    status: selectedTicketStatusFilter.value,
-  };
-
-  const filtered = Object.keys(raw)
-    .filter((key) => allowed.value.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = raw[key];
-      return obj;
-    }, {});
-
-  if (selectedTicketStatusFilter.value !== '') {
-    return _.filter(tickets.value, filtered);
-  }
-
-  return tickets.value;
-});
 
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
-  // window.zESettings.contactForm.fields = [
-  //   { id: '360042012811', prefill: { '*': `test this` } },
-  // ]
   isLoading.value = false;
 });
 </script>
 
 <template>
-  <div class="tickets__statusAndFilter">
-    <div v-if="tickets" class="bg-purple-300 rounded-xl shadow-md">
-      <div class="text-white grid grid-cols-5 p-2">
-        <BaseText class="col-span-4"
-          >Total Tickets: {{ tickets.data?.results?.length }}</BaseText
-        >
-        <div
-          :class="
-            selectedTicketStatusFilter === '' ? 'bg-purple-200' : 'bg-white'
-          "
-          class="rounded-md text-center text-black"
-          @click="changeStatusFilter('')"
-        >
-          All
-        </div>
-      </div>
-      <div v-if="ticketTotals" class="grid grid-cols-3 text-center">
-        <div
-          :class="[
-            getStatusFilterClass('new'),
-            'new rounded-bl-xl flex flex-col',
-          ]"
-          @click="changeStatusFilter('new')"
-        >
-          New <BaseText>{{ ticketTotals?.new || 0 }}</BaseText>
-        </div>
-        <div
-          :class="[getStatusFilterClass('open'), 'open flex flex-col']"
-          @click="changeStatusFilter('open')"
-        >
-          Open <BaseText>{{ ticketTotals?.open || 0 }}</BaseText>
-        </div>
-        <div
-          :class="[getStatusFilterClass('pending'), 'pending flex flex-col']"
-          @click="changeStatusFilter('pending')"
-        >
-          Pending <BaseText>{{ ticketTotals?.pending || 0 }}</BaseText>
-        </div>
-      </div>
-    </div>
-    <BaseSelect
-      v-model="selectedFilters"
-      :options="filters"
-      display="chip"
-      option-label="label"
-      option-group-label="label"
-      option-group-children="items"
-      placeholder="Select a Filter"
-    />
+  <Table
+    :columns="columns"
+    :data="tickets"
+    @row-click="(v) => showTicketModal(v)"
+  >
+    <template #zendesk="slotProps">
+      <base-link
+        :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
+        text-variant="bodysm"
+        class="px-2"
+        target="_blank"
+        >Link</base-link
+      >
+    </template>
+  </Table>
+  <!--  <AdminTicketDashboard  />-->
 
-    <BaseButton
-      :action="() => changeCardView()"
-      class="md:col-span-4 bg-primary-light text-white"
-      size="md"
-    >
-      <template #default>{{
-        advancedTicketInfo ? 'Advanced' : 'Classic'
-      }}</template>
-    </BaseButton>
-  </div>
+  <!--  <div class="tickets__statusAndFilter">-->
+  <!--    <div v-if="tickets" class="bg-primary-light rounded-xl shadow-md">-->
+  <!--      <div class="text-white grid grid-cols-5 p-2">-->
+  <!--        <BaseText class="col-span-4"-->
+  <!--          >Total Tickets: {{ tickets.data?.results?.length }}</BaseText-->
+  <!--        >-->
+  <!--        <div-->
+  <!--          :class="-->
+  <!--            selectedTicketStatusFilter === '' ? 'bg-primary-dark' : 'bg-white'-->
+  <!--          "-->
+  <!--          class="rounded-md text-center text-black"-->
+  <!--          @click="changeStatusFilter('')"-->
+  <!--        >-->
+  <!--          All-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div v-if="ticketTotals" class="grid grid-cols-3 text-center">-->
+  <!--        <div-->
+  <!--          :class="[-->
+  <!--            getStatusFilterClass('new'),-->
+  <!--            'new rounded-bl-xl flex flex-col',-->
+  <!--          ]"-->
+  <!--          @click="changeStatusFilter('new')"-->
+  <!--        >-->
+  <!--          New <BaseText>{{ ticketTotals?.new || 0 }}</BaseText>-->
+  <!--        </div>-->
+  <!--        <div-->
+  <!--          :class="[getStatusFilterClass('open'), 'open flex flex-col']"-->
+  <!--          @click="changeStatusFilter('open')"-->
+  <!--        >-->
+  <!--          Open <BaseText>{{ ticketTotals?.open || 0 }}</BaseText>-->
+  <!--        </div>-->
+  <!--        <div-->
+  <!--          :class="[getStatusFilterClass('pending'), 'pending flex flex-col']"-->
+  <!--          @click="changeStatusFilter('pending')"-->
+  <!--        >-->
+  <!--          Pending <BaseText>{{ ticketTotals?.pending || 0 }}</BaseText>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <BaseSelect-->
+  <!--      v-model="selectedFilters"-->
+  <!--      :options="filters"-->
+  <!--      display="chip"-->
+  <!--      option-label="label"-->
+  <!--      option-group-label="label"-->
+  <!--      option-group-children="items"-->
+  <!--      placeholder="Select a Filter"-->
+  <!--    />-->
+  <!--  </div>-->
 
-  <div v-show="tickets && !advancedTicketInfo" class="tickets__container">
-    <div v-for="(item, idx) in computedTicketData" :key="`${item.id}-${idx}`">
+  <modal
+    v-if="ticketModal"
+    closeable
+    :title="'Ticket: ' + activeTicket.id"
+    class="p-10"
+    @close="showTicketModal()"
+  >
+    <template #default>
       <TicketCards
-        v-if="item.description && usersRelatedToTickets"
-        :key="`${item.id}-${idx}`"
+        v-if="
+          activeTicket.description &&
+          usersRelatedToTickets &&
+          currentUser &&
+          agents
+        "
+        :key="`${activeTicket.id}`"
         :users="usersRelatedToTickets.data"
-        :ticket-data="item"
+        :current-user="currentUser"
+        :agents="agents"
+        :ticket-data="activeTicket"
         @re-fetch-ticket="fetchTickets"
       />
-    </div>
-  </div>
-
-  <!--  <div v-show="tickets && advancedTicketInfo" class="tickets__container-advanced">-->
-  <!--    <div v-for="(item, idx) in computedTicketData" :key="`${item.id}-${idx}`">-->
-  <!--    <AdvancedTicketCards-->
-  <!--      v-if="item.description && usersRelatedToTickets"-->
-  <!--      :key="`${item.id}-${idx}`"-->
-  <!--      :users="usersRelatedToTickets.data"-->
-  <!--      :ticket-data="item"-->
-  <!--      @re-fetch-ticket="fetchTickets"-->
-  <!--    />-->
-  <!--    </div>-->
-  <!--  </div>-->
+    </template>
+  </modal>
 </template>
 
 <style lang="postcss" scoped>
@@ -280,6 +289,7 @@ onMounted(() => {
 .tickets__container {
   @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
 }
+
 .tickets__container-advanced {
   @apply grid grid-cols-1;
 }

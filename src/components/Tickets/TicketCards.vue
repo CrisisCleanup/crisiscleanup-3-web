@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 import moment from 'moment';
 import Table from '../Table.vue';
 import Modal from '@/components/Modal.vue';
@@ -14,27 +15,34 @@ import BaseSelect from '@/components/BaseSelect.vue';
 const props = defineProps({
   ticketData: {
     type: Object,
-    default: null,
+    default: () => null,
   },
   users: {
     type: Array,
-  },
-  rawTickets: {
-    type: Array,
+    default: () => [],
   },
   agents: {
     type: Array,
+    default: () => [],
   },
   currentUser: {
     type: Object,
+    default: () => null,
   },
 });
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
-const emit = defineEmits<{ (e: 'reFetchTicket'): void }>();
-const store = useStore();
+// const emit = defineEmits<{ (e: 'reFetchTicket'): void }>();
+// const store = useStore();
+const features = {
+  userType: false,
+  loginAs: false,
+  ccUserInfo: true,
+  events: false,
+  githubIssue: false,
+};
 const userMap = ref({});
 const userEmailMap = ref({});
 const expanded = ref(false);
@@ -46,8 +54,7 @@ const comments = ref([]);
 const ticketReply = ref('');
 const selectedAgent = ref('');
 const agentList = ref([]);
-const agentDropdown = ref([]);
-const customerList = ref([]);
+// const agentDropdown = ref([]);
 const macros = ref([
   {
     id: 1,
@@ -99,7 +106,7 @@ const macroColumns = [
   },
 ];
 const macroModalVisibility = ref(false);
-const selectedMacroId = ref();
+// const selectedMacroId = ref();
 
 const processedUsers = () => {
   if (Array.isArray(props.users)) {
@@ -125,8 +132,8 @@ const assignedUser = computed(() => {
   return _.find(agentList.value, { id: props.ticketData?.assignee_id });
 });
 const assignedTo = computed(() => {
-  return assignedUser.value ? assignedUser.value.name : 'None'
-})
+  return assignedUser.value ? assignedUser.value.name : 'None';
+});
 
 const replyToTicket = (replyStatus: string) => {
   axiosInstance
@@ -139,7 +146,7 @@ const replyToTicket = (replyStatus: string) => {
         },
       },
     })
-    .then((response: any) => {
+    .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
         // toast.success(
         // 	`Reply Successfull, Ticket Status Changed to ${replyStatus}`
@@ -148,8 +155,9 @@ const replyToTicket = (replyStatus: string) => {
 
       router.go();
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       // toast.error('Reply unsuccessful', e)
+      console.log(error);
     });
 };
 
@@ -160,7 +168,7 @@ const reAssignTicket = () => {
         assignee_id: _.find(agentList.value, { name: selectedAgent.value }).id,
       },
     })
-    .then((response: any) => {
+    .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
         // toast.success('Successfully reassigned')
         setTimeout(() => {
@@ -168,8 +176,9 @@ const reAssignTicket = () => {
         }, 2000); // Timeout to account for zendesk db update
       }
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       // toast.error('Reply unsuccessful', e)
+      console.log(error);
     });
 };
 
@@ -183,28 +192,28 @@ const getCurrentLoggedInUser = () => {
   )?.id;
 };
 
-const getAgentList = () => {
-  axiosInstance
-    .get(`/users`, {
-      params: {
-        role: 'admin',
-      },
-    })
-    .then((response: any) => {
-      for (let i = 0; i < response.data.users.length; i++) {
-        agentList.value.push({
-          id: response.data.users[i].id,
-          name: response.data.users[i].name,
-        });
-        agentDropdown.value.push(response.data.users[i].name);
-      }
-    });
-};
+// const getAgentList = () => {
+//   axiosInstance
+//     .get(`/users`, {
+//       params: {
+//         role: 'admin',
+//       },
+//     })
+//     .then((response: any) => {
+//       for (let i = 0; i < response.data.users.length; i++) {
+//         agentList.value.push({
+//           id: response.data.users[i].id,
+//           name: response.data.users[i].name,
+//         });
+//         agentDropdown.value.push(response.data.users[i].name);
+//       }
+//     });
+// };
 
 const getComments = () => {
   axiosInstance
     .get(`/tickets/${props.ticketData.id}/comments`, {})
-    .then((response: any) => {
+    .then((response: AxiosResponse<unknown>) => {
       comments.value = response.data.comments;
     });
 };
@@ -216,24 +225,26 @@ const messageHighlights = (item) => {
 
   return 'bg-gray-400';
 };
-const eventsModal = ref(false)
+
+const eventsModal = ref(false);
 const showEventsModal = () => {
-  eventsModal.value = !eventsModal.value
-}
+  eventsModal.value = !eventsModal.value;
+};
+
 const showMacroModal = () => {
   macroModalVisibility.value = !macroModalVisibility.value;
 };
 
-const selectedMacro = computed(() => {
-  return macros.value.find((m) => {
-    return m.id === selectedMacroId.value;
-  });
-});
+// const selectedMacro = computed(() => {
+//   return macros.value.find((m) => {
+//     return m.id === selectedMacroId.value;
+//   });
+// });
 
 const executeMacro = (macro) => {
   showMacroModal();
-  ticketReply.value = macro.template
-}
+  ticketReply.value = macro.template;
+};
 
 const formatKey = (key: string) => {
   return key
@@ -278,7 +289,7 @@ async function getCCUser() {
       props.ticketData.custom_fields.find(
         (field) => field.id === 360_042_012_811,
       )?.value || null;
-    if (_userId !== null) {
+    if (_userId !== null && !_userId.includes('@')) {
       const _response = await User.api().get(`/users?id__in=${_userId}`, {
         dataKey: 'results',
       });
@@ -289,17 +300,18 @@ async function getCCUser() {
         roles: ccUser.value.roles ?? [],
         email: ccUser.value.email ?? '',
         phone: ccUser.value.mobile ?? '',
-        ccAge: formatDateString(ccUser.value.accepted_terms_timestamp, 'MM/DD/YYYY, h:mm:ss A'),
-        os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}` ?? '',
-        browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}` ?? '',
+        ccAge: formatDateString(
+          ccUser.value.accepted_terms_timestamp,
+          'MM/DD/YYYY, h:mm:ss A',
+        ),
+        os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
+        browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
       };
-
     }
   } catch (error) {
     console.log(error);
   }
 }
-
 
 // async function loginAs(userId: string) {
 //   console.log('waiting on merged user data to get user id')
@@ -313,15 +325,14 @@ async function getCCUser() {
 //   window.location.replace('/');
 // }
 
-
 const isUserType = computed(() => {
-  const _usertypes = [
+  const _userTypes = [
     { name: 'User', color: '#3498DB' },
     { name: 'Ghost', color: '#F39C12' },
     { name: 'Survivor', color: '#27AE60' },
   ];
 
-  return _usertypes.map((type) => ({
+  return _userTypes.map((type) => ({
     name: type.name,
     color: type.color,
   }));
@@ -358,17 +369,21 @@ onMounted(() => {
             : userMapFunction(ticketData.requester_id) || ticketData.name
         }}</BaseText>
       </div>
-      <div
-        v-for="type in isUserType"
-        :key="type.name"
-        :style="`border-color: ${type.color}; color: ${type.color}`"
-        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
-      >
-        {{ type.name }}
+      <div v-if="features.userType">
+        <div
+          v-for="type in isUserType"
+          :key="type.name"
+          :style="`border-color: ${type.color}; color: ${type.color}`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        >
+          {{ type.name }}
+        </div>
       </div>
-      <hr class="border-gray-400" />
 
-      <div class="flex items-center justify-center">
+      <div
+        v-if="features.loginAs"
+        class="flex items-center justify-center border-y-2 border-gray-400"
+      >
         <BaseButton
           :action="() => loginAs()"
           text="Login As"
@@ -376,22 +391,26 @@ onMounted(() => {
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
       </div>
-      <hr class="border-gray-400" />
-      <div
-        v-for="stats in userStats"
-        :key="stats.org"
-        class="info flex flex-col m-4"
-      >
-        <BaseText v-for="(value, key) in stats" :key="key">
-          <template v-if="!value" #default><span></span></template>
-          <template v-else #default>
-            <span class="font-bold text-xl">{{ formatKey(key) }}: </span>
-            <span class="text-lg">{{ value }}</span>
-          </template>
-        </BaseText>
+      <div v-if="features.ccUserInfo">
+        <div
+          v-for="stats in userStats"
+          :key="stats.org"
+          class="info flex flex-col m-4"
+        >
+          <BaseText v-for="(value, key) in stats" :key="key">
+            <template v-if="!value" #default><span></span></template>
+            <template v-else #default>
+              <span class="font-bold text-xl">{{ formatKey(key) }}: </span>
+              <span class="text-lg">{{ value }}</span>
+            </template>
+          </BaseText>
+        </div>
       </div>
-      <hr class="border-gray-400" />
-      <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
+
+      <div
+        v-if="features.events"
+        class="events m-2 text-xs border p-2 flex flex-col gap-2"
+      >
         <BaseText class="text-center">Recent Events:</BaseText>
         <div>
           <span class="underline text-primary-light">D W</span> from Crisis
@@ -402,7 +421,12 @@ onMounted(() => {
           Cleanup User
           <span class="font-bold">Create Case W774 in Hurricane Nicole</span>
         </div>
-        <BaseButton :action="()=> showEventsModal()" text="More Events" variant="primary" class="p-1 rounded-md"/>
+        <BaseButton
+          :action="() => showEventsModal()"
+          text="More Events"
+          variant="primary"
+          class="p-1 rounded-md"
+        />
       </div>
       <modal
         v-if="eventsModal"
@@ -431,10 +455,12 @@ onMounted(() => {
           </BaseText>
         </div>
         <BaseButton
+          v-if="features.githubIssue"
           action=""
           class="border border-black rounded-md font-bold"
           text="Create Github Issue"
         />
+        <span v-else></span>
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
@@ -515,25 +541,24 @@ onMounted(() => {
           />
           <div class="row-span-4 flex justify-center items-center">
             <BaseButton
-              class="rounded-md mx-2 py-4 "
+              class="rounded-md mx-2 py-4"
               :action="showMacroModal"
               text="Apply Macro"
               variant="primary"
             />
           </div>
-
         </div>
 
-<!--        <BaseSelect-->
-<!--          class="my-2"-->
-<!--          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"-->
-<!--          placeholder="Apply Macro"-->
-<!--          :options="macros"-->
-<!--          :model-value="selectedMacroId"-->
-<!--          item-key="id"-->
-<!--          label="name"-->
-<!--          @update:model-value="(v) => (selectedMacroId = v)"-->
-<!--        />-->
+        <!--        <BaseSelect-->
+        <!--          class="my-2"-->
+        <!--          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"-->
+        <!--          placeholder="Apply Macro"-->
+        <!--          :options="macros"-->
+        <!--          :model-value="selectedMacroId"-->
+        <!--          item-key="id"-->
+        <!--          label="name"-->
+        <!--          @update:model-value="(v) => (selectedMacroId = v)"-->
+        <!--        />-->
         <modal
           v-if="macroModalVisibility"
           closeable
@@ -554,12 +579,9 @@ onMounted(() => {
       <div class="assigned-to__container">
         <div class="header">
           <!--        <img src="" class="w-10 h-10 rounded-md" />-->
-          <BaseText
-            variant="h1"
+          <BaseText variant="h1"
             >Assigned To:
-            <span class="font-bold text-xl">{{
-              assignedTo
-              }}</span></BaseText
+            <span class="font-bold text-xl">{{ assignedTo }}</span></BaseText
           >
         </div>
         <BaseSelect
@@ -571,7 +593,6 @@ onMounted(() => {
           item-key="id"
           :options="agents"
           @update:model-value="(v) => (selectedAgent = v)"
-
         />
 
         <BaseButton
@@ -604,7 +625,7 @@ onMounted(() => {
 
 <style scoped>
 .ticket__container {
-  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12 ;
+  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12;
 
   .cc__user-info {
     @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
@@ -696,7 +717,6 @@ onMounted(() => {
   background: #e8e4e4;
 }
 
-
 .new-tag {
   color: #c19700;
 }
@@ -712,7 +732,6 @@ onMounted(() => {
 .pending-tag {
   color: #6b6b6b;
 }
-
 
 ::-webkit-scrollbar {
   width: 10px;
