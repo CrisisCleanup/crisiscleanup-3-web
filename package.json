@@ -27,11 +27,13 @@
     "repair:clean-modules": "pnpm dlx rimraf node_modules",
     "repair:prune-pnpm": "pnpm run clean && pnpm run repair:clean-modules && pnpm store prune",
     "pw": "pnpm exec playwright",
-    "e2e:install": "playwright install --with-deps",
-    "e2e:gen": "playwright codegen",
+    "e2e:install": "pnpm run pw install --with-deps",
+    "e2e:report": "pnpm run pw show-report",
+    "e2e:gen": "pnpm run pw codegen",
     "test": "vitest",
     "test:unit": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "pnpm run pw test",
+    "test:e2e:ui": "pnpm run pw test --ui",
     "test:cov": "vitest run --coverage"
   },
   "dependencies": {
