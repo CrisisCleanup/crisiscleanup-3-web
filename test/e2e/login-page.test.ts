@@ -30,6 +30,10 @@ test.describe('LoginPage', () => {
         'testAwsLink',
         'testAwsImgIcon',
       ]);
+      await test.info().attach('login-page-screenshot', {
+        body: await page.screenshot(),
+        contentType: 'image/png',
+      });
     },
   );
 });
