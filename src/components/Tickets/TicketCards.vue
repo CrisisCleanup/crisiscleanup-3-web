@@ -282,12 +282,12 @@ const formatTicketTime = (date: string) => {
 
 const ccUser = ref();
 async function getCCUser() {
-  // 16781124470797 == ccid
-  // 360042012811 = cc email
+  // 16781124470797 == ccid form field
+  // 360042012811 = cc email form field
   try {
     const _userId =
       props.ticketData.custom_fields.find(
-        (field) => field.id === 360_042_012_811,
+        (field) => field.id === 16_781_124_470_797,
       )?.value || null;
     if (_userId !== null && !_userId.includes('@')) {
       const _response = await User.api().get(`/users?id__in=${_userId}`, {
