@@ -1,3 +1,4 @@
+import process from 'node:process';
 import type { Page } from '@playwright/test';
 import { z } from 'zod';
 
@@ -13,6 +14,12 @@ export const TestTags = {
 } as const;
 export const TestTagEnum = z.nativeEnum(TestTags);
 export type TestTag = z.infer<typeof TestTagEnum>;
+
+export const LoginCredentialSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+export type LoginCredential = z.infer<typeof LoginCredentialSchema>;
 
 /**
  * Generate test title with given tags
@@ -46,6 +53,27 @@ export function testTitleWithTags(title: string, tags: TestTag[]) {
   const testTags = tags.map((t) => `@${t}`);
   const tagsString = testTags.length > 0 ? ` (${testTags.join(',')})` : '';
   return `${title}${tagsString}`;
+}
+
+/**
+ * Get login credentials for app.
+ * Uses TEST_APP_EMAIL & TEST_APP_PASSWORD
+ */
+export function getLoginCredentials(): LoginCredential {
+  const email = process.env.TEST_APP_EMAIL!;
+  const password = process.env.TEST_APP_PASSWORD!;
+  if (!email || !password) {
+    throw new Error(`
+      Cannot find login credentials.
+      TEST_APP_EMAIL: ${email}
+      TEST_APP_PASSWORD: ${password}
+    `);
+  }
+
+  return LoginCredentialSchema.parse({
+    email,
+    password,
+  });
 }
 
 /**
