@@ -262,7 +262,21 @@ onMounted(() => {
       {{ slotProps.item.user.ccu_user?.roles ?? null }}
     </template>
     <template #account_type="slotProps">
-      {{ slotProps.item.user.ccu_user ? 'USER' : 'OTHER' }}
+      <div
+        v-if="slotProps.item.user.ccu_user"
+        :style="`border-color: #3498DB; color: #3498DB`"
+        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+      >
+        User
+      </div>
+
+      <div
+        v-else
+        :style="`border-color: #27AE60; color: #27AE60`"
+        class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+      >
+        Survivor
+      </div>
     </template>
   </Table>
   <!--  <AdminTicketDashboard  />-->
