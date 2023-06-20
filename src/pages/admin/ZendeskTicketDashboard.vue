@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import axios from 'axios';
 import _ from 'lodash';
+import moment from 'moment';
 import users from '../organization/Users.vue';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -188,12 +189,8 @@ const processedUsers = () => {
   } else console.log('props.users is not an array');
 };
 
-const userMapFunction = (id: number) => {
-  return userMap.value[id];
-};
-
-const userEmailMapFunction = (id: number) => {
-  return userEmailMap.value[id];
+const formatTicketTime = (date: string) => {
+  return moment(date).fromNow();
 };
 
 const ticketsWithUsers = ref([]);
@@ -253,9 +250,12 @@ onMounted(() => {
         :action="() => showTicketModal(slotProps.item)"
         text="open"
         variant="primary"
-        class="p-2"
+        class="p-2 rounded-md"
       />
     </template>
+    <template #created_at="slotProps">{{
+      formatTicketTime(slotProps.item.created_at)
+    }}</template>
     <template #requester="slotProps">
       {{
         slotProps.item.user.ccu_user

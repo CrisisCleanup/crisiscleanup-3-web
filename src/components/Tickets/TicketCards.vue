@@ -190,7 +190,7 @@ const getComments = () => {
 
 const messageHighlights = (item) => {
   if (item.author_id === currentUserID.value) {
-    return 'bg-primary-light text-white';
+    return 'text-black border shadow-md';
   }
 
   return 'bg-gray-400';
@@ -288,6 +288,12 @@ const isUserType = computed(() => {
   }));
 });
 
+const removeSubmittedFrom = (body) => {
+  const delimiter = '------------------';
+  const parts = body.split(delimiter);
+  return parts[0].trim();
+};
+
 onMounted(() => {
   isLoading.value = true;
   getCurrentLoggedInUser();
@@ -299,8 +305,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="ticket__container">
-    <div class="cc__user-info">
+  <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
+    <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
         <img
           alt="picture of user"
@@ -449,7 +455,7 @@ onMounted(() => {
             {{ zendeskUser.name }}
           </BaseText>
           <br />
-          <BaseText>{{ item.body }}</BaseText>
+          <BaseText>{{ removeSubmittedFrom(item.body) }}</BaseText>
 
           <div v-if="item.attachments[0]" class="attachments-container">
             <span class="attachments__header">Attachments</span>
@@ -479,7 +485,7 @@ onMounted(() => {
           />
           <div class="row-span-4 flex justify-center items-center">
             <BaseButton
-              class="rounded-md mx-2 py-4"
+              class="rounded-md mx-2 py-4 p-2"
               :action="showMacroModal"
               text="Apply Macro"
               variant="primary"
@@ -552,7 +558,7 @@ onMounted(() => {
 
 <style scoped>
 .ticket__container {
-  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12;
+  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid;
 
   .cc__user-info {
     @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
