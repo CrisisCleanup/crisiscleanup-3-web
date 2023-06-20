@@ -55,8 +55,9 @@ const { currentUser } = useCurrentUser();
 const agents = ref([
   { id: 411_677_450_351, name: 'Triston Lewis' },
   { id: 484_643_688, name: 'Aarron Titus' },
-  { id: 2, name: 'Ross Arroyo' },
-  { id: 3, name: 'Gina Newby' },
+  { id: 114_709_872_451, name: 'Ross Arroyo' },
+  { id: 403_645_788_712, name: 'Gina Newby' },
+  { id: 401_921_331_392, name: 'Angelo Pablo' },
 ]);
 // const filters = ref([
 //   {
@@ -150,14 +151,14 @@ const getUsersRelatedToTickets = () => {
 // });
 
 const columns = makeTableColumns([
-  ['id', '5%', 'Id'],
-  ['created_at', '10%', 'Created'],
+  ['status', '8%', 'Status'],
+  ['created_at', '5%', 'Created'],
   ['account_type', '8%', 'Account Type'],
   ['roles', '8%', 'Roles'],
   ['app', '6%', 'App'],
   ['requester', '8%', 'Requester'],
   ['description', '45%', 'Description'],
-  ['advanced_ticket', '5%', 'Advanced Ticket'],
+  ['advanced_ticket', '7%', 'Advanced Ticket'],
   ['zendesk', '5%', 'Zendesk'],
 ]);
 
@@ -216,6 +217,16 @@ const fetchTickets = () => {
     });
 };
 
+const removeSubmittedFrom = (body) => {
+  const delimiter = '------------------';
+  const parts = body.split(delimiter);
+  return parts[0].trim();
+};
+
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -229,38 +240,15 @@ onMounted(() => {
     :columns="columns"
     :data="ticketsWithUsers"
   >
-    <template #zendesk="slotProps">
-      <base-link
-        :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
-        text-variant="bodysm"
-        class="px-2"
-        target="_blank"
-        >Link</base-link
-      >
-    </template>
-    <template #advanced_ticket="slotProps">
-      <BaseButton
-        :action="() => showTicketModal(slotProps.item)"
-        text="open"
-        variant="primary"
-        class="p-2 rounded-md"
-      />
+    <template #status="slotProps">
+      <div :class="[slotProps.item.status + '-tag', 'ticket-status text-xl']">
+        {{ capitalizeFirstLetter(slotProps.item.status) }}
+      </div>
     </template>
     <template #created_at="slotProps">{{
       formatTicketTime(slotProps.item.created_at)
     }}</template>
-    <template #requester="slotProps">
-      {{
-        slotProps.item.user.ccu_user
-          ? slotProps.item.user.ccu_user?.first_name +
-            ' ' +
-            slotProps.item.user.ccu_user?.last_name
-          : slotProps.item.user.name
-      }}
-    </template>
-    <template #roles="slotProps">
-      {{ slotProps.item.user.ccu_user?.roles ?? null }}
-    </template>
+
     <template #account_type="slotProps">
       <div
         v-if="slotProps.item.user.ccu_user"
@@ -277,6 +265,43 @@ onMounted(() => {
       >
         Survivor
       </div>
+    </template>
+
+    <template #roles="slotProps">
+      {{ slotProps.item.user.ccu_user?.roles ?? null }}
+    </template>
+
+    <template #requester="slotProps">
+      {{
+        slotProps.item.user.ccu_user
+          ? slotProps.item.user.ccu_user?.first_name +
+            ' ' +
+            slotProps.item.user.ccu_user?.last_name
+          : slotProps.item.user.name
+      }}
+    </template>
+
+    <template #description="slotProps">{{
+      removeSubmittedFrom(slotProps.item.description)
+    }}</template>
+
+    <template #advanced_ticket="slotProps">
+      <BaseButton
+        :action="() => showTicketModal(slotProps.item)"
+        text="open"
+        variant="primary"
+        class="p-2 rounded-md"
+      />
+    </template>
+
+    <template #zendesk="slotProps">
+      <base-link
+        :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
+        text-variant="bodysm"
+        class="px-2"
+        target="_blank"
+        >Link</base-link
+      >
     </template>
   </Table>
   <!--  <AdminTicketDashboard  />-->
@@ -386,5 +411,29 @@ onMounted(() => {
 .pending {
   color: #6b6b6b;
   background: #e8e4e4;
+}
+
+.new-tag {
+  color: #c19700;
+  border: 2px solid #c19700;
+  @apply p-2 rounded-md;
+}
+
+.open-tag {
+  color: #0042ed;
+  border: 2px solid #0042ed;
+  @apply p-2 rounded-md;
+}
+
+.solved-tag {
+  color: #f21b1b;
+  border: 2px solid #f21b1b;
+  @apply p-2 rounded-md;
+}
+
+.pending-tag {
+  color: #6b6b6b;
+  border: 2px solid #6b6b6b;
+  @apply p-2 rounded-md;
 }
 </style>
