@@ -2,16 +2,16 @@
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
-// import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 import moment from 'moment';
 import Table from '../Table.vue';
 import Modal from '@/components/Modal.vue';
 import BaseText from '@/components/BaseText.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseInput from '@/components/BaseInput.vue';
-import User from '@/models/User';
 import BaseSelect from '@/components/BaseSelect.vue';
 
+const store = useStore();
 const props = defineProps({
   ticketData: {
     type: Object,
@@ -32,7 +32,7 @@ const axiosInstance = axios.create({
 });
 const features = {
   userType: false,
-  loginAs: false,
+  loginAs: true,
   ccUserInfo: true,
   events: false,
   githubIssue: false,
@@ -157,7 +157,7 @@ const capitalizeFirstLetter = (string: string) => {
 };
 
 const getCurrentLoggedInUser = () => {
-  currentUserID.value = props.agents.find(
+  currentUserID.value = props.agents.some(
     (agent) => agent.name === props.currentUser.full_name,
   )?.id;
 };
@@ -191,6 +191,15 @@ const getComments = () => {
 const messageHighlights = (item) => {
   if (item.author_id === currentUserID.value) {
     return 'text-black border shadow-md';
+  }
+
+  if (
+    props.agents.some(
+      (agent) =>
+        agent.id === item.author_id && agent.id !== currentUserID.value,
+    )
+  ) {
+    return 'text-black border shadow-md'; // No specific class for the condition, returning an empty string
   }
 
   return 'bg-gray-400';
@@ -236,11 +245,8 @@ const submittedFrom = computed(() => {
   const parsed = props.ticketData.description.split(_separator)[1]?.trim();
   return parsed || '';
 });
-const formatDateString = (date: string, format: string) => {
-  return moment(date).format(format);
-};
 
-const formatTicketTime = (date: string) => {
+const formatTimeFromNow = (date: string) => {
   return moment(date).fromNow();
 };
 
@@ -248,32 +254,29 @@ const ccUser = ref(props.ticketData.user.ccu_user);
 const zendeskUser = ref(props.ticketData.user);
 async function getCcuStats() {
   // 16781124470797 == ccid form field
-  // 360042012811 = cc email form field
-  userStats[0] = {
-    org: ccUser.value.organization?.name ?? '',
-    roles: ccUser.value.roles ?? [],
-    email: ccUser.value.email ?? '',
-    phone: ccUser.value.mobile ?? '',
-    ccAge: formatDateString(
-      ccUser.value.accepted_terms_timestamp,
-      'MM/DD/YYYY, h:mm:ss A',
-    ),
-    // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
-    // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
-  };
+  if (ccUser.value) {
+    userStats[0] = {
+      org: ccUser.value.organization?.name ?? '',
+      roles: ccUser.value.roles ?? [],
+      email: ccUser.value.email ?? '',
+      phone: ccUser.value.mobile ?? '',
+      ccAge: formatTimeFromNow(ccUser.value.accepted_terms_timestamp),
+      // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
+      // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
+    };
+  } else console.log('Error Loading CCuser');
 }
 
-// async function loginAs(userId: string) {
-//   console.log('waiting on merged user data to get user id')
-//   const response = await axios.post(
-//     `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
-//     {
-//       user: userId,
-//     },
-//   );
-//   store.commit('auth/setUser', response.data);
-//   window.location.replace('/');
-// }
+async function loginAs(userId: string) {
+  const response = await axios.post(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
+    {
+      user: userId,
+    },
+  );
+  store.commit('auth/setUser', response.data);
+  window.location.replace('/');
+}
 
 const isUserType = computed(() => {
   const _userTypes = [
@@ -292,6 +295,14 @@ const removeSubmittedFrom = (body) => {
   const delimiter = '------------------';
   const parts = body.split(delimiter);
   return parts[0].trim();
+};
+
+const agentMapFunction = (id: number) => {
+  const _agentMap = props.agents
+    .map((u) => ({ [u.id]: u.name }))
+    .reduce((prev, current) => ({ ...prev, ...current }), {});
+
+  return _agentMap[id];
 };
 
 onMounted(() => {
@@ -331,7 +342,7 @@ onMounted(() => {
         class="flex items-center justify-center border-y-2 border-gray-400"
       >
         <BaseButton
-          :action="() => loginAs()"
+          :action="() => loginAs(props.ticketData.user.ccu_user?.id)"
           text="Login As"
           variant="primary"
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
@@ -421,7 +432,7 @@ onMounted(() => {
       <div class="subject-date__container">
         <BaseText class="">
           <span class="text-base font-bold">Created:</span>
-          {{ formatTicketTime(ticketData.created_at) }}</BaseText
+          {{ formatTimeFromNow(ticketData.created_at) }}</BaseText
         >
         <hr />
         <BaseText>
@@ -452,7 +463,7 @@ onMounted(() => {
           :class="messageHighlights(item)"
         >
           <BaseText class="text-3xl font-bold">
-            {{ zendeskUser.name }}
+            {{ agentMapFunction(item.author_id) ?? zendeskUser.name }}
           </BaseText>
           <br />
           <BaseText>{{ removeSubmittedFrom(item.body) }}</BaseText>

@@ -2,7 +2,6 @@
 import axios from 'axios';
 import _ from 'lodash';
 import moment from 'moment';
-import users from '../organization/Users.vue';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { makeTableColumns } from '@/utils/table';
@@ -55,7 +54,7 @@ const tickets = ref([]);
 const { currentUser } = useCurrentUser();
 const agents = ref([
   { id: 411_677_450_351, name: 'Triston Lewis' },
-  { id: 1, name: 'Aarron Titus' },
+  { id: 484_643_688, name: 'Aarron Titus' },
   { id: 2, name: 'Ross Arroyo' },
   { id: 3, name: 'Gina Newby' },
 ]);
@@ -103,10 +102,10 @@ const getUsersRelatedToTickets = () => {
     .then((response) => {
       usersRelatedToTickets.value = response;
     })
-    .then((response) => {
+    .then(() => {
       processedUsers();
     })
-    .then((respose) => {
+    .then(() => {
       getTicketsWithUsers();
     })
     .catch((error) => {
@@ -149,12 +148,6 @@ const getUsersRelatedToTickets = () => {
 //
 //   return tickets.value;
 // });
-
-const getUserByZendeskRequesterId = (id) => {
-  return usersRelatedToTickets.value.data.find((ticket) =>
-    ticket.url.includes(id),
-  );
-};
 
 const columns = makeTableColumns([
   ['id', '5%', 'Id'],
