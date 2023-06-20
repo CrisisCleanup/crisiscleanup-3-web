@@ -288,9 +288,9 @@ onMounted(() => {
     <template #advanced_ticket="slotProps">
       <BaseButton
         :action="() => showTicketModal(slotProps.item)"
-        text="open"
+        text="Open"
         variant="primary"
-        class="p-2 rounded-md"
+        class="p-2 rounded-md text-lg"
       />
     </template>
 
@@ -298,10 +298,11 @@ onMounted(() => {
       <base-link
         :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
         text-variant="bodysm"
-        class="px-2"
+        class="px-2 w-14 border rounded-md"
         target="_blank"
-        >Link</base-link
       >
+        <img alt="zendesk icon" src="../../assets/icons/zendesk.svg"
+      /></base-link>
     </template>
   </Table>
   <!--  <AdminTicketDashboard  />-->
