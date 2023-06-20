@@ -8,6 +8,7 @@ import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table.vue';
 import Modal from '@/components/Modal.vue';
 import BaseButton from '@/components/BaseButton.vue';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
 export interface Macro {
   label: string;
@@ -268,7 +269,13 @@ onMounted(() => {
     </template>
 
     <template #roles="slotProps">
-      {{ slotProps.item.user.ccu_user?.roles ?? null }}
+      <!--      {{ slotProps.item.user.ccu_user?.roles ?? null }}-->
+      <UserRolesSelect
+        style="pointer-events: none"
+        class="w-full flex-grow border border-crisiscleanup-dark-100"
+        data-testid="testUserRolesSelect"
+        :user="slotProps.item.user.ccu_user"
+      />
     </template>
 
     <template #requester="slotProps">
