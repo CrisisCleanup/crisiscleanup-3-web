@@ -17,10 +17,6 @@ const props = defineProps({
     type: Object,
     default: () => null,
   },
-  users: {
-    type: Array,
-    default: () => [],
-  },
   agents: {
     type: Array,
     default: () => [],
@@ -34,8 +30,6 @@ const props = defineProps({
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
-// const emit = defineEmits<{ (e: 'reFetchTicket'): void }>();
-// const store = useStore();
 const features = {
   userType: false,
   loginAs: false,
@@ -43,8 +37,6 @@ const features = {
   events: false,
   githubIssue: false,
 };
-const userMap = ref({});
-const userEmailMap = ref({});
 const expanded = ref(false);
 const currentUserID = ref('');
 const isLoading = ref(false);
@@ -54,7 +46,6 @@ const comments = ref([]);
 const ticketReply = ref('');
 const selectedAgent = ref('');
 const agentList = ref([]);
-// const agentDropdown = ref([]);
 const macros = ref([
   {
     id: 1,
@@ -106,27 +97,6 @@ const macroColumns = [
   },
 ];
 const macroModalVisibility = ref(false);
-// const selectedMacroId = ref();
-
-const processedUsers = () => {
-  if (Array.isArray(props.users)) {
-    userMap.value = props.users
-      .map((u) => ({ [u.id]: u.name }))
-      .reduce((prev, current) => ({ ...prev, ...current }), {});
-
-    userEmailMap.value = props.users
-      .map((u) => ({ [u.id]: u.email }))
-      .reduce((prev, current) => ({ ...prev, ...current }), {});
-  } else console.log('props.users is not an array');
-};
-
-const userMapFunction = (id: number) => {
-  return userMap.value[id];
-};
-
-const userEmailMapFunction = (id: number) => {
-  return userEmailMap.value[id];
-};
 
 const assignedUser = computed(() => {
   return _.find(agentList.value, { id: props.ticketData?.assignee_id });
@@ -235,12 +205,6 @@ const showMacroModal = () => {
   macroModalVisibility.value = !macroModalVisibility.value;
 };
 
-// const selectedMacro = computed(() => {
-//   return macros.value.find((m) => {
-//     return m.id === selectedMacroId.value;
-//   });
-// });
-
 const executeMacro = (macro) => {
   showMacroModal();
   ticketReply.value = macro.template;
@@ -262,8 +226,8 @@ const userStats = [
     email: null,
     phone: null,
     totalTickets: null,
-    os: null,
-    browser: null,
+    // os: null,
+    // browser: null,
   },
 ];
 
@@ -280,37 +244,23 @@ const formatTicketTime = (date: string) => {
   return moment(date).fromNow();
 };
 
-const ccUser = ref();
-async function getCCUser() {
+const ccUser = ref(props.ticketData.user.ccu_user);
+const zendeskUser = ref(props.ticketData.user);
+async function getCcuStats() {
   // 16781124470797 == ccid form field
   // 360042012811 = cc email form field
-  try {
-    const _userId =
-      props.ticketData.custom_fields.find(
-        (field) => field.id === 16_781_124_470_797,
-      )?.value || null;
-    if (_userId !== null) {
-      const _response = await User.api().get(`/users?id__in=${_userId}`, {
-        dataKey: 'results',
-      });
-      ccUser.value = _response.entities.users[0];
-
-      userStats[0] = {
-        org: ccUser.value.organization?.name ?? '',
-        roles: ccUser.value.roles ?? [],
-        email: ccUser.value.email ?? '',
-        phone: ccUser.value.mobile ?? '',
-        ccAge: formatDateString(
-          ccUser.value.accepted_terms_timestamp,
-          'MM/DD/YYYY, h:mm:ss A',
-        ),
-        os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
-        browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
-      };
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  userStats[0] = {
+    org: ccUser.value.organization?.name ?? '',
+    roles: ccUser.value.roles ?? [],
+    email: ccUser.value.email ?? '',
+    phone: ccUser.value.mobile ?? '',
+    ccAge: formatDateString(
+      ccUser.value.accepted_terms_timestamp,
+      'MM/DD/YYYY, h:mm:ss A',
+    ),
+    // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
+    // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
+  };
 }
 
 // async function loginAs(userId: string) {
@@ -340,14 +290,8 @@ const isUserType = computed(() => {
 
 onMounted(() => {
   isLoading.value = true;
-  if (props.users) {
-    processedUsers();
-  } else {
-    console.log('users prop is not ready');
-  }
-
   getCurrentLoggedInUser();
-  getCCUser();
+  getCcuStats();
   getComments();
   // getAgentList();
   isLoading.value = false;
@@ -363,11 +307,7 @@ onMounted(() => {
           :src="ccUser?.profilePictureUrl || 'https://picsum.photos/200'"
           class="w-full"
         />
-        <BaseText>{{
-          ccUser
-            ? ccUser.full_name
-            : userMapFunction(ticketData.requester_id) || ticketData.name
-        }}</BaseText>
+        <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div v-if="features.userType">
         <div
@@ -445,13 +385,11 @@ onMounted(() => {
       <div class="ticket__header">
         <div class="submitter-info">
           <BaseText>
-            {{ userMapFunction(ticketData.requester_id) || ticketData.name }}
+            {{ zendeskUser.name }}
           </BaseText>
           <hr />
           <BaseText>
-            {{
-              userEmailMapFunction(ticketData.requester_id) || ticketData.email
-            }}
+            {{ zendeskUser.email }}
           </BaseText>
         </div>
         <BaseButton
@@ -507,8 +445,8 @@ onMounted(() => {
           class="comments__items"
           :class="messageHighlights(item)"
         >
-          <BaseText class="text-3xl font-bold"
-            >{{ userMapFunction(item.author_id) || ticketData.name }}
+          <BaseText class="text-3xl font-bold">
+            {{ zendeskUser.name }}
           </BaseText>
           <br />
           <BaseText>{{ item.body }}</BaseText>
@@ -548,17 +486,6 @@ onMounted(() => {
             />
           </div>
         </div>
-
-        <!--        <BaseSelect-->
-        <!--          class="my-2"-->
-        <!--          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"-->
-        <!--          placeholder="Apply Macro"-->
-        <!--          :options="macros"-->
-        <!--          :model-value="selectedMacroId"-->
-        <!--          item-key="id"-->
-        <!--          label="name"-->
-        <!--          @update:model-value="(v) => (selectedMacroId = v)"-->
-        <!--        />-->
         <modal
           v-if="macroModalVisibility"
           closeable
