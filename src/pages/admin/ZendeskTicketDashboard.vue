@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import axios from 'axios';
 import _ from 'lodash';
+import users from '../organization/Users.vue';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table.vue';
 import Modal from '@/components/Modal.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 export interface Macro {
   label: string;
@@ -100,25 +102,11 @@ const getUsersRelatedToTickets = () => {
     .then((response) => {
       usersRelatedToTickets.value = response;
     })
-    .catch((error) => {
-      console.error('Error fetching tickets:', error);
-    });
-};
-
-const fetchTickets = () => {
-  axiosInstance
-    .get('/search', {
-      params: {
-        query: 'status<solved',
-      },
-    })
     .then((response) => {
-      tickets.value = response.data.results;
-      ticketTotals.value = _.countBy(response.data.results, 'status');
+      processedUsers();
     })
-    .then(() => {
-      parseUserIdsFromTickets(tickets.value);
-      getUsersRelatedToTickets();
+    .then((respose) => {
+      getTicketsWithUsers();
     })
     .catch((error) => {
       console.error('Error fetching tickets:', error);
@@ -161,13 +149,19 @@ const fetchTickets = () => {
 //   return tickets.value;
 // });
 
+const getUserByZendeskRequesterId = (id) => {
+  return usersRelatedToTickets.value.data.find((ticket) =>
+    ticket.url.includes(id),
+  );
+};
+
 const columns = makeTableColumns([
   ['id', '5%', 'Id'],
   ['created_at', '10%', 'Created'],
-  ['account_type', '5%', 'Account Type'],
-  ['roles', '5%', 'Roles'],
-  ['app', '5%', 'App'],
-  ['requester_id', '15%', 'Requester Id'],
+  ['account_type', '8%', 'Account Type'],
+  ['roles', '8%', 'Roles'],
+  ['app', '6%', 'App'],
+  ['requester', '8%', 'Requester'],
   ['description', '45%', 'Description'],
   ['advanced_ticket', '5%', 'Advanced Ticket'],
   ['zendesk', '5%', 'Zendesk'],
@@ -180,6 +174,58 @@ const showTicketModal = (ticket) => {
   activeTicket.value = ticket;
 };
 
+const userMap = ref({});
+const userEmailMap = ref({});
+const processedUsers = () => {
+  if (Array.isArray(usersRelatedToTickets.value.data)) {
+    userMap.value = usersRelatedToTickets.value.data
+      .map((u) => ({ [u.id]: u.name }))
+      .reduce((prev, current) => ({ ...prev, ...current }), {});
+
+    userEmailMap.value = usersRelatedToTickets.value.data
+      .map((u) => ({ [u.id]: u.email }))
+      .reduce((prev, current) => ({ ...prev, ...current }), {});
+  } else console.log('props.users is not an array');
+};
+
+const userMapFunction = (id: number) => {
+  return userMap.value[id];
+};
+
+const userEmailMapFunction = (id: number) => {
+  return userEmailMap.value[id];
+};
+
+const ticketsWithUsers = ref([]);
+const getTicketsWithUsers = () => {
+  ticketsWithUsers.value = tickets.value.map((ticket) => {
+    const matchingUser = usersRelatedToTickets.value.data.find(
+      (user) => ticket.requester_id === user.id,
+    );
+    return { ...ticket, user: matchingUser };
+  });
+};
+
+const fetchTickets = () => {
+  axiosInstance
+    .get('/search', {
+      params: {
+        query: 'status<solved',
+      },
+    })
+    .then((response) => {
+      tickets.value = response.data.results;
+      ticketTotals.value = _.countBy(response.data.results, 'status');
+    })
+    .then(() => {
+      parseUserIdsFromTickets(tickets.value);
+      getUsersRelatedToTickets();
+    })
+    .catch((error) => {
+      console.error('Error fetching tickets:', error);
+    });
+};
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -189,9 +235,9 @@ onMounted(() => {
 
 <template>
   <Table
+    v-if="usersRelatedToTickets && usersRelatedToTickets.data"
     :columns="columns"
-    :data="tickets"
-    @row-click="(v) => showTicketModal(v)"
+    :data="ticketsWithUsers"
   >
     <template #zendesk="slotProps">
       <base-link
@@ -201,6 +247,29 @@ onMounted(() => {
         target="_blank"
         >Link</base-link
       >
+    </template>
+    <template #advanced_ticket="slotProps">
+      <BaseButton
+        :action="() => showTicketModal(slotProps.item)"
+        text="open"
+        variant="primary"
+        class="p-2"
+      />
+    </template>
+    <template #requester="slotProps">
+      {{
+        slotProps.item.user.ccu_user
+          ? slotProps.item.user.ccu_user?.first_name +
+            ' ' +
+            slotProps.item.user.ccu_user?.last_name
+          : slotProps.item.user.name
+      }}
+    </template>
+    <template #roles="slotProps">
+      {{ slotProps.item.user.ccu_user?.roles ?? null }}
+    </template>
+    <template #account_type="slotProps">
+      {{ slotProps.item.user.ccu_user ? 'USER' : 'OTHER' }}
     </template>
   </Table>
   <!--  <AdminTicketDashboard  />-->
@@ -272,7 +341,6 @@ onMounted(() => {
           agents
         "
         :key="`${activeTicket.id}`"
-        :users="usersRelatedToTickets.data"
         :current-user="currentUser"
         :agents="agents"
         :ticket-data="activeTicket"
