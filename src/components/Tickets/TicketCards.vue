@@ -11,6 +11,8 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseInput from '@/components/BaseInput.vue';
 import BaseSelect from '@/components/BaseSelect.vue';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
+import AdminEventStream from '@/components/admin/AdminEventStream.vue';
+import JsonWrapper from '@/components/JsonWrapper.vue';
 
 const store = useStore();
 const props = defineProps({
@@ -35,7 +37,7 @@ const features = {
   userType: false,
   loginAs: true,
   ccUserInfo: true,
-  events: false,
+  events: true,
   githubIssue: true,
 };
 const expanded = ref(false);
@@ -276,6 +278,9 @@ const userStats = [
     email: null,
     phone: null,
     totalTickets: null,
+    primaryLanguage: null,
+    secondaryLanguage: null,
+    signInCount: null,
     // os: null,
     // browser: null,
   },
@@ -301,6 +306,10 @@ async function getCcuStats() {
       email: ccUser.value.email ?? '',
       phone: ccUser.value.mobile ?? '',
       ccAge: formatTimeFromNow(ccUser.value.accepted_terms_timestamp),
+      primaryLanguage: ccUser.value.primary_language,
+      secondaryLanguage: ccUser.value.secondary_language,
+      signInCount: ccUser.value.sign_in_count,
+      lastActive: formatTimeFromNow(ccUser.value.last_sign_in_at),
       // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
       // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
     };
@@ -346,6 +355,10 @@ const agentMapFunction = (id: number) => {
   return _agentMap[id];
 };
 
+const extraInfo = ref(false);
+const ccUserEntries = computed(() => {
+  return Object.entries(ccUser.value);
+});
 onMounted(() => {
   isLoading.value = true;
   getCurrentLoggedInUser();
@@ -414,28 +427,32 @@ onMounted(() => {
             :user="ccUser"
           />
         </div>
+        <div class="flex items-center justify-center">
+          <BaseButton
+            :action="() => (extraInfo = !extraInfo)"
+            variant="primary"
+            text="Extra Info"
+            class="p-2 mx-4 my-3 text-xl rounded-md w-full"
+          />
+        </div>
+        <div v-if="extraInfo">
+          <JsonWrapper :json-data="ccUser" />
+        </div>
       </div>
 
       <div
         v-if="features.events"
         class="events m-2 text-xs border p-2 flex flex-col gap-2"
       >
-        <BaseText class="text-center">Recent Events:</BaseText>
-        <div>
-          <span class="underline text-primary-light">D W</span> from Crisis
-          Cleanup User <span class="font-bold">Has Loggin In</span>
+        <AdminEventStream :user="ccUser.id" limit="5" class="overflow-auto" />
+        <div class="flex items-center justify-center">
+          <BaseButton
+            :action="() => showEventsModal()"
+            text="More Events"
+            variant="primary"
+            class="p-2 mx-4 my-4 text-xl rounded-md w-full"
+          />
         </div>
-        <div>
-          <span class="underline text-primary-light">D W</span> from Crisis
-          Cleanup User
-          <span class="font-bold">Create Case W774 in Hurricane Nicole</span>
-        </div>
-        <BaseButton
-          :action="() => showEventsModal()"
-          text="More Events"
-          variant="primary"
-          class="p-1 rounded-md"
-        />
       </div>
       <modal
         v-if="eventsModal"
@@ -445,8 +462,9 @@ onMounted(() => {
         @close="showEventsModal()"
       >
         <template #default>
-          <BaseInput type="search" />
-          Plan to add all events related to user here
+          <div class="p-4">
+            <AdminEventStream :user="ccUser.id" />
+          </div>
         </template>
       </modal>
     </div>
