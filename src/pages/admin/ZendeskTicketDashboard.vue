@@ -154,11 +154,11 @@ const getUsersRelatedToTickets = () => {
 const columns = makeTableColumns([
   ['status', '8%', 'Status'],
   ['created_at', '5%', 'Created'],
-  ['account_type', '8%', 'Account Type'],
-  ['roles', '8%', 'Roles'],
+  ['account_type', '10%', 'Account Type'],
+  ['roles', '16%', 'Roles'],
   ['app', '6%', 'App'],
   ['requester', '8%', 'Requester'],
-  ['description', '45%', 'Description'],
+  ['description', '35%', 'Description'],
   ['advanced_ticket', '7%', 'Advanced Ticket'],
   ['zendesk', '5%', 'Zendesk'],
 ]);
@@ -269,13 +269,14 @@ onMounted(() => {
     </template>
 
     <template #roles="slotProps">
-      <!--      {{ slotProps.item.user.ccu_user?.roles ?? null }}-->
       <UserRolesSelect
+        v-if="slotProps.item.user.ccu_user"
         style="pointer-events: none"
         class="w-full flex-grow border border-crisiscleanup-dark-100"
         data-testid="testUserRolesSelect"
         :user="slotProps.item.user.ccu_user"
       />
+      <div v-else class="flex items-center justify-center">No Roles</div>
     </template>
 
     <template #requester="slotProps">
