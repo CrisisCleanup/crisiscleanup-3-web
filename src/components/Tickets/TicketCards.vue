@@ -119,6 +119,7 @@ Describe the actual result here.
 **Additional Information:**
 - Environment:
 - Version:
+- Ticket Submitted From: **${submittedFrom.value}**
 - Zendesk Username: **${zendeskUser.value.name}**
 - Crisis Cleanup Username: **${
       ccUser.value.first_name + ' ' + ccUser.value.last_name
