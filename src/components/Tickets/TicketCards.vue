@@ -36,7 +36,7 @@ const features = {
   loginAs: true,
   ccUserInfo: true,
   events: false,
-  githubIssue: false,
+  githubIssue: true,
 };
 const expanded = ref(false);
 const currentUserID = ref('');
@@ -98,6 +98,45 @@ const macroColumns = [
   },
 ];
 const macroModalVisibility = ref(false);
+
+const createIssue = () => {
+  const queryParams = new URLSearchParams({
+    title: '',
+    body: `
+**Issue Description:**
+This is the description of the issue.
+
+**Steps to Reproduce:**
+1. First step.
+2. Second step.
+
+**Expected Result:**
+Describe the expected result here.
+
+**Actual Result:**
+Describe the actual result here.
+
+**Additional Information:**
+- Environment:
+- Version:
+- Zendesk Username: **${zendeskUser.value.name}**
+- Crisis Cleanup Username: **${
+      ccUser.value.first_name + ' ' + ccUser.value.last_name
+    }**
+- Organization: **${ccUser.value.organization?.name}**
+- Email: **${ccUser.value.email}**
+- Phone: **${ccUser.value.mobile}**
+- CC Age: **${formatTimeFromNow(ccUser.value.accepted_terms_timestamp)}**
+`,
+    // Add additional parameters as needed
+  });
+
+  const repo = 'crisiscleanup-4-web';
+  const url = `https://github.com/CrisisCleanup/${repo}/issues/new?${queryParams.toString()}`;
+
+  // Perform any other actions or navigate to the URL
+  window.open(url, '_blank');
+};
 
 const assignedUser = computed(() => {
   return _.find(agentList.value, { id: props.ticketData?.assignee_id });
@@ -264,7 +303,8 @@ async function getCcuStats() {
       // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
       // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
     };
-  } else console.log('Error Loading CCuser');
+  } else
+    console.log('Error Loading CCuser or CCuser doesnt exist for this user');
 }
 
 async function loginAs(userId: string) {
@@ -310,6 +350,7 @@ onMounted(() => {
   getCurrentLoggedInUser();
   getCcuStats();
   getComments();
+
   // getAgentList();
   isLoading.value = false;
 });
@@ -419,12 +460,16 @@ onMounted(() => {
             {{ zendeskUser.email }}
           </BaseText>
         </div>
-        <BaseButton
+        <base-link
           v-if="features.githubIssue"
-          action=""
-          class="border border-black rounded-md font-bold"
-          text="Create Github Issue"
-        />
+          :href="url"
+          class="border border-black rounded-md font-bold text-center flex justify-center items-center"
+          target="_blank"
+          text-variant="h2"
+          @click="createIssue()"
+        >
+          Create GitHub Issue</base-link
+        >
         <span v-else></span>
         <div class="ticket-link">
           <a
