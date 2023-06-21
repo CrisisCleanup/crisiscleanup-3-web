@@ -9,6 +9,7 @@ import Table from '@/components/Table.vue';
 import Modal from '@/components/Modal.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
+import BaseText from '@/components/BaseText.vue';
 
 export interface Macro {
   label: string;
@@ -109,6 +110,7 @@ const getUsersRelatedToTickets = () => {
     })
     .then(() => {
       getTicketsWithUsers();
+      getTicketStats();
     })
     .catch((error) => {
       console.error('Error fetching tickets:', error);
@@ -198,6 +200,44 @@ const getTicketsWithUsers = () => {
   });
 };
 
+const ticketStats = ref({
+  total: 0,
+  new: 0,
+  open: 0,
+  pending: 0,
+  users: 0,
+  survivors: 0,
+  app: null,
+});
+const getTicketStats = () => {
+  const ticketFilterByCCUser = ticketsWithUsers.value.filter(
+    (ticket) => ticket.user.ccu_user !== null,
+  );
+  const ticketFilterBySurvivors = ticketsWithUsers.value.filter(
+    (ticket) => ticket.user.ccu_user === null,
+  );
+  ticketStats.value.users = _.countBy(ticketFilterByCCUser, 'ccu_user');
+  ticketStats.value.survivors = _.countBy(ticketFilterBySurvivors, 'ccu_user');
+  ticketStats.value.total = Object.values(ticketTotals.value).reduce(
+    (acc, val) => acc + val,
+    0,
+  );
+  ticketStats.value.new = ticketTotals.value.new;
+  ticketStats.value.open = ticketTotals.value.open;
+  ticketStats.value.pending = ticketTotals.value.pending;
+  ticketStats.value.app = _.countBy(ticketsWithUsers.value, (ticket) => {
+    if (ticket.description.includes('android_res')) {
+      return 'android';
+    }
+
+    if (ticket.description.includes('ios_res')) {
+      return 'ios';
+    }
+
+    return 'web4';
+  });
+};
+
 const fetchTickets = () => {
   axiosInstance
     .get('/search', {
@@ -236,6 +276,60 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="grid grid-cols-12">
+    <div
+      v-if="ticketTotals"
+      class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
+    >
+      <BaseText
+        ><span class="font-bold">Total Tickets:</span>
+        {{ ticketStats.total }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold text-[#c19700]">New: </span
+        >{{ ticketStats.new }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold text-[#0042ed]">Open: </span>
+        {{ ticketStats.open }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold text-[#6b6b6b]">Pending: </span
+        >{{ ticketStats.pending }}</BaseText
+      >
+    </div>
+    <div
+      v-if="ticketTotals"
+      class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
+    >
+      <BaseText
+        ><span class="font-bold">Web4:</span>
+        {{ ticketStats.app?.web4 ?? 0 }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold">IOS:</span>
+        {{ ticketStats.app?.ios ?? 0 }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold">Android:</span>
+        {{ ticketStats.app?.android ?? 0 }}</BaseText
+      >
+    </div>
+    <div
+      v-if="ticketTotals"
+      class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
+    >
+      <!--      could not get these to return just number instead of key:value pair as undefined for key-->
+      <BaseText
+        ><span class="font-bold">Users: </span>
+        {{ ticketStats.users?.undefined }}
+      </BaseText>
+      <BaseText
+        ><span class="font-bold">Survivors: </span>
+        {{ ticketStats.survivors?.undefined }}</BaseText
+      >
+    </div>
+  </div>
   <Table
     v-if="usersRelatedToTickets && usersRelatedToTickets.data"
     :columns="columns"
@@ -313,7 +407,6 @@ onMounted(() => {
       /></base-link>
     </template>
   </Table>
-  <!--  <AdminTicketDashboard  />-->
 
   <!--  <div class="tickets__statusAndFilter">-->
   <!--    <div v-if="tickets" class="bg-primary-light rounded-xl shadow-md">-->
