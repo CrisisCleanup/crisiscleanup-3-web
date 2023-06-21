@@ -10,6 +10,7 @@ import BaseText from '@/components/BaseText.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseInput from '@/components/BaseInput.vue';
 import BaseSelect from '@/components/BaseSelect.vue';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
 const store = useStore();
 const props = defineProps({
@@ -257,7 +258,6 @@ async function getCcuStats() {
   if (ccUser.value) {
     userStats[0] = {
       org: ccUser.value.organization?.name ?? '',
-      roles: ccUser.value.roles ?? [],
       email: ccUser.value.email ?? '',
       phone: ccUser.value.mobile ?? '',
       ccAge: formatTimeFromNow(ccUser.value.accepted_terms_timestamp),
@@ -362,6 +362,16 @@ onMounted(() => {
             </template>
           </BaseText>
         </div>
+        <div class="flex flex-col px-4">
+          <span class="font-bold text-xl">Roles: </span>
+          <UserRolesSelect
+            v-if="ccUser.roles"
+            style="pointer-events: none"
+            class="w-full flex-grow border border-crisiscleanup-dark-100"
+            data-testid="testUserRolesSelect"
+            :user="ccUser"
+          />
+        </div>
       </div>
 
       <div
@@ -443,7 +453,9 @@ onMounted(() => {
         <BaseText>
           <span class="text-base font-bold"> Subject: </span>
           {{
-            expanded ? ticketData?.description : ticketData?.raw_subject
+            expanded
+              ? removeSubmittedFrom(ticketData?.description)
+              : ticketData?.raw_subject
           }}</BaseText
         >
         <BaseText
