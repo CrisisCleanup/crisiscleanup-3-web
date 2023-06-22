@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { useStore } from 'vuex';
 import moment from 'moment';
 import Table from '../Table.vue';
+import LanguageTag from '../tags/LanguageTag.vue';
 import Modal from '@/components/Modal.vue';
 import BaseText from '@/components/BaseText.vue';
 import BaseButton from '@/components/BaseButton.vue';
@@ -13,6 +14,9 @@ import BaseSelect from '@/components/BaseSelect.vue';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import AdminEventStream from '@/components/admin/AdminEventStream.vue';
 import JsonWrapper from '@/components/JsonWrapper.vue';
+import Language from '@/models/Language';
+
+const languages = Language.all();
 
 const store = useStore();
 const props = defineProps({
@@ -34,7 +38,7 @@ const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
 const features = {
-  userType: false,
+  userType: true,
   loginAs: true,
   ccUserInfo: true,
   events: true,
@@ -123,9 +127,7 @@ Describe the actual result here.
 - Version:
 - Ticket Submitted From: **${submittedFrom.value}**
 - Zendesk Username: **${zendeskUser.value.name}**
-- Crisis Cleanup Username: **${
-      ccUser.value.first_name + ' ' + ccUser.value.last_name
-    }**
+- Crisis Cleanup Username: **${ccUserFullName.value}**
 - Organization: **${ccUser.value.organization?.name}**
 - Email: **${ccUser.value.email}**
 - Phone: **${ccUser.value.mobile}**
@@ -278,8 +280,6 @@ const userStats = [
     email: null,
     phone: null,
     totalTickets: null,
-    primaryLanguage: null,
-    secondaryLanguage: null,
     signInCount: null,
     // os: null,
     // browser: null,
@@ -297,6 +297,7 @@ const formatTimeFromNow = (date: string) => {
 };
 
 const ccUser = ref(props.ticketData.user.ccu_user);
+const ccUserFullName = ccUser.value.first_name + ' ' + ccUser.value.last_name;
 const zendeskUser = ref(props.ticketData.user);
 async function getCcuStats() {
   // 16781124470797 == ccid form field
@@ -306,8 +307,6 @@ async function getCcuStats() {
       email: ccUser.value.email ?? '',
       phone: ccUser.value.mobile ?? '',
       ccAge: formatTimeFromNow(ccUser.value.accepted_terms_timestamp),
-      primaryLanguage: ccUser.value.primary_language,
-      secondaryLanguage: ccUser.value.secondary_language,
       signInCount: ccUser.value.sign_in_count,
       lastActive: formatTimeFromNow(ccUser.value.last_sign_in_at),
       // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
@@ -359,6 +358,19 @@ const extraInfo = ref(false);
 const ccUserEntries = computed(() => {
   return Object.entries(ccUser.value);
 });
+
+const profilePictureUrl = computed(() => {
+  if (ccUser.value.files && ccUser.value.files.length > 0) {
+    const profilePictures = ccUser.value.files.filter(
+      (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+    );
+    if (profilePictures.length > 0) {
+      return profilePictures[0].small_thumbnail_url;
+    }
+  }
+
+  return `https://avatars.dicebear.com/api/bottts/${ccUser.value.first_name}.svg`;
+});
 onMounted(() => {
   isLoading.value = true;
   getCurrentLoggedInUser();
@@ -374,24 +386,34 @@ onMounted(() => {
   <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
-        <img
-          alt="picture of user"
-          :src="ccUser?.profilePictureUrl || 'https://picsum.photos/200'"
-          class="w-full"
-        />
-        <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
+        <img alt="picture of user" :src="profilePictureUrl" class="w-full" />
+        <BaseText>{{ ccUserFullName }}</BaseText>
       </div>
       <div v-if="features.userType">
+        <!--        <div-->
+        <!--          v-for="type in isUserType"-->
+        <!--          :key="type.name"-->
+        <!--          :style="`border-color: ${type.color}; color: ${type.color}`"-->
+        <!--          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"-->
+        <!--        >-->
+        <!--          {{ type.name }}-->
+        <!--        </div>-->
         <div
-          v-for="type in isUserType"
-          :key="type.name"
-          :style="`border-color: ${type.color}; color: ${type.color}`"
+          v-if="ccUser"
+          :style="`border-color: #3498DB; color: #3498DB`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
-          {{ type.name }}
+          User
+        </div>
+
+        <div
+          v-else
+          :style="`border-color: #27AE60; color: #27AE60`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        >
+          Survivor
         </div>
       </div>
-
       <div
         v-if="features.loginAs"
         class="flex items-center justify-center border-y-2 border-gray-400"
@@ -407,7 +429,7 @@ onMounted(() => {
         <div
           v-for="stats in userStats"
           :key="stats.org"
-          class="info flex flex-col m-4"
+          class="info flex flex-col mx-4 my-2"
         >
           <BaseText v-for="(value, key) in stats" :key="key">
             <template v-if="!value" #default><span></span></template>
@@ -417,6 +439,21 @@ onMounted(() => {
             </template>
           </BaseText>
         </div>
+        <div class="flex flex-col px-4 py-2">
+          <span class="font-bold text-xl">Languages: </span>
+          <div
+            v-for="l in languages.filter(
+              (item) =>
+                item.id === ccUser.primary_language ||
+                item.id === ccUser.secondary_language,
+            )"
+            :key="`l_${l}`"
+            class="flex flex-col tag-container"
+          >
+            <LanguageTag class="tag-item p-2 mx-0.5" :language-id="l.id" />
+          </div>
+        </div>
+
         <div class="flex flex-col px-4">
           <span class="font-bold text-xl">Roles: </span>
           <UserRolesSelect
