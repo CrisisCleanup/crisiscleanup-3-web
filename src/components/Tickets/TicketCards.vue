@@ -375,7 +375,7 @@ onMounted(() => {
   <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
-        <img alt="picture of user" :src="profilePictureUrl" class="w-full" />
+        <img alt="~~picture of user" :src="profilePictureUrl" class="w-full" />
         <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div v-if="features.userType">

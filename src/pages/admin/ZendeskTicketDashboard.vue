@@ -10,6 +10,7 @@ import Modal from '@/components/Modal.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import BaseText from '@/components/BaseText.vue';
+import { momentFromNow, capitalize } from '@/filters';
 
 export interface Macro {
   label: string;
@@ -45,15 +46,28 @@ export interface Filter {
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
-const userIdsFilter = ref();
 
+const { currentUser } = useCurrentUser();
+const ticketsWithUsers = ref([]);
+const userMap = ref({});
+const userEmailMap = ref({});
+const activeTicket = ref();
+const ticketModal = ref();
+const userIdsFilter = ref();
 const usersRelatedToTickets = ref();
 const requesterIdList = ref();
 const ticketTotals = ref();
 const isLoading = ref(false);
 const tickets = ref([]);
-// const selectedFilters = ref([]);
-const { currentUser } = useCurrentUser();
+const ticketStats = ref({
+  total: 0,
+  new: 0,
+  open: 0,
+  pending: 0,
+  users: 0,
+  survivors: 0,
+  app: null,
+});
 const agents = ref([
   { id: 411_677_450_351, name: 'Triston Lewis' },
   { id: 484_643_688, name: 'Aarron Titus' },
@@ -61,32 +75,6 @@ const agents = ref([
   { id: 403_645_788_712, name: 'Gina Newby' },
   { id: 401_921_331_392, name: 'Angelo Pablo' },
 ]);
-// const filters = ref([
-//   {
-//     label: 'Ticket Status',
-//     statuses: [
-//       { label: 'New', value: 'New' },
-//       { label: 'Open', value: 'Open' },
-//       { label: 'Pending', value: 'Pending' },
-//       { label: 'Solved', value: 'Solved' },
-//     ],
-//   },
-//   {
-//     label: 'Assigned Agents',
-//     agents: [
-//       { label: 'Triston', value: 'Triston' },
-//       { label: 'Braden', value: 'Braden' },
-//       { label: 'Ross', value: 'Ross' },
-//       { label: 'Deep', value: 'Deep' },
-//       { label: 'Angelo', value: 'Angelo' },
-//     ],
-//   },
-// ]);
-
-// const selectedTicketStatusFilter = ref('');
-// const changeStatusFilter = (status: string) => {
-//   selectedTicketStatusFilter.value = status;
-// };
 
 const parseUserIdsFromTickets = (tickets) => {
   try {
@@ -117,42 +105,6 @@ const getUsersRelatedToTickets = () => {
     });
 };
 
-// const ticketStatusClasses = {
-//   '': 'bg-purple-200',
-//   new: 'border border-primary-light border-2',
-//   open: 'border border-primary-light border-2',
-//   pending: 'border border-primary-light border-2',
-// };
-
-// const getStatusFilterClass = (status) => {
-//   if (selectedTicketStatusFilter.value === status) {
-//     return ticketStatusClasses[selectedTicketStatusFilter.value];
-//   }
-//
-//   return '';
-// };
-
-// const computedTicketData = computed(() => {
-// const _allowed = ref(['status']);
-
-//   const raw = {
-//     status: selectedTicketStatusFilter.value,
-//   };
-//
-//   const filtered = Object.keys(raw)
-//     .filter((key) => _allowed.value.includes(key))
-//     .reduce((obj, key) => {
-//       obj[key] = raw[key];
-//       return obj;
-//     }, {});
-//
-//   if (selectedTicketStatusFilter.value !== '') {
-//     return _.filter(tickets.value, filtered);
-//   }
-//
-//   return tickets.value;
-// });
-
 const columns = makeTableColumns([
   ['status', '8%', 'Status'],
   ['created_at', '5%', 'Created'],
@@ -164,16 +116,11 @@ const columns = makeTableColumns([
   ['advanced_ticket', '7%', 'Advanced Ticket'],
   ['zendesk', '5%', 'Zendesk'],
 ]);
-
-const activeTicket = ref();
-const ticketModal = ref();
 const showTicketModal = (ticket) => {
   ticketModal.value = !ticketModal.value;
   activeTicket.value = ticket;
 };
 
-const userMap = ref({});
-const userEmailMap = ref({});
 const processedUsers = () => {
   if (Array.isArray(usersRelatedToTickets.value.data)) {
     userMap.value = usersRelatedToTickets.value.data
@@ -186,11 +133,6 @@ const processedUsers = () => {
   } else console.log('props.users is not an array');
 };
 
-const formatTicketTime = (date: string) => {
-  return moment(date).fromNow();
-};
-
-const ticketsWithUsers = ref([]);
 const getTicketsWithUsers = () => {
   ticketsWithUsers.value = tickets.value.map((ticket) => {
     const matchingUser = usersRelatedToTickets.value.data.find(
@@ -200,15 +142,6 @@ const getTicketsWithUsers = () => {
   });
 };
 
-const ticketStats = ref({
-  total: 0,
-  new: 0,
-  open: 0,
-  pending: 0,
-  users: 0,
-  survivors: 0,
-  app: null,
-});
 const getTicketStats = () => {
   const ticketFilterByCCUser = ticketsWithUsers.value.filter(
     (ticket) => ticket.user.ccu_user !== null,
@@ -258,14 +191,10 @@ const fetchTickets = () => {
     });
 };
 
-const removeSubmittedFrom = (body) => {
+const removeSubmittedFromFooter = (body) => {
   const delimiter = '------------------';
   const parts = body.split(delimiter);
   return parts[0].trim();
-};
-
-const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
 onMounted(() => {
@@ -337,11 +266,11 @@ onMounted(() => {
   >
     <template #status="slotProps">
       <div :class="[slotProps.item.status + '-tag', 'ticket-status text-xl']">
-        {{ capitalizeFirstLetter(slotProps.item.status) }}
+        {{ capitalize(slotProps.item.status) }}
       </div>
     </template>
     <template #created_at="slotProps">{{
-      formatTicketTime(slotProps.item.created_at)
+      momentFromNow(slotProps.item.created_at)
     }}</template>
 
     <template #account_type="slotProps">
@@ -384,7 +313,7 @@ onMounted(() => {
     </template>
 
     <template #description="slotProps">{{
-      removeSubmittedFrom(slotProps.item.description)
+      removeSubmittedFromFooter(slotProps.item.description)
     }}</template>
 
     <template #advanced_ticket="slotProps">
