@@ -127,7 +127,9 @@ Describe the actual result here.
 - Version:
 - Ticket Submitted From: **${submittedFrom.value}**
 - Zendesk Username: **${zendeskUser.value.name}**
-- Crisis Cleanup Username: **${ccUserFullName.value}**
+- Crisis Cleanup Username: **${
+      ccUser.value.first_name + ' ' + ccUser.value.last_name
+    }**
 - Organization: **${ccUser.value.organization?.name}**
 - Email: **${ccUser.value.email}**
 - Phone: **${ccUser.value.mobile}**
@@ -247,7 +249,7 @@ const messageHighlights = (item) => {
     return 'text-black border shadow-md'; // No specific class for the condition, returning an empty string
   }
 
-  return 'bg-gray-400';
+  return 'bg-gray-300';
 };
 
 const eventsModal = ref(false);
@@ -297,7 +299,6 @@ const formatTimeFromNow = (date: string) => {
 };
 
 const ccUser = ref(props.ticketData.user.ccu_user);
-const ccUserFullName = ccUser.value.first_name + ' ' + ccUser.value.last_name;
 const zendeskUser = ref(props.ticketData.user);
 async function getCcuStats() {
   // 16781124470797 == ccid form field
@@ -387,7 +388,7 @@ onMounted(() => {
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
         <img alt="picture of user" :src="profilePictureUrl" class="w-full" />
-        <BaseText>{{ ccUserFullName }}</BaseText>
+        <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div v-if="features.userType">
         <!--        <div-->
