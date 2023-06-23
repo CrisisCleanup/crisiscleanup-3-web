@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import axios from 'axios';
 import _ from 'lodash';
-import moment from 'moment';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { makeTableColumns } from '@/utils/table';
@@ -11,63 +10,154 @@ import BaseButton from '@/components/BaseButton.vue';
 import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
-
-export interface Macro {
-  label: string;
-  value: string;
-}
-export interface Macros {
-  macros: Macro[];
-}
-export interface Status {
-  label: string;
-  value: string;
-}
-
-export interface Statuses {
-  statuses: Status[];
-}
-
-export interface Agent {
-  label: string;
-  value: string;
-}
-
-export interface Agents {
-  agents: Agent[];
-}
-
-export interface Filter {
-  label: string;
-  agents?: Agent[];
-  Statuses?: Status[];
-}
+import type User from '@/models/User';
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
+interface Ticket {
+  assignee_id: number;
+  collaborator_ids: number[];
+  created_at: string;
+  custom_fields: {
+    id: number;
+    value: string;
+  }[];
+  custom_status_id: number;
+  description: string;
+  due_at: string | null;
+  external_id: string;
+  follower_ids: number[];
+  from_messaging_channel: boolean;
+  group_id: number;
+  has_incidents: boolean;
+  id: number;
+  organization_id: number;
+  priority: string;
+  problem_id: number;
+  raw_subject: string;
+  recipient: string;
+  requester_id: number;
+  satisfaction_rating: {
+    comment: string;
+    id: number;
+    score: string;
+  };
+  sharing_agreement_ids: number[];
+  status: string;
+  subject: string;
+  submitter_id: number;
+  tags: string[];
+  type: string;
+  updated_at: string;
+  url: string;
+  via: {
+    channel: string;
+  };
+  user?: ZendeskUser;
+}
+interface ZendeskUser {
+  active: boolean;
+  alias: string;
+  created_at: string;
+  custom_role_id: number;
+  details: string;
+  email: string;
+  external_id: string;
+  iana_time_zone: string;
+  id: number;
+  last_login_at: string;
+  locale: string;
+  locale_id: number;
+  moderator: boolean;
+  name: string;
+  notes: string;
+  only_private_comments: boolean;
+  organization_id: number;
+  phone: string;
+  photo: {
+    content_type: string;
+    content_url: string;
+    id: number;
+    name: string;
+    size: number;
+    thumbnails: {
+      content_type: string;
+      content_url: string;
+      id: number;
+      name: string;
+      size: number;
+    }[];
+  };
+  restricted_agent: boolean;
+  role: string;
+  role_type: number;
+  shared: boolean;
+  shared_agent: boolean;
+  signature: string;
+  suspended: boolean;
+  tags: string[];
+  ticket_restriction: string;
+  time_zone: string;
+  updated_at: string;
+  url: string;
+  user_fields: {
+    user_date: string;
+    user_decimal: number;
+    user_dropdown: string;
+  };
+  verified: boolean;
+  ccu_user?: User | null;
+}
+interface ZendeskUserList {
+  users: ZendeskUser[];
+}
+interface TicketsWithUsers {
+  tickets: Ticket[];
+}
+interface TicketStats {
+  total: number;
+  newTickets: number;
+  open: number;
+  pending: number;
+  users: number;
+  survivors: number;
+  app_type: {
+    web4?: number;
+    ios?: number;
+    android?: number;
+  } | null;
+}
+interface UserNameMap {
+  [userId: number]: string;
+}
+
+interface UserEmailMap {
+  [userId: number]: string;
+}
 
 const { currentUser } = useCurrentUser();
-const ticketsWithUsers = ref([]);
-const userMap = ref({});
-const userEmailMap = ref({});
-const activeTicket = ref();
-const ticketModal = ref();
-const userIdsFilter = ref();
-const usersRelatedToTickets = ref();
-const requesterIdList = ref();
-const ticketTotals = ref();
-const isLoading = ref(false);
-const tickets = ref([]);
-const ticketStats = ref({
+const ticketsWithUsers = ref<TicketsWithUsers[]>([]);
+const tickets = ref<Ticket[]>([]);
+const ticketStats = ref<TicketStats>({
   total: 0,
-  new: 0,
+  newTickets: 0,
   open: 0,
   pending: 0,
   users: 0,
   survivors: 0,
-  app: null,
+  app_type: { web4: 0, ios: 0, android: 0 },
 });
+const userNameMap = ref<UserNameMap>({});
+const userEmailMap = ref<UserEmailMap>({});
+const activeTicket = ref<Ticket | undefined>();
+const ticketModal = ref<boolean>(false);
+const userIdsFilter = ref<string>();
+const usersRelatedToTickets = ref<ZendeskUserList>({ users: [] });
+const requesterIdList = ref<number[]>([]);
+const isLoading = ref<boolean>(false);
+
+const ticketTotals = ref();
 const agents = ref([
   { id: 411_677_450_351, name: 'Triston Lewis' },
   { id: 484_643_688, name: 'Aarron Titus' },
@@ -76,11 +166,11 @@ const agents = ref([
   { id: 401_921_331_392, name: 'Angelo Pablo' },
 ]);
 
-const parseUserIdsFromTickets = (tickets) => {
+const parseUserIdsFromTickets = (tickets: Ticket[]) => {
   try {
     requesterIdList.value = tickets.map((ticket) => ticket.requester_id);
     userIdsFilter.value = requesterIdList.value
-      .map((id) => `user_ids=${id}`)
+      .map((id: number) => `user_ids=${id}`)
       .join('&');
   } catch (error) {
     console.log(error);
@@ -90,8 +180,9 @@ const parseUserIdsFromTickets = (tickets) => {
 const getUsersRelatedToTickets = () => {
   axiosInstance
     .get(`/users?${userIdsFilter.value}`, {})
-    .then((response) => {
+    .then((response: ZendeskUserList) => {
       usersRelatedToTickets.value = response;
+      console.log('This is the usersRelated to ticket response', response);
     })
     .then(() => {
       processedUsers();
@@ -100,7 +191,7 @@ const getUsersRelatedToTickets = () => {
       getTicketsWithUsers();
       getTicketStats();
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       console.error('Error fetching tickets:', error);
     });
 };
@@ -116,27 +207,36 @@ const columns = makeTableColumns([
   ['advanced_ticket', '7%', 'Advanced Ticket'],
   ['zendesk', '5%', 'Zendesk'],
 ]);
-const showTicketModal = (ticket) => {
+const showTicketModal = (ticket: Ticket) => {
   ticketModal.value = !ticketModal.value;
   activeTicket.value = ticket;
 };
 
 const processedUsers = () => {
   if (Array.isArray(usersRelatedToTickets.value.data)) {
-    userMap.value = usersRelatedToTickets.value.data
-      .map((u) => ({ [u.id]: u.name }))
-      .reduce((prev, current) => ({ ...prev, ...current }), {});
+    userNameMap.value = usersRelatedToTickets.value.data
+      .map((u: ZendeskUser) => ({ [u.id]: u.name }))
+      .reduce(
+        (prev: UserNameMap, current: UserNameMap) => ({ ...prev, ...current }),
+        {},
+      );
 
     userEmailMap.value = usersRelatedToTickets.value.data
-      .map((u) => ({ [u.id]: u.email }))
-      .reduce((prev, current) => ({ ...prev, ...current }), {});
+      .map((u: ZendeskUser) => ({ [u.id]: u.email }))
+      .reduce(
+        (prev: UserEmailMap, current: UserEmailMap) => ({
+          ...prev,
+          ...current,
+        }),
+        {},
+      );
   } else console.log('props.users is not an array');
 };
 
 const getTicketsWithUsers = () => {
-  ticketsWithUsers.value = tickets.value.map((ticket) => {
+  ticketsWithUsers.value = tickets.value.map((ticket: Ticket) => {
     const matchingUser = usersRelatedToTickets.value.data.find(
-      (user) => ticket.requester_id === user.id,
+      (user: ZendeskUser) => ticket.requester_id === user.id,
     );
     return { ...ticket, user: matchingUser };
   });
@@ -144,10 +244,10 @@ const getTicketsWithUsers = () => {
 
 const getTicketStats = () => {
   const ticketFilterByCCUser = ticketsWithUsers.value.filter(
-    (ticket) => ticket.user.ccu_user !== null,
+    (ticket: Ticket) => ticket.user?.ccu_user !== null,
   );
   const ticketFilterBySurvivors = ticketsWithUsers.value.filter(
-    (ticket) => ticket.user.ccu_user === null,
+    (ticket: Ticket) => ticket.user?.ccu_user === null,
   );
   ticketStats.value.users = _.countBy(ticketFilterByCCUser, 'ccu_user');
   ticketStats.value.survivors = _.countBy(ticketFilterBySurvivors, 'ccu_user');
@@ -155,20 +255,23 @@ const getTicketStats = () => {
     (acc, val) => acc + val,
     0,
   );
-  ticketStats.value.new = ticketTotals.value.new;
+  ticketStats.value.newTickets = ticketTotals.value.new;
   ticketStats.value.open = ticketTotals.value.open;
   ticketStats.value.pending = ticketTotals.value.pending;
-  ticketStats.value.app = _.countBy(ticketsWithUsers.value, (ticket) => {
-    if (ticket.description.includes('android_res')) {
-      return 'android';
-    }
+  ticketStats.value.app_type = _.countBy(
+    ticketsWithUsers.value,
+    (ticket: Ticket) => {
+      if (ticket.description.includes('android_res')) {
+        return 'android';
+      }
 
-    if (ticket.description.includes('ios_res')) {
-      return 'ios';
-    }
+      if (ticket.description.includes('ios_res')) {
+        return 'ios';
+      }
 
-    return 'web4';
-  });
+      return 'web4';
+    },
+  );
 };
 
 const fetchTickets = () => {
@@ -178,7 +281,7 @@ const fetchTickets = () => {
         query: 'status<solved',
       },
     })
-    .then((response) => {
+    .then((response: { data: { results: Ticket[] } }) => {
       tickets.value = response.data.results;
       ticketTotals.value = _.countBy(response.data.results, 'status');
     })
@@ -186,14 +289,14 @@ const fetchTickets = () => {
       parseUserIdsFromTickets(tickets.value);
       getUsersRelatedToTickets();
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       console.error('Error fetching tickets:', error);
     });
 };
 
-const removeSubmittedFromFooter = (body) => {
+const removeSubmittedFromFooter = (body: string): string => {
   const delimiter = '------------------';
-  const parts = body.split(delimiter);
+  const parts: string[] = body.split(delimiter);
   return parts[0].trim();
 };
 
@@ -216,7 +319,7 @@ onMounted(() => {
       >
       <BaseText
         ><span class="font-bold text-[#c19700]">New: </span
-        >{{ ticketStats.new }}</BaseText
+        >{{ ticketStats.newTickets }}</BaseText
       >
       <BaseText
         ><span class="font-bold text-[#0042ed]">Open: </span>
@@ -233,15 +336,15 @@ onMounted(() => {
     >
       <BaseText
         ><span class="font-bold">Web4:</span>
-        {{ ticketStats.app?.web4 ?? 0 }}</BaseText
+        {{ ticketStats.app_type?.web4 ?? 0 }}</BaseText
       >
       <BaseText
         ><span class="font-bold">IOS:</span>
-        {{ ticketStats.app?.ios ?? 0 }}</BaseText
+        {{ ticketStats.app_type?.ios ?? 0 }}</BaseText
       >
       <BaseText
         ><span class="font-bold">Android:</span>
-        {{ ticketStats.app?.android ?? 0 }}</BaseText
+        {{ ticketStats.app_type?.android ?? 0 }}</BaseText
       >
     </div>
     <div
@@ -304,10 +407,10 @@ onMounted(() => {
 
     <template #requester="slotProps">
       {{
-        slotProps.item.user.ccu_user
-          ? slotProps.item.user.ccu_user?.first_name +
+        slotProps.item.user?.ccu_user
+          ? slotProps.item.user?.ccu_user?.first_name +
             ' ' +
-            slotProps.item.user.ccu_user?.last_name
+            slotProps.item.user?.ccu_user?.last_name
           : slotProps.item.user.name
       }}
     </template>
@@ -327,7 +430,7 @@ onMounted(() => {
 
     <template #zendesk="slotProps">
       <base-link
-        :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
+        :href="`https://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
         text-variant="bodysm"
         class="px-2 w-14 border rounded-md"
         target="_blank"
@@ -336,57 +439,6 @@ onMounted(() => {
       /></base-link>
     </template>
   </Table>
-
-  <!--  <div class="tickets__statusAndFilter">-->
-  <!--    <div v-if="tickets" class="bg-primary-light rounded-xl shadow-md">-->
-  <!--      <div class="text-white grid grid-cols-5 p-2">-->
-  <!--        <BaseText class="col-span-4"-->
-  <!--          >Total Tickets: {{ tickets.data?.results?.length }}</BaseText-->
-  <!--        >-->
-  <!--        <div-->
-  <!--          :class="-->
-  <!--            selectedTicketStatusFilter === '' ? 'bg-primary-dark' : 'bg-white'-->
-  <!--          "-->
-  <!--          class="rounded-md text-center text-black"-->
-  <!--          @click="changeStatusFilter('')"-->
-  <!--        >-->
-  <!--          All-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div v-if="ticketTotals" class="grid grid-cols-3 text-center">-->
-  <!--        <div-->
-  <!--          :class="[-->
-  <!--            getStatusFilterClass('new'),-->
-  <!--            'new rounded-bl-xl flex flex-col',-->
-  <!--          ]"-->
-  <!--          @click="changeStatusFilter('new')"-->
-  <!--        >-->
-  <!--          New <BaseText>{{ ticketTotals?.new || 0 }}</BaseText>-->
-  <!--        </div>-->
-  <!--        <div-->
-  <!--          :class="[getStatusFilterClass('open'), 'open flex flex-col']"-->
-  <!--          @click="changeStatusFilter('open')"-->
-  <!--        >-->
-  <!--          Open <BaseText>{{ ticketTotals?.open || 0 }}</BaseText>-->
-  <!--        </div>-->
-  <!--        <div-->
-  <!--          :class="[getStatusFilterClass('pending'), 'pending flex flex-col']"-->
-  <!--          @click="changeStatusFilter('pending')"-->
-  <!--        >-->
-  <!--          Pending <BaseText>{{ ticketTotals?.pending || 0 }}</BaseText>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <BaseSelect-->
-  <!--      v-model="selectedFilters"-->
-  <!--      :options="filters"-->
-  <!--      display="chip"-->
-  <!--      option-label="label"-->
-  <!--      option-group-label="label"-->
-  <!--      option-group-children="items"-->
-  <!--      placeholder="Select a Filter"-->
-  <!--    />-->
-  <!--  </div>-->
 
   <modal
     v-if="ticketModal"
@@ -414,16 +466,6 @@ onMounted(() => {
 </template>
 
 <style lang="postcss" scoped>
-.tickets__statusAndFilter {
-  @apply p-4 m-4 gap-4 flex flex-col;
-}
-.tickets__container {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-}
-
-.tickets__container-advanced {
-  @apply grid grid-cols-1;
-}
 .new {
   color: #c19700;
   background: #fff59c;
