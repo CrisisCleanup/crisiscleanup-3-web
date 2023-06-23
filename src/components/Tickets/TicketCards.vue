@@ -15,8 +15,7 @@ import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import AdminEventStream from '@/components/admin/AdminEventStream.vue';
 import JsonWrapper from '@/components/JsonWrapper.vue';
 import Language from '@/models/Language';
-
-const languages = Language.all();
+import { momentFromNow, capitalize } from '@/filters';
 
 const store = useStore();
 const props = defineProps({
@@ -37,6 +36,9 @@ const props = defineProps({
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
+const router = useRouter();
+
+const languages = Language.all();
 const features = {
   userType: true,
   loginAs: true,
@@ -44,10 +46,10 @@ const features = {
   events: true,
   githubIssue: true,
 };
+const extraInfo = ref(false);
 const expanded = ref(false);
 const currentUserID = ref('');
 const isLoading = ref(false);
-const router = useRouter();
 // const toast = useToast()
 const comments = ref([]);
 const ticketReply = ref('');
@@ -104,6 +106,51 @@ const macroColumns = [
   },
 ];
 const macroModalVisibility = ref(false);
+const eventsModal = ref(false);
+const userStats = [
+  {
+    org: null,
+    roles: null,
+    ccAge: null,
+    lastActive: null,
+    timezone: null,
+    email: null,
+    phone: null,
+    totalTickets: null,
+    signInCount: null,
+    // os: null,
+    // browser: null,
+  },
+];
+const ccUser = ref(props.ticketData.user.ccu_user);
+const zendeskUser = ref(props.ticketData.user);
+
+const ccUserEntries = computed(() => {
+  return Object.entries(ccUser.value);
+});
+const profilePictureUrl = computed(() => {
+  if (ccUser.value.files && ccUser.value.files.length > 0) {
+    const profilePictures = ccUser.value.files.filter(
+      (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+    );
+    if (profilePictures.length > 0) {
+      return profilePictures[0].small_thumbnail_url;
+    }
+  }
+
+  return `https://avatars.dicebear.com/api/bottts/${ccUser.value.first_name}.svg`;
+});
+const submittedFrom = computed(() => {
+  const _separator = 'Submitted from:';
+  const parsed = props.ticketData.description.split(_separator)[1]?.trim();
+  return parsed || '';
+});
+const assignedUser = computed(() => {
+  return _.find(agentList.value, { id: props.ticketData?.assignee_id });
+});
+const ticketAssigneeName = computed(() => {
+  return assignedUser.value ? assignedUser.value.name : 'None';
+});
 
 const createIssue = () => {
   const queryParams = new URLSearchParams({
@@ -133,7 +180,7 @@ Describe the actual result here.
 - Organization: **${ccUser.value.organization?.name}**
 - Email: **${ccUser.value.email}**
 - Phone: **${ccUser.value.mobile}**
-- CC Age: **${formatTimeFromNow(ccUser.value.accepted_terms_timestamp)}**
+- CC Age: **${momentFromNow(ccUser.value.accepted_terms_timestamp)}**
 `,
     // Add additional parameters as needed
   });
@@ -144,13 +191,6 @@ Describe the actual result here.
   // Perform any other actions or navigate to the URL
   window.open(url, '_blank');
 };
-
-const assignedUser = computed(() => {
-  return _.find(agentList.value, { id: props.ticketData?.assignee_id });
-});
-const assignedTo = computed(() => {
-  return assignedUser.value ? assignedUser.value.name : 'None';
-});
 
 const replyToTicket = (replyStatus: string) => {
   axiosInstance
@@ -199,11 +239,7 @@ const reAssignTicket = () => {
     });
 };
 
-const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-const getCurrentLoggedInUser = () => {
+const getAgentIdForCurrentUser = () => {
   currentUserID.value = props.agents.some(
     (agent) => agent.name === props.currentUser.full_name,
   )?.id;
@@ -226,7 +262,6 @@ const getCurrentLoggedInUser = () => {
 //       }
 //     });
 // };
-
 const getComments = () => {
   axiosInstance
     .get(`/tickets/${props.ticketData.id}/comments`, {})
@@ -235,7 +270,7 @@ const getComments = () => {
     });
 };
 
-const messageHighlights = (item) => {
+const getCommentHighlights = (item) => {
   if (item.author_id === currentUserID.value) {
     return 'text-black border shadow-md';
   }
@@ -252,7 +287,6 @@ const messageHighlights = (item) => {
   return 'bg-gray-300';
 };
 
-const eventsModal = ref(false);
 const showEventsModal = () => {
   eventsModal.value = !eventsModal.value;
 };
@@ -272,51 +306,6 @@ const formatKey = (key: string) => {
     .replace(/^./, (str) => str.toUpperCase());
 };
 
-const userStats = [
-  {
-    org: null,
-    roles: null,
-    ccAge: null,
-    lastActive: null,
-    timezone: null,
-    email: null,
-    phone: null,
-    totalTickets: null,
-    signInCount: null,
-    // os: null,
-    // browser: null,
-  },
-];
-
-const submittedFrom = computed(() => {
-  const _separator = 'Submitted from:';
-  const parsed = props.ticketData.description.split(_separator)[1]?.trim();
-  return parsed || '';
-});
-
-const formatTimeFromNow = (date: string) => {
-  return moment(date).fromNow();
-};
-
-const ccUser = ref(props.ticketData.user.ccu_user);
-const zendeskUser = ref(props.ticketData.user);
-async function getCcuStats() {
-  // 16781124470797 == ccid form field
-  if (ccUser.value) {
-    userStats[0] = {
-      org: ccUser.value.organization?.name ?? '',
-      email: ccUser.value.email ?? '',
-      phone: ccUser.value.mobile ?? '',
-      ccAge: formatTimeFromNow(ccUser.value.accepted_terms_timestamp),
-      signInCount: ccUser.value.sign_in_count,
-      lastActive: formatTimeFromNow(ccUser.value.last_sign_in_at),
-      // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
-      // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
-    };
-  } else
-    console.log('Error Loading CCuser or CCuser doesnt exist for this user');
-}
-
 async function loginAs(userId: string) {
   const response = await axios.post(
     `${import.meta.env.VITE_APP_API_BASE_URL}/admins/users/login_as`,
@@ -327,6 +316,37 @@ async function loginAs(userId: string) {
   store.commit('auth/setUser', response.data);
   window.location.replace('/');
 }
+
+async function getCcuStats() {
+  // 16781124470797 == ccid form field
+  if (ccUser.value) {
+    userStats[0] = {
+      org: ccUser.value.organization?.name ?? '',
+      email: ccUser.value.email ?? '',
+      phone: ccUser.value.mobile ?? '',
+      ccAge: momentFromNow(ccUser.value.accepted_terms_timestamp),
+      signInCount: ccUser.value.sign_in_count,
+      lastActive: momentFromNow(ccUser.value.last_sign_in_at),
+      // os: `${ccUser.value.states.userAgent?.os?.name} ${ccUser.value.states.userAgent?.os?.version}`,
+      // browser: `${ccUser.value.states.userAgent?.browser?.name} ${ccUser.value.states.userAgent?.browser?.version}`,
+    };
+  } else
+    console.log('Error Loading CCuser or CCuser doesnt exist for this user');
+}
+
+const removeSubmittedFromFooter = (body) => {
+  const delimiter = '------------------';
+  const parts = body.split(delimiter);
+  return parts[0].trim();
+};
+
+const getAgentById = (id: number) => {
+  const _agentMap = props.agents
+    .map((u) => ({ [u.id]: u.name }))
+    .reduce((prev, current) => ({ ...prev, ...current }), {});
+
+  return _agentMap[id];
+};
 
 const isUserType = computed(() => {
   const _userTypes = [
@@ -341,43 +361,11 @@ const isUserType = computed(() => {
   }));
 });
 
-const removeSubmittedFrom = (body) => {
-  const delimiter = '------------------';
-  const parts = body.split(delimiter);
-  return parts[0].trim();
-};
-
-const agentMapFunction = (id: number) => {
-  const _agentMap = props.agents
-    .map((u) => ({ [u.id]: u.name }))
-    .reduce((prev, current) => ({ ...prev, ...current }), {});
-
-  return _agentMap[id];
-};
-
-const extraInfo = ref(false);
-const ccUserEntries = computed(() => {
-  return Object.entries(ccUser.value);
-});
-
-const profilePictureUrl = computed(() => {
-  if (ccUser.value.files && ccUser.value.files.length > 0) {
-    const profilePictures = ccUser.value.files.filter(
-      (file) => file.file_type_t === 'fileTypes.user_profile_picture',
-    );
-    if (profilePictures.length > 0) {
-      return profilePictures[0].small_thumbnail_url;
-    }
-  }
-
-  return `https://avatars.dicebear.com/api/bottts/${ccUser.value.first_name}.svg`;
-});
 onMounted(() => {
   isLoading.value = true;
-  getCurrentLoggedInUser();
+  getAgentIdForCurrentUser();
   getCcuStats();
   getComments();
-
   // getAgentList();
   isLoading.value = false;
 });
@@ -537,14 +525,14 @@ onMounted(() => {
           >
         </div>
         <div :class="[ticketData.status + '-tag', 'ticket-status text-xl']">
-          {{ capitalizeFirstLetter(ticketData.status) }}
+          {{ capitalize(ticketData.status) }}
         </div>
       </div>
 
       <div class="subject-date__container">
-        <BaseText class="">
+        <BaseText>
           <span class="text-base font-bold">Created:</span>
-          {{ formatTimeFromNow(ticketData.created_at) }}</BaseText
+          {{ momentFromNow(ticketData.created_at) }}</BaseText
         >
         <hr />
         <BaseText>
@@ -556,7 +544,7 @@ onMounted(() => {
           <span class="text-base font-bold"> Subject: </span>
           {{
             expanded
-              ? removeSubmittedFrom(ticketData?.description)
+              ? removeSubmittedFromFooter(ticketData?.description)
               : ticketData?.raw_subject
           }}</BaseText
         >
@@ -571,22 +559,22 @@ onMounted(() => {
       <div class="comments__container">
         <BaseText class="comments__header">Comments</BaseText>
         <div
-          v-for="(item, comment_idx) in comments"
+          v-for="(comment, comment_idx) in comments"
           :key="comment_idx"
           class="comments__items"
-          :class="messageHighlights(item)"
+          :class="getCommentHighlights(comment)"
         >
           <BaseText class="text-3xl font-bold">
-            {{ agentMapFunction(item.author_id) ?? zendeskUser.name }}
+            {{ getAgentById(comment.author_id) ?? zendeskUser.name }}
           </BaseText>
           <br />
-          <BaseText>{{ removeSubmittedFrom(item.body) }}</BaseText>
+          <BaseText>{{ removeSubmittedFromFooter(comment.body) }}</BaseText>
 
-          <div v-if="item.attachments[0]" class="attachments-container">
+          <div v-if="comment.attachments[0]" class="attachments-container">
             <span class="attachments__header">Attachments</span>
             <div class="attachments__items">
               <div
-                v-for="(attachment, attachment_idx) in item.attachments"
+                v-for="(attachment, attachment_idx) in comment.attachments"
                 :key="attachment_idx"
                 class="flex flex-col items-center justify-center border"
               >
@@ -636,10 +624,11 @@ onMounted(() => {
 
       <div class="assigned-to__container">
         <div class="header">
-          <!--        <img src="" class="w-10 h-10 rounded-md" />-->
           <BaseText variant="h1"
             >Assigned To:
-            <span class="font-bold text-xl">{{ assignedTo }}</span></BaseText
+            <span class="font-bold text-xl">{{
+              ticketAssigneeName
+            }}</span></BaseText
           >
         </div>
         <BaseSelect
