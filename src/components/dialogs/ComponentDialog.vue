@@ -125,7 +125,11 @@ export default defineComponent({
 
     emitter.on('modal_component:close', (key) => {
       if (key === props.id) {
-        closeDialog('ok');
+        try {
+          closeDialog('ok');
+        } catch {
+          return false;
+        }
       }
     });
 
