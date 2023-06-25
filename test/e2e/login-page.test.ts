@@ -44,6 +44,24 @@ test.describe('LoginPage', () => {
   );
 
   test(
+    testTitleWithTags('should show & hide password on eye icon click', [
+      'fast',
+      'primary',
+    ]),
+    async ({ page }) => {
+      const passwordField = page.getByPlaceholder('Password');
+      const eyeIcon = page.locator('.fa-eye');
+      await expect(eyeIcon).toBeVisible();
+      await passwordField.type('abc');
+      // Password field should have type password on init
+      await expect(passwordField).toHaveAttribute('type', 'password');
+      await eyeIcon.click();
+      // should have type text after click
+      await expect(passwordField).toHaveAttribute('type', 'text');
+    },
+  );
+
+  test(
     testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
     async ({ page }) => {
       const dataTestIds = await getAllTestIds(page);
