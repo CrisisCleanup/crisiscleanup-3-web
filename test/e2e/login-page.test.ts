@@ -95,23 +95,29 @@ test.describe('LoginPage', () => {
     },
   );
 
-  test.only(
+  test(
     testTitleWithTags(`should return 200 status code for all links`, [
       'slow',
       'primary',
     ]),
     async ({ page, context }) => {
       const linkLocators = await page.getByRole('link').all();
+      const visitedLinks = new Set();
       for (const link of linkLocators) {
         const href = await link.getAttribute('href');
         console.info('Found link', href);
-        if (href && !href.startsWith('mailto:')) {
+        const isVisited = visitedLinks.has(href);
+        if (isVisited) {
+          console.info('Skipping already visited link', href);
+        } else if (href && !href.startsWith('mailto:')) {
           const newPage = await context.newPage();
           await newPage.bringToFront();
           const response = await newPage.goto(href, {
             timeout: 30_000,
             waitUntil: 'networkidle',
           });
+          // Add link to visited links
+          visitedLinks.add(href);
           if (!response) {
             console.error('No response from', href);
             continue;
