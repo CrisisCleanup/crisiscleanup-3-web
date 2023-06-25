@@ -64,7 +64,11 @@ test.describe('LoginPage', () => {
   test(
     testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
     async ({ page }) => {
-      const dataTestIds = await getAllTestIds(page);
+      const _dataTestIds = await getAllTestIds(page);
+      // don't include testIncidentPhoneDiv (current incident hotline) as it changes based on current incident
+      const dataTestIds = _dataTestIds.filter(
+        (id) => !['testIncidentPhoneDiv'].includes(id!),
+      );
       expect(dataTestIds).toMatchObject([
         'testIsUnauthenticatedDiv',
         'testLogoIcon',
