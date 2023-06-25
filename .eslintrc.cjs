@@ -65,6 +65,12 @@ const config = {
         'vue/no-reserved-component-names': 'warn',
       },
     },
+    {
+      files: ['test/e2e/*'],
+      rules: {
+        'no-await-in-loop': 'warn',
+      },
+    },
   ],
 };
 
