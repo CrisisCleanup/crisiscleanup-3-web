@@ -113,8 +113,7 @@ test.describe('LoginPage', () => {
           const newPage = await context.newPage();
           await newPage.bringToFront();
           const response = await newPage.goto(href, {
-            timeout: 30_000,
-            waitUntil: 'networkidle',
+            waitUntil: 'commit',
           });
           // Add link to visited links
           visitedLinks.add(href);
