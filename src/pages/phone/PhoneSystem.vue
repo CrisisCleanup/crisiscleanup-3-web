@@ -350,7 +350,7 @@
           </div>
         </div>
         <div v-show="showingTable" class="phone-system__main-content--table">
-          <div class="flex justify-end items-center">
+          <div class="justify-end items-center hidden md:flex">
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
               data-testid="testUnclaimButton"
@@ -1161,11 +1161,11 @@ export default defineComponent({
     @apply flex flex-col;
 
     &__main {
-      @apply h-1/3;
+      @apply h-1/2;
     }
 
     &__form {
-      @apply h-2/3;
+      @apply h-1/2;
     }
   }
 }

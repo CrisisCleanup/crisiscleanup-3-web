@@ -3,8 +3,8 @@
     ref="table"
     :columns="columns"
     :url="tableUrl"
-    :body-style="{ height: '24rem' }"
-    class="mt-6 shadow-lg"
+    :body-style="{ height: mq.smMinus ? '10rem' : '24rem' }"
+    class="shadow-lg"
     :query="worksiteQuery"
     enable-selection
     @rowClick="
@@ -45,6 +45,7 @@ import {
   getStatusName,
 } from '../../filters';
 import AjaxTable from '@/components/AjaxTable.vue';
+import {useMq} from "vue3-mq";
 
 export default defineComponent({
   name: 'WorksiteTable',
@@ -55,6 +56,7 @@ export default defineComponent({
 
   setup() {
     const { t } = useI18n();
+    const mq = useMq();
 
     const columns = ref([
       {
@@ -104,6 +106,7 @@ export default defineComponent({
       getColorForStatus,
       getWorkTypeName,
       getStatusName,
+      mq,
     };
   },
 });

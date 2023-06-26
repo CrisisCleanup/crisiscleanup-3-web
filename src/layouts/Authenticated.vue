@@ -46,7 +46,7 @@
       />
     </div>
     <div class="main">
-      <div class="h-full overflow-auto">
+      <div class="h-full overflow-auto w-screen md:w-auto">
         <slot />
       </div>
     </div>

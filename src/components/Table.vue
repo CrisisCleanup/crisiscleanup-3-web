@@ -1,12 +1,12 @@
 <template>
-  <div class="table-grid js-table w-full">
+  <div v-if="mq" class="table-grid js-table w-full">
     <div
-      v-if="!hideHeader && $mq !== 'sm'"
+      v-if="!hideHeader && !mq.smMinus"
       class="header text-crisiscleanup-grey-700 bg-white"
       :style="gridStyleHeader"
     >
       <div
-        v-if="enableSelection && $mq !== 'sm'"
+        v-if="enableSelection && !mq.smMinus"
         class="flex items-center p-2 border-b"
       >
         <base-checkbox
@@ -16,13 +16,13 @@
         />
       </div>
       <div
-        v-if="hasRowDetails && $mq !== 'sm'"
+        v-if="hasRowDetails && !mq.smMinus"
         class="flex items-center p-2 border-b"
       ></div>
       <div
         v-for="column of columns"
-        :data-testid="`testColumn${column.key}Div`"
         :key="column.key"
+        :data-testid="`testColumn${column.key}Div`"
         class="p-2 border-b flex items-center cursor-pointer header-column"
         :class="column.headerClass || []"
         :style="column.headerStyle || []"
@@ -123,8 +123,8 @@
       </div>
       <div
         v-for="item of data"
-        :data-testid="`testDataItem${item.id}Content`"
         :key="item.id"
+        :data-testid="`testDataItem${item.id}Content`"
         :style="gridStyleRow"
         class="hover:bg-crisiscleanup-light-grey border-b js-table-row"
         :class="{
@@ -134,7 +134,7 @@
         @click="rowClick(item, $event)"
       >
         <div
-          v-if="enableSelection && $mq !== 'sm'"
+          v-if="enableSelection && !mq.smMinus"
           class="flex items-center p-2 border-b"
         >
           <base-checkbox
@@ -149,28 +149,32 @@
           />
         </div>
         <div
-          v-if="hasRowDetails && $mq !== 'sm'"
+          v-if="hasRowDetails && !mq.smMinus"
           class="flex items-center p-2 lg:border-b md:border-b"
         >
           <font-awesome-icon
             class="cursor-pointer"
             size="md"
-            :alt="showingDetails.has(item.id) ? $t('actions.hide_options') : $t('actions.show_options')"
+            :alt="
+              showingDetails.has(item.id)
+                ? $t('actions.hide_options')
+                : $t('actions.show_options')
+            "
             :icon="showingDetails.has(item.id) ? 'caret-up' : 'caret-down'"
             @click="setShowingDetails(item)"
           />
         </div>
         <div
           v-for="column of columns"
-          :data-testid="`testColumn${column.key && item.id}Column`"
           :key="column.key"
+          :data-testid="`testColumn${column.key && item.id}Column`"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
           :class="column.class || []"
           :style="column.style || []"
           @click="handleColumnAction(column, item[column.key], item)"
         >
           <slot :name="column.key" :item="item">
-            <span v-if="$mq === 'sm'" class="font-semibold mr-2">
+            <span v-if="mq.smMinus" class="font-semibold mr-2">
               {{ column.title }}:
             </span>
             <template
@@ -211,7 +215,7 @@
       v-if="enablePagination"
       class="footer flex flex-col sm:flex-row sm:items-center justify-between p-4"
     >
-      <div class="flex items-center mb-4 sm:mb-0">
+      <div v-if="!mq.smMinus" class="flex items-center mb-4 sm:mb-0">
         <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
         <base-select
           :model-value="pagination.pageSize"
@@ -223,7 +227,7 @@
           @update:modelValue="onSelectPageSize"
         />
       </div>
-      <div>
+      <div v-if="!mq.smMinus">
         <div class="flex items-center">
           <base-button
             :disabled="isPreviousButtonDisabled"
@@ -270,6 +274,34 @@
             class="text-base js-next"
           />
         </div>
+      </div>
+      <div v-else class="flex items-center justify-between pt-2">
+        <base-button
+          :disabled="isPreviousButtonDisabled"
+          :action="
+            () => {
+              pageChangeHandle('previous');
+            }
+          "
+          variant="solid"
+          :alt="$t('tableVue.prev')"
+          data-testid="testPaginationPrevButton"
+          icon-size="xs"
+          ccu-icon="arrow-left"
+        />
+        <base-button
+          :disabled="isNextButtonDisabled"
+          :action="
+            () => {
+              pageChangeHandle('next');
+            }
+          "
+          variant="solid"
+          :alt="$t('tableVue.next')"
+          data-testid="testPaginationNextButton"
+          icon-size="xs"
+          ccu-icon="arrow-right"
+        />
       </div>
     </div>
   </div>
@@ -468,7 +500,7 @@ export default defineComponent({
     const gridStyleRow = computed(() => {
       return {
         display: 'grid',
-        'grid-template-columns': mq === 'sm' ? 'auto' : gridTemplate.value,
+        'grid-template-columns': mq.smMinus ? 'auto' : gridTemplate.value,
         ...props.rowStyle,
       };
     });
@@ -650,6 +682,7 @@ export default defineComponent({
       exportTableCSV,
       handleColumnAction,
       internalColumnSearch,
+      mq,
     };
   },
 });

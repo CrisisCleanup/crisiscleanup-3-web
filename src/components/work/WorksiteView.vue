@@ -8,8 +8,8 @@
       <div class="flex p-1">
         <flag
           v-for="flag in worksite.flags"
-          :data-testid="`test${flag.reason_t}Flag`"
           :key="flag.reason_t"
+          :data-testid="`test${flag.reason_t}Flag`"
           :flag-reason="flag.reason_t"
           removable
           @onRemove="removeFlag(flag)"
@@ -194,7 +194,8 @@
                       class="ml-2 p-1 px-3 text-xs"
                     />
                     <div
-                      v-else class="ml-2 p-1 px-3 text-xs"
+                      v-else
+                      class="ml-2 p-1 px-3 text-xs"
                       data-testid="testRequestedDiv"
                     >
                       {{ $t('caseView.requested') }}
@@ -372,7 +373,9 @@
         :alt="$t('actions.claim')"
         :action="
           () => {
-            showingClaimModal = true;
+            return claimWorkType(
+              workTypesUnclaimed.map((workType) => workType.work_type),
+            );
           }
         "
       />

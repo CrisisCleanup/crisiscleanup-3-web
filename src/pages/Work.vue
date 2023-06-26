@@ -256,7 +256,7 @@
           </div>
         </div>
         <div v-if="showingTable" class="work-page__main-content--table">
-          <div class="flex items-center justify-end">
+          <div class="items-center justify-end hidden md:flex">
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
               data-testid="testPrintClaimedButton"
@@ -1721,11 +1721,11 @@ export default defineComponent({
     @apply flex flex-col;
 
     &__main {
-      @apply h-1/3;
+      @apply h-1/2;
     }
 
     &__form {
-      @apply h-2/3;
+      @apply h-1/2;
     }
   }
 }
