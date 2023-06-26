@@ -123,7 +123,12 @@ test.describe('LoginPage', () => {
             continue;
           }
 
-          console.info(`Response from ${href}`, response);
+          console.info(`Response from ${href}`, {
+            url: response.url(),
+            ok: response.ok(),
+            status: response.status(),
+            headers: response.headers(),
+          });
           const status = response.status();
           expect(status).toBe(200);
           // close newly opened page (tab) to avoid OOM issues
