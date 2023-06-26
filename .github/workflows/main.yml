@@ -134,6 +134,8 @@ jobs:
         run: pnpm install
       - name: Install Playwright Browsers
         run: pnpm run e2e:install
+      - name: Build App
+        run: pnpm run build:app
       - name: Run Playwright tests
         run: pnpm run test:e2e
       - uses: actions/upload-artifact@v3
