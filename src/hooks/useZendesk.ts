@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import { createInjectionState } from '@vueuse/shared';
+import { useMutationObserver, tryOnMounted } from '@vueuse/core';
 
 interface WebWidgetColor {
   theme: string;
@@ -119,6 +120,46 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
     const config = reactive(initialConfig);
     const zeWindow = computed(() => window as typeof window & { zE: Zendesk });
 
+    const _zeContainer = ref<HTMLDivElement | undefined>(undefined);
+    const _zeWidgetFrame = ref<HTMLIFrameElement | undefined>(undefined);
+
+    const isOpen = computed<boolean>(() => _zeWidgetFrame !== undefined);
+
+    // Look for zendesk button iframe to find the parent container
+    // in which it and the form, as the form is added/removed from the dom tree
+    // dynamically.
+    const handleOnMounted = async () => {
+      await nextTick(() => {
+        const zeButtonFrame =
+          zeWindow.value?.document?.querySelector?.('iframe#launcher');
+        if (zeButtonFrame) {
+          _zeContainer.value = zeButtonFrame?.parentElement as HTMLDivElement;
+        }
+      });
+    };
+
+    // Observe container to watch for the widget iframe node being added/removed.
+    useMutationObserver(
+      _zeContainer,
+      (mutations) => {
+        console.log('mutations:', mutations);
+        const widgetFrameAdded = mutations.find(
+          (mut) => mut.addedNodes.length > 0,
+        );
+        if (!widgetFrameAdded) {
+          if (mutations.some((mut) => mut.removedNodes.length > 0)) {
+            _zeWidgetFrame.value = undefined;
+          }
+
+          return;
+        }
+
+        const node = widgetFrameAdded.addedNodes.item(0);
+        _zeWidgetFrame.value = node as HTMLIFrameElement;
+      },
+      { childList: true },
+    );
+
     const zE: Zendesk = <ArgsT extends Parameters<Zendesk>>(
       ...args: ArgsT
     ): void => {
@@ -134,10 +175,13 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
       { deep: true, immediate: true },
     );
 
+    tryOnMounted(handleOnMounted);
+
     return {
       config,
       zeWindow,
       zE,
+      isOpen,
     };
   },
 );
