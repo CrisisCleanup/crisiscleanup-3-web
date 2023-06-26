@@ -18,6 +18,7 @@ import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
 
+const { t } = useI18n();
 const commentsContainer = ref<HTMLDivElement | null>(null);
 
 const { emitter } = useEmitter();
@@ -490,7 +491,11 @@ onMounted(() => {
   <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
-        <img alt="~~picture of user" :src="profilePictureUrl" class="w-full" />
+        <img
+          :alt="t('~~picture of user')"
+          :src="profilePictureUrl"
+          class="w-full"
+        />
         <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div v-if="features.userType">
@@ -499,7 +504,7 @@ onMounted(() => {
           :style="`border-color: #3498DB; color: #3498DB`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
-          User
+          {{ t('~~User') }}
         </div>
 
         <div
@@ -507,7 +512,7 @@ onMounted(() => {
           :style="`border-color: #27AE60; color: #27AE60`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
-          Survivor
+          {{ t('~~Survivor') }}
         </div>
       </div>
       <div
@@ -516,7 +521,7 @@ onMounted(() => {
       >
         <BaseButton
           :action="() => loginAs(props.ticketData.user.ccu_user?.id)"
-          text="Login As"
+          :text="t('~~Login As')"
           variant="primary"
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
@@ -536,7 +541,7 @@ onMounted(() => {
           </BaseText>
         </div>
         <div class="flex flex-col px-4 py-2">
-          <span class="font-bold text-xl">Languages: </span>
+          <span class="font-bold text-xl"> {{ t('~~Languages:') }}</span>
           <div
             v-for="l in languages.filter(
               (item) =>
@@ -551,7 +556,7 @@ onMounted(() => {
         </div>
 
         <div class="flex flex-col px-4">
-          <span class="font-bold text-xl">Roles: </span>
+          <span class="font-bold text-xl"> {{ t('~~Roles:') }} </span>
           <UserRolesSelect
             v-if="ccUser.roles"
             style="pointer-events: none"
@@ -564,7 +569,7 @@ onMounted(() => {
           <BaseButton
             :action="() => (extraInfo = !extraInfo)"
             variant="primary"
-            text="Extra Info"
+            :text="t('~~Extra Info')"
             class="p-2 mx-4 my-3 text-xl rounded-md w-full"
           />
         </div>
@@ -581,7 +586,7 @@ onMounted(() => {
         <div class="flex items-center justify-center">
           <BaseButton
             :action="() => showEventsModal()"
-            text="More Events"
+            :text="t('~~More Events')"
             variant="primary"
             class="p-2 mx-4 my-4 text-xl rounded-md w-full"
           />
@@ -620,15 +625,16 @@ onMounted(() => {
           text-variant="h2"
           @click="createIssue()"
         >
-          Create GitHub Issue</base-link
+          {{ t('~~Create GitHub Issue') }}</base-link
         >
         <span v-else></span>
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
             target="_blank"
+            class="md:text-[1.2vw]"
           >
-            Zendesk</a
+            {{ t('~~Zendesk') }}</a
           >
         </div>
         <div :class="[ticketTestData.status + '-tag', 'ticket-status text-xl']">
@@ -638,7 +644,7 @@ onMounted(() => {
 
       <div class="subject-date__container">
         <BaseText>
-          <span class="text-base font-bold">Created:</span>
+          <span class="text-base font-bold"> {{ t('~~Created:') }}</span>
           {{ momentFromNow(ticketData.created_at) }}</BaseText
         >
         <hr />
@@ -648,7 +654,7 @@ onMounted(() => {
         >
         <hr />
         <BaseText>
-          <span class="text-base font-bold"> Subject: </span>
+          <span class="text-base font-bold"> {{ t('~~Subject:') }} </span>
           {{
             expanded
               ? removeSubmittedFromFooter(ticketData?.description)
@@ -659,11 +665,11 @@ onMounted(() => {
           class="m-2 text-primary-light"
           @click="() => (expanded = !expanded)"
         >
-          {{ expanded ? 'Less' : 'More' }}
+          {{ expanded ? t('~~Less') : t('~~More') }}
         </BaseText>
       </div>
       <div ref="commentsContainer" class="comments__container">
-        <BaseText class="comments__header">Comments</BaseText>
+        <BaseText class="comments__header">{{ t('Comments') }}</BaseText>
         <div
           v-for="(comment, comment_idx) in comments"
           :key="comment_idx"
@@ -677,7 +683,7 @@ onMounted(() => {
           <BaseText>{{ removeSubmittedFromFooter(comment.body) }}</BaseText>
 
           <div v-if="comment.attachments[0]" class="attachments-container">
-            <span class="attachments__header">Attachments</span>
+            <span class="attachments__header"> {{ t('~~Attachments') }}</span>
             <div class="attachments__items">
               <div
                 v-for="(attachment, attachment_idx) in comment.attachments"
@@ -706,7 +712,7 @@ onMounted(() => {
             <BaseButton
               class="rounded-md mx-2 py-4 p-2"
               :action="showMacroModal"
-              text="Apply Macro"
+              :text="t('~~Apply Macro')"
               variant="primary"
             />
           </div>
@@ -714,7 +720,7 @@ onMounted(() => {
         <modal
           v-if="macroModalVisibility"
           closeable
-          title="Macros"
+          :title="t('~~Macros')"
           class="p-10"
           @close="showMacroModal()"
         >
@@ -731,7 +737,7 @@ onMounted(() => {
       <div class="assigned-to__container">
         <div class="header">
           <BaseText variant="h1"
-            >Assigned To:
+            >{{ t('~~Assigned To:') }}
             <span class="font-bold text-xl">{{
               ticketAssigneeName
             }}</span></BaseText
@@ -750,18 +756,18 @@ onMounted(() => {
 
         <BaseButton
           variant="primary"
-          text="Assign"
+          :text="t('~~Assign')"
           class="reassign-button"
           :action="reAssignTicket"
         />
       </div>
 
       <div class="reply-as">
-        <BaseText class="reply-as__header">Reply As:</BaseText>
+        <BaseText class="reply-as__header"> {{ t('~~Reply As:') }}</BaseText>
         <div class="buttons__container">
           <BaseButton
             size="md"
-            text="Delete"
+            :text="t('~~Delete')"
             :class="['w-1/4 rounded-md text-xl border']"
             icon="trash"
             icon-size="lg"

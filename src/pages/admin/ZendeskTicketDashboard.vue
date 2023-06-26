@@ -13,6 +13,7 @@ import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
 import type User from '@/models/User';
 
+const { t } = useI18n();
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
@@ -318,19 +319,19 @@ onMounted(() => {
       class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
     >
       <BaseText
-        ><span class="font-bold">Total Tickets:</span>
+        ><span class="font-bold">{{ t('~~Total Tickets:') }}</span>
         {{ ticketStats.total }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#c19700]">New: </span
+        ><span class="font-bold text-[#c19700]">{{ t('~~New:') }}</span
         >{{ ticketStats.newTickets }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#0042ed]">Open: </span>
+        ><span class="font-bold text-[#0042ed]">{{ t('~~Open:') }}</span>
         {{ ticketStats.open }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#6b6b6b]">Pending: </span
+        ><span class="font-bold text-[#6b6b6b]">{{ t('~~Pending:') }}</span
         >{{ ticketStats.pending }}</BaseText
       >
     </div>
@@ -339,15 +340,15 @@ onMounted(() => {
       class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
     >
       <BaseText
-        ><span class="font-bold">Web4:</span>
+        ><span class="font-bold">{{ t('~~Web4:') }}</span>
         {{ ticketStats.app_type?.web4 ?? 0 }}</BaseText
       >
       <BaseText
-        ><span class="font-bold">IOS:</span>
+        ><span class="font-bold">{{ t('~~IOS:') }}</span>
         {{ ticketStats.app_type?.ios ?? 0 }}</BaseText
       >
       <BaseText
-        ><span class="font-bold">Android:</span>
+        ><span class="font-bold">{{ t('~~Android:') }}</span>
         {{ ticketStats.app_type?.android ?? 0 }}</BaseText
       >
     </div>
@@ -357,11 +358,11 @@ onMounted(() => {
     >
       <!--      could not get these to return just number instead of key:value pair as undefined for key-->
       <BaseText
-        ><span class="font-bold">Users: </span>
+        ><span class="font-bold">{{ t('~~Users:') }}</span>
         {{ ticketStats.users?.undefined }}
       </BaseText>
       <BaseText
-        ><span class="font-bold">Survivors: </span>
+        ><span class="font-bold">{{ t('~~Survivors: ') }}</span>
         {{ ticketStats.survivors?.undefined }}</BaseText
       >
     </div>
@@ -386,7 +387,7 @@ onMounted(() => {
         :style="`border-color: #3498DB; color: #3498DB`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        User
+        {{ t('~~User') }}
       </div>
 
       <div
@@ -394,7 +395,7 @@ onMounted(() => {
         :style="`border-color: #27AE60; color: #27AE60`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        Survivor
+        {{ t('~~Survivor') }}
       </div>
     </template>
 
@@ -406,7 +407,9 @@ onMounted(() => {
         data-testid="testUserRolesSelect"
         :user="slotProps.item.user.ccu_user"
       />
-      <div v-else class="flex items-center justify-center">No Roles</div>
+      <div v-else class="flex items-center justify-center">
+        {{ t('~~') }}No Roles
+      </div>
     </template>
 
     <template #requester="slotProps">
@@ -426,7 +429,7 @@ onMounted(() => {
     <template #advanced_ticket="slotProps">
       <BaseButton
         :action="() => showTicketModal(slotProps.item)"
-        text="Open"
+        :text="t('~~Open')"
         variant="primary"
         class="p-2 rounded-md text-lg"
       />
