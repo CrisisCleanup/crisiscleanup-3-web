@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
@@ -180,7 +181,7 @@ const parseUserIdsFromTickets = (tickets: Ticket[]) => {
 const getUsersRelatedToTickets = () => {
   axiosInstance
     .get(`/users?${userIdsFilter.value}`, {})
-    .then((response: ZendeskUserList) => {
+    .then((response: AxiosResponse<unknown>) => {
       usersRelatedToTickets.value = response;
       console.log('This is the usersRelated to ticket response', response);
     })
@@ -300,6 +301,9 @@ const removeSubmittedFromFooter = (body: string): string => {
   return parts[0].trim();
 };
 
+watch(ticketsWithUsers, (newValue, oldValue) => {
+  console.log('ticket data has changed', newValue, oldValue);
+});
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -459,7 +463,7 @@ onMounted(() => {
         :current-user="currentUser"
         :agents="agents"
         :ticket-data="activeTicket"
-        @re-fetch-ticket="fetchTickets"
+        @change="fetchTickets"
       />
     </template>
   </modal>

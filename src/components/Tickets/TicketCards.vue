@@ -3,7 +3,7 @@ import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
 import { useStore } from 'vuex';
-import moment from 'moment';
+import { ref } from 'vue';
 import Table from '../Table.vue';
 import LanguageTag from '../tags/LanguageTag.vue';
 import Modal from '@/components/Modal.vue';
@@ -16,6 +16,50 @@ import AdminEventStream from '@/components/admin/AdminEventStream.vue';
 import JsonWrapper from '@/components/JsonWrapper.vue';
 import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
+import useEmitter from '@/hooks/useEmitter';
+
+const commentsContainer = ref<HTMLDivElement | null>(null);
+
+const { emitter } = useEmitter();
+
+interface Comment {
+  attachments: {
+    content_type: string;
+    content_url: string;
+    file_name: string;
+    id: number;
+    size: number;
+    thumbnails: {
+      [key: string]: any;
+    }[];
+  }[];
+  author_id: number;
+  body: string;
+  created_at: string;
+  id: number;
+  metadata: {
+    system: {
+      client: string;
+      ip_address: string;
+      latitude: number;
+      location: string;
+      longitude: number;
+    };
+    via: {
+      channel: string;
+      source: {
+        from: any;
+        rel: string;
+        to: any;
+      };
+    };
+  };
+  public: boolean;
+  type: string;
+}
+interface CommentList {
+  comments: Comment[];
+}
 
 const store = useStore();
 const props = defineProps({
@@ -32,7 +76,7 @@ const props = defineProps({
     default: () => null,
   },
 });
-
+const ticketTestData = toRef(props, 'ticketData');
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
@@ -46,14 +90,14 @@ const features = {
   events: true,
   githubIssue: true,
 };
-const extraInfo = ref(false);
-const expanded = ref(false);
-const currentUserID = ref('');
-const isLoading = ref(false);
+const extraInfo = ref<boolean>(false);
+const expanded = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
+const currentUserID = ref<number>();
 // const toast = useToast()
-const comments = ref([]);
-const ticketReply = ref('');
-const selectedAgent = ref('');
+const comments = ref<Comment[]>([]);
+const ticketReply = ref<string>('');
+const selectedAgent = ref<string>('');
 const agentList = ref([]);
 const macros = ref([
   {
@@ -146,7 +190,7 @@ const submittedFrom = computed(() => {
   return parsed || '';
 });
 const assignedUser = computed(() => {
-  return _.find(agentList.value, { id: props.ticketData?.assignee_id });
+  return _.find(props.agents, { id: props.ticketData?.assignee_id });
 });
 const ticketAssigneeName = computed(() => {
   return assignedUser.value ? assignedUser.value.name : 'None';
@@ -192,6 +236,21 @@ Describe the actual result here.
   window.open(url, '_blank');
 };
 
+const fetchActiveTicket = () => {
+  axiosInstance
+    .get(`/tickets/${ticketTestData.value.id}`, {})
+    .then((response) => {
+      console.log('fetchActiveTicket', response);
+      ticketTestData.value.status = response.data.ticket.status;
+      ticketTestData.value.assignee_id = response.data.ticket.assignee_id;
+      ticketReply.value = '';
+      selectedAgent.value = '';
+    })
+    .catch((error: Error) => {
+      console.error('Error fetching tickets:', error);
+    });
+};
+
 const replyToTicket = (replyStatus: string) => {
   axiosInstance
     .put(`/tickets/${props.ticketData.id}`, {
@@ -210,7 +269,10 @@ const replyToTicket = (replyStatus: string) => {
         // )
       }
 
-      router.go();
+      emitter.emit('reFetchActiveTicket');
+      getComments();
+      fetchActiveTicket();
+      // router.go();
     })
     .catch((error: Error) => {
       // toast.error('Reply unsuccessful', e)
@@ -218,18 +280,22 @@ const replyToTicket = (replyStatus: string) => {
     });
 };
 
+const testAssign = () => {
+  console.log('ASSIGN TICKET');
+};
+
 const reAssignTicket = () => {
   axiosInstance
     .put(`/tickets/${props.ticketData.id}`, {
       ticket: {
-        assignee_id: _.find(agentList.value, { name: selectedAgent.value }).id,
+        assignee_id: selectedAgent.value,
       },
     })
     .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
         // toast.success('Successfully reassigned')
         setTimeout(() => {
-          router.go(); // Reload the page after a delay
+          fetchActiveTicket();
         }, 2000); // Timeout to account for zendesk db update
       }
     })
@@ -267,6 +333,9 @@ const getComments = () => {
     .get(`/tickets/${props.ticketData.id}/comments`, {})
     .then((response: AxiosResponse<unknown>) => {
       comments.value = response.data.comments;
+    })
+    .then(() => {
+      commentsContainer.value.scrollTop = commentsContainer.value.scrollHeight;
     });
 };
 
@@ -372,6 +441,16 @@ onMounted(() => {
 </script>
 
 <template>
+  <!--  <div class="overflow-scroll">-->
+  <!--    ticketdata:-->
+  <!--    {{ ticketData }}-->
+  <!--    <br />-->
+  <!--    <br />-->
+  <!--    <br />-->
+  <!--    ticketTestData:-->
+  <!--    {{ ticketTestData }}-->
+  <!--  </div>-->
+
   <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
@@ -524,8 +603,8 @@ onMounted(() => {
             Zendesk</a
           >
         </div>
-        <div :class="[ticketData.status + '-tag', 'ticket-status text-xl']">
-          {{ capitalize(ticketData.status) }}
+        <div :class="[ticketTestData.status + '-tag', 'ticket-status text-xl']">
+          {{ capitalize(ticketTestData.status) }}
         </div>
       </div>
 
@@ -555,8 +634,7 @@ onMounted(() => {
           {{ expanded ? 'Less' : 'More' }}
         </BaseText>
       </div>
-
-      <div class="comments__container">
+      <div ref="commentsContainer" class="comments__container">
         <BaseText class="comments__header">Comments</BaseText>
         <div
           v-for="(comment, comment_idx) in comments"
@@ -586,13 +664,13 @@ onMounted(() => {
           </div>
         </div>
       </div>
-
       <div class="ticket-reply">
         <div class="grid grid-cols-12 grid-rows-4">
           <BaseInput
             v-model="ticketReply"
             text-area
             class="w-full h-full col-span-11 row-span-4"
+            input-classes="resize-none row-span-4"
             rows="6"
             placeholder="Ticket Reply"
           />
@@ -646,7 +724,7 @@ onMounted(() => {
           variant="primary"
           text="Assign"
           class="reassign-button"
-          :action="() => reAssignTicket"
+          :action="reAssignTicket"
         />
       </div>
 
@@ -654,7 +732,7 @@ onMounted(() => {
         <BaseText class="reply-as__header">Reply As:</BaseText>
         <div class="buttons__container">
           <template
-            v-for="status in ['open', 'pending', 'solved']"
+            v-for="status in ['new', 'open', 'pending', 'solved']"
             :key="status"
           >
             <BaseButton
@@ -698,7 +776,7 @@ onMounted(() => {
     @apply px-4 py-2 text-left row-span-2  border-b-2 border-gray-400;
   }
   .comments__container {
-    @apply text-left px-4 py-2 overflow-y-scroll row-span-4 h-80;
+    @apply text-left px-4 py-2 overflow-y-scroll row-span-4 h-80 scroll-smooth;
     .comments__header {
       @apply text-base font-bold;
     }
