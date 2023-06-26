@@ -417,19 +417,6 @@ const getAgentById = (id: number) => {
   return _agentMap[id];
 };
 
-const isUserType = computed(() => {
-  const _userTypes = [
-    { name: 'User', color: '#3498DB' },
-    { name: 'Ghost', color: '#F39C12' },
-    { name: 'Survivor', color: '#27AE60' },
-  ];
-
-  return _userTypes.map((type) => ({
-    name: type.name,
-    color: type.color,
-  }));
-});
-
 onMounted(() => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
@@ -441,16 +428,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--  <div class="overflow-scroll">-->
-  <!--    ticketdata:-->
-  <!--    {{ ticketData }}-->
-  <!--    <br />-->
-  <!--    <br />-->
-  <!--    <br />-->
-  <!--    ticketTestData:-->
-  <!--    {{ ticketTestData }}-->
-  <!--  </div>-->
-
   <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
@@ -458,14 +435,6 @@ onMounted(() => {
         <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div v-if="features.userType">
-        <!--        <div-->
-        <!--          v-for="type in isUserType"-->
-        <!--          :key="type.name"-->
-        <!--          :style="`border-color: ${type.color}; color: ${type.color}`"-->
-        <!--          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"-->
-        <!--        >-->
-        <!--          {{ type.name }}-->
-        <!--        </div>-->
         <div
           v-if="ccUser"
           :style="`border-color: #3498DB; color: #3498DB`"
