@@ -197,9 +197,20 @@ const ticketAssigneeName = computed(() => {
 });
 
 const createIssue = () => {
-  const queryParams = new URLSearchParams({
-    title: '',
-    body: `
+  const formattedComments = comments.value
+    .map(
+      (comment, index) =>
+        `**Comment ${
+          getAgentById(comment.author_id) ?? zendeskUser.value.name
+        }:**\n\n${removeSubmittedFromFooter(comment.body)}`,
+    )
+    .join('\n\n---\n\n');
+
+  const queryParams = new URLSearchParams({ title: '', body: '' });
+  if (ccUser.value) {
+    queryParams.set(
+      'body',
+      `
 **Issue Description:**
 This is the description of the issue.
 
@@ -219,15 +230,49 @@ Describe the actual result here.
 - Ticket Submitted From: **${submittedFrom.value}**
 - Zendesk Username: **${zendeskUser.value.name}**
 - Crisis Cleanup Username: **${
-      ccUser.value.first_name + ' ' + ccUser.value.last_name
-    }**
+        ccUser.value.first_name + ' ' + ccUser.value.last_name
+      }**
 - Organization: **${ccUser.value.organization?.name}**
 - Email: **${ccUser.value.email}**
 - Phone: **${ccUser.value.mobile}**
 - CC Age: **${momentFromNow(ccUser.value.accepted_terms_timestamp)}**
+
+**Comments:**
+\`\`\`
+  ${formattedComments}
+\`\`\`
 `,
-    // Add additional parameters as needed
-  });
+    );
+  } else {
+    queryParams.set(
+      'body',
+      `
+**Issue Description:**
+This is the description of the issue.
+
+**Steps to Reproduce:**
+1. First step.
+2. Second step.
+
+**Expected Result:**
+Describe the expected result here.
+
+**Actual Result:**
+Describe the actual result here.
+
+**Additional Information:**
+- Environment:
+- Version:
+- Ticket Submitted From: **${submittedFrom.value}**
+- Zendesk Username: **${zendeskUser.value.name}**
+
+**Comments:**
+\`\`\`
+  ${formattedComments}
+\`\`\`
+`,
+    );
+  }
 
   const repo = 'crisiscleanup-4-web';
   const url = `https://github.com/CrisisCleanup/${repo}/issues/new?${queryParams.toString()}`;
@@ -280,8 +325,22 @@ const replyToTicket = (replyStatus: string) => {
     });
 };
 
-const testAssign = () => {
-  console.log('ASSIGN TICKET');
+const deleteTicket = () => {
+  console.log('coming soon!');
+  // axiosInstance
+  //   .delete(`/tickets/${props.ticketData.id}.json`).then((response: AxiosResponse<unknown>) => {
+  //   if (response.status === 200) {
+  // toast.success(
+  // 	`Reply Successfull, Ticket Status Changed to ${replyStatus}`
+  // )
+  // }
+
+  // emitter.emit('closeModal');
+  // })
+  //   .catch((error: Error) => {
+  // toast.error('Reply unsuccessful', e)
+  // console.log(error);
+  // });
 };
 
 const reAssignTicket = () => {
@@ -700,8 +759,16 @@ onMounted(() => {
       <div class="reply-as">
         <BaseText class="reply-as__header">Reply As:</BaseText>
         <div class="buttons__container">
+          <BaseButton
+            size="md"
+            text="Delete"
+            :class="['w-1/4 rounded-md text-xl border']"
+            icon="trash"
+            icon-size="lg"
+            :action="() => deleteTicket()"
+          />
           <template
-            v-for="status in ['new', 'open', 'pending', 'solved']"
+            v-for="status in ['open', 'pending', 'solved']"
             :key="status"
           >
             <BaseButton
