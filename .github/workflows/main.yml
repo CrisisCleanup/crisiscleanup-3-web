@@ -104,6 +104,8 @@ jobs:
     needs: [versions]
     env:
       VITE_APP_BASE_URL: http://127.0.0.1:8080
+      TEST_APP_EMAIL: ${{ secrets.TEST_APP_EMAIL_DEV }}
+      TEST_APP_PASSWORD: ${{ secrets.TEST_APP_PASSWORD_DEV }}
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
