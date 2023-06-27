@@ -100,7 +100,6 @@ const comments = ref<Comment[]>([]);
 const firstComment = ref();
 const ticketReply = ref<string>('');
 const selectedAgent = ref<string>('');
-const agentList = ref([]);
 const macros = ref([
   {
     id: 1,
@@ -287,7 +286,6 @@ const fetchActiveTicket = () => {
   axiosInstance
     .get(`/tickets/${ticketTestData.value.id}`, {})
     .then((response) => {
-      console.log('fetchActiveTicket', response);
       ticketTestData.value.status = response.data.ticket.status;
       ticketTestData.value.assignee_id = response.data.ticket.assignee_id;
       ticketReply.value = '';
@@ -309,17 +307,16 @@ const replyToTicket = (replyStatus: string) => {
         },
       },
     })
-    .then((response: AxiosResponse<unknown>) => {
-      if (response.status === 200) {
-        // toast.success(
-        // 	`Reply Successfull, Ticket Status Changed to ${replyStatus}`
-        // )
-      }
-
-      emitter.emit('reFetchActiveTicket');
+    .then(() => {
       getComments();
-      fetchActiveTicket();
-      // router.go();
+      if (props.ticketData?.assignee_id) {
+        fetchActiveTicket();
+      } else {
+        reAssignTicket(currentUserID.value);
+      }
+    })
+    .then(() => {
+      emitter.emit('reFetchActiveTicket');
     })
     .catch((error: Error) => {
       // toast.error('Reply unsuccessful', e)
@@ -345,11 +342,13 @@ const deleteTicket = () => {
   // });
 };
 
-const reAssignTicket = () => {
+const reAssignTicket = (agentId: number) => {
+  const _assigneeId = agentId ? agentId : selectedAgent.value;
+
   axiosInstance
     .put(`/tickets/${props.ticketData.id}`, {
       ticket: {
-        assignee_id: selectedAgent.value,
+        assignee_id: _assigneeId,
       },
     })
     .then((response: AxiosResponse<unknown>) => {
@@ -357,7 +356,7 @@ const reAssignTicket = () => {
         // toast.success('Successfully reassigned')
         setTimeout(() => {
           fetchActiveTicket();
-        }, 2000); // Timeout to account for zendesk db update
+        }, 1000); // Timeout to account for zendesk db update
       }
     })
     .catch((error: Error) => {
@@ -367,28 +366,11 @@ const reAssignTicket = () => {
 };
 
 const getAgentIdForCurrentUser = () => {
-  currentUserID.value = props.agents.some(
+  currentUserID.value = props.agents.find(
     (agent) => agent.name === props.currentUser.full_name,
   )?.id;
 };
 
-// const getAgentList = () => {
-//   axiosInstance
-//     .get(`/users`, {
-//       params: {
-//         role: 'admin',
-//       },
-//     })
-//     .then((response: any) => {
-//       for (let i = 0; i < response.data.users.length; i++) {
-//         agentList.value.push({
-//           id: response.data.users[i].id,
-//           name: response.data.users[i].name,
-//         });
-//         agentDropdown.value.push(response.data.users[i].name);
-//       }
-//     });
-// };
 const getComments = () => {
   axiosInstance
     .get(`/tickets/${props.ticketData.id}/comments`, {})
@@ -634,7 +616,7 @@ onMounted(() => {
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
             target="_blank"
-            class="md:text-[1.2vw]"
+            class="md:text-[.9vw]"
           >
             {{ t('~~Zendesk') }}</a
           >
@@ -721,7 +703,7 @@ onMounted(() => {
           />
           <div class="row-span-4 flex justify-center items-center">
             <BaseButton
-              class="rounded-md mx-2 py-4 p-2"
+              class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
               :action="showMacroModal"
               :text="t('~~Apply Macro')"
               variant="primary"
@@ -860,7 +842,7 @@ onMounted(() => {
       @apply md:col-span-11 my-2;
     }
     .reassign-button {
-      @apply md:col-span-1 p-4 rounded-md mx-2 my-2;
+      @apply md:col-span-1 p-4 rounded-md mx-2 my-2 md:text-[.8vw];
     }
   }
 
