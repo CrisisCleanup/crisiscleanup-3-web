@@ -160,13 +160,14 @@ const requesterIdList = ref<number[]>([]);
 const isLoading = ref<boolean>(false);
 
 const ticketTotals = ref();
-const agents = ref([
-  { id: 411_677_450_351, name: 'Triston Lewis' },
-  { id: 484_643_688, name: 'Aarron Titus' },
-  { id: 114_709_872_451, name: 'Ross Arroyo' },
-  { id: 403_645_788_712, name: 'Gina Newby' },
-  { id: 401_921_331_392, name: 'Angelo Pablo' },
-]);
+// const agents = ref([
+//   { id: 411_677_450_351, name: 'Triston Lewis' },
+//   { id: 484_643_688, name: 'Aarron Titus' },
+//   { id: 114_709_872_451, name: 'Ross Arroyo' },
+//   { id: 403_645_788_712, name: 'Gina Newby' },
+//   { id: 401_921_331_392, name: 'Angelo Pablo' },
+// ]);
+const agents = ref([]);
 
 const parseUserIdsFromTickets = (tickets: Ticket[]) => {
   try {
@@ -184,7 +185,6 @@ const getUsersRelatedToTickets = () => {
     .get(`/users?${userIdsFilter.value}`, {})
     .then((response: AxiosResponse<unknown>) => {
       usersRelatedToTickets.value = response;
-      console.log('This is the usersRelated to ticket response', response);
     })
     .then(() => {
       processedUsers();
@@ -232,7 +232,7 @@ const processedUsers = () => {
         }),
         {},
       );
-  } else console.log('props.users is not an array');
+  } else console.log('Error Processing Users');
 };
 
 const getTicketsWithUsers = () => {
@@ -302,12 +302,30 @@ const removeSubmittedFromFooter = (body: string): string => {
   return parts[0].trim();
 };
 
-watch(ticketsWithUsers, (newValue, oldValue) => {
-  console.log('ticket data has changed', newValue, oldValue);
-});
+const getAgentList = () => {
+  axiosInstance
+    .get(`/users/search.json?role=agent`, {
+      params: {
+        role: 'admin',
+      },
+    })
+    .then((response: any) => {
+      const _agents = response.data.users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        thumbnails: user.photo?.thumbnails,
+      }));
+      agents.value = _agents;
+    });
+};
+
+// watch(ticketsWithUsers, (newValue, oldValue) => {
+//   console.log('ticket data has changed', newValue, oldValue);
+// });
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
+  getAgentList();
   isLoading.value = false;
 });
 </script>
