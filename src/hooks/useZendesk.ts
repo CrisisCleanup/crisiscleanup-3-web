@@ -22,6 +22,13 @@ interface ContactFormField {
    */
   id: string | number;
   prefill?: Record<string, string>;
+  /**
+   * Make a field hidden.
+   *
+   * @remarks
+   * This is not a zendesk field and is implemented within this hook.
+   */
+  hidden?: boolean;
 }
 
 interface WebWidgetContactForm {
@@ -122,8 +129,11 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
 
     const _zeContainer = ref<HTMLDivElement | undefined>(undefined);
     const _zeWidgetFrame = ref<HTMLIFrameElement | undefined>(undefined);
+    const _configFields = computed<ContactFormField[]>(
+      () => config.webWidget?.contactForm?.fields ?? [],
+    );
 
-    const isOpen = computed<boolean>(() => _zeWidgetFrame !== undefined);
+    const isOpen = computed<boolean>(() => _zeWidgetFrame.value !== undefined);
 
     // Look for zendesk button iframe to find the parent container
     // in which it and the form, as the form is added/removed from the dom tree
@@ -142,12 +152,15 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
     useMutationObserver(
       _zeContainer,
       (mutations) => {
-        console.log('mutations:', mutations);
-        const widgetFrameAdded = mutations.find(
-          (mut) => mut.addedNodes.length > 0,
+        // zeContainer also holds the label, which gets destroyed
+        const isWidgetNode = (c: Node): bool => c.id === 'webWidget';
+        const widgetFrameAdded = mutations.find((mut) =>
+          [...mut.addedNodes].some(isWidgetNode),
         );
         if (!widgetFrameAdded) {
-          if (mutations.some((mut) => mut.removedNodes.length > 0)) {
+          if (
+            mutations.some((mut) => [...mut.removedNodes].some(isWidgetNode))
+          ) {
             _zeWidgetFrame.value = undefined;
           }
 
@@ -174,6 +187,24 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
       },
       { deep: true, immediate: true },
     );
+
+    // implement {@link ContactFormField} hidden property
+    zE(async (zendeskEvent) => {
+      if (zendeskEvent.action === 'Contact Form Shown') {
+        await Promise.allSettled(
+          _configFields.value
+            .filter((field) => field.hidden)
+            .map(async (field) => {
+              const selector = `label[data-fieldid='key:${field.id}']`;
+              const fieldLabel =
+                _zeWidgetFrame.value?.contentDocument?.querySelector?.(
+                  selector,
+                );
+              fieldLabel?.parentElement?.style?.setProperty('display', 'none');
+            }),
+        );
+      }
+    });
 
     tryOnMounted(handleOnMounted);
 
