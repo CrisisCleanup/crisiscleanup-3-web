@@ -19,7 +19,12 @@ vi.mock('vue-json-viewer', () => {
     default: vi.fn(),
   };
 });
-vi.mock('vue3-mq');
+vi.mock('vue3-mq', async () => {
+  const actual = await vi.importActual<Record<string, unknown>>('vue3-mq');
+  return {
+    ...actual,
+  };
+});
 
 class MockWorker {
   private readonly url: string;
