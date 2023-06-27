@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import { config } from '@vue/test-utils';
+import { config, enableAutoUnmount, flushPromises } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import { Vue3Mq } from 'vue3-mq';
 
@@ -190,9 +190,18 @@ beforeAll(() => {
 });
 
 //  Close server after all tests
-afterAll(() => {
+afterAll(async () => {
+  console.info(
+    'Closing server. Clearing all mocks & timers. Flushing promises.',
+  );
   server.close();
+  vi.clearAllMocks();
+  vi.clearAllTimers();
+  await flushPromises();
 });
+
+// See: https://test-utils.vuejs.org/api/#enableautounmount
+enableAutoUnmount(afterEach);
 
 // Reset handlers after each test `important for test isolation`
 afterEach(() => {
