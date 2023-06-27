@@ -2,10 +2,22 @@ import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { config } from '@vue/test-utils';
+import { createI18n } from 'vue-i18n';
+import { Vue3Mq } from 'vue3-mq';
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en',
+  messages: {
+    en: {},
+  },
+});
 
 config.global.mocks = {
   $t: (string: string, context: Record<string, any>) => string, // just return translation key
 };
+
+config.global.plugins = [i18n, Vue3Mq];
 
 vi.mock('@geoman-io/leaflet-geoman-free', () => {
   return {
@@ -138,8 +150,7 @@ export const restHandlers = [
   ),
 
   rest.get(
-    `${
-      import.meta.env.VITE_APP_API_BASE_URL
+    `${import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_successes`,
     async (req, res, ctx: any) => {
       return res(
@@ -154,8 +165,7 @@ export const restHandlers = [
   ),
 
   rest.get(
-    `${
-      import.meta.env.VITE_APP_API_BASE_URL
+    `${import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_failures`,
     async (req, res, ctx: any) => {
       return res(
