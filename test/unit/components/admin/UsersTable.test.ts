@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { createI18n } from 'vue-i18n';
+import { commonComponentStubs } from '../../../helpers';
 import UsersTable from '@/components/admin/UsersTable.vue';
 
 describe('UsersTable', () => {
@@ -67,8 +68,7 @@ describe('UsersTable', () => {
           $t: (key: string) => key,
         },
         stubs: {
-          'base-button': true,
-          'base-link': true,
+          ...commonComponentStubs,
         },
       },
     });

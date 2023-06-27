@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
+import { commonComponentStubs } from '../../../helpers';
 import IncidentApprovalTable from '@/components/admin/IncidentApprovalTable.vue';
 
 describe('IncidentApprovalTable', () => {
@@ -63,10 +64,7 @@ describe('IncidentApprovalTable', () => {
           $t: (key: string) => key,
         },
         stubs: {
-          'font-awesome-icon': true,
-          badge: true,
-          'base-button': true,
-          'base-link': true,
+          ...commonComponentStubs,
         },
       },
     });

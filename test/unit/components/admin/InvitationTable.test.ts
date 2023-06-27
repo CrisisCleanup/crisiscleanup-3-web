@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { createI18n } from 'vue-i18n';
+import { commonComponentStubs } from '../../../helpers';
 import InvitationTable from '@/components/admin/InvitationTable.vue';
 
 describe('InvitationTable', () => {
@@ -55,8 +56,7 @@ describe('InvitationTable', () => {
           $t: (key: string) => key,
         },
         stubs: {
-          'base-link': true,
-          'base-button': true,
+          ...commonComponentStubs,
         },
       },
     });

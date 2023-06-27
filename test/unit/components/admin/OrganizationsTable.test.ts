@@ -4,6 +4,7 @@ import { createI18n } from 'vue-i18n';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import type { MockedFunction } from 'vitest';
+import { commonComponentStubs } from '../../../helpers';
 import OrganizationsTable from '@/components/admin/OrganizationsTable.vue';
 
 vi.mock('axios');
@@ -82,16 +83,7 @@ describe('OrganizationsTable', () => {
           $t: (key: string) => key,
         },
         stubs: {
-          badge: true,
-          spinner: true,
-          'font-awesome-icon': true,
-          'base-text': true,
-          'base-checkbox': true,
-          'base-button': true,
-          'base-link': true,
-          'base-input': true,
-          'base-select': true,
-          'ccu-icon': true,
+          ...commonComponentStubs,
         },
       },
     });

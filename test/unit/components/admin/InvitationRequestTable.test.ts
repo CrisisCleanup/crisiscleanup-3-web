@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
+import { commonComponentStubs } from '../../../helpers';
 import InvitationRequestTable from '@/components/admin/InvitationRequestTable.vue';
 
 describe('InvitationRequestTable', () => {
@@ -58,6 +59,9 @@ describe('InvitationRequestTable', () => {
           $toasted: {
             success() {},
           },
+        },
+        stubs: {
+          ...commonComponentStubs,
         },
       },
     });
