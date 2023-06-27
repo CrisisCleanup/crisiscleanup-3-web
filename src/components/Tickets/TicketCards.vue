@@ -25,6 +25,12 @@ const { emitter } = useEmitter();
 const { t } = useI18n();
 const toast = useToast();
 
+export interface TicketCardsProps {
+  ticketData?: Record<string, any>;
+  agents: Record<string, any>[];
+  currentUser?: Record<string, any>;
+}
+
 interface Thumbnail {
   content_type: string;
   content_url: string;
@@ -70,19 +76,10 @@ interface Comment {
 }
 
 const store = useStore();
-const props = defineProps({
-  ticketData: {
-    type: Object,
-    default: () => null,
-  },
-  agents: {
-    type: Array,
-    default: () => [],
-  },
-  currentUser: {
-    type: Object,
-    default: () => null,
-  },
+const props = withDefaults(defineProps<TicketCardsProps>(), {
+  ticketData: undefined,
+  agents: () => [],
+  currentUser: undefined,
 });
 const ticketTestData = toRef(props, 'ticketData');
 const axiosInstance = axios.create({
