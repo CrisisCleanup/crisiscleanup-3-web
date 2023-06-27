@@ -4,7 +4,6 @@ import Chat from '@/components/chat/Chat.vue';
 import BaseInput from '@/components/BaseInput.vue';
 import BaseButton from '@/components/BaseButton.vue';
 
-vi.mock('vue3-mq');
 class MockWebSocket {
   addEventListener() {
     return undefined;
@@ -22,6 +21,7 @@ class MockWebSocket {
     return undefined;
   }
 }
+
 describe('Chat.vue', () => {
   beforeEach(() => {
     global.WebSocket = MockWebSocket as any;
