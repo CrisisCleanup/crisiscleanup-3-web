@@ -309,7 +309,7 @@ const getAgentList = () => {
         role: 'admin',
       },
     })
-    .then((response: any) => {
+    .then((response: AxiosResponse<unknown>) => {
       const _agents = response.data.users.map((user) => ({
         id: user.id,
         name: user.name,

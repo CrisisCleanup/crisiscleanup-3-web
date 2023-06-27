@@ -4,6 +4,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import { useStore } from 'vuex';
 import { ref } from 'vue';
+import { useToast } from 'vue-toastification';
 import Table from '../Table.vue';
 import LanguageTag from '../tags/LanguageTag.vue';
 import Modal from '@/components/Modal.vue';
@@ -17,12 +18,19 @@ import JsonWrapper from '@/components/JsonWrapper.vue';
 import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
-import { useToast } from 'vue-toastification';
 
 const commentsContainer = ref<HTMLDivElement | null>(null);
 const { emitter } = useEmitter();
 const { t } = useI18n();
 const toast = useToast();
+
+interface Thumbnail {
+  content_type: string;
+  content_url: string;
+  file_name: string;
+  id: number;
+  size: number;
+}
 
 interface Comment {
   attachments: {
@@ -32,7 +40,7 @@ interface Comment {
     id: number;
     size: number;
     thumbnails: {
-      [key: string]: any;
+      [key: string]: Thumbnail;
     }[];
   }[];
   author_id: number;
@@ -50,17 +58,14 @@ interface Comment {
     via: {
       channel: string;
       source: {
-        from: any;
+        from: unknown;
         rel: string;
-        to: any;
+        to: unknown;
       };
     };
   };
   public: boolean;
   type: string;
-}
-interface CommentList {
-  comments: Comment[];
 }
 
 const store = useStore();
@@ -97,21 +102,21 @@ const macroColumns = [
     title: 'Name',
     sortable: true,
     searchable: false,
-    width: '1fr',
+    width: '20%',
   },
   {
     key: 'description',
     title: 'Description',
     sortable: true,
     searchable: false,
-    width: '1fr',
+    width: '20%',
   },
   {
     key: 'template',
     title: 'Template',
     sortable: true,
     searchable: false,
-    width: '1fr',
+    width: '60%',
   },
   // {
   //   key: 'actions',
@@ -171,7 +176,7 @@ const ticketAssigneeName = computed(() => {
 const createIssue = () => {
   const formattedComments = comments.value
     .map(
-      (comment, index) =>
+      (comment) =>
         `**Comment ${
           getAgentById(comment.author_id) ?? zendeskUser.value.name
         }:**\n\n${removeSubmittedFromFooter(comment.body)}`,
@@ -261,6 +266,7 @@ const replyToTicket = (replyStatus: string) => {
       if (response.status === 200) {
         toast.success('Reply Successful');
       }
+
       getComments();
       if (props.ticketData?.assignee_id) {
         fetchActiveTicket();
@@ -295,7 +301,7 @@ const deleteTicket = () => {
 };
 
 const reAssignTicket = (agentId: number) => {
-  const _assigneeId = agentId ? agentId : selectedAgent.value;
+  const _assigneeId = agentId || selectedAgent.value;
 
   axiosInstance
     .put(`/tickets/${props.ticketData.id}`, {
@@ -362,10 +368,13 @@ const showMacroModal = () => {
 const executeMacro = (macro) => {
   showMacroModal();
   let replacedReply = macro.template;
-  for (const zendeskVariable in zendeskVariables) {
-    const myVariable = zendeskVariables[zendeskVariable];
+
+  for (const [zendeskVariable, myVariable] of Object.entries(
+    zendeskVariables,
+  )) {
     replacedReply = replacedReply.replace(zendeskVariable, myVariable);
   }
+
   ticketReply.value = replacedReply;
 
   toast.success(`Applying Macro: ${macro.title}`);
@@ -744,8 +753,8 @@ onMounted(() => {
             <Table
               :columns="macroColumns"
               :data="mappedMacros"
-              @row-click="(v) => executeMacro(v)"
               :body-style="{ height: '900px' }"
+              @row-click="(v) => executeMacro(v)"
             >
               <template #template="slotProps">
                 <div class="overflow-auto h-[200px] px-4">
