@@ -17,11 +17,12 @@ import JsonWrapper from '@/components/JsonWrapper.vue';
 import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
+import { useToast } from 'vue-toastification';
 
-const { t } = useI18n();
 const commentsContainer = ref<HTMLDivElement | null>(null);
-
 const { emitter } = useEmitter();
+const { t } = useI18n();
+const toast = useToast();
 
 interface Comment {
   attachments: {
@@ -81,48 +82,18 @@ const ticketTestData = toRef(props, 'ticketData');
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
-const router = useRouter();
-
 const languages = Language.all();
-const features = {
-  userType: true,
-  loginAs: true,
-  ccUserInfo: true,
-  events: true,
-  githubIssue: true,
-};
 const extraInfo = ref<boolean>(false);
 const expanded = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const currentUserID = ref<number>();
-// const toast = useToast()
 const comments = ref<Comment[]>([]);
 const firstComment = ref();
 const ticketReply = ref<string>('');
 const selectedAgent = ref<string>('');
-const macros = ref([
-  {
-    id: 1,
-    name: 'Test Macro',
-    description: 'This is just for user testing of macros',
-    template: 'This is a test',
-    actions() {
-      console.log('macro applied');
-    },
-  },
-  {
-    id: 2,
-    name: '2nd Test',
-    description: 'This is just for user testing of macros',
-    template: '2nd test',
-    actions() {
-      console.log('macro applied');
-    },
-  },
-]);
 const macroColumns = [
   {
-    key: 'name',
+    key: 'title',
     title: 'Name',
     sortable: true,
     searchable: false,
@@ -170,9 +141,9 @@ const userStats = [
 const ccUser = ref(props.ticketData.user.ccu_user);
 const zendeskUser = ref(props.ticketData.user);
 
-const ccUserEntries = computed(() => {
-  return Object.entries(ccUser.value);
-});
+// const ccUserEntries = computed(() => {
+//   return Object.entries(ccUser.value);
+// });
 const profilePictureUrl = computed(() => {
   if (ccUser.value.files && ccUser.value.files.length > 0) {
     const profilePictures = ccUser.value.files.filter(
@@ -212,18 +183,8 @@ const createIssue = () => {
     queryParams.set(
       'body',
       `
-**Issue Description:**
-This is the description of the issue.
 
-**Steps to Reproduce:**
-1. First step.
-2. Second step.
 
-**Expected Result:**
-Describe the expected result here.
-
-**Actual Result:**
-Describe the actual result here.
 
 **Additional Information:**
 - Environment:
@@ -248,18 +209,7 @@ Describe the actual result here.
     queryParams.set(
       'body',
       `
-**Issue Description:**
-This is the description of the issue.
 
-**Steps to Reproduce:**
-1. First step.
-2. Second step.
-
-**Expected Result:**
-Describe the expected result here.
-
-**Actual Result:**
-Describe the actual result here.
 
 **Additional Information:**
 - Environment:
@@ -307,7 +257,10 @@ const replyToTicket = (replyStatus: string) => {
         },
       },
     })
-    .then(() => {
+    .then((response) => {
+      if (response.status === 200) {
+        toast.success('Reply Successful');
+      }
       getComments();
       if (props.ticketData?.assignee_id) {
         fetchActiveTicket();
@@ -319,13 +272,12 @@ const replyToTicket = (replyStatus: string) => {
       emitter.emit('reFetchActiveTicket');
     })
     .catch((error: Error) => {
-      // toast.error('Reply unsuccessful', e)
-      console.log(error);
+      toast.error('Reply unsuccessful', error);
     });
 };
 
 const deleteTicket = () => {
-  console.log('coming soon!');
+  toast.info('coming soon!');
   // axiosInstance
   //   .delete(`/tickets/${props.ticketData.id}.json`).then((response: AxiosResponse<unknown>) => {
   //   if (response.status === 200) {
@@ -353,15 +305,14 @@ const reAssignTicket = (agentId: number) => {
     })
     .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
-        // toast.success('Successfully reassigned')
+        toast.success('Successfully reassigned');
         setTimeout(() => {
           fetchActiveTicket();
         }, 1000); // Timeout to account for zendesk db update
       }
     })
     .catch((error: Error) => {
-      // toast.error('Reply unsuccessful', e)
-      console.log(error);
+      toast.error('Assignment Unsuccessful', error, { timer: 100 });
     });
 };
 
@@ -562,7 +513,7 @@ onMounted(() => {
         />
         <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
-      <div v-if="features.userType">
+      <div>
         <div
           v-if="ccUser"
           :style="`border-color: #3498DB; color: #3498DB`"
@@ -579,10 +530,7 @@ onMounted(() => {
           {{ t('~~Survivor') }}
         </div>
       </div>
-      <div
-        v-if="features.loginAs"
-        class="flex items-center justify-center border-y-2 border-gray-400"
-      >
+      <div class="flex items-center justify-center border-y-2 border-gray-400">
         <BaseButton
           :action="() => loginAs(props.ticketData.user.ccu_user?.id)"
           :text="t('~~Login As')"
@@ -590,7 +538,7 @@ onMounted(() => {
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
       </div>
-      <div v-if="features.ccUserInfo">
+      <div>
         <div
           v-for="stats in userStats"
           :key="stats.org"
@@ -642,10 +590,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div
-        v-if="features.events"
-        class="events m-2 text-xs border p-2 flex flex-col gap-2"
-      >
+      <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
         <AdminEventStream :user="ccUser.id" limit="5" class="overflow-auto" />
         <div class="flex items-center justify-center">
           <BaseButton
@@ -682,7 +627,6 @@ onMounted(() => {
           </BaseText>
         </div>
         <base-link
-          v-if="features.githubIssue"
           :href="url"
           class="border border-black rounded-md font-bold text-center flex justify-center items-center"
           target="_blank"
@@ -691,7 +635,6 @@ onMounted(() => {
         >
           {{ t('~~Create GitHub Issue') }}</base-link
         >
-        <span v-else></span>
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
