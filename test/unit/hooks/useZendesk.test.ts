@@ -115,6 +115,11 @@ describe('useZendesk', () => {
           },
         ],
         [
+          "webWidget:on",
+          "userEvent",
+          [Function],
+        ],
+        [
           "webWidget",
           "hide",
         ],
