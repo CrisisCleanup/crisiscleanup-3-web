@@ -135,7 +135,11 @@ export default defineComponent({
         color: { theme: '#fece09' },
         position: { horizontal: 'left', vertical: 'bottom' },
         offset: { horizontal: '-0.5rem' },
-        contactForm: {},
+        contactForm: {
+          fields: [
+            { id: '16781124470797', hidden: true, prefill: { '*': '' } },
+          ],
+        },
       },
     });
     // Suppress help form on certain routes.
