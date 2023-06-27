@@ -82,10 +82,16 @@ describe('OrganizationsTable', () => {
           $t: (key: string) => key,
         },
         stubs: {
-          'font-awesome-icon': true,
           badge: true,
+          spinner: true,
+          'font-awesome-icon': true,
+          'base-text': true,
+          'base-checkbox': true,
           'base-button': true,
           'base-link': true,
+          'base-input': true,
+          'base-select': true,
+          'ccu-icon': true,
         },
       },
     });
