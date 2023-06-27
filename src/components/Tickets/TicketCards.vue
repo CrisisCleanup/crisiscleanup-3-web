@@ -323,9 +323,10 @@ const reAssignTicket = (agentId: number) => {
 };
 
 const getAgentIdForCurrentUser = () => {
-  currentUserID.value = props.agents.find(
+  const agent = props.agents.find(
     (agent) => agent.name === props.currentUser.full_name,
-  )?.id;
+  );
+  currentUserID.value = agent ? agent.id : '401_921_331_392';
 };
 
 const getComments = () => {

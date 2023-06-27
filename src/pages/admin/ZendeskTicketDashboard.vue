@@ -160,13 +160,7 @@ const requesterIdList = ref<number[]>([]);
 const isLoading = ref<boolean>(false);
 
 const ticketTotals = ref();
-// const agents = ref([
-//   { id: 411_677_450_351, name: 'Triston Lewis' },
-//   { id: 484_643_688, name: 'Aarron Titus' },
-//   { id: 114_709_872_451, name: 'Ross Arroyo' },
-//   { id: 403_645_788_712, name: 'Gina Newby' },
-//   { id: 401_921_331_392, name: 'Angelo Pablo' },
-// ]);
+
 const agents = ref([]);
 
 const parseUserIdsFromTickets = (tickets: Ticket[]) => {
