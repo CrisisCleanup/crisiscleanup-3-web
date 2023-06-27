@@ -1,23 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import type { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import { commonComponentStubs } from '../../helpers';
 import { makeTableColumns } from '../../../src/utils/table';
 import AjaxTable from '@/components/AjaxTable.vue';
-
-const globalOptions: GlobalMountOptions = {
-  stubs: {
-    badge: true,
-    spinner: true,
-    'font-awesome-icon': true,
-    'base-text': true,
-    'base-checkbox': true,
-    'base-button': true,
-    'base-link': true,
-    'base-input': true,
-    'base-select': true,
-    'ccu-icon': true,
-  },
-};
 
 describe('AjaxTable', () => {
   it('should render', async () => {
@@ -30,7 +15,11 @@ describe('AjaxTable', () => {
         url: `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
         query: {},
       },
-      global: globalOptions,
+      global: {
+        stubs: {
+          ...commonComponentStubs,
+        },
+      },
     });
     await flushPromises();
     expect(wrapper.html()).toContain('Name from table data');
@@ -48,7 +37,11 @@ describe('AjaxTable', () => {
         url: `${import.meta.env.VITE_APP_API_BASE_URL}/table`,
         query: {},
       },
-      global: globalOptions,
+      global: {
+        stubs: {
+          ...commonComponentStubs,
+        },
+      },
     });
     await flushPromises();
     expect(wrapper.html()).toContain('info.search_items');
