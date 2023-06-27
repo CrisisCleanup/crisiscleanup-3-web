@@ -18,6 +18,7 @@ import JsonWrapper from '@/components/JsonWrapper.vue';
 import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
+import { getErrorMessage } from '@/utils/errors';
 
 const commentsContainer = ref<HTMLDivElement | null>(null);
 const { emitter } = useEmitter();
@@ -278,7 +279,7 @@ const replyToTicket = (replyStatus: string) => {
       emitter.emit('reFetchActiveTicket');
     })
     .catch((error: Error) => {
-      toast.error('Reply unsuccessful', error);
+      toast.error(`Reply unsuccessful ${getErrorMessage(error)}`);
     });
 };
 
@@ -295,7 +296,7 @@ const deleteTicket = () => {
   // emitter.emit('closeModal');
   // })
   //   .catch((error: Error) => {
-  // toast.error('Reply unsuccessful', e)
+  // toast.error(`Reply unsuccessful ${getErrorMessage(e)}`)
   // console.log(error);
   // });
 };
@@ -318,7 +319,7 @@ const reAssignTicket = (agentId: number) => {
       }
     })
     .catch((error: Error) => {
-      toast.error('Assignment Unsuccessful', error);
+      toast.error(`Assignment Unsuccessful ${getErrorMessage(error)}`);
     });
 };
 
