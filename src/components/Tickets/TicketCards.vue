@@ -142,13 +142,13 @@ const macroColumns = [
     searchable: false,
     width: '1fr',
   },
-  {
-    key: 'actions',
-    title: 'Actions',
-    sortable: true,
-    searchable: false,
-    width: '1fr',
-  },
+  // {
+  //   key: 'actions',
+  //   title: 'Actions',
+  //   sortable: true,
+  //   searchable: false,
+  //   width: '1fr',
+  // },
 ];
 const macroModalVisibility = ref(false);
 const eventsModal = ref(false);
@@ -410,7 +410,14 @@ const showMacroModal = () => {
 
 const executeMacro = (macro) => {
   showMacroModal();
-  ticketReply.value = macro.template;
+  let replacedReply = macro.template;
+  for (const zendeskVariable in zendeskVariables) {
+    const myVariable = zendeskVariables[zendeskVariable];
+    replacedReply = replacedReply.replace(zendeskVariable, myVariable);
+  }
+  ticketReply.value = replacedReply;
+
+  toast.success(`Applying Macro: ${macro.title}`);
 };
 
 const formatKey = (key: string) => {
@@ -455,10 +462,83 @@ const removeSubmittedFromFooter = (body) => {
 
 const getAgentById = (id: number) => {
   const _agentMap = props.agents
-    .map((u) => ({ [u.id]: u.name }))
+    ?.map((u) => ({ [u.id]: u.name }))
     .reduce((prev, current) => ({ ...prev, ...current }), {});
 
   return _agentMap[id];
+};
+
+const mappedMacros = ref([]);
+
+const getMacros = () => {
+  axiosInstance.get(`/macros`, {}).then((response: AxiosResponse<unknown>) => {
+    const mappedData = response.data?.macros.map((macro) => {
+      const templateAction = macro.actions.find(
+        (action) => action.field === 'comment_value',
+      );
+      const templateValue = templateAction?.value ?? '';
+      return {
+        title: macro.title,
+        description: macro.description,
+        template: templateValue,
+      };
+    });
+    mappedMacros.value = mappedData;
+  });
+};
+
+const zendeskVariables = {
+  '{{current_user.details}}': 'unknownCurrentUserDetails',
+  '{{current_user.email}}': props.currentUser?.email,
+  '{{current_user.external_id}}': props.currentUser?.id,
+  '{{current_user.first_name}}': props.currentUser?.first_name,
+  '{{current_user.language}}': props.currentUser?.primary_language,
+  '{{current_user.name}}': props.currentUser?.full_name,
+  '{{current_user.notes}}': 'unknownCurrentUserNotes',
+  '{{current_user.organization.details}}':
+    'unknownCurrentUserOrganizationDetails',
+  '{{current_user.organization.name}}': props.currentUser?.organization?.name,
+  '{{current_user.organization.notes}}': 'unknownCurrentUserOrganizationNotes',
+  '{{current_user.phone}}': props.currentUser?.mobile,
+  '{{satisfaction.current_comment}}': 'unknownSatisfactionCurrentComment',
+  '{{satisfaction.current_rating}}': 'unknownSatisfactionCurrentRating',
+  '{{ticket.account}}': 'unknownTicketAccount',
+  '{{ticket.assignee.email}}': 'unknownTicketAssigneeEmail',
+  '{{ticket.assignee.first_name}}': 'unknownTicketAssigneeFirstName',
+  '{{ticket.assignee.last_name}}': 'unknownTicketAssigneeLastName',
+  '{{ticket.assignee.name}}': 'unknownTicketAssigneeName',
+  '{{ticket.brand.name}}': 'unknownTicketBrandName',
+  '{{ticket.cc_names}}': 'unknownTicketCCNames',
+  '{{ticket.ccs}}': 'unknownTicketCCs',
+  '{{ticket.current_holiday_name}}': 'unknownTicketCurrentHolidayName',
+  '{{ticket.description}}': 'unknownTicketDescription',
+  '{{ticket.due_date}}': 'unknownTicketDueDate',
+  '{{ticket.external_id}}': 'unknownTicketExternalId',
+  '{{ticket.latest_comment_html}}': 'unknownTicketLatestCommentHTML',
+  '{{ticket.latest_public_comment_html}}':
+    'unknownTicketLatestPublicCommentHTML',
+  '{{ticket.organization.details}}': 'unknownTicketOrganizationDetails',
+  '{{ticket.organization.external_id}}': 'unknownTicketOrganizationExternalId',
+  '{{ticket.organization.name}}': 'unknownTicketOrganizationName',
+  '{{ticket.organization.notes}}': 'unknownTicketOrganizationNotes',
+  '{{ticket.priority}}': 'unknownTicketPriority',
+  '{{ticket.requester.details}}': 'unknownTicketRequesterDetails',
+  '{{ticket.requester.email}}': zendeskUser.value.email,
+  '{{ticket.requester.external_id}}': 'unknownTicketRequesterExternalId',
+  '{{ticket.requester.first_name}}': zendeskUser.value.name.split(' ')[0],
+  '{{ticket.requester.language}}': 'unknownTicketRequesterLanguage',
+  '{{ticket.requester.last_name}}': zendeskUser.value.name.split(' ')[1],
+  '{{ticket.requester.name}}': zendeskUser.value.name,
+  '{{ticket.requester.phone}}': zendeskUser.value.phone,
+  '{{ticket.requester_field}}': 'unknownTicketRequesterField',
+  '{{ticket.status}}': props.ticketData?.status,
+  '{{ticket.tags}}': 'unknownTicketTags',
+  '{{ticket.ticket_field_ID}}': 'unknownTicketFieldID',
+  '{{ticket.ticket_field_option_title_ID}}': 'unknownTicketFieldOptionTitleID',
+  '{{ticket.ticket_type}}': props.ticketData?.type,
+  '{{ticket.title}}': props.ticketData?.subject,
+  '{{ticket.url}}': props.ticketData?.url,
+  // Add more Zendesk variables as needed
 };
 
 onMounted(() => {
@@ -466,7 +546,7 @@ onMounted(() => {
   getAgentIdForCurrentUser();
   getCcuStats();
   getComments();
-  // getAgentList();
+  getMacros();
   isLoading.value = false;
 });
 </script>
@@ -720,9 +800,16 @@ onMounted(() => {
           <template #default>
             <Table
               :columns="macroColumns"
-              :data="macros"
+              :data="mappedMacros"
               @row-click="(v) => executeMacro(v)"
-            />
+              :body-style="{ height: '900px' }"
+            >
+              <template #template="slotProps">
+                <div class="overflow-auto h-[200px] px-4">
+                  {{ slotProps.item.template }}
+                </div>
+              </template>
+            </Table>
           </template>
         </modal>
       </div>
