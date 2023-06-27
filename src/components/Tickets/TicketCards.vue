@@ -326,7 +326,10 @@ const getAgentIdForCurrentUser = () => {
   const agent = props.agents.find(
     (agent) => agent.name === props.currentUser.full_name,
   );
-  currentUserID.value = agent ? agent.id : '401_921_331_392';
+  const generalAgent = props.agents.find(
+    (agent) => agent.name === 'Crisis Cleanup Helpdesk',
+  );
+  currentUserID.value = agent ? agent.id : generalAgent.id;
 };
 
 const getComments = () => {
