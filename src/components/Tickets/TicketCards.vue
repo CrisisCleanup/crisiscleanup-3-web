@@ -318,7 +318,7 @@ const reAssignTicket = (agentId: number) => {
       }
     })
     .catch((error: Error) => {
-      toast.error('Assignment Unsuccessful', error, { timer: 100 });
+      toast.error('Assignment Unsuccessful', error);
     });
 };
 
