@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it, vi } from 'vitest';
-import { createI18n } from 'vue-i18n';
+import { describe, expect, it } from 'vitest';
+import { commonComponentStubs } from '../../../helpers';
 import GhostUsersTable from '@/components/admin/GhostUsersTable.vue';
 
 describe('GhostUsersTable', () => {
@@ -16,7 +16,7 @@ describe('GhostUsersTable', () => {
         associated_user: 'Jane Smith',
       },
       {
-        id: 1,
+        id: 2,
         email: 'john.doe2@example.com',
         first_name: 'John',
         last_name: 'Doe',
@@ -37,14 +37,6 @@ describe('GhostUsersTable', () => {
       },
     };
 
-    const i18n = createI18n({
-      legacy: false,
-      locale: 'en',
-      messages: {
-        en: {},
-      },
-    });
-
     const wrapper = mount(GhostUsersTable, {
       props: {
         users,
@@ -52,12 +44,11 @@ describe('GhostUsersTable', () => {
         loading: false,
       },
       global: {
-        plugins: [i18n],
         mocks: {
           $t: (key: string) => key,
         },
         stubs: {
-          'base-link': true,
+          ...commonComponentStubs,
         },
       },
     });
