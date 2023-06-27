@@ -3,7 +3,6 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { makeTableColumns } from '../../../src/utils/table';
 import AjaxTable from '@/components/AjaxTable.vue';
 
-vi.mock('vue3-mq');
 describe('AjaxTable', () => {
   it('should render', async () => {
     const wrapper = mount(AjaxTable, {
