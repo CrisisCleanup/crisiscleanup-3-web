@@ -505,10 +505,10 @@ const zendeskVariables = {
   // Add more Zendesk variables as needed
 };
 
-onMounted(() => {
+onMounted(async () => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
-  getCcuStats();
+  await getCcuStats();
   getComments();
   getMacros();
   isLoading.value = false;
