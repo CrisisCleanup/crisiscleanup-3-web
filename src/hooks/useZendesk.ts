@@ -189,22 +189,31 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
     );
 
     // implement {@link ContactFormField} hidden property
-    zE(async (zendeskEvent) => {
-      if (zendeskEvent.action === 'Contact Form Shown') {
-        await Promise.allSettled(
-          _configFields.value
-            .filter((field) => field.hidden)
-            .map(async (field) => {
-              const selector = `label[data-fieldid='key:${field.id}']`;
-              const fieldLabel =
-                _zeWidgetFrame.value?.contentDocument?.querySelector?.(
-                  selector,
-                );
-              fieldLabel?.parentElement?.style?.setProperty('display', 'none');
-            }),
-        );
-      }
-    });
+    zE(
+      ZendeskTarget.WEB_WIDGET_ON,
+      ZendeskOnEvent.USER_EVENT,
+      async (zendeskEvent) => {
+        if (zendeskEvent && zendeskEvent.action === 'Contact Form Shown') {
+          await Promise.allSettled(
+            _configFields.value
+              .filter((field) => field.hidden)
+              .map(async (field) =>
+                nextTick(() => {
+                  const selector = `label[data-fieldid='key:${field.id}']`;
+                  const fieldLabel =
+                    _zeWidgetFrame.value?.contentDocument?.querySelector?.(
+                      selector,
+                    );
+                  fieldLabel?.parentElement?.style?.setProperty(
+                    'display',
+                    'none',
+                  );
+                }),
+              ),
+          );
+        }
+      },
+    );
 
     tryOnMounted(handleOnMounted);
 
