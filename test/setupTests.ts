@@ -150,7 +150,8 @@ export const restHandlers = [
   ),
 
   rest.get(
-    `${import.meta.env.VITE_APP_API_BASE_URL
+    `${
+      import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_successes`,
     async (req, res, ctx: any) => {
       return res(
@@ -165,7 +166,8 @@ export const restHandlers = [
   ),
 
   rest.get(
-    `${import.meta.env.VITE_APP_API_BASE_URL
+    `${
+      import.meta.env.VITE_APP_API_BASE_URL
     }/worksites_import/:reportId/get_failures`,
     async (req, res, ctx: any) => {
       return res(
