@@ -97,6 +97,7 @@ const isLoading = ref<boolean>(false);
 const currentUserID = ref<number>();
 // const toast = useToast()
 const comments = ref<Comment[]>([]);
+const firstComment = ref();
 const ticketReply = ref<string>('');
 const selectedAgent = ref<string>('');
 const agentList = ref([]);
@@ -393,6 +394,7 @@ const getComments = () => {
     .get(`/tickets/${props.ticketData.id}/comments`, {})
     .then((response: AxiosResponse<unknown>) => {
       comments.value = response.data.comments;
+      firstComment.value = comments.value[0];
     })
     .then(() => {
       commentsContainer.value.scrollTop = commentsContainer.value.scrollHeight;
@@ -648,10 +650,19 @@ onMounted(() => {
           {{ momentFromNow(ticketData.created_at) }}</BaseText
         >
         <hr />
-        <BaseText>
-          <span class="text-base font-bold"> Submitted From: </span>
-          {{ submittedFrom }}</BaseText
-        >
+        <BaseText v-if="firstComment">
+          <span class="text-base font-bold">
+            {{ t('~~Submitted From:') }}
+          </span>
+          [{{ submittedFrom }}] <span class="font-bold">At</span> [{{
+            firstComment?.metadata?.system?.ip_address
+          }}] <span class="font-bold">Near</span> [{{
+            firstComment.metadata?.system?.location
+          }}] (<span class="font-bold">Latt:</span>
+          {{ firstComment.metadata?.system?.latitude }}
+          <span class="font-bold">Long: </span
+          >{{ firstComment.metadata?.system?.latitude }})
+        </BaseText>
         <hr />
         <BaseText>
           <span class="text-base font-bold"> {{ t('~~Subject:') }} </span>
