@@ -150,7 +150,8 @@ const zendeskUser = ref(props.ticketData.user);
 const profilePictureUrl = computed(() => {
   if (ccUser.value.files && ccUser.value.files.length > 0) {
     const profilePictures = ccUser.value.files.filter(
-      (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+      (file: Record<string, unknown>) =>
+        file.file_type_t === 'fileTypes.user_profile_picture',
     );
     if (profilePictures.length > 0) {
       return profilePictures[0].small_thumbnail_url;
@@ -165,7 +166,10 @@ const submittedFrom = computed(() => {
   return parsed || '';
 });
 const assignedUser = computed(() => {
-  return _.find(props.agents, { id: props.ticketData?.assignee_id });
+  return _.find(props.agents, { id: props.ticketData?.assignee_id }) as Record<
+    string,
+    any
+  >;
 });
 const ticketAssigneeName = computed(() => {
   return assignedUser.value ? assignedUser.value.name : 'None';
@@ -269,7 +273,7 @@ const replyToTicket = (replyStatus: string) => {
       if (props.ticketData?.assignee_id) {
         fetchActiveTicket();
       } else {
-        reAssignTicket(currentUserID.value);
+        reAssignTicket(currentUserID.value!);
       }
     })
     .then(() => {
@@ -298,7 +302,7 @@ const deleteTicket = () => {
   // });
 };
 
-const reAssignTicket = (agentId: number) => {
+const reAssignTicket = (agentId?: number) => {
   const _assigneeId = agentId || selectedAgent.value;
 
   axiosInstance
@@ -433,20 +437,22 @@ const getAgentById = (id: number) => {
 const mappedMacros = ref([]);
 
 const getMacros = () => {
-  axiosInstance.get(`/macros`, {}).then((response: AxiosResponse<unknown>) => {
-    const mappedData = response.data?.macros.map((macro) => {
-      const templateAction = macro.actions.find(
-        (action) => action.field === 'comment_value',
-      );
-      const templateValue = templateAction?.value ?? '';
-      return {
-        title: macro.title,
-        description: macro.description,
-        template: templateValue,
-      };
+  axiosInstance
+    .get<Record<string, any>>(`/macros`, {})
+    .then((response: AxiosResponse<unknown>) => {
+      const mappedData = response.data?.macros.map((macro) => {
+        const templateAction = macro.actions.find(
+          (action: Record<string, any>) => action.field === 'comment_value',
+        );
+        const templateValue = templateAction?.value ?? '';
+        return {
+          title: macro.title,
+          description: macro.description,
+          template: templateValue,
+        };
+      });
+      mappedMacros.value = mappedData;
     });
-    mappedMacros.value = mappedData;
-  });
 };
 
 const zendeskVariables = {
@@ -602,7 +608,7 @@ onMounted(async () => {
       </div>
 
       <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
-        <AdminEventStream :user="ccUser.id" limit="5" class="overflow-auto" />
+        <AdminEventStream :user="ccUser.id" :limit="5" class="overflow-auto" />
         <div class="flex items-center justify-center">
           <BaseButton
             :action="() => showEventsModal()"
@@ -663,8 +669,8 @@ onMounted(async () => {
       <div class="subject-date__container">
         <BaseText>
           <span class="text-base font-bold"> {{ t('~~Created:') }}</span>
-          {{ momentFromNow(ticketData.created_at) }}</BaseText
-        >
+          {{ momentFromNow(ticketData.created_at) }}
+        </BaseText>
         <hr />
         <BaseText v-if="firstComment">
           <span class="text-base font-bold">
@@ -686,8 +692,8 @@ onMounted(async () => {
             expanded
               ? removeSubmittedFromFooter(ticketData?.description)
               : ticketData?.raw_subject
-          }}</BaseText
-        >
+          }}
+        </BaseText>
         <BaseText
           class="m-2 text-primary-light"
           @click="() => (expanded = !expanded)"
@@ -732,7 +738,7 @@ onMounted(async () => {
             text-area
             class="w-full h-full col-span-11 row-span-4"
             input-classes="resize-none row-span-4"
-            rows="6"
+            :rows="6"
             placeholder="Ticket Reply"
           />
           <div class="row-span-4 flex justify-center items-center">
@@ -772,10 +778,8 @@ onMounted(async () => {
         <div class="header">
           <BaseText variant="h1"
             >{{ t('~~Assigned To:') }}
-            <span class="font-bold text-xl">{{
-              ticketAssigneeName
-            }}</span></BaseText
-          >
+            <span class="font-bold text-xl">{{ ticketAssigneeName }}</span>
+          </BaseText>
         </div>
         <BaseSelect
           :model-value="selectedAgent"
@@ -837,33 +841,41 @@ onMounted(async () => {
 
   .ticket__header {
     @apply grid grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
+
     .submitter-info {
       @apply col-span-1 text-left;
     }
+
     .ticket-link {
       @apply text-center flex items-center rounded-md justify-center bg-primary-light;
     }
+
     .ticket-status {
       @apply text-center flex items-center rounded-md justify-center font-bold;
     }
   }
 
   .subject-date__container {
-    @apply px-4 py-2 text-left row-span-2  border-b-2 border-gray-400;
+    @apply px-4 py-2 text-left row-span-2 border-b-2 border-gray-400;
   }
+
   .comments__container {
     @apply text-left px-4 py-2 overflow-y-scroll row-span-4 h-80 scroll-smooth;
+
     .comments__header {
       @apply text-base font-bold;
     }
+
     .comments__items {
       @apply rounded-lg p-2 m-4;
 
       .attachments-container {
         @apply my-4 border-t-4;
+
         .attachments__header {
           @apply font-bold text-black;
         }
+
         .attachments__items {
           @apply flex gap-4 my-4;
         }
@@ -874,14 +886,18 @@ onMounted(async () => {
   .ticket-reply {
     @apply px-4 py-2 border-y-2 border-gray-400;
   }
+
   .assigned-to__container {
     @apply grid grid-cols-12 px-4 py-2 row-span-2 border-b-2 border-gray-400 flex items-center justify-center;
+
     .header {
       @apply flex gap-2 items-center justify-center md:col-span-12 my-2;
     }
+
     .agent-selection {
       @apply md:col-span-11 my-2;
     }
+
     .reassign-button {
       @apply md:col-span-1 p-4 rounded-md mx-2 my-2 md:text-[.8vw];
     }
@@ -891,7 +907,9 @@ onMounted(async () => {
     .reply-as__header {
       @apply text-base font-bold;
     }
+
     @apply flex flex-col gap-2 px-4 py-2 col-span-6 row-span-2;
+
     .buttons__container {
       @apply flex gap-2;
     }
