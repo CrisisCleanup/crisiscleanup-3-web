@@ -1,6 +1,20 @@
 import { faker } from '@faker-js/faker';
+import type { Stubs } from '@vue/test-utils/dist/types';
 
 export const MOCK_DATE = new Date(Date.UTC(2022, 1, 1, 1, 1, 1, 1));
+
+export const commonComponentStubs: Stubs = {
+  badge: true,
+  spinner: true,
+  'font-awesome-icon': true,
+  'base-text': true,
+  'base-checkbox': true,
+  'base-button': true,
+  'base-link': true,
+  'base-input': true,
+  'base-select': true,
+  'ccu-icon': true,
+};
 
 export function generateMockUser() {
   const activeRole = faker.datatype.number({ min: 1, max: 10 });
