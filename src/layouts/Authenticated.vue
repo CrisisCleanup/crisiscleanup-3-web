@@ -81,11 +81,9 @@
 </template>
 
 <script lang="ts">
-import detectBrowserLanguage from 'detect-browser-language';
-import { size } from 'lodash';
-import { ref, computed, watch, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import moment from 'moment';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -96,7 +94,6 @@ import Language from '../models/Language';
 import Report from '../models/Report';
 import Role from '../models/Role';
 import PhoneStatus from '../models/PhoneStatus';
-import { i18nService } from '../services/i18n.service';
 import NavMenu from '../components/navigation/NavMenu.vue';
 import TermsandConditionsModal from '../components/modals/TermsandConditionsModal.vue';
 import Header from '../components/header/Header.vue';
@@ -105,6 +102,7 @@ import { AuthService } from '../services/auth.service';
 import LoginForm from '../components/LoginForm.vue';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import useAcl from '@/hooks/useAcl';
+import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -124,6 +122,7 @@ export default defineComponent({
     const { t, setLocaleMessage, locale } = useI18n();
     const store = useStore();
     const { $can } = useAcl();
+    const zendesk = useZendesk()!;
 
     // const { $log } = context.root;
     const currentIncidentId = computed(
@@ -284,6 +283,37 @@ export default defineComponent({
     onMounted(() => {
       if (route.params.incident_id) {
         handleChange(route.params.incident_id as string);
+      }
+    });
+
+    // update zendesk current user.
+    watchEffect(() => {
+      if (currentUser.value && zendesk.isOpen.value) {
+        // ccu user id custom zendesk field.
+        const ccuIdFieldId = '16781124470797';
+        // prefill base zendesk fields.
+        zendesk.zE(ZendeskTarget.WEB_WIDGET, ZendeskCommand.PREFILL, {
+          name: {
+            value: currentUser.value!.full_name,
+            readOnly: false,
+          },
+          email: {
+            value: currentUser.value!.email,
+            readOnly: false,
+          },
+        });
+        // merge contact form fields.
+        zendesk.config.webWidget.contactForm!.fields ??= [];
+        zendesk.config.webWidget.contactForm!.fields = [
+          ...zendesk.config.webWidget.contactForm!.fields.filter(
+            (field) => field.id !== ccuIdFieldId,
+          ),
+          {
+            id: ccuIdFieldId,
+            hidden: true,
+            prefill: { '*': String(currentUser.value!.id) },
+          },
+        ];
       }
     });
 
