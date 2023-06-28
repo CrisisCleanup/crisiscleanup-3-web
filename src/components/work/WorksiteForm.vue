@@ -443,8 +443,8 @@ import WorksiteNotes from './WorksiteNotes.vue';
 import Language from '@/models/Language';
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
-  'formOptions.often',
   'formOptions.not_often',
+  'formOptions.often',
   'formOptions.never',
 ];
 
