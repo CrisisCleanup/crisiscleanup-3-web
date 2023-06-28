@@ -103,9 +103,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: [versions]
     env:
+      NODE_ENV: development
+      VITE_APP_STAGE: development
       VITE_APP_BASE_URL: http://127.0.0.1:8080
+      VITE_APP_API_BASE_URL: https://api.dev.crisiscleanup.io
+      VITE_APP_WS_URL: wss://socket.dev.crisiscleanup.io
+      VITE_APP_AWS_CCP_URL: https://ccudev.awsapps.com/connect/ccp-v2/
       TEST_APP_EMAIL: ${{ secrets.TEST_APP_EMAIL_DEV }}
       TEST_APP_PASSWORD: ${{ secrets.TEST_APP_PASSWORD_DEV }}
+      VITE_APP_CCP_INSTANCE: 87fbcad4-9f58-4153-84e8-d5b7202693e8
+      VITE_APP_PORTAL_KEY: crisiscleanup_demo
+      VITE_APP_PHONE_DEFAULT_USERNAME: english
+      VITE_APP_PHONE_DEFAULT_PASSWORD: volunteer
+      VITE_APP_ENGLISH_PHONE_GATEWAY: 216961
+      VITE_APP_SPANISH_PHONE_GATEWAY: 216962
+      VITE_APP_DEFAULT_CALLER_ID: 2722003211
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
@@ -115,23 +127,6 @@ jobs:
         with:
           node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
-
-      - name: Setup Env Vars
-        run: |
-          echo "NODE_ENV=development" >> $GITHUB_ENV
-          echo "VITE_APP_STAGE=development" >> $GITHUB_ENV
-          echo "VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io" >> $GITHUB_ENV
-          echo "VITE_APP_API_BASE_URL=https://api.dev.crisiscleanup.io" >> $GITHUB_ENV
-          echo "VITE_APP_WS_URL=wss://socket.dev.crisiscleanup.io" >> $GITHUB_ENV
-          echo "VITE_APP_AWS_CCP_URL=https://ccudev.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
-          echo "VITE_APP_CCP_INSTANCE=87fbcad4-9f58-4153-84e8-d5b7202693e8" >> $GITHUB_ENV
-          echo "VITE_APP_PORTAL_KEY=crisiscleanup_demo" >> $GITHUB_ENV
-          echo "VITE_APP_PHONE_DEFAULT_USERNAME=english" >> $GITHUB_ENV
-          echo "VITE_APP_PHONE_DEFAULT_PASSWORD=volunteer" >> $GITHUB_ENV
-          echo "VITE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
-          echo "VITE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
-          echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: pnpm install
       - name: Install Playwright Browsers
