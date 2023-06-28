@@ -4,8 +4,8 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import BaseSelect from '@/components/BaseSelect.vue';
 
-vi.mock('vue3-mq');
 vi.mock('vue-i18n');
+vi.mock('axios');
 
 (useI18n as any).mockReturnValue({
   t: (tKey: string) => tKey,
