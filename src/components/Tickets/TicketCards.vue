@@ -193,7 +193,7 @@ const createIssue = () => {
 
 
 
-**~~Additional Information:**
+**Additional Information:**
 - Environment:
 - Version:
 - Ticket Submitted From: **${submittedFrom.value}**
