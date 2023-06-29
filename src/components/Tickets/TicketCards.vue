@@ -193,7 +193,7 @@ const createIssue = () => {
 
 
 
-**Additional Information:**
+**~~Additional Information:**
 - Environment:
 - Version:
 - Ticket Submitted From: **${submittedFrom.value}**
@@ -266,7 +266,7 @@ const replyToTicket = (replyStatus: string) => {
     })
     .then((response) => {
       if (response.status === 200) {
-        toast.success('Reply Successful');
+        toast.success('~~Reply Successful');
       }
 
       getComments();
@@ -280,24 +280,24 @@ const replyToTicket = (replyStatus: string) => {
       emitter.emit('reFetchActiveTicket');
     })
     .catch((error: Error) => {
-      toast.error(`Reply unsuccessful ${getErrorMessage(error)}`);
+      toast.error(`~~Reply unsuccessful ${getErrorMessage(error)}`);
     });
 };
 
 const deleteTicket = () => {
-  toast.info('coming soon!');
+  toast.info('~~coming soon!');
   // axiosInstance
   //   .delete(`/tickets/${props.ticketData.id}.json`).then((response: AxiosResponse<unknown>) => {
   //   if (response.status === 200) {
   // toast.success(
-  // 	`Reply Successfull, Ticket Status Changed to ${replyStatus}`
+  // 	`~~Reply Successfull, Ticket Status Changed to ${replyStatus}`
   // )
   // }
 
   // emitter.emit('closeModal');
   // })
   //   .catch((error: Error) => {
-  // toast.error(`Reply unsuccessful ${getErrorMessage(e)}`)
+  // toast.error(`~~Reply unsuccessful ${getErrorMessage(e)}`)
   // console.log(error);
   // });
 };
@@ -313,14 +313,14 @@ const reAssignTicket = (agentId?: number) => {
     })
     .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
-        toast.success('Successfully reassigned');
+        toast.success('~~Successfully reassigned');
         setTimeout(() => {
           fetchActiveTicket();
         }, 1000); // Timeout to account for zendesk db update
       }
     })
     .catch((error: Error) => {
-      toast.error(`Assignment Unsuccessful ${getErrorMessage(error)}`);
+      toast.error(`~~Assignment Unsuccessful ${getErrorMessage(error)}`);
     });
 };
 
@@ -383,7 +383,7 @@ const executeMacro = (macro) => {
 
   ticketReply.value = replacedReply;
 
-  toast.success(`Applying Macro: ${macro.title}`);
+  toast.success(`~~Applying Macro: ${macro.title}`);
 };
 
 const formatKey = (key: string) => {
@@ -524,7 +524,7 @@ onMounted(async () => {
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
         <img
-          :alt="t('~~picture of user')"
+          :alt="t('helpdesk.user_picture')"
           :src="profilePictureUrl"
           class="w-full"
         />
@@ -536,7 +536,7 @@ onMounted(async () => {
           :style="`border-color: #3498DB; color: #3498DB`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
-          {{ t('~~User') }}
+          {{ t('helpdesk.user_account') }}
         </div>
 
         <div
@@ -544,13 +544,13 @@ onMounted(async () => {
           :style="`border-color: #27AE60; color: #27AE60`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
-          {{ t('~~Survivor') }}
+          {{ t('helpdesk.survivor_account') }}
         </div>
       </div>
       <div class="flex items-center justify-center border-y-2 border-gray-400">
         <BaseButton
           :action="() => loginAs(props.ticketData.user.ccu_user?.id)"
-          :text="t('~~Login As')"
+          :text="t('actions.login_as')"
           variant="primary"
           class="p-2 mx-4 my-4 text-xl rounded-md w-full"
         />
@@ -598,7 +598,7 @@ onMounted(async () => {
           <BaseButton
             :action="() => (extraInfo = !extraInfo)"
             variant="primary"
-            :text="t('~~Extra Info')"
+            :text="t('helpdesk.more_user_details')"
             class="p-2 mx-4 my-3 text-xl rounded-md w-full"
           />
         </div>
@@ -612,7 +612,7 @@ onMounted(async () => {
         <div class="flex items-center justify-center">
           <BaseButton
             :action="() => showEventsModal()"
-            :text="t('~~More Events')"
+            :text="t('actions.show_more')"
             variant="primary"
             class="p-2 mx-4 my-4 text-xl rounded-md w-full"
           />
@@ -650,7 +650,7 @@ onMounted(async () => {
           text-variant="h2"
           @click="createIssue()"
         >
-          {{ t('~~Create GitHub Issue') }}</base-link
+          {{ t('helpdesk.create_github_issue') }}</base-link
         >
         <div class="ticket-link">
           <a
@@ -658,7 +658,7 @@ onMounted(async () => {
             target="_blank"
             class="md:text-[.9vw]"
           >
-            {{ t('~~Zendesk') }}</a
+            {{ t('helpdesk.zendesk_link') }}</a
           >
         </div>
         <div :class="[ticketTestData.status + '-tag', 'ticket-status text-xl']">
@@ -668,26 +668,23 @@ onMounted(async () => {
 
       <div class="subject-date__container">
         <BaseText>
-          <span class="text-base font-bold"> {{ t('~~Created:') }}</span>
+          <span class="text-base font-bold"> {{ t('helpdesk.ticket_created_at') }}:</span>
           {{ momentFromNow(ticketData.created_at) }}
         </BaseText>
         <hr />
         <BaseText v-if="firstComment">
           <span class="text-base font-bold">
-            {{ t('~~Submitted From:') }}
+            {{ t('helpdesk.submitting_page') }}
           </span>
-          [{{ submittedFrom }}] <span class="font-bold">At</span> [{{
+          [{{ submittedFrom }}] <span class="font-bold">{{ t('helpdesk.ip_address') }}</span> [{{
             firstComment?.metadata?.system?.ip_address
-          }}] <span class="font-bold">Near</span> [{{
+          }}] (<a href="https://www.google.com/maps/place/@{{ firstComment.metadata?.system?.latitude }},{{ firstComment.metadata?.system?.longitute }},13z" target="_blank" title="{{firstComment.metadata?.system?.location}}">{{
             firstComment.metadata?.system?.location
-          }}] (<span class="font-bold">Latt:</span>
-          {{ firstComment.metadata?.system?.latitude }}
-          <span class="font-bold">Long: </span
-          >{{ firstComment.metadata?.system?.latitude }})
+          }}</a>)
         </BaseText>
         <hr />
         <BaseText>
-          <span class="text-base font-bold"> {{ t('~~Subject:') }} </span>
+          <span class="text-base font-bold"> {{ t('helpdesk.subject_line') }} </span>
           {{
             expanded
               ? removeSubmittedFromFooter(ticketData?.description)
@@ -698,11 +695,11 @@ onMounted(async () => {
           class="m-2 text-primary-light"
           @click="() => (expanded = !expanded)"
         >
-          {{ expanded ? t('~~Less') : t('~~More') }}
+          {{ expanded ? t('actions.show_less') : t('actions.show_more') }}
         </BaseText>
       </div>
       <div ref="commentsContainer" class="comments__container">
-        <BaseText class="comments__header">{{ t('Comments') }}</BaseText>
+        <BaseText class="comments__header">{{ t('~~Comments') }}</BaseText>
         <div
           v-for="(comment, comment_idx) in comments"
           :key="comment_idx"

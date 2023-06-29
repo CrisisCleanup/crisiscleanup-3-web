@@ -200,7 +200,7 @@ const columns = makeTableColumns([
   ['app', '6%', t('helpdesk.app_platform')],
   ['requester', '8%', t('helpdesk.requester')],
   ['description', '35%', t('helpdesk.description')],
-  ['advanced_ticket', '7%', t('helpdesk.advanced_ticket')],
+  ['advanced_ticket', '7%', t('helpdesk.full_ticket')],
   ['zendesk', '5%', t('helpdesk.zendesk_link')],
 ]);
 const showTicketModal = (ticket: Ticket) => {
@@ -399,7 +399,7 @@ onMounted(() => {
         :style="`border-color: #3498DB; color: #3498DB`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        {{ t('helpdesk.user_role') }}
+        {{ t('helpdesk.user_account') }}
       </div>
 
       <div
@@ -407,7 +407,7 @@ onMounted(() => {
         :style="`border-color: #27AE60; color: #27AE60`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        {{ t('helpdesk.survivor_role') }}
+        {{ t('helpdesk.survivor_account') }}
       </div>
     </template>
 
@@ -420,7 +420,7 @@ onMounted(() => {
         :user="slotProps.item.user.ccu_user"
       />
       <div v-else class="flex items-center justify-center">
-        {{ t('helpdesk.no_role') }}
+        {{ t('helpdesk.no_account') }}
       </div>
     </template>
 
