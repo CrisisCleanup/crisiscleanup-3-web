@@ -19,34 +19,46 @@
         </div>
       </slot>
     </div>
-    <div
-      v-show="showComponent"
-      data-testid="testPhoneSystemActionContentDiv"
-      class="phone-system-action__content"
-      :class="componentClass"
-      :style="componentStyle"
-    >
-      <div class="phone-system-action__close">
-        <ccu-icon
-          :alt="$t('actions.cancel')"
-          data-testid="testPhoneSystemActionCloseIcon"
-          size="xs"
-          type="cancel"
-          class="phone-system-action__close-icon"
-          @click="() => (showComponent = false)"
-        />
+
+    <template v-if="mq.smMinus">
+      <modal v-show="showComponent" @close="() => (showComponent = false)">
+        <slot name="component"></slot>
+      </modal>
+    </template>
+
+    <template v-else>
+      <div
+        v-show="showComponent"
+        data-testid="testPhoneSystemActionContentDiv"
+        class="phone-system-action__content"
+        :class="componentClass"
+        :style="componentStyle"
+      >
+        <div class="phone-system-action__close">
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            data-testid="testPhoneSystemActionCloseIcon"
+            size="xs"
+            type="cancel"
+            class="phone-system-action__close-icon"
+            @click="() => (showComponent = false)"
+          />
+        </div>
+        <slot name="component"></slot>
       </div>
-      <slot name="component"></slot>
-    </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import { onBeforeMount, ref, watch } from 'vue';
+import { useMq } from 'vue3-mq';
 import useEmitter from '../../hooks/useEmitter';
+import Modal from '@/components/Modal.vue';
 
 export default defineComponent({
   name: 'PhoneComponentButton',
+  components: { Modal },
   props: {
     name: { type: String, default: null, required: true },
     icon: { type: String, default: null, required: false },
@@ -60,6 +72,7 @@ export default defineComponent({
     const showComponent = ref(false);
     const top = ref(0);
     const { emitter } = useEmitter();
+    const mq = useMq();
 
     function toggleComponent() {
       if (props.keepOpen) {
@@ -100,6 +113,7 @@ export default defineComponent({
       top,
       showComponent,
       toggleComponent,
+      mq,
     };
   },
 });

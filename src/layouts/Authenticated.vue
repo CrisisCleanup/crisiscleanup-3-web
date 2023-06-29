@@ -1,83 +1,137 @@
 <template>
-  <div
-    v-if="!loading && currentIncident"
-    class="layout"
-    data-testid="testIsAuthenticatedDiv"
-  >
-    <div
-      class="sidebar h-full overflow-auto"
-      :class="{ 'slide-over': slideOverVisible }"
+  <template v-if="mq.smMinus">
+    <div v-if="!loading && currentIncident" class="flex flex-col h-screen">
+      <DisasterIcon
+        v-if="currentIncident && currentIncident.incidentImage"
+        :current-incident="currentIncident"
+        data-testid="testDisasterIcon"
+        class="fixed left-4 top-4"
+        style="z-index: 1002"
+        @click="showIncidentSelectionModal"
+      />
+      <main>
+        <slot />
+      </main>
+      <footer
+        class="pt-3 pb-3 bg-zinc-800 text-white fixed inset-x-0 bottom-0 flex justify-around items-center"
+      >
+        <div
+          v-for="r in mobileRoutes"
+          :key="route.key"
+          class="flex flex-col items-center"
+        >
+          <font-awesome-icon :icon="r.icon" class="mb-1" size="small" />
+          <a :href="r.to" class="text-white">{{ r.text }}</a>
+        </div>
+        <div class="flex flex-col items-center">
+          <font-awesome-icon icon="bars" class="mb-1" />
+          <a class="text-white" @click="showingMoreLinks = true">{{
+            $t('~~More')
+          }}</a>
+        </div>
+      </footer>
+    </div>
+
+    <modal
+      v-if="showingMoreLinks"
+      data-testid="testShowingMoreLinksModal"
+      modal-classes="bg-white h-120 shadow p-3"
+      closeable
+      :title="$t('~~All Links')"
+      @close="showingMoreLinks = false"
     >
-      <div v-if="slideOverVisible" class="flex items-center justify-end p-1.5">
+      <div v-for="r in routes" :key="r.key" class="flex items-center">
+        <base-link :href="r.to" class="text-black text-base p-1">{{
+          r.text || $t(`nav.${r.key}`)
+        }}</base-link>
+      </div>
+    </modal>
+  </template>
+
+  <template v-else>
+    <div
+      v-if="!loading && currentIncident"
+      class="layout"
+      data-testid="testIsAuthenticatedDiv"
+    >
+      <div
+        class="sidebar h-full overflow-auto"
+        :class="{ 'slide-over': slideOverVisible }"
+      >
+        <div
+          v-if="slideOverVisible"
+          class="flex items-center justify-end p-1.5"
+        >
+          <font-awesome-icon
+            icon="times"
+            :alt="$t('nav.hide_navigation')"
+            data-testid="testAuthenticatedToggleIcon"
+            class="menu-button mx-2 cursor-pointer text-white self-end"
+            size="2xl"
+            @click="toggle"
+          />
+        </div>
+        <NavMenu
+          :key="route"
+          :routes="routes"
+          :logo-route="logoRoute"
+          class="flex flex-col text-sm"
+        />
+      </div>
+      <div class="header p-1 flex items-center">
         <font-awesome-icon
-          icon="times"
-          :alt="$t('nav.hide_navigation')"
-          data-testid="testAuthenticatedToggleIcon"
-          class="menu-button mx-2 cursor-pointer text-white self-end"
+          icon="bars"
+          :alt="$t('nav.show_navigation')"
+          data-testid="testHamburgerIcon"
+          class="menu-button mx-3 cursor-pointer"
           size="2xl"
           @click="toggle"
         />
+        <Header
+          :current-incident="currentIncident"
+          :incidents="incidents"
+          @update:incident="handleChange"
+          @auth:logout="
+            () => {
+              logoutApp();
+            }
+          "
+        />
       </div>
-      <NavMenu
-        :key="route"
-        :routes="routes"
-        :logo-route="logoRoute"
-        class="flex flex-col text-sm"
-      />
-    </div>
-    <div class="header p-1 flex items-center">
-      <font-awesome-icon
-        icon="bars"
-        :alt="$t('nav.show_navigation')"
-        data-testid="testHamburgerIcon"
-        class="menu-button mx-3 cursor-pointer"
-        size="2xl"
-        @click="toggle"
-      />
-      <Header
-        :current-incident="currentIncident"
-        :incidents="incidents"
-        @update:incident="handleChange"
-        @auth:logout="
-          () => {
-            logoutApp();
-          }
-        "
-      />
-    </div>
-    <div class="main">
-      <div class="h-full overflow-auto w-screen md:w-auto">
-        <slot />
+      <div class="main">
+        <div class="h-full overflow-auto w-screen md:w-auto">
+          <slot />
+        </div>
+      </div>
+      <template v-if="showAcceptTermsModal">
+        <TermsandConditionsModal
+          :organization="currentOrganization"
+          data-testid="testShowAcceptTermsModal"
+          @acceptedTerms="acceptTermsAndConditions"
+        />
+      </template>
+      <div v-if="transferRequest">
+        <CompletedTransferModal
+          :transfer-request="transferRequest"
+          data-testid="testCompletedTransferModal"
+          @close="
+            () => {
+              transferRequest = null;
+            }
+          "
+        />
+      </div>
+      <div v-if="showLoginModal">
+        <modal modal-classes="bg-white max-w-lg shadow p-5" :closeable="false">
+          <LoginForm :redirect="false" />
+          <div slot="footer"></div>
+        </modal>
       </div>
     </div>
-    <template v-if="showAcceptTermsModal">
-      <TermsandConditionsModal
-        :organization="currentOrganization"
-        data-testid="testShowAcceptTermsModal"
-        @acceptedTerms="acceptTermsAndConditions"
-      />
-    </template>
-    <div v-if="transferRequest">
-      <CompletedTransferModal
-        :transfer-request="transferRequest"
-        data-testid="testCompletedTransferModal"
-        @close="
-          () => {
-            transferRequest = null;
-          }
-        "
-      />
+    <div v-else class="flex h-screen items-center justify-center">
+      <spinner show-quote />
     </div>
-    <div v-if="showLoginModal">
-      <modal modal-classes="bg-white max-w-lg shadow p-5" :closeable="false">
-        <LoginForm :redirect="false" />
-        <div slot="footer"></div>
-      </modal>
-    </div>
-  </div>
-  <div v-else class="flex h-screen items-center justify-center">
-    <spinner show-quote />
-  </div>
+  </template>
 </template>
 
 <script lang="ts">
@@ -87,6 +141,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useMq } from 'vue3-mq';
 import Incident from '../models/Incident';
 import User from '../models/User';
 import Organization from '../models/Organization';
@@ -102,6 +157,8 @@ import { AuthService } from '../services/auth.service';
 import LoginForm from '../components/LoginForm.vue';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import useAcl from '@/hooks/useAcl';
+import DisasterIcon from '@/components/DisasterIcon.vue';
+import useDialogs from '@/hooks/useDialogs';
 import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
@@ -109,6 +166,7 @@ const VERSION_3_LAUNCH_DATE = '2020-03-25';
 export default defineComponent({
   name: 'Authenticated',
   components: {
+    DisasterIcon,
     LoginForm,
     CompletedTransferModal,
     NavMenu,
@@ -116,6 +174,8 @@ export default defineComponent({
     Header,
   },
   setup() {
+    const mq = useMq();
+
     const route = useRoute();
     const router = useRouter();
     const $http = axios;
@@ -123,6 +183,7 @@ export default defineComponent({
     const store = useStore();
     const { $can } = useAcl();
     const zendesk = useZendesk()!;
+    const { selection } = useDialogs();
 
     // const { $log } = context.root;
     const currentIncidentId = computed(
@@ -142,6 +203,7 @@ export default defineComponent({
     const loading = ref(false);
     const ready = ref(false);
     const showAcceptTermsModal = ref(false);
+    const showingMoreLinks = ref(false);
     const transferRequest = ref(null);
 
     const currentUser = computed(() => User.find(userId.value));
@@ -229,6 +291,34 @@ export default defineComponent({
       },
     ]);
 
+    const mobileRoutes = computed(() => [
+      {
+        key: 'dashboard',
+        text: t('nav.dashboard'),
+        to: `/incident/${currentIncidentId.value}/dashboard`,
+        icon: 'dashboard',
+      },
+      {
+        key: 'work',
+        to: `/incident/${currentIncidentId.value}/work`,
+        icon: 'briefcase',
+        text: t('nav.work'),
+      },
+      {
+        key: 'phone',
+        icon: 'phone',
+        text: t('nav.phone'),
+        to: '/phone',
+        disabled: !$can || !$can('phone_agent'),
+      },
+      {
+        key: 'profile',
+        icon: 'user',
+        text: t('nav.profile'),
+        to: '/profile',
+      },
+    ]);
+
     // store.commit('auth/setShowLoginModal', false);
 
     const handleChange = async (value: string) => {
@@ -270,6 +360,21 @@ export default defineComponent({
       await store.dispatch('auth/logout');
       await router.push('/login');
     };
+
+    async function showIncidentSelectionModal() {
+      const result = await selection({
+        title: t('Select Incident'),
+        content: t('~~Please select an incident'),
+        options: incidents.value,
+        placeholder: t('~~Please select an incident'),
+        itemKey: 'id',
+        label: 'name',
+      });
+
+      if (result) {
+        await handleChange(result);
+      }
+    }
 
     watch(
       () => route.params.incident_id,
@@ -421,13 +526,14 @@ export default defineComponent({
       ready,
       showAcceptTermsModal,
       transferRequest,
-
+      showingMoreLinks,
       currentUser,
       currentOrganization,
       currentIncident,
       incidents,
       route,
       routes,
+      mobileRoutes,
       logoRoute,
       // login,
       acceptTermsAndConditions,
@@ -438,6 +544,8 @@ export default defineComponent({
 
       slideOverVisible,
       toggle,
+      mq,
+      showIncidentSelectionModal,
     };
   },
 });

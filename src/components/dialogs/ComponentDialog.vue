@@ -33,6 +33,7 @@
                 :is="dynamicComponent"
                 v-bind="props"
                 :class="classes"
+                :style="styles"
                 v-on="listeners"
               />
             </div>
@@ -84,6 +85,10 @@ export default defineComponent({
       default() {},
     },
     classes: {
+      type: String,
+      default: '',
+    },
+    styles: {
       type: String,
       default: '',
     },

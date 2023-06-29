@@ -1,7 +1,7 @@
 <template>
   <div
     style="height: 85%"
-    class="h-full flex justify-center"
+    class="h-full flex justify-center mt-10 md:mt-0"
     data-testid="testProfileDiv"
   >
     <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
@@ -10,7 +10,14 @@
           class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
         >
           {{ currentUser.full_name }}
-          <div class="flex justify-end">
+          <div class="flex justify-end gap-2">
+            <base-button
+              data-testid="testLogoutButton"
+              class="px-4 py-2 bg-red-600 text-white md:hidden"
+              :text="$t('actions.logout')"
+              :alt="$t('actions.logout')"
+              :action="logoutApp"
+            />
             <base-button
               variant="solid"
               data-testid="testSaveButton"
@@ -399,6 +406,7 @@ export default defineComponent({
   setup() {
     const $toasted = useToast();
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const { validatePhoneNumber } = useValidation();
     const { t } = useI18n();
@@ -560,6 +568,11 @@ export default defineComponent({
       await User.api().clearUserPreferences();
     }
 
+    const logoutApp = async () => {
+      await store.dispatch('auth/logout');
+      await router.push('/login');
+    };
+
     onMounted(() => {
       if (route.query.move) {
         state.showChangeOrganizationModal = true;
@@ -583,6 +596,7 @@ export default defineComponent({
       resetStates,
       validatePhoneNumber,
       form,
+      logoutApp,
     };
   },
 });

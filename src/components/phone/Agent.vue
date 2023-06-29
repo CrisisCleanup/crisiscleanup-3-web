@@ -10,14 +10,18 @@
             v-if="currentUser"
             data-testid="testCurrentUserMobileContent"
             variant="bodysm"
+            class="w-18"
           >
-            {{currentUser.mobile}}
+            {{ currentUser.mobile }}
           </base-text>
         </div>
       </div>
       <div class="py-3">
-        <div class="flex flex-row tags" data-testid="testPhoneDashboardLanguagesDiv">
-          <div class="mx-2 text-crisiscleanup-dark-200">
+        <div
+          class="flex flex-row tags"
+          data-testid="testPhoneDashboardLanguagesDiv"
+        >
+          <div class="mx-2 text-crisiscleanup-dark-200 hidden md:block">
             {{ $t('phoneDashboard.languages') }}
           </div>
           <div

@@ -1,330 +1,133 @@
 <template>
-  <div class="work-page h-full" :class="{ collapsedForm }">
-    <div :key="currentIncidentId" class="work-page__main">
-      <div class="relative">
-        <div class="flex items-center">
-          <div
-            v-if="!collapsedUtilityBar"
-            :key="currentIncidentId"
-            class="flex items-center flex-wrap w-full p-3"
+  <template v-if="mq.smMinus">
+    <div v-if="!isViewing && !isEditing">
+      <SimpleMap
+        v-if="showingMap"
+        :map-loading="mapLoading"
+        data-testid="testSimpleMapdiv"
+        show-zoom-buttons
+        :available-work-types="availableWorkTypes"
+        class="mb-16"
+        zoom-buttons-class="mt-20"
+        @onZoomIn="zoomIn"
+        @onZoomOut="zoomOut"
+        @onZoomIncidentCenter="goToIncidentCenter"
+        @onZoomInteractive="goToInteractive"
+      />
+      <div v-else-if="showingTable" class="mt-20 p-2 border">
+        <div class="text-base p-2 mb-1 text-center w-full">
+          Cases for {{ incidentName }}
+        </div>
+        <WorksiteTable
+          :worksite-query="worksiteQuery"
+          @rowClick="loadCase"
+          @selectionChanged="onSelectionChanged"
+        />
+      </div>
+      <span
+        v-if="allWorksiteCount"
+        class="font-thin w-screen absolute flex items-center justify-center mt-4 mr-6"
+        style="z-index: 1002"
+      >
+        <span class="bg-black rounded p-2 text-white">
+          <span
+            v-if="allWorksiteCount === filteredWorksiteCount"
+            data-testid="testCaseCountContent"
           >
-            <ccu-icon
-              :alt="$t('casesVue.map_view')"
-              data-testid="testMapViewIcon"
-              size="medium"
-              class="mr-4 cursor-pointer"
-              :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-              type="map"
-              ccu-event="user_ui-view-map"
-              @click="() => showMap(true)"
-            />
-            <ccu-icon
-              :alt="$t('casesVue.table_view')"
-              data-testid="testTableViewIcon"
-              size="medium"
-              class="mr-4 cursor-pointer"
-              :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-              type="table"
-              ccu-event="user_ui-view-table"
-              @click="showTable"
-            />
-            <span v-if="allWorksiteCount" class="font-thin">
-              <span
-                v-if="allWorksiteCount === filteredWorksiteCount"
-                data-testid="testCaseCountContent"
-              >
-                {{ $t('casesVue.cases') }}
-                {{ numeral(allWorksiteCount) }}
-              </span>
-              <span
-                v-else
-                data-testid="testCaseCountFilteredContent"
-              >
-                {{ $t('casesVue.cases') }}
-                {{ numeral(filteredWorksiteCount) }} of
-                {{ numeral(allWorksiteCount) }}
-              </span>
-            </span>
-            <WorksiteSearchInput
-              :value="currentSearch"
-              data-testid="testWorksiteSearch"
-              icon="search"
-              display-property="name"
-              :placeholder="$t('actions.search')"
-              size="medium"
-              skip-validation
-              class="mx-4 py-1"
-              @selectedExisting="handleSelectedExisting"
-              @input="
+            {{ numeral(allWorksiteCount) }}
+            {{ $t('casesVue.cases') }}
+          </span>
+          <span v-else data-testid="testCaseCountFilteredContent">
+            {{ numeral(filteredWorksiteCount) }} of
+            {{ numeral(allWorksiteCount) }}
+            {{ $t('casesVue.cases') }}
+          </span>
+        </span>
+      </span>
+      <div
+        style="z-index: 1002"
+        class="absolute top-4 right-4 flex items-center"
+      >
+        <WorksiteActions
+          v-if="currentIncidentId"
+          :key="currentIncidentId"
+          class="py-1"
+          :current-incident-id="String(currentIncidentId)"
+          :inital-filters="filters"
+          @updatedQuery="onUpdateQuery"
+          @updatedFilters="onUpdateFilters"
+          @applyLocation="applyLocation"
+          @applyTeamGeoJson="applyTeamGeoJson"
+          @downloadCsv="downloadWorksites"
+          @toggleHeatMap="toggleHeatMap"
+          @selectedExisting="handleSelectedExisting"
+          @toggleSearch="showingSearchModal = !showingSearchModal"
+        />
+      </div>
+      <div style="z-index: 1002" class="absolute top-20 left-12 mt-2">
+        <WorksiteSearchInput
+          v-if="showingSearchModal"
+          :value="mobileSearch"
+          data-testid="testWorksiteSearch"
+          size="large"
+          display-property="name"
+          :placeholder="$t('actions.search')"
+          skip-validation
+          class="mx-4 py-1 inset-1"
+          @selectedExisting="handleSelectedExisting"
+          @input="
                   (value: string) => {
-                    currentSearch = value;
+                    mobileSearch = value;
                   }
                 "
-            />
-            <WorksiteActions
-              v-if="currentIncidentId"
-              :key="currentIncidentId"
-              class="py-1"
-              :current-incident-id="String(currentIncidentId)"
-              :inital-filters="filters"
-              @updatedQuery="onUpdateQuery"
-              @updatedFilters="onUpdateFilters"
-              @applyLocation="applyLocation"
-              @applyTeamGeoJson="applyTeamGeoJson"
-              @downloadCsv="downloadWorksites"
-              @toggleHeatMap="toggleHeatMap"
-            />
-          </div>
-          <div
-            :class="collapsedUtilityBar ? 'w-full' : ''"
-            class="flex justify-end items-center justify-self-end"
-          >
-            <font-awesome-icon
-              :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
-              :alt="collapsedUtilityBar ? $t('actions.show_options') : $t('actions.hide_options')"
-              data-testid="testCollapseUtilityBarIcon"
-              class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
-              size="xl"
-              @click="collapsedUtilityBar = !collapsedUtilityBar"
-            />
-          </div>
-        </div>
-        <tag
-          v-if="overDueFilterLabel"
-          data-testid="testOverDueFilterLabelDiv"
-          closeable
-          class="m-1 p-1 w-max"
-          @closed="clearQuery"
-          >{{ overDueFilterLabel }}</tag
-        >
-        <div
-          v-if="!collapsedUtilityBar && !showingTable"
-          class="flex justify-center items-center"
-        >
-          <Slider
-            primary-color="#dadada"
-            data-testid="testSviSliderInput"
-            secondary-color="white"
-            :value="sviSliderValue"
-            :from="$t('svi.most_vulnerable')"
-            :to="$t('svi.everyone')"
-            :from-tooltip="$t(`svi.svi_more_info_link`)"
-            handle-size="12px"
-            track-size="8px"
-            class="pt-1 ml-4"
-            slider-class="w-64"
-            @input="filterSvi"
-          />
-          <Slider
-            track-size="8px"
-            data-testid="testUpdatedSliderInput"
-            handle-size="12px"
-            primary-color="#dadada"
-            secondary-color="white"
-            class="pt-1 ml-4"
-            slider-class="w-84"
-            :title="$t('casesVue.updated')"
-            :value="dateSliderValue"
-            :min="0"
-            :max="100"
-            :from="dateSliderFrom"
-            :to="dateSliderTo"
-            @input="filterDates"
-          ></Slider>
-        </div>
+        />
       </div>
-      <div class="work-page__main-content">
-        <div v-if="showingMap" class="work-page__main-content--map">
-          <SimpleMap
-            :map-loading="mapLoading"
-            data-testid="testSimpleMapdiv"
-            show-zoom-buttons
-            :available-work-types="availableWorkTypes"
-            @onZoomIn="zoomIn"
-            @onZoomOut="zoomOut"
-            @onZoomIncidentCenter="goToIncidentCenter"
-            @onZoomInteractive="goToInteractive"
-          />
-          <div ref="phoneButtons" class="work-page__actions">
-            <div
-              class="w-full h-full flex items-center justify-center relative p-0.5 mt-1 bg-white cursor-pointer"
-            >
-              <font-awesome-icon
-                :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
-                :alt="collapsedForm ? $t('actions.show_options') : $t('actions.hide_options')"
-                data-testid="testCollapsedFormIcon"
-                class="px-0.5 py-2 ml-1.5"
-                size="large"
-                @click="collapsedForm = !collapsedForm"
-              />
-            </div>
-            <PhoneComponentButton
-              name="chat"
-              data-testid="testPhoneComponentChatButton"
-              class="work-page__action"
-              component-class="work-page__action-content work-page__action-content--chat"
-              @open="
-                () => {
-                  updateUserState({
-                    [`chat_${selectedChat.id}_last_seen`]:
-                      moment().toISOString(),
-                  });
-                  unreadChatCount = 0;
-                  unreadUrgentChatCount = 0;
-                }
-              "
-            >
-              <template #button>
-                <div
-                  class="w-full h-full flex items-center justify-center relative"
-                >
-                  <div
-                    v-if="unreadChatCount"
-                    class="absolute top-0 left-0 m-1"
-                    data-testid="testUnreadChatCountDiv"
-                  >
-                    <span
-                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
-                      >{{ unreadChatCount }}</span
-                    >
-                  </div>
-                  <div
-                    v-if="unreadUrgentChatCount"
-                    class="absolute top-0 right-0 my-1 -mx-1"
-                  >
-                    <span
-                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
-                      >{{ unreadUrgentChatCount }}</span
-                    >
-                  </div>
-                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" :alt="$t('chat.chat')" />
-                </div>
-              </template>
-              <template #component>
-                <Chat
-                  v-if="selectedChat"
-                  data-testid="testChatDiv"
-                  :chat="selectedChat"
-                  :state-key="`chat_${selectedChat.id}_last_seen`"
-                  @unreadCount="unreadChatCount = $event"
-                  @unreadUrgentCount="unreadUrgentChatCount = $event"
-                  @onNewMessage="unreadChatCount += 1"
-                  @onNewUrgentMessage="unreadUrgentChatCount += 1"
-                  @focusNewsTab="focusNewsTab"
-                />
-              </template>
-            </PhoneComponentButton>
-            <PhoneComponentButton
-              name="news"
-              data-testid="testPhoneComponentNewsDiv"
-              class="work-page__action"
-              component-class="work-page__action-content work-page__action-content--news"
-              @open="
-                () => {
-                  updateUserState({
-                    work_news_last_seen: moment().toISOString(),
-                  });
-                  unreadNewsCount = 0;
-                }
-              "
-            >
-              <template #button>
-                <div
-                  class="w-full h-full flex items-center justify-center relative"
-                >
-                  <div
-                    v-if="unreadNewsCount"
-                    class="absolute top-0 left-0 m-1"
-                    data-testid="testUnreadNewsCountDiv"
-                  >
-                    <span
-                      class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
-                      >{{ unreadNewsCount }}</span
-                    >
-                  </div>
-                  <ccu-icon type="news" class="p-1 ml-1.5" size="large" :alt="$t('phoneDashboard.news')" />
-                </div>
-              </template>
-              <template #component>
-                <PhoneNews
-                  :cms-tag="'work-news'"
-                  state-key="work_news_last_seen"
-                  @unreadCount="unreadNewsCount = $event"
-                />
-              </template>
-            </PhoneComponentButton>
-          </div>
-        </div>
-        <div v-if="showingTable" class="work-page__main-content--table">
-          <div class="items-center justify-end hidden md:flex">
-            <base-button
-              class="ml-3 my-3 border p-1 px-4 bg-white"
-              data-testid="testPrintClaimedButton"
-              :class="
-                selectedTableItems && selectedTableItems.size === 0
-                  ? 'text-crisiscleanup-grey-700'
-                  : ''
-              "
-              :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :text="$t('actions.print_claimed')"
-              :alt="$t('actions.print_claimed')"
-              :action="printSelectedWorksites"
-            />
-            <base-button
-              class="ml-3 my-3 border p-1 px-4 bg-white"
-              data-testid="testDownloadButton"
-              :class="
-                selectedTableItems && selectedTableItems.size === 0
-                  ? 'text-crisiscleanup-grey-700'
-                  : ''
-              "
-              :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :text="$t('actions.download')"
-              :alt="$t('actions.download')"
-              :action="
-                () => {
-                  downloadWorksites(Array.from(selectedTableItems));
-                }
-              "
-            />
-            <base-button
-              class="ml-3 my-3 border p-1 px-4 bg-white"
-              data-testid="testUnclaimButton"
-              :class="
-                selectedTableItems && selectedTableItems.size === 0
-                  ? 'text-crisiscleanup-grey-700'
-                  : ''
-              "
-              :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :action="showUnclaimModal"
-              :text="$t('actions.unclaim')"
-              :alt="$t('actions.unclaim')"
-            >
-            </base-button>
-            <base-button
-              icon="sync"
-              data-testid="testUpdateStatusButton"
-              class="ml-3 my-3 border p-1 px-4 bg-white"
-              :class="
-                selectedTableItems && selectedTableItems.size === 0
-                  ? 'text-crisiscleanup-grey-700'
-                  : ''
-              "
-              :disabled="selectedTableItems && selectedTableItems.size === 0"
-              :text="$t('actions.update_status')"
-              :alt="$t('actions.update_status')"
-              :action="showUpdateStatusModal"
-            />
-          </div>
-          <WorksiteTable
-            :worksite-query="worksiteQuery"
-            @rowClick="loadCase"
-            @selectionChanged="onSelectionChanged"
-          />
-        </div>
+      <div
+        style="z-index: 1002"
+        class="absolute bottom-20 gap-2 right-4 flex flex-col"
+      >
+        <base-button
+          data-testid="testAddCaseButton"
+          icon="plus"
+          icon-size="sm"
+          :title="$t('~~Add Case')"
+          :alt="$t('~~Add Case')"
+          :action="
+            () => {
+              isEditing = true;
+            }
+          "
+          class="w-12 h-12 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+        />
+        <base-button
+          v-if="showingMap"
+          data-testid="testShowTableButton"
+          ccu-icon="table"
+          icon-size="sm"
+          :title="$t('~~Show Table')"
+          :alt="$t('~~Show Table')"
+          :action="showTable"
+          class="w-12 h-12 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+        />
+        <base-button
+          v-if="showingTable"
+          data-testid="testShowMapButton"
+          ccu-icon="map"
+          icon-size="sm"
+          :title="$t('~~Show Map')"
+          :alt="$t('~~Show Map')"
+          :action="showMap"
+          class="w-12 h-12 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+        />
       </div>
     </div>
-    <div class="work-page__form h-full min-h-0">
+    <div
+      v-else
+      class=""
+      :style="{
+        height: worksite ? 'calc(100vh - 10rem)' : 'calc(100vh - 8rem)',
+      }"
+    >
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -399,20 +202,6 @@
             "
           />
         </div>
-        <base-button
-          v-if="$mq === 'sm'"
-          data-testid="testShowMapButton"
-          type="bare"
-          icon="map"
-          class="text-gray-700 pt-2"
-          :action="
-            () => {
-              showMobileMap = true;
-            }
-          "
-          :text="$t('casesVue.show_map')"
-          :alt="$t('casesVue.show_map')"
-        />
       </div>
       <div v-if="showingDetails" class="work-page__form-toggler">
         <base-button
@@ -433,7 +222,7 @@
         <span v-if="showFlags" class="text-base">{{ $t('actions.flag') }}</span>
         <div></div>
       </div>
-      <div class="h-auto min-h-0">
+      <div class="h-full min-h-0">
         <CaseHistory
           v-if="showHistory"
           data-testid="testShowHistoryDiv"
@@ -461,8 +250,8 @@
         ></CaseFlag>
         <WorksiteView
           v-else-if="isViewing"
-          data-testid="testWorksiteFormDiv"
           :key="worksiteId"
+          data-testid="testWorksiteFormDiv"
           :worksite-id="worksiteId"
           :incident-id="String(currentIncidentId)"
           :top-height="300"
@@ -493,7 +282,521 @@
         />
       </div>
     </div>
-  </div>
+  </template>
+  <template v-else>
+    <div class="work-page h-full" :class="{ collapsedForm }">
+      <div :key="currentIncidentId" class="work-page__main">
+        <div class="relative">
+          <div class="flex items-center">
+            <div
+              v-if="!collapsedUtilityBar"
+              :key="currentIncidentId"
+              class="flex items-center flex-wrap w-full p-3"
+            >
+              <ccu-icon
+                :alt="$t('casesVue.map_view')"
+                data-testid="testMapViewIcon"
+                size="medium"
+                class="mr-4 cursor-pointer"
+                :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+                type="map"
+                ccu-event="user_ui-view-map"
+                @click="() => showMap(true)"
+              />
+              <ccu-icon
+                :alt="$t('casesVue.table_view')"
+                data-testid="testTableViewIcon"
+                size="medium"
+                class="mr-4 cursor-pointer"
+                :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+                type="table"
+                ccu-event="user_ui-view-table"
+                @click="showTable"
+              />
+              <span v-if="allWorksiteCount" class="font-thin">
+                <span
+                  v-if="allWorksiteCount === filteredWorksiteCount"
+                  data-testid="testCaseCountContent"
+                >
+                  {{ $t('casesVue.cases') }}
+                  {{ numeral(allWorksiteCount) }}
+                </span>
+                <span v-else data-testid="testCaseCountFilteredContent">
+                  {{ $t('casesVue.cases') }}
+                  {{ numeral(filteredWorksiteCount) }} of
+                  {{ numeral(allWorksiteCount) }}
+                </span>
+              </span>
+              <WorksiteSearchInput
+                :value="currentSearch"
+                data-testid="testWorksiteSearch"
+                icon="search"
+                display-property="name"
+                :placeholder="$t('actions.search')"
+                size="medium"
+                skip-validation
+                class="mx-4 py-1"
+                @selectedExisting="handleSelectedExisting"
+                @input="
+                  (value: string) => {
+                    currentSearch = value;
+                  }
+                "
+              />
+              <WorksiteActions
+                v-if="currentIncidentId"
+                :key="currentIncidentId"
+                class="py-1"
+                :current-incident-id="String(currentIncidentId)"
+                :inital-filters="filters"
+                @updatedQuery="onUpdateQuery"
+                @updatedFilters="onUpdateFilters"
+                @applyLocation="applyLocation"
+                @applyTeamGeoJson="applyTeamGeoJson"
+                @downloadCsv="downloadWorksites"
+                @toggleHeatMap="toggleHeatMap"
+              />
+            </div>
+            <div
+              :class="collapsedUtilityBar ? 'w-full' : ''"
+              class="flex justify-end items-center justify-self-end"
+            >
+              <font-awesome-icon
+                :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
+                :alt="
+                  collapsedUtilityBar
+                    ? $t('actions.show_options')
+                    : $t('actions.hide_options')
+                "
+                data-testid="testCollapseUtilityBarIcon"
+                class="rounded-full border p-1 mx-1 mb-1 cursor-pointer justify-end"
+                size="xl"
+                @click="collapsedUtilityBar = !collapsedUtilityBar"
+              />
+            </div>
+          </div>
+          <tag
+            v-if="overDueFilterLabel"
+            data-testid="testOverDueFilterLabelDiv"
+            closeable
+            class="m-1 p-1 w-max"
+            @closed="clearQuery"
+            >{{ overDueFilterLabel }}</tag
+          >
+          <div
+            v-if="!collapsedUtilityBar && !showingTable"
+            class="flex justify-center items-center"
+          >
+            <Slider
+              primary-color="#dadada"
+              data-testid="testSviSliderInput"
+              secondary-color="white"
+              :value="sviSliderValue"
+              :from="$t('svi.most_vulnerable')"
+              :to="$t('svi.everyone')"
+              :from-tooltip="$t(`svi.svi_more_info_link`)"
+              handle-size="12px"
+              track-size="8px"
+              class="pt-1 ml-4"
+              slider-class="w-64"
+              @input="filterSvi"
+            />
+            <Slider
+              track-size="8px"
+              data-testid="testUpdatedSliderInput"
+              handle-size="12px"
+              primary-color="#dadada"
+              secondary-color="white"
+              class="pt-1 ml-4"
+              slider-class="w-84"
+              :title="$t('casesVue.updated')"
+              :value="dateSliderValue"
+              :min="0"
+              :max="100"
+              :from="dateSliderFrom"
+              :to="dateSliderTo"
+              @input="filterDates"
+            ></Slider>
+          </div>
+        </div>
+        <div class="work-page__main-content">
+          <div v-if="showingMap" class="work-page__main-content--map">
+            <SimpleMap
+              :map-loading="mapLoading"
+              data-testid="testSimpleMapdiv"
+              show-zoom-buttons
+              :available-work-types="availableWorkTypes"
+              @onZoomIn="zoomIn"
+              @onZoomOut="zoomOut"
+              @onZoomIncidentCenter="goToIncidentCenter"
+              @onZoomInteractive="goToInteractive"
+            />
+            <div ref="phoneButtons" class="work-page__actions">
+              <div
+                class="w-full h-full flex items-center justify-center relative p-0.5 mt-1 bg-white cursor-pointer"
+              >
+                <font-awesome-icon
+                  :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
+                  :alt="
+                    collapsedForm
+                      ? $t('actions.show_options')
+                      : $t('actions.hide_options')
+                  "
+                  data-testid="testCollapsedFormIcon"
+                  class="px-0.5 py-2 ml-1.5"
+                  size="large"
+                  @click="collapsedForm = !collapsedForm"
+                />
+              </div>
+              <PhoneComponentButton
+                name="chat"
+                data-testid="testPhoneComponentChatButton"
+                class="work-page__action"
+                component-class="work-page__action-content work-page__action-content--chat"
+                @open="
+                  () => {
+                    updateUserState({
+                      [`chat_${selectedChat.id}_last_seen`]:
+                        moment().toISOString(),
+                    });
+                    unreadChatCount = 0;
+                    unreadUrgentChatCount = 0;
+                  }
+                "
+              >
+                <template #button>
+                  <div
+                    class="w-full h-full flex items-center justify-center relative"
+                  >
+                    <div
+                      v-if="unreadChatCount"
+                      class="absolute top-0 left-0 m-1"
+                      data-testid="testUnreadChatCountDiv"
+                    >
+                      <span
+                        class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-black bg-primary-light rounded-full"
+                        >{{ unreadChatCount }}</span
+                      >
+                    </div>
+                    <div
+                      v-if="unreadUrgentChatCount"
+                      class="absolute top-0 right-0 my-1 -mx-1"
+                    >
+                      <span
+                        class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                        >{{ unreadUrgentChatCount }}</span
+                      >
+                    </div>
+                    <ccu-icon
+                      type="chat"
+                      class="p-1 ml-1.5"
+                      size="large"
+                      :alt="$t('chat.chat')"
+                    />
+                  </div>
+                </template>
+                <template #component>
+                  <Chat
+                    v-if="selectedChat"
+                    data-testid="testChatDiv"
+                    :chat="selectedChat"
+                    :state-key="`chat_${selectedChat.id}_last_seen`"
+                    @unreadCount="unreadChatCount = $event"
+                    @unreadUrgentCount="unreadUrgentChatCount = $event"
+                    @onNewMessage="unreadChatCount += 1"
+                    @onNewUrgentMessage="unreadUrgentChatCount += 1"
+                    @focusNewsTab="focusNewsTab"
+                  />
+                </template>
+              </PhoneComponentButton>
+              <PhoneComponentButton
+                name="news"
+                data-testid="testPhoneComponentNewsDiv"
+                class="work-page__action"
+                component-class="work-page__action-content work-page__action-content--news"
+                @open="
+                  () => {
+                    updateUserState({
+                      work_news_last_seen: moment().toISOString(),
+                    });
+                    unreadNewsCount = 0;
+                  }
+                "
+              >
+                <template #button>
+                  <div
+                    class="w-full h-full flex items-center justify-center relative"
+                  >
+                    <div
+                      v-if="unreadNewsCount"
+                      class="absolute top-0 left-0 m-1"
+                      data-testid="testUnreadNewsCountDiv"
+                    >
+                      <span
+                        class="inline-flex items-center justify-center px-1 py-0.5 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                        >{{ unreadNewsCount }}</span
+                      >
+                    </div>
+                    <ccu-icon
+                      type="news"
+                      class="p-1 ml-1.5"
+                      size="large"
+                      :alt="$t('phoneDashboard.news')"
+                    />
+                  </div>
+                </template>
+                <template #component>
+                  <PhoneNews
+                    :cms-tag="'work-news'"
+                    state-key="work_news_last_seen"
+                    @unreadCount="unreadNewsCount = $event"
+                  />
+                </template>
+              </PhoneComponentButton>
+            </div>
+          </div>
+          <div v-if="showingTable" class="work-page__main-content--table">
+            <div class="items-center justify-end hidden md:flex">
+              <base-button
+                class="ml-3 my-3 border p-1 px-4 bg-white"
+                data-testid="testPrintClaimedButton"
+                :class="
+                  selectedTableItems && selectedTableItems.size === 0
+                    ? 'text-crisiscleanup-grey-700'
+                    : ''
+                "
+                :disabled="selectedTableItems && selectedTableItems.size === 0"
+                :text="$t('actions.print_claimed')"
+                :alt="$t('actions.print_claimed')"
+                :action="printSelectedWorksites"
+              />
+              <base-button
+                class="ml-3 my-3 border p-1 px-4 bg-white"
+                data-testid="testDownloadButton"
+                :class="
+                  selectedTableItems && selectedTableItems.size === 0
+                    ? 'text-crisiscleanup-grey-700'
+                    : ''
+                "
+                :disabled="selectedTableItems && selectedTableItems.size === 0"
+                :text="$t('actions.download')"
+                :alt="$t('actions.download')"
+                :action="
+                  () => {
+                    downloadWorksites(Array.from(selectedTableItems));
+                  }
+                "
+              />
+              <base-button
+                class="ml-3 my-3 border p-1 px-4 bg-white"
+                data-testid="testUnclaimButton"
+                :class="
+                  selectedTableItems && selectedTableItems.size === 0
+                    ? 'text-crisiscleanup-grey-700'
+                    : ''
+                "
+                :disabled="selectedTableItems && selectedTableItems.size === 0"
+                :action="showUnclaimModal"
+                :text="$t('actions.unclaim')"
+                :alt="$t('actions.unclaim')"
+              >
+              </base-button>
+              <base-button
+                icon="sync"
+                data-testid="testUpdateStatusButton"
+                class="ml-3 my-3 border p-1 px-4 bg-white"
+                :class="
+                  selectedTableItems && selectedTableItems.size === 0
+                    ? 'text-crisiscleanup-grey-700'
+                    : ''
+                "
+                :disabled="selectedTableItems && selectedTableItems.size === 0"
+                :text="$t('actions.update_status')"
+                :alt="$t('actions.update_status')"
+                :action="showUpdateStatusModal"
+              />
+            </div>
+            <WorksiteTable
+              :worksite-query="worksiteQuery"
+              @rowClick="loadCase"
+              @selectionChanged="onSelectionChanged"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="work-page__form h-full min-h-0">
+        <CaseHeader
+          v-if="worksite"
+          :worksite="worksite"
+          class="border-l border-r"
+          can-edit
+          show-case-tabs
+          :is-viewing-worksite="isViewing"
+          @closeWorksite="clearCase"
+          @onJumpToCase="jumpToCase"
+          @reloadMap="reloadMap"
+          @onShareWorksite="() => shareWorksite(worksite?.id)"
+          @onDownloadWorksite="
+            () => {
+              downloadWorksites([worksite?.id]);
+            }
+          "
+          @onPrintWorksite="() => printWorksite(worksite?.id)"
+          @onFlagCase="
+            () => {
+              showFlags = true;
+              showHistory = false;
+            }
+          "
+          @onEditCase="
+            () => {
+              isViewing = false;
+              isEditing = true;
+              router.push(
+                `/incident/${currentIncidentId}/work/${worksite?.id}/edit`,
+              );
+            }
+          "
+          @onShowHistory="
+            () => {
+              showFlags = false;
+              showHistory = true;
+            }
+          "
+        />
+        <div v-else class="work-page__form-header">
+          <div
+            class="flex h-full items-center cursor-pointer border-b-2 border-primary-light p-3"
+            @click="() => clearCase()"
+          >
+            <ccu-icon
+              :alt="$t('casesVue.new_case')"
+              type="active"
+              size="small"
+              data-testid="testNewCaseIcon"
+            />
+            <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+          </div>
+          <div
+            v-if="mostRecentlySavedWorksite && mostRecentlySavedWorksite.id"
+            class="h-full p-3 flex items-center justify-center"
+            @click="() => loadCase(mostRecentlySavedWorksite)"
+          >
+            Case
+            {{
+              mostRecentlySavedWorksite && mostRecentlySavedWorksite.case_number
+            }}
+            <ccu-icon
+              :alt="$t('actions.cancel')"
+              data-testid="testCancelButton"
+              size="xs"
+              type="cancel"
+              class="ml-2"
+              :action="
+                () => {
+                  mostRecentlySavedWorksite = null;
+                }
+              "
+            />
+          </div>
+          <base-button
+            v-if="$mq === 'sm'"
+            data-testid="testShowMapButton"
+            type="bare"
+            icon="map"
+            class="text-gray-700 pt-2"
+            :action="
+              () => {
+                showMobileMap = true;
+              }
+            "
+            :text="$t('casesVue.show_map')"
+            :alt="$t('casesVue.show_map')"
+          />
+        </div>
+        <div v-if="showingDetails" class="work-page__form-toggler">
+          <base-button
+            icon="arrow-left"
+            data-testid="testHistoryButton"
+            icon-size="medium"
+            :action="
+              () => {
+                showHistory = false;
+                showFlags = false;
+              }
+            "
+            :alt="$t('actions.history')"
+          />
+          <span v-if="showHistory" class="text-base">{{
+            $t('actions.history')
+          }}</span>
+          <span v-if="showFlags" class="text-base">{{
+            $t('actions.flag')
+          }}</span>
+          <div></div>
+        </div>
+        <div class="h-auto min-h-0">
+          <CaseHistory
+            v-if="showHistory"
+            data-testid="testShowHistoryDiv"
+            :incident-id="Number(currentIncidentId)"
+            :worksite-id="worksiteId"
+          ></CaseHistory>
+          <CaseFlag
+            v-else-if="showFlags"
+            data-testid="testShowFlagsDiv"
+            :incident-id="String(currentIncidentId)"
+            :worksite-id="worksiteId"
+            @reloadCase="
+              () => {
+                reloadCase();
+                showFlags = false;
+              }
+            "
+            @reloadMap="
+              () => {
+                reloadMap();
+                showFlags = false;
+              }
+            "
+            @clearCase="clearCase"
+          ></CaseFlag>
+          <WorksiteView
+            v-else-if="isViewing"
+            :key="worksiteId"
+            data-testid="testWorksiteFormDiv"
+            :worksite-id="worksiteId"
+            :incident-id="String(currentIncidentId)"
+            :top-height="300"
+            @reloadCase="reloadMap"
+            @closeWorksite="clearCase"
+            @onResetForm="clearCase"
+            @caseLoaded="
+              () => {
+                if (route && route.query.showOnMap) {
+                  jumpToCase();
+                }
+              }
+            "
+          />
+          <WorksiteForm
+            v-else
+            ref="worksiteForm"
+            :key="worksiteId"
+            :incident-id="String(currentIncidentId)"
+            :worksite-id="worksiteId"
+            :is-editing="isEditing"
+            class="border shadow"
+            @jumpToCase="jumpToCase"
+            @savedWorksite="handleWorksiteSave"
+            @closeWorksite="clearCase"
+            @navigateToWorksite="handleWorksiteNavigation"
+            @geocoded="addMarkerToMap"
+          />
+        </div>
+      </div>
+    </div>
+  </template>
 </template>
 
 <script lang="ts">
@@ -514,6 +817,7 @@ import type { Sprite } from 'pixi.js';
 import moment from 'moment';
 import type { LatLng } from 'leaflet';
 import * as L from 'leaflet';
+import { useMq } from 'vue3-mq';
 import WorksiteSearchInput from '../components/work/WorksiteSearchInput.vue';
 import PhoneComponentButton from '../components/phone/PhoneComponentButton.vue';
 import SimpleMap from '../components/SimpleMap.vue';
@@ -572,10 +876,16 @@ export default defineComponent({
     const { t } = useI18n();
     const store = useStore();
     const { emitter } = useEmitter();
+    const mq = useMq();
 
     const currentIncidentId = computed(
       () => store.getters['incident/currentIncidentId'],
     );
+
+    const incidentName = computed(() => {
+      const { name } = Incident.find(currentIncidentId.value) as Incident;
+      return name;
+    });
 
     const currentUser = computed(() =>
       User.find(User.store().getters['auth/userId']),
@@ -597,6 +907,7 @@ export default defineComponent({
     const filteredWorksiteCount = ref<number>(0);
     const searchWorksites = ref<any[]>([]);
     const currentSearch = ref<string>('');
+    const mobileSearch = ref<string>('');
     const worksiteId = ref<any>(null);
     const selectedChat = ref<any>({ id: 2 });
     const filterQuery = ref<any>({});
@@ -618,6 +929,7 @@ export default defineComponent({
         reloadTable();
       },
     );
+    const showingSearchModal = ref(false);
 
     function loadStatesForUser() {
       const states = currentUser?.value?.getStatesForIncident(
@@ -1299,6 +1611,9 @@ export default defineComponent({
       showHistory.value = false;
       showFlags.value = false;
       router.push(`/incident/${currentIncidentId.value}/work`);
+      if (mq.smMinus) {
+        showMap(true);
+      }
     }
 
     async function addMarkerToMap(location: LatLng) {
@@ -1506,6 +1821,7 @@ export default defineComponent({
       addMarkerToMap,
       clearCase,
       currentIncidentId,
+      incidentName,
       allWorksiteCount,
       filteredWorksiteCount,
       isEditing,
@@ -1566,6 +1882,7 @@ export default defineComponent({
       unreadUrgentChatCount,
       unreadNewsCount,
       currentSearch,
+      mobileSearch,
       numeral,
       moment,
       dateSliderFrom,
@@ -1577,10 +1894,14 @@ export default defineComponent({
       overDueFilterLabel,
       getOrganizationName,
       clearQuery,
+      mq,
+      showingSearchModal,
     };
   },
 });
 </script>
+
+<script setup></script>
 
 <style lang="postcss">
 .work-page {
@@ -1645,7 +1966,6 @@ export default defineComponent({
   }
 }
 </style>
-
 <style lang="postcss" scoped>
 .collapsedForm.work-page {
   grid-template-columns: minmax(0, auto);
@@ -1726,6 +2046,10 @@ export default defineComponent({
 
     &__form {
       @apply h-1/2;
+
+      &-header {
+        @apply h-16 border flex items-center justify-start;
+      }
     }
   }
 }

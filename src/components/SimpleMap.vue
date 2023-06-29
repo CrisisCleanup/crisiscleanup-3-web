@@ -11,6 +11,7 @@
       v-if="showZoomButtons"
       class="flex flex-col absolute zoom-control-container"
       style="z-index: 1001; top: 10px; left: 10px"
+      :class="zoomButtonsClass"
     >
       <div class="zoom-control flex flex-col mb-5">
         <base-button
@@ -110,6 +111,10 @@ export default defineComponent({
   props: {
     mapLoading: {
       type: Boolean,
+    },
+    zoomButtonsClass: {
+      type: String,
+      default: '',
     },
     showZoomButtons: {
       type: Boolean,

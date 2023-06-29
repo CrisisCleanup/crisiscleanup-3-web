@@ -2,7 +2,7 @@
   <div
     v-if="!loading"
     :key="currentIncidentId"
-    class="flex flex-col"
+    class="flex flex-col mt-16 md:mt-0"
     data-testid="testDashboarddiv"
   >
     <div class="flex self-end mr-4">

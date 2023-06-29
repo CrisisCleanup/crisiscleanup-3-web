@@ -308,6 +308,8 @@ input {
   height: var(--height);
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
+  -webkit-appearance: none;
+  opacity: 1;
 }
 
 textarea {
