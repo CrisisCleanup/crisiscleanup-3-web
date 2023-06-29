@@ -193,15 +193,15 @@ const getUsersRelatedToTickets = () => {
 };
 
 const columns = makeTableColumns([
-  ['status', '8%', 'Status'],
-  ['created_at', '5%', 'Created'],
-  ['account_type', '10%', 'Account Type'],
-  ['roles', '16%', 'Roles'],
-  ['app', '6%', 'App'],
-  ['requester', '8%', 'Requester'],
-  ['description', '35%', 'Description'],
-  ['advanced_ticket', '7%', 'Advanced Ticket'],
-  ['zendesk', '5%', 'Zendesk'],
+  ['status', '8%', t('helpdesk.ticket_status')],
+  ['created_at', '5%', t('helpdesk.ticket_created_at')],
+  ['account_type', '10%', t('helpdesk.account_type')],
+  ['roles', '16%', t('helpdesk.roles')],
+  ['app', '6%', t('helpdesk.app_platform')],
+  ['requester', '8%', t('helpdesk.requester')],
+  ['description', '35%', t('helpdesk.description')],
+  ['advanced_ticket', '7%', t('helpdesk.advanced_ticket')],
+  ['zendesk', '5%', t('helpdesk.zendesk_link')],
 ]);
 const showTicketModal = (ticket: Ticket) => {
   ticketModal.value = !ticketModal.value;
@@ -331,19 +331,19 @@ onMounted(() => {
       class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
     >
       <BaseText
-        ><span class="font-bold">{{ t('~~Total Tickets:') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.total_tickets') }}</span>
         {{ ticketStats.total }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#c19700]">{{ t('~~New:') }}</span
+        ><span class="font-bold text-[#c19700]">{{ t('helpdesk.new_tickets') }}</span
         >{{ ticketStats.newTickets }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#0042ed]">{{ t('~~Open:') }}</span>
+        ><span class="font-bold text-[#0042ed]">{{ t('helpdesk.open_tickets') }}</span>
         {{ ticketStats.open }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#6b6b6b]">{{ t('~~Pending:') }}</span
+        ><span class="font-bold text-[#6b6b6b]">{{ t('helpdesk.pending_tickets') }}</span
         >{{ ticketStats.pending }}</BaseText
       >
     </div>
@@ -352,15 +352,15 @@ onMounted(() => {
       class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
     >
       <BaseText
-        ><span class="font-bold">{{ t('~~Web4:') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.web_platform') }}</span>
         {{ ticketStats.app_type?.web4 ?? 0 }}</BaseText
       >
       <BaseText
-        ><span class="font-bold">{{ t('~~IOS:') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.ios_platform') }}</span>
         {{ ticketStats.app_type?.ios ?? 0 }}</BaseText
       >
       <BaseText
-        ><span class="font-bold">{{ t('~~Android:') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.android_platform') }}</span>
         {{ ticketStats.app_type?.android ?? 0 }}</BaseText
       >
     </div>
@@ -370,11 +370,11 @@ onMounted(() => {
     >
       <!--      could not get these to return just number instead of key:value pair as undefined for key-->
       <BaseText
-        ><span class="font-bold">{{ t('~~Users:') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.user_count') }}</span>
         {{ ticketStats.users?.undefined }}
       </BaseText>
       <BaseText
-        ><span class="font-bold">{{ t('~~Survivors: ') }}</span>
+        ><span class="font-bold">{{ t('helpdesk.survivor_count') }}</span>
         {{ ticketStats.survivors?.undefined }}</BaseText
       >
     </div>
@@ -399,7 +399,7 @@ onMounted(() => {
         :style="`border-color: #3498DB; color: #3498DB`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        {{ t('~~User') }}
+        {{ t('helpdesk.user_role') }}
       </div>
 
       <div
@@ -407,7 +407,7 @@ onMounted(() => {
         :style="`border-color: #27AE60; color: #27AE60`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
       >
-        {{ t('~~Survivor') }}
+        {{ t('helpdesk.survivor_role') }}
       </div>
     </template>
 
@@ -420,7 +420,7 @@ onMounted(() => {
         :user="slotProps.item.user.ccu_user"
       />
       <div v-else class="flex items-center justify-center">
-        {{ t('~~') }}No Roles
+        {{ t('helpdesk.no_role') }}
       </div>
     </template>
 
@@ -441,7 +441,7 @@ onMounted(() => {
     <template #advanced_ticket="slotProps">
       <BaseButton
         :action="() => showTicketModal(slotProps.item)"
-        :text="t('~~Open')"
+        :text="t('helpdesk.open_ticket_status')"
         variant="primary"
         class="p-2 rounded-md text-lg"
       />
