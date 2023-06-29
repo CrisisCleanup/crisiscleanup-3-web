@@ -1,5 +1,5 @@
 <template>
-  <template v-if="mq.smMinus">
+  <template v-if="mq.mdMinus">
     <div v-if="!isViewing && !isEditing">
       <SimpleMap
         v-if="showingMap"
@@ -1611,7 +1611,7 @@ export default defineComponent({
       showHistory.value = false;
       showFlags.value = false;
       router.push(`/incident/${currentIncidentId.value}/work`);
-      if (mq.smMinus) {
+      if (mq.mdMinus) {
         showMap(true);
       }
     }

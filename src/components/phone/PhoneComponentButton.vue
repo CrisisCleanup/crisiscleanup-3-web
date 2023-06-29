@@ -20,7 +20,7 @@
       </slot>
     </div>
 
-    <template v-if="mq.smMinus">
+    <template v-if="mq.mdMinus">
       <modal v-show="showComponent" @close="() => (showComponent = false)">
         <slot name="component"></slot>
       </modal>

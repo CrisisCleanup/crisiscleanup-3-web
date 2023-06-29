@@ -1,5 +1,5 @@
 <template>
-  <template v-if="mq.smMinus">
+  <template v-if="mq.mdMinus">
     <base-button
       text=""
       data-testid="testSearchButton"

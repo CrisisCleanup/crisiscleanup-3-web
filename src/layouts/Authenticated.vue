@@ -1,12 +1,12 @@
 <template>
-  <template v-if="mq.smMinus">
+  <template v-if="mq.mdMinus">
     <div v-if="!loading && currentIncident" class="flex flex-col h-screen">
       <DisasterIcon
         v-if="currentIncident && currentIncident.incidentImage"
         :current-incident="currentIncident"
         data-testid="testDisasterIcon"
         class="fixed left-4 top-4"
-        style="z-index: 1002"
+        style="z-index: 1003"
         @click="showIncidentSelectionModal"
       />
       <main>
@@ -20,14 +20,16 @@
           :key="route.key"
           class="flex flex-col items-center"
         >
-          <font-awesome-icon :icon="r.icon" class="mb-1" size="small" />
-          <a :href="r.to" class="text-white">{{ r.text }}</a>
+          <a :href="r.to" class="text-white flex flex-col">
+            <font-awesome-icon :icon="r.icon" class="mb-1" size="small" />
+            {{ r.text }}
+          </a>
         </div>
         <div class="flex flex-col items-center">
-          <font-awesome-icon icon="bars" class="mb-1" />
-          <a class="text-white" @click="showingMoreLinks = true">{{
-            $t('~~More')
-          }}</a>
+          <a class="text-white flex flex-col" @click="showingMoreLinks = true">
+            <font-awesome-icon icon="bars" class="mb-1" />
+            {{ $t('~~More') }}</a
+          >
         </div>
       </footer>
     </div>

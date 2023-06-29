@@ -3,7 +3,7 @@
     ref="table"
     :columns="columns"
     :url="tableUrl"
-    :body-style="{ height: mq.smMinus ? '40vh' : '24rem' }"
+    :body-style="{ height: mq.mdMinus ? '40vh' : '24rem' }"
     class="shadow-lg"
     :query="worksiteQuery"
     enable-selection

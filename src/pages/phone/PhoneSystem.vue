@@ -1,5 +1,5 @@
 <template>
-  <template v-if="mq.smMinus">
+  <template v-if="mq.mdMinus">
     <div v-if="!isEditing && !isNew">
       <div class="h-20 absolute top-0 w-24 mt-20" style="z-index: 1002">
         <PhoneToolBar

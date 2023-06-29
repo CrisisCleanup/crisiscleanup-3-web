@@ -1,12 +1,12 @@
 <template>
   <div v-if="mq" class="table-grid js-table w-full">
     <div
-      v-if="!hideHeader && !mq.smMinus"
+      v-if="!hideHeader && !mq.mdMinus"
       class="header text-crisiscleanup-grey-700 bg-white"
       :style="gridStyleHeader"
     >
       <div
-        v-if="enableSelection && !mq.smMinus"
+        v-if="enableSelection && !mq.mdMinus"
         class="flex items-center p-2 border-b"
       >
         <base-checkbox
@@ -16,7 +16,7 @@
         />
       </div>
       <div
-        v-if="hasRowDetails && !mq.smMinus"
+        v-if="hasRowDetails && !mq.mdMinus"
         class="flex items-center p-2 border-b"
       ></div>
       <div
@@ -134,7 +134,7 @@
         @click="rowClick(item, $event)"
       >
         <div
-          v-if="enableSelection && !mq.smMinus"
+          v-if="enableSelection && !mq.mdMinus"
           class="flex items-center p-2 border-b"
         >
           <base-checkbox
@@ -149,7 +149,7 @@
           />
         </div>
         <div
-          v-if="hasRowDetails && !mq.smMinus"
+          v-if="hasRowDetails && !mq.mdMinus"
           class="flex items-center p-2 lg:border-b md:border-b"
         >
           <font-awesome-icon
@@ -174,7 +174,7 @@
           @click="handleColumnAction(column, item[column.key], item)"
         >
           <slot :name="column.key" :item="item">
-            <span v-if="mq.smMinus" class="font-semibold mr-2">
+            <span v-if="mq.mdMinus" class="font-semibold mr-2">
               {{ column.title }}:
             </span>
             <template
@@ -215,7 +215,7 @@
       v-if="enablePagination"
       class="footer flex flex-col sm:flex-row sm:items-center justify-between p-4"
     >
-      <div v-if="!mq.smMinus" class="flex items-center mb-4 sm:mb-0">
+      <div v-if="!mq.mdMinus" class="flex items-center mb-4 sm:mb-0">
         <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
         <base-select
           :model-value="pagination.pageSize"
@@ -227,7 +227,7 @@
           @update:modelValue="onSelectPageSize"
         />
       </div>
-      <div v-if="!mq.smMinus">
+      <div v-if="!mq.mdMinus">
         <div class="flex items-center">
           <base-button
             :disabled="isPreviousButtonDisabled"
@@ -500,7 +500,7 @@ export default defineComponent({
     const gridStyleRow = computed(() => {
       return {
         display: 'grid',
-        'grid-template-columns': mq.smMinus ? 'auto' : gridTemplate.value,
+        'grid-template-columns': mq.mdMinus ? 'auto' : gridTemplate.value,
         ...props.rowStyle,
       };
     });
