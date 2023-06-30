@@ -8,6 +8,7 @@
             :current-incident="currentIncident"
             data-testid="testDisasterIcon"
             :alt="$t('info.double_click_surprise')"
+            :title="$t('info.double_click_surprise')"
           />
         </div>
         <div class="flex flex-col ml-2 md:w-84 lg:w-84">

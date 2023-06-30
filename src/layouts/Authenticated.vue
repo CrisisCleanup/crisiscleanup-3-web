@@ -28,7 +28,7 @@
         <div class="flex flex-col items-center">
           <a class="text-white flex flex-col" @click="showingMoreLinks = true">
             <font-awesome-icon icon="bars" class="mb-1" />
-            {{ $t('~~More') }}</a
+            {{ $t('nav.more') }}</a
           >
         </div>
       </footer>
@@ -41,7 +41,7 @@
       data-testid="testShowingMoreLinksModal"
       modal-classes="bg-white h-120 shadow p-3"
       closeable
-      :title="$t('~~All Links')"
+      :title="$t('nav.all_links')"
       @close="showingMoreLinks = false"
     >
       <div v-for="r in routes" :key="r.key" class="flex items-center">
@@ -368,9 +368,9 @@ export default defineComponent({
     async function showIncidentSelectionModal() {
       const result = await selection({
         title: t('Select Incident'),
-        content: t('~~Please select an incident'),
+        content: t('locationVue.select_incident'),
         options: incidents.value,
-        placeholder: t('~~Please select an incident'),
+        placeholder: t('locationVue.select_incident'),
         itemKey: 'id',
         label: 'name',
       });

@@ -5,8 +5,8 @@
       data-testid="testSearchButton"
       icon="search"
       icon-size="sm"
-      :title="$t('~~Search')"
-      :alt="$t('~~Search')"
+      :title="$t('actions.search')"
+      :alt="$t('actions.search')"
       :action="() => $emit('toggleSearch')"
       class="w-10 h-10 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
     />

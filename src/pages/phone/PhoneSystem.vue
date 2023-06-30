@@ -251,8 +251,8 @@
           data-testid="testSearchButton"
           icon="search"
           icon-size="sm"
-          :title="$t('~~Search')"
-          :alt="$t('~~Search')"
+          :title="$t('actions.search')"
+          :alt="$t('actions.search')"
           :action="
             () => {
               showingSearchModal = !showingSearchModal;
@@ -287,8 +287,8 @@
           data-testid="testAddCaseButton"
           icon="plus"
           icon-size="sm"
-          :title="$t('~~Add Case')"
-          :alt="$t('~~Add Case')"
+          :title="$t('actions.add_case')"
+          :alt="$t('actions.add_case')"
           :action="
             () => {
               isNew = true;
@@ -301,8 +301,8 @@
           data-testid="testShowTableButton"
           ccu-icon="table"
           icon-size="sm"
-          :title="$t('~~Show Table')"
-          :alt="$t('~~Show Table')"
+          :title="$t('actions.table_view_alt')"
+          :alt="$t('actions.table_view_alt')"
           :action="() => toggleView('showingTable')"
           class="w-12 h-12 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
         />
@@ -311,8 +311,8 @@
           data-testid="testShowMapButton"
           ccu-icon="map"
           icon-size="sm"
-          :title="$t('~~Show Map')"
-          :alt="$t('~~Show Map')"
+          :title="$t('casesVue.map_view')"
+          :alt="$t('casesVue.map_view')"
           :action="() => toggleView('showingMap')"
           class="w-12 h-12 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
         />
