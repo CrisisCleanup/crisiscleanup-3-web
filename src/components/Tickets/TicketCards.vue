@@ -266,7 +266,7 @@ const replyToTicket = (replyStatus: string) => {
     })
     .then((response) => {
       if (response.status === 200) {
-        toast.success('~~Reply Successful');
+        toast.success(t('helpdesk.reply_success'));
       }
 
       getComments();
@@ -280,7 +280,7 @@ const replyToTicket = (replyStatus: string) => {
       emitter.emit('reFetchActiveTicket');
     })
     .catch((error: Error) => {
-      toast.error(`~~Reply unsuccessful ${getErrorMessage(error)}`);
+      toast.error(t('helpdesk.reply_unsuccessful')` ${getErrorMessage(error)}`);
     });
 };
 
@@ -290,14 +290,14 @@ const deleteTicket = () => {
   //   .delete(`/tickets/${props.ticketData.id}.json`).then((response: AxiosResponse<unknown>) => {
   //   if (response.status === 200) {
   // toast.success(
-  // 	`~~Reply Successfull, Ticket Status Changed to ${replyStatus}`
+  // 	t('helpdesk.sucessfully_deleted')` ${replyStatus}`
   // )
   // }
 
   // emitter.emit('closeModal');
   // })
   //   .catch((error: Error) => {
-  // toast.error(`~~Reply unsuccessful ${getErrorMessage(e)}`)
+  // toast.error(t('helpdesk.delete_unsucessful')` ${getErrorMessage(e)}`)
   // console.log(error);
   // });
 };
@@ -313,14 +313,14 @@ const reAssignTicket = (agentId?: number) => {
     })
     .then((response: AxiosResponse<unknown>) => {
       if (response.status === 200) {
-        toast.success('~~Successfully reassigned');
+        toast.success(t('helpdesk.reassign_success'));
         setTimeout(() => {
           fetchActiveTicket();
         }, 1000); // Timeout to account for zendesk db update
       }
     })
     .catch((error: Error) => {
-      toast.error(`~~Assignment Unsuccessful ${getErrorMessage(error)}`);
+      toast.error(t('helpdesk.reassign_failure')` ${getErrorMessage(error)}`);
     });
 };
 
@@ -383,7 +383,7 @@ const executeMacro = (macro) => {
 
   ticketReply.value = replacedReply;
 
-  toast.success(`~~Applying Macro: ${macro.title}`);
+  toast.success(t('helpdesk.macro_success')` ${macro.title}`);
 };
 
 const formatKey = (key: string) => {
@@ -570,7 +570,7 @@ onMounted(async () => {
           </BaseText>
         </div>
         <div class="flex flex-col px-4 py-2">
-          <span class="font-bold text-xl"> {{ t('~~Languages:') }}</span>
+          <span class="font-bold text-xl"> {{ t('helpdesk.languages') }}</span>
           <div
             v-for="l in languages.filter(
               (item) =>
@@ -585,7 +585,7 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-col px-4">
-          <span class="font-bold text-xl"> {{ t('~~Roles:') }} </span>
+          <span class="font-bold text-xl"> {{ t('helpdesk.roles') }} </span>
           <UserRolesSelect
             v-if="ccUser.roles"
             style="pointer-events: none"
@@ -699,7 +699,7 @@ onMounted(async () => {
         </BaseText>
       </div>
       <div ref="commentsContainer" class="comments__container">
-        <BaseText class="comments__header">{{ t('~~Comments') }}</BaseText>
+        <BaseText class="comments__header">{{ t('helpdesk.comments') }}</BaseText>
         <div
           v-for="(comment, comment_idx) in comments"
           :key="comment_idx"
@@ -713,7 +713,7 @@ onMounted(async () => {
           <BaseText>{{ removeSubmittedFromFooter(comment.body) }}</BaseText>
 
           <div v-if="comment.attachments[0]" class="attachments-container">
-            <span class="attachments__header"> {{ t('~~Attachments') }}</span>
+            <span class="attachments__header"> {{ t('helpdesk.attachments') }}</span>
             <div class="attachments__items">
               <div
                 v-for="(attachment, attachment_idx) in comment.attachments"
@@ -742,7 +742,7 @@ onMounted(async () => {
             <BaseButton
               class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
               :action="showMacroModal"
-              :text="t('~~Apply Macro')"
+              :text="t('actions.apply_macro')"
               variant="primary"
             />
           </div>
@@ -774,7 +774,7 @@ onMounted(async () => {
       <div class="assigned-to__container">
         <div class="header">
           <BaseText variant="h1"
-            >{{ t('~~Assigned To:') }}
+            >{{ t('helpdesk.assigned_to') }}
             <span class="font-bold text-xl">{{ ticketAssigneeName }}</span>
           </BaseText>
         </div>
@@ -783,7 +783,7 @@ onMounted(async () => {
           select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
           class="agent-selection"
           label="name"
-          placeholder="Select Agent"
+          :placeholder="t('helpdesk.select_agent')"
           item-key="id"
           :options="agents"
           @update:model-value="(v) => (selectedAgent = v)"
@@ -791,18 +791,17 @@ onMounted(async () => {
 
         <BaseButton
           variant="primary"
-          :text="t('~~Assign')"
+          :text="t('actions.assign')"
           class="reassign-button"
           :action="reAssignTicket"
         />
       </div>
 
       <div class="reply-as">
-        <BaseText class="reply-as__header"> {{ t('~~Reply As:') }}</BaseText>
         <div class="buttons__container">
           <BaseButton
             size="md"
-            :text="t('~~Delete')"
+            :text="t('actions.delete')"
             :class="['w-1/4 rounded-md text-xl border']"
             icon="trash"
             icon-size="lg"
