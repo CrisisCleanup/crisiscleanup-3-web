@@ -12,28 +12,10 @@
       <main>
         <slot />
       </main>
-      <footer
-        class="pt-3 pb-3 bg-zinc-800 text-white fixed inset-x-0 bottom-0 flex justify-around items-center"
-      >
-        <div
-          v-for="r in mobileRoutes"
-          :key="route.key"
-          class="flex flex-col items-center"
-        >
-          <a :href="r.to" class="text-white flex flex-col">
-            <font-awesome-icon :icon="r.icon" class="mb-1" size="small" />
-            {{ r.text }}
-          </a>
-        </div>
-        <div class="flex flex-col items-center">
-          <a class="text-white flex flex-col" @click="showingMoreLinks = true">
-            <font-awesome-icon icon="bars" class="mb-1" />
-            {{ $t('~~More') }}</a
-          >
-        </div>
-      </footer>
     </div>
-
+    <div v-else class="flex h-screen items-center justify-center">
+      <spinner show-quote />
+    </div>
     <modal
       v-if="showingMoreLinks"
       data-testid="testShowingMoreLinksModal"
