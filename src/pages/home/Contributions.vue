@@ -14,12 +14,12 @@
         }}</base-text>
         <ul>
           <li>
-            <a class="doc-link" href="/icla.pdf" target="_blank">{{
+            <a class="doc-link" href="/assets/icla.pdf" target="_blank">{{
               $t('contrib.icla')
             }}</a>
           </li>
           <li>
-            <a class="doc-link" href="/ccla.pdf" target="_blank">{{
+            <a class="doc-link" href="/assets/ccla.pdf" target="_blank">{{
               $t('contrib.ccla')
             }}</a>
           </li>
@@ -35,7 +35,7 @@
         }}</base-text>
         <ul>
           <li>
-            <a class="doc-link" href="/sgla.pdf" target="_blank">{{
+            <a class="doc-link" href="/assets/sgla.pdf" target="_blank">{{
               $t('contrib.sgla')
             }}</a>
           </li>
