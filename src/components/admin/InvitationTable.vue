@@ -14,7 +14,7 @@
         text-variant="bodysm"
         class="px-2"
         data-testid="testActivateButton"
-      >{{ $t('actions.activate') }}</base-link
+        >{{ $t('actions.activate') }}</base-link
       >
     </template>
     <template #organization="slotProps">

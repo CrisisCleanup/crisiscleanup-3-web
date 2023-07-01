@@ -624,6 +624,7 @@ export default defineComponent({
           'checkmark-input',
           'base-button',
           'link',
+          'ccu-icon',
         ].some(hasClass)
       ) {
         return;

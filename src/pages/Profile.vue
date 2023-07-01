@@ -1,13 +1,12 @@
 <template>
   <div
-    style="height: 85%"
     class="h-full flex justify-center mt-10 md:mt-0"
     data-testid="testProfileDiv"
   >
-    <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
+    <div class="h-full flex flex-col w-11/12 md:w-3/4 my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
-          class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
+          class="md:border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
         >
           {{ currentUser.full_name }}
           <div class="flex justify-end gap-2">
@@ -28,9 +27,9 @@
             />
           </div>
         </div>
-        <div class="overflow-auto">
-          <div class="flex sm:flex-row flex-col">
-            <div class="flex flex-col p-8 sm:w-64 items-center">
+        <div class="">
+          <div class="flex md:flex-row flex-col">
+            <div class="flex flex-col p-8 md:w-64 items-center">
               <Avatar
                 :initials="currentUser.first_name"
                 :url="currentUser.profilePictureUrl"
@@ -63,11 +62,11 @@
                 {{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
-            <div class="user-form p-10 sm:p-8">
+            <div class="user-form p-10 md:p-8">
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
-                  <div class="flex pb-4">
-                    <div class="form-field mr-2">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pb-4">
+                    <div class="form-field">
                       <label for="first_name">{{
                         $t('profileUser.first_name_placeholder')
                       }}</label>
@@ -104,12 +103,10 @@
                         "
                       />
                     </div>
-                  </div>
-                  <div class="flex pb-4">
                     <div class="form-field mr-2">
                       <label for="last_name">{{
-                        $t('profileUser.last_name_placeholder')
-                      }}</label>
+                          $t('profileUser.last_name_placeholder')
+                        }}</label>
                       <base-input
                         name="last_name"
                         data-testid="testLastNameTextInput"
@@ -126,8 +123,8 @@
                     </div>
                     <div class="form-field">
                       <label for="email">{{
-                        $t('profileUser.email_placeholder')
-                      }}</label>
+                          $t('profileUser.email_placeholder')
+                        }}</label>
                       <base-input
                         name="email"
                         data-testid="testEmailTextInput"
@@ -145,16 +142,16 @@
                   </div>
                 </div>
                 <hr class="p-2 m-auto" />
-                <div class="flex flex-col sm:flex-row pb-4">
-                  <div class="sm:w-1/2 mr-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 pb-4 gap-2">
+                  <div class="">
                     <p>{{ $t('profileUser.user_roles') }}</p>
                     <UserRolesSelect
-                      class="w-full flex-grow border border-crisiscleanup-dark-100"
+                      class="w-full flex-grow"
                       data-testid="testUserRolesSelect"
                       :user="currentUser"
                     />
                   </div>
-                  <div class="w-1/2">
+                  <div>
                     <p>{{ $t('profileUser.equipment') }}</p>
                     <base-select
                       v-model="currentUser.equipment"
@@ -605,7 +602,7 @@ export default defineComponent({
 <style scoped>
 .user-form {
   .form-field {
-    @apply flex flex-col w-1/2 ml-0;
+    @apply flex flex-col ml-0;
   }
 }
 .profile-image {

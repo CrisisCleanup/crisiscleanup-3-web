@@ -1,13 +1,13 @@
 <template>
   <modal
-    modal-classes="max-w-xl"
+    modal-classes="md:max-w-xl"
     data-testid="testUserEditModal"
     :title="$t('profileUser.edit_user')"
     closeable
     @close="$emit('close')"
   >
-    <div class="flex px-10 py-5">
-      <div class="w-1/2 flex items-start justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 px-10 py-5">
+      <div class="flex items-start justify-center">
         <img
           class="rounded-full profile-image mr-16 w-40"
           data-testid="testProfilePictureIcon"
@@ -15,7 +15,7 @@
           :alt="$t('userView.profile_picture')"
         />
       </div>
-      <div class="w-1/2 flex flex-col">
+      <div class="flex flex-col">
         <base-input
           size="large"
           data-testid="testFirstNameTextInput"

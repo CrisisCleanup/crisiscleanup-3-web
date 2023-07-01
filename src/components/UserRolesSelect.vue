@@ -3,7 +3,6 @@
     :key="user.id"
     data-testid="testUserRolesSelect"
     v-model="selectedRoleIds"
-    class="border border-crisiscleanup-dark-100"
     multiple
     searchable
     :clearable="false"

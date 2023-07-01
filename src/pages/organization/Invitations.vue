@@ -131,7 +131,7 @@
           </div>
         </template>
         <template #delete="slotProps">
-          <div class="flex mr-2 justify-center">
+          <div class="flex mr-2 justify-center items-center w-full">
             <ccu-icon
               :alt="$t('actions.delete_invitation')"
               :data-testid="`testDeleteInvitation${slotProps.item}Button`"
