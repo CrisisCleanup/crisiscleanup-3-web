@@ -24,9 +24,6 @@ export default defineComponent({
         key: 'nav.admin_tickets',
       }),
       reactive({
-        key: 'nav.costs',
-      }),
-      reactive({
         key: 'nav.cms',
       }),
       reactive({

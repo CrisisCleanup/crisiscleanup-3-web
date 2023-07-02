@@ -14,11 +14,11 @@
           }
         "
       ></base-input>
-      <div class="flex flex-wrap mt-4 sm:mt-0 items-center mr-4">
-        <InviteUsers class="px-3" is-admin />
+      <div class="flex gap-2 flex-wrap mt-4 items-center mr-4">
+        <InviteUsers class="" is-admin />
         <MergeOrganizations is-admin />
-        <FileUpload class="mx-3 my-1" />
-        <DatabaseAccess class="mx-3 my-1" />
+        <FileUpload class="" />
+        <DatabaseAccess class="" />
         <base-button
           :text="$t('adminDashboard.arcgis_upload')"
           :alt="$t('adminDashboard.arcgis_upload')"
@@ -42,9 +42,11 @@
             data-testid="testRefreshPendingOrganizationsButton"
           />
         </div>
-        <div class="py-4 px-4 border-b flex items-center">
+        <div
+          class="py-4 px-4 border-b grid md:grid-cols-3 grid-cols-1 items-center"
+        >
           <base-button
-            class="mr-2 border-r pr-2"
+            class="mr-2 md:border-r pr-2"
             data-testid="testPendingOrganizationsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
@@ -57,7 +59,7 @@
           />
 
           <base-button
-            class="mr-2 border-r pr-2"
+            class="mr-2 md:border-r pr-2"
             data-testid="testPendingOrganizationsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
@@ -108,9 +110,9 @@
             :alt="$t('adminDashboard.refresh_incident_redeploy_requests')"
           />
         </div>
-        <div class="py-4 px-4 border-b flex items-center">
+        <div class="py-4 px-4 border-b grid md:grid-cols-3 grid-cols-1 items-center">
           <base-button
-            class="mr-2 border-r pr-2"
+            class="mr-2 md:border-r pr-2"
             data-testid="testRedeployRequestsActionRequiredButton"
             size="medium"
             :text="$t('adminDashboard.action_required')"
@@ -121,7 +123,7 @@
           />
 
           <base-button
-            class="mr-2 border-r pr-2"
+            class="mr-2 md:border-r pr-2"
             data-testid="testRedeployRequestsRecentlyApprovedButton"
             size="medium"
             :text="$t('adminDashboard.recently_approved')"
@@ -165,7 +167,7 @@
                   organizations.visible = !organizations.visible;
                 }
               "
-              >-</base-button
+            >-</base-button
             >
             {{ $t('adminDashboard.organizations') }}
           </span>
@@ -173,7 +175,7 @@
             :model-value="organizations.search"
             data-testid="testOrganizationsSearch"
             icon="search"
-            class="w-72 mx-4"
+            class="w-48 md:w-72 mx-4"
             :placeholder="$t('actions.search')"
             @update:modelValue="
               (value) => {
@@ -206,14 +208,14 @@
                   users.visible = !users.visible;
                 }
               "
-              >-</base-button
+            >-</base-button
             >
             {{ $t('adminDashboard.users') }}
           </span>
           <base-input
             :model-value="users.search"
             icon="search"
-            class="w-72 mx-4"
+            class="w-48 md:w-72 mx-4"
             :placeholder="$t('actions.search')"
             @update:modelValue="
               (value) => {
@@ -246,14 +248,14 @@
                   ghostUsers.visible = !ghostUsers.visible;
                 }
               "
-              >-</base-button
+            >-</base-button
             >
             {{ $t('adminDashboard.ghost_users') }}
           </span>
           <base-input
             :model-value="ghostUsers.search"
             icon="search"
-            class="w-72 mx-4"
+            class="w-48 md:w-72 mx-4"
             :placeholder="$t('actions.search')"
             @update:modelValue="
               (value) => {
@@ -286,14 +288,14 @@
                   invitationRequests.visible = !invitationRequests.visible;
                 }
               "
-              >-</base-button
+            >-</base-button
             >
             {{ $t('adminDashboard.invitation_requests') }}
           </span>
           <base-input
             :model-value="invitationRequests.search"
             icon="search"
-            class="w-72 mx-4"
+            class="w-48 md:w-72 mx-4"
             :placeholder="$t('actions.search')"
             @update:modelValue="
               (value) => {
@@ -326,14 +328,14 @@
                   invitations.visible = !invitations.visible;
                 }
               "
-              >-</base-button
+            >-</base-button
             >
             {{ $t('adminDashboard.invitations') }}
           </span>
           <base-input
             :model-value="invitations.search"
             icon="search"
-            class="w-72 mx-4"
+            class="w-48 md:w-72 mx-4"
             :placeholder="$t('actions.search')"
             @update:modelValue="
               (value) => {
@@ -353,9 +355,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div v-if="false" class="flex h-screen items-center justify-center">
-    <spinner />
   </div>
 </template>
 

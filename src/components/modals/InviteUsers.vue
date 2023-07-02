@@ -5,7 +5,7 @@
       :alt="$t('usersVue.invite_new_user')"
       data-testid="testInviteNewUserButton"
       variant="solid"
-      class="mx-1 px-3 py-1"
+      size="medium"
       :action="
         () => {
           showInviteModal = true;

@@ -1,6 +1,6 @@
 <template>
   <template v-if="mq.mdMinus">
-    <div v-if="!loading && currentIncident" class="flex flex-col h-screen">
+    <div v-if="!loading && currentIncident" class="flex flex-col">
       <DisasterIcon
         v-if="currentIncident && currentIncident.incidentImage"
         :current-incident="currentIncident"
@@ -13,6 +13,7 @@
         <slot />
       </main>
       <footer
+        style="width: 100svw;"
         class="pt-3 pb-3 bg-zinc-800 text-white fixed inset-x-0 bottom-0 flex justify-around items-center"
       >
         <div
