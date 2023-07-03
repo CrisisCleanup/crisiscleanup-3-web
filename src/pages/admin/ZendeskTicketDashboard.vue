@@ -12,7 +12,9 @@ import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
 import type User from '@/models/User';
+import useEmitter from '@/hooks/useEmitter';
 
+const { emitter } = useEmitter();
 const { t } = useI18n();
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
@@ -313,9 +315,13 @@ const getAgentList = () => {
     });
 };
 
+emitter.on('closeModal', () => {
+  showTicketModal();
+});
 // watch(ticketsWithUsers, (newValue, oldValue) => {
 //   console.log('ticket data has changed', newValue, oldValue);
 // });
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();

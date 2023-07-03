@@ -75,6 +75,12 @@ interface Comment {
   type: string;
 }
 
+const StatusEnum = {
+  NEW: 'new',
+  OPEN: 'open',
+  PENDING: 'pending',
+  SOLVED: 'solved',
+};
 const store = useStore();
 const props = withDefaults(defineProps<TicketCardsProps>(), {
   ticketData: undefined,
@@ -245,8 +251,6 @@ const fetchActiveTicket = () => {
     .then((response) => {
       ticketTestData.value.status = response.data.ticket.status;
       ticketTestData.value.assignee_id = response.data.ticket.assignee_id;
-      ticketReply.value = '';
-      selectedAgent.value = '';
     })
     .catch((error: Error) => {
       console.error('Error fetching tickets:', error);
@@ -269,9 +273,15 @@ const replyToTicket = (replyStatus: string) => {
         toast.success(t('helpdesk.reply_success'));
       }
 
-      getComments();
+      if (replyStatus === StatusEnum.OPEN) {
+        getComments();
+      } else {
+        emitter.emit('closeModal');
+      }
+
       if (props.ticketData?.assignee_id) {
         fetchActiveTicket();
+        ticketReply.value = '';
       } else {
         reAssignTicket(currentUserID.value!);
       }
@@ -318,6 +328,8 @@ const reAssignTicket = (agentId?: number) => {
           fetchActiveTicket();
         }, 1000); // Timeout to account for zendesk db update
       }
+
+      selectedAgent.value = '';
     })
     .catch((error: Error) => {
       toast.error(t('helpdesk.reassign_failure')` ${getErrorMessage(error)}`);
@@ -373,15 +385,15 @@ const showMacroModal = () => {
 
 const executeMacro = (macro) => {
   showMacroModal();
-  let replacedReply = macro.template;
+  let appendedReply = ticketReply.value + '\n' + macro.template;
 
   for (const [zendeskVariable, myVariable] of Object.entries(
     zendeskVariables,
   )) {
-    replacedReply = replacedReply.replace(zendeskVariable, myVariable);
+    appendedReply = appendedReply.replace(zendeskVariable, myVariable);
   }
 
-  ticketReply.value = replacedReply;
+  ticketReply.value = appendedReply;
 
   toast.success(t('helpdesk.macro_success')` ${macro.title}`);
 };
@@ -509,12 +521,23 @@ const zendeskVariables = {
   // Add more Zendesk variables as needed
 };
 
+async function getGhostUsers() {
+  const response = await axios.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/ghost_users?email=${
+      ccUser.value.email
+    }`,
+  );
+  console.log(response);
+  return response.data.results;
+}
+
 onMounted(async () => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
   await getCcuStats();
   getComments();
   getMacros();
+  await getGhostUsers();
   isLoading.value = false;
 });
 </script>
