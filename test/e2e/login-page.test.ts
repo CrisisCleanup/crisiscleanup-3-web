@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { testTitleWithTags, getAllTestIds, getLoginCredentials } from './utils';
+import { testTitleWithTags, getAllTestIds, doLogin } from './utils';
 
 test.describe('LoginPage', () => {
   test.beforeEach(async ({ page }) => {
@@ -10,21 +10,7 @@ test.describe('LoginPage', () => {
   test(
     testTitleWithTags('should login', ['slow', 'primary']),
     async ({ page }) => {
-      const { email, password } = getLoginCredentials();
-      const emailField = page.getByPlaceholder('Email');
-      const passwordField = page.getByPlaceholder('Password');
-      const loginSubmitButton = page.getByTestId('testLoginButton');
-
-      await emailField.click();
-      await emailField.fill(email);
-      await passwordField.click();
-      await passwordField.fill(password);
-      await loginSubmitButton.click();
-
-      await page.waitForLoadState('networkidle');
-
-      // wait for dashboard root div
-      await page.waitForSelector('[data-testid="testDashboarddiv"]');
+      await doLogin(page);
 
       await expect(page).toHaveURL(/.*\/incident\/.*\/dashboard/);
       await expect(page).toHaveTitle(/.*Dashboard.*/);

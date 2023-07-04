@@ -77,6 +77,34 @@ export function getLoginCredentials(): LoginCredential {
 }
 
 /**
+ * Do login on given page
+ * @param page
+ */
+export async function doLogin(page: Page): Promise<boolean> {
+  const { email, password } = getLoginCredentials();
+  const emailField = page.getByPlaceholder('Email');
+  const passwordField = page.getByPlaceholder('Password');
+  const loginSubmitButton = page.getByTestId('testLoginButton');
+  try {
+    await emailField.click();
+    await emailField.fill(email);
+    await passwordField.click();
+    await passwordField.fill(password);
+    await loginSubmitButton.click();
+
+    await page.waitForLoadState('networkidle');
+
+    // wait for dashboard root div
+    await page.waitForSelector('[data-testid="testDashboarddiv"]');
+    return true;
+  } catch (error: unknown) {
+    console.error('Error Logging In', error);
+  }
+
+  return false;
+}
+
+/**
  * Query for all data-testid on a given page.
  * @param page
  * @param testIdIdentifier
