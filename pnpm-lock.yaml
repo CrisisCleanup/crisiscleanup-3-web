@@ -392,8 +392,8 @@ devDependencies:
     specifier: ^4.3.9
     version: 4.3.9(@types/node@18.16.3)(sass@1.63.6)
   vite-plugin-inspect:
-    specifier: ^0.7.28
-    version: 0.7.28(vite@4.3.9)
+    specifier: ^0.7.32
+    version: 0.7.32(vite@4.3.9)
   vite-plugin-vue-inspector:
     specifier: ^3.4.2
     version: 3.4.2(vite@4.3.9)
@@ -9567,8 +9567,8 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-inspect@0.7.28(vite@4.3.9):
-    resolution: {integrity: sha512-XRdQGdf+PU6eT0EoL8beUyFQfcCrHr06OyRM71IT8t7rEC9JywdsscehGHEAyFZryfaVBWAI280N63BI2N+1BA==}
+  /vite-plugin-inspect@0.7.32(vite@4.3.9):
+    resolution: {integrity: sha512-TqRLHwOM3FTJPOGCCHJmub4SVVogSjZ9LSDo1Q6WeN2Zvc7HB7tr7cqYlAyStXCI90KvVnb1BRwI22+HXlghXQ==}
     engines: {node: '>=14'}
     peerDependencies:
       vite: ^3.1.0 || ^4.0.0

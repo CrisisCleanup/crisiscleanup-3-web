@@ -167,7 +167,7 @@
     "typescript": "^5.1.6",
     "unplugin-auto-import": "^0.16.4",
     "vite": "^4.3.9",
-    "vite-plugin-inspect": "^0.7.28",
+    "vite-plugin-inspect": "^0.7.32",
     "vite-plugin-vue-inspector": "^3.4.2",
     "vitest": "^0.32.4",
     "vue-eslint-parser": "^9.3.1",
