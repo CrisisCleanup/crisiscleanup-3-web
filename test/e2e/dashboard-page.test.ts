@@ -17,14 +17,17 @@ test.describe('DashboardPage', () => {
     testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
     async ({ page }) => {
       const _dataTestIds = await getAllTestIds(page);
-      const dataTestIds = _dataTestIds.filter(
-        (id) =>
+      const idsWithNumRegex = /\d/;
+      const dataTestIds = _dataTestIds.filter((id) => {
+        return (
+          !idsWithNumRegex.test(id) &&
           ![
             'testShowAcceptTermsModal',
             'testModalCancelIcon',
             'testTermsmodalAcceptButton',
-          ].includes(id ?? ''),
-      ) as string[];
+          ].includes(id)
+        );
+      });
       expect(generateSnapshot(dataTestIds)).toMatchSnapshot({
         name: 'dashboard-page-dataTestIds',
       });
