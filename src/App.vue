@@ -100,15 +100,6 @@ export default defineComponent({
     );
 
     onMounted(async () => {
-      const currentUser = computed(() =>
-        User.find(store.getters['auth/userId']),
-      );
-      watch(currentUser, (newCurrentUser) => {
-        console.log('newcurrent', newCurrentUser);
-        zendesk.config.webWidget.contactForm.fields[0].prefill['*'] =
-          JSON.stringify(newCurrentUser.id);
-      });
-
       if (moment().isAfter(AuthService.getExpiry())) {
         AuthService.removeUser();
       }
