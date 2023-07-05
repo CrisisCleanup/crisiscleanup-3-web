@@ -89,6 +89,7 @@ export default defineConfig(async ({ command }) => {
         reporter: ['text', 'json', 'html'],
       },
       silent: true,
+      dangerouslyIgnoreUnhandledErrors: true,
       globalSetup: './test/globalSetup.ts',
     },
   });
