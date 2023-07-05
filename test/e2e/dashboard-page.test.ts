@@ -13,7 +13,7 @@ test.describe('DashboardPage', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test.only(
+  test(
     testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
     async ({ page }) => {
       const _dataTestIds = await getAllTestIds(page);
