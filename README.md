@@ -2,6 +2,34 @@
 
 # Crisis Cleanup
 
+<!-- Badges -->
+<p>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/main.yml" >
+    <img src="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/main.yml/badge.svg"/>
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/deploy.yml" >
+    <img src="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/deploy.yml/badge.svg"/>
+  </a>
+  <a href="https://codecov.io/gh/CrisisCleanup/crisiscleanup-4-web" >
+    <img src="https://codecov.io/gh/CrisisCleanup/crisiscleanup-4-web/branch/master/graph/badge.svg?token=O8D9FKSJJR"/>
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/issues/">
+    <img src="https://img.shields.io/github/issues/CrisisCleanup/crisiscleanup-4-web" alt="open issues" />
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/github/last-commit/CrisisCleanup/crisiscleanup-4-web" alt="last update" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/CrisisCleanup/crisiscleanup-4-web" alt="contributors" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/stargazers">
+    <img src="https://img.shields.io/github/stars/CrisisCleanup/crisiscleanup-4-web" alt="stars" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/network/members">
+    <img src="https://img.shields.io/github/forks/CrisisCleanup/crisiscleanup-4-web" alt="forks" />
+  </a>
+</p>
+
 Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 600,000+ volunteers from 2,500+ organizations with 140,000+ households in 55 states/provinces and 207 disasters in 7 countries; a new disaster every two weeks.
 
 Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction.
@@ -68,7 +96,6 @@ _Note: You can also use [`asdf`](https://github.com/asdf-vm/asdf) if you already
 
 - You should now have all the tools required (defined in [.tool-versions](.tool-versions)) to run this project.
 
-
 Performing this step should install all tools required to run this project.
 
 #### Direnv
@@ -80,7 +107,6 @@ Performing this step should install all tools required to run this project.
 - Install [asdf-plugin](https://github.com/asdf-community/asdf-direnv) for direnv
 
 > For more detailed instructions on asdf + direnv setup, please refer to [this guide](https://docs.arroyodev.com/setups/setup-asdf-direnv/)
-
 
 ##### Environment
 
