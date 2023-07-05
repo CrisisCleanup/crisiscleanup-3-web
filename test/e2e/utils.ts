@@ -115,7 +115,7 @@ export async function getAllTestIds(page: Page, testIdIdentifier = 'testid') {
     locators.map(async (e) => e.getAttribute(`data-${testIdIdentifier}`)),
   );
   console.info(`Found all testIds on ${page.url()}`, dataTestIds);
-  return dataTestIds;
+  return dataTestIds as string[];
 }
 
 /**
