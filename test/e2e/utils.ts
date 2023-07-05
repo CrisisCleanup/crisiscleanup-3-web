@@ -117,3 +117,15 @@ export async function getAllTestIds(page: Page, testIdIdentifier = 'testid') {
   console.info(`Found all testIds on ${page.url()}`, dataTestIds);
   return dataTestIds;
 }
+
+/**
+ * Generate a jest-like snapshot from given array | object
+ * This is here because playwright doesn't support
+ * taking object snapshots in snapshots dir yet.
+ * @see https://github.com/microsoft/playwright/issues/9006
+ *
+ * @param data
+ */
+export function generateSnapshot<T>(data: T) {
+  return JSON.stringify(data, null, 2);
+}
