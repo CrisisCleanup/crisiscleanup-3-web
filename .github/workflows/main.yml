@@ -95,7 +95,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install
-      - run: pnpm run test:unit
+      - run: pnpm run test
       - name: 📊 Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
