@@ -200,8 +200,9 @@ const columns = makeTableColumns([
   ['account_type', '10%', t('helpdesk.account_type')],
   ['roles', '16%', t('helpdesk.roles')],
   ['app', '6%', t('helpdesk.app_platform')],
+  ['assignee', '10%', t('helpdesk.assignee')],
   ['requester', '8%', t('helpdesk.requester')],
-  ['description', '35%', t('helpdesk.description')],
+  ['description', '25%', t('helpdesk.description')],
   ['advanced_ticket', '7%', t('helpdesk.full_ticket')],
   ['zendesk', '5%', t('helpdesk.zendesk_link')],
 ]);
@@ -341,15 +342,21 @@ onMounted(() => {
         {{ ticketStats.total }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#c19700]">{{ t('helpdesk.new_tickets') }}</span
+        ><span class="font-bold text-[#c19700]">{{
+          t('helpdesk.new_tickets')
+        }}</span
         >{{ ticketStats.newTickets }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#0042ed]">{{ t('helpdesk.open_tickets') }}</span>
+        ><span class="font-bold text-[#0042ed]">{{
+          t('helpdesk.open_tickets')
+        }}</span>
         {{ ticketStats.open }}</BaseText
       >
       <BaseText
-        ><span class="font-bold text-[#6b6b6b]">{{ t('helpdesk.pending_tickets') }}</span
+        ><span class="font-bold text-[#6b6b6b]">{{
+          t('helpdesk.pending_tickets')
+        }}</span
         >{{ ticketStats.pending }}</BaseText
       >
     </div>
@@ -429,7 +436,16 @@ onMounted(() => {
         {{ t('helpdesk.no_account') }}
       </div>
     </template>
-
+    <template #assignee="slotProps">
+      {{ _.find(agents, { id: slotProps.item.assignee_id })?.name || '-' }}
+    </template>
+    <template #app="slotProps">
+      {{
+        slotProps.item.custom_fields.find(
+          (field) => field.id === 17295140815757,
+        ).value || '-'
+      }}
+    </template>
     <template #requester="slotProps">
       {{
         slotProps.item.user?.ccu_user
@@ -441,7 +457,7 @@ onMounted(() => {
     </template>
 
     <template #description="slotProps">{{
-      removeSubmittedFromFooter(slotProps.item.description)
+      removeSubmittedFromFooter(slotProps.item.subject)
     }}</template>
 
     <template #advanced_ticket="slotProps">
