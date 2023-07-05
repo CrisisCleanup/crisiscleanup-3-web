@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
@@ -206,4 +207,10 @@ enableAutoUnmount(afterEach);
 // Reset handlers after each test `important for test isolation`
 afterEach(() => {
   server.resetHandlers();
+});
+
+// FAIL LOUDLY on unhandled promise rejections / errors
+process.on('unhandledRejection', (reason) => {
+  console.log(`FAILED TO HANDLE PROMISE REJECTION`);
+  throw reason;
 });
