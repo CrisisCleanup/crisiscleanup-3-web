@@ -521,15 +521,6 @@ const zendeskVariables = {
   // Add more Zendesk variables as needed
 };
 
-async function getGhostUsers() {
-  const response = await axios.get(
-    `${import.meta.env.VITE_APP_API_BASE_URL}/ghost_users?email=${
-      ccUser.value.email
-    }`,
-  );
-  console.log(response);
-  return response.data.results;
-}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -537,7 +528,6 @@ onMounted(async () => {
   await getCcuStats();
   getComments();
   getMacros();
-  await getGhostUsers();
   isLoading.value = false;
 });
 </script>

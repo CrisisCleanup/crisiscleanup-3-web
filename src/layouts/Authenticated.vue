@@ -401,6 +401,7 @@ export default defineComponent({
       if (currentUser.value && zendesk.isOpen.value) {
         // ccu user id custom zendesk field.
         const ccuIdFieldId = '16781124470797';
+        const appTypeFieldId = '17295140815757';
         // prefill base zendesk fields.
         zendesk.zE(ZendeskTarget.WEB_WIDGET, ZendeskCommand.PREFILL, {
           name: {
@@ -416,12 +417,17 @@ export default defineComponent({
         zendesk.config.webWidget.contactForm!.fields ??= [];
         zendesk.config.webWidget.contactForm!.fields = [
           ...zendesk.config.webWidget.contactForm!.fields.filter(
-            (field) => field.id !== ccuIdFieldId,
+            (field) => field.id !== ccuIdFieldId && field.id !== appTypeFieldId
           ),
           {
             id: ccuIdFieldId,
             hidden: true,
             prefill: { '*': String(currentUser.value!.id) },
+          },
+          {
+            id: appTypeFieldId,
+            hidden: true,
+            prefill: { '*': 'web' },
           },
         ];
       }
