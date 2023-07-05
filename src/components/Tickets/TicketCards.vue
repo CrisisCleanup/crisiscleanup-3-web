@@ -521,7 +521,6 @@ const zendeskVariables = {
   // Add more Zendesk variables as needed
 };
 
-
 onMounted(async () => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
@@ -681,7 +680,9 @@ onMounted(async () => {
 
       <div class="subject-date__container">
         <BaseText>
-          <span class="text-base font-bold"> {{ t('helpdesk.ticket_created_at') }}:</span>
+          <span class="text-base font-bold">
+            {{ t('helpdesk.ticket_created_at') }}:</span
+          >
           {{ momentFromNow(ticketData.created_at) }}
         </BaseText>
         <hr />
@@ -689,15 +690,21 @@ onMounted(async () => {
           <span class="text-base font-bold">
             {{ t('helpdesk.submitting_page') }}
           </span>
-          [{{ submittedFrom }}] <span class="font-bold">{{ t('helpdesk.ip_address') }}</span> [{{
+          [{{ submittedFrom }}]
+          <span class="font-bold">{{ t('helpdesk.ip_address') }}</span> [{{
             firstComment?.metadata?.system?.ip_address
-          }}] (<a href="https://www.google.com/maps/place/@{{ firstComment.metadata?.system?.latitude }},{{ firstComment.metadata?.system?.longitute }},13z" target="_blank" title="{{firstComment.metadata?.system?.location}}">{{
-            firstComment.metadata?.system?.location
-          }}</a>)
+          }}] (<a
+            href="https://www.google.com/maps/place/@{{ firstComment.metadata?.system?.latitude }},{{ firstComment.metadata?.system?.longitute }},13z"
+            target="_blank"
+            title="{{firstComment.metadata?.system?.location}}"
+            >{{ firstComment.metadata?.system?.location }}</a
+          >)
         </BaseText>
         <hr />
         <BaseText>
-          <span class="text-base font-bold"> {{ t('helpdesk.subject_line') }} </span>
+          <span class="text-base font-bold">
+            {{ t('helpdesk.subject_line') }}
+          </span>
           {{
             expanded
               ? removeSubmittedFromFooter(ticketData?.description)
@@ -705,6 +712,10 @@ onMounted(async () => {
           }}
         </BaseText>
         <BaseText
+          v-if="
+            removeSubmittedFromFooter(ticketData?.description).length >
+            ticketData?.raw_subject.length
+          "
           class="m-2 text-primary-light"
           @click="() => (expanded = !expanded)"
         >
@@ -712,7 +723,9 @@ onMounted(async () => {
         </BaseText>
       </div>
       <div ref="commentsContainer" class="comments__container">
-        <BaseText class="comments__header">{{ t('helpdesk.comments') }}</BaseText>
+        <BaseText class="comments__header">{{
+          t('helpdesk.comments')
+        }}</BaseText>
         <div
           v-for="(comment, comment_idx) in comments"
           :key="comment_idx"
@@ -726,7 +739,9 @@ onMounted(async () => {
           <BaseText>{{ removeSubmittedFromFooter(comment.body) }}</BaseText>
 
           <div v-if="comment.attachments[0]" class="attachments-container">
-            <span class="attachments__header"> {{ t('helpdesk.attachments') }}</span>
+            <span class="attachments__header">
+              {{ t('helpdesk.attachments') }}</span
+            >
             <div class="attachments__items">
               <div
                 v-for="(attachment, attachment_idx) in comment.attachments"
