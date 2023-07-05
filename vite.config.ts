@@ -85,7 +85,7 @@ export default defineConfig(async ({ command }) => {
         inline: ['@vue', '@vueuse'],
       },
       coverage: {
-        provider: 'c8',
+        provider: 'v8',
         reporter: ['text', 'json', 'html'],
       },
       globalSetup: './test/globalSetup.ts',
