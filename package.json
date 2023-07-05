@@ -30,11 +30,11 @@
     "e2e:install": "pnpm run pw install --with-deps",
     "e2e:report": "pnpm run pw show-report",
     "e2e:gen": "pnpm run pw codegen",
-    "test": "vitest",
+    "test": "pnpm run test:cov",
     "test:unit": "vitest",
     "test:e2e": "pnpm run pw test",
     "test:e2e:ui": "pnpm run pw test --ui",
-    "test:cov": "vitest run --coverage"
+    "test:cov": "pnpm run test:unit --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
