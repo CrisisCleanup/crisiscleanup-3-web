@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
   testTitleWithTags,
-  getAllTestIds,
   doLogin,
-  generateSnapshot,
   visitAllLinksAndGetResponseInfo,
 } from './utils';
 
@@ -17,24 +15,55 @@ test.describe('DashboardPage', () => {
   test(
     testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
     async ({ page }) => {
-      const _dataTestIds = await getAllTestIds(page);
-      const idsWithNumRegex = /\d/;
-      const dataTestIds = _dataTestIds.filter((id) => {
-        return (
-          !idsWithNumRegex.test(id) &&
-          ![
-            'testShowAcceptTermsModal',
-            'testModalCancelIcon',
-            'testTermsmodalAcceptButton',
-          ].includes(id)
-        );
-      });
-      expect(generateSnapshot(dataTestIds)).toMatchSnapshot({
-        name: 'dashboard-page-dataTestIds',
-      });
+      const dataTestIds = [
+        'testIsAuthenticatedDiv',
+        'testCrisiscleanupLogoIcon',
+        'testdashboardLink',
+        'testdashboardIcon',
+        'testworkLink',
+        'testworkIcon',
+        'testmy_organizationLink',
+        'testmy_organizationIcon',
+        'testother_organizationsLink',
+        'testother_organizationsIcon',
+        'testreportsLink',
+        'testreportsIcon',
+        'testtrainingLink',
+        'testtrainingIcon',
+        'testDisasterIcon',
+        'testIncidentImageIcon',
+        'testLogoutLink',
+        'testCurrentUserFullNameContent',
+        'testDashboarddiv',
+        'testRequestRedeployButton',
+        'testInviteNewUserButton',
+        'testMetricCardMyClaimedCasesDiv',
+        'testMyClaimedCasesIcon',
+        'testMetricCardTotalClaimedDiv',
+        'testTotalClaimedIcon',
+        'testMetricCardInProgressDiv',
+        'testInProgressIcon',
+        'testInProgressDiv',
+        'testMetricCardClosedDiv',
+        'testClosedIcon',
+        'testClosedDiv',
+        'testClaimedWorksitesTable',
+        'testCaseTransferRequestsDiv',
+        'testInboundRequestsButton',
+        'testOutboundRequestsButton',
+        'testArchivedRequestsButton',
+        'testWorksiteRequestsTable',
+        'testUserTransferRequestTable',
+      ];
+      const locators = dataTestIds.map((tId) => page.getByTestId(tId));
+      const resolved = await Promise.all(
+        locators.map(async (l) => l.isVisible()),
+      );
+      const isEveryLocatorVisible = resolved.every(Boolean);
+      expect(isEveryLocatorVisible).toBe(true);
       await test.info().attach('dashboard-page-screenshot', {
         body: await page.screenshot({
-          mask: dataTestIds.map((id) => page.getByTestId(id)),
+          mask: locators,
           maskColor: '#ff00ff11',
           fullPage: true,
         }),
