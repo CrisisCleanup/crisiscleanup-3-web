@@ -1,5 +1,5 @@
 import process from 'node:process';
-import type { Page } from '@playwright/test';
+import { expect, type BrowserContext, type Page } from '@playwright/test';
 import { z } from 'zod';
 
 export const TestTags = {
@@ -20,6 +20,13 @@ export const LoginCredentialSchema = z.object({
   password: z.string(),
 });
 export type LoginCredential = z.infer<typeof LoginCredentialSchema>;
+
+interface LinkInfo {
+  url: string;
+  ok: boolean;
+  status: number;
+  headers: Record<string, string>;
+}
 
 /**
  * Generate test title with given tags
@@ -119,6 +126,50 @@ export async function getAllTestIds(page: Page, testIdIdentifier = 'testid') {
   );
   console.info(`Found all testIds on ${page.url()}`, dataTestIds);
   return dataTestIds as string[];
+}
+
+export async function visitAllLinksAndGetResponseInfo(
+  page: Page,
+  context: BrowserContext,
+) {
+  const linkLocators = await page.getByRole('link').all();
+  const visitedLinks = new Set();
+  const linkInfos: LinkInfo[] = [];
+  for (const link of linkLocators) {
+    const href = await link.getAttribute('href');
+    console.info('Found link', href);
+    const isVisited = visitedLinks.has(href);
+    if (isVisited) {
+      console.info('Skipping already visited link', href);
+    } else if (href && !href.startsWith('mailto:')) {
+      const newPage = await context.newPage();
+      await newPage.bringToFront();
+      const response = await newPage.goto(href, {
+        waitUntil: 'commit',
+      });
+      // Add link to visited links
+      visitedLinks.add(href);
+      if (!response) {
+        console.error('No response from', href);
+        continue;
+      }
+
+      const linkInfo: LinkInfo = {
+        url: response.url(),
+        ok: response.ok(),
+        status: response.status(),
+        headers: response.headers(),
+      };
+      linkInfos.push(linkInfo);
+      console.info(`Response from ${href}`, linkInfo);
+      // close newly opened page (tab) to avoid OOM issues
+      await newPage.close();
+      // bring root page back into focus
+      await page.bringToFront();
+    }
+  }
+
+  return linkInfos;
 }
 
 /**
