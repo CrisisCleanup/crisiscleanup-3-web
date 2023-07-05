@@ -30,6 +30,30 @@ test.describe('LoginPage', () => {
   );
 
   test(
+    testTitleWithTags(
+      'should show error toast on login with invalid credentials',
+      ['slow', 'primary'],
+    ),
+    async ({ page }) => {
+      const email = 'a@a.com';
+      const password = 'pass123abc';
+      const emailField = page.getByPlaceholder('Email');
+      const passwordField = page.getByPlaceholder('Password');
+      const loginSubmitButton = page.getByTestId('testLoginButton');
+      await emailField.click();
+      await emailField.fill(email);
+      await passwordField.click();
+      await passwordField.fill(password);
+      await loginSubmitButton.click();
+      // make sure error toast shows
+      const errorToastElement = await page.waitForSelector(
+        '.Vue-Toastification__toast--error',
+      );
+      expect(errorToastElement).toBeTruthy();
+    },
+  );
+
+  test(
     testTitleWithTags('should show & hide password on eye icon click', [
       'fast',
       'primary',
