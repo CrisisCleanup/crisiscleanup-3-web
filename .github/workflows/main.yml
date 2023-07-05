@@ -173,8 +173,8 @@ jobs:
 
       - name: 🎭 Playwright tests
         run: pnpm run test:e2e --project=${{ matrix.project }}
-        env:
-          DEBUG: pw:api,pw:browser*
+        # env:
+        #   DEBUG: pw:api,pw:browser*
 
       - name: 📊 Upload test results
         uses: actions/upload-artifact@v3
