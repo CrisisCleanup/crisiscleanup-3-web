@@ -80,8 +80,11 @@ export function getLoginCredentials(): LoginCredential {
  * Do login on given page
  * @param page
  */
-export async function doLogin(page: Page): Promise<boolean> {
-  const { email, password } = getLoginCredentials();
+export async function doLogin(
+  page: Page,
+  credentials?: LoginCredential,
+): Promise<boolean> {
+  const { email, password } = credentials ?? getLoginCredentials();
   const emailField = page.getByPlaceholder('Email');
   const passwordField = page.getByPlaceholder('Password');
   const loginSubmitButton = page.getByTestId('testLoginButton');
