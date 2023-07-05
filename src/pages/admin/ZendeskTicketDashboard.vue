@@ -127,9 +127,10 @@ interface TicketStats {
   users: number;
   survivors: number;
   app_type: {
-    web4?: number;
+    web?: number;
     ios?: number;
     android?: number;
+    unkown?: number;
   } | null;
 }
 interface UserNameMap {
@@ -150,7 +151,7 @@ const ticketStats = ref<TicketStats>({
   pending: 0,
   users: 0,
   survivors: 0,
-  app_type: { web4: 0, ios: 0, android: 0 },
+  app_type: { web: 0, ios: 0, android: 0, unknown: 0 },
 });
 const userNameMap = ref<UserNameMap>({});
 const userEmailMap = ref<UserEmailMap>({});
@@ -260,15 +261,28 @@ const getTicketStats = () => {
   ticketStats.value.app_type = _.countBy(
     ticketsWithUsers.value,
     (ticket: Ticket) => {
-      if (ticket.description.includes('android_res')) {
+      if (
+        ticket.custom_fields?.find((field) => field.id === 17_295_140_815_757)
+          .value === 'android'
+      ) {
         return 'android';
       }
 
-      if (ticket.description.includes('ios_res')) {
+      if (
+        ticket.custom_fields?.find((field) => field.id === 17_295_140_815_757)
+          .value === 'ios'
+      ) {
         return 'ios';
       }
 
-      return 'web4';
+      if (
+        ticket.custom_fields?.find((field) => field.id === 17_295_140_815_757)
+          .value === 'web'
+      ) {
+        return 'web';
+      }
+
+      return 'unknown';
     },
   );
 };
@@ -366,7 +380,7 @@ onMounted(() => {
     >
       <BaseText
         ><span class="font-bold">{{ t('helpdesk.web_platform') }}</span>
-        {{ ticketStats.app_type?.web4 ?? 0 }}</BaseText
+        {{ ticketStats.app_type?.web ?? 0 }}</BaseText
       >
       <BaseText
         ><span class="font-bold">{{ t('helpdesk.ios_platform') }}</span>
@@ -375,6 +389,10 @@ onMounted(() => {
       <BaseText
         ><span class="font-bold">{{ t('helpdesk.android_platform') }}</span>
         {{ ticketStats.app_type?.android ?? 0 }}</BaseText
+      >
+      <BaseText
+        ><span class="font-bold">{{ t('~~unknown') }}</span>
+        {{ ticketStats.app_type?.unknown ?? 0 }}</BaseText
       >
     </div>
     <div
