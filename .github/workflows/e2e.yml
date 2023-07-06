@@ -43,6 +43,10 @@ jobs:
           node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
+      - name: 🔧 Setup Common Env
+        run: |
+          echo "PW_SKIP_WEBSERVER=1" >> $GITHUB_ENV
+
       - name: 🔧 Setup Development Test Env
         if: matrix.stage == 'development'
         run: |
