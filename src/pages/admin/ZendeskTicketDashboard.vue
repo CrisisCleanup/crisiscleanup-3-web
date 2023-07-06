@@ -405,7 +405,7 @@ onMounted(() => {
         {{ ticketStats.users?.undefined }}
       </BaseText>
       <BaseText
-        ><span class="font-bold">{{ t('helpdesk.survivor_count') }}</span>
+        ><span class="font-bold">{{ t('~~Other') }}</span>
         {{ ticketStats.survivors?.undefined }}</BaseText
       >
     </div>
@@ -435,10 +435,10 @@ onMounted(() => {
 
       <div
         v-else
-        :style="`border-color: #27AE60; color: #27AE60`"
         class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        style="border-color: #27ae60; color: #27ae60"
       >
-        {{ t('helpdesk.survivor_account') }}
+        {{ t('~~Other') }}
       </div>
     </template>
 
