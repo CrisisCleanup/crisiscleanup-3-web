@@ -58,8 +58,8 @@ jobs:
         if: matrix.stage == 'staging'
         run: |
           echo "VITE_APP_BASE_URL=https://app.staging.crisiscleanup.io" >> $GITHUB_ENV
-          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_STAGING }}" >> $GITHUB_ENV
-          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_STAGING }}" >> $GITHUB_ENV
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}" >> $GITHUB_ENV
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}" >> $GITHUB_ENV
 
       - name: 🔧 Setup Production Test Env
         if: matrix.stage == 'production'
