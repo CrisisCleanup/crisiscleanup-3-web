@@ -21,6 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         stage: [development, staging, production]
+        project: [chromium, firefox, webkit]
         include:
           - project: chromium
             os: ubuntu-latest
