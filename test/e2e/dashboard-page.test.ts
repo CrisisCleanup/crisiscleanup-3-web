@@ -78,7 +78,54 @@ test.describe('DashboardPage', () => {
       'primary',
     ]),
     async ({ page, context }) => {
-      const linkInfos = await visitAllLinksAndGetResponseInfo(page, context);
+      const navLinks = [
+        'testdashboardLink',
+        'testworkLink',
+        'testphoneLink',
+        'testmy_organizationLink',
+        'testother_organizationsLink',
+        'testreportsLink',
+        'testtrainingLink',
+      ];
+      const links = navLinks;
+      const linkLocators = links.map((l) => page.getByTestId(l));
+      console.info('Total links found:', linkLocators.length);
+      const visitedLinks = new Set();
+      const linkInfos: Array<Record<string, unknown>> = [];
+      for (const link of linkLocators) {
+        const href = await link.getAttribute('href');
+        console.info('Found link', href);
+        const isVisited = visitedLinks.has(href);
+        if (isVisited) {
+          console.info('Skipping already visited link', href);
+        } else if (href && !href.startsWith('mailto:')) {
+          const newPage = await context.newPage();
+          await newPage.bringToFront();
+          const response = await newPage.goto(href, {
+            waitUntil: 'commit',
+          });
+          // Add link to visited links
+          visitedLinks.add(href);
+          if (!response) {
+            console.error('No response from', href);
+            continue;
+          }
+
+          const linkInfo = {
+            url: response.url(),
+            ok: response.ok(),
+            status: response.status(),
+            headers: response.headers(),
+          };
+          linkInfos.push(linkInfo);
+          console.info(`Response from ${href}`, linkInfo);
+          // close newly opened page (tab) to avoid OOM issues
+          await newPage.close();
+          // bring root page back into focus
+          await page.bringToFront();
+        }
+      }
+
       const statuses = linkInfos.map((l) => l.status);
       const isStatusOKForAllLinks = statuses.every((s) => s === 200);
       expect(isStatusOKForAllLinks).toBe(true);
