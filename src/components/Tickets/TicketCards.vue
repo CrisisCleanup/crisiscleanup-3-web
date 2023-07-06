@@ -100,6 +100,29 @@ const comments = ref<Comment[]>([]);
 const firstComment = ref();
 const ticketReply = ref<string>('');
 const selectedAgent = ref<string>('');
+const workSiteColumns = [
+  {
+    key: 'id',
+    title: 'Worksite ID',
+    sortable: true,
+    searchable: false,
+    width: '20%',
+  },
+  {
+    key: 'name',
+    title: 'Name',
+    sortable: true,
+    searchable: false,
+    width: '20%',
+  },
+  {
+    key: 'incident',
+    title: 'Incident',
+    sortable: true,
+    searchable: false,
+    width: '60%',
+  },
+];
 const macroColumns = [
   {
     key: 'title',
@@ -520,6 +543,47 @@ const zendeskVariables = {
   '{{ticket.url}}': props.ticketData?.url,
   // Add more Zendesk variables as needed
 };
+const ghostUser = ref([]);
+
+async function getGhostUser() {
+  const response = await axios.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/ghost_users?search=${
+      zendeskUser.value.email
+    }`,
+  );
+  ghostUser.value = response.data.results;
+}
+
+const worksites = ref([]);
+
+async function getWorksiteForUser() {
+  const response = await axios.get(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/worksites?search=${
+      zendeskUser.value.email
+    }`,
+  );
+  worksites.value = response.data.results;
+}
+
+const accountType = computed(() => {
+  const _accountType = {
+    ghostUser: ghostUser.value,
+    ccUser: ccUser.value,
+    worksite: worksites.value,
+  };
+
+  return _accountType;
+});
+
+const openWorkSitePage = (incidentId: number, worksiteId: number) => {
+  const url = `https://crisiscleanup.org/incident/${incidentId}/work/${worksiteId}`;
+  window.open(url, '_blank');
+};
+
+const worksiteModal = ref(false);
+const showWorksiteModal = () => {
+  worksiteModal.value = !worksiteModal.value;
+};
 
 onMounted(async () => {
   isLoading.value = true;
@@ -527,12 +591,14 @@ onMounted(async () => {
   await getCcuStats();
   getComments();
   getMacros();
+  await getWorksiteForUser();
+  await getGhostUser();
   isLoading.value = false;
 });
 </script>
 
 <template>
-  <div class="ticket__container" :class="ccUser ? 'grid-cols-12' : ''">
+  <div class="ticket__container">
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
         <img
@@ -544,7 +610,7 @@ onMounted(async () => {
       </div>
       <div>
         <div
-          v-if="ccUser"
+          v-if="accountType.ccUser"
           :style="`border-color: #3498DB; color: #3498DB`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
         >
@@ -552,11 +618,19 @@ onMounted(async () => {
         </div>
 
         <div
-          v-else
-          :style="`border-color: #27AE60; color: #27AE60`"
+          v-if="accountType.worksite > 0"
+          :style="`background-color: #27AE60; color: #ffffff`"
           class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          @click="showWorksiteModal"
         >
           {{ t('helpdesk.survivor_account') }}
+        </div>
+        <div
+          v-if="accountType.ghostUser.length > 0"
+          :style="`border-color: #F39C12; color: #F39C12`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        >
+          {{ t('~~Ghost User') }}
         </div>
       </div>
       <div class="flex items-center justify-center border-y-2 border-gray-400">
@@ -644,6 +718,37 @@ onMounted(async () => {
         </template>
       </modal>
     </div>
+    <div v-if="!ccUser" class="cc__user-info">
+      <div>
+        <div
+          v-if="accountType.worksite > 0"
+          :style="`background-color: #27AE60; color: #ffffff`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          @click="showWorksiteModal"
+        >
+          {{ t('helpdesk.survivor_account') }}
+        </div>
+        <div
+          v-if="accountType.ghostUser.length > 0"
+          :style="`border-color: #F39C12; color: #F39C12`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        >
+          {{ t('~~Ghost User') }}
+        </div>
+
+        <div
+          v-if="
+            accountType.ghostUser.length === 0 &&
+            accountType.worksite.length === 0
+          "
+          :style="`border-color: #B2BEB5; color: #B2BEB5`"
+          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+        >
+          {{ t('~~No Role') }}
+        </div>
+      </div>
+    </div>
+
     <div class="col-span-12 md:col-span-9">
       <div class="ticket__header">
         <div class="submitter-info">
@@ -849,12 +954,29 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <modal
+      v-if="worksiteModal"
+      closeable
+      :title="t('~~Worksite')"
+      class="p-10"
+      @close="showWorksiteModal()"
+    >
+      <template #default>
+        <Table
+          :columns="workSiteColumns"
+          :data="worksites"
+          :body-style="{ height: '400px' }"
+          @row-click="(v) => openWorkSitePage(v.incident, v.id)"
+        />
+      </template>
+    </modal>
   </div>
 </template>
 
 <style scoped>
 .ticket__container {
-  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid;
+  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12;
 
   .cc__user-info {
     @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
