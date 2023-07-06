@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
-    if: github.event_name == 'workflow_dispatch' && ${{ github.event.inputs[ matrix.stage ] }} == true
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.${{ matrix.stage }} == true
     strategy:
       fail-fast: false
       matrix:
