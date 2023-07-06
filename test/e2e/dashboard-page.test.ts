@@ -73,7 +73,7 @@ test.describe('DashboardPage', () => {
   );
 
   test(
-    testTitleWithTags(`should return 200 status code for all links on page`, [
+    testTitleWithTags(`should return ok status code for all links on page`, [
       'slow',
       'primary',
     ]),
@@ -127,7 +127,9 @@ test.describe('DashboardPage', () => {
       }
 
       const statuses = linkInfos.map((l) => l.status);
-      const isStatusOKForAllLinks = statuses.every((s) => s === 200);
+      const isStatusOKForAllLinks = statuses.every((s) =>
+        [200, 304].includes(s),
+      );
       expect(isStatusOKForAllLinks).toBe(true);
     },
   );

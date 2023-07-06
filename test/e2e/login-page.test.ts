@@ -108,14 +108,16 @@ test.describe('LoginPage', () => {
   );
 
   test(
-    testTitleWithTags(`should return 200 status code for all links`, [
+    testTitleWithTags(`should return ok status code for all links`, [
       'slow',
       'primary',
     ]),
     async ({ page, context }) => {
       const linkInfos = await visitAllLinksAndGetResponseInfo(page, context);
       const statuses = linkInfos.map((l) => l.status);
-      const isStatusOKForAllLinks = statuses.every((s) => s === 200);
+      const isStatusOKForAllLinks = statuses.every((s) =>
+        [200, 304].includes(s),
+      );
       expect(isStatusOKForAllLinks).toBe(true);
     },
   );
