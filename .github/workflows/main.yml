@@ -121,10 +121,6 @@ jobs:
           - project: webkit
             os: macos-12
             cache_dir: ~/Library/Caches/ms-playwright
-    env:
-      VITE_APP_BASE_URL: http://127.0.0.1:8080
-      TEST_APP_EMAIL: ${{ secrets.TEST_APP_EMAIL_DEV }}
-      TEST_APP_PASSWORD: ${{ secrets.TEST_APP_PASSWORD_DEV }}
     steps:
       - uses: actions/checkout@v3
 
@@ -141,7 +137,7 @@ jobs:
         run: |
           echo "NODE_ENV=development" >> $GITHUB_ENV
           echo "VITE_APP_STAGE=development" >> $GITHUB_ENV
-          echo "VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io" >> $GITHUB_ENV
+          echo "VITE_APP_BASE_URL=http://127.0.0.1:8080" >> $GITHUB_ENV
           echo "VITE_APP_API_BASE_URL=https://api.dev.crisiscleanup.io" >> $GITHUB_ENV
           echo "VITE_APP_WS_URL=wss://socket.dev.crisiscleanup.io" >> $GITHUB_ENV
           echo "VITE_APP_AWS_CCP_URL=https://ccudev.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
@@ -152,6 +148,8 @@ jobs:
           echo "VITE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
           echo "VITE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}"
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}""
 
       - name: Install dependencies
         run: pnpm install
