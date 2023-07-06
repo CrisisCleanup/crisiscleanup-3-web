@@ -148,8 +148,8 @@ jobs:
           echo "VITE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
           echo "VITE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
-          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}"
-          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}""
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}" >> $GITHUB_ENV
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: pnpm install
