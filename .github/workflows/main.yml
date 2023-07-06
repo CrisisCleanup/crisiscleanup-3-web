@@ -137,7 +137,7 @@ jobs:
         run: |
           echo "NODE_ENV=development" >> $GITHUB_ENV
           echo "VITE_APP_STAGE=development" >> $GITHUB_ENV
-          echo "VITE_APP_BASE_URL=http://127.0.0.1:8080" >> $GITHUB_ENV
+          echo "VITE_APP_BASE_URL=http://localhost:8080" >> $GITHUB_ENV
           echo "VITE_APP_API_BASE_URL=https://api.dev.crisiscleanup.io" >> $GITHUB_ENV
           echo "VITE_APP_WS_URL=wss://socket.dev.crisiscleanup.io" >> $GITHUB_ENV
           echo "VITE_APP_AWS_CCP_URL=https://ccudev.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
