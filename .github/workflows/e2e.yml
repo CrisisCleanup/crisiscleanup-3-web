@@ -96,24 +96,24 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Post Notify Deploy
-        if: success()
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_COLOR: '#13E768'
-          SLACK_TITLE: 'E2E Tests Passed!'
-          SLACK_MESSAGE: ':large_green_square: :test_tube: E2E Tests passed for ${{ github.event.inputs.stage }}!!'
-
-      - name: Notify Failed
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_COLOR: '#D94F37'
-          SLACK_TITLE: 'E2E Tests Failed!'
-          SLACK_MESSAGE: ':large_red_square: :test_tube: E2E tests failed for ${{ matrix.stage }}... Someone broke something! :frowning:'
+      # - name: Post Notify Deploy
+      #   if: success()
+      #   uses: rtCamp/action-slack-notify@v2.0.1
+      #   env:
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      #     SLACK_CHANNEL: 'core'
+      #     SLACK_USERNAME: 'CrisisCleanup Bot'
+      #     SLACK_COLOR: '#13E768'
+      #     SLACK_TITLE: 'E2E Tests Passed!'
+      #     SLACK_MESSAGE: ':large_green_square: :test_tube: E2E Tests passed for ${{ github.event.inputs.stage }}!!'
+      #
+      # - name: Notify Failed
+      #   if: failure()
+      #   uses: rtCamp/action-slack-notify@v2.0.1
+      #   env:
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      #     SLACK_CHANNEL: 'core'
+      #     SLACK_USERNAME: 'CrisisCleanup Bot'
+      #     SLACK_COLOR: '#D94F37'
+      #     SLACK_TITLE: 'E2E Tests Failed!'
+      #     SLACK_MESSAGE: ':large_red_square: :test_tube: E2E tests failed for ${{ matrix.stage }}... Someone broke something! :frowning:'
