@@ -33,6 +33,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
+    if: github.event_name == 'workflow_dispatch' && ${{ github.event.inputs[ matrix.stage ] }} == true
     strategy:
       fail-fast: false
       matrix:
@@ -48,26 +49,6 @@ jobs:
             os: macos-12
             cache_dir: ~/Library/Caches/ms-playwright
     steps:
-      - name: Check Inputs and Skip/Continue Workflow
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          if [[ ${{ github.event.inputs.development }} == true ]]; then
-            echo "Skipping workflow for development"
-            exit 0
-          fi
-
-          if [[ ${{ github.event.inputs.staging }} == true ]]; then
-            echo "Skipping workflow for staging"
-            exit 0
-          fi
-
-          if [[ ${{ github.event.inputs.production }} == true ]]; then
-            echo "Skipping workflow for production"
-            exit 0
-          fi
-
-          echo "Continuing e2e tests for ${{ matrix.stage }}"
-
       - uses: actions/checkout@v3
 
       - uses: pnpm/action-setup@v2
