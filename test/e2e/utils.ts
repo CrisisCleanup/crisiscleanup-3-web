@@ -133,6 +133,7 @@ export async function visitAllLinksAndGetResponseInfo(
   context: BrowserContext,
 ) {
   const linkLocators = await page.getByRole('link').all();
+  console.info('Total links found:', linkLocators.length);
   const visitedLinks = new Set();
   const linkInfos: LinkInfo[] = [];
   for (const link of linkLocators) {
