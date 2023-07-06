@@ -151,7 +151,7 @@ jobs:
           echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}" >> $GITHUB_ENV
           echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}" >> $GITHUB_ENV
 
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: pnpm install
 
       - name: 🔧 Set Playwright Version
