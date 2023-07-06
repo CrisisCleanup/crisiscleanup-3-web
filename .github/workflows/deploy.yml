@@ -7,6 +7,11 @@ on:
         description: 'App stage to deploy (development|staging|production).'
         required: true
         default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
 
 jobs:
   deploy:
