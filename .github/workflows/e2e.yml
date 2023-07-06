@@ -6,22 +6,6 @@ on:
   schedule:
     - cron: 0 9 * * *
   workflow_dispatch:
-    inputs:
-      development:
-        description: 'Run E2E Tests for development'
-        required: true
-        default: true
-        type: boolean
-      staging:
-        description: 'Run E2E Tests for staging'
-        required: true
-        default: true
-        type: boolean
-      production:
-        description: 'Run E2E Tests for production'
-        required: true
-        default: true
-        type: boolean
 
 jobs:
   versions:
@@ -33,7 +17,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.${{ matrix.stage }} == true
     strategy:
       fail-fast: false
       matrix:
