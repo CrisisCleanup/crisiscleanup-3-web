@@ -1,0 +1,114 @@
+name: Run E2E Tests Periodically
+
+# Run every day at 9:00 AM
+# See: https://crontab.guru/examples.html
+on:
+  schedule:
+    - cron: 0 9 * * *
+
+jobs:
+  versions:
+    name: Get Versions 📜
+    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/get-versions.yml@master
+
+  test-e2e:
+    name: 🧪 E2E Tests 💻 | ${{ matrix.project }}
+    timeout-minutes: 60
+    runs-on: ${{ matrix.os }}
+    needs: [versions]
+    strategy:
+      fail-fast: false
+      matrix:
+        stage: [development, staging, production]
+        include:
+          - project: chromium
+            os: ubuntu-latest
+            cache_dir: ~/.cache/ms-playwright
+          - project: firefox
+            os: ubuntu-latest
+            cache_dir: ~/.cache/ms-playwright
+          - project: webkit
+            os: macos-12
+            cache_dir: ~/Library/Caches/ms-playwright
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
+          cache: pnpm
+
+      - name: 🔧 Setup Development Test Env
+        if: matrix.stage == 'development'
+        run: |
+          echo "VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io" >> $GITHUB_ENV
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}" >> $GITHUB_ENV
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}" >> $GITHUB_ENV
+
+      - name: 🔧 Setup Staging Test Env
+        if: matrix.stage == 'staging'
+        run: |
+          echo "VITE_APP_BASE_URL=https://app.staging.crisiscleanup.io" >> $GITHUB_ENV
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_STAGING }}" >> $GITHUB_ENV
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_STAGING }}" >> $GITHUB_ENV
+
+      - name: 🔧 Setup Production Test Env
+        if: matrix.stage == 'production'
+        run: |
+          echo "VITE_APP_BASE_URL=https://crisiscleanup.org" >> $GITHUB_ENV
+          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}" >> $GITHUB_ENV
+          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: 🔧 Set Playwright Version
+        run: pnpm exec playwright --version > .github/.playwright-version
+
+      - name: ⚡️ Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: ${{ matrix.cache_dir }}
+          key: ${{ runner.os }}-${{ matrix.project }}-pw-${{ hashFiles('**/.playwright-version') }}
+
+      - name: 📥 Install ${{ matrix.project }} with Playwright
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps ${{ matrix.project }}
+
+      - name: 🎭 Playwright tests
+        run: pnpm run test:e2e --project=${{ matrix.project }}
+
+      - name: 📊 Upload test results
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Post Notify Deploy
+        if: success()
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_COLOR: '#13E768'
+          SLACK_TITLE: 'E2E Tests Passed!'
+          SLACK_MESSAGE: ':large_green_square: :test_tube: E2E Tests passed for ${{ github.event.inputs.stage }}!!'
+
+      - name: Notify Failed
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_COLOR: '#D94F37'
+          SLACK_TITLE: 'E2E Tests Failed!'
+          SLACK_MESSAGE: ':large_red_square: :test_tube: E2E tests failed for ${{ matrix.stage }}... Someone broke something! :frowning:'
