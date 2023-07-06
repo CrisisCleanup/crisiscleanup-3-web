@@ -6,6 +6,22 @@ on:
   schedule:
     - cron: 0 9 * * *
   workflow_dispatch:
+    inputs:
+      development:
+        description: 'Run E2E Tests for development'
+        required: true
+        default: true
+        type: boolean
+      staging:
+        description: 'Run E2E Tests for staging'
+        required: true
+        default: true
+        type: boolean
+      production:
+        description: 'Run E2E Tests for production'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   versions:
@@ -32,6 +48,26 @@ jobs:
             os: macos-12
             cache_dir: ~/Library/Caches/ms-playwright
     steps:
+      - name: Check Inputs and Skip/Continue Workflow
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [[ ${{ github.event.inputs.development }} == true ]]; then
+            echo "Skipping workflow for development"
+            exit 0
+          fi
+
+          if [[ ${{ github.event.inputs.staging }} == true ]]; then
+            echo "Skipping workflow for staging"
+            exit 0
+          fi
+
+          if [[ ${{ github.event.inputs.production }} == true ]]; then
+            echo "Skipping workflow for production"
+            exit 0
+          fi
+
+          echo "Continuing e2e tests for ${{ matrix.stage }}"
+
       - uses: actions/checkout@v3
 
       - uses: pnpm/action-setup@v2
