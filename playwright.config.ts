@@ -71,10 +71,14 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command:
-      'echo "Starting WEB SERVER on port 8080" && pnpm run preview --port 8080',
-    port: 8080,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command:
+        'echo "Starting WEB SERVER on port 8080" && pnpm run preview --port 8080',
+      url: 'http://localhost:8080',
+      timeout: 120 * 1000,
+      reuseExistingServer: !process.env.CI,
+      stdout: 'pipe',
+    },
+  ],
 });
