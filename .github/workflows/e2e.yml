@@ -1,4 +1,4 @@
-name: Run E2E Tests Periodically
+name: E2E Tests
 
 # Run every day at 9:00 AM
 # See: https://crontab.guru/examples.html
