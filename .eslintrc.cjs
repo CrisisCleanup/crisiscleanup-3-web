@@ -66,9 +66,9 @@ const config = {
       },
     },
     {
-      files: ['test/e2e/*'],
+      files: ['test/e2e/**'],
       rules: {
-        'no-await-in-loop': 'warn',
+        'no-await-in-loop': 'off',
       },
     },
   ],
