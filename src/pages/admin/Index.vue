@@ -1,5 +1,5 @@
 <template>
-  <PageTabBar :tabs="tabs" />
+  <PageTabBar v-if="isFinished && bugReportCount" :tabs="tabs" />
 </template>
 
 <script lang="ts">
@@ -10,6 +10,17 @@ export default defineComponent({
   name: 'AdminPage',
   components: { PageTabBar },
   setup() {
+    const bugReportCount = ref(0);
+    const ccuApi = useApi();
+    const { isFinished, data: bugReportsData } = ccuApi('/bug_reports', {
+      method: 'GET',
+    });
+    whenever(isFinished, () => {
+      bugReportCount.value = bugReportsData.value.count;
+      const bugsTab = tabs.find((tab) => tab.key === 'nav.bugs');
+
+      bugsTab.title = `Bugs (${bugReportCount.value})`;
+    });
     const tabs = reactive([
       reactive({
         key: 'nav.admin_dashboard',
@@ -36,7 +47,8 @@ export default defineComponent({
         key: 'nav.localizations',
       }),
     ]);
-    return { tabs };
+
+    return { tabs, isFinished, bugReportCount };
   },
 });
 </script>
