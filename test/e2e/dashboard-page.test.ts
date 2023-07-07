@@ -52,11 +52,10 @@ test.describe('DashboardPage', () => {
         'testUserTransferRequestTable',
       ];
       const locators = dataTestIds.map((tId) => page.getByTestId(tId));
-      const resolved = await Promise.all(
-        locators.map(async (l) => l.isVisible()),
-      );
-      const isEveryLocatorVisible = resolved.every(Boolean);
-      expect(isEveryLocatorVisible).toBe(true);
+      for (const l of locators) {
+        await expect(l).toBeVisible();
+      }
+
       await test.info().attach('dashboard-page-screenshot', {
         body: await page.screenshot({
           mask: locators,
