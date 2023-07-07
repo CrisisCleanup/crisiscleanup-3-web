@@ -1,3 +1,4 @@
+import type { Locator } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 import { testTitleWithTags, doLogin } from '../utils';
 
@@ -126,6 +127,94 @@ test.describe('DashboardPage', () => {
         [200, 304].includes(s as number),
       );
       expect(isStatusOKForAllLinks).toBe(true);
+    },
+  );
+
+  test(
+    testTitleWithTags('should have working incident selector', [
+      'slow',
+      'primary',
+    ]),
+    async ({ page }) => {
+      test.setTimeout(2 * 60 * 1000);
+      const infoDivsTestIds = [
+        'testMetricCardMyClaimedCasesDiv',
+        'testMetricCardTotalClaimedDiv',
+        'testMetricCardInProgressDiv',
+        'testMetricCardClosedDiv',
+      ];
+      const infoDivLocators = infoDivsTestIds.map((d) => page.getByTestId(d));
+      const incidentSelector = page
+        .getByTestId('testIncidentSelectorSelect')
+        .first();
+      // NOTE: Relying on <div class="multiselect-single-label"><span class="multiselect-single-label-text">Medium Fire</span></div>
+      // to infer current incident name.
+      // It comes from @vueform/multiselect dependency.
+      // If the dependency changes in the future, this needs to be updated
+      const getIncidentSelectorLabelLocator = (locator: Locator) =>
+        locator.locator('.multiselect-single-label');
+      const getIncidentSelectorTextContent = async (locator: Locator) => {
+        const text = await getIncidentSelectorLabelLocator(
+          locator,
+        ).textContent();
+        if (!text) {
+          console.error(
+            'Incident Selector Text Content is invalid... Returning empty value',
+          );
+          return '';
+        }
+
+        return text;
+      };
+
+      const initialSelectedIncidentName = await getIncidentSelectorTextContent(
+        incidentSelector,
+      );
+      if (!initialSelectedIncidentName) {
+        throw new Error('Unable to infer initial incident name');
+      }
+
+      console.info(
+        'Found initialSelectedIncidentName',
+        initialSelectedIncidentName,
+      );
+
+      const selectOptionFromIncidentSelector = async (n: number) => {
+        await page.waitForTimeout(1000);
+        await incidentSelector.click();
+        for (let i = 0; i < n; i++) {
+          await incidentSelector.press('ArrowDown');
+        }
+
+        await incidentSelector.press('Enter');
+        await incidentSelector.press('Enter');
+      };
+
+      const assertIncidentNameInInfoDivs = async (incidentName: string) => {
+        for (const l of infoDivLocators) {
+          const matchRegex = new RegExp(`.*${incidentName}.*`);
+          await expect(l).toHaveText(matchRegex, { timeout: 25_000 }); // changing incidents is really slow :(
+        }
+      };
+
+      // initial incident name should show inside dashboard info divs
+      await assertIncidentNameInInfoDivs(initialSelectedIncidentName);
+
+      await selectOptionFromIncidentSelector(4);
+      const newIncidentName = await getIncidentSelectorTextContent(
+        incidentSelector,
+      );
+      // expect(newIncidentName).not.toBe(initialSelectedIncidentName);
+      console.info('New Incident Name', newIncidentName);
+      await assertIncidentNameInInfoDivs(newIncidentName);
+
+      await selectOptionFromIncidentSelector(1);
+      const anotherIncidentName = await getIncidentSelectorTextContent(
+        incidentSelector,
+      );
+      // expect(anotherIncidentName).not.toBe(initialSelectedIncidentName);
+      console.info('Another Incident Name', anotherIncidentName);
+      await assertIncidentNameInInfoDivs(anotherIncidentName);
     },
   );
 });
