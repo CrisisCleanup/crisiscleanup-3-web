@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { testTitleWithTags, doLogin } from './utils';
+import { testTitleWithTags, doLogin } from '../utils';
 
 test.describe('DashboardPage', () => {
   test.beforeEach(async ({ page }) => {

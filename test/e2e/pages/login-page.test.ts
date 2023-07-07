@@ -4,7 +4,7 @@ import {
   getAllTestIds,
   doLogin,
   visitAllLinksAndGetResponseInfo,
-} from './utils';
+} from '../utils';
 
 test.describe('LoginPage', () => {
   test.beforeEach(async ({ page }) => {
