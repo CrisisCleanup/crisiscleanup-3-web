@@ -1,9 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {
-  testTitleWithTags,
-  doLogin,
-  visitAllLinksAndGetResponseInfo,
-} from './utils';
+import { testTitleWithTags, doLogin } from './utils';
 
 test.describe('DashboardPage', () => {
   test.beforeEach(async ({ page }) => {
@@ -128,7 +124,7 @@ test.describe('DashboardPage', () => {
 
       const statuses = linkInfos.map((l) => l.status);
       const isStatusOKForAllLinks = statuses.every((s) =>
-        [200, 304].includes(s),
+        [200, 304].includes(s as number),
       );
       expect(isStatusOKForAllLinks).toBe(true);
     },
