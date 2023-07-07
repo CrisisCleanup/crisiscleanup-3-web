@@ -23,7 +23,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html', { open: 'never' }]],
-  timeout: 2 * 60 * 1000,
+  timeout: 1 * 60 * 1000,
   expect: {
     timeout: 10_000,
   },
