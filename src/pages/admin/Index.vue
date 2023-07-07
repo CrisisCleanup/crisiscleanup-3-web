@@ -24,6 +24,9 @@ export default defineComponent({
         key: 'nav.admin_tickets',
       }),
       reactive({
+        key: 'nav.bugs',
+      }),
+      reactive({
         key: 'nav.cms',
       }),
       reactive({
@@ -31,9 +34,6 @@ export default defineComponent({
       }),
       reactive({
         key: 'nav.localizations',
-      }),
-      reactive({
-        key: 'nav.bugs',
       }),
     ]);
     return { tabs };

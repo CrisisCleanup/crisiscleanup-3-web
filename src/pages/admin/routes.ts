@@ -46,6 +46,11 @@ const routes = [
         name: 'nav.admin_tickets',
         component: ZendeskTicketDashboard,
       },
+      {
+        path: 'bugs',
+        name: 'nav.bugs',
+        component: AdminBugs,
+      },
       // {
       //   path: 'costs',
       //   name: 'nav.costs',
@@ -70,11 +75,6 @@ const routes = [
         path: 'incident_wizard/:incident_id',
         name: 'nav.incident_wizard_detail',
         component: AdminIncidentWizard,
-      },
-      {
-        path: 'bugs',
-        name: 'nav.bugs',
-        component: AdminBugs,
       },
     ],
   },
