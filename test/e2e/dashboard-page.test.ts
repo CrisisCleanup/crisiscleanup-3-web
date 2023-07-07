@@ -4,8 +4,8 @@ import { testTitleWithTags, doLogin } from './utils';
 test.describe('DashboardPage', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await doLogin(page);
     await page.waitForLoadState('networkidle');
+    await doLogin(page);
   });
 
   test(
