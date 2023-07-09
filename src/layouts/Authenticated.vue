@@ -437,16 +437,25 @@ export default defineComponent({
       loading.value = true;
       store.commit('incident/setCurrentIncidentId', 60);
       let u;
+
       try {
-        await User.api().get('/users/me', {});
-        u = User.find(userId.value);
-        if (u) {
-          AuthService.updateUser(u.$toJson());
+        try {
+          await User.api().get('/users/me', {});
+          u = User.find(userId.value);
+          if (u) {
+            AuthService.updateUser(u.$toJson());
+          }
+        } catch {
+          await AuthService.refreshAccessToken();
+          await User.api().get('/users/me', {});
+          u = User.find(userId.value);
+          if (u) {
+            AuthService.updateUser(u.$toJson());
+          }
         }
       } catch {
         await AuthService.removeUser();
         await logoutApp();
-        return;
       }
 
       await Promise.all([
@@ -456,7 +465,7 @@ export default defineComponent({
             dataKey: 'results',
           },
         ),
-        Organization.api().get(`/organizations/${user.value.organizations.id}`),
+        Organization.api().get(`/organizations/${user.value.organization.id}`),
         Language.api().get('/languages', {
           dataKey: 'results',
         }),
@@ -477,7 +486,7 @@ export default defineComponent({
 
       await getUserTransferRequests();
       await setupLanguage();
-      store.commit('acl/setUserAcl', user.value.user_claims.id);
+      store.commit('acl/setUserAcl', user.value.id);
 
       let incidentId = route.params.incident_id;
       if (!incidentId) {

@@ -14,20 +14,19 @@ const AuthState = {
 // Getters
 const getters = {
   isLoggedIn(state: State) {
-    return state.user && AuthService.getExpiry().isAfter(moment());
+    return state.user && AuthService.getAccessTokenExpiry().isAfter(moment());
   },
   isOrphan(state: State) {
-    return state.user && !state.user.user_claims.organization;
+    return state.user && !state.user.organization;
   },
   isOrganizationInactive(state: State) {
-    return state.user && !state.user.user_claims.organization?.is_active;
+    return state.user && !state.user.organization?.is_active;
   },
   isAdmin(state: State) {
-    return state.user && state.user.user_claims.active_roles.includes(1);
+    return state.user && state.user.active_roles.includes(1);
   },
-  userId: (state: State) => (state.user ? state.user.user_claims.id : null),
+  userId: (state: State) => (state.user ? state.user.id : null),
   user: (state: State) => state.user,
-  userToken: (state: State) => (state.user ? state.user.access_token : null),
   showLoginModal: (state: State) => state.showLoginModal,
 };
 
@@ -50,7 +49,9 @@ const actions = {
 
   logout({ commit }: ActionContext<any, any>) {
     commit('setUser', null);
-    // Window.location.reload();
+    AuthService.logoutUser().then(() => {
+      window.location.href = '/';
+    });
   },
 };
 
@@ -62,7 +63,7 @@ const mutations = {
       AuthService.saveUser(user);
       Sentry.setUser({
         ...state.user,
-        id: state.user.user_claims.id,
+        id: state.user.id,
         username: state.user.email,
         email: state.user.email,
       });

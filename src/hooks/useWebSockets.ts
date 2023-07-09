@@ -1,13 +1,17 @@
 import { AuthService } from '../services/auth.service';
 
-export function useWebSockets(url, name, cb) {
+export function useWebSockets(
+  url: string,
+  name: string,
+  cb: (data: Record<string, any>) => object,
+) {
   const endpoint = import.meta.env.VITE_APP_API_BASE_URL.replace('http', 'ws');
   let socket: WebSocket | undefined;
   let send;
 
   function connect() {
     socket = new WebSocket(
-      `${endpoint}${url}?bearer=${AuthService.getToken()}`,
+      `${endpoint}${url}?bearer=${AuthService.getAccessToken()}`,
     );
 
     const sendMessage = (message: Record<any, any>) => {

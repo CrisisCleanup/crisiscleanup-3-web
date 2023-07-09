@@ -6,6 +6,7 @@ import Survivors from './Survivors.vue';
 import ResetPassword from './ResetPassword.vue';
 import PewPew from './PewPew.vue';
 import DownForMaintenance from './DownForMaintenance.vue';
+import OauthRedirect from '@/pages/OauthRedirect.vue';
 
 const routes = [
   {
@@ -24,6 +25,12 @@ const routes = [
     path: '/s/:token',
     component: Survivors,
     name: 'nav.survivors',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/o/callback',
+    component: OauthRedirect,
+    name: 'nav.token',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   // {

@@ -1,8 +1,6 @@
 import moment from 'moment';
 import Bowser from 'bowser';
 import * as Sentry from '@sentry/browser';
-import { useRouter } from 'vue-router';
-import { Model } from '@vuex-orm/core';
 import type { Config } from '@vuex-orm/plugin-axios';
 import { AuthService } from '../services/auth.service';
 import Language from './Language';
@@ -315,6 +313,7 @@ export default class User extends CCUModel {
         updatedStates = {
           ...updatedStates,
           incidents: updatedIncidentStates,
+          // eslint-disable-next-line import/no-named-as-default-member
           userAgent: Bowser.parse(window.navigator.userAgent),
         };
         await User.update({
@@ -323,7 +322,7 @@ export default class User extends CCUModel {
             states: updatedStates,
           },
         });
-        currentUser = User.find(AuthService.getUser().user_claims.id);
+        currentUser = User.find(AuthService.getUser()?.id);
         await this.patch(
           `/users/${currentUser?.id}`,
           {
@@ -339,7 +338,7 @@ export default class User extends CCUModel {
         preferences: Record<string, any>,
         reload = false,
       ) {
-        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        const currentUser = User.find(AuthService.getUser()?.id);
         if (!currentUser) {
           return;
         }
@@ -360,7 +359,7 @@ export default class User extends CCUModel {
         }
       },
       async acceptTerms() {
-        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        const currentUser = User.find(AuthService.getUser()?.id);
         await this.patch(`/users/${currentUser?.id}`, {
           accepted_terms: true,
           accepted_terms_timestamp: moment().toISOString(),

@@ -100,7 +100,7 @@ export default defineComponent({
     );
 
     onMounted(async () => {
-      if (moment().isAfter(AuthService.getExpiry())) {
+      if (moment().isAfter(AuthService.getAccessTokenExpiry())) {
         AuthService.removeUser();
       }
 
@@ -122,7 +122,7 @@ export default defineComponent({
         },
         function (error) {
           if (error.response && error.response.status === 401) {
-            store.commit('auth/setShowLoginModal', true);
+            AuthService.refreshAccessToken();
           }
 
           return Promise.reject(error);

@@ -1,27 +1,26 @@
 <template>
-  <Home>
-    <div class="flex items-center justify-around h-full p-3">
-      <LoginForm class="w-120" />
-      <div class="grid--globe hidden md:block">
-        <div class="homegrid-globe">
-          <img
-            data-testid="testGlobeIcon"
-            src="../../assets/globe.png"
-            :alt="$t('loginForm.globe')"
-          />
-        </div>
-      </div>
-    </div>
-  </Home>
+  <spinner show-quote />
 </template>
 
 <script lang="ts">
-import LoginForm from '../../components/LoginForm.vue';
-import Home from '../../layouts/Home.vue';
+import { AuthService } from '@/services/auth.service';
+import Spinner from '@/components/Spinner.vue';
 
 export default defineComponent({
   name: 'Login',
-  components: { Home, LoginForm },
+  components: { Spinner },
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const store = useStore();
+    if (store.getters['auth/isLoggedIn']) {
+      router.push('/dashboard');
+    } else {
+      AuthService.buildOauthAuthorizationUrl(route.query.from).then((url) => {
+        window.location.href = url;
+      });
+    }
+  },
 });
 </script>
 

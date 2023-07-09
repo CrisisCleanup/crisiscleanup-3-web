@@ -70,7 +70,7 @@ export const i18n = getI18n();
 
 if (AuthService.getUser()) {
   axios.defaults.withCredentials = true;
-  axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getToken()}`;
+  axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getAccessToken()}`;
 }
 
 const app = createApp(App);

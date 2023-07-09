@@ -66,6 +66,7 @@ jobs:
           echo "VITE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
           echo "VITE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
+          echo "VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID=WHrBBfxA5AQ0gWFeYc24x1hFDBmkQk4bYHutOYT5" >> $GITHUB_ENV
           echo "NODE_ENV=development" >> $GITHUB_ENV
 
       - name: Setup Staging Env
@@ -83,6 +84,7 @@ jobs:
           echo "VITE_APP_ENGLISH_PHONE_GATEWAY=124906" >> $GITHUB_ENV
           echo "VITE_APP_SPANISH_PHONE_GATEWAY=124906" >> $GITHUB_ENV
           echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
+          echo "VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID=bHQe6Lk69j9sTbVnOCSjpNJisN4bNMuS7VA8jkNp" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Setup Production Env
@@ -100,6 +102,7 @@ jobs:
           echo "VITE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
           echo "VITE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VITE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
+          echo "VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID=bHQe6Lk69j9sTbVnOCSjpNJisN4bNMuS7VA8jkNp" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Create Sentry Release
@@ -149,6 +152,7 @@ jobs:
             VITE_APP_ENGLISH_PHONE_GATEWAY=${{ env.VITE_APP_ENGLISH_PHONE_GATEWAY }}
             VITE_APP_SPANISH_PHONE_GATEWAY=${{ env.VITE_APP_SPANISH_PHONE_GATEWAY }}
             VITE_APP_DEFAULT_CALLER_ID=${{ env.VITE_APP_DEFAULT_CALLER_ID }}
+            VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID=${{ env.VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID }}
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_PROPERTIES="sentry.properties"
