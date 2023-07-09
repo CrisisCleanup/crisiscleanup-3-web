@@ -104,8 +104,7 @@ export default defineComponent({
           user: userId,
         },
       );
-      store.commit('auth/setUser', response.data);
-      window.location.replace('/');
+      window.location = response.data.link;
     }
 
     async function showUserEvents(user: User) {

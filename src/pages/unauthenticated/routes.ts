@@ -4,6 +4,7 @@ import InvitationSignup from './InvitationSignup.vue';
 import PrintToken from './PrintToken.vue';
 import Survivors from './Survivors.vue';
 import ResetPassword from './ResetPassword.vue';
+import MagicLink from './MagicLink.vue';
 import PewPew from './PewPew.vue';
 import DownForMaintenance from './DownForMaintenance.vue';
 import OauthRedirect from '@/pages/OauthRedirect.vue';
@@ -49,6 +50,12 @@ const routes = [
     path: '/password/reset/:token',
     component: ResetPassword,
     name: 'nav.reset_password',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/magic-link',
+    component: MagicLink,
+    name: 'nav.magic_link',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
