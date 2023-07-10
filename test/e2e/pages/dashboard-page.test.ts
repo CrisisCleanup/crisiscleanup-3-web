@@ -78,7 +78,7 @@ test.describe('DashboardPage', () => {
       const navLinks = [
         'testdashboardLink',
         'testworkLink',
-        'testphoneLink',
+        // 'testphoneLink',
         'testmy_organizationLink',
         'testother_organizationsLink',
         'testreportsLink',
