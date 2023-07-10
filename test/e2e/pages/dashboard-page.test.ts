@@ -218,4 +218,41 @@ test.describe('DashboardPage', () => {
       await assertIncidentNameInInfoDivs(anotherIncidentName);
     },
   );
+
+  test(
+    testTitleWithTags(
+      'should show/hide add incident, request redeploy & invite user modals correctly',
+      ['slow', 'primary'],
+    ),
+    async ({ page }) => {
+      const incidentSelector = page
+        .getByTestId('testIncidentSelectorSelect')
+        .first();
+      await page.waitForTimeout(1000);
+      await incidentSelector.click();
+
+      const addIncidentBtn = page.getByText('Add Incident');
+      await addIncidentBtn.click();
+      const addIncidentModal = page.getByTestId('testShowRedeployModal');
+      await expect(addIncidentModal).toBeVisible();
+      await page.getByTestId('testCancelButton').click();
+      await expect(addIncidentModal).toBeHidden();
+
+      const reqRedeployBtn = page.getByTestId('testRequestRedeployButton');
+      const redeployModal = page.getByTestId('testShowRedeployModal');
+      await expect(redeployModal).toBeHidden();
+      await reqRedeployBtn.click();
+      await expect(redeployModal).toBeVisible();
+      await page.getByTestId('testCancelButton').click();
+      await expect(redeployModal).toBeHidden();
+
+      const inviteUserBtn = page.getByTestId('testInviteNewUserButton');
+      const inviteModal = page.getByTestId('testInviteUserModal');
+      await expect(inviteModal).toBeHidden();
+      await inviteUserBtn.click();
+      await expect(inviteModal).toBeVisible();
+      await page.getByTestId('testCancelButton').click();
+      await expect(inviteModal).toBeHidden();
+    },
+  );
 });
