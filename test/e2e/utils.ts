@@ -100,7 +100,8 @@ export async function doLogin(
     await emailField.fill(email);
     await passwordField.click();
     await passwordField.fill(password);
-    await loginSubmitButton.click();
+    await passwordField.press('Enter');
+    // await loginSubmitButton.click();
 
     await page.waitForLoadState('networkidle');
 
