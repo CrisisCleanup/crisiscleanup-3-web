@@ -213,6 +213,7 @@ const AuthService = {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-CSRFToken': this.getCsrfToken(),
+            Authorization: `Bearer ${this.getAccessToken()}`,
           },
         },
       );
