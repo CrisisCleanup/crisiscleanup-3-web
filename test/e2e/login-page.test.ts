@@ -70,23 +70,20 @@ test.describe('LoginPage', () => {
         (id) => !['testIncidentPhoneDiv'].includes(id ?? ''),
       );
       expect(dataTestIds).toMatchObject([
-        'testIsUnauthenticatedDiv',
         'testLogoIcon',
         'testSurvivorContactDiv',
-        'testNavRouteblogLink',
-        'testNavRoutecontactLink',
-        'testRegisterButton',
+        'testIncidentPhoneDiv',
         'testLoginTextContent',
         'testSigninTextContent',
         'testEmailTextInput',
         'testPasswordTextInput',
+        'testMagicLink',
         'testRequestPasswordResetLink',
         'testLoginButton',
         'testRequestAccessButton',
-        'testGlobeIcon',
-        'testBottomSectionDiv',
         'testAwsLink',
         'testAwsImgIcon',
+        'testGlobeIcon',
       ]);
       await test.info().attach('login-page-screenshot', {
         body: await page.screenshot(),

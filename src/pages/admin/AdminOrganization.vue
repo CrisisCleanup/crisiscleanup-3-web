@@ -590,7 +590,6 @@
         </div>
       </div>
     </div>
-
     <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
       <base-text variant="h2" :weight="600"> Groups</base-text>
       <div class="flex flex-col sm:flex-row item-start">
@@ -653,7 +652,10 @@
       </div>
     </div>
     <div class="flex">
-      <div class="w-1/2 bg-white shadow mt-6 mr-3" data-testid="testPrimaryLocationDiv">
+      <div
+        class="w-1/2 bg-white shadow mt-6 mr-3"
+        data-testid="testPrimaryLocationDiv"
+      >
         <div class="border-b px-8 py-4 font-semibold">
           {{ $t('adminOrganization.primary_location') }}
         </div>
@@ -687,7 +689,10 @@
         </div>
         <div id="primary-location" ref="primaryMap" class="w-full h-84" />
       </div>
-      <div class="w-1/2 bg-white shadow mt-6" data-testid="testSecondaryLocationDiv">
+      <div
+        class="w-1/2 bg-white shadow mt-6"
+        data-testid="testSecondaryLocationDiv"
+      >
         <div class="border-b px-8 py-4 font-semibold">
           {{ $t('adminOrganization.secondary_location') }}
         </div>
@@ -953,7 +958,7 @@ export default defineComponent({
     }
 
     function getIncidentName(value, incidents) {
-      let incident = incidents.find((c) => c.id === value);
+      const incident = incidents.find((c) => c.id === value);
       return incidents.length > 0 && incident?.name;
     }
 
