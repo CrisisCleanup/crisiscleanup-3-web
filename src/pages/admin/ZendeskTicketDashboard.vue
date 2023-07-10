@@ -13,6 +13,7 @@ import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
 import type User from '@/models/User';
 import useEmitter from '@/hooks/useEmitter';
+import BaseSelect from '@/components/BaseSelect.vue';
 
 const { emitter } = useEmitter();
 const { t } = useI18n();
@@ -336,6 +337,33 @@ emitter.on('closeModal', () => {
 // watch(ticketsWithUsers, (newValue, oldValue) => {
 //   console.log('ticket data has changed', newValue, oldValue);
 // });
+const sorterEnums = {
+  OLDEST: 'oldest',
+  STATUS: 'status',
+  AGENT: 'agent',
+  REQUESTER: 'requester',
+};
+const ticketSorter = ref();
+const sorterObject = {
+  [sorterEnums.STATUS]: ['status'],
+  [sorterEnums.AGENT]: ['assignee_id'],
+  [sorterEnums.REQUESTER]: ['requester_id'],
+  [sorterEnums.OLDEST]: null,
+};
+
+const changeTicketSorting = (sorter) => {
+  ticketSorter.value = sorter;
+};
+
+const ticketsWithUsersSorted = computed(() => {
+  const sortingKey = sorterObject[ticketSorter.value];
+
+  if (sortingKey) {
+    return _.orderBy(ticketsWithUsers.value, sortingKey);
+  }
+
+  return ticketsWithUsers.value;
+});
 
 onMounted(() => {
   isLoading.value = true;
@@ -409,11 +437,29 @@ onMounted(() => {
         {{ ticketStats.survivors?.undefined }}</BaseText
       >
     </div>
+    <div
+      class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-4"
+    >
+      <!--      <BaseButton :action="()=> changeTicketSorting(sorterEnums.OLDEST)"  variant="primary" class="p-2 rounded-md text-lg" text="Created"/>-->
+      <!--      <BaseButton :action="()=> changeTicketSorting(sorterEnums.STATUS)"  variant="primary" class="p-2 rounded-md text-lg" text="Status"/>-->
+      <!--      <BaseButton :action="()=> changeTicketSorting(sorterEnums.AGENT)"  variant="primary" class="p-2 rounded-md text-lg" text="Agent"/>-->
+      <!--      <BaseButton :action="()=> changeTicketSorting(sorterEnums.REQUESTER)"  variant="primary" class="p-2 rounded-md text-lg" text="Requester"/>-->
+      <BaseSelect
+        :model-value="ticketSorter"
+        select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
+        class="w-full"
+        label="name"
+        :placeholder="t('~~Selected Sorter')"
+        item-key="id"
+        :options="sorterObject"
+        @update:model-value="(v) => changeTicketSorting(v)"
+      />
+    </div>
   </div>
   <Table
     v-if="usersRelatedToTickets && usersRelatedToTickets.data"
     :columns="columns"
-    :data="ticketsWithUsers"
+    :data="ticketsWithUsersSorted"
   >
     <template #status="slotProps">
       <div :class="[slotProps.item.status + '-tag', 'ticket-status text-xl']">
