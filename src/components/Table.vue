@@ -447,7 +447,7 @@ export default defineComponent({
     const paginationTriggers = computed(() => {
       const currentPage = props.pagination.current;
       const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
-      const pagintationTriggersArray = Array.from({
+      const paginationTriggersArray = Array.from({
         length: visiblePagesCount - 1,
       }).fill(0);
 
@@ -458,10 +458,10 @@ export default defineComponent({
       }
 
       if (currentPage <= visiblePagesThreshold + 1) {
-        pagintationTriggersArray[0] = 1;
-        const pagintationTriggers = pagintationTriggersArray.map(
+        paginationTriggersArray[0] = 1;
+        const pagintationTriggers = paginationTriggersArray.map(
           (paginationTrigger, index) => {
-            return pagintationTriggersArray[0] + index;
+            return paginationTriggersArray[0] + index;
           },
         );
         pagintationTriggers.push(pageCount.value);
@@ -469,7 +469,7 @@ export default defineComponent({
       }
 
       if (currentPage >= pageCount.value - visiblePagesThreshold + 1) {
-        const pagintationTriggers = pagintationTriggersArray.map(
+        const pagintationTriggers = paginationTriggersArray.map(
           (paginationTrigger, index) => {
             return pageCount.value - index;
           },
@@ -478,10 +478,10 @@ export default defineComponent({
         return pagintationTriggers;
       }
 
-      pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
-      const pagintationTriggers = pagintationTriggersArray.map(
+      paginationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
+      const pagintationTriggers = paginationTriggersArray.map(
         (paginationTrigger, index) => {
-          return pagintationTriggersArray[0] + index;
+          return paginationTriggersArray[0] + index;
         },
       );
       pagintationTriggers.unshift(1);
