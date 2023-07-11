@@ -308,7 +308,7 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
+import type { PropType, StyleValue } from 'vue';
 import { computed, ref, defineComponent } from 'vue';
 import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
@@ -334,6 +334,25 @@ export interface TableChangeEmitItem<T = Record<string, unknown>> {
   pagination?: TablePagination;
   filters?: TableColumnFilters;
   columnSearch?: TableColumnSearch;
+}
+
+export interface TableColumnOption<T = Record<string, unknown>> {
+  key: string;
+  subKey: string;
+  title: string;
+  titleClass: string;
+  width: string;
+  style: StyleValue;
+  class: string;
+  headerClass: string | string[];
+  headerStyle: StyleValue;
+  sortable: boolean;
+  sortKey: string;
+  searchable: boolean;
+  searchSelect: boolean;
+  getSelectValues: (data: T) => any;
+  transformer: (key: keyof T, data: T) => any;
+  action: (...args: any[]) => any;
 }
 
 export default defineComponent({
