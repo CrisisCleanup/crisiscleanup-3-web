@@ -314,6 +314,7 @@ import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 import useLogEvent from '@/hooks/useLogEvent';
 
+export type TableDataItem<T = Record<string, unknown>> = T;
 export type TableColumnSearch = Record<string, any>;
 export type TableColumnFilters = Record<string, any>;
 export interface TablePagination {
