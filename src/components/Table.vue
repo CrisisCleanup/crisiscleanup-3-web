@@ -360,7 +360,7 @@ export default defineComponent({
   name: 'Table',
   props: {
     columns: {
-      type: Array,
+      type: Array as PropType<TableColumnOption[]>,
       default() {
         return [];
       },
@@ -369,7 +369,7 @@ export default defineComponent({
       type: Boolean,
     },
     data: {
-      type: Array,
+      type: Array as PropType<TableDataItem[]>,
       default: () => [],
     },
     pagination: {
