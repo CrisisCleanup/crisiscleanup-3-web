@@ -461,13 +461,13 @@ export default defineComponent({
 
       if (currentPage <= visiblePagesThreshold + 1) {
         paginationTriggersArray[0] = 1;
-        const pagintationTriggers = paginationTriggersArray.map(
+        const paginationTriggers = paginationTriggersArray.map(
           (paginationTrigger, index) => {
             return paginationTriggersArray[0] + index;
           },
         );
-        pagintationTriggers.push(pageCount.value);
-        return pagintationTriggers;
+        paginationTriggers.push(pageCount.value);
+        return paginationTriggers;
       }
 
       if (currentPage >= pageCount.value - visiblePagesThreshold + 1) {
@@ -527,7 +527,7 @@ export default defineComponent({
       };
     });
 
-    function setChecked(item, value) {
+    function setChecked(item: TableDataItem, value: TableDataItem) {
       if (value) {
         selectedItems.value.add(item.id);
       } else {
@@ -538,7 +538,7 @@ export default defineComponent({
       emit('selectionChanged', selectedItems.value);
     }
 
-    function setShowingDetails(item) {
+    function setShowingDetails(item: TableDataItem) {
       if (showingDetails.value.has(item.id)) {
         showingDetails.value.delete(item.id);
       } else {
@@ -548,7 +548,7 @@ export default defineComponent({
       showingDetails.value = new Set(showingDetails.value);
     }
 
-    function setAllChecked(value) {
+    function setAllChecked(value: any) {
       if (value) {
         selectedItems.value = new Set(props.data.map((item) => item.id));
         emit('allSelected', selectedItems.value);
@@ -560,7 +560,7 @@ export default defineComponent({
       emit('selectionChanged', selectedItems.value);
     }
 
-    function pageChangeHandle(value) {
+    function pageChangeHandle(value: 'next' | 'previous') {
       let newPage;
       switch (value) {
         case 'next': {
@@ -592,7 +592,7 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
 
-    function onSelectPageSize(pageSize) {
+    function onSelectPageSize(pageSize: number) {
       const columnSearch = { ...internalColumnSearch.value };
       const pagination = {
         ...props.pagination,
@@ -606,7 +606,7 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
 
-    function sort(key) {
+    function sort(key: string) {
       const columnSearch = { ...internalColumnSearch.value };
       const sorter = { ...props.sorter };
       sorter.key = key;
@@ -634,8 +634,8 @@ export default defineComponent({
       emit('change', { pagination, filter, sorter, columnSearch });
     }
 
-    function rowClick(item, event) {
-      const hasClass = (className) =>
+    function rowClick(item: TableDataItem, event: Event) {
+      const hasClass = (className: string) =>
         event.target.className.includes &&
         event.target.className.includes(className);
       if (
@@ -656,7 +656,7 @@ export default defineComponent({
     }
 
     function exportTableCSV() {
-      const headers = {};
+      const headers: Record<string, any> = {};
       const headersColumns = props.columns.filter((column) =>
         Boolean(column.title),
       );
@@ -665,7 +665,7 @@ export default defineComponent({
       }
 
       const data = props.data.map((object) => {
-        const response = {};
+        const response: Record<string, any> = {};
         for (const column of headersColumns) {
           response[column.key] = object[column.key];
         }
@@ -675,7 +675,11 @@ export default defineComponent({
       exportCSVFile(headers, data, 'export');
     }
 
-    async function handleColumnAction(column, data, item) {
+    async function handleColumnAction(
+      column: TableColumnOption,
+      data: any,
+      item: TableDataItem,
+    ) {
       if (column.action) {
         await column.action(data, item);
       }
