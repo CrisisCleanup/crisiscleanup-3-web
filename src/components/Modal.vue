@@ -19,7 +19,7 @@
                 <div class="flex gap-2 items-center">
                   <ccu-icon
                     v-if="allowFullScreen"
-                    :alt="$t('~~actions.fullscreen')"
+                    :alt="$t('actions.fullscreen')"
                     data-testid="testModalFullScreenIcon"
                     size="xs"
                     :type="fullScreenIcon"

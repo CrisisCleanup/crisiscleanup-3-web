@@ -15,7 +15,7 @@
         <div>{{ totalCalls / 1000 }}K</div>
       </div>
       <div class="col-span-1 text-center">
-        <div class="text-gray-500">~{{ $t('incidentList.value') }}</div>
+        <div class="text-gray-500">{{ $t('incidentList.value') }}</div>
         <div>{{ totalValue / 1000000 }}M</div>
       </div>
     </div>
@@ -23,19 +23,19 @@
       <div class="grid grid-cols-6 items-center justify-center">
         <div class="col-span-2">{{ incident.name }}</div>
         <div class="col-span-1 text-center">
-          <div class="text-gray-500">{{ $t('incidentList.cases') }}~~Cases</div>
+          <div class="text-gray-500">{{ $t('incidentList.cases') }}</div>
           <div>{{ incident.cases }}</div>
         </div>
         <div class="col-span-1 text-center">
-          <div class="text-gray-500">{{ $t('incidentList.claimed') }}~~Claimed</div>
+          <div class="text-gray-500">{{ $t('incidentList.claimed') }}</div>
           <div>{{ incident.claimed }}</div>
         </div>
         <div class="col-span-1 text-center">
-          <div class="text-gray-500">{{ $t('incidentList.calls') }}~~Calls</div>
+          <div class="text-gray-500">{{ $t('incidentList.calls') }}</div>
           <div>{{ incident.calls / 1000 }}K</div>
         </div>
         <div class="col-span-1 text-center">
-          <div class="text-gray-500">{{ $t('incidentList.value') }}~~Value</div>
+          <div class="text-gray-500">{{ $t('incidentList.value') }}</div>
           <div>{{ incident.value / 1000000 }}M</div>
         </div>
       </div>

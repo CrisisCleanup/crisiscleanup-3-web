@@ -3,7 +3,10 @@
     <div class="grid--main">
       <div class="w-2/3">
         <div class="text-3xl" data-testid="testMagicLinkDiv">
-          {{ $t('~~Request magic login link') }}
+          {{ $t('helpdesk.request_magic_link') }}
+        </div>
+        <div>
+          {{ $t('helpdesk.magic_link_description') }}
         </div>
         <form ref="form" class="w-108 flex flex-col" autocomplete="off">
           <base-input
