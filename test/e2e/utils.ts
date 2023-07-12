@@ -111,6 +111,7 @@ export async function doLogin(
       await oauthAuthorizeBtn.click();
     }
 
+    await page.waitForLoadState('networkidle');
     // wait for dashboard root div
     await page.waitForSelector('[data-testid="testDashboarddiv"]');
     return true;
