@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useMq } from 'vue3-mq';
 import Table from '../Table.vue';
 import LanguageTag from '../tags/LanguageTag.vue';
 import Modal from '@/components/Modal.vue';
@@ -19,6 +20,8 @@ import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
 import { getErrorMessage } from '@/utils/errors';
+
+const mq = useMq();
 
 const commentsContainer = ref<HTMLDivElement | null>(null);
 const { emitter } = useEmitter();
@@ -767,16 +770,22 @@ onMounted(async () => {
           text-variant="h2"
           @click="createIssue()"
         >
-          {{ t('helpdesk.create_github_issue') }}</base-link
-        >
+          <span class="hidden md:block">{{
+            t('helpdesk.create_github_issue')
+          }}</span>
+          <span class="block md:hidden">G</span>
+        </base-link>
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
             target="_blank"
             class="md:text-[.9vw]"
           >
-            {{ t('helpdesk.zendesk_link') }}</a
-          >
+            <span class="hidden md:block">{{
+              t('helpdesk.zendesk_link')
+            }}</span>
+            <span class="block md:hidden">Z</span>
+          </a>
         </div>
         <div :class="[ticketTestData.status + '-tag', 'ticket-status text-xl']">
           {{ capitalize(ticketTestData.status) }}
@@ -799,7 +808,7 @@ onMounted(async () => {
           <span class="font-bold">{{ t('helpdesk.ip_address') }}</span> [{{
             firstComment?.metadata?.system?.ip_address
           }}] (<a
-            href="https://www.google.com/maps/place/@{{ firstComment.metadata?.system?.latitude }},{{ firstComment.metadata?.system?.longitute }},13z"
+            :href="`https://www.google.com/maps/search/?api=1&query=${firstComment.metadata?.system?.latitude},${firstComment.metadata?.system?.longitude}`"
             target="_blank"
             title="{{firstComment.metadata?.system?.location}}"
             >{{ firstComment.metadata?.system?.location }}</a
@@ -840,7 +849,6 @@ onMounted(async () => {
           <BaseText class="text-3xl font-bold">
             {{ getAgentById(comment.author_id) ?? zendeskUser.name }}
           </BaseText>
-          <br />
           <BaseText>{{ removeSubmittedFromFooter(comment.body) }}</BaseText>
 
           <div v-if="comment.attachments[0]" class="attachments-container">
@@ -866,16 +874,18 @@ onMounted(async () => {
           <BaseInput
             v-model="ticketReply"
             text-area
-            class="w-full h-full col-span-11 row-span-4"
+            class="w-full h-full col-span-9 md:col-span-11 row-span-4"
             input-classes="resize-none row-span-4"
-            :rows="6"
+            :rows="mq.mdMinus ? 4 : 6"
             placeholder="Ticket Reply"
           />
-          <div class="row-span-4 flex justify-center items-center">
+          <div
+            class="col-span-3 md:col-span-1 row-span-4 flex justify-center items-center"
+          >
             <BaseButton
               class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
               :action="showMacroModal"
-              :text="t('actions.apply_macro')"
+              :text="t('~~Apply Macro')"
               variant="primary"
             />
           </div>
@@ -934,8 +944,8 @@ onMounted(async () => {
         <div class="buttons__container">
           <BaseButton
             size="md"
-            :text="t('actions.delete')"
-            :class="['w-1/4 rounded-md text-xl border']"
+            :text="mq.mdMinus ? '' : t('actions.delete')"
+            :class="['w-full md:w-1/4 rounded-md text-xl border']"
             icon="trash"
             icon-size="lg"
             :action="() => deleteTicket()"
@@ -947,7 +957,7 @@ onMounted(async () => {
             <BaseButton
               size="md"
               :text="status.charAt(0).toUpperCase() + status.slice(1)"
-              :class="[status, 'w-1/3 rounded-md text-xl']"
+              :class="[status, 'w-full md:w-1/3 rounded-md text-xl']"
               :action="() => replyToTicket(status)"
             />
           </template>
@@ -976,20 +986,20 @@ onMounted(async () => {
 
 <style scoped>
 .ticket__container {
-  @apply rounded-lg bg-white border border-gray-600 m-4 text-sm shadow-md grid grid-cols-12;
+  @apply rounded-lg bg-white md:border md:border-gray-600 md:m-4 text-sm shadow-md grid grid-cols-12;
 
   .cc__user-info {
-    @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
+    @apply hidden md:block col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
     .cc_user {
       @apply border rounded-md m-4 text-center;
     }
   }
 
   .ticket__header {
-    @apply grid grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
+    @apply grid grid-cols-8 md:grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
 
     .submitter-info {
-      @apply col-span-1 text-left;
+      @apply col-span-5 md:col-span-1 text-left;
     }
 
     .ticket-link {
@@ -1006,7 +1016,7 @@ onMounted(async () => {
   }
 
   .comments__container {
-    @apply text-left px-4 py-2 overflow-y-scroll row-span-4 h-80 scroll-smooth;
+    @apply text-left px-4 py-2 overflow-y-scroll row-span-4 h-60 scroll-smooth;
 
     .comments__header {
       @apply text-base font-bold;
@@ -1037,15 +1047,15 @@ onMounted(async () => {
     @apply grid grid-cols-12 px-4 py-2 row-span-2 border-b-2 border-gray-400 flex items-center justify-center;
 
     .header {
-      @apply flex gap-2 items-center justify-center md:col-span-12 my-2;
+      @apply flex gap-2 items-center justify-center col-span-12 my-2;
     }
 
     .agent-selection {
-      @apply md:col-span-11 my-2;
+      @apply col-span-8 md:col-span-11  my-2;
     }
 
     .reassign-button {
-      @apply md:col-span-1 p-4 rounded-md mx-2 my-2 md:text-[.8vw];
+      @apply col-span-4 md:col-span-1 p-4 rounded-md mx-2 my-2 md:text-[.8vw];
     }
   }
 
@@ -1057,7 +1067,7 @@ onMounted(async () => {
     @apply flex flex-col gap-2 px-4 py-2 col-span-6 row-span-2;
 
     .buttons__container {
-      @apply flex gap-2;
+      @apply flex gap-2 grid grid-cols-2 grid-rows-2;
     }
   }
 }

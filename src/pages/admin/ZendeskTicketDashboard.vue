@@ -198,18 +198,6 @@ const getUsersRelatedToTickets = () => {
     });
 };
 
-// const columns = makeTableColumns([
-//   ['status', '8%', t('helpdesk.ticket_status')],
-//   ['created_at', '5%', t('helpdesk.ticket_created_at')],
-//   ['account_type', '10%', t('helpdesk.account_type')],
-//   ['roles', '16%', t('helpdesk.roles')],
-//   ['app', '6%', t('helpdesk.app_platform')],
-//   ['assignee', '10%', t('helpdesk.assignee')],
-//   ['requester', '8%', t('helpdesk.requester')],
-//   ['description', '25%', t('helpdesk.description')],
-//   ['advanced_ticket', '7%', t('helpdesk.full_ticket')],
-//   ['zendesk', '5%', t('helpdesk.zendesk_link')],
-// ]);
 const columns = [
   {
     title: t('helpdesk.ticket_status'),
@@ -646,7 +634,8 @@ onMounted(() => {
     v-if="ticketModal"
     closeable
     :title="'Ticket: ' + activeTicket.id"
-    class="p-10"
+    :class="mq.mdMinus ? 'p-2' : 'p-10'"
+    modal-body-classes="overflow-auto"
     @close="showTicketModal()"
   >
     <template #default>
@@ -664,6 +653,7 @@ onMounted(() => {
         @change="fetchTickets"
       />
     </template>
+    <template #footer><span v-if="mq.mdMinus"></span></template>
   </modal>
 </template>
 
