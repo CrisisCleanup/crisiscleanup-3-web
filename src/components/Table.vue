@@ -90,7 +90,7 @@
               item-key="value"
               label="name_t"
               :model-value="internalColumnSearch[column.key]"
-              @update:modelValue="
+              @update:model-value="
                 (value) => {
                   internalColumnSearch[column.key] = value;
                   onSearch();
@@ -103,7 +103,7 @@
               :placeholder="column.title"
               :model-value="internalColumnSearch[column.key]"
               input-style="width: 100%"
-              @update:modelValue="
+              @update:model-value="
                 (value) => {
                   internalColumnSearch[column.key] = value;
                   onSearch();
@@ -141,7 +141,7 @@
             :model-value="selectedItems.has(item.id)"
             :data-testid="`testDataItem${item.id}Checkbox`"
             class="mb-5 js-select-item"
-            @update:modelValue="
+            @update:model-value="
               (value) => {
                 setChecked(item, value);
               }
@@ -224,7 +224,7 @@
           data-testid="testPaginationPagesizeSelect"
           class="w-32"
           select-classes="sm:w-24 bg-white border vue-select-up"
-          @update:modelValue="onSelectPageSize"
+          @update:model-value="onSelectPageSize"
         />
       </div>
       <div v-if="!mq.mdMinus">
