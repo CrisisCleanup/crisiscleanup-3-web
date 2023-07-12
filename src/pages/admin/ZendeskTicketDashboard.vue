@@ -243,6 +243,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
     {
       title: t('helpdesk.requester'),
       key: 'requester',
+      sortKey: 'requestorName',
       sortable: true,
       width: '8%',
     },
@@ -295,7 +296,13 @@ const getTicketsWithUsers = () => {
     const matchingUser = usersRelatedToTickets.value.data.find(
       (user: ZendeskUser) => ticket.requester_id === user.id,
     );
-    return { ...ticket, user: matchingUser };
+    return {
+      ...ticket,
+      user: matchingUser,
+      requestorName: matchingUser?.ccu_user
+        ? `${matchingUser?.ccu_user?.first_name} ${matchingUser?.ccu_user?.last_name}`
+        : matchingUser.name,
+    };
   });
 };
 
@@ -566,13 +573,7 @@ onMounted(() => {
       <template #requester="slotProps">
         <BaseText>
           <span v-if="mq.mdMinus" class="font-bold">Requester:</span>
-          {{
-            slotProps.item.user?.ccu_user
-              ? slotProps.item.user?.ccu_user?.first_name +
-                ' ' +
-                slotProps.item.user?.ccu_user?.last_name
-              : slotProps.item.user.name
-          }}
+          {{ slotProps.item.requestorName }}
         </BaseText>
       </template>
 
