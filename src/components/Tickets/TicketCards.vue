@@ -1093,6 +1093,7 @@ onMounted(async () => {
           closeable
           :title="t('helpdesk.macros')"
           class="p-10"
+          modal-classes="mx-2"
           @close="showMacroModal()"
         >
           <template #default>
