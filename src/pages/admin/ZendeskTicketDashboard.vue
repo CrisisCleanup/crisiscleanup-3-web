@@ -444,14 +444,14 @@ onMounted(() => {
     >
       <BaseText
         ><span class="font-bold">{{ t('helpdesk.total_tickets') }}</span>
-        {{ ticketStats.total }}</BaseText
-      >
+        {{ ticketStats.total }}
+      </BaseText>
       <BaseText
         ><span class="font-bold text-[#c19700]">{{
           t('helpdesk.new_tickets')
-        }}</span
-        >{{ ticketStats.newTickets }}</BaseText
-      >
+        }}</span>
+        {{ ticketStats.newTickets }}
+      </BaseText>
       <BaseText
         ><span class="font-bold text-[#0042ed]">{{
           t('helpdesk.open_tickets')
@@ -461,8 +461,8 @@ onMounted(() => {
       <BaseText
         ><span class="font-bold text-[#6b6b6b]">{{
           t('helpdesk.pending_tickets')
-        }}</span
-        >{{ ticketStats.pending }}</BaseText
+        }}</span>
+        {{ ticketStats.pending }}</BaseText
       >
     </div>
     <div
