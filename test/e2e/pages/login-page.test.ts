@@ -35,26 +35,24 @@ test.describe('LoginPage', () => {
   );
 
   test(
-    testTitleWithTags(
-      'should show error toast on login with invalid credentials',
-      ['slow', 'primary'],
-    ),
+    testTitleWithTags('should show error on login with invalid credentials', [
+      'slow',
+      'primary',
+    ]),
     async ({ page }) => {
       const email = 'a@a.com';
       const password = 'pass123abc';
       const emailField = page.getByPlaceholder('Email');
       const passwordField = page.getByPlaceholder('Password');
       const loginSubmitButton = page.getByTestId('testLoginButton');
+      const errorContainer = page.getByTestId('testLoginErrorDiv');
+      await expect(errorContainer).toBeHidden();
       await emailField.click();
       await emailField.fill(email);
       await passwordField.click();
       await passwordField.fill(password);
       await loginSubmitButton.click();
-      // make sure error toast shows
-      const errorToastElement = await page.waitForSelector(
-        '.Vue-Toastification__toast--error',
-      );
-      expect(errorToastElement).toBeTruthy();
+      await expect(errorContainer).toBeVisible();
     },
   );
 
