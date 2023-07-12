@@ -231,6 +231,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
     {
       title: t('helpdesk.app_platform'),
       key: 'app',
+      sortKey: 'appPlatform',
       sortable: true,
       width: '6%',
     },
@@ -300,6 +301,9 @@ const getTicketsWithUsers = () => {
     return {
       ...ticket,
       user: matchingUser,
+      appPlatform: ticket.custom_fields?.find(
+        (field) => field.id === 17_295_140_815_757,
+      )?.value,
       requestorName: matchingUser?.ccu_user
         ? `${matchingUser?.ccu_user?.first_name} ${matchingUser?.ccu_user?.last_name}`
         : matchingUser.name,
@@ -562,14 +566,10 @@ onMounted(() => {
         </BaseText>
       </template>
       <template #app="slotProps">
-        <BaseText
-          ><span v-if="mq.mdMinus" class="font-bold">App: </span
-          >{{
-            slotProps.item.custom_fields.find(
-              (field) => field.id === 17295140815757,
-            ).value || '-'
-          }}</BaseText
-        >
+        <BaseText>
+          <span v-if="mq.mdMinus" class="font-bold">App: </span>
+          {{ slotProps.item.appPlatform ?? '-' }}
+        </BaseText>
       </template>
       <template #requester="slotProps">
         <BaseText>
