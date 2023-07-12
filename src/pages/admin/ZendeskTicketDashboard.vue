@@ -402,33 +402,6 @@ emitter.on('closeTicketModal', () => {
 // watch(ticketsWithUsers, (newValue, oldValue) => {
 //   console.log('ticket data has changed', newValue, oldValue);
 // });
-const sorterEnums = {
-  OLDEST: 'oldest',
-  STATUS: 'status',
-  AGENT: 'agent',
-  REQUESTER: 'requester',
-};
-const ticketSorter = ref();
-const sorterObject = {
-  [sorterEnums.STATUS]: ['status'],
-  [sorterEnums.AGENT]: ['assignee_id'],
-  [sorterEnums.REQUESTER]: ['requester_id'],
-  [sorterEnums.OLDEST]: null,
-};
-
-const changeTicketSorting = (sorter) => {
-  ticketSorter.value = sorter;
-};
-
-const ticketsWithUsersSorted = computed(() => {
-  const sortingKey = sorterObject[ticketSorter.value];
-
-  if (sortingKey) {
-    return _.orderBy(ticketsWithUsers.value, sortingKey);
-  }
-
-  return ticketsWithUsers.value;
-});
 
 const tableData = computed(() => {
   const o = ticketTableSorter.value;
@@ -437,7 +410,6 @@ const tableData = computed(() => {
     return _.orderBy(ticketsWithUsers.value, key, direction);
   }
 
-  console.info('Sorter', o);
   return ticketsWithUsers.value;
 });
 
