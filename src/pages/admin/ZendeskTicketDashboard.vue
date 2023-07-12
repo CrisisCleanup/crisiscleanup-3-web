@@ -170,7 +170,13 @@ const isLoading = ref<boolean>(false);
 
 const ticketTotals = ref();
 
-const agents = ref([]);
+const agents = ref<
+  Array<{
+    id: number | string;
+    name: string;
+    thumbnails: any[];
+  }>
+>([]);
 
 const parseUserIdsFromTickets = (tickets: Ticket[]) => {
   try {
@@ -239,7 +245,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
       title: t('helpdesk.assignee'),
       key: 'assignee',
       sortable: true,
-      sortKey: 'assignee_id',
+      sortKey: 'agentName',
       width: '10%',
     },
     {
@@ -301,6 +307,7 @@ const getTicketsWithUsers = () => {
     return {
       ...ticket,
       user: matchingUser,
+      agentName: agents.value.find((a) => a.id === ticket.assignee_id)?.name,
       appPlatform: ticket.custom_fields?.find(
         (field) => field.id === 17_295_140_815_757,
       )?.value,
@@ -562,7 +569,7 @@ onMounted(() => {
       <template #assignee="slotProps">
         <BaseText
           ><span v-if="mq.mdMinus" class="font-bold">Assignee: </span>
-          {{ _.find(agents, { id: slotProps.item.assignee_id })?.name || '-' }}
+          {{ slotProps.item.agentName ?? '-' }}
         </BaseText>
       </template>
       <template #app="slotProps">
