@@ -42,7 +42,7 @@ const routes = [
         component: AdminEventStream,
       },
       {
-        path: 'Tickets',
+        path: 'tickets',
         name: 'nav.admin_tickets',
         component: ZendeskTicketDashboard,
       },
