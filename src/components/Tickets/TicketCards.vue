@@ -771,22 +771,26 @@ onMounted(async () => {
     <modal
       v-if="mobileExtraUserInfo"
       closeable
+      fullscreen
       :title="t('~~Extra User Info')"
-      class="md:p-10"
+      modal-body-classes="overflow-y-scroll"
       @close="showExtraUserInfoModal()"
     >
       <template #default>
         <div v-if="ccUser" class="cc__user-info2">
-          <div class="cc_user">
-            <img
-              :alt="t('helpdesk.user_picture')"
-              :src="profilePictureUrl"
-              class="w-full"
-            />
-            <BaseText>{{
-              ccUser.first_name + ' ' + ccUser.last_name
-            }}</BaseText>
+          <div class="flex flex-col justify-center items-center">
+            <div class="cc_user">
+              <img
+                :alt="t('helpdesk.user_picture')"
+                :src="profilePictureUrl"
+                class="w-full"
+              />
+              <BaseText>{{
+                ccUser.first_name + ' ' + ccUser.last_name
+              }}</BaseText>
+            </div>
           </div>
+
           <div>
             <div
               v-if="accountType.ccUser"
@@ -876,21 +880,21 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
-            <AdminEventStream
-              :user="ccUser.id"
-              :limit="5"
-              class="overflow-auto"
-            />
-            <div class="flex items-center justify-center">
-              <BaseButton
-                :action="() => showEventsModal()"
-                :text="t('actions.show_more')"
-                variant="primary"
-                class="p-2 mx-4 my-4 text-xl rounded-md w-full"
-              />
-            </div>
-          </div>
+          <!--            <div class="events m-2 text-xs border p-2 flex flex-col gap-2">-->
+          <!--              <AdminEventStream-->
+          <!--                :user="ccUser.id"-->
+          <!--                :limit="5"-->
+          <!--                class="overflow-auto"-->
+          <!--              />-->
+          <!--              <div class="flex items-center justify-center">-->
+          <!--                <BaseButton-->
+          <!--                  :action="() => showEventsModal()"-->
+          <!--                  :text="t('~~Show Events')"-->
+          <!--                  variant="primary"-->
+          <!--                  class="p-2 mx-4 my-4 text-xl rounded-md w-full"-->
+          <!--                />-->
+          <!--              </div>-->
+          <!--            </div>-->
           <modal
             v-if="eventsModal"
             closeable
@@ -951,7 +955,7 @@ onMounted(async () => {
         </div>
         <base-link
           :href="url"
-          class="border border-black rounded-md font-bold text-center flex justify-center items-center"
+          class="github-link"
           target="_blank"
           text-variant="h2"
           @click="createIssue()"
@@ -973,27 +977,25 @@ onMounted(async () => {
             <span class="block md:hidden">Z</span>
           </a>
         </div>
+        <BaseButton
+          v-if="mq.mdMinus"
+          class="extra-info"
+          :action="showExtraUserInfoModal"
+          text="Extra Info"
+          variant="primary"
+        />
         <div :class="[ticketTestData.status + '-tag', 'ticket-status text-xl']">
           {{ capitalize(ticketTestData.status) }}
         </div>
       </div>
 
       <div class="subject-date__container">
-        <div class="grid grid-cols-2 md:grid-cols-1">
-          <BaseText>
-            <span class="text-base font-bold">
-              {{ t('helpdesk.ticket_created_at') }}:</span
-            >
-            {{ momentFromNow(ticketData.created_at) }}
-          </BaseText>
-          <BaseButton
-            v-if="mq.mdMinus"
-            :action="showExtraUserInfoModal"
-            text="Extra Info"
-            variant="primary"
-          />
-        </div>
-
+        <BaseText>
+          <span class="text-base font-bold">
+            {{ t('helpdesk.ticket_created_at') }}:</span
+          >
+          {{ momentFromNow(ticketData.created_at) }}
+        </BaseText>
         <hr />
         <BaseText v-if="firstComment">
           <span class="text-base font-bold">
@@ -1197,9 +1199,9 @@ onMounted(async () => {
   }
 
   .cc__user-info2 {
-    @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
+    @apply overflow-y-auto min-h-full h-full md:h-24 w-full;
     .cc_user {
-      @apply border rounded-md m-4 text-center;
+      @apply border rounded-md m-4 text-center w-3/4;
     }
   }
 
@@ -1207,18 +1209,23 @@ onMounted(async () => {
     @apply border rounded-md text-center p-2 mx-4 my-2 text-xl;
   }
   .ticket__header {
-    @apply grid grid-cols-8 md:grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
+    @apply grid grid-cols-9 grid-rows-2 md:grid-rows-1 md:grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
 
     .submitter-info {
-      @apply col-span-5 md:col-span-1 text-left;
+      @apply row-start-1 col-span-5 md:col-span-1 text-left;
+    }
+    .github-link {
+      @apply row-start-2 md:row-end-1 col-span-3 md:col-span-1 border border-black rounded-md font-bold text-center flex justify-center items-center;
     }
 
     .ticket-link {
-      @apply text-center flex items-center rounded-md justify-center bg-primary-light;
+      @apply row-start-2 md:row-end-1  col-span-3 md:col-span-1 text-center flex items-center rounded-md justify-center bg-primary-light;
     }
-
+    .extra-info {
+      @apply row-start-2 md:row-end-1 col-span-3 md:col-span-1 text-center flex items-center rounded-md justify-center bg-primary-light;
+    }
     .ticket-status {
-      @apply text-center flex items-center rounded-md justify-center font-bold;
+      @apply col-span-4 md:col-span-1 text-center flex items-center rounded-md justify-center font-bold;
     }
   }
 

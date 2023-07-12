@@ -634,8 +634,9 @@ onMounted(() => {
     v-if="ticketModal"
     closeable
     :title="'Ticket: ' + activeTicket.id"
-    :class="mq.mdMinus ? 'p-2' : 'p-10'"
-    modal-body-classes="overflow-auto"
+    :fullscreen="mq.mdMinus"
+    :class="mq.mdMinus ? '' : 'p-10'"
+    modal-classes="overflow-auto"
     @close="showTicketModal()"
   >
     <template #default>
