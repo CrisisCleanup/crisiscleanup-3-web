@@ -314,7 +314,9 @@ import { useMq } from 'vue3-mq';
 import { exportCSVFile } from '../utils/downloads';
 import useLogEvent from '@/hooks/useLogEvent';
 
-export type TableDataItem<T = Record<string, unknown>> = T;
+export type TableDataItem<T = Record<string, unknown>> = T & {
+  id: string | number;
+};
 export type TableColumnSearch = Record<string, any>;
 export type TableColumnFilters = Record<string, any>;
 export interface TablePagination {
@@ -426,8 +428,8 @@ export default defineComponent({
 
     const pageSizes = [5, 10, 20, 100, 500, 1000];
     const visiblePagesCount = 5;
-    const selectedItems = ref(new Set([]));
-    const showingDetails = ref(new Set([]));
+    const selectedItems = ref(new Set<string | number>([]));
+    const showingDetails = ref(new Set<string | number>([]));
     const internalColumnSearch = ref({ ...props.columnSearch });
 
     const pageCount = computed(() => {
