@@ -3,7 +3,7 @@ import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { ref, Teleport } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useMq } from 'vue3-mq';
 import Table from '../Table.vue';
@@ -302,7 +302,7 @@ const replyToTicket = (replyStatus: string) => {
       if (replyStatus === StatusEnum.OPEN) {
         getComments();
       } else {
-        emitter.emit('closeModal');
+        emitter.emit('closeTicketModal');
       }
 
       if (props.ticketData?.assignee_id) {
@@ -330,7 +330,7 @@ const deleteTicket = () => {
   // )
   // }
 
-  // emitter.emit('closeModal');
+  // emitter.emit('closeTicketModal');
   // })
   //   .catch((error: Error) => {
   // toast.error(t('helpdesk.delete_unsucessful')` ${getErrorMessage(e)}`)
@@ -579,13 +579,18 @@ const accountType = computed(() => {
 });
 
 const openWorkSitePage = (incidentId: number, worksiteId: number) => {
-  const url = `https://crisiscleanup.org/incident/${incidentId}/work/${worksiteId}`;
+  const url = `https://crisiscleanup.org/incident/${incidentId}/work/${worksiteId}?showOnMap=true`;
   window.open(url, '_blank');
 };
 
 const worksiteModal = ref(false);
 const showWorksiteModal = () => {
   worksiteModal.value = !worksiteModal.value;
+};
+
+const mobileExtraUserInfo = ref(false);
+const showExtraUserInfoModal = () => {
+  mobileExtraUserInfo.value = !mobileExtraUserInfo.value;
 };
 
 onMounted(async () => {
@@ -602,6 +607,7 @@ onMounted(async () => {
 
 <template>
   <div class="ticket__container">
+    <!--    <Teleport to="#user-content">-->
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
         <img
@@ -612,26 +618,22 @@ onMounted(async () => {
         <BaseText>{{ ccUser.first_name + ' ' + ccUser.last_name }}</BaseText>
       </div>
       <div>
-        <div
-          v-if="accountType.ccUser"
-          :style="`border-color: #3498DB; color: #3498DB`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
-        >
+        <div v-if="accountType.ccUser" style="color: #3498db" class="user-type">
           {{ t('helpdesk.user_account') }}
         </div>
 
         <div
-          v-if="accountType.worksite > 0"
+          v-if="accountType.worksite.length > 0"
           :style="`background-color: #27AE60; color: #ffffff`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          class="user-type cursor-pointer"
           @click="showWorksiteModal"
         >
           {{ t('helpdesk.survivor_account') }}
         </div>
         <div
           v-if="accountType.ghostUser.length > 0"
-          :style="`border-color: #F39C12; color: #F39C12`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          style="color: #f39c12"
+          class="user-type"
         >
           {{ t('~~Ghost User') }}
         </div>
@@ -711,7 +713,7 @@ onMounted(async () => {
         v-if="eventsModal"
         closeable
         title="Events"
-        class="p-10"
+        class="md:p-10"
         @close="showEventsModal()"
       >
         <template #default>
@@ -724,9 +726,9 @@ onMounted(async () => {
     <div v-if="!ccUser" class="cc__user-info">
       <div>
         <div
-          v-if="accountType.worksite > 0"
+          v-if="accountType.worksite.length > 0"
           :style="`background-color: #27AE60; color: #ffffff`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          class="user-type cursor-pointer"
           @click="showWorksiteModal"
         >
           {{ t('helpdesk.survivor_account') }}
@@ -734,7 +736,7 @@ onMounted(async () => {
         <div
           v-if="accountType.ghostUser.length > 0"
           :style="`border-color: #F39C12; color: #F39C12`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          class="user-type"
         >
           {{ t('~~Ghost User') }}
         </div>
@@ -745,12 +747,196 @@ onMounted(async () => {
             accountType.worksite.length === 0
           "
           :style="`border-color: #B2BEB5; color: #B2BEB5`"
-          class="user-type border rounded-md text-center p-2 mx-4 my-2 text-xl"
+          class="user-type"
         >
           {{ t('~~No Role') }}
         </div>
       </div>
     </div>
+
+    <!--    </Teleport>-->
+
+    <!--    <modal-->
+    <!--      v-if="mobileExtraUserInfo"-->
+    <!--      closeable-->
+    <!--      :title="t('~~Extra User Info')"-->
+    <!--      class="md:p-10"-->
+    <!--      @close="showExtraUserInfoModal()"-->
+    <!--    >-->
+    <!--      <template #default>-->
+    <!--<div id="user-content"></div>-->
+    <!--      </template>-->
+    <!--    </modal>-->
+
+    <modal
+      v-if="mobileExtraUserInfo"
+      closeable
+      :title="t('~~Extra User Info')"
+      class="md:p-10"
+      @close="showExtraUserInfoModal()"
+    >
+      <template #default>
+        <div v-if="ccUser" class="cc__user-info2">
+          <div class="cc_user">
+            <img
+              :alt="t('helpdesk.user_picture')"
+              :src="profilePictureUrl"
+              class="w-full"
+            />
+            <BaseText>{{
+              ccUser.first_name + ' ' + ccUser.last_name
+            }}</BaseText>
+          </div>
+          <div>
+            <div
+              v-if="accountType.ccUser"
+              style="color: #3498db"
+              class="user-type"
+            >
+              {{ t('helpdesk.user_account') }}
+            </div>
+
+            <div
+              v-if="accountType.worksite.length > 0"
+              :style="`background-color: #27AE60; color: #ffffff`"
+              class="user-type cursor-pointer"
+              @click="showWorksiteModal"
+            >
+              {{ t('helpdesk.survivor_account') }}
+            </div>
+            <div
+              v-if="accountType.ghostUser.length > 0"
+              style="color: #f39c12"
+              class="user-type"
+            >
+              {{ t('~~Ghost User') }}
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-center border-y-2 border-gray-400"
+          >
+            <BaseButton
+              :action="() => loginAs(props.ticketData.user.ccu_user?.id)"
+              :text="t('actions.login_as')"
+              variant="primary"
+              class="p-2 mx-4 my-4 text-xl rounded-md w-full"
+            />
+          </div>
+          <div>
+            <div
+              v-for="stats in userStats"
+              :key="stats.org"
+              class="info flex flex-col mx-4 my-2"
+            >
+              <BaseText v-for="(value, key) in stats" :key="key">
+                <template v-if="!value" #default><span></span></template>
+                <template v-else #default>
+                  <span class="font-bold text-xl">{{ formatKey(key) }}: </span>
+                  <span class="text-lg">{{ value }}</span>
+                </template>
+              </BaseText>
+            </div>
+            <div class="flex flex-col px-4 py-2">
+              <span class="font-bold text-xl">
+                {{ t('helpdesk.languages') }}</span
+              >
+              <div
+                v-for="l in languages.filter(
+                  (item) =>
+                    item.id === ccUser.primary_language ||
+                    item.id === ccUser.secondary_language,
+                )"
+                :key="`l_${l}`"
+                class="flex flex-col tag-container"
+              >
+                <LanguageTag class="tag-item p-2 mx-0.5" :language-id="l.id" />
+              </div>
+            </div>
+
+            <div class="flex flex-col px-4">
+              <span class="font-bold text-xl"> {{ t('helpdesk.roles') }} </span>
+              <UserRolesSelect
+                v-if="ccUser.roles"
+                style="pointer-events: none"
+                class="w-full flex-grow border border-crisiscleanup-dark-100"
+                data-testid="testUserRolesSelect"
+                :user="ccUser"
+              />
+            </div>
+            <div class="flex items-center justify-center">
+              <BaseButton
+                :action="() => (extraInfo = !extraInfo)"
+                variant="primary"
+                :text="t('helpdesk.more_user_details')"
+                class="p-2 mx-4 my-3 text-xl rounded-md w-full"
+              />
+            </div>
+            <div v-if="extraInfo">
+              <JsonWrapper :json-data="ccUser" />
+            </div>
+          </div>
+
+          <div class="events m-2 text-xs border p-2 flex flex-col gap-2">
+            <AdminEventStream
+              :user="ccUser.id"
+              :limit="5"
+              class="overflow-auto"
+            />
+            <div class="flex items-center justify-center">
+              <BaseButton
+                :action="() => showEventsModal()"
+                :text="t('actions.show_more')"
+                variant="primary"
+                class="p-2 mx-4 my-4 text-xl rounded-md w-full"
+              />
+            </div>
+          </div>
+          <modal
+            v-if="eventsModal"
+            closeable
+            title="Events"
+            class="md:p-10"
+            @close="showEventsModal()"
+          >
+            <template #default>
+              <div class="p-4">
+                <AdminEventStream :user="ccUser.id" />
+              </div>
+            </template>
+          </modal>
+        </div>
+        <div v-if="!ccUser" class="cc__user-info2">
+          <div>
+            <div
+              v-if="accountType.worksite.length > 0"
+              :style="`background-color: #27AE60; color: #ffffff`"
+              class="user-type cursor-pointer"
+              @click="showWorksiteModal"
+            >
+              {{ t('helpdesk.survivor_account') }}
+            </div>
+            <div
+              v-if="accountType.ghostUser.length > 0"
+              :style="`border-color: #F39C12; color: #F39C12`"
+              class="user-type"
+            >
+              {{ t('~~Ghost User') }}
+            </div>
+
+            <div
+              v-if="
+                accountType.ghostUser.length === 0 &&
+                accountType.worksite.length === 0
+              "
+              :style="`border-color: #B2BEB5; color: #B2BEB5`"
+              class="user-type"
+            >
+              {{ t('~~No Role') }}
+            </div>
+          </div>
+        </div>
+      </template>
+    </modal>
 
     <div class="col-span-12 md:col-span-9">
       <div class="ticket__header">
@@ -793,12 +979,21 @@ onMounted(async () => {
       </div>
 
       <div class="subject-date__container">
-        <BaseText>
-          <span class="text-base font-bold">
-            {{ t('helpdesk.ticket_created_at') }}:</span
-          >
-          {{ momentFromNow(ticketData.created_at) }}
-        </BaseText>
+        <div class="grid grid-cols-2 md:grid-cols-1">
+          <BaseText>
+            <span class="text-base font-bold">
+              {{ t('helpdesk.ticket_created_at') }}:</span
+            >
+            {{ momentFromNow(ticketData.created_at) }}
+          </BaseText>
+          <BaseButton
+            v-if="mq.mdMinus"
+            :action="showExtraUserInfoModal"
+            text="Extra Info"
+            variant="primary"
+          />
+        </div>
+
         <hr />
         <BaseText v-if="firstComment">
           <span class="text-base font-bold">
@@ -808,6 +1003,7 @@ onMounted(async () => {
           <span class="font-bold">{{ t('helpdesk.ip_address') }}</span> [{{
             firstComment?.metadata?.system?.ip_address
           }}] (<a
+            class="underline text-blue"
             :href="`https://www.google.com/maps/search/?api=1&query=${firstComment.metadata?.system?.latitude},${firstComment.metadata?.system?.longitude}`"
             target="_blank"
             title="{{firstComment.metadata?.system?.location}}"
@@ -894,18 +1090,23 @@ onMounted(async () => {
           v-if="macroModalVisibility"
           closeable
           :title="t('~~Macros')"
-          class="p-10"
+          class="md:p-10"
+          modal-classes="mx-2"
           @close="showMacroModal()"
         >
           <template #default>
             <Table
               :columns="macroColumns"
               :data="mappedMacros"
-              :body-style="{ height: '900px' }"
+              :body-style="{ height: '600px' }"
               @row-click="(v) => executeMacro(v)"
             >
               <template #template="slotProps">
-                <div class="overflow-auto h-[200px] px-4">
+                <span v-if="mq.mdMinus" class="font-bold">Template: </span>
+                <div
+                  class="overflow-auto px-4"
+                  :class="h - [slotProps.item.template.length]"
+                >
                   {{ slotProps.item.template }}
                 </div>
               </template>
@@ -945,7 +1146,7 @@ onMounted(async () => {
           <BaseButton
             size="md"
             :text="mq.mdMinus ? '' : t('actions.delete')"
-            :class="['w-full md:w-1/4 rounded-md text-xl border']"
+            :class="['w-full rounded-md text-xl border']"
             icon="trash"
             icon-size="lg"
             :action="() => deleteTicket()"
@@ -957,7 +1158,7 @@ onMounted(async () => {
             <BaseButton
               size="md"
               :text="status.charAt(0).toUpperCase() + status.slice(1)"
-              :class="[status, 'w-full md:w-1/3 rounded-md text-xl']"
+              :class="[status, 'w-full rounded-md text-xl']"
               :action="() => replyToTicket(status)"
             />
           </template>
@@ -969,7 +1170,7 @@ onMounted(async () => {
       v-if="worksiteModal"
       closeable
       :title="t('~~Worksite')"
-      class="p-10"
+      class="md:p-10"
       @close="showWorksiteModal()"
     >
       <template #default>
@@ -995,6 +1196,16 @@ onMounted(async () => {
     }
   }
 
+  .cc__user-info2 {
+    @apply col-span-12 md:col-span-3  border-r-2 border-gray-400 overflow-y-auto min-h-full  h-64 md:h-24;
+    .cc_user {
+      @apply border rounded-md m-4 text-center;
+    }
+  }
+
+  .user-type {
+    @apply border rounded-md text-center p-2 mx-4 my-2 text-xl;
+  }
   .ticket__header {
     @apply grid grid-cols-8 md:grid-cols-4 px-4 py-2 row-span-2 flex gap-2 border-b-2 border-gray-400;
 
@@ -1067,7 +1278,7 @@ onMounted(async () => {
     @apply flex flex-col gap-2 px-4 py-2 col-span-6 row-span-2;
 
     .buttons__container {
-      @apply flex gap-2 grid grid-cols-2 grid-rows-2;
+      @apply flex gap-2 grid grid-cols-2 grid-rows-2 md:grid-rows-1 md:grid-cols-4;
     }
   }
 }
