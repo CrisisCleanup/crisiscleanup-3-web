@@ -124,6 +124,7 @@ export default defineComponent({
       default: false,
     },
   },
+  emits: ['ok', 'close', 'cancel'],
   setup(props) {
     const isFullScreen = ref(props.fullscreen);
     const fullScreenIcon = computed(() =>
@@ -136,6 +137,7 @@ export default defineComponent({
         isFullScreen.value = !isFullScreen.value;
       }
     }
+
     return {
       isFullScreen,
       fullScreenIcon,
