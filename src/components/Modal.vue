@@ -31,7 +31,7 @@
                     data-testid="testModalCancelIcon"
                     size="xs"
                     type="cancel"
-                    @click.native="
+                    @click="
                       () => {
                         $emit('close');
                         $emit('cancel');
@@ -51,7 +51,7 @@
               size="xs"
               type="cancel"
               class="absolute right-0 p-2"
-              @click.native="
+              @click="
                 () => {
                   $emit('close');
                   $emit('cancel');
