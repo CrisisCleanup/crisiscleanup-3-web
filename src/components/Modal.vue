@@ -4,7 +4,9 @@
       <div class="modal-wrapper">
         <div
           class="modal-container bg-white flex flex-col justify-between"
-          :class="modalClasses"
+          :class="
+            modalClasses + (isFullScreen ? ' modal-container--fullscreen' : '')
+          "
           :style="modalStyle"
         >
           <div class="modal-header flex-shrink">
@@ -14,18 +16,29 @@
                 class="title p-3 flex items-center justify-between border-b"
               >
                 <span class="text-base font-bold">{{ title }}</span>
-                <ccu-icon
-                  :alt="$t('actions.cancel')"
-                  data-testid="testModalCancelIcon"
-                  size="xs"
-                  type="cancel"
-                  @click.native="
-                    () => {
-                      $emit('close');
-                      $emit('cancel');
-                    }
-                  "
-                />
+                <div class="flex gap-2 items-center">
+                  <ccu-icon
+                    v-if="allowFullScreen"
+                    :alt="$t('~~actions.fullscreen')"
+                    data-testid="testModalFullScreenIcon"
+                    size="xs"
+                    :type="fullScreenIcon"
+                    fa
+                    @click="toggleFullScreen"
+                  />
+                  <ccu-icon
+                    :alt="$t('actions.cancel')"
+                    data-testid="testModalCancelIcon"
+                    size="xs"
+                    type="cancel"
+                    @click.native="
+                      () => {
+                        $emit('close');
+                        $emit('cancel');
+                      }
+                    "
+                  />
+                </div>
               </div>
             </slot>
           </div>
@@ -102,6 +115,32 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    allowFullScreen: {
+      type: Boolean,
+      default: true,
+    },
+    fullscreen: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
+    const isFullScreen = ref(props.fullscreen);
+    const fullScreenIcon = computed(() =>
+      isFullScreen.value
+        ? 'down-left-and-up-right-to-center'
+        : 'up-right-and-down-left-from-center',
+    );
+    function toggleFullScreen() {
+      if (props.allowFullScreen) {
+        isFullScreen.value = !isFullScreen.value;
+      }
+    }
+    return {
+      isFullScreen,
+      fullScreenIcon,
+      toggleFullScreen,
+    };
   },
 });
 </script>
@@ -127,6 +166,12 @@ export default defineComponent({
 .modal-container {
   margin: 0 auto;
   transition: all 0.3s ease;
+
+  &--fullscreen {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .modal-default-button {
