@@ -1,0 +1,50 @@
+name: Slack Notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      slack_webhook:
+        description: 'Slack Webhook URL'
+        required: true
+        type: string
+        default: ${{ secrets.SLACK_WEBHOOK }}
+      slack_channel:
+        description: 'Slack Channel'
+        required: true
+        type: string
+        default: 'core'
+      slack_username:
+        description: 'Slack Username'
+        required: true
+        type: string
+        default: 'CrisisCleanup Bot'
+      slack_color:
+        description: 'Slack Message Color'
+        required: true
+        type: string
+        default: '#fece09'
+      slack_title:
+        description: 'Slack Message Title'
+        required: true
+        type: string
+        default: 'Message From CI'
+      slack_message:
+        description: 'Slack Message Content'
+        required: true
+        type: string
+        default: 'Test Message From CI!'
+
+jobs:
+  notify_slack:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ github.event.inputs.slack_webhook }}
+          SLACK_CHANNEL: ${{ github.event.inputs.slack_channel }}
+          SLACK_USERNAME: ${{ github.event.inputs.slack_username }}
+          SLACK_COLOR: ${{ github.event.inputs.slack_color }}
+          SLACK_TITLE: ${{ github.event.inputs.slack_title }}
+          SLACK_MESSAGE: ${{ github.event.inputs.slack_message }}
