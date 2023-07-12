@@ -5,7 +5,10 @@ import _ from 'lodash';
 import { useMq } from 'vue3-mq';
 import TicketCards from '@/components/Tickets/TicketCards.vue';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import { makeTableColumns } from '@/utils/table';
+import type {
+  TableChangeEmitItem,
+  TableSorterObject,
+} from '@/components/Table.vue';
 import Table from '@/components/Table.vue';
 import Modal from '@/components/Modal.vue';
 import BaseButton from '@/components/BaseButton.vue';
@@ -198,78 +201,77 @@ const getUsersRelatedToTickets = () => {
     });
 };
 
-const columns = [
-  {
-    title: t('helpdesk.ticket_status'),
-    dataIndex: 'status',
-    key: 'status',
-    sortable: true,
-    width: '8%',
-  },
-  {
-    title: t('helpdesk.ticket_created_at'),
-    dataIndex: 'created_at',
-    key: 'created_at',
-    sortable: true,
-    width: '5%',
-  },
-  {
-    title: t('helpdesk.account_type'),
-    dataIndex: 'account_type',
-    key: 'account_type',
-    sortable: true,
-    width: '10%',
-  },
-  {
-    title: t('helpdesk.roles'),
-    dataIndex: 'roles',
-    key: 'roles',
-    sortable: true,
-    width: '16%',
-  },
-  {
-    title: t('helpdesk.app_platform'),
-    dataIndex: 'app',
-    key: 'app',
-    sortable: true,
-    width: '6%',
-  },
-  {
-    title: t('helpdesk.assignee'),
-    dataIndex: 'assignee',
-    key: 'assignee',
-    sortable: true,
-    width: '10%',
-  },
-  {
-    title: t('helpdesk.requester'),
-    dataIndex: 'requester',
-    key: 'requester',
-    sortable: true,
-    width: '8%',
-  },
-  {
-    title: t('helpdesk.description'),
-    dataIndex: 'description',
-    key: 'description',
-    sortable: true,
-    width: '25%',
-  },
-  {
-    title: t('helpdesk.full_ticket'),
-    dataIndex: 'advanced_ticket',
-    key: 'advanced_ticket',
-    sortable: true,
-    width: '7%',
-  },
-  {
-    title: t('helpdesk.zendesk_link'),
-    dataIndex: 'zendesk',
-    key: 'zendesk',
-    sortable: true,
-    width: '5%',
-  },
-];
+const ticketTableSorter = ref<TableSorterObject>({});
+const columns = computed<Partial<TableSorterObject>[]>(() => {
+  return [
+    {
+      title: t('helpdesk.ticket_status'),
+      dataIndex: 'status',
+      key: 'status',
+      sortable: true,
+      width: '8%',
+    },
+    {
+      title: t('helpdesk.ticket_created_at'),
+      dataIndex: 'created_at',
+      key: 'created_at',
+      sortable: true,
+      width: '5%',
+    },
+    {
+      title: t('helpdesk.account_type'),
+      dataIndex: 'account_type',
+      key: 'account_type',
+      sortable: true,
+      width: '10%',
+    },
+    {
+      title: t('helpdesk.roles'),
+      dataIndex: 'roles',
+      key: 'roles',
+      width: '16%',
+    },
+    {
+      title: t('helpdesk.app_platform'),
+      dataIndex: 'app',
+      key: 'app',
+      sortable: true,
+      width: '6%',
+    },
+    {
+      title: t('helpdesk.assignee'),
+      dataIndex: 'assignee',
+      key: 'assignee',
+      sortable: true,
+      width: '10%',
+    },
+    {
+      title: t('helpdesk.requester'),
+      dataIndex: 'requester',
+      key: 'requester',
+      sortable: true,
+      width: '8%',
+    },
+    {
+      title: t('helpdesk.description'),
+      dataIndex: 'description',
+      key: 'description',
+      width: '25%',
+    },
+    {
+      title: t('helpdesk.full_ticket'),
+      dataIndex: 'advanced_ticket',
+      key: 'advanced_ticket',
+      width: '7%',
+    },
+    {
+      title: t('helpdesk.zendesk_link'),
+      dataIndex: 'zendesk',
+      key: 'zendesk',
+      width: '5%',
+    },
+  ];
+});
 
 const showTicketModal = (ticket: Ticket) => {
   ticketModal.value = !ticketModal.value;
@@ -427,6 +429,22 @@ const ticketsWithUsersSorted = computed(() => {
 
   return ticketsWithUsers.value;
 });
+
+const tableData = computed(() => {
+  const o = ticketTableSorter.value;
+  if (o.key) {
+    const { key, direction } = o;
+    return _.orderBy(ticketsWithUsers.value, key, direction);
+  }
+
+  console.info('Sorter', o);
+  return ticketsWithUsers.value;
+});
+
+function handleTableChange(value: TableChangeEmitItem) {
+  const { sorter = {} } = value;
+  ticketTableSorter.value = { ...sorter };
+}
 
 onMounted(() => {
   isLoading.value = true;
@@ -681,25 +699,21 @@ onMounted(() => {
 
 .new-tag {
   color: #c19700;
-  //border: 2px solid #c19700;
   @apply p-2 rounded-md;
 }
 
 .open-tag {
   color: #0042ed;
-  //border: 2px solid #0042ed;
   @apply p-2 rounded-md;
 }
 
 .solved-tag {
   color: #f21b1b;
-  //border: 2px solid #f21b1b;
   @apply p-2 rounded-md;
 }
 
 .pending-tag {
   color: #6b6b6b;
-  //border: 2px solid #6b6b6b;
   @apply p-2 rounded-md;
 }
 </style>
