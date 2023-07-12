@@ -82,12 +82,11 @@ test.describe('LoginPage', () => {
       const _dataTestIds = await getAllTestIds(page);
       // don't include testIncidentPhoneDiv (current incident hotline) as it changes based on current incident
       const dataTestIds = _dataTestIds.filter(
-        (id) => !['testIncidentPhoneDiv'].includes(id ?? ''),
+        (id) => !['testIncidentPhoneDiv', 'testNoPhoneDiv'].includes(id),
       );
       expect(dataTestIds).toMatchObject([
         'testLogoIcon',
         'testSurvivorContactDiv',
-        'testIncidentPhoneDiv',
         'testLoginTextContent',
         'testSigninTextContent',
         'testEmailTextInput',
