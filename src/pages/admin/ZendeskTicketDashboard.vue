@@ -219,6 +219,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
     {
       title: t('helpdesk.account_type'),
       key: 'account_type',
+      sortKey: 'user.ccu_user',
       sortable: true,
       width: '10%',
     },
