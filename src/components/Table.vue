@@ -353,8 +353,8 @@ export interface TableColumnOption<T = Record<string, unknown>> {
   sortKey: string;
   searchable: boolean;
   searchSelect: boolean;
-  getSelectValues: (data: T) => any;
-  transformer: (key: keyof T, data: T) => any;
+  getSelectValues: (data: TableDataItem[]) => any;
+  transformer: (value: any, data: T) => any;
   action: (...args: any[]) => any;
 }
 
