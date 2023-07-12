@@ -117,7 +117,7 @@ export default defineComponent({
     },
     allowFullScreen: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     fullscreen: {
       type: Boolean,
