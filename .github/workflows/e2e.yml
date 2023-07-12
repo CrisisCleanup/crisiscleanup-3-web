@@ -4,7 +4,7 @@ name: E2E Tests
 # See: https://crontab.guru/examples.html
 on:
   schedule:
-    - cron: 0 9 * * *
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 jobs:
