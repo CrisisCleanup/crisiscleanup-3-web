@@ -238,6 +238,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
       title: t('helpdesk.assignee'),
       key: 'assignee',
       sortable: true,
+      sortKey: 'assignee_id',
       width: '10%',
     },
     {
