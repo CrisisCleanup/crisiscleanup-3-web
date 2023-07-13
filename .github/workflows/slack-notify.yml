@@ -24,7 +24,7 @@ on:
         type: string
         default: 'Test Message From CI!'
     secrets:
-      SLACK_WEBHOOK:
+      slack_webhook:
         required: true
 
 jobs:
