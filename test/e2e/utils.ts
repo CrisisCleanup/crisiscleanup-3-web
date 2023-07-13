@@ -146,11 +146,12 @@ export async function visitAllLinksAndGetResponseInfo(
   const linkInfos: LinkInfo[] = [];
   for (const link of linkLocators) {
     const href = await link.getAttribute('href');
+    const isHrefValid = !['mailto:', 'tel:'].some((s) => href?.startsWith(s));
     console.info('Found link', href);
     const isVisited = visitedLinks.has(href);
     if (isVisited) {
       console.info('Skipping already visited link', href);
-    } else if (href && !href.startsWith('mailto:')) {
+    } else if (href && isHrefValid) {
       const newPage = await context.newPage();
       await newPage.bringToFront();
       const response = await newPage.goto(href, {
