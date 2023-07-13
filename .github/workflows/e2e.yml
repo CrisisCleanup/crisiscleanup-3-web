@@ -115,23 +115,31 @@ jobs:
   notify-failed:
     name: 🔴 Notify Failed 🔴
     needs: [e2e]
+    runs-on: ubuntu-latest
     if: needs.e2e.outputs.TEST_SUCCESS == '1'
-    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
-    with:
-      slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-      slack_channel: 'core'
-      slack_color: '#D94F37'
-      slack_title: 'E2e Tests Failed!'
-      slack_message: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+    steps:
+      - name: Notify Slack
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_CHANNEL: 'core'
+          SLACK_COLOR: '#D94F37'
+          SLACK_TITLE: 'E2e Tests Failed!'
+          SLACK_MESSAGE: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
 
   notify-success:
     name: 🟢 Notify Success 🟢
     needs: [e2e]
+    runs-on: ubuntu-latest
     if: needs.e2e.outputs.TEST_SUCCESS == '0'
-    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
-    with:
-      slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-      slack_channel: 'core'
-      slack_color: '#13E768'
-      slack_title: 'E2e Tests Passed!'
-      slack_message: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+    steps:
+      - name: Notify Slack
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_CHANNEL: 'core'
+          SLACK_COLOR: '#13E768'
+          SLACK_TITLE: 'E2e Tests Passed!'
+          SLACK_MESSAGE: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
