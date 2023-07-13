@@ -12,7 +12,7 @@ jobs:
     name: Get Versions 📜
     uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/get-versions.yml@master
 
-  test-e2e:
+  e2e:
     name: 🧪 E2E Tests 💻 | ${{ matrix.stage }} | ${{ matrix.project }}
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
