@@ -125,7 +125,7 @@ jobs:
           SLACK_CHANNEL: 'core'
           SLACK_COLOR: '#D94F37'
           SLACK_TITLE: 'E2e Tests Failed!'
-          SLACK_MESSAGE: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+          SLACK_MESSAGE: '🧪 E2e Tests Failed... Someone broke something! 😦'
 
   notify-success:
     name: 🟢 Notify Success 🟢
@@ -142,4 +142,4 @@ jobs:
           SLACK_CHANNEL: 'core'
           SLACK_COLOR: '#13E768'
           SLACK_TITLE: 'E2e Tests Passed!'
-          SLACK_MESSAGE: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+          SLACK_MESSAGE: '🧪 E2e Tests Passed!!'
