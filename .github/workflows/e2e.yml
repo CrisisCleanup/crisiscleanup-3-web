@@ -114,10 +114,11 @@ jobs:
     name: 🔴 Notify Failure 🔴
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_STATUS == 'failure'
+    if: always()
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
+        if: needs.e2e.outputs.TEST_STATUS == 'failure'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: 'CrisisCleanup Bot'
@@ -130,10 +131,11 @@ jobs:
     name: 🟢 Notify Success 🟢
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_STATUS == 'success'
+    if: always()
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
+        if: needs.e2e.outputs.TEST_STATUS == 'success'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: 'CrisisCleanup Bot'
