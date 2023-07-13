@@ -113,7 +113,7 @@ jobs:
           fi
 
   notify-failed:
-    name: 🔴 Notify Failed 🔴
+    name: 🔴 Notify Failure 🔴
     needs: [e2e]
     runs-on: ubuntu-latest
     if: needs.e2e.outputs.TEST_SUCCESS == '1'
