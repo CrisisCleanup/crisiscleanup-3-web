@@ -93,7 +93,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: playwright-report-${{ matrix.project }}
+          name: playwright-report-${{ matrix.stage }}-${{ matrix.project }}
           path: playwright-report/
           retention-days: 30
 
