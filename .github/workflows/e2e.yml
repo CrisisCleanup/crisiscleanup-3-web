@@ -112,25 +112,26 @@ jobs:
             echo "TEST_SUCCESS=0" >> $GITHUB_OUTPUT
           fi
 
-  notify-results:
-    name: Notify Success
+  notify-failed:
+    name: 🔴 Notify Failed 🔴
     needs: [e2e]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Slack Notification
-        uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
-        env:
-          IS_SUCCESS: ${{ needs.e2e.outputs.TEST_SUCCESS == '1' }}
-          SUCCESS_COLOR: '#13E768'
-          FAILURE_COLOR: '#D94F37'
-          SUCCESS_TITLE: 'E2e Tests Passed!'
-          FAILURE_TITLE: 'E2e Tests Failed!'
-          SUCCESS_MESSAGE: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
-          FAILURE_MESSAGE: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
-        with:
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          slack_channel: 'core'
-          slack_username: 'CrisisCleanup Bot'
-          slack_color: ${{ env.IS_SUCCESS && env.SUCCESS_COLOR || env.FAILURE_COLOR }}
-          slack_title: ${{ env.IS_SUCCESS && env.SUCCESS_TITLE || env.FAILURE_TITLE }}
-          slack_message: ${{ env.IS_SUCCESS && env.SUCCESS_MESSAGE || env.FAILURE_MESSAGE }}
+    if: needs.e2e.outputs.TEST_SUCCESS == '1'
+    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
+    with:
+      slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+      slack_channel: 'core'
+      slack_color: '#D94F37'
+      slack_title: 'E2e Tests Failed!'
+      slack_message: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+
+  notify-success:
+    name: 🟢 Notify Success 🟢
+    needs: [e2e]
+    if: needs.e2e.outputs.TEST_SUCCESS == '0'
+    uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
+    with:
+      slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+      slack_channel: 'core'
+      slack_color: '#13E768'
+      slack_title: 'E2e Tests Passed!'
+      slack_message: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
