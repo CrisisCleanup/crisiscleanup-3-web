@@ -116,7 +116,7 @@ jobs:
     name: 🔴 Notify Failure 🔴
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_SUCCESS == '1'
+    if: needs.e2e.outputs.TEST_SUCCESS == '0'
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
@@ -132,7 +132,7 @@ jobs:
     name: 🟢 Notify Success 🟢
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_SUCCESS == '0'
+    if: needs.e2e.outputs.TEST_SUCCESS == '1'
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
