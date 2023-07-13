@@ -106,7 +106,7 @@ jobs:
         run: |
           echo "TEST_STAGE=${{ matrix.stage }}" >> $GITHUB_OUTPUT
           echo "TEST_PROJECT=${{ matrix.project }}" >> $GITHUB_OUTPUT
-          if ${{ success() }}; then
+          if [ ${{ job.status }} == 'success' ]; then
             echo "TEST_SUCCESS=1" >> $GITHUB_OUTPUT
           else
             echo "TEST_SUCCESS=0" >> $GITHUB_OUTPUT
