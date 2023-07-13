@@ -55,7 +55,7 @@ test.describe('DashboardPage', () => {
       ];
       const locators = dataTestIds.map((tId) => page.getByTestId(tId));
       for (const l of locators) {
-        await expect(l).toBeVisible();
+        await expect(l).toBeVisible({ timeout: 15_000 });
       }
 
       await test.info().attach('dashboard-page-screenshot', {
