@@ -132,5 +132,5 @@ jobs:
           slack_channel: 'core'
           slack_username: 'CrisisCleanup Bot'
           slack_color: ${{ env.IS_SUCCESS && env.SUCCESS_COLOR || env.FAILURE_COLOR }}
-          slack_title: ${{ env.IS_SUCCESS == '1' && env.SUCCESS_TITLE || env.FAILURE_TITLE }}
-          slack_message: ${{ env.IS_SUCCESS == '1' && env.SUCCESS_MESSAGE || env.FAILURE_MESSAGE }}
+          slack_title: ${{ env.IS_SUCCESS && env.SUCCESS_TITLE || env.FAILURE_TITLE }}
+          slack_message: ${{ env.IS_SUCCESS && env.SUCCESS_MESSAGE || env.FAILURE_MESSAGE }}
