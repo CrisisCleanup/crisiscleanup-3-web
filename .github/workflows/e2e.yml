@@ -125,8 +125,8 @@ jobs:
           FAILURE_COLOR: '#D94F37'
           SUCCESS_TITLE: 'E2e Tests Passed!'
           FAILURE_TITLE: 'E2e Tests Failed!'
-          SUCCESS_MESSAGE: ${{ format('🟩🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
-          FAILURE_MESSAGE: ${{ format('🟥🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+          SUCCESS_MESSAGE: ${{ format('🟩 🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+          FAILURE_MESSAGE: ${{ format('🟥 🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
         with:
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           slack_channel: 'core'
