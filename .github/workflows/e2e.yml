@@ -20,7 +20,7 @@ jobs:
     outputs:
       TEST_STAGE: ${{ steps.results.outputs.TEST_STAGE }}
       TEST_PROJECT: ${{ steps.results.outputs.TEST_PROJECT }}
-      TEST_SUCCESS: ${{ steps.results.outputs.TEST_SUCCESS }}
+      TEST_STATUS: ${{ steps.results.outputs.TEST_STATUS }}
     strategy:
       fail-fast: false
       matrix:
@@ -107,17 +107,14 @@ jobs:
         run: |
           echo "TEST_STAGE=${{ matrix.stage }}" >> $GITHUB_OUTPUT
           echo "TEST_PROJECT=${{ matrix.project }}" >> $GITHUB_OUTPUT
-          if [ ${{ job.status }} == 'success' ]; then
-            echo "TEST_SUCCESS=1" >> $GITHUB_OUTPUT
-          else
-            echo "TEST_SUCCESS=0" >> $GITHUB_OUTPUT
-          fi
+          # The current status of the job. Possible values are success, failure, or cancelled.
+          echo "TEST_STATUS=${{ job.status }}" >> $GITHUB_OUTPUT
 
   notify-failed:
     name: 🔴 Notify Failure 🔴
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_SUCCESS == '0'
+    if: needs.e2e.outputs.TEST_STATUS == 'failure'
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
@@ -133,7 +130,7 @@ jobs:
     name: 🟢 Notify Success 🟢
     needs: [e2e]
     runs-on: ubuntu-latest
-    if: needs.e2e.outputs.TEST_SUCCESS == '1'
+    if: needs.e2e.outputs.TEST_STATUS == 'success'
     steps:
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.1
