@@ -23,6 +23,9 @@ on:
         required: true
         type: string
         default: 'Test Message From CI!'
+    secrets:
+      SLACK_WEBHOOK:
+        required: true
 
 jobs:
   notify_slack:
