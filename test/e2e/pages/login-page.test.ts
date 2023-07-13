@@ -34,8 +34,7 @@ test.describe('LoginPage', () => {
     },
   );
 
-  // Skip till login registration template PR gets merged
-  test.skip(
+  test(
     testTitleWithTags('should show error on login with invalid credentials', [
       'slow',
       'primary',
