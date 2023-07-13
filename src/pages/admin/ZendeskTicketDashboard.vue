@@ -505,6 +505,7 @@ onMounted(() => {
       v-if="usersRelatedToTickets && usersRelatedToTickets.data"
       :columns="columns"
       :data="tableData"
+      :sorter="ticketTableSorter"
       @change="handleTableChange"
     >
       <template #status="slotProps">
