@@ -17,7 +17,6 @@ import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
 import type User from '@/models/User';
 import useEmitter from '@/hooks/useEmitter';
-import BaseSelect from '@/components/BaseSelect.vue';
 
 const mq = useMq();
 const { emitter } = useEmitter();
@@ -174,7 +173,7 @@ const agents = ref<
   Array<{
     id: number | string;
     name: string;
-    thumbnails: any[];
+    thumbnails: unknown[];
   }>
 >([]);
 
@@ -251,7 +250,7 @@ const columns = computed<Partial<TableSorterObject>[]>(() => {
     {
       title: t('helpdesk.requester'),
       key: 'requester',
-      sortKey: 'requestorName',
+      sortKey: 'requesterName',
       sortable: true,
       width: '8%',
     },
@@ -311,7 +310,7 @@ const getTicketsWithUsers = () => {
       appPlatform: ticket.custom_fields?.find(
         (field) => field.id === 17_295_140_815_757,
       )?.value,
-      requestorName: matchingUser?.ccu_user
+      requesterName: matchingUser?.ccu_user
         ? `${matchingUser?.ccu_user?.first_name} ${matchingUser?.ccu_user?.last_name}`
         : matchingUser.name,
     };
@@ -501,25 +500,12 @@ onMounted(() => {
           {{ ticketStats.survivors?.undefined }}</BaseText
         >
       </div>
-      <div
-        class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-12 md:col-span-4"
-      >
-        <BaseSelect
-          :model-value="ticketSorter"
-          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
-          class="w-full"
-          label="name"
-          :placeholder="t('helpdesk.sort_by')"
-          item-key="id"
-          :options="sorterObject"
-          @update:model-value="(v) => changeTicketSorting(v)"
-        />
-      </div>
     </div>
     <Table
       v-if="usersRelatedToTickets && usersRelatedToTickets.data"
       :columns="columns"
-      :data="ticketsWithUsersSorted"
+      :data="tableData"
+      @change="handleTableChange"
     >
       <template #status="slotProps">
         <span v-if="mq.mdMinus" class="font-bold">Status: </span>
@@ -581,7 +567,7 @@ onMounted(() => {
       <template #requester="slotProps">
         <BaseText>
           <span v-if="mq.mdMinus" class="font-bold">Requester:</span>
-          {{ slotProps.item.requestorName }}
+          {{ slotProps.item.requesterName }}
         </BaseText>
       </template>
 
