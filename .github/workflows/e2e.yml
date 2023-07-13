@@ -17,6 +17,10 @@ jobs:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
+    outputs:
+      TEST_STAGE: ${{ steps.results.outputs.TEST_STAGE }}
+      TEST_PROJECT: ${{ steps.results.outputs.TEST_PROJECT }}
+      TEST_SUCCESS: ${{ steps.results.outputs.TEST_SUCCESS }}
     strategy:
       fail-fast: false
       matrix:
@@ -97,24 +101,35 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # - name: Post Notify Deploy
-      #   if: success()
-      #   uses: rtCamp/action-slack-notify@v2.0.1
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     SLACK_CHANNEL: 'core'
-      #     SLACK_USERNAME: 'CrisisCleanup Bot'
-      #     SLACK_COLOR: '#13E768'
-      #     SLACK_TITLE: 'E2E Tests Passed!'
-      #     SLACK_MESSAGE: ':large_green_square: :test_tube: E2E Tests passed for ${{ github.event.inputs.stage }}!!'
-      #
-      # - name: Notify Failed
-      #   if: failure()
-      #   uses: rtCamp/action-slack-notify@v2.0.1
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     SLACK_CHANNEL: 'core'
-      #     SLACK_USERNAME: 'CrisisCleanup Bot'
-      #     SLACK_COLOR: '#D94F37'
-      #     SLACK_TITLE: 'E2E Tests Failed!'
-      #     SLACK_MESSAGE: ':large_red_square: :test_tube: E2E tests failed for ${{ matrix.stage }}... Someone broke something! :frowning:'
+      - id: results
+        shell: bash
+        run: |
+          echo "TEST_STAGE=${{ matrix.stage }}" >> $GITHUB_OUTPUT
+          echo "TEST_PROJECT=${{ matrix.project }}" >> $GITHUB_OUTPUT
+          if ${{ success() }}; then
+            echo "TEST_SUCCESS=1" >> $GITHUB_OUTPUT
+          else
+            echo "TEST_SUCCESS=0" >> $GITHUB_OUTPUT
+          fi
+
+  notify-results:
+    name: Notify Success
+    needs: [e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Slack Notification
+        uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/slack-notify.yml@master
+        env:
+          SUCCESS_COLOR: '#13E768'
+          FAILURE_COLOR: '#D94F37'
+          SUCCESS_TITLE: 'E2e Tests Passed!'
+          FAILURE_TITLE: 'E2e Tests Failed!'
+          SUCCESS_MESSAGE: ${{ format('🟩🧪 E2e Tests Passed for {0} {1}', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+          FAILURE_MESSAGE: ${{ format('🟥🧪 E2e Tests Failed for {0} {1}... Someone broke something! 😦', needs.e2e.outputs.TEST_STAGE, needs.e2e.outputs.TEST_PROJECT) }}
+        with:
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          slack_channel: 'core'
+          slack_username: 'CrisisCleanup Bot'
+          slack_color: ${{ needs.e2e.outputs.TEST_SUCCESS == '1' && env.SUCCESS_COLOR || env.FAILURE_COLOR }}
+          slack_title: ${{ needs.e2e.outputs.TEST_SUCCESS == '1' && env.SUCCESS_TITLE || env.FAILURE_TITLE }}
+          slack_message: ${{ needs.e2e.outputs.TEST_SUCCESS == '1' && env.SUCCESS_MESSAGE || env.FAILURE_MESSAGE }}
