@@ -103,6 +103,7 @@ jobs:
 
       - id: results
         shell: bash
+        if: always()
         run: |
           echo "TEST_STAGE=${{ matrix.stage }}" >> $GITHUB_OUTPUT
           echo "TEST_PROJECT=${{ matrix.project }}" >> $GITHUB_OUTPUT
