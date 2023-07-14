@@ -15,6 +15,7 @@ test.describe('LoginPage', () => {
   test(
     testTitleWithTags('should login', ['slow', 'primary']),
     async ({ page }) => {
+      test.slow();
       await doLogin(page);
 
       await expect(page).toHaveURL(/.*\/incident\/.*\/dashboard/);
