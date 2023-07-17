@@ -127,6 +127,11 @@ export async function doLogin(
   return false;
 }
 
+export async function doLoginAsAdmin(page: Page) {
+  const adminCreds = getLoginCredentials(true);
+  return doLogin(page, adminCreds);
+}
+
 /**
  * Query for all data-testid on a given page.
  * @param page
