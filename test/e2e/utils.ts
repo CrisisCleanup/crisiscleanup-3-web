@@ -66,12 +66,17 @@ export function testTitleWithTags(title: string, tags: TestTag[]) {
  * Get login credentials for app.
  * Uses TEST_APP_EMAIL & TEST_APP_PASSWORD
  */
-export function getLoginCredentials(): LoginCredential {
-  const email = process.env.TEST_APP_EMAIL!;
-  const password = process.env.TEST_APP_PASSWORD!;
+export function getLoginCredentials(admin = false): LoginCredential {
+  let email = process.env.TEST_APP_EMAIL!;
+  let password = process.env.TEST_APP_PASSWORD!;
+  if (admin) {
+    email = process.env.TEST_APP_ADMIN_EMAIL!;
+    password = process.env.TEST_APP_ADMIN_PASSWORD!;
+  }
+
   if (!email || !password) {
     throw new Error(`
-      Cannot find login credentials.
+      Cannot find login credentials. (Admin = ${admin.toString()})
       TEST_APP_EMAIL: ${email}
       TEST_APP_PASSWORD: ${password}
     `);
