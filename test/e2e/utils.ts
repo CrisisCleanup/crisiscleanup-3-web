@@ -28,6 +28,9 @@ interface LinkInfo {
   headers: Record<string, string>;
 }
 
+export const normalUserStatePath = 'playwright/.auth/user.json';
+export const adminUserStatePath = 'playwright/.auth/admin.json';
+
 /**
  * Generate test title with given tags
  * @param title
