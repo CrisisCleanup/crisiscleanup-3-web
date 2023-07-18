@@ -29,41 +29,46 @@ export interface OuathToken {
 
 const AuthService = {
   async exchangeAuthorizationCode(authorizationCode: string) {
-    const code_verifier = localStorage.getItem('code_verifier');
+    try {
+      const code_verifier = localStorage.getItem('code_verifier');
 
-    // Prepare the request payload
-    const payload = {
-      client_id: CLIENT_ID,
-      grant_type: 'authorization_code',
-      code: authorizationCode,
-      redirect_uri: `${window.location.origin}/o/callback`,
-      code_verifier: code_verifier,
-    } as Record<string, string>;
+      // Prepare the request payload
+      const payload = {
+        client_id: CLIENT_ID,
+        grant_type: 'authorization_code',
+        code: authorizationCode,
+        redirect_uri: `${window.location.origin}/o/callback`,
+        code_verifier: code_verifier,
+      } as Record<string, string>;
 
-    // Send the token exchange request
-    const response = await axios.post(
-      tokenEndpoint,
-      new URLSearchParams(payload).toString(),
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-CSRFToken': this.getCsrfToken(),
+      // Send the token exchange request
+      const response = await axios.post(
+        tokenEndpoint,
+        new URLSearchParams(payload).toString(),
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': this.getCsrfToken(),
+          },
         },
-      },
-    );
+      );
 
-    this.setAccessToken(response.data);
-    const user = await axios.get(
-      `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
-      {
-        headers: {
-          Authorization: `Bearer ${response.data.access_token}`,
+      this.setAccessToken(response.data);
+      const user = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${response.data.access_token}`,
+          },
         },
-      },
-    );
-    this.saveUser(user.data);
-    localStorage.removeItem('code_verifier');
+      );
+      this.saveUser(user.data);
+      localStorage.removeItem('code_verifier');
+    } catch {
+      this.clearAuthStorage();
+      window.location.reload();
+    }
   },
   getCsrfToken() {
     const cookies = document.cookie.split(';');
@@ -209,6 +214,12 @@ const AuthService = {
       'Authorization',
     ]);
   },
+  clearAuthStorage() {
+    localStorage.removeItem('oauth_user');
+    localStorage.removeItem('oauth_token');
+    localStorage.removeItem('oauth_token_expiry');
+    localStorage.removeItem('code_verifier');
+  },
   async logoutUser() {
     try {
       await axios.post(
@@ -228,9 +239,7 @@ const AuthService = {
     if (this.getAccessToken()) {
       await this.revokeAccessToken(this.getAccessToken() as string);
       await this.revokeAccessToken(this.getRefreshToken() as string);
-      localStorage.removeItem('oauth_user');
-      localStorage.removeItem('oauth_token');
-      localStorage.removeItem('oauth_token_expiry');
+      this.clearAuthStorage();
     }
   },
   async buildOauthAuthorizationUrl(from: string | null | LocationQueryValue[]) {
