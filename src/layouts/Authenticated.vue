@@ -490,8 +490,8 @@ export default defineComponent({
         }
       }
 
-      if (currentUser?.value?.states && currentUser.value.states.incident) {
-        incidentId = currentUser.value.states.incident;
+      if (currentUser?.value?.states && currentUser.value?.states.incident) {
+        incidentId = currentUser.value?.states.incident;
       }
 
       if (incidentId) {
@@ -501,11 +501,11 @@ export default defineComponent({
       if (
         !currentUser?.value?.accepted_terms_timestamp ||
         moment(VERSION_3_LAUNCH_DATE).isAfter(
-          moment(currentUser.value.accepted_terms_timestamp),
+          moment(currentUser.value?.accepted_terms_timestamp),
         ) ||
-        (portal.value.tos_updated_at &&
-          moment(portal.value.tos_updated_at).isAfter(
-            currentUser.value.accepted_terms_timestamp,
+        (portal.value?.tos_updated_at &&
+          moment(portal.value?.tos_updated_at).isAfter(
+            currentUser.value?.accepted_terms_timestamp,
           ))
       ) {
         showAcceptTermsModal.value = true;
