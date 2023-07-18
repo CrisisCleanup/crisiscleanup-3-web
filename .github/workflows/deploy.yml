@@ -23,7 +23,7 @@ jobs:
 
       - name: Notify Deploy
         if: "github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production'"
-        uses: rtCamp/action-slack-notify@v2.0.1
+        uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
@@ -173,7 +173,7 @@ jobs:
 
       - name: Post Notify Deploy
         if: "github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production'"
-        uses: rtCamp/action-slack-notify@v2.0.1
+        uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
@@ -184,7 +184,7 @@ jobs:
 
       - name: Notify Failed
         if: "(github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production') && failure()"
-        uses: rtCamp/action-slack-notify@v2.0.1
+        uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'

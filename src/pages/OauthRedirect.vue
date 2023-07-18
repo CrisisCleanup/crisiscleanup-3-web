@@ -1,5 +1,7 @@
 <template>
-  <spinner show-quote />
+  <div class="h-screen flex items-center justify-center">
+    <spinner show-quote />
+  </div>
 </template>
 
 <script>
