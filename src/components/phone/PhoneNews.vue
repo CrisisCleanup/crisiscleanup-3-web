@@ -1,9 +1,6 @@
 <template>
   <tabs ref="tabs" class="" tab-details-classes="h-full overflow-auto">
-    <tab
-      :name="$t('phoneDashboard.news')"
-      data-testid="testPhoneNewsDiv"
-    >
+    <tab :name="$t('phoneDashboard.news')" data-testid="testPhoneNewsDiv">
       <ul>
         <li
           v-for="newItem in news"
@@ -106,7 +103,7 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      newsInterval.value = setInterval(getNews, 10_000);
+      newsInterval.value = setInterval(getNews, 60_000);
     });
 
     onBeforeUnmount(() => {
