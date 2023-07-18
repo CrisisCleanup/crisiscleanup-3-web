@@ -50,6 +50,8 @@ const actions = {
   logout({ commit }: ActionContext<any, any>) {
     commit('setUser', null);
     AuthService.logoutUser().then(() => {
+      const broadcast = new BroadcastChannel('logoutChannel');
+      broadcast.postMessage('logout');
       window.location.href = '/';
     });
   },

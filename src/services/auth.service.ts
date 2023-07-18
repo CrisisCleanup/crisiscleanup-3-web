@@ -95,6 +95,11 @@ const AuthService = {
         },
       );
       this.setAccessToken(response.data);
+
+      // Create a new broadcast channel and post the token
+      const broadcast = new BroadcastChannel('oauthTokenChannel');
+      broadcast.postMessage(JSON.stringify(response.data));
+
       const user = await axios.get(
         `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
         {
@@ -225,6 +230,7 @@ const AuthService = {
       await this.revokeAccessToken(this.getRefreshToken() as string);
       localStorage.removeItem('oauth_user');
       localStorage.removeItem('oauth_token');
+      localStorage.removeItem('oauth_token_expiry');
     }
   },
   async buildOauthAuthorizationUrl(from: string | null | LocationQueryValue[]) {

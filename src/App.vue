@@ -129,6 +129,28 @@ export default defineComponent({
         },
       );
       await getEnums();
+
+      const oauthTokenChannel = new BroadcastChannel('oauthTokenChannel');
+      const logoutChannel = new BroadcastChannel('logoutChannel');
+
+      // eslint-disable-next-line unicorn/prefer-add-event-listener
+      oauthTokenChannel.onmessage = (event) => {
+        let token = JSON.parse(event.data);
+        const user = axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.access_token}`,
+            },
+          },
+        );
+        AuthService.saveUser(user.data);
+      };
+
+      // eslint-disable-next-line unicorn/prefer-add-event-listener
+      logoutChannel.onmessage = () => {
+        window.location.href = '/';
+      };
     });
 
     // 360042012811
