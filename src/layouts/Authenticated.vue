@@ -13,7 +13,7 @@
         <slot />
       </main>
       <footer
-        style="width: 100svw;"
+        style="width: 100svw"
         class="pt-3 pb-3 bg-zinc-800 text-white fixed inset-x-0 bottom-0 flex justify-around items-center"
       >
         <div
@@ -401,7 +401,6 @@ export default defineComponent({
       if (currentUser.value && zendesk.isOpen.value) {
         // ccu user id custom zendesk field.
         const ccuIdFieldId = '16781124470797';
-        const appTypeFieldId = '17295140815757';
         // prefill base zendesk fields.
         zendesk.zE(ZendeskTarget.WEB_WIDGET, ZendeskCommand.PREFILL, {
           name: {
@@ -417,17 +416,12 @@ export default defineComponent({
         zendesk.config.webWidget.contactForm!.fields ??= [];
         zendesk.config.webWidget.contactForm!.fields = [
           ...zendesk.config.webWidget.contactForm!.fields.filter(
-            (field) => field.id !== ccuIdFieldId && field.id !== appTypeFieldId
+            (field) => field.id !== ccuIdFieldId,
           ),
           {
             id: ccuIdFieldId,
             hidden: true,
             prefill: { '*': String(currentUser.value!.id) },
-          },
-          {
-            id: appTypeFieldId,
-            hidden: true,
-            prefill: { '*': 'web' },
           },
         ];
       }
@@ -458,7 +452,7 @@ export default defineComponent({
         await logoutApp();
       }
 
-      await Promise.all([
+      await Promise.any([
         Incident.api().get(
           '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
           {

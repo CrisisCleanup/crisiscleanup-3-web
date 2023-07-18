@@ -1668,11 +1668,13 @@ export default defineComponent({
     );
 
     async function init() {
-      const allWorksites = await getAllWorksites();
-      const markers = await getWorksites();
+      const [allWorksites, markers] = await Promise.all([
+        getAllWorksites(),
+        getWorksites(),
+      ]);
 
       if (route.query.work_type__claimed_by) {
-        await Organization.api().get(
+        Organization.api().get(
           `/organizations/${route.query.work_type__claimed_by}`,
         );
       }

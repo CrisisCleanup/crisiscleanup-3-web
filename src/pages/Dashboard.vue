@@ -207,8 +207,8 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in slotProps.item.work_types"
-                  :data-testid="`testWorkType${work_type.id}Div`"
                   :key="work_type.id"
+                  :data-testid="`testWorkType${work_type.id}Div`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
@@ -378,10 +378,7 @@
               </div>
             </template>
             <template #work_type="slotProps">
-              <div
-                class="flex flex-col"
-                data-testid="testWorksiteWorkTypeDiv"
-              >
+              <div class="flex flex-col" data-testid="testWorksiteWorkTypeDiv">
                 {{ slotProps.item.worksite_work_type }}
               </div>
             </template>
@@ -1006,7 +1003,7 @@ export default defineComponent({
     }
 
     async function reloadDashBoard() {
-      await Promise.all([
+      await Promise.any([
         getClaimedWorksites(),
         getReportedWorkSites(),
         getWorksiteRequests(),
