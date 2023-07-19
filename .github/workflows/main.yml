@@ -151,6 +151,8 @@ jobs:
           echo "VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID=PAz48HT2nBNSkuvKWLLJ8gq7ewG5yJvHyoDdGy5v" >> $GITHUB_ENV
           echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}" >> $GITHUB_ENV
           echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}" >> $GITHUB_ENV
+          echo "TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_DEV }}" >> $GITHUB_ENV
+          echo "TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_DEV }}" >> $GITHUB_ENV
 
       - name: 📥 Install dependencies
         run: pnpm install
