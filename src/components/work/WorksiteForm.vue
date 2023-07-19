@@ -443,8 +443,8 @@ import WorksiteNotes from './WorksiteNotes.vue';
 import Language from '@/models/Language';
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
-  'formOptions.not_often',
   'formOptions.often',
+  'formOptions.not_often',
   'formOptions.never',
 ];
 
@@ -690,7 +690,7 @@ export default defineComponent({
             notes: [],
             formFields: {},
             auto_contact_frequency_t: currentIncident.value.auto_contact
-              ? 'formOptions.often'
+              ? 'formOptions.not_often'
               : 'formOptions.never',
             ...props.dataPrefill,
           };
@@ -1205,7 +1205,7 @@ export default defineComponent({
         incident: props.incidentId,
         form_data: [],
         auto_contact_frequency_t: currentIncident.value.auto_contact
-          ? 'formOptions.often'
+          ? 'formOptions.not_often'
           : 'formOptions.never',
       });
     }
@@ -1347,7 +1347,7 @@ export default defineComponent({
         form_data: [],
         formFields: {},
         auto_contact_frequency_t: currentIncident.value.auto_contact
-          ? 'formOptions.often'
+          ? 'formOptions.not_often'
           : 'formOptions.never',
       };
     });
