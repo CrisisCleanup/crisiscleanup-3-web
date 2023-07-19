@@ -132,7 +132,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@playwright/test": "^1.35.1",
+    "@playwright/test": "^1.36.1",
     "@types/crypto-js": "^4.1.1",
     "@types/d3": "^7.4.0",
     "@types/google.maps": "^3.53.4",
