@@ -208,6 +208,8 @@ const ticketAssigneeName = computed(() => {
 });
 
 const createIssue = () => {
+  getAllPictures();
+
   const formattedComments = comments.value
     .map(
       (comment) =>
@@ -238,6 +240,9 @@ const createIssue = () => {
 - Phone: **${ccUser.value.mobile}**
 - CC Age: **${momentFromNow(ccUser.value.accepted_terms_timestamp)}**
 
+**Pictures:**
+${attachmentsArray.value.join('\n')}
+
 **Comments:**
 \`\`\`
   ${formattedComments}
@@ -255,6 +260,9 @@ const createIssue = () => {
 - Version:
 - Ticket Submitted From: **${submittedFrom.value}**
 - Zendesk Username: **${zendeskUser.value.name}**
+
+**Pictures:**
+${attachmentsArray.value.join('\n')}
 
 **Comments:**
 \`\`\`
@@ -606,6 +614,15 @@ const showRepoSelection = () => {
 };
 
 const selectedRepo = ref(crisisCleanupRepos.value[0]);
+
+const attachmentsArray = ref([]);
+
+const getAllPictures = () => {
+  // Assuming comments.value is an array of comments, each with an attachments array
+  attachmentsArray.value = _.flatMap(comments.value, (comment) =>
+    comment.attachments.map((attachment) => attachment.content_url),
+  );
+};
 
 onMounted(async () => {
   isLoading.value = true;
