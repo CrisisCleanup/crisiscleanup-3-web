@@ -214,6 +214,7 @@ import Home from '@/layouts/Home.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Language from '@/models/Language';
 import { getErrorMessage } from '@/utils/errors';
+import { AuthService } from '@/services/auth.service';
 
 export default defineComponent({
   name: 'RequestAccess',
@@ -299,6 +300,9 @@ export default defineComponent({
       await Language.api().get('/languages', {
         dataKey: 'results',
       });
+      if (route.query.orphan) {
+        AuthService.refreshAndSaveUser().catch(null);
+      }
     });
 
     return {

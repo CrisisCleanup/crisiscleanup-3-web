@@ -28,6 +28,17 @@ export interface OuathToken {
 }
 
 const AuthService = {
+  async refreshAndSaveUser() {
+    const user = await axios.get(
+      `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.getAccessToken()}`,
+        },
+      },
+    );
+    this.saveUser(user.data);
+  },
   async exchangeAuthorizationCode(authorizationCode: string) {
     try {
       const code_verifier = localStorage.getItem('code_verifier');
@@ -172,13 +183,18 @@ const AuthService = {
     return moment();
   },
   getUser() {
-    const user = localStorage.getItem('oauth_user');
-    if (!user) {
-      console.error('No user found in local storage');
+    try {
+      const user = localStorage.getItem('oauth_user');
+      if (!user) {
+        console.error('No user found in local storage');
+        return null;
+      }
+
+      return JSON.parse(user) as Record<string, any>;
+    } catch {
+      console.error('Failed to parse user from local storage');
       return null;
     }
-
-    return JSON.parse(user) as Record<string, any>;
   },
   getToken() {
     const user = localStorage.getItem('oauth_user');
@@ -209,7 +225,7 @@ const AuthService = {
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   },
   removeUser() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('oauth_user');
     axios.defaults.headers.common = omit(axios.defaults.headers.common, [
       'Authorization',
     ]);
