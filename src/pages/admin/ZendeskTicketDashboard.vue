@@ -427,6 +427,10 @@ function handleTableChange(value: TableChangeEmitItem) {
   ticketTableSorter.value = { ...sorter };
 }
 
+const findAgentName = (id) => {
+  return agents.value.find((a) => a.id === id)?.name;
+};
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -444,25 +448,25 @@ onMounted(() => {
       >
         <BaseText
           ><span class="font-bold">{{ t('helpdesk.total_tickets') }}</span>
-          {{ ticketStats.total }}
+          {{ ticketStats.total ?? 0 }}
         </BaseText>
         <BaseText
           ><span class="font-bold text-[#c19700]">{{
             t('helpdesk.new_tickets')
           }}</span>
-          {{ ticketStats.newTickets }}
+          {{ ticketStats.newTickets ?? 0 }}
         </BaseText>
         <BaseText
           ><span class="font-bold text-[#0042ed]">{{
             t('helpdesk.open_tickets')
           }}</span>
-          {{ ticketStats.open }}</BaseText
+          {{ ticketStats.open ?? 0 }}</BaseText
         >
         <BaseText
           ><span class="font-bold text-[#6b6b6b]">{{
             t('helpdesk.pending_tickets')
           }}</span>
-          {{ ticketStats.pending }}</BaseText
+          {{ ticketStats.pending ?? 0 }}</BaseText
         >
       </div>
       <div
@@ -556,7 +560,7 @@ onMounted(() => {
       <template #assignee="slotProps">
         <BaseText
           ><span v-if="mq.mdMinus" class="font-bold">Assignee: </span>
-          {{ slotProps.item.agentName ?? '-' }}
+          {{ findAgentName(slotProps.item.assignee_id) ?? '-' }}
         </BaseText>
       </template>
       <template #app="slotProps">
