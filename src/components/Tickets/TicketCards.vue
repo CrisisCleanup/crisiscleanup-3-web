@@ -293,40 +293,89 @@ const fetchActiveTicket = () => {
 };
 
 const replyToTicket = (replyStatus: string) => {
-  axiosInstance
-    .put(`/tickets/${props.ticketData.id}`, {
-      ticket: {
-        status: replyStatus,
-        comment: {
-          body: ticketReply.value,
-          author_id: currentUserID.value,
+  if (replyStatus === StatusEnum.SOLVED && !assignedUser.value) {
+    axiosInstance
+      .put(`/tickets/${props.ticketData.id}`, {
+        ticket: {
+          assignee_id: currentUserID.value!,
         },
-      },
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        toast.success(t('helpdesk.reply_success'));
-      }
+      })
+      .then((response: AxiosResponse<unknown>) => {
+        if (response.status === 200) {
+          toast.success(t('helpdesk.reassign_success'));
+          setTimeout(() => {
+            fetchActiveTicket();
+          }, 1000); // Timeout to account for zendesk db update
+        }
 
-      if (replyStatus === StatusEnum.OPEN) {
-        getComments();
-      } else {
-        emitter.emit('closeTicketModal');
-      }
+        selectedAgent.value = '';
+      })
+      .catch((error: Error) => {
+        toast.error(t('helpdesk.reassign_failure')` ${getErrorMessage(error)}`);
+      })
+      .then(() => {
+        // Ticket has been successfully reassigned, now proceed with the ticket reply
+        return axiosInstance.put(`/tickets/${props.ticketData.id}`, {
+          ticket: {
+            status: replyStatus,
+            comment: {
+              body: ticketReply.value,
+              author_id: currentUserID.value,
+            },
+          },
+        });
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success(t('helpdesk.reply_success'));
+          emitter.emit('closeTicketModal');
+        }
+      })
+      .then(() => {
+        emitter.emit('reFetchActiveTicket');
+      })
+      .catch((error: Error) => {
+        toast.error(
+          t('helpdesk.reply_unsuccessful')` ${getErrorMessage(error)}`,
+        );
+      });
+  } else
+    axiosInstance
+      .put(`/tickets/${props.ticketData.id}`, {
+        ticket: {
+          status: replyStatus,
+          comment: {
+            body: ticketReply.value,
+            author_id: currentUserID.value,
+          },
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success(t('helpdesk.reply_success'));
+        }
 
-      if (props.ticketData?.assignee_id) {
-        fetchActiveTicket();
-        ticketReply.value = '';
-      } else {
-        reAssignTicket(currentUserID.value!);
-      }
-    })
-    .then(() => {
-      emitter.emit('reFetchActiveTicket');
-    })
-    .catch((error: Error) => {
-      toast.error(t('helpdesk.reply_unsuccessful')` ${getErrorMessage(error)}`);
-    });
+        if (replyStatus === StatusEnum.OPEN) {
+          getComments();
+        } else {
+          emitter.emit('closeTicketModal');
+        }
+
+        if (props.ticketData?.assignee_id) {
+          fetchActiveTicket();
+          ticketReply.value = '';
+        } else {
+          reAssignTicket(currentUserID.value!);
+        }
+      })
+      .then(() => {
+        emitter.emit('reFetchActiveTicket');
+      })
+      .catch((error: Error) => {
+        toast.error(
+          t('helpdesk.reply_unsuccessful')` ${getErrorMessage(error)}`,
+        );
+      });
 };
 
 const deleteTicket = () => {
