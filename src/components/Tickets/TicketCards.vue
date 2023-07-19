@@ -759,7 +759,7 @@ onMounted(async () => {
     <!--    <modal-->
     <!--      v-if="mobileExtraUserInfo"-->
     <!--      closeable-->
-    <!--      :title="t('~~Extra User Info')"-->
+    <!--      :title="t('helpdesk.more_user_details')"-->
     <!--      class="md:p-10"-->
     <!--      @close="showExtraUserInfoModal()"-->
     <!--    >-->
@@ -772,7 +772,7 @@ onMounted(async () => {
       v-if="mobileExtraUserInfo"
       closeable
       fullscreen
-      :title="t('~~Extra User Info')"
+      :title="t('helpdesk.more_user_details')"
       modal-body-classes="overflow-y-scroll"
       @close="showExtraUserInfoModal()"
     >
@@ -813,7 +813,7 @@ onMounted(async () => {
               style="color: #f39c12"
               class="user-type"
             >
-              {{ t('~~Ghost User') }}
+              {{ t('helpdesk.ghost_user') }}
             </div>
           </div>
           <div
@@ -889,7 +889,7 @@ onMounted(async () => {
           <!--              <div class="flex items-center justify-center">-->
           <!--                <BaseButton-->
           <!--                  :action="() => showEventsModal()"-->
-          <!--                  :text="t('~~Show Events')"-->
+          <!--                  :text="t('helpdesk.show_events')"-->
           <!--                  variant="primary"-->
           <!--                  class="p-2 mx-4 my-4 text-xl rounded-md w-full"-->
           <!--                />-->
@@ -924,7 +924,7 @@ onMounted(async () => {
               :style="`border-color: #F39C12; color: #F39C12`"
               class="user-type"
             >
-              {{ t('~~Ghost User') }}
+              {{ t('helpdesk.ghost_user') }}
             </div>
 
             <div
@@ -935,7 +935,7 @@ onMounted(async () => {
               :style="`border-color: #B2BEB5; color: #B2BEB5`"
               class="user-type"
             >
-              {{ t('~~No Role') }}
+              {{ t('helpdesk.no_role') }}
             </div>
           </div>
         </div>
@@ -1083,7 +1083,7 @@ onMounted(async () => {
             <BaseButton
               class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
               :action="showMacroModal"
-              :text="t('~~Apply Macro')"
+              :text="t('actions.apply_macro')"
               variant="primary"
             />
           </div>
