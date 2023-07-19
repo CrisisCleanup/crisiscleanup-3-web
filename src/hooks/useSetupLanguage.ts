@@ -54,7 +54,7 @@ export default function useSetupLanguage() {
       }
 
       store.commit('locale/setLanguage', currentLanguage);
-      if (currentLanguage !== locale.value) {
+      if (currentLanguage) {
         try {
           const data = await i18nService.getLanguage(currentLanguage);
           const { translations } = data;
