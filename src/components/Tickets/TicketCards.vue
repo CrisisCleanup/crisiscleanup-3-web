@@ -264,8 +264,9 @@ const createIssue = () => {
     );
   }
 
-  const repo = 'crisiscleanup-4-web';
-  const url = `https://github.com/CrisisCleanup/${repo}/issues/new?${queryParams.toString()}`;
+  const url = `https://github.com/CrisisCleanup/${
+    selectedRepo.value
+  }/issues/new?${queryParams.toString()}`;
 
   // Perform any other actions or navigate to the URL
   window.open(url, '_blank');
@@ -442,7 +443,6 @@ async function loginAs(userId: string) {
 }
 
 async function getCcuStats() {
-  // 16781124470797 == ccid form field
   if (ccUser.value) {
     userStats[0] = {
       org: ccUser.value.organization?.name ?? '',
@@ -592,6 +592,20 @@ const mobileExtraUserInfo = ref(false);
 const showExtraUserInfoModal = () => {
   mobileExtraUserInfo.value = !mobileExtraUserInfo.value;
 };
+
+const crisisCleanupRepos = ref([
+  'crisiscleanup-4-web',
+  'crisiscleanup-android',
+  'crisiscleanup-ios',
+]);
+
+const repoSelection = ref(false);
+
+const showRepoSelection = () => {
+  repoSelection.value = !repoSelection.value;
+};
+
+const selectedRepo = ref(crisisCleanupRepos.value[0]);
 
 onMounted(async () => {
   isLoading.value = true;
@@ -953,18 +967,31 @@ onMounted(async () => {
             {{ zendeskUser.email }}
           </BaseText>
         </div>
-        <base-link
-          :href="url"
-          class="github-link"
-          target="_blank"
-          text-variant="h2"
-          @click="createIssue()"
-        >
+        <BaseButton class="github-link" @click="showRepoSelection()">
           <span class="hidden md:block">{{
             t('helpdesk.create_github_issue')
           }}</span>
           <span class="block md:hidden">G</span>
-        </base-link>
+        </BaseButton>
+        <modal
+          v-if="repoSelection"
+          closeable
+          title="Crisis Cleanup Repo Selection"
+          @close="showRepoSelection()"
+          @ok="createIssue()"
+        >
+          <template #default>
+            <div class="p-4">
+              <BaseSelect
+                :model-value="selectedRepo"
+                select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
+                :placeholder="t('~~Select a repo')"
+                :options="crisisCleanupRepos"
+                @update:model-value="(v) => (selectedRepo = v)"
+              />
+            </div>
+          </template>
+        </modal>
         <div class="ticket-link">
           <a
             :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
