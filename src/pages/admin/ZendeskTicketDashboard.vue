@@ -493,11 +493,11 @@ onMounted(() => {
         <!--      could not get these to return just number instead of key:value pair as undefined for key-->
         <BaseText
           ><span class="font-bold">{{ t('helpdesk.user_count') }}</span>
-          {{ ticketStats.users?.undefined }}
+          {{ ticketStats.users?.undefined || 0 }}
         </BaseText>
         <BaseText
           ><span class="font-bold">{{ t('helpdesk.other') }}</span>
-          {{ ticketStats.survivors?.undefined }}</BaseText
+          {{ ticketStats.survivors?.undefined || 0 }}</BaseText
         >
       </div>
     </div>
