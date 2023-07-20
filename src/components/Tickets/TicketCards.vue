@@ -1161,25 +1161,23 @@ onMounted(async () => {
         </div>
       </div>
       <div class="ticket-reply">
-        <div class="grid grid-cols-12 grid-rows-4">
-          <BaseInput
-            v-model="ticketReply"
-            text-area
-            class="w-full h-full col-span-9 md:col-span-11 row-span-4"
-            input-classes="resize-none row-span-4"
-            :rows="mq.mdMinus ? 4 : 6"
-            placeholder="Ticket Reply"
+        <BaseInput
+          v-model="ticketReply"
+          text-area
+          class="reply-box"
+          input-classes="resize-none row-span-4"
+          :rows="mq.mdMinus ? 4 : 6"
+          placeholder="Ticket Reply"
+        />
+        <div
+          class="col-span-3 md:col-span-1 row-span-4 flex justify-center items-center"
+        >
+          <BaseButton
+            class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
+            :action="showMacroModal"
+            :text="t('actions.apply_macro')"
+            variant="primary"
           />
-          <div
-            class="col-span-3 md:col-span-1 row-span-4 flex justify-center items-center"
-          >
-            <BaseButton
-              class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
-              :action="showMacroModal"
-              :text="t('actions.apply_macro')"
-              variant="primary"
-            />
-          </div>
         </div>
         <modal
           v-if="macroModalVisibility"
@@ -1209,7 +1207,6 @@ onMounted(async () => {
           </template>
         </modal>
       </div>
-
       <div class="assigned-to__container">
         <div class="header">
           <BaseText variant="h1"
@@ -1351,7 +1348,11 @@ onMounted(async () => {
   }
 
   .ticket-reply {
-    @apply px-4 py-2 border-y-2 border-gray-400;
+    @apply grid grid-cols-12 grid-rows-4 px-4 py-2 border-y-2 border-gray-400;
+
+    .reply-box {
+      @apply w-full h-full col-span-9 md:col-span-11 row-span-4;
+    }
   }
 
   .assigned-to__container {
