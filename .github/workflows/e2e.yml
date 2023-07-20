@@ -48,36 +48,37 @@ jobs:
           node-version: ${{ needs.versions.outputs.NODE_VERSION }}
           cache: pnpm
 
+      # NOTE: Using single quotes when setting $GITHUB_ENV in-case secret has special characters
       - name: 🔧 Setup Common Env
         run: |
-          echo "PW_SKIP_WEBSERVER=1" >> $GITHUB_ENV
+          echo 'PW_SKIP_WEBSERVER=1' >> $GITHUB_ENV
 
       - name: 🔧 Setup Development Test Env
         if: matrix.stage == 'development'
         run: |
-          echo "VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io" >> $GITHUB_ENV
-          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}" >> $GITHUB_ENV
-          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_DEV }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_DEV }}" >> $GITHUB_ENV
+          echo 'VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io' >> $GITHUB_ENV
+          echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}' >> $GITHUB_ENV
+          echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_DEV }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_DEV }}' >> $GITHUB_ENV
 
       - name: 🔧 Setup Staging Test Env
         if: matrix.stage == 'staging'
         run: |
-          echo "VITE_APP_BASE_URL=https://app.staging.crisiscleanup.io" >> $GITHUB_ENV
-          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_PROD }}" >> $GITHUB_ENV
+          echo 'VITE_APP_BASE_URL=https://app.staging.crisiscleanup.io' >> $GITHUB_ENV
+          echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_PROD }}' >> $GITHUB_ENV
 
       - name: 🔧 Setup Production Test Env
         if: matrix.stage == 'production'
         run: |
-          echo "VITE_APP_BASE_URL=https://crisiscleanup.org" >> $GITHUB_ENV
-          echo "TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_PROD }}" >> $GITHUB_ENV
-          echo "TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_PROD }}" >> $GITHUB_ENV
+          echo 'VITE_APP_BASE_URL=https://crisiscleanup.org' >> $GITHUB_ENV
+          echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_EMAIL=${{ secrets.TEST_APP_ADMIN_EMAIL_PROD }}' >> $GITHUB_ENV
+          echo 'TEST_APP_ADMIN_PASSWORD=${{ secrets.TEST_APP_ADMIN_PASSWORD_PROD }}' >> $GITHUB_ENV
 
       - name: Install dependencies
         run: pnpm install
