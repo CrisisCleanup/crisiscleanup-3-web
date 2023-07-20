@@ -959,22 +959,6 @@ onMounted(async () => {
               <JsonWrapper :json-data="ccUser" />
             </div>
           </div>
-
-          <!--            <div class="events m-2 text-xs border p-2 flex flex-col gap-2">-->
-          <!--              <AdminEventStream-->
-          <!--                :user="ccUser.id"-->
-          <!--                :limit="5"-->
-          <!--                class="overflow-auto"-->
-          <!--              />-->
-          <!--              <div class="flex items-center justify-center">-->
-          <!--                <BaseButton-->
-          <!--                  :action="() => showEventsModal()"-->
-          <!--                  :text="t('helpdesk.show_events')"-->
-          <!--                  variant="primary"-->
-          <!--                  class="p-2 mx-4 my-4 text-xl rounded-md w-full"-->
-          <!--                />-->
-          <!--              </div>-->
-          <!--            </div>-->
           <modal
             v-if="eventsModal"
             closeable
@@ -1160,77 +1144,75 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div class="ticket-reply">
-        <BaseInput
-          v-model="ticketReply"
-          text-area
-          class="reply-box"
-          input-classes="resize-none row-span-4"
-          :rows="mq.mdMinus ? 4 : 6"
-          placeholder="Ticket Reply"
-        />
-        <div
-          class="col-span-3 md:col-span-1 row-span-4 flex justify-center items-center"
-        >
+      <div class="grid grid-cols-1 md:grid-cols-12">
+        <div class="ticket-reply">
+          <BaseInput
+            v-model="ticketReply"
+            text-area
+            class="reply-box"
+            input-classes="resize-none row-span-4"
+            :rows="mq.mdMinus ? 4 : 6"
+            placeholder="Ticket Reply"
+          />
           <BaseButton
-            class="rounded-md mx-2 py-4 p-2 md:text-[.8vw]"
+            class="apply-macro__button"
             :action="showMacroModal"
             :text="t('actions.apply_macro')"
             variant="primary"
           />
+          <modal
+            v-if="macroModalVisibility"
+            closeable
+            :title="t('helpdesk.macros')"
+            class="p-10"
+            modal-classes="mx-2"
+            @close="showMacroModal()"
+          >
+            <template #default>
+              <Table
+                :columns="macroColumns"
+                :data="mappedMacros"
+                :body-style="{ height: '600px' }"
+                @row-click="(v) => executeMacro(v)"
+              >
+                <template #template="slotProps">
+                  <span v-if="mq.mdMinus" class="font-bold">Template: </span>
+                  <div
+                    class="overflow-auto px-4"
+                    :class="h - [slotProps.item.template.length]"
+                  >
+                    {{ slotProps.item.template }}
+                  </div>
+                </template>
+              </Table>
+            </template>
+          </modal>
         </div>
-        <modal
-          v-if="macroModalVisibility"
-          closeable
-          :title="t('helpdesk.macros')"
-          class="p-10"
-          modal-classes="mx-2"
-          @close="showMacroModal()"
-        >
-          <template #default>
-            <Table
-              :columns="macroColumns"
-              :data="mappedMacros"
-              :body-style="{ height: '600px' }"
-              @row-click="(v) => executeMacro(v)"
-            >
-              <template #template="slotProps">
-                <span v-if="mq.mdMinus" class="font-bold">Template: </span>
-                <div
-                  class="overflow-auto px-4"
-                  :class="h - [slotProps.item.template.length]"
-                >
-                  {{ slotProps.item.template }}
-                </div>
-              </template>
-            </Table>
-          </template>
-        </modal>
-      </div>
-      <div class="assigned-to__container">
-        <div class="header">
-          <BaseText variant="h1"
-            >{{ t('helpdesk.assigned_to') }}
-            <span class="font-bold text-xl">{{ ticketAssigneeName }}</span>
-          </BaseText>
-        </div>
-        <BaseSelect
-          :model-value="selectedAgent"
-          select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
-          class="agent-selection"
-          label="name"
-          :placeholder="t('helpdesk.select_agent')"
-          item-key="id"
-          :options="agents"
-          @update:model-value="(v) => (selectedAgent = v)"
-        />
+        <div class="assigned-to__container">
+          <div class="header">
+            <BaseText variant="h1"
+              >{{ t('helpdesk.assigned_to') }}
+              <span class="font-bold text-xl">{{ ticketAssigneeName }}</span>
+            </BaseText>
+          </div>
+          <BaseSelect
+            :model-value="selectedAgent"
+            select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
+            class="agent-selection"
+            label="name"
+            :placeholder="t('helpdesk.select_agent')"
+            item-key="id"
+            :options="agents"
+            @update:model-value="(v) => (selectedAgent = v)"
+          />
 
-        <BaseButton
-          variant="primary"
-          :text="t('actions.assign')"
-          class="reassign-button"
-          :action="reAssignTicket"
-        />
+          <BaseButton
+            variant="primary"
+            :text="t('actions.assign')"
+            class="reassign-button"
+            :action="reAssignTicket"
+          />
+        </div>
       </div>
 
       <div class="reply-as">
@@ -1348,26 +1330,29 @@ onMounted(async () => {
   }
 
   .ticket-reply {
-    @apply grid grid-cols-12 grid-rows-4 px-4 py-2 border-y-2 border-gray-400;
+    @apply grid grid-cols-12 col-span-8 px-4 py-2 border-y-2 border-gray-400;
 
     .reply-box {
-      @apply w-full h-full col-span-9 md:col-span-11 row-span-4;
+      @apply w-full h-full col-span-9 md:col-span-12 row-span-4;
+    }
+    .apply-macro__button {
+      @apply rounded-md col-span-3 row-span-4 md:row-span-1 md:col-span-12 m-2 md:my-2 p-1 md:text-[.8vw];
     }
   }
 
   .assigned-to__container {
-    @apply grid grid-cols-12 px-4 py-2 row-span-2 border-b-2 border-gray-400 flex items-center justify-center;
+    @apply grid grid-cols-12 col-span-4 px-4 p-2 row-span-2 border-b-2 md:border-y-2 md:border-l-2 border-gray-400 flex items-center justify-center;
 
     .header {
       @apply flex gap-2 items-center justify-center col-span-12 my-2;
     }
 
     .agent-selection {
-      @apply col-span-8 md:col-span-11  my-2;
+      @apply col-span-8 md:col-span-12  my-2;
     }
 
     .reassign-button {
-      @apply col-span-4 md:col-span-1 p-4 rounded-md mx-2 my-2 md:text-[.8vw];
+      @apply col-span-4 md:col-span-12 p-1 rounded-md m-2 md:my-2 md:text-[.8vw];
     }
   }
 
