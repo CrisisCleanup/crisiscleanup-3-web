@@ -8,8 +8,8 @@
         <div class="message-container">
           <div
             id="messages"
-            data-testid="testMessagesContent"
             ref="messagesBox"
+            data-testid="testMessagesContent"
             class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
             @wheel="handleWheel"
             @ontouchmove="handleWheel"
@@ -60,9 +60,8 @@
                   class="italic cursor-pointer"
                   data-testid="testFocusNewsTabLink"
                   @click="focusNewsTab"
-                >{{
-                  $t('chat.read_faq_first')
-                }}</span>
+                  >{{ $t('chat.read_faq_first') }}</span
+                >
                 <div class="flex">
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
@@ -85,9 +84,36 @@
           >
             <ChatMessage
               v-for="favorite in favorites"
-              data-testid="testFavoritesContent"
               :key="favorite.id"
+              data-testid="testFavoritesContent"
               :message="favorite"
+            />
+          </div>
+        </div>
+      </tab>
+      <tab :name="$t('chat.search')">
+        <div class="flex flex-col h-84 w-full my-4">
+          <base-input
+            data-testid="testMessagesSearchTextInput"
+            :model-value="search"
+            icon="search"
+            class="w-full"
+            :placeholder="$t('info.search_items')"
+            @update:modelValue="
+              (value) => {
+                search = value;
+                throttle(searchMessages, 1000)();
+              }
+            "
+          />
+          <div
+            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+          >
+            <ChatMessage
+              v-for="chat in searchResults"
+              :key="chat.id"
+              data-testid="testFavoritesContent"
+              :message="chat"
             />
           </div>
         </div>
@@ -97,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
+import _, { throttle } from 'lodash';
 import {
   computed,
   nextTick,
@@ -133,10 +159,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const socket = ref<WebSocket | null>(null);
     const currentMessage = ref('');
+    const search = ref('');
     const messages = ref<Message[]>([]);
     const favorites = ref<Message[]>([]);
+    const searchResults = ref<Message[]>([]);
     const urgent = ref(false);
     const loadingMessages = ref(false);
+    const searchLoading = ref(false);
     let sendToWebsocket: (data: Partial<Message>) => void;
     const messagesBox = ref<HTMLDivElement | null>(null);
     const { currentUser } = useCurrentUser();
@@ -147,6 +176,21 @@ export default defineComponent({
       currentMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
       return _.uniqWith(currentMessages, _.isEqual);
     });
+
+    async function searchMessages() {
+      searchLoading.value = false;
+      const parameters = {
+        message_group: props.chat.id,
+        limit: 30,
+        search: search.value,
+      } as Record<string, any>;
+      const queryString = getQueryString(parameters);
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+      );
+      searchResults.value = response.data.results;
+      searchLoading.value = false;
+    }
 
     function handleWheel() {
       if (
@@ -323,6 +367,10 @@ export default defineComponent({
       sendMessage,
       toggleFavorite,
       focusNewsTab,
+      throttle,
+      searchMessages,
+      search,
+      searchResults,
     };
   },
 });
