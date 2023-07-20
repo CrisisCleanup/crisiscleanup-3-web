@@ -1042,18 +1042,14 @@ onMounted(async () => {
             </div>
           </template>
         </modal>
-        <div class="ticket-link">
-          <a
-            :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
-            target="_blank"
-            class="md:text-[.9vw]"
-          >
-            <span class="hidden md:block">{{
-              t('helpdesk.zendesk_link')
-            }}</span>
-            <span class="block md:hidden">Z</span>
-          </a>
-        </div>
+        <a
+          :href="`https://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+          target="_blank"
+          class="md:text-[.9vw] ticket-link"
+        >
+          <span class="hidden md:block">{{ t('helpdesk.zendesk_link') }}</span>
+          <span class="block md:hidden">Z</span>
+        </a>
         <BaseButton
           v-if="mq.mdMinus"
           class="extra-info"
