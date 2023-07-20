@@ -175,6 +175,23 @@ const RANDOM_QUOTES = [
   'spinner.loading_cheetah_on_roller_skates',
   'spinner.loading_virtual_popcorn',
   'spinner.loading_take_me_with_you',
+  'spinner.loading_harbinger_good_things',
+  'spinner.loading_entertain_digital_dance',
+  'spinner.loading_dont_blink_grand_reveal',
+  'spinner.loading_loading_tour_guide',
+  'spinner.loading_guess_whats_loading',
+  'spinner.loading_voted_most_entertaining',
+  'spinner.loading_magic_spinner_suspense',
+  'spinner.loading_double_your_pay',
+  'spinner.loading_doing_great_15_minutes_sleep',
+  'spinner.loading_calm_before_after_storm',
+  'spinner.loading_personal_digital_rollercoaster',
+  'spinner.loading_breath_drink_nap_high_five',
+  'spinner.loading_cant_wait_to_see',
+  'spinner.loading_pleasure_meeting_you',
+  'spinner.loading_grow_up_be_like_you',
+  'spinner.loading_sunshine_after_storm',
+  'spinner.loading_spinner_and_disaster_will_pass',
 ];
 
 export default defineComponent({
