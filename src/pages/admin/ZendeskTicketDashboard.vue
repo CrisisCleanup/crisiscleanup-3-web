@@ -17,6 +17,9 @@ import BaseText from '@/components/BaseText.vue';
 import { momentFromNow, capitalize } from '@/filters';
 import type User from '@/models/User';
 import useEmitter from '@/hooks/useEmitter';
+import webIcon from '@/assets/icons/web.svg';
+import iosIcon from '@/assets/icons/ios.svg';
+import androidIcon from '@/assets/icons/android.svg';
 
 const mq = useMq();
 const { emitter } = useEmitter();
@@ -135,7 +138,6 @@ interface TicketStats {
     web?: number;
     ios?: number;
     android?: number;
-    unkown?: number;
   } | null;
 }
 interface UserNameMap {
@@ -156,7 +158,7 @@ const ticketStats = ref<TicketStats>({
   pending: 0,
   users: 0,
   survivors: 0,
-  app_type: { web: 0, ios: 0, android: 0, unknown: 0 },
+  app_type: { web: 0, ios: 0, android: 0 },
 });
 const userNameMap = ref<UserNameMap>({});
 const userEmailMap = ref<UserEmailMap>({});
@@ -336,17 +338,11 @@ const getTicketStats = () => {
   ticketStats.value.app_type = _.countBy(
     ticketsWithUsers.value,
     (ticket: Ticket) => {
-      if (
-        ticket.custom_fields?.find((field) => field.id === 17_295_140_815_757)
-          .value === 'android'
-      ) {
+      if (ticket.description.includes('android_res')) {
         return 'android';
       }
 
-      if (
-        ticket.custom_fields?.find((field) => field.id === 17_295_140_815_757)
-          .value === 'ios'
-      ) {
+      if (ticket.description.includes('ios_res')) {
         return 'ios';
       }
 
@@ -357,7 +353,7 @@ const getTicketStats = () => {
         return 'web';
       }
 
-      return 'unknown';
+      return 'web';
     },
   );
 };
@@ -431,6 +427,22 @@ const findAgentName = (id) => {
   return agents.value.find((a) => a.id === id)?.name;
 };
 
+const getAppTypeIcons = (appPlatform: string, ticketSubject: string) => {
+  if (appPlatform === 'web') {
+    return webIcon;
+  }
+
+  if (ticketSubject.includes('ios_res')) {
+    return iosIcon;
+  }
+
+  if (ticketSubject.includes('android_res')) {
+    return androidIcon;
+  }
+
+  return webIcon;
+};
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -478,16 +490,17 @@ onMounted(() => {
           {{ ticketStats.app_type?.web ?? 0 }}</BaseText
         >
         <BaseText class="flex justify-evenly items-center">
-          <img src="@/assets/icons/ios.svg" height="26" width="26" />
+          <img
+            class="mx-1"
+            src="@/assets/icons/ios.svg"
+            height="26"
+            width="26"
+          />
           {{ ticketStats.app_type?.ios ?? 0 }}</BaseText
         >
         <BaseText class="flex justify-evenly items-center">
           <img src="@/assets/icons/android.svg" height="36" width="36" />
           {{ ticketStats.app_type?.android ?? 0 }}</BaseText
-        >
-        <BaseText
-          ><span class="font-bold">{{ t('helpdesk.unknown_platform') }}</span>
-          {{ ticketStats.app_type?.unknown ?? 0 }}</BaseText
         >
       </div>
       <div
@@ -564,10 +577,29 @@ onMounted(() => {
         </BaseText>
       </template>
       <template #app="slotProps">
-        <BaseText>
-          <span v-if="mq.mdMinus" class="font-bold">App: </span>
-          {{ slotProps.item.appPlatform ?? '-' }}
-        </BaseText>
+        <div class="flex justify-center items-center w-full">
+          <BaseText>
+            <span v-if="mq.mdMinus" class="font-bold">App: </span>
+            <span
+              v-if="
+                !getAppTypeIcons(
+                  slotProps.item.appPlatform,
+                  slotProps.item.description,
+                )
+              "
+              >-</span
+            >
+            <img
+              v-else
+              :src="
+                getAppTypeIcons(
+                  slotProps.item.appPlatform,
+                  slotProps.item.description,
+                )
+              "
+            />
+          </BaseText>
+        </div>
       </template>
       <template #requester="slotProps">
         <BaseText>
