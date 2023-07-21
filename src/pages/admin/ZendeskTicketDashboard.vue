@@ -473,16 +473,16 @@ onMounted(() => {
         v-if="ticketTotals"
         class="flex border p-4 m-2 rounded-md items-center justify-evenly col-span-12 md:col-span-4"
       >
-        <BaseText
-          ><span class="font-bold">{{ t('helpdesk.web_platform') }}</span>
+        <BaseText class="flex justify-evenly items-center">
+          <img src="@/assets/icons/web.svg" height="36" width="36" />
           {{ ticketStats.app_type?.web ?? 0 }}</BaseText
         >
-        <BaseText
-          ><span class="font-bold">{{ t('helpdesk.ios_platform') }}</span>
+        <BaseText class="flex justify-evenly items-center">
+          <img src="@/assets/icons/ios.svg" height="26" width="26" />
           {{ ticketStats.app_type?.ios ?? 0 }}</BaseText
         >
-        <BaseText
-          ><span class="font-bold">{{ t('helpdesk.android_platform') }}</span>
+        <BaseText class="flex justify-evenly items-center">
+          <img src="@/assets/icons/android.svg" height="36" width="36" />
           {{ ticketStats.app_type?.android ?? 0 }}</BaseText
         >
         <BaseText
