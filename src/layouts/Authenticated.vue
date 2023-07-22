@@ -429,7 +429,6 @@ export default defineComponent({
 
     onMounted(async () => {
       loading.value = true;
-      store.commit('incident/setCurrentIncidentId', 60);
       let u;
 
       try {
@@ -452,13 +451,14 @@ export default defineComponent({
         await logoutApp();
       }
 
+      await Incident.api().get(
+        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
+        {
+          dataKey: 'results',
+        },
+      );
+
       await Promise.any([
-        Incident.api().get(
-          '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
-          {
-            dataKey: 'results',
-          },
-        ),
         Organization.api().get(`/organizations/${user.value.organization.id}`),
         Language.api().get('/languages', {
           dataKey: 'results',
@@ -486,7 +486,7 @@ export default defineComponent({
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {
-          incidentId = incident.id;
+          incidentId = String(incident.id);
         }
       }
 
