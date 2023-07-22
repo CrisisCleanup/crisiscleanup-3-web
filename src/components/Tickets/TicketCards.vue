@@ -529,6 +529,30 @@ const getAgentById = (id: number) => {
   return _agentMap[id];
 };
 
+const onMacroSearch = computed(() => {
+  const lowerCasedSearchValue = macroSearch.value.toLowerCase().trim();
+
+  // If there is no search term, return the original mappedMacros.value without filtering
+  if (!lowerCasedSearchValue) {
+    return mappedMacros.value;
+  }
+
+  return mappedMacros.value.filter((macro) => {
+    const macroTitleLower = macro.title ? macro.title.toLowerCase() : '';
+    const macroDescriptionLower = macro.description
+      ? macro.description.toLowerCase()
+      : '';
+    const macroTemplateLower =
+      typeof macro.template === 'string' ? macro.template.toLowerCase() : '';
+
+    return (
+      macroTitleLower.includes(lowerCasedSearchValue) ||
+      macroDescriptionLower.includes(lowerCasedSearchValue) ||
+      macroTemplateLower.includes(lowerCasedSearchValue)
+    );
+  });
+});
+
 const mappedMacros = ref([]);
 
 const getMacros = () => {
@@ -672,6 +696,8 @@ const getAllPictures = () => {
     comment.attachments.map((attachment) => attachment.content_url),
   );
 };
+
+const macroSearch = ref('');
 
 onMounted(async () => {
   isLoading.value = true;
@@ -1165,9 +1191,15 @@ onMounted(async () => {
             @close="showMacroModal()"
           >
             <template #default>
+              <base-input
+                v-model="macroSearch"
+                icon="search"
+                class="my-2"
+                :placeholder="t('~~Search Macros')"
+              ></base-input>
               <Table
                 :columns="macroColumns"
-                :data="mappedMacros"
+                :data="onMacroSearch"
                 :body-style="{ height: '600px' }"
                 @row-click="(v) => executeMacro(v)"
               >
