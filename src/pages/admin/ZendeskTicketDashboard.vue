@@ -577,7 +577,7 @@ onMounted(() => {
         </BaseText>
       </template>
       <template #app="slotProps">
-        <div class="flex justify-center items-center w-full">
+        <div class="flex-row md:justify-center md:items-center md:w-full">
           <BaseText>
             <span v-if="mq.mdMinus" class="font-bold">App: </span>
             <span
@@ -597,6 +597,8 @@ onMounted(() => {
                   slotProps.item.description,
                 )
               "
+              height="36"
+              width="36"
             />
           </BaseText>
         </div>
