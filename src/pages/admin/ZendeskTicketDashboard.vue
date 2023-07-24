@@ -650,9 +650,11 @@ onMounted(() => {
     v-if="ticketModal"
     closeable
     :title="'Ticket: ' + activeTicket.id"
-    :fullscreen="mq.mdMinus"
-    :class="mq.mdMinus ? '' : 'p-10'"
+    :fullscreen="true"
+    :class="[mq.md ? 'px-10' : '', mq.lgPlus ? 'p-5' : '']"
+    modal-header-classes="sticky top-0 bg-white"
     modal-classes="overflow-auto"
+    modal-body-classes="pb-5"
     @close="showTicketModal()"
   >
     <template #default>
