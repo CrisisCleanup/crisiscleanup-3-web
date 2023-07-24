@@ -142,6 +142,15 @@ export default defineComponent({
       }
     }
 
+    onMounted(() => {
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Reset the overflow property to 'auto' when the modal is closed
+    onBeforeUnmount(() => {
+      document.body.style.overflow = 'auto';
+    });
+
     return {
       isFullScreen,
       fullScreenIcon,
