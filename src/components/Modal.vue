@@ -143,12 +143,18 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      document.body.style.overflow = 'hidden';
+      // see: https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
+      // When the modal is shown, we want a fixed body
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
     });
 
-    // Reset the overflow property to 'auto' when the modal is closed
     onBeforeUnmount(() => {
-      document.body.style.overflow = 'auto';
+      // When the modal is hidden...
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     });
 
     return {
