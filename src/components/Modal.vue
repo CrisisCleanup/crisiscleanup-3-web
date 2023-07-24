@@ -9,7 +9,7 @@
           "
           :style="modalStyle"
         >
-          <div class="modal-header flex-shrink">
+          <div class="modal-header flex-shrink" :class="modalHeaderClasses">
             <slot name="header">
               <div
                 v-if="title"
@@ -96,6 +96,10 @@ export default defineComponent({
   name: 'Modal',
   props: {
     modalClasses: {
+      type: null,
+      default: null,
+    },
+    modalHeaderClasses: {
       type: null,
       default: null,
     },
