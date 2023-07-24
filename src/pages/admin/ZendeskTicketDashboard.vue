@@ -670,7 +670,7 @@ onMounted(() => {
         @change="fetchTickets"
       />
     </template>
-    <template #footer><span v-if="mq.mdMinus"></span></template>
+    <template #footer><span></span></template>
   </modal>
 </template>
 
