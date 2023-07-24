@@ -1047,7 +1047,9 @@ onMounted(async () => {
           <span class="hidden md:block">{{
             t('helpdesk.create_github_issue')
           }}</span>
-          <span class="block md:hidden">G</span>
+          <span class="block md:hidden"
+            ><img src="@/assets/icons/github.svg" height="48" width="48"
+          /></span>
         </BaseButton>
         <modal
           v-if="repoSelection"
@@ -1074,7 +1076,9 @@ onMounted(async () => {
           class="md:text-[.9vw] ticket-link"
         >
           <span class="hidden md:block">{{ t('helpdesk.zendesk_link') }}</span>
-          <span class="block md:hidden">Z</span>
+          <span class="block md:hidden"
+            ><img src="@/assets/icons/zendesk.svg" height="26" width="26"
+          /></span>
         </a>
         <BaseButton
           v-if="mq.mdMinus"
