@@ -524,6 +524,7 @@ onMounted(() => {
       :data="tableData"
       :sorter="ticketTableSorter"
       @change="handleTableChange"
+      @row-click="(v) => showTicketModal(v)"
     >
       <template #status="slotProps">
         <span v-if="mq.mdMinus" class="font-bold">Status: </span>
