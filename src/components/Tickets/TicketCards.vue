@@ -20,8 +20,11 @@ import Language from '@/models/Language';
 import { momentFromNow, capitalize } from '@/filters';
 import useEmitter from '@/hooks/useEmitter';
 import { getErrorMessage } from '@/utils/errors';
+import InvitationTable from '@/components/admin/InvitationTable.vue';
+import InvitationRequestTable from '@/components/admin/InvitationRequestTable.vue';
 
 const mq = useMq();
+const ccuApi = useApi();
 
 const commentsContainer = ref<HTMLDivElement | null>(null);
 const { emitter } = useEmitter();
@@ -654,6 +657,8 @@ const accountType = computed(() => {
     ghostUser: ghostUser.value,
     ccUser: ccUser.value,
     worksite: worksites.value,
+    invitations: invitations.value,
+    invitationRequests: invitationRequests.value,
   };
 
   return _accountType;
@@ -699,6 +704,43 @@ const getAllPictures = () => {
 
 const macroSearch = ref('');
 
+const invitations = ref([]);
+const invitationRequests = ref([]);
+
+const { isFinished: isInvitationFinished, data: _invitations } = ccuApi(
+  `/admins/invitations?search=${zendeskUser.value.email}`,
+  {
+    method: 'GET',
+  },
+);
+whenever(isInvitationFinished, () => {
+  invitations.value = _invitations.value.results;
+  console.log('These are the invitations', invitations.value);
+});
+
+const { isFinished: isInvitationRequestsFinished, data: _invitationRequests } =
+  ccuApi(
+    `/admins/invitation_requests?search=${zendeskUser.value.email}&approved_by__isnull=true&rejected_by__isnull=true&sort=-requested_at`,
+    {
+      method: 'GET',
+    },
+  );
+whenever(isInvitationRequestsFinished, () => {
+  console.log('These are the invitation requests', _invitationRequests);
+  invitationRequests.value = _invitationRequests.value.results;
+});
+
+const invitationRequestsModalVisibility = ref(false);
+const showInvitationRequestsModal = () => {
+  invitationRequestsModalVisibility.value =
+    !invitationRequestsModalVisibility.value;
+};
+
+const invitationsModalVisibility = ref(false);
+const showInvitationsModal = () => {
+  invitationsModalVisibility.value = !invitationsModalVisibility.value;
+};
+
 onMounted(async () => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
@@ -713,6 +755,33 @@ onMounted(async () => {
 
 <template>
   <div class="ticket__container">
+    <modal
+      v-if="invitationsModalVisibility"
+      closeable
+      :title="t('~~Invitations')"
+      class="p-0 md:p-10"
+      :fullscreen="true"
+      modal-classes="mx-2"
+      @close="showInvitationsModal()"
+    >
+      <template #default>
+        <InvitationTable :invitations="invitations" />
+      </template>
+    </modal>
+
+    <modal
+      v-if="invitationRequestsModalVisibility"
+      closeable
+      :title="t('~~Invitation Requests')"
+      class="p-0 md:p-10"
+      :fullscreen="true"
+      modal-classes="mx-2"
+      @close="showInvitationRequestsModal()"
+    >
+      <template #default>
+        <InvitationRequestTable :requests="invitationRequests" />
+      </template>
+    </modal>
     <!--    <Teleport to="#user-content">-->
     <div v-if="ccUser" class="cc__user-info">
       <div class="cc_user">
@@ -742,6 +811,22 @@ onMounted(async () => {
           class="user-type"
         >
           {{ t('helpdesk.ghost_user') }}
+        </div>
+        <div
+          v-if="accountType.invitations.length > 0"
+          :style="`background-color: #FF5733; color: #ffffff`"
+          class="user-type cursor-pointer"
+          @click="showInvitationsModal"
+        >
+          {{ t('~~Invitation') }}
+        </div>
+        <div
+          v-if="accountType.invitationRequests.length > 0"
+          :style="`background-color: #9966CC; color: #ffffff`"
+          class="user-type cursor-pointer"
+          @click="showInvitationRequestsModal"
+        >
+          {{ t('~~Invitations Request') }}
         </div>
       </div>
       <div class="flex items-center justify-center border-y-2 border-gray-400">
@@ -856,6 +941,23 @@ onMounted(async () => {
           class="user-type"
         >
           {{ t('helpdesk.no_role') }}
+        </div>
+
+        <div
+          v-if="accountType.invitations.length > 0"
+          :style="`background-color: #FF5733; color: #ffffff`"
+          class="user-type cursor-pointer"
+          @click="showInvitationsModal"
+        >
+          {{ t('~~Invitation') }}
+        </div>
+        <div
+          v-if="accountType.invitationRequests.length > 0"
+          :style="`background-color: #9966CC; color: #ffffff`"
+          class="user-type cursor-pointer"
+          @click="showInvitationRequestsModal"
+        >
+          {{ t('~~Invitations Request') }}
         </div>
       </div>
     </div>
@@ -1190,7 +1292,8 @@ onMounted(async () => {
             v-if="macroModalVisibility"
             closeable
             :title="t('helpdesk.macros')"
-            class="p-10"
+            class="p-0 md:p-10"
+            :fullscreen="true"
             modal-classes="mx-2"
             @close="showMacroModal()"
           >
