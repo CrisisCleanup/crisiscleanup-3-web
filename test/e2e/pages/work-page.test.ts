@@ -83,7 +83,7 @@ test.describe('WorkPage', () => {
     },
   );
 
-  test.only(
+  test(
     testTitleWithTags(
       'should have working collapsable utility bar & worksite form',
       ['primary', 'slow'],
