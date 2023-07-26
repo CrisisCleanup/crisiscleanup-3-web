@@ -3,11 +3,10 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createI18n } from 'vue-i18n';
-import { createStore } from 'vuex';
 import ChatMessage from '@/components/chat/ChatMessage.vue';
 
 describe('ChatMessage.vue', () => {
-  let wrapper: VueWrapper<any>;
+  let wrapper: VueWrapper<InstanceType<typeof ChatMessage>>;
 
   beforeEach(async () => {
     const i18n = createI18n({
