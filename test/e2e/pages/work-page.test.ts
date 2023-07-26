@@ -1,7 +1,7 @@
 import { test, expect, type Locator } from '@playwright/test';
 import { testTitleWithTags, normalUserStatePath } from '../utils';
 
-test.describe.only('WorkPage', () => {
+test.describe('WorkPage', () => {
   test.use({ storageState: normalUserStatePath });
 
   test.beforeEach(async ({ page }) => {
