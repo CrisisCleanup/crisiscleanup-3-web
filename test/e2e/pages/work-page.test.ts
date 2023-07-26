@@ -4,6 +4,41 @@ import { testTitleWithTags, normalUserStatePath } from '../utils';
 test.describe('WorkPage', () => {
   test.use({ storageState: normalUserStatePath });
 
+  const utilityBarTestIds = [
+    'testMapViewIcon',
+    'testTableViewIcon',
+    'testWorksiteSearch',
+    'testLayersButton',
+    'testWorksiteFiltersButton',
+    'testDownloadCsvButton',
+  ];
+  const worksiteFormTestIds = [
+    // intake form
+    'testIntakeFormDiv',
+    // form fields
+    'testNameTextInput',
+    'testWorksiteSearchInputSearch',
+    'testPhone1TextInput',
+    'testAddPhoneLink',
+    'testEmailTextInput',
+    'testPrimaryLanguageTextInput',
+    'testAutoContactFrequencySelect',
+    'testWorksiteSearchInputInput',
+    'testWhat3WordsTextInput',
+    'testUseMyLocationButton',
+    'testToggleSelectOnMapButton',
+    'testSaveNoteInput',
+    'testAddNoteButton',
+    'testAddressProblemsCheckbox',
+    'testIsHighPriorityCheckbox',
+    'testMemberOfMyOrgCheckbox',
+    // TODO: find a way to test dynamic form tree fields
+    // form action buttons
+    'testCloseWorksiteButton',
+    'testSaveButton',
+    'testSaveClaimButton',
+  ];
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/dashboard');
     const workLink = page.getByTestId('testworkLink');
@@ -17,12 +52,7 @@ test.describe('WorkPage', () => {
     async ({ page }) => {
       test.slow();
       const dataTestIds = [
-        'testMapViewIcon',
-        'testTableViewIcon',
-        'testWorksiteSearch',
-        'testLayersButton',
-        'testWorksiteFiltersButton',
-        'testDownloadCsvButton',
+        ...utilityBarTestIds,
         'testCollapseUtilityBarIcon',
         'testCollapsedFormIcon',
         'testSviSliderInput',
@@ -32,30 +62,7 @@ test.describe('WorkPage', () => {
         'testPhoneSystemActionButtonDiv',
         'testPhoneComponentNewsDiv',
         'testNewCaseIcon',
-        // intake form
-        'testIntakeFormDiv',
-        // form fields
-        'testNameTextInput',
-        'testWorksiteSearchInputSearch',
-        'testPhone1TextInput',
-        'testAddPhoneLink',
-        'testEmailTextInput',
-        'testPrimaryLanguageTextInput',
-        'testAutoContactFrequencySelect',
-        'testWorksiteSearchInputInput',
-        'testWhat3WordsTextInput',
-        'testUseMyLocationButton',
-        'testToggleSelectOnMapButton',
-        'testSaveNoteInput',
-        'testAddNoteButton',
-        'testAddressProblemsCheckbox',
-        'testIsHighPriorityCheckbox',
-        'testMemberOfMyOrgCheckbox',
-        // TODO: find a way to test dynamic form tree fields
-        // form action buttons
-        'testCloseWorksiteButton',
-        'testSaveButton',
-        'testSaveClaimButton',
+        ...worksiteFormTestIds,
       ];
       const locators: Locator[] = [];
       for (const testId of dataTestIds) {
@@ -84,14 +91,7 @@ test.describe('WorkPage', () => {
     async ({ page }) => {
       test.setTimeout(60_000);
       // by default, utility bar and worksite form should be visible
-      const utilityBarItems = [
-        'testMapViewIcon',
-        'testTableViewIcon',
-        'testWorksiteSearch',
-        'testLayersButton',
-        'testWorksiteFiltersButton',
-        'testDownloadCsvButton',
-      ];
+      const utilityBarItems = utilityBarTestIds;
       const utilityBarCollapseButton = page.getByTestId(
         'testCollapseUtilityBarIcon',
       );
@@ -107,29 +107,7 @@ test.describe('WorkPage', () => {
         await expect(l).toBeHidden();
       }
 
-      const worksiteFormItems = [
-        'testNewCaseIcon',
-        'testIntakeFormDiv',
-        'testNameTextInput',
-        'testWorksiteSearchInputSearch',
-        'testPhone1TextInput',
-        'testAddPhoneLink',
-        'testEmailTextInput',
-        'testPrimaryLanguageTextInput',
-        'testAutoContactFrequencySelect',
-        'testWorksiteSearchInputInput',
-        'testWhat3WordsTextInput',
-        'testUseMyLocationButton',
-        'testToggleSelectOnMapButton',
-        'testSaveNoteInput',
-        'testAddNoteButton',
-        'testAddressProblemsCheckbox',
-        'testIsHighPriorityCheckbox',
-        'testMemberOfMyOrgCheckbox',
-        'testCloseWorksiteButton',
-        'testSaveButton',
-        'testSaveClaimButton',
-      ];
+      const worksiteFormItems = worksiteFormTestIds;
       const worksiteFormCollapseButton = page.getByTestId(
         'testCollapsedFormIcon',
       );
