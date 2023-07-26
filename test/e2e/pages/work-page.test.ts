@@ -75,4 +75,75 @@ test.describe('WorkPage', () => {
       });
     },
   );
+
+  test.only(
+    testTitleWithTags(
+      'should have working collapsable utility bar & worksite form',
+      ['primary', 'slow'],
+    ),
+    async ({ page }) => {
+      test.setTimeout(60_000);
+      // by default, utility bar and worksite form should be visible
+      const utilityBarItems = [
+        'testMapViewIcon',
+        'testTableViewIcon',
+        'testWorksiteSearch',
+        'testLayersButton',
+        'testWorksiteFiltersButton',
+        'testDownloadCsvButton',
+      ];
+      const utilityBarCollapseButton = page.getByTestId(
+        'testCollapseUtilityBarIcon',
+      );
+      for (const testId of utilityBarItems) {
+        const l = page.getByTestId(testId).first();
+        await expect(l).toBeVisible({ timeout: 30_000 });
+      }
+
+      await utilityBarCollapseButton.click();
+      // utility bar items should now be hidden
+      for (const testId of utilityBarItems) {
+        const l = page.getByTestId(testId).first();
+        await expect(l).toBeHidden();
+      }
+
+      const worksiteFormItems = [
+        'testNewCaseIcon',
+        'testIntakeFormDiv',
+        'testNameTextInput',
+        'testWorksiteSearchInputSearch',
+        'testPhone1TextInput',
+        'testAddPhoneLink',
+        'testEmailTextInput',
+        'testPrimaryLanguageTextInput',
+        'testAutoContactFrequencySelect',
+        'testWorksiteSearchInputInput',
+        'testWhat3WordsTextInput',
+        'testUseMyLocationButton',
+        'testToggleSelectOnMapButton',
+        'testSaveNoteInput',
+        'testAddNoteButton',
+        'testAddressProblemsCheckbox',
+        'testIsHighPriorityCheckbox',
+        'testMemberOfMyOrgCheckbox',
+        'testCloseWorksiteButton',
+        'testSaveButton',
+        'testSaveClaimButton',
+      ];
+      const worksiteFormCollapseButton = page.getByTestId(
+        'testCollapsedFormIcon',
+      );
+      for (const testId of worksiteFormItems) {
+        const l = page.getByTestId(testId).first();
+        await expect(l).toBeVisible({ timeout: 30_000 });
+      }
+
+      await worksiteFormCollapseButton.click();
+      // worksite form items should now be hidden
+      for (const testId of worksiteFormItems) {
+        const l = page.getByTestId(testId).first();
+        await expect(l).toBeHidden();
+      }
+    },
+  );
 });
