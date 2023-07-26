@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Locator } from '@playwright/test';
 import { testTitleWithTags, normalUserStatePath } from '../utils';
 
 test.describe.only('WorkPage', () => {
@@ -32,9 +32,36 @@ test.describe.only('WorkPage', () => {
         'testPhoneSystemActionButtonDiv',
         'testPhoneComponentNewsDiv',
         'testNewCaseIcon',
+        // intake form
+        'testIntakeFormDiv',
+        // form fields
+        'testNameTextInput',
+        'testWorksiteSearchInputSearch',
+        'testPhone1TextInput',
+        'testAddPhoneLink',
+        'testEmailTextInput',
+        'testPrimaryLanguageTextInput',
+        'testAutoContactFrequencySelect',
+        'testWorksiteSearchInputInput',
+        'testWhat3WordsTextInput',
+        'testUseMyLocationButton',
+        'testToggleSelectOnMapButton',
+        'testSaveNoteInput',
+        'testAddNoteButton',
+        'testAddressProblemsCheckbox',
+        'testIsHighPriorityCheckbox',
+        'testMemberOfMyOrgCheckbox',
+        // TODO: find a way to test dynamic form tree fields
+        // form action buttons
+        'testCloseWorksiteButton',
+        'testSaveButton',
+        'testSaveClaimButton',
       ];
-      const locators = dataTestIds.map((tId) => page.getByTestId(tId).first());
-      for (const l of locators) {
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        console.info('Checking visibility of', testId);
         await expect(l).toBeVisible({ timeout: 30_000 });
       }
 
