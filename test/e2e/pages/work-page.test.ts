@@ -40,6 +40,7 @@ test.describe('WorkPage', () => {
   ];
 
   test.beforeEach(async ({ page }) => {
+    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const workLink = page.getByTestId('testworkLink');
     await workLink.click();
