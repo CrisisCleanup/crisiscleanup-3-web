@@ -59,11 +59,11 @@ describe('ChatMessage.vue', () => {
 
   it('shows favorite star on mouseenter and hides on mouseleave', async () => {
     await wrapper.trigger('mouseenter');
-    let favoriteStar = wrapper.find('.absolute.top-1\\/2.right-2.mt-2');
+    let favoriteStar = wrapper.find('[data-testid="testShowFavoriteContent"]');
     expect(favoriteStar.exists()).toBe(true);
 
     await wrapper.trigger('mouseleave');
-    favoriteStar = wrapper.find('.absolute.top-1\\/2.right-2.mt-2');
+    favoriteStar = wrapper.find('[data-testid="testShowFavoriteContent"]');
     expect(favoriteStar.exists()).toBe(false);
   });
 });
