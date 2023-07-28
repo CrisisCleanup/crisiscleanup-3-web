@@ -111,7 +111,7 @@ jobs:
         run: pnpm exec playwright install --with-deps ${{ matrix.project }}
 
       - name: 🎭 Playwright tests
-        run: pnpm run test:e2e --project=${{ matrix.project }}
+        run: pnpm run test:e2e:${{ matrix.stage }} --project=${{ matrix.project }}
 
       - name: 📊 Upload test results
         uses: actions/upload-artifact@v3
