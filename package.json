@@ -33,9 +33,9 @@
     "test": "pnpm run test:cov",
     "test:unit": "vitest",
     "test:e2e": "pnpm run pw test",
-    "test:e2e:dev": "pnpm run test:e2e --grep '@development'",
+    "test:e2e:development": "pnpm run test:e2e --grep '@development'",
     "test:e2e:staging": "pnpm run test:e2e --grep '@staging'",
-    "test:e2e:prod": "pnpm run test:e2e --grep '@production'",
+    "test:e2e:production": "pnpm run test:e2e --grep '@production'",
     "test:e2e:ui": "pnpm run pw test --ui",
     "test:cov": "pnpm run test:unit --coverage"
   },
