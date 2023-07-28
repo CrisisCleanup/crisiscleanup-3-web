@@ -4,18 +4,37 @@ import {
   doLoginAsAdmin,
   normalUserStatePath,
   adminUserStatePath,
+  testTitleWithTags,
 } from './utils';
 
-setup('authenticate as user', async ({ page }) => {
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
-  await doLogin(page);
-  await page.context().storageState({ path: normalUserStatePath });
-});
+setup(
+  testTitleWithTags('authenticate as user', [
+    'primary',
+    'slow',
+    'development',
+    'staging',
+    'production',
+  ]),
+  async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await doLogin(page);
+    await page.context().storageState({ path: normalUserStatePath });
+  },
+);
 
-setup('authenticate as admin', async ({ page }) => {
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
-  await doLoginAsAdmin(page);
-  await page.context().storageState({ path: adminUserStatePath });
-});
+setup(
+  testTitleWithTags('authenticate as admin', [
+    'primary',
+    'slow',
+    'development',
+    'staging',
+    'production',
+  ]),
+  async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await doLoginAsAdmin(page);
+    await page.context().storageState({ path: adminUserStatePath });
+  },
+);
