@@ -27,13 +27,13 @@
           @saveNote="saveNote"
         />
 
-        <div class="flex flex-row" data-testid="testNameContent">
+        <div class="flex flex-row">
           <div class="flex-1">
             <label
               class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
               >{{ $t('formLabels.name') }}</label
             >
-            <div>{{ worksite.name }}</div>
+            <div data-testid="testNameContent">{{ worksite.name }}</div>
           </div>
           <div class="flex-1">
             <div class="flex flex-row">
