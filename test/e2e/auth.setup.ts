@@ -16,6 +16,7 @@ setup(
     'production',
   ]),
   async ({ page }) => {
+    setup.slow();
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     await doLogin(page);
@@ -32,6 +33,7 @@ setup(
     'production',
   ]),
   async ({ page }) => {
+    setup.slow();
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     await doLoginAsAdmin(page);
