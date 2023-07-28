@@ -415,7 +415,7 @@
           icon="search"
           class="w-64 mr-4 mb-6"
           :placeholder="$t('actions.search')"
-          @input="onUserSearch"
+          @update:modelValue="onUserSearch"
         ></base-input>
 
         <div class="h-64 overflow-auto">
@@ -428,9 +428,9 @@
             class="border-t pt-2"
           >
             <base-checkbox
-              :value="usersToAdd.includes(user.id)"
+              :model-value="usersToAdd.includes(user.id)"
               :data-testid="`testSelectUser${user.id}Checkbox`"
-              @input="
+              @update:modelValue="
                 (value) => {
                   if (value) {
                     usersToAdd.push(user.id);
@@ -518,7 +518,7 @@
             >
               <base-checkbox
                 :data-testid="`testAssignableWorksite${worksite.id}Checkbox`"
-                @input="
+                @update:modelValue="
                   (value) => {
                     const ids = worksite.work_types
                       .filter(

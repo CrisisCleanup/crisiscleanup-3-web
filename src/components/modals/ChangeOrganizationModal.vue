@@ -73,7 +73,7 @@
               class="w-108"
               size="large"
               data-testid="testOrganizationSearchInputSelect"
-              @selectedOrganization="selectedOrganization = $event.id"
+              @selectedOrganization="selectedOrganization = $event"
             />
           </tab>
           <tab
@@ -89,7 +89,7 @@
               <base-checkbox
                 class="pb-2"
                 data-testid="testSelectAllUsersCheckbox"
-                @input="setAllUsers"
+                @update:modelValue="setAllUsers"
               >{{
                 $t('actions.select_all')
               }}</base-checkbox>
@@ -133,7 +133,7 @@
                     <base-checkbox
                       class="pb-2"
                       data-testid="testSelectAllCasesCheckbox"
-                      @input="
+                      @update:modelValue="
                         (value: boolean) => {
                           setCases(value, cases);
                         }
@@ -151,8 +151,8 @@
                       <base-checkbox
                         class="pb-2"
                         data-testid="testWorkTypeCheckbox"
-                        :value="selectedCases.includes(work_type.id)"
-                        @input="
+                        :model-value="selectedCases.includes(work_type.id)"
+                        @update:modelValue="
                           (value: boolean) => {
                             setCases(value, [work_type]);
                           }
@@ -323,6 +323,7 @@ export default defineComponent({
     }
 
     async function transferRequest() {
+      debugger;
       await $http.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
         {

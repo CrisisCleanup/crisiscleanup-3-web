@@ -116,13 +116,13 @@
             class=""
             size="large"
             data-testid="testPrimaryLanguageSelect"
-            :value="selectedLanguage"
+            :model-value="selectedLanguage"
             :options="languages"
             item-key="id"
             label="name_t"
             :placeholder="$t('requestAccess.primary_language')"
             select-classes="bg-white border text-xs p-1 profile-select"
-            @input="(value) => (primaryLanguage = value)"
+            @update:modelValue="(value) => (primaryLanguage = value)"
           />
         </fieldset>
         <base-button

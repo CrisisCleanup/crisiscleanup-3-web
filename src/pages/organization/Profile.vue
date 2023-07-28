@@ -601,7 +601,7 @@
           data-testid="testAddSurvivorWaiverTextTextArea"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-full sm:w-72"
-          @input="
+          @update:modelValue="
             (e) =>
               updateOrganization(e.target.value, 'custom_legal_survivor_waiver')
           "

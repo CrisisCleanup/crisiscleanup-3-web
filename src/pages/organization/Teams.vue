@@ -6,7 +6,7 @@
         icon="search"
         class="w-84 mr-4 mb-6"
         :placeholder="$t('actions.search')"
-        @input="onSearch"
+        @update:modelValue="onSearch"
       ></base-input>
     </div>
     <div style="display: grid; grid-template-columns: 0.75fr 2fr" class="h-120">

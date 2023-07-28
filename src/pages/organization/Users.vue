@@ -8,7 +8,7 @@
         icon="search"
         class="w-full"
         :placeholder="$t('actions.search')"
-        @input="onSearch"
+        @update:modelValue="onSearch"
       ></base-input>
       <div
         class="flex items-center bg-white border p-1 px-4 cursor-pointer h-10"
@@ -202,7 +202,7 @@
               icon="search"
               class="w-84 mr-4"
               :placeholder="$t('actions.search')"
-              @input="onSearch"
+              @update:modelValue="onSearch"
             ></base-input>
             <v-popover
               :auto-hide="false"
