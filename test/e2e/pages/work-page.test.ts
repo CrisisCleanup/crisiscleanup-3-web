@@ -143,6 +143,8 @@ test.describe('WorkPage', () => {
     async ({ page }) => {
       test.slow();
       const d = worksiteData[12];
+      const currentTimestamp = Date.now();
+      const residentName = `${d.residentName} - ${currentTimestamp}`;
       const nameField = page.getByTestId('testNameTextInput').locator('input');
       const phoneField = page
         .getByTestId('testPhone1TextInput')
@@ -170,7 +172,7 @@ test.describe('WorkPage', () => {
         .getByText('Tree Work');
       const saveWorksiteButton = page.getByTestId('testSaveButton');
       await nameField.click();
-      await nameField.fill(d.residentName);
+      await nameField.fill(residentName);
       await phoneField.click();
       await phoneField.fill(d.phone);
       await addressField.click();
