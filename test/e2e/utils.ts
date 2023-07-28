@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { expect, type BrowserContext, type Page } from '@playwright/test';
+import { type BrowserContext, type Page } from '@playwright/test';
 import { z } from 'zod';
 
 export const TestTags = {
@@ -61,7 +61,7 @@ export const adminUserStatePath = 'playwright/.auth/admin.json';
 export function testTitleWithTags(title: string, tags: TestTag[]) {
   // prefix test tag with @
   const testTags = tags.map((t) => `@${t}`);
-  const tagsString = testTags.length > 0 ? ` (${testTags.join(',')})` : '';
+  const tagsString = testTags.length > 0 ? ` - ( ${testTags.join(' ')} )` : '';
   return `${title}${tagsString}`;
 }
 
