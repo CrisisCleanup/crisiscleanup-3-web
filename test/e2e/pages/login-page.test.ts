@@ -13,7 +13,13 @@ test.describe('LoginPage', () => {
   });
 
   test(
-    testTitleWithTags('should login', ['slow', 'primary']),
+    testTitleWithTags('should login', [
+      'slow',
+      'primary',
+      'development',
+      'staging',
+      'production',
+    ]),
     async ({ page }) => {
       test.slow();
       await doLogin(page);
@@ -39,6 +45,9 @@ test.describe('LoginPage', () => {
     testTitleWithTags('should show error on login with invalid credentials', [
       'slow',
       'primary',
+      'development',
+      'staging',
+      'production',
     ]),
     async ({ page }) => {
       const email = 'a@a.com';
@@ -62,6 +71,9 @@ test.describe('LoginPage', () => {
     testTitleWithTags('should show & hide password on eye icon click', [
       'fast',
       'primary',
+      'development',
+      'staging',
+      'production',
     ]),
     async ({ page }) => {
       const passwordField = page.getByPlaceholder('Password');
@@ -77,7 +89,13 @@ test.describe('LoginPage', () => {
   );
 
   test(
-    testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
+    testTitleWithTags(`should have data-testids`, [
+      'fast',
+      'primary',
+      'development',
+      'staging',
+      'production',
+    ]),
     async ({ page }) => {
       const _dataTestIds = await getAllTestIds(page);
       // don't include testIncidentPhoneDiv (current incident hotline) as it changes based on current incident
@@ -110,6 +128,9 @@ test.describe('LoginPage', () => {
     testTitleWithTags(`should return ok status code for all links`, [
       'slow',
       'primary',
+      'development',
+      'staging',
+      'production',
     ]),
     async ({ page, context }) => {
       const linkInfos = await visitAllLinksAndGetResponseInfo(page, context);

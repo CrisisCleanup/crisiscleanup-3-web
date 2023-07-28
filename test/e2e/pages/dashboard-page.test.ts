@@ -11,7 +11,13 @@ test.describe('DashboardPage', () => {
   });
 
   test(
-    testTitleWithTags(`should have data-testids`, ['fast', 'primary']),
+    testTitleWithTags(`should have data-testids`, [
+      'fast',
+      'primary',
+      'development',
+      'staging',
+      'production',
+    ]),
     async ({ page }) => {
       const dataTestIds = [
         'testIsAuthenticatedDiv',
@@ -73,6 +79,9 @@ test.describe('DashboardPage', () => {
     testTitleWithTags(`should return ok status code for all links on page`, [
       'slow',
       'primary',
+      'development',
+      'staging',
+      'production',
     ]),
     async ({ page, context }) => {
       const navLinks = [
@@ -91,8 +100,8 @@ test.describe('DashboardPage', () => {
       const linkInfos: Array<Record<string, unknown>> = [];
       for (const link of linkLocators) {
         const href = await link.getAttribute('href');
-        const isHrefValid = !['mailto:', 'tel:'].some((s) =>
-          href?.startsWith(s),
+        const isHrefValid = !['mailto:', 'tel:'].some(
+          (s) => href?.startsWith(s),
         );
         console.info('Found link', href);
         const isVisited = visitedLinks.has(href);
@@ -138,6 +147,9 @@ test.describe('DashboardPage', () => {
     testTitleWithTags('should have working incident selector', [
       'slow',
       'primary',
+      'development',
+      'staging',
+      'production',
     ]),
     async ({ page }) => {
       test.setTimeout(2 * 60 * 1000);
@@ -225,7 +237,7 @@ test.describe('DashboardPage', () => {
   test(
     testTitleWithTags(
       'should show/hide add incident, request redeploy & invite user modals correctly',
-      ['slow', 'primary'],
+      ['slow', 'primary', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       const incidentSelector = page

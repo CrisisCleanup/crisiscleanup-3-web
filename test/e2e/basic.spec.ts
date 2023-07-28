@@ -2,7 +2,13 @@ import { test, expect } from '@playwright/test';
 import { testTitleWithTags } from './utils';
 
 test(
-  testTitleWithTags('should have valid title & url', ['fast', 'primary']),
+  testTitleWithTags('should have valid title & url', [
+    'fast',
+    'primary',
+    'development',
+    'staging',
+    'production',
+  ]),
   async ({ page }) => {
     await page.goto('/');
     // Expect a title "to contain" a substring.
@@ -14,7 +20,13 @@ test(
 
 // Checks if localizations are loading on Login page
 test(
-  testTitleWithTags('should have valid localizations', ['fast', 'primary']),
+  testTitleWithTags('should have valid localizations', [
+    'fast',
+    'primary',
+    'development',
+    'staging',
+    'production',
+  ]),
   async ({ page }) => {
     // Should navigate to login page
     await page.goto('/');

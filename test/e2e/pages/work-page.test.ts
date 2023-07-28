@@ -50,7 +50,13 @@ test.describe('WorkPage', () => {
   });
 
   test(
-    testTitleWithTags('should have visible data-testids', ['primary', 'slow']),
+    testTitleWithTags('should have visible data-testids', [
+      'primary',
+      'slow',
+      'development',
+      'staging',
+      'production',
+    ]),
     async ({ page }) => {
       test.slow();
       const dataTestIds = [
@@ -88,7 +94,7 @@ test.describe('WorkPage', () => {
   test(
     testTitleWithTags(
       'should have working collapsable utility bar & worksite form',
-      ['primary', 'slow'],
+      ['primary', 'slow', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.setTimeout(60_000);
