@@ -183,68 +183,70 @@
         </tabs>
       </div>
     </div>
-    <div slot="footer" class="flex items-center justify-center py-2 border-t">
-      <base-button
-        v-if="page === 'start'"
-        data-testid="testCancelButton"
-        :text="$t('actions.cancel')"
-        :alt="$t('actions.cancel')"
-        variant="outline"
-        class="px-6 p-3"
-        :action="
+    <template #footer>
+      <div class="flex items-center justify-center py-2 border-t">
+        <base-button
+          v-if="page === 'start'"
+          data-testid="testCancelButton"
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+          variant="outline"
+          class="px-6 p-3"
+          :action="
           () => {
             $emit('cancel');
           }
         "
-      >
-        {{ $t('actions.cancel') }}
-      </base-button>
-      <base-button
-        v-if="page !== 'start'"
-        data-testid="testBackLink"
-        :text="$t('actions.back')"
-        :alt="$t('actions.back')"
-        variant="outline"
-        class="px-6 p-3 mx-2 w-24"
-        :action="
+        >
+          {{ $t('actions.cancel') }}
+        </base-button>
+        <base-button
+          v-if="page !== 'start'"
+          data-testid="testBackLink"
+          :text="$t('actions.back')"
+          :alt="$t('actions.back')"
+          variant="outline"
+          class="px-6 p-3 mx-2 w-24"
+          :action="
           () => {
             if (tabs) {
               tabs.previousTab();
             }
           }
         "
-      >
-        {{ $t('actions.back') }}
-      </base-button>
-      <base-button
-        v-if="page !== 'start' && tabs && !tabs.isLast"
-        data-testid="testNextLink"
-        :text="$t('actions.next')"
-        :alt="$t('actions.next')"
-        variant="solid"
-        class="px-6 p-3 mx-2 w-24"
-        :action="
+        >
+          {{ $t('actions.back') }}
+        </base-button>
+        <base-button
+          v-if="page !== 'start' && tabs && !tabs.isLast"
+          data-testid="testNextLink"
+          :text="$t('actions.next')"
+          :alt="$t('actions.next')"
+          variant="solid"
+          class="px-6 p-3 mx-2 w-24"
+          :action="
           () => {
             if (tabs) {
               tabs.nextTab();
             }
           }
         "
-      >
-        {{ $t('actions.next') }}
-      </base-button>
-      <base-button
-        v-if="tabs && tabs.isLast"
-        data-testid="testMoveButton"
-        :text="$t('actions.move')"
-        :alt="$t('actions.move')"
-        variant="solid"
-        class="px-6 p-3 mx-2 w-24"
-        :action="transferRequest"
-      >
-        {{ $t('actions.move') }}
-      </base-button>
-    </div>
+        >
+          {{ $t('actions.next') }}
+        </base-button>
+        <base-button
+          v-if="tabs && tabs.isLast"
+          data-testid="testMoveButton"
+          :text="$t('actions.move')"
+          :alt="$t('actions.move')"
+          variant="solid"
+          class="px-6 p-3 mx-2 w-24"
+          :action="transferRequest"
+        >
+          {{ $t('actions.move') }}
+        </base-button>
+      </div>
+    </template>
   </modal>
 </template>
 
@@ -261,6 +263,8 @@ import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import type Tabs from '@/components/tabs/Tabs.vue';
 import type Incident from '@/models/Incident';
 import type { WorkType } from '@/models/types';
+import { useI18n } from "vue-i18n";
+import useDialogs from "@/hooks/useDialogs";
 
 export default defineComponent({
   name: 'ChangeOrganizationModal',
@@ -270,6 +274,8 @@ export default defineComponent({
   setup(props, context) {
     const { currentUser } = useCurrentUser();
     const $http = axios;
+    const { t } = useI18n();
+    const { confirm } = useDialogs();
 
     const page = ref('start');
     const lineageUsers = ref([]);
@@ -323,7 +329,6 @@ export default defineComponent({
     }
 
     async function transferRequest() {
-      debugger;
       await $http.post(
         `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
         {
@@ -334,6 +339,10 @@ export default defineComponent({
           user_notes: '',
         },
       );
+      await confirm({
+        title: t('~~Move Requested'),
+        content: t('~~Your request to move to a new organization has been sent.'),
+      });
       context.emit('cancel');
     }
 

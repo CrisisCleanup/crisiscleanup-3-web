@@ -12,12 +12,14 @@
           <span v-html="$t('reportsVue.no_state_account_yet')"></span>
         </base-text>
       </div>
-      <div slot="footer" class="flex p-1 justify-center">
-        <base-button
-          variant="outline"
-          :action="() => (showRequestAccessModal = false)"
-        ></base-button>
-      </div>
+      <template #footer>
+        <div slot="footer" class="flex p-1 justify-center">
+          <base-button
+            variant="outline"
+            :action="() => (showRequestAccessModal = false)"
+          ></base-button>
+        </div>
+      </template>
     </modal>
     <!-- Report Library -->
     <h1 class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>

@@ -175,28 +175,31 @@
           <div v-if="currentLayerUpload" class="text-center">
             {{ $t('locationTool.selected_location') }} {{ currentLayerUpload[0].name }}
           </div>
-          <div slot="footer" class="p-3 flex items-center justify-center">
-            <base-button
-              :action="
+          <template #footer>
+            <div slot="footer" class="p-3 flex items-center justify-center">
+              <base-button
+                :action="
                 () => {
                   showingUploadModal = false;
                 }
               "
-              :text="$t('actions.cancel')"
-              :alt="$t('actions.cancel')"
-              data-testid="testCancelButton"
-              variant="outline"
-              class="ml-2 p-3 px-6 text-xs"
-            />
-            <base-button
-              variant="solid"
-              :action="applyCurrentLayerUpload"
-              :text="$t('actions.apply')"
-              :alt="$t('actions.apply')"
-              data-testid="testApplyButton"
-              class="ml-2 p-3 px-6 text-xs"
-            />
-          </div>
+                :text="$t('actions.cancel')"
+                :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
+                variant="outline"
+                class="ml-2 p-3 px-6 text-xs"
+              />
+              <base-button
+                variant="solid"
+                :action="applyCurrentLayerUpload"
+                :text="$t('actions.apply')"
+                :alt="$t('actions.apply')"
+                data-testid="testApplyButton"
+                class="ml-2 p-3 px-6 text-xs"
+              />
+            </div>
+
+          </template>
         </modal>
         <div
           v-if="incident || organization"

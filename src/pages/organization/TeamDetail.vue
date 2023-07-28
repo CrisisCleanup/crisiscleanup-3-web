@@ -453,28 +453,31 @@
           </div>
         </div>
       </div>
-      <div slot="footer" class="p-3 flex items-center justify-center">
-        <base-button
-          :action="
+      <template #footer>
+        <div slot="footer" class="p-3 flex items-center justify-center">
+          <base-button
+            :action="
             () => {
               showAddMembersModal = false;
             }
           "
-          :text="$t('actions.cancel')"
-          :alt="$t('actions.cancel')"
-          data-testid="testCancelButton"
-          variant="outline"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-        <base-button
-          variant="solid"
-          data-testid="testAddButton"
-          :action="addUsers"
-          :text="$t('actions.add')"
-          :alt="$t('actions.add')"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-      </div>
+            :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
+            variant="outline"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+          <base-button
+            variant="solid"
+            data-testid="testAddButton"
+            :action="addUsers"
+            :text="$t('actions.add')"
+            :alt="$t('actions.add')"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+        </div>
+
+      </template>
     </modal>
     <modal
       v-if="showAddCasesModal"

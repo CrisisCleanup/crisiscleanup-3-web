@@ -62,7 +62,7 @@
               "
             ></base-button>
           </div>
-          <div slot="footer"></div>
+          <template #footer></template>
         </modal>
       </div>
     </div>

@@ -44,35 +44,36 @@
               />
             </div>
           </div>
-
-          <div slot="footer" class="p-3 flex">
-            <base-button
-              :action="
+          <template #footer>
+            <div slot="footer" class="p-3 flex">
+              <base-button
+                :action="
                 () => {
                   showingAffiliateModal = false;
                   selectedAffiliate = null;
                 }
               "
-              :text="$t('actions.cancel')"
-              :alt="$t('actions.cancel')"
-              data-testid="testCancelButton"
-              class="ml-2 p-3 px-6 text-xs border border-black"
-            />
-            <base-button
-              variant="solid"
-              data-testid="testInviteButton"
-              :action="
+                :text="$t('actions.cancel')"
+                :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
+                class="ml-2 p-3 px-6 text-xs border border-black"
+              />
+              <base-button
+                variant="solid"
+                data-testid="testInviteButton"
+                :action="
                 () => {
                   sendAffiliateRequest(selectedAffiliate);
                   showingAffiliateModal = false;
                   selectedAffiliate = null;
                 }
               "
-              :text="$t('actions.invite')"
-              :alt="$t('actions.invite')"
-              class="ml-2 p-3 px-6 text-xs"
-            />
-          </div>
+                :text="$t('actions.invite')"
+                :alt="$t('actions.invite')"
+                class="ml-2 p-3 px-6 text-xs"
+              />
+            </div>
+          </template>
         </modal>
       </div>
       <Table

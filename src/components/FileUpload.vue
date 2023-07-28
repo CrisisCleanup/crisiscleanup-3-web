@@ -56,7 +56,7 @@
           </template>
         </DragDrop>
       </div>
-      <div slot="footer"></div>
+      <template #footer></template>
     </modal>
     <base-button
       :text="$t('fileUpload.file_uploader')"
