@@ -1,13 +1,14 @@
 import type { Locator } from '@playwright/test';
 import { test, expect } from '@playwright/test';
-import { testTitleWithTags, doLogin } from '../utils';
+import { testTitleWithTags, normalUserStatePath } from '../utils';
 
 test.describe('DashboardPage', () => {
+  test.use({ storageState: normalUserStatePath });
+
   test.beforeEach(async ({ page }) => {
-    test.slow();
-    await page.goto('/');
+    await page.goto('/dashboard');
+    await page.waitForURL(/.*\/incident\/.*\/dashboard.*/);
     await page.waitForLoadState('networkidle');
-    await doLogin(page);
   });
 
   test(
