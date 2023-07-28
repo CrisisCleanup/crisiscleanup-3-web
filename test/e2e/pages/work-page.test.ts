@@ -175,9 +175,9 @@ test.describe('WorkPage', () => {
       await phoneField.fill(d.phone);
       await addressField.click();
       await addressField.fill(d.address);
-      await page.waitForTimeout(3000);
+      await page.waitForTimeout(2000);
       await addressSearchPickedResult.click();
-      await page.waitForTimeout(3000);
+      await page.waitForTimeout(2000);
       const isOutOfRangeBtnVisible = await outOfRangeWorksiteButton.isVisible();
       // Click 'Case Outside Current Incident' button if needed
       if (isOutOfRangeBtnVisible) {
@@ -186,12 +186,10 @@ test.describe('WorkPage', () => {
 
       await muckOutCheckbox.click();
       await treeWorkCheckbox.click();
-      await page.waitForTimeout(2000);
       await saveWorksiteButton.click();
-      await page.waitForTimeout(2000);
       // make sure error toast shows
       const successToast = page.locator('.Vue-Toastification__toast--success');
-      await expect(successToast).toBeVisible();
+      await expect(successToast).toBeVisible({ timeout: 15_000 });
       await expect(successToast).toHaveText(/.*success.*/i);
     },
   );
