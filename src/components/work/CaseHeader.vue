@@ -2,12 +2,12 @@
   <div>
     <div
       v-if="showCaseTabs"
-      data-testid="testNewCaseDiv"
+      data-testid="testCaseHeaderDiv"
       class="h-12 flex items-center justify-start px-2"
     >
       <div
         class="flex items-center cursor-pointer"
-        data-testid="testCloseWorksiteDiv"
+        data-testid="testNewCaseDiv"
         @click="() => $emit('closeWorksite')"
       >
         <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
