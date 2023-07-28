@@ -1,5 +1,6 @@
 import { test, expect, type Locator } from '@playwright/test';
 import { testTitleWithTags, normalUserStatePath } from '../utils';
+import worksiteData from '../fixtures/worksiteCreateData.json' assert { type: 'json' };
 
 test.describe('WorkPage', () => {
   test.use({ storageState: normalUserStatePath });
@@ -123,6 +124,69 @@ test.describe('WorkPage', () => {
         const l = page.getByTestId(testId).first();
         await expect(l).toBeHidden();
       }
+    },
+  );
+
+  test(
+    testTitleWithTags('should create new worksite', [
+      'primary',
+      'slow',
+      'development',
+      'staging',
+    ]),
+    async ({ page }) => {
+      test.slow();
+      const d = worksiteData[12];
+      const nameField = page.getByTestId('testNameTextInput').locator('input');
+      const phoneField = page
+        .getByTestId('testPhone1TextInput')
+        .locator('input');
+      const addressField = page
+        .getByTestId('testWorksiteSearchInputInput')
+        .locator('input');
+      const addressSearchResults = page
+        .getByTestId('testWorsiteSearchResultsDiv')
+        .locator('div');
+      const addressSearchPickedResult = addressSearchResults
+        .filter({
+          hasText: 'Geocode',
+        })
+        .locator('div')
+        .first();
+      const outOfRangeWorksiteButton = page.getByRole('button', {
+        name: 'Continue Anyway',
+      });
+      const muckOutCheckbox = page
+        .getByTestId('testmuck_out_infoCheckbox')
+        .getByText('Muck Out');
+      const treeWorkCheckbox = page
+        .getByTestId('testtree_infoCheckbox')
+        .getByText('Tree Work');
+      const saveWorksiteButton = page.getByTestId('testSaveButton');
+      await nameField.click();
+      await nameField.fill(d.residentName);
+      await phoneField.click();
+      await phoneField.fill(d.phone);
+      await addressField.click();
+      await addressField.fill(d.address);
+      await page.waitForTimeout(3000);
+      await addressSearchPickedResult.click();
+      await page.waitForTimeout(3000);
+      const isOutOfRangeBtnVisible = await outOfRangeWorksiteButton.isVisible();
+      // Click 'Case Outside Current Incident' button if needed
+      if (isOutOfRangeBtnVisible) {
+        await outOfRangeWorksiteButton.click();
+      }
+
+      await muckOutCheckbox.click();
+      await treeWorkCheckbox.click();
+      await page.waitForTimeout(2000);
+      await saveWorksiteButton.click();
+      await page.waitForTimeout(2000);
+      // make sure error toast shows
+      const successToast = page.locator('.Vue-Toastification__toast--success');
+      await expect(successToast).toBeVisible();
+      await expect(successToast).toHaveText(/.*success.*/i);
     },
   );
 });
