@@ -39,6 +39,7 @@ export default class User extends CCUModel {
   social!: Record<string, any>;
 
   files!: any[];
+  approved_incidents!: any[];
 
   lineage!: any[];
 
