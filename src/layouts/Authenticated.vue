@@ -482,7 +482,8 @@ export default defineComponent({
       await setupLanguage();
       store.commit('acl/setUserAcl', user.value.id);
 
-      let incidentId = route.params.incident_id || currentUser?.value?.approved_incidents[0];
+      let incidentId =
+        route.params.incident_id || currentUser?.value?.approved_incidents?.[0];
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {
