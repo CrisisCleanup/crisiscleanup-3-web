@@ -1,6 +1,10 @@
 import type { Locator } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { normalUserStatePath, testTitleWithTags } from '../utils';
+import {
+  normalUserStatePath,
+  selectorMaskColor,
+  testTitleWithTags,
+} from '../utils';
 
 test.describe('WorkPage', () => {
   test.use({ storageState: normalUserStatePath });
@@ -47,7 +51,7 @@ test.describe('WorkPage', () => {
       await test.info().attach('my-organization-page-screenshot', {
         body: await page.screenshot({
           mask: locators,
-          maskColor: '#ff00ff11',
+          maskColor: selectorMaskColor,
           fullPage: true,
         }),
         contentType: 'image/png',

@@ -1,5 +1,9 @@
 import { test, expect, type Locator } from '@playwright/test';
-import { testTitleWithTags, normalUserStatePath } from '../utils';
+import {
+  testTitleWithTags,
+  normalUserStatePath,
+  selectorMaskColor,
+} from '../utils';
 import worksiteData from '../fixtures/worksiteCreateData.json' assert { type: 'json' };
 
 test.describe('WorkPage', () => {
@@ -83,7 +87,7 @@ test.describe('WorkPage', () => {
       await test.info().attach('work-page-screenshot', {
         body: await page.screenshot({
           mask: locators,
-          maskColor: '#ff00ff11',
+          maskColor: selectorMaskColor,
           fullPage: true,
         }),
         contentType: 'image/png',
