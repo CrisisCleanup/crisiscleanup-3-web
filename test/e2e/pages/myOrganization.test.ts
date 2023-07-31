@@ -6,7 +6,7 @@ import {
   testTitleWithTags,
 } from '../utils';
 
-test.describe('WorkPage', () => {
+test.describe('MyOrganization', () => {
   test.use({ storageState: normalUserStatePath });
 
   const myOrgTabs = {

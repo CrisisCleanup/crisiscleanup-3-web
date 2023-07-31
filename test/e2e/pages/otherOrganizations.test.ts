@@ -6,7 +6,7 @@ import {
   testTitleWithTags,
 } from '../utils';
 
-test.describe('WorkPage', () => {
+test.describe('OtherOrganizations', () => {
   test.use({ storageState: normalUserStatePath });
 
   test.beforeEach(async ({ page }) => {
