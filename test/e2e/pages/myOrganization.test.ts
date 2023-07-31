@@ -184,4 +184,78 @@ test.describe('WorkPage', () => {
         );
     },
   );
+
+  test(
+    testTitleWithTags(
+      `${myOrgTabs.ORGANIZATION_PROFILE}: should display all required elements`,
+      ['primary', 'slow', 'development', 'staging', 'production'],
+    ),
+    async ({ page }) => {
+      test.slow();
+      const tabLink = page.getByTestId('testMyOrganizationNavprofileLink');
+      await tabLink.click();
+      const dataTestIds = [
+        'testSaveButton',
+        // 'testOrganizationLogoFile',
+        'testOrganizationLogoIcon',
+        'testOrganizationLogo2File',
+        'testUpdateLogoButton',
+        'testOrganizationNameTextInput',
+        'testAddressTextInput',
+        'testUrlTextInput',
+        'testEmailTextInput',
+        'testPhoneTextInput',
+        'testOrganizationTypeTextInput',
+        'testPrimaryContactsDiv',
+        'testAddPrimaryContactsSearch',
+        'testFacebookTextInput',
+        'testTwitterTextInput',
+        'testDonationUrlTextInput',
+        'testCapabilitiesMatrixInput',
+        'testCurrentIncidentsContent',
+        'testApprovedIncidentsDiv',
+        'testPendingIncidentsDiv',
+        'testEditPrimaryLocationButton',
+        // 'testAddPrimaryLocationButton',
+        // 'testContactHelpChangeResponseButton',
+        // 'testEditSecondaryLocationButton',
+        // 'testAddSecondaryLocationButton',
+        // 'testContactHelpChangeResponse2Button',
+        // 'testSelectLocationModal',
+        'testSaveButton',
+        'testCustomOpsMessageTextArea',
+        'testAddCustomTosTextInput',
+        // 'testDeleteIcon',
+        'testTermsOfServiceFile',
+        'testAddTermsButton',
+        'testCustomLegalTosTextArea',
+        'testAddCustomLiabilityInput',
+        // 'testDeleteLiabilityWaiverButton',
+        'testLiabilityWaiverFile',
+        'testCustomSurvivorWaiverButton',
+        'testAddSurvivorWaiverTextTextArea',
+      ];
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        console.info('Checking visibility of', testId);
+        await expect(l).toBeVisible();
+      }
+
+      await test
+        .info()
+        .attach(
+          `my-organization-${myOrgTabs.ORGANIZATION_PROFILE}-page-screenshot`,
+          {
+            body: await page.screenshot({
+              mask: locators,
+              maskColor: selectorMaskColor,
+              fullPage: true,
+            }),
+            contentType: 'image/png',
+          },
+        );
+    },
+  );
 });
