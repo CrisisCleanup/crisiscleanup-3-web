@@ -258,4 +258,47 @@ test.describe('WorkPage', () => {
         );
     },
   );
+
+  test(
+    testTitleWithTags(
+      `${myOrgTabs.AFFILIATED_ORGANIZATIONS}: should display all required elements`,
+      ['primary', 'slow', 'development', 'staging', 'production'],
+    ),
+    async ({ page }) => {
+      test.slow();
+      const tabLink = page.getByTestId('testMyOrganizationNavaffiliatesLink');
+      await tabLink.click();
+      const addAffiliateButton = page.getByTestId('testAddAffiliateButton');
+      await addAffiliateButton.click();
+      const rootDataTestIds = ['testAddAffiliateButton', 'testAffiliatesTable'];
+      const modalDataTestIds = [
+        'testRequestAffiliateModal',
+        'testSelectedAffiliateSearch',
+        'testRequestReasonTextArea',
+        'testCancelButton',
+        'testInviteButton',
+      ];
+      const dataTestIds = [...rootDataTestIds, ...modalDataTestIds];
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        await expect(l).toBeVisible();
+      }
+
+      await test
+        .info()
+        .attach(
+          `my-organization-${myOrgTabs.AFFILIATED_ORGANIZATIONS}-page-screenshot`,
+          {
+            body: await page.screenshot({
+              mask: locators,
+              maskColor: selectorMaskColor,
+              fullPage: true,
+            }),
+            contentType: 'image/png',
+          },
+        );
+    },
+  );
 });
