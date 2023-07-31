@@ -31,6 +31,8 @@ interface LinkInfo {
 export const normalUserStatePath = 'playwright/.auth/user.json';
 export const adminUserStatePath = 'playwright/.auth/admin.json';
 
+export const selectorMaskColor = '#ff00ff11';
+
 /**
  * Generate test title with given tags
  * @param title
