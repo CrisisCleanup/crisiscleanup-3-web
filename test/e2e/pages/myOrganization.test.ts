@@ -110,4 +110,37 @@ test.describe('WorkPage', () => {
         );
     },
   );
+
+  test(
+    testTitleWithTags(
+      `${myOrgTabs.USER_MANAGEMENT}: should display all required elements`,
+      ['primary', 'slow', 'development', 'staging', 'production'],
+    ),
+    async ({ page }) => {
+      test.slow();
+      const tabLink = page.getByTestId('testMyOrganizationNavusersLink');
+      await tabLink.click();
+      const dataTestIds = ['testInviteNewUserButton', 'testUserTable'];
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        await expect(l).toBeVisible();
+      }
+
+      await test
+        .info()
+        .attach(
+          `my-organization-${myOrgTabs.USER_MANAGEMENT}-page-screenshot`,
+          {
+            body: await page.screenshot({
+              mask: locators,
+              maskColor: selectorMaskColor,
+              fullPage: true,
+            }),
+            contentType: 'image/png',
+          },
+        );
+    },
+  );
 });
