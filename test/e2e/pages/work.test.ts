@@ -141,7 +141,7 @@ test.describe('WorkPage', () => {
     testTitleWithTags('should create new worksite', [
       'primary',
       'slow',
-      'development',
+      // 'development',
       'staging',
     ]),
     async ({ page }) => {
