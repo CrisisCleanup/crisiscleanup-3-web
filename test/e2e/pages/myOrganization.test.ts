@@ -9,6 +9,15 @@ import {
 test.describe('WorkPage', () => {
   test.use({ storageState: normalUserStatePath });
 
+  const myOrgTabs = {
+    INVITATION_MANAGEMENT: 'Invitation Management',
+    USER_MANAGEMENT: 'User Management',
+    TEAM_MANAGEMENT: 'Team Management',
+    ORGANIZATION_PROFILE: 'Organization Profile',
+    AFFILIATED_ORGANIZATIONS: 'Affiliated Organizations',
+    LAYER_LIBRARY: 'Layer Library',
+  };
+
   const tabTestIds = [
     'testMyOrganizationNavinvitationsLink',
     'testMyOrganizationNavusersLink',
@@ -56,6 +65,47 @@ test.describe('WorkPage', () => {
         }),
         contentType: 'image/png',
       });
+    },
+  );
+
+  test(
+    testTitleWithTags(
+      `${myOrgTabs.INVITATION_MANAGEMENT}: should display all required elements`,
+      ['primary', 'slow', 'development', 'staging', 'production'],
+    ),
+    async ({ page }) => {
+      test.slow();
+      const rootDiv = page.getByTestId('testMyOrganizationDashboardDiv');
+      await expect(rootDiv).toHaveText(/.*current requests.*/i);
+      await expect(rootDiv).toHaveText(/.*incomplete invitations.*/i);
+      const dataTestIds = [
+        'testInviteNewUserButton',
+        'testExportInvitationRequestsButton',
+        'testInvitationRequestsTable',
+        'testExportInvitationsButton',
+        'testDeleteExpiredInvitationsButton',
+        'testInvitationsTable',
+      ];
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        await expect(l).toBeVisible();
+      }
+
+      await test
+        .info()
+        .attach(
+          `my-organization-${myOrgTabs.INVITATION_MANAGEMENT}-page-screenshot`,
+          {
+            body: await page.screenshot({
+              mask: locators,
+              maskColor: '#ff00ff11',
+              fullPage: true,
+            }),
+            contentType: 'image/png',
+          },
+        );
     },
   );
 });
