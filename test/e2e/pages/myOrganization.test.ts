@@ -25,7 +25,7 @@ test.describe('WorkPage', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test.only(
+  test(
     testTitleWithTags('should have visible data-testids', [
       'primary',
       'slow',
