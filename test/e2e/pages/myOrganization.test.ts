@@ -75,6 +75,8 @@ test.describe('WorkPage', () => {
     ),
     async ({ page }) => {
       test.slow();
+      const tabLink = page.getByTestId('testMyOrganizationNavinvitationsLink');
+      await tabLink.click();
       const rootDiv = page.getByTestId('testMyOrganizationDashboardDiv');
       await expect(rootDiv).toHaveText(/.*current requests.*/i);
       await expect(rootDiv).toHaveText(/.*incomplete invitations.*/i);
