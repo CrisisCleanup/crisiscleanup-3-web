@@ -120,7 +120,11 @@ test.describe('WorkPage', () => {
       test.slow();
       const tabLink = page.getByTestId('testMyOrganizationNavusersLink');
       await tabLink.click();
-      const dataTestIds = ['testInviteNewUserButton', 'testUserTable'];
+      const dataTestIds = [
+        'testInviteNewUserButton',
+        'testUserSearch',
+        'testUserTable',
+      ];
       const locators: Locator[] = [];
       for (const testId of dataTestIds) {
         const l = page.getByTestId(testId).first();
