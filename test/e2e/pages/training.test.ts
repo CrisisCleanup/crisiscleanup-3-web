@@ -1,20 +1,11 @@
 import type { Locator } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import {
-  normalUserStatePath,
-  selectorMaskColor,
-  testTitleWithTags,
-} from '../utils';
+import { selectorMaskColor, testTitleWithTags } from '../utils';
 
 test.describe('Training', () => {
-  test.use({ storageState: normalUserStatePath });
-
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60_000);
-    await page.goto('/dashboard');
-    const myOrgLink = page.getByTestId('testtrainingLink');
-    await myOrgLink.click();
-    await page.waitForURL(/.*\/training.*/);
+    await page.goto('/training');
     await page.waitForLoadState('networkidle');
   });
 
