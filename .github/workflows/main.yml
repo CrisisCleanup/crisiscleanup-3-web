@@ -188,7 +188,7 @@ jobs:
         run: pnpm run build:app
 
       - name: 🎭 Playwright tests
-        run: pnpm run test:e2e --project=${{ matrix.project }}
+        run: pnpm run test:e2e:development --project=${{ matrix.project }}
         # env:
         #   DEBUG: pw:api,pw:browser*
 
