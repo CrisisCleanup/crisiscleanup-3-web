@@ -3,6 +3,7 @@
     <div class="flex justify-between items-center">
       <base-input
         v-model="currentSearch"
+        data-testid="testTeamSearch"
         icon="search"
         class="w-84 mr-4 mb-6"
         :placeholder="$t('actions.search')"
@@ -16,6 +17,7 @@
           <base-button
             :text="$t('teams.create_new_team')"
             :alt="$t('teams.create_new_team')"
+            data-testid="testTeamCreateBtn"
             variant="solid"
             size="small"
             :action="
@@ -32,6 +34,7 @@
             grid-auto-rows: min-content;
           "
           class="overflow-auto h-120"
+          data-testid="testTeamsContainerDiv"
         >
           <div
             v-for="team in teams"
