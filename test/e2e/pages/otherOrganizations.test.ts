@@ -12,8 +12,8 @@ test.describe('OtherOrganizations', () => {
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/dashboard');
-    const myOrgLink = page.getByTestId('testother_organizationsLink');
-    await myOrgLink.click();
+    const otherOrgLink = page.getByTestId('testother_organizationsLink');
+    await otherOrgLink.click();
     await page.waitForURL(/.*\/other_organizations.*/);
     await page.waitForLoadState('networkidle');
   });

@@ -12,8 +12,8 @@ test.describe('Reports', () => {
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/dashboard');
-    const myOrgLink = page.getByTestId('testreportsLink');
-    await myOrgLink.click();
+    const reportLink = page.getByTestId('testreportsLink');
+    await reportLink.click();
     await page.waitForURL(/.*\/reports.*/);
     await page.waitForLoadState('networkidle');
   });
