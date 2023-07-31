@@ -147,4 +147,41 @@ test.describe('WorkPage', () => {
         );
     },
   );
+
+  test(
+    testTitleWithTags(
+      `${myOrgTabs.TEAM_MANAGEMENT}: should display all required elements`,
+      ['primary', 'slow', 'development', 'staging', 'production'],
+    ),
+    async ({ page }) => {
+      test.slow();
+      const tabLink = page.getByTestId('testMyOrganizationNavteamsLink');
+      await tabLink.click();
+      const dataTestIds = [
+        'testTeamSearch',
+        'testTeamCreateBtn',
+        'testTeamsContainerDiv',
+      ];
+      const locators: Locator[] = [];
+      for (const testId of dataTestIds) {
+        const l = page.getByTestId(testId).first();
+        locators.push(l);
+        await expect(l).toBeVisible();
+      }
+
+      await test
+        .info()
+        .attach(
+          `my-organization-${myOrgTabs.TEAM_MANAGEMENT}-page-screenshot`,
+          {
+            body: await page.screenshot({
+              mask: locators,
+              maskColor: selectorMaskColor,
+              fullPage: true,
+            }),
+            contentType: 'image/png',
+          },
+        );
+    },
+  );
 });
