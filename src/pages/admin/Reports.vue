@@ -22,7 +22,7 @@
       </template>
     </modal>
     <!-- Report Library -->
-    <h1 class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>
+    <h1 data-testid="testReportHeader" class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>
     <div v-for="sponsored in reportsKeys" :key="sponsored">
       <div v-if="sponsored === 'true'" class="text-lg font-bold m-2 ml-3 pt-1">
         {{ $t('reportsVue.sponsored_reports') }}
@@ -30,7 +30,10 @@
       <div v-else class="text-lg font-bold m-2 ml-3 pt-1">
         {{ $t('reportsVue.other_reports') }}
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3">
+      <div
+        data-testid="testReportsContainerDiv"
+        class="grid grid-cols-1 sm:grid-cols-3"
+      >
         <div v-for="r in reportsGrouped[sponsored]" :key="`${r.id}`">
           <div
             class="my-4 mx-2 bg-white shadow h-auto content-center flex-wrap cursor-pointer"
