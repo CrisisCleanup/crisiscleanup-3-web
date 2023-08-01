@@ -38,6 +38,8 @@ jobs:
           - project: webkit
             os: macos-12
             cache_dir: ~/Library/Caches/ms-playwright
+            shardIndex: [1]
+            shardTotal: [1]
     steps:
       - uses: actions/checkout@v3
 
