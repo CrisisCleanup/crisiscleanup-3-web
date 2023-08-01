@@ -13,7 +13,7 @@ jobs:
     uses: CrisisCleanup/crisiscleanup-4-web/.github/workflows/get-versions.yml@master
 
   e2e:
-    name: 🧪 E2E (${{ matrix.shardIndex }}/${{ matrix.shardTotal }}) | ${{ matrix.stage }} | ${{ matrix.project }}
+    name: 🧪 E2E Tests 💻 | ${{ matrix.stage }} | ${{ matrix.project }}
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
@@ -26,8 +26,6 @@ jobs:
       matrix:
         stage: [development, staging, production]
         project: [chromium, firefox, webkit]
-        shardIndex: [1, 2, 3, 4]
-        shardTotal: [4]
         include:
           - project: chromium
             os: ubuntu-latest
@@ -113,13 +111,13 @@ jobs:
         run: pnpm exec playwright install --with-deps ${{ matrix.project }}
 
       - name: 🎭 Playwright tests
-        run: pnpm run test:e2e:${{ matrix.stage }} --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: pnpm run test:e2e:${{ matrix.stage }} --project=${{ matrix.project }}
 
       - name: 📊 Upload test results
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: playwright-report-${{ matrix.stage }}-${{ matrix.project }}-${{ matrix.shardIndex }}-of-${{ matrix.shardTotal }}
+          name: playwright-report-${{ matrix.stage }}-${{ matrix.project }}
           path: playwright-report/
           retention-days: 30
 
