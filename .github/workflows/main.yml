@@ -104,13 +104,16 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test-e2e:
-    name: 🧪 E2E Tests 💻 | ${{ matrix.project }}
+    name: 🧪 E2E Tests (${{ matrix.shardIndex }}/${{ matrix.shardTotal }}) | ${{ matrix.project }}
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     needs: [versions]
     strategy:
       fail-fast: false
       matrix:
+        project: [chromium, firefox, webkit]
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
         include:
           - project: chromium
             os: ubuntu-latest
@@ -188,7 +191,7 @@ jobs:
         run: pnpm run build:app
 
       - name: 🎭 Playwright tests
-        run: pnpm run test:e2e:development --project=${{ matrix.project }}
+        run: pnpm run test:e2e:development --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         # env:
         #   DEBUG: pw:api,pw:browser*
 
@@ -196,6 +199,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report-${{ matrix.project }}
+          name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}-of-${{ matrix.shardTotal }}
           path: playwright-report/
           retention-days: 30
