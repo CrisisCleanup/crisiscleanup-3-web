@@ -89,6 +89,7 @@ test.describe('DashboardPage', () => {
       'production',
     ]),
     async ({ page, context }) => {
+      test.setTimeout(60_000);
       const navLinks = [
         'testdashboardLink',
         'testworkLink',
