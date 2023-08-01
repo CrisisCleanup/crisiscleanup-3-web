@@ -66,8 +66,7 @@ test.describe('LoginPage', () => {
     },
   );
 
-  // Skip bc we are serving login page from api and it doesn't contain eye icon yet
-  test.skip(
+  test(
     testTitleWithTags('should show & hide password on eye icon click', [
       'fast',
       'primary',
