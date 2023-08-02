@@ -9,6 +9,7 @@ import autoImport from 'unplugin-auto-import/vite';
 import inspect from 'vite-plugin-inspect';
 import inspector from 'vite-plugin-vue-inspector';
 import postcssConfig from './postcss.config.cjs';
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 export default defineConfig(async ({ command }) => {
   const vitePlugins = [
@@ -45,6 +46,11 @@ export default defineConfig(async ({ command }) => {
     inspect(),
     // https://github.com/webfansplz/vite-plugin-vue-inspector
     inspector(),
+    sentryVitePlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "crisis-cleanup",
+      project: "crisiscleanup-4-web",
+    }),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
@@ -68,7 +74,11 @@ export default defineConfig(async ({ command }) => {
   );
 
   if (command === 'build') {
-    // Do something
+    configs.push({
+      build: {
+        sourcemap: true,
+      },
+    });
   } else {
     // Do something else
   }

@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@fortawesome/fontawesome-svg-core':
     specifier: ^6.4.0
@@ -10830,7 +10826,11 @@ packages:
     dev: false
 
   github.com/CrisisCleanup/cf-agent-library/f1953ec15ff69d7750d8071a729859daaf3f0739:
-    resolution: {tarball: https://codeload.github.com/CrisisCleanup/cf-agent-library/tar.gz/f1953ec15ff69d7750d8071a729859daaf3f0739}
+    resolution: {commit: f1953ec15ff69d7750d8071a729859daaf3f0739, repo: https://git@github.com/CrisisCleanup/cf-agent-library.git, type: git}
     name: cf-agent-library
     version: 1.0.0
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
