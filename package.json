@@ -15,7 +15,7 @@
     "postinstall": "is-ci || husky install",
     "dev": "vite --port 8080",
     "build": "pnpm run typecheck && pnpm run build:app",
-    "build:app": "vite build",
+    "build:app": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "lint": "xo",
