@@ -87,38 +87,30 @@ export default class PhoneOutbound extends CCUModel {
         return data;
       },
       async getRemainingCallbackCount(incidentId: string) {
-        const phoneOutbound = await this.get(
-          `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=callback`,
-        );
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data.count;
+        try {
+          const phoneOutbound = await this.get(
+            `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=callback`
+          );
+          const {
+            response: { data }
+          } = phoneOutbound;
+          return data.count;
+        } catch (e) {
+          console.log(e);
+        }
       },
       async getRemainingCalldownCount(incidentId: string) {
-        const phoneOutbound = await this.get(
-          `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=calldown`,
-        );
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data.count;
-      },
-      async getSingleOutbound(id: string) {
-        const phoneOutbound = await this.get(`/phone_outbound/${id}`);
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data;
-      },
-      async callOutbound(id: string, { isManual = false } = {}) {
-        return this.post(
-          `/phone_outbound/${id}/call`,
-          {
-            manual: isManual,
-          },
-          { save: false },
-        );
+        try {
+          const phoneOutbound = await this.get(
+            `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=calldown`
+          );
+          const {
+            response: { data }
+          } = phoneOutbound;
+          return data.count;
+        } catch (e) {
+          console.log(e);
+        }
       },
       async updateStatus(
         id: string,

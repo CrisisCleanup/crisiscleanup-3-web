@@ -68,24 +68,28 @@ export default defineComponent({
     const unreadCount = ref(0);
 
     async function getNews() {
-      if (currentUser.states[props.stateKey]) {
+      try {
+        if (currentUser.states[props.stateKey]) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
+              props.cmsTag
+            }&publish_at__gt=${
+              currentUser.states[props.stateKey]
+            }&publish_at__lt=${moment().toISOString()}&limit=1`
+          );
+          unreadCount.value = response.data.count;
+          emit("unreadCount", response.data.count);
+        }
+
         const response = await axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
             props.cmsTag
-          }&publish_at__gt=${
-            currentUser.states[props.stateKey]
-          }&publish_at__lt=${moment().toISOString()}&limit=1`,
+          }&sort=-publish_at&limit=10`
         );
-        unreadCount.value = response.data.count;
-        emit('unreadCount', response.data.count);
+        news.value = response.data.results;
+      } catch (e) {
+        console.error(e);
       }
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
-          props.cmsTag
-        }&sort=-publish_at&limit=10`,
-      );
-      news.value = response.data.results;
     }
 
     async function showDetails(newItem) {
