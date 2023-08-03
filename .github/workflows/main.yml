@@ -79,6 +79,8 @@ jobs:
 
       - name: Build app
         run: pnpm run build:app
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
   test:
     name: Test 🧪
