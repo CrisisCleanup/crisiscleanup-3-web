@@ -227,7 +227,7 @@
 
       <hr class="my-4" />
 
-      <div>
+      <div class="w-full">
         <div class="text-lg my-2 font-bold">
           {{ $t('survivorContact.upload_photos') }}
         </div>
@@ -239,6 +239,9 @@
           @photosChanged="() => getSurvivorToken(true)"
           @image-click="showImage"
         />
+        <BaseSwitch :model-value="survivorToken.allow_sharing" @update:modelValue="survivorToken.allow_sharing = $event" class="w-full mt-2" data-testid="survivorContactSharePermissionSwitch">
+          {{$t('survivorContact.share_permission')}}
+        </BaseSwitch>
       </div>
       <hr class="my-4" />
 
@@ -378,10 +381,18 @@ import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
 import WorksiteNotes from '@/components/work/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
+import BaseSwitch from "@/components/BaseSwitch.vue";
+import survivor from "@/pages/home/Survivor.vue";
 
 export default defineComponent({
   name: 'Survivors',
+  computed: {
+    survivor() {
+      return survivor
+    }
+  },
   components: {
+    BaseSwitch,
     WorksiteNotes,
     WorksiteImageSection,
     LocationViewer,
@@ -574,6 +585,7 @@ export default defineComponent({
           state.survivorToken.files = response.data.files;
         } else {
           state.survivorToken = response.data;
+          state.survivorToken.allow_sharing = !!state.survivorToken.permission_public_share_at;
         }
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
