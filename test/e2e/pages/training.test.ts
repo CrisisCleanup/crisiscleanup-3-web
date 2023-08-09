@@ -13,6 +13,7 @@ test.describe('Training', () => {
     testTitleWithTags('should have visible data-testids', [
       'primary',
       'slow',
+      'read',
       'development',
       'staging',
       'production',

@@ -42,6 +42,7 @@ test.describe('MyOrganization', () => {
     testTitleWithTags('should have visible data-testids', [
       'primary',
       'slow',
+      'read',
       'development',
       'staging',
       'production',
@@ -71,7 +72,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.INVITATION_MANAGEMENT}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();
@@ -114,7 +115,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.USER_MANAGEMENT}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();
@@ -151,7 +152,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.TEAM_MANAGEMENT}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();
@@ -188,7 +189,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.ORGANIZATION_PROFILE}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();
@@ -262,7 +263,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.AFFILIATED_ORGANIZATIONS}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();
@@ -305,7 +306,7 @@ test.describe('MyOrganization', () => {
   test(
     testTitleWithTags(
       `${myOrgTabs.LAYER_LIBRARY}: should display all required elements`,
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.slow();

@@ -19,6 +19,7 @@ test.describe('DashboardPage', () => {
     testTitleWithTags(`should have data-testids`, [
       'fast',
       'primary',
+      'read',
       'development',
       'staging',
       'production',
@@ -84,6 +85,7 @@ test.describe('DashboardPage', () => {
     testTitleWithTags(`should return ok status code for all links on page`, [
       'slow',
       'primary',
+      'read',
       'development',
       'staging',
       'production',
@@ -153,6 +155,7 @@ test.describe('DashboardPage', () => {
     testTitleWithTags('should have working incident selector', [
       'slow',
       'primary',
+      'read',
       'development',
       'staging',
       'production',
@@ -243,7 +246,7 @@ test.describe('DashboardPage', () => {
   test(
     testTitleWithTags(
       'should show/hide add incident, request redeploy & invite user modals correctly',
-      ['slow', 'primary', 'development', 'staging', 'production'],
+      ['slow', 'primary', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       const incidentSelector = page

@@ -70,6 +70,7 @@ test.describe('LoginPage', () => {
     testTitleWithTags('should show & hide password on eye icon click', [
       'fast',
       'primary',
+      'read',
       'development',
       'staging',
       'production',
@@ -91,6 +92,7 @@ test.describe('LoginPage', () => {
     testTitleWithTags(`should have data-testids`, [
       'fast',
       'primary',
+      'read',
       'development',
       'staging',
       'production',
@@ -127,6 +129,7 @@ test.describe('LoginPage', () => {
     testTitleWithTags(`should return ok status code for all links`, [
       'slow',
       'primary',
+      'read',
       'development',
       'staging',
       'production',

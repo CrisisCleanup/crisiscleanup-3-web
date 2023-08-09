@@ -57,6 +57,7 @@ test.describe('WorkPage', () => {
     testTitleWithTags('should have visible data-testids', [
       'primary',
       'slow',
+      'read',
       'development',
       'staging',
       'production',
@@ -98,7 +99,7 @@ test.describe('WorkPage', () => {
   test(
     testTitleWithTags(
       'should have working collapsable utility bar & worksite form',
-      ['primary', 'slow', 'development', 'staging', 'production'],
+      ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
       test.setTimeout(60_000);
@@ -141,6 +142,7 @@ test.describe('WorkPage', () => {
     testTitleWithTags('should create new worksite', [
       'primary',
       'slow',
+      'write',
       // 'development',
       'staging',
     ]),
