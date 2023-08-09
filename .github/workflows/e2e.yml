@@ -106,7 +106,7 @@ jobs:
         with:
           name: playwright-report-${{ matrix.stage }}-${{ matrix.project }}
           path: playwright-report/
-          retention-days: 30
+          retention-days: 7
 
       - id: results
         shell: bash

@@ -190,4 +190,4 @@ jobs:
         with:
           name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}-of-${{ matrix.shardTotal }}
           path: playwright-report/
-          retention-days: 30
+          retention-days: 7
