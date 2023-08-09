@@ -5,6 +5,7 @@ test(
   testTitleWithTags('should have valid title & url', [
     'fast',
     'primary',
+    'read',
     'development',
     'staging',
     'production',
@@ -23,6 +24,7 @@ test(
   testTitleWithTags('should have valid localizations', [
     'fast',
     'primary',
+    'read',
     'development',
     'staging',
     'production',

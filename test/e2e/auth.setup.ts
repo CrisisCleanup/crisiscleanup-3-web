@@ -11,6 +11,7 @@ setup(
   testTitleWithTags('authenticate as user', [
     'primary',
     'slow',
+    'read',
     'development',
     'staging',
     'production',
@@ -28,6 +29,7 @@ setup(
   testTitleWithTags('authenticate as admin', [
     'primary',
     'slow',
+    'read',
     'development',
     'staging',
     'production',
