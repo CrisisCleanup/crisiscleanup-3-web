@@ -100,13 +100,13 @@ jobs:
       - name: 🎭 Playwright tests
         run: pnpm run test:e2e:${{ matrix.stage }} --project=${{ matrix.project }}
 
-      - name: 📊 Upload test results
+      - name: 📤 Upload blob report to GitHub Actions Artifacts
+        if: always()
         uses: actions/upload-artifact@v3
-        if: failure()
         with:
-          name: playwright-report-${{ matrix.stage }}-${{ matrix.project }}
-          path: playwright-report/
-          retention-days: 7
+          name: all-blob-reports
+          path: blob-report
+          retention-days: 1
 
       - id: results
         shell: bash
@@ -152,3 +152,40 @@ jobs:
           SLACK_COLOR: '#13E768'
           SLACK_TITLE: 'E2e Tests Passed!'
           SLACK_MESSAGE: '🧪 E2e Tests Passed!!'
+
+  merge-e2e-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    name: 🔄 Merge Playwright Reports
+    if: always()
+    needs: [versions, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
+          cache: pnpm
+
+      - name: 📥 Install dependencies
+        run: pnpm install
+
+      - name: 📥 Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: all-blob-reports
+          path: all-blob-reports
+
+      - name: 🔄 Merge all blob reports into HTML Report
+        run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: 📤 Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-report-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: playwright-report
+          retention-days: 7
