@@ -184,10 +184,47 @@ jobs:
         # env:
         #   DEBUG: pw:api,pw:browser*
 
-      - name: 📊 Upload test results
-        uses: actions/upload-artifact@v3
+      - name: 📤 Upload blob report to GitHub Actions Artifacts
         if: always()
+        uses: actions/upload-artifact@v3
         with:
-          name: playwright-report-${{ matrix.project }}-${{ matrix.shardIndex }}-of-${{ matrix.shardTotal }}
-          path: playwright-report/
+          name: all-blob-reports
+          path: blob-report
+          retention-days: 1
+
+  merge-e2e-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    name: 🔄 Merge Playwright Reports
+    if: always()
+    needs: [versions, test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ needs.versions.outputs.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.versions.outputs.NODE_VERSION }}
+          cache: pnpm
+
+      - name: 📥 Install dependencies
+        run: pnpm install
+
+      - name: 📥 Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: all-blob-reports
+          path: all-blob-reports
+
+      - name: 🔄 Merge all blob reports into HTML Report
+        run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: 📤 Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-report-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: playwright-report
           retention-days: 7
