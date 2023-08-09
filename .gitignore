@@ -146,6 +146,7 @@ modules.xml
 # Playwright E2E Testing
 /test-results/
 /playwright-report/
+/blob-report/
 /playwright/.cache/
 /playwright/.auth
 
