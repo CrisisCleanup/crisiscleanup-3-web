@@ -22,7 +22,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html', { open: 'never' }]],
+  reporter: process.env.CI ? 'blob' : [['html', { open: 'never' }]],
   // timeout: 1 * 60 * 1000,
   // expect: {
   //   timeout: 10_000,
