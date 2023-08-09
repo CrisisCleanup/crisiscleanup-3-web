@@ -165,6 +165,7 @@ import useAcl from '@/hooks/useAcl';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import useDialogs from '@/hooks/useDialogs';
 import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
+import useEmitter from "@/hooks/useEmitter";
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -189,6 +190,7 @@ export default defineComponent({
     const { $can } = useAcl();
     const zendesk = useZendesk()!;
     const { selection } = useDialogs();
+    const { emitter } = useEmitter();
 
     // const { $log } = context.root;
     const currentIncidentId = computed(
@@ -391,6 +393,9 @@ export default defineComponent({
     );
 
     onMounted(() => {
+      emitter.on('update:incident', (incidentId) => {
+        handleChange(incidentId);
+      });
       if (route.params.incident_id) {
         handleChange(route.params.incident_id as string);
       }
