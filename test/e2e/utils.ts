@@ -11,6 +11,9 @@ export const TestTags = {
   SECONDARY: 'secondary', // Runs outside of CI
   FAST: 'fast', // Fast tests
   SLOW: 'slow', // Slow tests
+  READ: 'read', // Tests that only perform read operations
+  WRITE: 'write', // Tests that only perform write operations
+  DELETE: 'delete', // Tests that only perform delete operations
 } as const;
 export const TestTagEnum = z.nativeEnum(TestTags);
 export type TestTag = z.infer<typeof TestTagEnum>;
