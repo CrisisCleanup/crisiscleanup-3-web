@@ -40,28 +40,41 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Setup project
+    // Set browsers for setups since playwright defaults to chromium
+    // if no browsers are defined. By doing this, we don't have to download
+    // chromium for non-chromium tests in CI.
     {
-      name: 'setup',
+      name: 'chromium-setup',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: 'firefox-setup',
+      use: { ...devices['Desktop Firefox'] },
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: 'webkit-setup',
+      use: { ...devices['Desktop Safari'] },
       testMatch: /.*\.setup\.ts/,
     },
 
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      dependencies: ['setup'],
+      dependencies: ['chromium-setup'],
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
-      dependencies: ['setup'],
+      dependencies: ['firefox-setup'],
     },
 
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-      dependencies: ['setup'],
+      dependencies: ['webkit-setup'],
     },
 
     /* Test against mobile viewports. */
