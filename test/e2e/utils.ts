@@ -63,8 +63,11 @@ export const selectorMaskColor = '#ff00ff11';
 export function testTitleWithTags(title: string, tags: TestTag[]) {
   // prefix test tag with @
   const testTags = tags.map((t) => `@${t}`);
+  // Add prefix in front of test title.
+  // Mainly used in CI e2e report to differentiate between dev, staging, prod tests
+  const testTitlePrefix = process.env.PW_TEST_TITLE_PREFIX ?? '';
   const tagsString = testTags.length > 0 ? ` - ( ${testTags.join(' ')} )` : '';
-  return `${title}${tagsString}`;
+  return `${testTitlePrefix}${title}${tagsString}`;
 }
 
 /**
