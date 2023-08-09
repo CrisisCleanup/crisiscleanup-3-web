@@ -86,19 +86,6 @@ jobs:
       - name: 🔧 Set Playwright Version
         run: pnpm exec playwright --version > .github/.playwright-version
 
-        # Make chromium binary available on all projects
-        # as setup tests run on chromium by default
-      - name: ⚡️ Cache Chromium Binary
-        uses: actions/cache@v3
-        id: playwright-chromium-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-chromium-pw-${{ hashFiles('**/.playwright-version') }}
-
-      - name: 📥 Install chromium with Playwright
-        if: steps.playwright-chromium-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps chromium
-
       - name: ⚡️ Cache playwright binaries
         uses: actions/cache@v3
         id: playwright-cache
