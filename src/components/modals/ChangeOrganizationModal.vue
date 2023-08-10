@@ -340,8 +340,8 @@ export default defineComponent({
         },
       );
       await confirm({
-        title: t('~~Move Requested'),
-        content: t('~~Your request to move to a new organization has been sent.'),
+        title: t('userTransfer.transfer_requested'),
+        content: t('userTransfer.transfer_request_sent'),
       });
       context.emit('cancel');
     }

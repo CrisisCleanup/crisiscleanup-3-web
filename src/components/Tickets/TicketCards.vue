@@ -758,7 +758,7 @@ onMounted(async () => {
     <modal
       v-if="invitationsModalVisibility"
       closeable
-      :title="t('~~Invitations')"
+      :title="t('helpdesk.invitation')"
       class="p-0 md:p-10"
       :fullscreen="true"
       modal-classes="mx-2"
@@ -772,7 +772,7 @@ onMounted(async () => {
     <modal
       v-if="invitationRequestsModalVisibility"
       closeable
-      :title="t('~~Invitation Requests')"
+      :title="t('helpdesk.invitation_request')"
       class="p-0 md:p-10"
       :fullscreen="true"
       modal-classes="mx-2"
@@ -818,7 +818,7 @@ onMounted(async () => {
           class="user-type cursor-pointer"
           @click="showInvitationsModal"
         >
-          {{ t('~~Invitation') }}
+          {{ t('helpdesk.invitation') }}
         </div>
         <div
           v-if="accountType.invitationRequests.length > 0"
@@ -826,7 +826,7 @@ onMounted(async () => {
           class="user-type cursor-pointer"
           @click="showInvitationRequestsModal"
         >
-          {{ t('~~Invitations Request') }}
+          {{ t('helpdesk.invitation_request') }}
         </div>
       </div>
       <div class="flex items-center justify-center border-y-2 border-gray-400">
@@ -949,7 +949,7 @@ onMounted(async () => {
           class="user-type cursor-pointer"
           @click="showInvitationsModal"
         >
-          {{ t('~~Invitation') }}
+          {{ t('helpdesk.invitation') }}
         </div>
         <div
           v-if="accountType.invitationRequests.length > 0"
@@ -957,7 +957,7 @@ onMounted(async () => {
           class="user-type cursor-pointer"
           @click="showInvitationRequestsModal"
         >
-          {{ t('~~Invitations Request') }}
+          {{ t('helpdesk.invitation_request') }}
         </div>
       </div>
     </div>
@@ -1165,7 +1165,7 @@ onMounted(async () => {
               <BaseSelect
                 :model-value="selectedRepo"
                 select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded py-2"
-                :placeholder="t('~~Select a repo')"
+                :placeholder="t('helpdesk.select_a_repo')"
                 :options="crisisCleanupRepos"
                 @update:model-value="(v) => (selectedRepo = v)"
               />
@@ -1302,7 +1302,7 @@ onMounted(async () => {
                 v-model="macroSearch"
                 icon="search"
                 class="my-2"
-                :placeholder="t('~~Search Macros')"
+                :placeholder="t('helpdesk.search_macros')"
               ></base-input>
               <Table
                 :columns="macroColumns"
@@ -1311,7 +1311,7 @@ onMounted(async () => {
                 @row-click="(v) => executeMacro(v)"
               >
                 <template #template="slotProps">
-                  <span v-if="mq.mdMinus" class="font-bold">Template: </span>
+                  <span v-if="mq.mdMinus" class="font-bold">{{ $t('helpdesk.template') }}</span>
                   <div
                     class="overflow-auto px-4"
                     :class="h - [slotProps.item.template.length]"
