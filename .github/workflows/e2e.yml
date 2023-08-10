@@ -56,7 +56,7 @@ jobs:
       - name: 🔧 Setup Development Test Env
         if: matrix.stage == 'development'
         run: |
-          echo 'PW_TEST_TITLE_PREFIX="DEV: "' >> $GITHUB_ENV
+          echo 'PW_TEST_TITLE_PREFIX=DEV: ' >> $GITHUB_ENV
           echo 'VITE_APP_BASE_URL=https://app.dev.crisiscleanup.io' >> $GITHUB_ENV
           echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_DEV }}' >> $GITHUB_ENV
           echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_DEV }}' >> $GITHUB_ENV
@@ -66,7 +66,7 @@ jobs:
       - name: 🔧 Setup Staging Test Env
         if: matrix.stage == 'staging'
         run: |
-          echo 'PW_TEST_TITLE_PREFIX="STAGING: "' >> $GITHUB_ENV
+          echo 'PW_TEST_TITLE_PREFIX=STAGING: ' >> $GITHUB_ENV
           echo 'VITE_APP_BASE_URL=https://app.staging.crisiscleanup.io' >> $GITHUB_ENV
           echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}' >> $GITHUB_ENV
           echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}' >> $GITHUB_ENV
@@ -77,7 +77,7 @@ jobs:
         if: matrix.stage == 'production'
         run: |
           # add 'PROD: ' prefix in test titles. ex: 'PROD: should do this - ( @production )'
-          echo 'PW_TEST_TITLE_PREFIX="PROD: "' >> $GITHUB_ENV
+          echo 'PW_TEST_TITLE_PREFIX=PROD: ' >> $GITHUB_ENV
           echo 'VITE_APP_BASE_URL=https://crisiscleanup.org' >> $GITHUB_ENV
           echo 'TEST_APP_EMAIL=${{ secrets.TEST_APP_EMAIL_PROD }}' >> $GITHUB_ENV
           echo 'TEST_APP_PASSWORD=${{ secrets.TEST_APP_PASSWORD_PROD }}' >> $GITHUB_ENV
