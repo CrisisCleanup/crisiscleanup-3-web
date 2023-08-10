@@ -108,7 +108,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: all-blob-reports
+          name: all-blob-reports-${{ matrix.stage }}
           path: blob-report
           retention-days: 1
 
@@ -159,10 +159,13 @@ jobs:
 
   merge-e2e-reports:
     # Merge reports after playwright-tests, even if some shards have failed
-    name: 🔄 Merge Playwright Reports
+    name: 🔄 Merge Playwright Reports | ${{ matrix.stage }}
     if: always()
     needs: [versions, e2e]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage: [development, staging, production]
     steps:
       - uses: actions/checkout@v3
 
@@ -181,15 +184,15 @@ jobs:
       - name: 📥 Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: all-blob-reports
+          name: all-blob-reports-${{ matrix.stage }}
           path: all-blob-reports
 
       - name: 🔄 Merge all blob reports into HTML Report
         run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
 
-      - name: 📤 Upload HTML report
+      - name: 📤 Upload HTML report ({{ matrix.stage }})
         uses: actions/upload-artifact@v3
         with:
-          name: e2e-report-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          name: e2e-report-${{ matrix.stage }}-${{ github.run_id }}-attempt_${{ github.run_attempt }}
           path: playwright-report
           retention-days: 7
