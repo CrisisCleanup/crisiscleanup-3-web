@@ -132,7 +132,7 @@ jobs:
         if: needs.e2e.outputs.TEST_STATUS == 'failure'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_ICON: https://avatars.githubusercontent.com/u/16155344?v=4
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_CHANNEL: 'core'
           SLACK_COLOR: '#D94F37'
@@ -150,7 +150,7 @@ jobs:
         if: needs.e2e.outputs.TEST_STATUS == 'success'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_ICON: https://avatars.githubusercontent.com/u/16155344?v=4
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_CHANNEL: 'core'
           SLACK_COLOR: '#13E768'
