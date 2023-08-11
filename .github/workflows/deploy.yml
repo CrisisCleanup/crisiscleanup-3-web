@@ -26,6 +26,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_COLOR: '#fece09'
@@ -176,6 +177,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_COLOR: '#fece09'
@@ -187,6 +189,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_COLOR: '#D94F37'
