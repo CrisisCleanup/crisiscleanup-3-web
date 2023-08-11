@@ -190,7 +190,7 @@ jobs:
       - name: 🔄 Merge all blob reports into HTML Report
         run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
 
-      - name: 📤 Upload HTML report ({{ matrix.stage }})
+      - name: 📤 Upload HTML report (${{ matrix.stage }})
         uses: actions/upload-artifact@v3
         with:
           name: e2e-report-${{ matrix.stage }}-${{ github.run_id }}-attempt_${{ github.run_attempt }}
