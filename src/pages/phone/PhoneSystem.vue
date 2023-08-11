@@ -1262,7 +1262,7 @@ export default defineComponent({
 
     async function reloadMap() {
       getWorksites().then((markers) => {
-        mapUtils.value.reloadMap(
+        mapUtils?.value?.reloadMap(
           markers,
           markers.map((m) => m.id),
         );
@@ -1279,7 +1279,7 @@ export default defineComponent({
 
       if (showingMap.value) {
         getWorksites().then((markers) => {
-          mapUtils.value.reloadMap(
+          mapUtils?.value?.reloadMap(
             markers,
             markers.map((m) => m.id),
           );
@@ -1382,7 +1382,7 @@ export default defineComponent({
       (value) => {
         if (value) {
           getWorksites().then((markers) => {
-            mapUtils.value.reloadMap(
+            mapUtils?.value?.reloadMap(
               markers,
               markers.map((m) => m.id),
             );

@@ -843,8 +843,8 @@ export default defineComponent({
         incidentId.value = value;
         queryFilter.value = { ...queryFilter.value };
         lastEventTimestamp.value = null;
-        mapUtils.value.reloadMap(await getAllEvents(), () => []);
-        mapUtils.value.restartLiveEvents();
+        mapUtils?.value?.reloadMap(await getAllEvents(), () => []);
+        mapUtils?.value?.restartLiveEvents();
       },
     );
 

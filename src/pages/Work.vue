@@ -1199,7 +1199,7 @@ export default defineComponent({
       if (sviList && container) {
         const count = Math.floor((sviList.length * Number(value)) / 100);
         const filteredSvi = sviList.slice(0, count);
-        const minSvi = filteredSvi[filteredSvi.length - 1].svi;
+        const minSvi = filteredSvi[filteredSvi.length - 1]?.svi || 0;
         for (const markerSprite of container.children) {
           markerSprite.visible = markerSprite.svi > minSvi;
         }
@@ -1238,7 +1238,7 @@ export default defineComponent({
       const list = getDatesList(container?.children?.length);
       if (list) {
         return `${moment({ hours: 0 }).diff(
-          list[0].updated_at,
+          list[0]?.updated_at,
           'days',
         )} days ago`;
       }

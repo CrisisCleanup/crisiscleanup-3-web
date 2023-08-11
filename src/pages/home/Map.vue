@@ -68,7 +68,7 @@ export default defineComponent({
 
     async function setLocations(incidentId) {
       const incident = state.incidents.find((i) => i.id === incidentId);
-      if (incident.locations.length > 0) {
+      if (incident && incident.locations.length > 0) {
         const locationIds = incident.locations.map(
           (location) => location.location,
         );
