@@ -1036,6 +1036,7 @@ export default defineComponent({
       stats,
       currentIncidentId,
       call,
+      lastCall,
       clearCall,
       potentialFailedCall,
       setPotentialFailedCall,
@@ -1124,7 +1125,7 @@ export default defineComponent({
 
       try {
         if (phoneService.callInfo.callType === 'OUTBOUND' && status) {
-          await PhoneOutbound.api().updateStatus(call.value.id, {
+          await PhoneOutbound.api().updateStatus(call?.value?.id || lastCall?.value?.id, {
             statusId: status,
             worksiteId: worksiteId.value,
             notes,
@@ -1142,7 +1143,7 @@ export default defineComponent({
 
           await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/phone_inbound/${
-              call.value.id
+              call?.value?.id || lastCall?.value?.id
             }/update_status`,
             data,
           );

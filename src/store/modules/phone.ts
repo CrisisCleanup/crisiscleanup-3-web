@@ -3,6 +3,7 @@ import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 const AppState = {
   user: {},
   call: null,
+  lastCall: null,
   incomingCall: null,
   outgoingCall: null,
   stats: {},
@@ -23,6 +24,7 @@ const getters = {
   callState: (state: State) => state.callState,
   callType: (state: State) => state.callType,
   call: (state: State) => state.call,
+  lastCall: (state: State) => state.lastCall,
   potentialFailedCall: (state: State) => state.potentialFailedCall,
   caller: (state: State) => state.caller,
   incomingCall: (state: State) => state.incomingCall,
@@ -92,7 +94,11 @@ const mutations = {
   setCallType(state: State, newType: any) {
     state.callType = newType;
   },
+  clearLastCall(state: State) {
+    state.lastCall = null;
+  },
   clearCall(state: State) {
+    state.lastCall = state.call;
     state.call = null;
     state.incomingCall = null;
     state.outgoingCall = null;

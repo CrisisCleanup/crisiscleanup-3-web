@@ -48,6 +48,7 @@ export default function useConnectFirst(context: {
   const callState = computed(() => store.getters['phone/callState']);
   const callType = computed(() => store.getters['phone/callType']);
   const call = computed(() => store.getters['phone/call']);
+  const lastCall = computed(() => store.getters['phone/lastCall']);
   const potentialFailedCall = computed(
     () => store.getters['phone/potentialFailedCall'],
   );
@@ -269,6 +270,7 @@ export default function useConnectFirst(context: {
     callState,
     callType,
     call,
+    lastCall,
     potentialFailedCall,
     caller,
     incomingCall,
