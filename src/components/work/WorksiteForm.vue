@@ -1134,7 +1134,7 @@ export default defineComponent({
     }
 
     async function onWorksiteSelect(value) {
-      emit('navigateToWorksite', value.id);
+      emit('navigateToWorksite', value);
     }
 
     function searchWorksites(search, incident) {

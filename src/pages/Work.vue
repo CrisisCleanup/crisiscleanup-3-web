@@ -1769,11 +1769,11 @@ export default defineComponent({
       reloadMap();
     }
 
-    function handleWorksiteNavigation(id: number) {
-      worksiteId.value = id;
+    function handleWorksiteNavigation(w: Worksite) {
+      worksiteId.value = w.id;
       isEditing.value = true;
       router.push({
-        path: `/incident/${currentIncidentId.value}/work/${worksite.value?.id}/edit`,
+        path: `/incident/${currentIncidentId.value}/work/${w.id}/edit`,
         query: { showOnMap: true },
       });
     }
