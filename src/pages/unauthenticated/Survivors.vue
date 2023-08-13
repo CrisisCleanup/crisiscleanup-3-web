@@ -239,9 +239,9 @@
           @photosChanged="() => getSurvivorToken(true)"
           @image-click="showImage"
         />
-        <BaseSwitch :model-value="survivorToken.allow_sharing" @update:modelValue="survivorToken.allow_sharing = $event" class="w-full mt-2" data-testid="survivorContactSharePermissionSwitch">
+        <base-checkbox :model-value="survivorToken.allow_sharing" @update:modelValue="survivorToken.allow_sharing = $event" class="w-full mt-2" data-testid="survivorContactSharePermissionSwitch">
           {{$t('survivorContact.share_permission')}}
-        </BaseSwitch>
+        </base-checkbox>
       </div>
       <hr class="my-4" />
 
@@ -381,8 +381,8 @@ import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
 import WorksiteNotes from '@/components/work/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
-import BaseSwitch from "@/components/BaseSwitch.vue";
 import survivor from "@/pages/home/Survivor.vue";
+import BaseCheckbox from "@/components/BaseCheckbox.vue";
 
 export default defineComponent({
   name: 'Survivors',
@@ -392,7 +392,7 @@ export default defineComponent({
     }
   },
   components: {
-    BaseSwitch,
+    BaseCheckbox,
     WorksiteNotes,
     WorksiteImageSection,
     LocationViewer,
