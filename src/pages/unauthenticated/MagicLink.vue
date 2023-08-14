@@ -3,10 +3,10 @@
     <div class="grid--main">
       <div class="w-2/3">
         <div class="text-3xl" data-testid="testMagicLinkDiv">
-          {{ $t('helpdesk.request_magic_link') }}
+          {{ $t('actions.request_magic_link') }}
         </div>
         <div>
-          {{ $t('helpdesk.magic_link_description') }}
+          {{ $t('magicLink.magic_link_description') }}
         </div>
         <form ref="form" class="w-108 flex flex-col" autocomplete="off">
           <base-input
@@ -49,8 +49,8 @@
               $t('magicLink.magic_link_sent')
             }}</base-text>
             <base-button
-              :text="$t('magicLink.go_to_login')"
-              :alt="$t('magicLink.go_to_login')"
+              :text="$t('resetPassword.go_to_login')"
+              :alt="$t('resetPassword.go_to_login')"
               data-testid="testGoToLogin2Button"
               size="large"
               variant="solid"
