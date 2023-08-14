@@ -134,7 +134,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.0.2",
     "@playwright/test": "^1.37.0",
     "@types/crypto-js": "^4.1.1",
     "@types/d3": "^7.4.0",
