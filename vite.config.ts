@@ -1,15 +1,16 @@
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vite';
-import type { UserConfig } from 'vite';
+import process from 'node:process';
+import { defineConfig, type UserConfig } from 'vite';
 import _ from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as vitest from 'vitest';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import autoImport from 'unplugin-auto-import/vite';
 import inspect from 'vite-plugin-inspect';
 import inspector from 'vite-plugin-vue-inspector';
-import postcssConfig from './postcss.config.cjs';
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin';
+import postcssConfig from './postcss.config';
 
 export default defineConfig(async ({ command }) => {
   const vitePlugins = [
@@ -48,8 +49,8 @@ export default defineConfig(async ({ command }) => {
     inspector(),
     sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: "crisis-cleanup",
-      project: "crisiscleanup-4-web",
+      org: 'crisis-cleanup',
+      project: 'crisiscleanup-4-web',
     }),
   ];
 
@@ -65,6 +66,11 @@ export default defineConfig(async ({ command }) => {
           'tailwind.config': fileURLToPath(
             new URL('tailwind.config.cjs', import.meta.url),
           ),
+        },
+      },
+      css: {
+        postcss: {
+          ...postcssConfig,
         },
       },
     },
