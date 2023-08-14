@@ -228,8 +228,8 @@ dependencies:
     specifier: ^2.7.2
     version: 2.7.2
   sass:
-    specifier: ^1.64.1
-    version: 1.64.1
+    specifier: ^1.65.1
+    version: 1.65.1
   unique-names-generator:
     specifier: ^4.7.1
     version: 4.7.1
@@ -329,8 +329,8 @@ devDependencies:
     specifier: ^2.4.1
     version: 2.4.1(vue@3.3.4)
   autoprefixer:
-    specifier: ^10.4.14
-    version: 10.4.14(postcss@8.4.27)
+    specifier: ^10.4.15
+    version: 10.4.15(postcss@8.4.27)
   eslint:
     specifier: 8.47.0
     version: 8.47.0
@@ -396,7 +396,7 @@ devDependencies:
     version: 0.16.6(@vueuse/core@10.3.0)
   vite:
     specifier: ^4.4.9
-    version: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+    version: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
   vite-plugin-inspect:
     specifier: ^0.7.38
     version: 0.7.38(vite@4.4.9)
@@ -405,7 +405,7 @@ devDependencies:
     version: 3.6.0(vite@4.4.9)
   vitest:
     specifier: ^0.34.1
-    version: 0.34.1(happy-dom@9.20.3)(sass@1.64.1)
+    version: 0.34.1(happy-dom@9.20.3)(sass@1.65.1)
   vue-eslint-parser:
     specifier: ^9.3.1
     version: 9.3.1(eslint@8.47.0)
@@ -550,7 +550,7 @@ packages:
       '@babel/compat-data': 7.21.7
       '@babel/core': 7.21.8
       '@babel/helper-validator-option': 7.21.0
-      browserslist: 4.21.5
+      browserslist: 4.21.10
       lru-cache: 5.1.1
       semver: 6.3.1
     dev: false
@@ -4352,7 +4352,7 @@ packages:
       '@babel/core': 7.21.8
       '@babel/plugin-transform-typescript': 7.21.3(@babel/core@7.21.8)
       '@vue/babel-plugin-jsx': 1.1.1(@babel/core@7.21.8)
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
       vue: 3.3.4
     transitivePeerDependencies:
       - supports-color
@@ -4365,7 +4365,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
       vue: 3.3.4
     dev: true
 
@@ -4385,7 +4385,7 @@ packages:
       std-env: 3.3.3
       test-exclude: 6.0.0
       v8-to-istanbul: 9.1.0
-      vitest: 0.34.1(happy-dom@9.20.3)(sass@1.64.1)
+      vitest: 0.34.1(happy-dom@9.20.3)(sass@1.65.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5056,15 +5056,15 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: false
 
-  /autoprefixer@10.4.14(postcss@8.4.27):
-    resolution: {integrity: sha512-FQzyfOsTlwVzjHxKEqRIAdJx9niO6VCBCoEwax/VLSoQF29ggECcPuBqUMZ+u8jCZOPSy8b8/8KnuFbp0SaFZQ==}
+  /autoprefixer@10.4.15(postcss@8.4.27):
+    resolution: {integrity: sha512-KCuPB8ZCIqFdA4HwKXsvz7j6gvSDNhDP7WnUjBleRkKjPdvCmHFuQ77ocavI8FT6NdvlBnE2UFr2H4Mycn8Vew==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      browserslist: 4.21.5
-      caniuse-lite: 1.0.30001482
+      browserslist: 4.21.10
+      caniuse-lite: 1.0.30001520
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -5170,16 +5170,6 @@ packages:
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
 
-  /browserslist@4.21.5:
-    resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-    dependencies:
-      caniuse-lite: 1.0.30001482
-      electron-to-chromium: 1.4.379
-      node-releases: 2.0.10
-      update-browserslist-db: 1.0.11(browserslist@4.21.5)
-
   /buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
@@ -5246,9 +5236,6 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
     dev: true
-
-  /caniuse-lite@1.0.30001482:
-    resolution: {integrity: sha512-F1ZInsg53cegyjroxLNW9DmrEQ1SuGRTO1QlpA0o2/6OpQ0gFeDRoq1yFmnr8Sakn9qwwt9DmbxHB6w167OSuQ==}
 
   /caniuse-lite@1.0.30001520:
     resolution: {integrity: sha512-tahF5O9EiiTzwTUqAeFjIZbn4Dnqxzz7ktrgGlMYNLH43Ul26IgTMH/zvL3DG0lZxBYnlT04axvInszUsZULdA==}
@@ -6038,9 +6025,6 @@ packages:
       minimatch: 9.0.1
       semver: 7.5.4
     dev: true
-
-  /electron-to-chromium@1.4.379:
-    resolution: {integrity: sha512-eRMq6Cf4PhjB14R9U6QcXM/VRQ54Gc3OL9LKnFugUIh2AXm3KJlOizlSfVIgjH76bII4zHGK4t0PVTE5qq8dZg==}
 
   /electron-to-chromium@1.4.490:
     resolution: {integrity: sha512-6s7NVJz+sATdYnIwhdshx/N/9O6rvMxmhVoDSDFdj6iA45gHR8EQje70+RYsF4GeB+k0IeNSBnP7yG9ZXJFr7A==}
@@ -7417,8 +7401,8 @@ packages:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
     dev: false
 
-  /immutable@4.3.1:
-    resolution: {integrity: sha512-lj9cnmB/kVS0QHsJnYKD1uo3o39nrbKxszjnqS9Fr6NB7bZzW45U6WSGBPKXDL/CvDKqDNPA4r3DoDQ8GTxo2A==}
+  /immutable@4.3.2:
+    resolution: {integrity: sha512-oGXzbEDem9OOpDWZu88jGiYCvIsLHMvGw+8OXlpsvTFvIQplQbjg1B1cvKg8f7Hoch6+NGjpPsH1Fr+Mc2D1aA==}
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -8440,9 +8424,6 @@ packages:
     dependencies:
       whatwg-url: 5.0.0
 
-  /node-releases@2.0.10:
-    resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
-
   /node-releases@2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
 
@@ -9417,13 +9398,13 @@ packages:
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  /sass@1.64.1:
-    resolution: {integrity: sha512-16rRACSOFEE8VN7SCgBu1MpYCyN7urj9At898tyzdXFhC+a+yOX5dXwAR7L8/IdPJ1NB8OYoXmD55DM30B2kEQ==}
+  /sass@1.65.1:
+    resolution: {integrity: sha512-9DINwtHmA41SEd36eVPQ9BJKpn7eKDQmUHmpI0y5Zv2Rcorrh0zS+cFrt050hdNbmmCNKTW3hV5mWfuegNRsEA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
       chokidar: 3.5.3
-      immutable: 4.3.1
+      immutable: 4.3.2
       source-map-js: 1.0.2
 
   /schema-utils@3.3.0:
@@ -10253,16 +10234,6 @@ packages:
       escalade: 3.1.1
       picocolors: 1.0.0
 
-  /update-browserslist-db@1.0.11(browserslist@4.21.5):
-    resolution: {integrity: sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
-    dependencies:
-      browserslist: 4.21.5
-      escalade: 3.1.1
-      picocolors: 1.0.0
-
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
@@ -10327,7 +10298,7 @@ packages:
     resolution: {integrity: sha512-/mnqMIwt5Bi9j59+48OqQtqgOx8oh186Xshdr/dqqBrakMSMlLt/jmeNHBod0PvOkesZf66ivQbWmtWYBlKetg==}
     dev: false
 
-  /vite-node@0.34.1(@types/node@18.16.3)(sass@1.64.1):
+  /vite-node@0.34.1(@types/node@18.16.3)(sass@1.65.1):
     resolution: {integrity: sha512-odAZAL9xFMuAg8aWd7nSPT+hU8u2r9gU3LRm9QKjxBEF2rRdWpMuqkrkjvyVQEdNFiBctqr2Gg4uJYizm5Le6w==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -10337,7 +10308,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -10367,7 +10338,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -10387,12 +10358,12 @@ packages:
       kolorist: 1.8.0
       magic-string: 0.30.2
       shell-quote: 1.8.1
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@4.4.9(@types/node@18.16.3)(sass@1.64.1):
+  /vite@4.4.9(@types/node@18.16.3)(sass@1.65.1):
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -10424,11 +10395,11 @@ packages:
       esbuild: 0.18.20
       postcss: 8.4.27
       rollup: 3.28.0
-      sass: 1.64.1
+      sass: 1.65.1
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vitest@0.34.1(happy-dom@9.20.3)(sass@1.64.1):
+  /vitest@0.34.1(happy-dom@9.20.3)(sass@1.65.1):
     resolution: {integrity: sha512-G1PzuBEq9A75XSU88yO5G4vPT20UovbC/2osB2KEuV/FisSIIsw7m5y2xMdB7RsAGHAfg2lPmp2qKr3KWliVlQ==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -10481,8 +10452,8 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.0
       tinypool: 0.7.0
-      vite: 4.4.9(@types/node@18.16.3)(sass@1.64.1)
-      vite-node: 0.34.1(@types/node@18.16.3)(sass@1.64.1)
+      vite: 4.4.9(@types/node@18.16.3)(sass@1.65.1)
+      vite-node: 0.34.1(@types/node@18.16.3)(sass@1.65.1)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
