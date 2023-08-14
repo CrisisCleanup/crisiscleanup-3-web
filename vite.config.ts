@@ -92,7 +92,11 @@ export default defineConfig(async ({ command }) => {
       globals: true,
       environment: 'happy-dom',
       deps: {
-        inline: ['@vue', '@vueuse'],
+        optimizer: {
+          web: {
+            include: ['@vue', '@vueuse'],
+          },
+        },
       },
       coverage: {
         provider: 'v8',
