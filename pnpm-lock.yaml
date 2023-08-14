@@ -296,14 +296,14 @@ devDependencies:
     specifier: ^7.4.0
     version: 7.4.0
   '@types/google.maps':
-    specifier: ^3.53.5
-    version: 3.53.5
+    specifier: ^3.53.6
+    version: 3.53.6
   '@types/leaflet':
     specifier: ^1.9.3
     version: 1.9.3
   '@types/lodash':
-    specifier: ^4.14.196
-    version: 4.14.196
+    specifier: ^4.14.197
+    version: 4.14.197
   '@types/node':
     specifier: ^18.16.3
     version: 18.16.3
@@ -4022,8 +4022,8 @@ packages:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
     dev: false
 
-  /@types/google.maps@3.53.5:
-    resolution: {integrity: sha512-HoRq4Te8J6krH7hj+TfdYepqegoKZCj3kkaK5gf+ySFSHLvyqYkDvkrtbcVJXQ6QBphQ0h1TF7p4J6sOh4r/zg==}
+  /@types/google.maps@3.53.6:
+    resolution: {integrity: sha512-zDU8c7K0YR1Ob7Wn0qCSQvICIuxilZH9KFIDHK6JO/5QzqEMv8e4+9bmyoDEktA9vPNmwP++zzg65h9y53iZ6Q==}
     dev: true
 
   /@types/istanbul-lib-coverage@2.0.4:
@@ -4062,8 +4062,8 @@ packages:
     dependencies:
       '@types/geojson': 7946.0.10
 
-  /@types/lodash@4.14.196:
-    resolution: {integrity: sha512-22y3o88f4a94mKljsZcanlNWPzO0uBsBdzLAngf2tp533LzZcQzb6+eZPJ+vCTt+bqF2XnvT9gejTLsAcJAJyQ==}
+  /@types/lodash@4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: true
 
   /@types/minimist@1.2.2:
