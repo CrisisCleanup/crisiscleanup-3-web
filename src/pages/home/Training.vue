@@ -101,35 +101,6 @@
       </div>
       <!--- /Content --->
 
-      <!--- Content --->
-      <div class="flex flex-col sm:flex-row justify-between m-5">
-        <!--- Training Video --->
-        <div class="flex-col sm:w-1/2">
-          <div class="video-container">
-            <iframe
-              class="resp-video"
-              data-testid="testCcuDuringCovidIframe"
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/vWFI7udFmik"
-              frameborder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            />
-          </div>
-        </div>
-        <!--- Training Video Description --->
-        <div class="flex-col sm:w-1/2">
-          <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
-            {{ $t('training.ccu_during_covid') }}
-          </h1>
-          <p class="px-10 text-xl text-crisiscleanup-dark-400">
-            {{ $t('training.ccu_during_covid_intro') }}
-          </p>
-        </div>
-        <!--- /Training Video Description --->
-      </div>
-      <!--- /Content --->
       <home-footer />
     </div>
   </Home>
