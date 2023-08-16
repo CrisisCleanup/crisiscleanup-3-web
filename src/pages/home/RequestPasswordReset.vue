@@ -46,19 +46,6 @@
           <base-text class="w-3/4 text-center" variant="body" wieght="300">
             {{ $t('resetPassword.email_arrive_soon_check_junk') }}
           </base-text>
-          <base-button
-            :text="$t('actions.got_it')"
-            :alt="$t('actions.got_it')"
-            data-testid="testGotItButton"
-            size="large"
-            variant="solid"
-            class="mt-10"
-            :action="
-              () => {
-                $router.push('/login');
-              }
-            "
-          ></base-button>
         </div>
         <template #footer></template>
       </modal>
