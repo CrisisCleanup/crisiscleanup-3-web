@@ -4,6 +4,7 @@ import moment from 'moment';
 import { omit } from 'lodash';
 import type { LocationQueryValue } from 'vue-router';
 import { generateRandomString, pkceChallengeFromVerifier } from '@/utils/oauth';
+import * as Sentry from '@sentry/browser';
 
 export const CLIENT_ID = import.meta.env.VITE_APP_CRISISCLEANUP_WEB_CLIENT_ID;
 const tokenEndpoint = `${import.meta.env.VITE_APP_API_BASE_URL}/o/token/`;
@@ -126,7 +127,9 @@ const AuthService = {
       );
       this.saveUser(user.data);
     } catch (error: any) {
-      throw new Error(`Failed to refresh access token: ${error.message}`);
+      Sentry.captureException(error);
+      this.clearAuthStorage();
+      window.location.reload();
     }
   },
   async revokeAccessToken(token: string): Promise<any> {
