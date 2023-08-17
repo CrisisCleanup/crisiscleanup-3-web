@@ -75,8 +75,6 @@ if (AuthService.getUser()) {
   axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getAccessToken()}`;
 }
 
-// const app = createApp(App);
-
 const buildApp = (app: VueApp) =>
   app
     .component('FontAwesomeIcon', FontAwesomeIcon as any)
