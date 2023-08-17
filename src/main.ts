@@ -1,5 +1,5 @@
 import { version } from '@/../package.json';
-import { createApp } from 'vue';
+import { createApp, type App as VueApp } from 'vue';
 import './style.css';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -9,11 +9,13 @@ import Datepicker from '@vuepic/vue-datepicker';
 import * as Sentry from '@sentry/vue';
 import { BrowserTracing } from '@sentry/tracing';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import Toast from 'vue-toastification';
-import type { PluginOptions as VueToastificationPluginOptions } from 'vue-toastification';
+import Toast, {
+  type PluginOptions as VueToastificationPluginOptions,
+} from 'vue-toastification';
 import { createI18n } from 'vue-i18n';
 import vSelect from 'vue-select';
 import App from './App.vue';
+import MaintenanceApp from './maintenance/App.vue';
 import router from './router';
 import BaseButton from './components/BaseButton.vue';
 import BaseInput from './components/BaseInput.vue';
@@ -73,66 +75,73 @@ if (AuthService.getUser()) {
   axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getAccessToken()}`;
 }
 
-const app = createApp(App);
-app.component('FontAwesomeIcon', FontAwesomeIcon as any);
-app.component('CcuIcon', BaseIcon);
-app.component('BaseButton', BaseButton);
-app.component('BaseInput', BaseInput);
-app.component('BaseText', BaseText);
-app.component('BaseLink', BaseLink);
-app.component('BaseRadio', BaseRadio);
-app.component('Badge', Badge);
-app.component('Tag', Tag);
-app.component('TagInput', VueTagsInput);
-app.component('VSelect', vSelect);
-app.component('AuthenticatedLayout', Authenticated);
-app.component('UnauthenticatedLayout', Unauthenticated);
-app.component('FormSelect', FormSelect);
-app.component('BaseSelect', BaseSelect);
-app.component('BaseCheckbox', BaseCheckbox);
-app.component('Modal', Modal);
-app.component('VPopover', Dropdown);
-app.component('VMenu', Menu);
-app.component('Spinner', Spinner);
-app.component('FormTree', FormTree);
-app.component('TreeMenu', TreeMenu);
-app.component('Tabs', Tabs);
-app.component('Tab', Tab);
-app.component('Datepicker', Datepicker);
+// const app = createApp(App);
 
-app.directive('tooltip', VTooltip);
+const buildApp = (app: VueApp) =>
+  app
+    .component('FontAwesomeIcon', FontAwesomeIcon as any)
+    .component('CcuIcon', BaseIcon)
+    .component('BaseButton', BaseButton)
+    .component('BaseInput', BaseInput)
+    .component('BaseText', BaseText)
+    .component('BaseLink', BaseLink)
+    .component('BaseRadio', BaseRadio)
+    .component('Badge', Badge)
+    .component('Tag', Tag)
+    .component('TagInput', VueTagsInput)
+    .component('VSelect', vSelect)
+    .component('AuthenticatedLayout', Authenticated)
+    .component('UnauthenticatedLayout', Unauthenticated)
+    .component('FormSelect', FormSelect)
+    .component('BaseSelect', BaseSelect)
+    .component('BaseCheckbox', BaseCheckbox)
+    .component('Modal', Modal)
+    .component('VPopover', Dropdown)
+    .component('VMenu', Menu)
+    .component('Spinner', Spinner)
+    .component('FormTree', FormTree)
+    .component('TreeMenu', TreeMenu)
+    .component('Tabs', Tabs)
+    .component('Tab', Tab)
+    .component('Datepicker', Datepicker)
+    .directive('tooltip', VTooltip)
+    .use(store)
+    // provide axios globally
+    .provide('axios', axios)
+    .use(Vue3Mq)
+    .use(router)
+    .use(i18n)
+    .use(Toast, {
+      timeout: 10_000,
+    } as VueToastificationPluginOptions)
+    .use(JsonViewer);
 
-app.use(store);
-// provide axios globally
-app.provide('axios', axios);
+const initSentry = () =>
+  Sentry.init({
+    dsn: 'https://33b5cc9258d64b5cb2a8084af5df4051@o317954.ingest.sentry.io/4504774609141760',
+    release: `crisiscleanup-4-web@v${version}`,
+    environment: import.meta.env.VITE_APP_STAGE,
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracePropagationTargets: [
+          'localhost',
+          'app.staging.crisiscleanup.io',
+          'crisiscleanup.org',
+          /^\//,
+        ],
+      }),
+    ],
+  });
 
-app.use(Vue3Mq);
-app.use(router);
-app.use(i18n);
-app.use(Toast, {
-  timeout: 10_000,
-} as VueToastificationPluginOptions);
-app.use(JsonViewer);
-app.config.devtools = true;
+const entrypoint =
+  import.meta.env.VITE_APP_ENTRY === 'maintenance' ? MaintenanceApp : App;
+const app = buildApp(createApp(entrypoint));
 
-Sentry.init({
-  dsn: 'https://33b5cc9258d64b5cb2a8084af5df4051@o317954.ingest.sentry.io/4504774609141760',
-  release: `crisiscleanup-4-web@v${version}`,
-  environment: import.meta.env.VITE_APP_STAGE,
-  integrations: [
-    new BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracePropagationTargets: [
-        'localhost',
-        'app.staging.crisiscleanup.io',
-        'crisiscleanup.org',
-        /^\//,
-      ],
-    }),
-  ],
-});
+initSentry();
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
-router.isReady().then(() => {
-  app.mount('#app');
-});
+void router
+  .isReady()
+  .then(() => app.mount('#app'))
+  // eslint-disable-next-line unicorn/prefer-top-level-await
+  .catch(console.error);
