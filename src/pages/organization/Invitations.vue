@@ -33,6 +33,7 @@
         :loading="false"
         :sorter="invitationRequestsSorter"
         @change="handleInvitationRequestsTableChange"
+        :body-style="{ height: '200px' }"
       >
         <template #actions="slotProps">
           <div class="flex mr-2 justify-end w-full">
@@ -111,6 +112,7 @@
         :columns="invitationsColumns"
         :loading="false"
         :sorter="invitationSorter"
+        :body-style="{ height: '200px' }"
         @change="handleInvitationsTableChange"
       >
         <template #actions="slotProps">
@@ -142,6 +144,60 @@
           </div>
         </template>
       </Table>
+
+      <div class="flex justify-between items-center my-6">
+        <div class="flex items-center">
+          <div class="text-base">
+            {{ $t('~~Persistent Invitations') }}
+          </div>
+        </div>
+        <div class="flex">
+          <base-button
+            size="small"
+            data-testid="testCreateNewPersistentInvitationButton"
+            :text="$t('actions.create_new')"
+            :alt="$t('actions.create_new')"
+            class="table-action-button"
+            :action="createNewPersistentInvitation"
+          />
+        </div>
+      </div>
+      <AjaxTable
+        :body-style="{ height: '200px' }"
+        :url="persistentInvitationsUrl"
+        :columns="persistentInvitationColumns"
+        class="border text-xs"
+        ref="persistentInvitationsTable"
+      >
+        <template #actions="slotProps">
+          <div class="flex mr-2 justify-center w-full">
+            <base-button
+              size="small"
+              :data-testid="`testShowQRCode${slotProps.item}Button`"
+              variant="solid"
+              class="m-1 mx-2 text-black text-xs px-3 py-1"
+              :action="
+                () => {
+                  showQRCode(slotProps.item);
+                }
+              "
+              :text="$t('~~Show QR Code')"
+              :alt="$t('~~Show QR Code')"
+            />
+          </div>
+        </template>
+        <template #delete="slotProps">
+          <div class="flex mr-2 justify-center items-center w-full">
+            <ccu-icon
+              :alt="$t('actions.delete_persistent_invitation')"
+              :data-testid="`testDeletePersistentInvitation${slotProps.item}Button`"
+              type="trash"
+              size="small"
+              @click="() => deletePersistentInvitation(slotProps.item)"
+            />
+          </div>
+        </template>
+      </AjaxTable>
     </div>
   </div>
 </template>
@@ -156,15 +212,26 @@ import Table from '@/components/Table.vue';
 import type { TableSorterObject } from '@/components/Table.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
+import AjaxTable from '@/components/AjaxTable.vue';
+import { makeTableColumns } from '@/utils/table';
+import { get } from 'lodash';
+import useDialogs from '@/hooks/useDialogs';
+import QRCode from '@/components/QRCode.vue';
+import CreateNewPersistentInvitation from '@/components/CreateNewPersistentInvitation.vue';
+import * as L from 'leaflet';
+import axios from 'axios';
+import { getErrorMessage } from '@/utils/errors';
 
 type TableInstance = InstanceType<typeof Table>;
 
 export default defineComponent({
   name: 'Invitations',
-  components: { InviteUsers, Table },
-  setup(props) {
+  components: { AjaxTable, InviteUsers, Table },
+  setup() {
     const { t } = useI18n();
     const $toasted = useToast();
+    const { component } = useDialogs();
+
     const invitationsTable = ref<TableInstance | null>(null);
     const invitationRequestsTable = ref<TableInstance | null>(null);
     const invitationSorter = ref<TableSorterObject<Invitation>>({});
@@ -250,6 +317,33 @@ export default defineComponent({
         width: '0.5fr',
       },
     ]);
+    const persistentInvitationsTable = ref(null);
+
+    const persistentInvitationColumns = makeTableColumns([
+      ['model', '1fr', 'Model'],
+      ['object_id', '1fr', 'Object ID'],
+      [
+        'requires_approval',
+        '1fr',
+        'Requires Approval',
+        {
+          transformer: (_: string, item) =>
+            get(item, 'requires_approval', false) ? 'Yes' : 'No',
+        },
+      ],
+      [
+        'expires_at',
+        '1fr',
+        'Expires At',
+        {
+          transformer(expires_at: string) {
+            return moment(expires_at).format('L');
+          },
+        },
+      ],
+      ['actions', '1fr', 'actions'],
+      ['delete', '1fr', 'delete'],
+    ]);
 
     const invitationRequests = computed(() => {
       const baseQuery = InvitationRequest.query()
@@ -271,6 +365,50 @@ export default defineComponent({
 
       return Invitation.query().orderBy('id', 'desc').get();
     });
+    const persistentInvitationsUrl = `${
+      import.meta.env.VITE_APP_API_BASE_URL
+    }/persistent_invitations`;
+
+    async function deletePersistentInvitation(persistentInvitation) {
+      try {
+        await axios.delete(
+          `${persistentInvitationsUrl}/${persistentInvitation.token}`,
+        );
+        await $toasted.success(t('~~Persistent Invitation Deleted'));
+        await persistentInvitationsTable.value.getData();
+      } catch (error) {
+        debugger;
+        await $toasted.error(getErrorMessage(error));
+      }
+    }
+
+    function showQRCode(persistentInvitation) {
+      return component({
+        title: t('~~Join the team'),
+        component: QRCode,
+        classes: 'w-full h-84 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-sm shadow',
+        props: {
+          value: window.location.origin + '/i/' + persistentInvitation.token,
+        },
+      });
+    }
+
+    async function createNewPersistentInvitation() {
+      const response = await component({
+        id: 'persistent_invitation_modal',
+        title: t('~~Create New Persistent Invitation'),
+        component: CreateNewPersistentInvitation,
+        classes: 'w-full h-72 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-sm shadow',
+        hideFooter: true,
+      });
+
+      if (response === 'ok') {
+        await persistentInvitationsTable.value.getData();
+      }
+
+    }
 
     async function loadAllInvitationRequests() {
       await InvitationRequest.api().get(`/invitation_requests`, {
@@ -362,6 +500,7 @@ export default defineComponent({
       invitationsTable,
       currentRequestsColumns,
       invitationsColumns,
+      persistentInvitationColumns,
       invitationSorter,
       invitationRequestsSorter,
       invitationRequests,
@@ -369,14 +508,17 @@ export default defineComponent({
       exportInvitationsTable,
       exportInvitationRequestsTable,
       deleteExpiredInvitations,
-      loadAllInvitationRequests,
-      loadAllInvitations,
+      persistentInvitationsTable,
       acceptInvitationRequest,
       rejectInvitationRequest,
       resendInvitation,
       deleteInvitations,
       handleInvitationsTableChange,
       handleInvitationRequestsTableChange,
+      createNewPersistentInvitation,
+      showQRCode,
+      deletePersistentInvitation,
+      persistentInvitationsUrl,
     };
   },
 });

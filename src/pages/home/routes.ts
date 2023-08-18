@@ -9,6 +9,7 @@ import Contributions from '@/pages/home/Contributions.vue';
 import Privacy from '@/pages/home/Privacy.vue';
 import Terms from '@/pages/home/Terms.vue';
 import RegisterOrganization from '@/pages/home/RegisterOrganization.vue';
+import PersistentInvitationSignup from "@/pages/home/PersistentInvitationSignup.vue";
 
 export default [
   {
@@ -21,6 +22,12 @@ export default [
     path: '/request_access',
     component: RequestAccess,
     name: 'nav.request_access',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/i/:token',
+    component: PersistentInvitationSignup,
+    name: 'nav.persistent_invitation_signup',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
