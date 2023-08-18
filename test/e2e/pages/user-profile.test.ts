@@ -10,7 +10,6 @@ test.describe('UserProfile', () => {
   test.use({ storageState: normalUserStatePath });
 
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const profileMenuDiv = page.getByTestId('testAvatarIcon').first();
     await profileMenuDiv.click();

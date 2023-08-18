@@ -10,7 +10,6 @@ test.describe('Reports', () => {
   test.use({ storageState: normalUserStatePath });
 
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const reportLink = page.getByTestId('testreportsLink');
     await reportLink.click();

@@ -91,7 +91,6 @@ test.describe('DashboardPage', () => {
       'production',
     ]),
     async ({ page, context }) => {
-      test.setTimeout(60_000);
       const navLinks = [
         'testdashboardLink',
         'testworkLink',
@@ -161,7 +160,6 @@ test.describe('DashboardPage', () => {
       'production',
     ]),
     async ({ page }) => {
-      test.setTimeout(2 * 60 * 1000);
       const infoDivsTestIds = [
         'testMetricCardMyClaimedCasesDiv',
         'testMetricCardTotalClaimedDiv',

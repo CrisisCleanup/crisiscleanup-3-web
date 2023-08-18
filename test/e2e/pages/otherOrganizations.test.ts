@@ -10,7 +10,6 @@ test.describe('OtherOrganizations', () => {
   test.use({ storageState: normalUserStatePath });
 
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const otherOrgLink = page.getByTestId('testother_organizationsLink');
     await otherOrgLink.click();

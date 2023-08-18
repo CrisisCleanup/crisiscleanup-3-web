@@ -136,7 +136,6 @@ test.describe('LoginPage', () => {
       'production',
     ]),
     async ({ page, context }) => {
-      test.setTimeout(60_000);
       const linkInfos = await visitAllLinksAndGetResponseInfo(page, context);
       const statuses = linkInfos.map((l) => l.status);
       const isStatusOKForAllLinks = statuses.every((s) =>

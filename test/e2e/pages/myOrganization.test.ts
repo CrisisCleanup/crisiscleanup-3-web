@@ -30,7 +30,6 @@ test.describe('MyOrganization', () => {
   const commonTestIds = ['testMyOrganizationDashboardDiv'];
 
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const myOrgLink = page.getByTestId('testmy_organizationLink');
     await myOrgLink.click();

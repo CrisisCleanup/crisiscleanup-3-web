@@ -45,7 +45,6 @@ test.describe('WorkPage', () => {
   ];
 
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(60_000);
     await page.goto('/dashboard');
     const workLink = page.getByTestId('testworkLink');
     await workLink.click();
@@ -102,7 +101,6 @@ test.describe('WorkPage', () => {
       ['primary', 'slow', 'read', 'development', 'staging', 'production'],
     ),
     async ({ page }) => {
-      test.setTimeout(60_000);
       // by default, utility bar and worksite form should be visible
       const utilityBarItems = utilityBarTestIds;
       const utilityBarCollapseButton = page.getByTestId(
