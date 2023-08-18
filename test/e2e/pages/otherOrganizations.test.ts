@@ -15,7 +15,7 @@ test.describe('OtherOrganizations', () => {
     const otherOrgLink = page.getByTestId('testother_organizationsLink');
     await otherOrgLink.click();
     await page.waitForURL(/.*\/other_organizations.*/);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

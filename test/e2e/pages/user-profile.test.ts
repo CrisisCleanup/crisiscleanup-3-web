@@ -17,7 +17,7 @@ test.describe('UserProfile', () => {
     const userProfileLink = page.getByTestId('testUserprofileProfileLink');
     await userProfileLink.click();
     await page.waitForURL(/.*\/profile.*/);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

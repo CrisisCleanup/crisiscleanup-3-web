@@ -50,7 +50,7 @@ test.describe('WorkPage', () => {
     const workLink = page.getByTestId('testworkLink');
     await workLink.click();
     await page.waitForURL(/.*\/incident\/.*\/work.*/);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

@@ -9,7 +9,7 @@ import {
 test.describe('LoginPage', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

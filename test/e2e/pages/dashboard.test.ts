@@ -12,7 +12,7 @@ test.describe('DashboardPage', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/dashboard');
     await page.waitForURL(/.*\/incident\/.*\/dashboard.*/);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

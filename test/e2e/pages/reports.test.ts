@@ -15,7 +15,7 @@ test.describe('Reports', () => {
     const reportLink = page.getByTestId('testreportsLink');
     await reportLink.click();
     await page.waitForURL(/.*\/reports.*/);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(

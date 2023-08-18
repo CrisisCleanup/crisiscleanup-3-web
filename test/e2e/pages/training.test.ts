@@ -6,7 +6,7 @@ test.describe('Training', () => {
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/training');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState();
   });
 
   test(
