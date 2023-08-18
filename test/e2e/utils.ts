@@ -116,20 +116,13 @@ export async function doLogin(
     await emailField.fill(email);
     await passwordField.click();
     await passwordField.fill(password);
-    // await passwordField.press('Enter');
+
     await loginSubmitButton.click();
 
-    await page.waitForLoadState('networkidle');
-    // Click oauth authorize btn if needed
-    const oauthAuthorizeBtn = page.getByRole('button', { name: 'Authorize' });
-    const isAuthorizeBtnVisible = await oauthAuthorizeBtn.isVisible();
-    if (isAuthorizeBtnVisible) {
-      await oauthAuthorizeBtn.click();
-    }
-
-    await page.waitForLoadState('networkidle');
     // wait for dashboard root div
-    await page.waitForSelector('[data-testid="testDashboarddiv"]');
+    await page.waitForSelector('[data-testid="testDashboarddiv"]', {
+      state: 'visible',
+    });
     return true;
   } catch (error: unknown) {
     console.error('Error Logging In', error);
