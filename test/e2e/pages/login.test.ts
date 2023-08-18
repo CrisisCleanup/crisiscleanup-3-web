@@ -98,6 +98,7 @@ test.describe('LoginPage', () => {
       'production',
     ]),
     async ({ page }) => {
+      await page.waitForURL((u) => u.href.includes('api.'));
       const _dataTestIds = await getAllTestIds(page);
       // don't include testIncidentPhoneDiv (current incident hotline) as it changes based on current incident
       const dataTestIds = _dataTestIds.filter(
