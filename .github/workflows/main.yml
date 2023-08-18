@@ -119,7 +119,7 @@ jobs:
     needs: [versions]
     # TODO: testing on PRs doesnt make sense like this.
     # Could setup feature branch deployments though.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -206,7 +206,7 @@ jobs:
   merge-e2e-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     name: 🔄 Merge Playwright Reports
-    if: github.event_name == 'push' && always()
+    # if: github.event_name == 'push' && always()
     needs: [versions, test-e2e]
     runs-on: ubuntu-latest
     steps:
