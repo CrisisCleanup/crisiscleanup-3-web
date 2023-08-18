@@ -119,6 +119,13 @@ export async function doLogin(
 
     await loginSubmitButton.click();
 
+    await page.waitForLoadState();
+    const oauthAuthorizeBtn = page.getByRole('button', { name: 'Authorize' });
+    const isAuthorizeBtnVisible = await oauthAuthorizeBtn.isVisible();
+    if (isAuthorizeBtnVisible) {
+      await oauthAuthorizeBtn.click();
+    }
+
     // wait for dashboard root div
     await page.waitForSelector('[data-testid="testDashboarddiv"]', {
       state: 'visible',
