@@ -206,7 +206,7 @@ jobs:
   merge-e2e-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     name: 🔄 Merge Playwright Reports
-    if: always()
+    if: github.event_name == 'push' && always()
     needs: [versions, test-e2e]
     runs-on: ubuntu-latest
     steps:
