@@ -125,7 +125,7 @@ export interface Zendesk {
 const [useProvideZendesk, useZendesk] = createInjectionState(
   (initialConfig: ZendeskConfig) => {
     const config = reactive(initialConfig);
-    const zeWindow = computed(() => window as typeof window & { zE: Zendesk });
+    const zeWindow = computed(() => window as typeof window & { zE?: Zendesk });
 
     const _zeContainer = ref<HTMLDivElement | undefined>(undefined);
     const _zeWidgetFrame = ref<HTMLIFrameElement | undefined>(undefined);
@@ -153,13 +153,18 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
       _zeContainer,
       (mutations) => {
         // zeContainer also holds the label, which gets destroyed
-        const isWidgetNode = (c: Node): bool => c.id === 'webWidget';
+        const isWidgetNode = (c: Node): boolean =>
+          'id' in c && c.id === 'webWidget';
         const widgetFrameAdded = mutations.find((mut) =>
-          [...mut.addedNodes].some(isWidgetNode),
+          // eslint-disable-next-line unicorn/prefer-spread
+          Array.from(mut.addedNodes).some(isWidgetNode),
         );
         if (!widgetFrameAdded) {
           if (
-            mutations.some((mut) => [...mut.removedNodes].some(isWidgetNode))
+            mutations.some((mut) =>
+              // eslint-disable-next-line unicorn/prefer-spread
+              Array.from(mut.removedNodes).some(isWidgetNode),
+            )
           ) {
             _zeWidgetFrame.value = undefined;
           }
@@ -176,7 +181,9 @@ const [useProvideZendesk, useZendesk] = createInjectionState(
     const zE: Zendesk = <ArgsT extends Parameters<Zendesk>>(
       ...args: ArgsT
     ): void => {
-      zeWindow.value.zE(...(args as Parameters<Zendesk>));
+      // if zendesk if blocked or fails to load in some fashion,
+      // zE may not be defined.
+      zeWindow.value.zE?.(...(args as Parameters<Zendesk>));
     };
 
     // reactively update zendesk config
