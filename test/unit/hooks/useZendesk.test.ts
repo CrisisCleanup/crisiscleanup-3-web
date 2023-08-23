@@ -1,13 +1,21 @@
-import type { MockedFunction } from 'vitest';
-import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import {
+  afterAll,
+  beforeAll,
+  describe,
+  expect,
+  test,
+  vi,
+  type MockedFunction,
+} from 'vitest';
 import { defineComponent, h } from 'vue';
 import { mount } from '@vue/test-utils';
-import type { Zendesk, ZendeskConfig } from '../../../src/hooks';
 import {
   useProvideZendesk,
   useZendesk,
   ZendeskCommand,
   ZendeskTarget,
+  type Zendesk,
+  type ZendeskConfig,
 } from '../../../src/hooks';
 
 const initialConfig: ZendeskConfig = {
@@ -155,5 +163,19 @@ describe('useZendesk', () => {
         ],
       ]
     `);
+  });
+
+  test('useZendesk no-op when zendesk fails to load', () => {
+    zEMock.mockReset();
+    delete (window as typeof window & { zE: MockedFunction<Zendesk> }).zE;
+    mount(
+      defineComponent({
+        setup() {
+          useProvideZendesk(initialConfig);
+          return () => h('div');
+        },
+      }),
+    );
+    expect(zEMock).not.toHaveBeenCalled();
   });
 });
