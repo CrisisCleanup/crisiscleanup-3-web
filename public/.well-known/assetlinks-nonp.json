@@ -1,0 +1,26 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.crisiscleanup.demo.debug",
+            "sha256_cert_fingerprints": [
+                "F5:C8:56:F1:82:A5:5B:A3:03:BB:70:A1:65:26:4A:96:5F:C1:00:F7:4C:8A:4F:A2:9A:E9:6D:8D:BD:95:51:33"
+            ]
+        }
+    },
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.crisiscleanup.demo",
+            "sha256_cert_fingerprints": [
+                "F5:C8:56:F1:82:A5:5B:A3:03:BB:70:A1:65:26:4A:96:5F:C1:00:F7:4C:8A:4F:A2:9A:E9:6D:8D:BD:95:51:33"
+            ]
+        }
+    }
+]
