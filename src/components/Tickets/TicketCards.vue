@@ -498,8 +498,7 @@ async function loginAs(userId: string) {
       user: userId,
     },
   );
-  store.commit('auth/setUser', response.data);
-  window.location.replace('/');
+  window.location = response.data.link;
 }
 
 async function getCcuStats() {
