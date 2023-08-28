@@ -740,7 +740,21 @@ const invitationsModalVisibility = ref(false);
 const showInvitationsModal = () => {
   invitationsModalVisibility.value = !invitationsModalVisibility.value;
 };
+const tableWidthMQ = computed(() => {
+  const screenWidth = window.innerWidth;
 
+  if (screenWidth <= 400) {
+    return {
+      height: '670px',
+      width: '80%',
+    };
+  } else {
+    return {
+      height: '670px',
+      width: '100%',
+    };
+  }
+});
 onMounted(async () => {
   isLoading.value = true;
   getAgentIdForCurrentUser();
@@ -1292,22 +1306,23 @@ onMounted(async () => {
             v-if="macroModalVisibility"
             closeable
             :title="t('helpdesk.macros')"
-            class="p-0 md:p-10"
             :fullscreen="true"
-            modal-classes="mx-2"
+            :class="[mq.md ? 'px-10' : '', mq.lgPlus ? 'p-5' : '']"
+            modal-header-classes="sticky top-0 bg-white"
+            modal-classes="overflow-auto"
             @close="showMacroModal()"
           >
             <template #default>
               <base-input
                 v-model="macroSearch"
                 icon="search"
-                class="my-2"
+                class="m-2 pr-8 searchOverride"
                 :placeholder="t('helpdesk.search_macros')"
               ></base-input>
               <Table
                 :columns="macroColumns"
                 :data="onMacroSearch"
-                :body-style="{ height: '600px' }"
+                :body-style="tableWidthMQ"
                 @row-click="(v) => executeMacro(v)"
               >
                 <template #template="slotProps">
@@ -1503,6 +1518,19 @@ onMounted(async () => {
     }
   }
 }
+.searchOverride {
+  width: 100% !important;
+  min-width: 100%;
+}
+/* Media query for extra-small screens (up to 576px width) */
+@media (max-width: 400px) {
+  .searchOverride {
+    width: 85% !important;
+    min-width: 0; /* Resetting the min-width for xs screens */
+  }
+
+}
+
 
 .new {
   color: #c19700;
