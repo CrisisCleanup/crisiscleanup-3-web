@@ -443,6 +443,12 @@ const getAppTypeIcons = (appPlatform: string, ticketSubject: string) => {
   return webIcon;
 };
 
+const isFullscreen = computed(() => {
+  const screenWidth = window.innerWidth;
+
+  // Assuming md breakpoint is 768px
+  return screenWidth < 768;
+});
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -650,11 +656,10 @@ onMounted(() => {
     v-if="ticketModal"
     closeable
     :title="'Ticket: ' + activeTicket.id"
-    :fullscreen="true"
+    :fullscreen="isFullscreen"
     :class="[mq.md ? 'px-10' : '', mq.lgPlus ? 'p-5' : '']"
     modal-header-classes="sticky top-0 bg-white"
     modal-classes="overflow-auto"
-    modal-body-classes="pb-5"
     @close="showTicketModal()"
   >
     <template #default>
