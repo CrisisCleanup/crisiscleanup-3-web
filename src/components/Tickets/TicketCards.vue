@@ -992,10 +992,14 @@ onMounted(async () => {
     <modal
       v-if="mobileExtraUserInfo"
       closeable
-      fullscreen
       :title="t('helpdesk.more_user_details')"
-      modal-body-classes="overflow-y-scroll"
       @close="showExtraUserInfoModal()"
+
+      :fullscreen="true"
+      :class="[mq.md ? 'px-10' : '', mq.lgPlus ? 'p-5' : '']"
+      modal-header-classes="sticky top-0 bg-white"
+      modal-classes="overflow-auto"
+      modal-body-classes="p-1"
     >
       <template #default>
         <div v-if="ccUser" class="cc__user-info2">
@@ -1144,6 +1148,51 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+        <div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+          <div>Testing Scroll</div>
+        </div>
+
       </template>
     </modal>
 
