@@ -742,17 +742,11 @@ const showInvitationsModal = () => {
 const tableWidthMQ = computed(() => {
   const screenWidth = window.innerWidth;
 
-  if (screenWidth <= 400) {
-    return {
-      height: '670px',
-      width: '80%',
-    };
-  } else {
+
     return {
       height: '670px',
       width: '100%',
     };
-  }
 });
 onMounted(async () => {
   isLoading.value = true;
@@ -1328,14 +1322,17 @@ onMounted(async () => {
                 :body-style="tableWidthMQ"
                 @row-click="(v) => executeMacro(v)"
               >
-                <template #template="slotProps">
-                  <span v-if="mq.mdMinus" class="font-bold">{{ $t('helpdesk.template') }}</span>
-                  <div
-                    class="overflow-auto px-4"
-                    :class="h - [slotProps.item.template.length]"
-                  >
-                    {{ slotProps.item.template }}
+                <template #template="slotProps" >
+                  <div class="flex flex-col">
+                    <span v-if="mq.mdMinus" class="font-bold">{{ $t('helpdesk.template') }}</span>
+                    <div
+                      class="overflow-auto px-4 pt-2"
+                      :class="h - [slotProps.item.template.length]"
+                    >
+                      {{ slotProps.item.template }}
+                    </div>
                   </div>
+
                 </template>
               </Table>
             </template>
@@ -1525,14 +1522,7 @@ onMounted(async () => {
   width: 100% !important;
   min-width: 100%;
 }
-/* Media query for extra-small screens (up to 576px width) */
-@media (max-width: 400px) {
-  .searchOverride {
-    width: 85% !important;
-    min-width: 0; /* Resetting the min-width for xs screens */
-  }
 
-}
 
 
 .new {
