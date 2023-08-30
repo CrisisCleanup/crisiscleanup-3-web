@@ -273,10 +273,10 @@
           class="mx-4 py-1 inset-1"
           @selectedExisting="onSelectExistingWorksite"
           @input="
-                  (value: string) => {
-                    mobileSearch = value;
-                  }
-                "
+            (value: string) => {
+              mobileSearch = value;
+            }
+          "
         />
       </div>
       <div
@@ -1053,7 +1053,7 @@ export default defineComponent({
         Number(stats.value.inQueue || 0) +
         Number(stats.value.active || 0) +
         Number(remainingCallbacks.value || 0) +
-        Number(remainingCallbacks.value || 0)
+        Number(remainingCalldowns.value || 0)
       );
     });
     const showingDetails = computed(function () {
@@ -1115,11 +1115,14 @@ export default defineComponent({
 
       try {
         if (phoneService.callInfo.callType === 'OUTBOUND' && status) {
-          await PhoneOutbound.api().updateStatus(call?.value?.id || lastCall?.value?.id, {
-            statusId: status,
-            worksiteId: worksiteId.value,
-            notes,
-          });
+          await PhoneOutbound.api().updateStatus(
+            call?.value?.id || lastCall?.value?.id,
+            {
+              statusId: status,
+              worksiteId: worksiteId.value,
+              notes,
+            },
+          );
         }
 
         if (phoneService.callInfo.callType === 'INBOUND') {
