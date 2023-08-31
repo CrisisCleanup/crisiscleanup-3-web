@@ -20,6 +20,7 @@ import useEmitter from '@/hooks/useEmitter';
 import webIcon from '@/assets/icons/web.svg';
 import iosIcon from '@/assets/icons/ios.svg';
 import androidIcon from '@/assets/icons/android.svg';
+import { useToast } from 'vue-toastification';
 
 const mq = useMq();
 const { emitter } = useEmitter();
@@ -27,6 +28,7 @@ const { t } = useI18n();
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
+const toast = useToast();
 interface Ticket {
   assignee_id: number;
   collaborator_ids: number[];
@@ -445,10 +447,28 @@ const getAppTypeIcons = (appPlatform: string, ticketSubject: string) => {
 
 const isFullscreen = computed(() => {
   const screenWidth = window.innerWidth;
-
   // Assuming md breakpoint is 768px
   return screenWidth < 768;
 });
+
+const IncidentNumbers = ref([
+  { shortName: "TN Storms:", number:"(865) 351-0552" },
+  { shortName: "HI Fires:",number:"(808) 451-3102" },
+  { shortName: "Hilary:",number:"(844) 965-1386" },
+  { shortName: "Idalia:",number:"(800) 451-1954" },
+  { shortName: "WV Floods:",number:"(304) 606-3452" }
+]);
+const copyToClipboard = (text) => {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  toast.info(t('~~Text copied to clipboard: ' + text));
+
+};
+
 onMounted(() => {
   isLoading.value = true;
   fetchTickets();
@@ -662,6 +682,12 @@ onMounted(() => {
     modal-classes="overflow-auto"
     @close="showTicketModal()"
   >
+    <template #header>
+      <div class="title flex p-3  justify-between border-b" :class="mq.mdPlus ? 'flex-row items-center' : 'flex-col'">
+        <div class="px-2" :class="mq.mdPlus ? 'border-r' : 'border-b'">Ticket: {{activeTicket.id}}</div>
+        <div class="px-2" v-for="item in IncidentNumbers">{{item.shortName }} <span class="text-[#2c9ffe]" @click="copyToClipboard(item.number)">{{ item.number }}</span></div>
+      </div>
+    </template>
     <template #default>
       <TicketCards
         v-if="
