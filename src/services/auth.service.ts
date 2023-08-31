@@ -151,9 +151,7 @@ const AuthService = {
       );
       console.log('Token revoked successfully');
     } catch (error: any) {
-      Sentry.captureException(error);
-      this.clearAuthStorage();
-      window.location.reload();
+      throw new Error(`Failed to revoke access token: ${error.message}`);
     }
   },
   setAccessToken(token: OuathToken) {
