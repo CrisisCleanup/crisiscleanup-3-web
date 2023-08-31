@@ -76,6 +76,8 @@ import logout from './assets/icons/logout.svg';
 import plane from './assets/icons/plane.svg';
 import news from './assets/icons/news.svg';
 import stickyNoteSolid from './assets/icons/sticky-note-solid.svg';
+import appleAppStore from './assets/icons/appleAppStore.svg';
+import googlePlayStore from './assets/icons/googlePlayStore.svg';
 
 // DISASTER ICONS
 import contaminatedWater from './assets/disaster_icons/contaminated-water.svg';
@@ -255,6 +257,8 @@ export const ICON_MAP = {
   logout,
   plane,
   news,
+  'google-play-store': googlePlayStore,
+  'apple-app-store': appleAppStore,
   'sticky-note-solid': stickyNoteSolid,
 };
 
