@@ -5,7 +5,30 @@
     class="flex flex-col mt-16 md:mt-0"
     data-testid="testDashboarddiv"
   >
-    <div class="flex self-end mr-4">
+    <div class="flex self-end mr-4 items-center">
+      <div class="flex items-center px-4">
+        <BaseText> {{ $t('Download the App')}}</BaseText>
+        <a>
+          <ccu-icon
+            data-testid="testDownloadAndroid"
+            :alt="$t('~~Download for Android')"
+            size="large"
+            class="p-1 py-2"
+            type="apple-app-store"
+            linked
+          />
+        </a>
+        <a>
+        <ccu-icon
+          data-testid="testDownloadIos"
+          :alt="$t('~~Download for Ios')"
+          size="large"
+          class="p-1 py-2"
+          type="google-play-store"
+          linked
+        />
+        </a>
+      </div>
       <RedeployRequest />
       <InviteUsers class="mx-1" />
     </div>
@@ -503,10 +526,12 @@ import useDialogs from '../hooks/useDialogs';
 import ReportWidget from '@/components/reports/ReportWidget.vue';
 import { transformWidgetData } from '@/utils/reports';
 import { numeral } from '@/utils/helpers';
+import BaseText from "@/components/BaseText.vue";
 
 export default defineComponent({
   name: 'Dashboard',
   components: {
+    BaseText,
     ReportWidget,
     UserTransferRequestTable,
     RedeployRequest,
