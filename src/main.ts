@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@sipec/vue3-tags-input';
 import Datepicker from '@vuepic/vue-datepicker';
 import * as Sentry from '@sentry/vue';
-import { BrowserTracing } from '@sentry/tracing';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import Toast, {
   type PluginOptions as VueToastificationPluginOptions,
@@ -114,21 +113,26 @@ const buildApp = (app: VueApp) =>
     } as VueToastificationPluginOptions)
     .use(JsonViewer);
 
-const initSentry = () =>
+const initSentry = (vueApp: VueApp) =>
   Sentry.init({
+    app: vueApp,
     dsn: 'https://33b5cc9258d64b5cb2a8084af5df4051@o317954.ingest.sentry.io/4504774609141760',
     release: `crisiscleanup-4-web@v${version}`,
     environment: import.meta.env.VITE_APP_STAGE,
+    tracePropagationTargets: [
+      'localhost',
+      /^https:\/\/(api\.|app\.|)(dev\.|staging\.|)crisiscleanup\.(org|io)/,
+      /^\//,
+    ],
+    tracesSampleRate: 0.15,
+    replaysSessionSampleRate: 0.05,
+    replaysOnErrorSampleRate: 0.2,
+    trackComponents: true,
     integrations: [
-      new BrowserTracing({
+      new Sentry.BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        tracePropagationTargets: [
-          'localhost',
-          'app.staging.crisiscleanup.io',
-          'crisiscleanup.org',
-          /^\//,
-        ],
       }),
+      new Sentry.Replay(),
     ],
   });
 
@@ -136,7 +140,9 @@ const entrypoint =
   import.meta.env.VITE_APP_ENTRY === 'maintenance' ? MaintenanceApp : App;
 const app = buildApp(createApp(entrypoint));
 
-initSentry();
+if (import.meta.env.PROD) {
+  initSentry(app);
+}
 
 void router
   .isReady()
