@@ -1,15 +1,13 @@
 <script lang="ts">
-import { defineComponent, computed, onMounted, watch, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import axios from 'axios';
 import { useStore } from 'vuex';
 import { DialogWrapper } from 'vue3-promise-dialog';
+import axios, { type AxiosError } from 'axios';
 import { cachedGet, hash } from './utils/promise';
 import { AuthService } from './services/auth.service';
 import { useProvideZendesk } from '@/hooks';
-import User from '@/models/User';
-import useCurrentUser from '@/hooks/useCurrentUser';
 
 export default defineComponent({
   name: 'App',
@@ -108,18 +106,50 @@ export default defineComponent({
       axios.defaults.headers.CCU_WEB_URL = window.location.href;
 
       // Intercept and handle unauthenticated requests
-      axios.interceptors.response.use(
-        function (response) {
-          return response;
-        },
-        function (error) {
-          if (error.response && error.response.status === 401) {
-            AuthService.refreshAccessToken();
-          }
+      // TODO: This belongs in a proper hook, not in entry.
+      const isReauthenticating = ref(false);
+      const reauthSubscribers = ref<Array<(token: string) => unknown>>([]);
 
-          return Promise.reject(error);
-        },
-      );
+      axios.interceptors.response.use(null, function (error: AxiosError) {
+        if (error.response && error.response.status === 401) {
+          // If no one else is reauthenticating, start the process
+          if (!isReauthenticating.value) {
+            isReauthenticating.value = true;
+            AuthService.refreshAccessToken()
+              .then(() => {
+                void Promise.allSettled(
+                  reauthSubscribers.value.map((cb) =>
+                    cb(AuthService.getAccessToken()!),
+                  ),
+                );
+                isReauthenticating.value = false;
+                reauthSubscribers.value = [];
+              })
+              .catch((error) => {
+                console.error(error);
+                // should have already been redirected by this point.
+                console.log('REFRESH FAILED');
+                isReauthenticating.value = false;
+                reauthSubscribers.value = [];
+              });
+          }
+          // wait for the reauth to finish then retry the request.
+          return new Promise((resolve) => {
+            reauthSubscribers.value.push((token) =>
+              resolve(
+                axios({
+                  ...error.config!,
+                  headers: {
+                    ...error.config!.headers,
+                    Authorization: `Bearer ${token}`,
+                  },
+                }),
+              ),
+            );
+          });
+        }
+        return error;
+      });
       await getEnums();
 
       const oauthTokenChannel = new BroadcastChannel('oauthTokenChannel');
