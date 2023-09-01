@@ -128,7 +128,6 @@ export default defineComponent({
               .catch((error) => {
                 console.error(error);
                 // should have already been redirected by this point.
-                console.log('REFRESH FAILED');
                 isReauthenticating.value = false;
                 reauthSubscribers.value = [];
               });
