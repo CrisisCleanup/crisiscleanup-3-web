@@ -2,7 +2,6 @@
 import { defineComponent, computed, onMounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import moment from 'moment';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { DialogWrapper } from 'vue3-promise-dialog';
@@ -100,10 +99,6 @@ export default defineComponent({
     );
 
     onMounted(async () => {
-      if (moment().isAfter(AuthService.getAccessTokenExpiry())) {
-        AuthService.removeUser();
-      }
-
       if (import.meta.env.NODE_ENV === 'development') {
         eventsInterval.value = setInterval(pushCurrentEvents, 2000);
       }
