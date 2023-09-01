@@ -28,6 +28,7 @@ export interface OuathToken {
   token_type: string;
 }
 
+// TODO: Server-side storage and handling of tokens via session.
 const AuthService = {
   async refreshAndSaveUser() {
     const user = await axios.get(
@@ -234,10 +235,7 @@ const AuthService = {
     ]);
   },
   clearAuthStorage() {
-    localStorage.removeItem('oauth_user');
-    localStorage.removeItem('oauth_token');
-    localStorage.removeItem('oauth_token_expiry');
-    localStorage.removeItem('code_verifier');
+    localStorage.clear();
   },
   async logoutUser() {
     try {
