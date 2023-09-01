@@ -56,9 +56,6 @@ dependencies:
   '@sentry/integrations':
     specifier: ^7.66.0
     version: 7.66.0
-  '@sentry/tracing':
-    specifier: ^7.66.0
-    version: 7.66.0
   '@sentry/vue':
     specifier: ^7.66.0
     version: 7.66.0(vue@3.3.4)
@@ -2655,13 +2652,6 @@ packages:
       '@sentry/core': 7.66.0
       '@sentry/types': 7.66.0
       '@sentry/utils': 7.66.0
-    dev: false
-
-  /@sentry/tracing@7.66.0:
-    resolution: {integrity: sha512-9bnz2EcOwjeMZAuYJnrwcRrImu9c10p7A0iDB8b2HLcp7gpuCkJbJyGoC1xeKD7reVD0BPq3VIbeHSwCcQufoQ==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry-internal/tracing': 7.66.0
     dev: false
 
   /@sentry/types@7.66.0:
