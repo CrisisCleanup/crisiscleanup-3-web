@@ -254,8 +254,10 @@ const AuthService = {
       console.error(error);
     }
     if (this.getAccessToken()) {
-      await this.revokeAccessToken(this.getAccessToken() as string);
-      await this.revokeAccessToken(this.getRefreshToken() as string);
+      await Promise.allSettled([
+        this.revokeAccessToken(this.getAccessToken() as string),
+        this.revokeAccessToken(this.getRefreshToken() as string),
+      ]);
       this.clearAuthStorage();
     }
   },
