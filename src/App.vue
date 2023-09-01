@@ -103,13 +103,10 @@ export default defineComponent({
         eventsInterval.value = setInterval(pushCurrentEvents, 2000);
       }
 
-      axios.interceptors.request.use((config) => {
-        if (config.headers) {
-          config.headers.CCU_PORTAL_KEY = import.meta.env.VITE_APP_PORTAL_KEY;
-          config.headers.CCU_WEB_URL = window.location.href;
-          return config;
-        }
-      });
+      axios.defaults.headers.CCU_PORTAL_KEY =
+        import.meta.env.VITE_APP_PORTAL_KEY;
+      axios.defaults.headers.CCU_WEB_URL = window.location.href;
+
       // Intercept and handle unauthenticated requests
       axios.interceptors.response.use(
         function (response) {
