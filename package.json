@@ -173,6 +173,7 @@
     "unplugin-auto-import": "^0.16.6",
     "vite": "^4.4.9",
     "vite-plugin-inspect": "^0.7.38",
+    "vite-plugin-mkcert": "^1.16.0",
     "vite-plugin-vue-inspector": "^3.6.0",
     "vitest": "^0.34.1",
     "vue-eslint-parser": "^9.3.1",

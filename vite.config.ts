@@ -10,6 +10,7 @@ import autoImport from 'unplugin-auto-import/vite';
 import inspect from 'vite-plugin-inspect';
 import inspector from 'vite-plugin-vue-inspector';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+import mkcert from 'vite-plugin-mkcert';
 import postcssConfig from './postcss.config';
 
 export default defineConfig(async ({ command }) => {
@@ -52,6 +53,7 @@ export default defineConfig(async ({ command }) => {
       org: 'crisis-cleanup',
       project: 'crisiscleanup-4-web',
     }),
+    mkcert(),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
