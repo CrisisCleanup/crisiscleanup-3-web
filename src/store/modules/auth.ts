@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/vue';
 import type State from '@vuex-orm/core/dist/src/model/contracts/State';
 import { type ActionContext } from 'vuex';
 import { AuthService } from '../../services/auth.service';

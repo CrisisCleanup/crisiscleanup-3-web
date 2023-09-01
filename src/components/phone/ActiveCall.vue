@@ -126,7 +126,7 @@
   </div>
 </template>
 <script lang="ts">
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/vue';
 import { computed, reactive, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import moment from 'moment';

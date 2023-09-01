@@ -1,6 +1,6 @@
 import moment from 'moment';
 import Bowser from 'bowser';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/vue';
 import type { Config } from '@vuex-orm/plugin-axios';
 import { AuthService } from '../services/auth.service';
 import Language from './Language';

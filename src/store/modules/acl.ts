@@ -1,5 +1,5 @@
 import Acl from 'browser-acl';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/vue';
 import type { Module } from 'vuex';
 import User from '@/models/User';
 import type { CCURootState } from '@/store/types';
