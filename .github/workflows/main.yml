@@ -19,6 +19,7 @@ jobs:
   lint:
     name: Lint 💅
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     # disabled till we fix the linting errors
     if: false
     needs: [versions]
@@ -41,6 +42,7 @@ jobs:
   type-check:
     name: Type Check 📝
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     # disabled till we fix the type errors
     if: false
     needs: [versions]
@@ -63,6 +65,7 @@ jobs:
   build:
     name: Build 🏗️
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [versions]
     steps:
       - uses: actions/checkout@v3
@@ -85,6 +88,7 @@ jobs:
   test:
     name: Test 🧪
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [versions]
     steps:
       - uses: actions/checkout@v3
