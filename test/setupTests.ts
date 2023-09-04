@@ -2,7 +2,7 @@ import process from 'node:process';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import { config, enableAutoUnmount, flushPromises } from '@vue/test-utils';
+import { config, flushPromises } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import { Vue3Mq } from 'vue3-mq';
 
@@ -200,9 +200,6 @@ afterAll(async () => {
   vi.clearAllTimers();
   await flushPromises();
 });
-
-// See: https://test-utils.vuejs.org/api/#enableautounmount
-enableAutoUnmount(afterEach);
 
 // Reset handlers after each test `important for test isolation`
 afterEach(() => {
