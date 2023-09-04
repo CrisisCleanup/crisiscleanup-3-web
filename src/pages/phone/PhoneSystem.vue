@@ -332,9 +332,21 @@
         can-edit
         :is-viewing-worksite="false"
         @onJumpToCase="jumpToCase"
-        @onDownloadWorksite="() => {}"
-        @onPrintWorksite="() => {}"
-        @onShowHistory="showHistory = true"
+        @onDownloadWorksite="() => downloadWorksites([worksite?.id])"
+        @onPrintWorksite="() => printWorksite(worksite?.id)"
+        @onFlagCase="
+          () => {
+            showFlags = true;
+            showHistory = false;
+          }
+        "
+        @onShareWorksite="() => shareWorksite(worksite?.id)"
+        @onShowHistory="
+          () => {
+            showFlags = false;
+            showHistory = true;
+          }
+        "
       />
       <div v-else class="phone-system__form-header">
         <div class="flex items-center cursor-pointer">
@@ -813,9 +825,21 @@
           can-edit
           :is-viewing-worksite="false"
           @onJumpToCase="jumpToCase"
-          @onDownloadWorksite="() => {}"
-          @onPrintWorksite="() => {}"
-          @onShowHistory="showHistory = true"
+          @onDownloadWorksite="() => downloadWorksites([worksite?.id])"
+          @onPrintWorksite="() => printWorksite(worksite?.id)"
+          @onShowHistory="
+            () => {
+              showFlags = false;
+              showHistory = true;
+            }
+          "
+          @onShareWorksite="() => shareWorksite(worksite?.id)"
+          @onFlagCase="
+            () => {
+              showFlags = true;
+              showHistory = false;
+            }
+          "
         />
         <div v-else class="phone-system__form-header">
           <div class="flex items-center cursor-pointer">
@@ -859,7 +883,12 @@
               }
             "
           />
-          <span class="text-base">{{ $t('actions.history') }}</span>
+          <span v-if="showHistory" class="text-base">{{
+            $t('actions.history')
+          }}</span>
+          <span v-else-if="showFlags" class="text-base">{{
+            $t('actions.flag')
+          }}</span>
           <div></div>
         </div>
         <div class="h-auto min-h-0">
@@ -869,6 +898,25 @@
             :incident-id="currentIncidentId"
             :worksite-id="worksiteId"
           ></CaseHistory>
+          <CaseFlag
+            v-else-if="showFlags"
+            data-testid="testShowFlagsDiv"
+            :incident-id="String(currentIncidentId)"
+            :worksite-id="worksiteId"
+            @reloadCase="
+              () => {
+                reloadCase();
+                showFlags = false;
+              }
+            "
+            @reloadMap="
+              () => {
+                reloadMap();
+                showFlags = false;
+              }
+            "
+            @clearCase="clearCase"
+          ></CaseFlag>
           <WorksiteForm
             v-else
             ref="worksiteForm"
@@ -943,10 +991,14 @@ import WorksiteTable from '@/components/work/WorksiteTable.vue';
 import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 import AdminEventStream from '@/components/admin/AdminEventStream.vue';
 import BugReport from '@/components/BugReport.vue';
+import { forceFileDownload } from '@/utils/downloads';
+import ShareWorksite from '@/components/modals/ShareWorksite.vue';
+import CaseFlag from '@/components/work/CaseFlag.vue';
 
 export default defineComponent({
   name: 'PhoneSystem',
   components: {
+    CaseFlag,
     WorksiteTable,
     PhoneIndicator,
     UpdateStatus,
@@ -969,7 +1021,7 @@ export default defineComponent({
   setup(props, context) {
     const { t } = useI18n();
     const $toasted = useToast();
-    const { confirm, component } = useDialogs();
+    const { prompt, confirm, component } = useDialogs();
     const { emitter } = useEmitter();
     const router = useRouter();
     const store = useStore();
@@ -981,6 +1033,7 @@ export default defineComponent({
     const numberClicks = ref(0);
     const scale = ref(1);
     const worksiteId = ref(null);
+    const loading = ref(false);
     const isEditing = ref(false);
     const isNew = ref(false);
     const mapLoading = ref(false);
@@ -1200,6 +1253,206 @@ export default defineComponent({
       isEditing.value = true;
     }
 
+    async function reloadCase() {
+      console.info('onReloadCase');
+      return Worksite.api().fetch(
+        worksite?.value?.id,
+        currentIncidentId.value.id,
+      );
+    }
+
+    async function downloadWorksites(ids: number[]) {
+      console.info('onDownloadWorksites', ids);
+      loading.value = true;
+      try {
+        let params;
+
+        if (ids) {
+          params = {
+            id__in: ids.join(','),
+          };
+        } else {
+          params = {
+            ...worksiteQuery.value,
+          };
+        }
+
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/worksites_download/download_csv`,
+          {
+            params,
+            headers: { Accept: 'text/csv' },
+            responseType: 'blob',
+          },
+        );
+        if (response.status === 202) {
+          await confirm({
+            title: t('info.processing_download'),
+            content: t('info.processing_download_d'),
+          });
+        } else {
+          forceFileDownload(response);
+        }
+      } catch (error) {
+        $toasted.error(getErrorMessage(error));
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    async function shareWorksite(id: number) {
+      console.info('onShareWorksite');
+      loading.value = true;
+      let noClaimText = '';
+      const worksiteToShare = Worksite.find(id);
+      const hasClaimedWorkType = worksiteToShare?.work_types.some(
+        (type) =>
+          currentUser?.value?.organization.affiliates.includes(type.claimed_by),
+      );
+      if (hasClaimedWorkType) {
+        noClaimText = '';
+      } else {
+        const result = await prompt({
+          title: t('casesVue.share_case'),
+          content: t('casesVue.please_claim_if_share'),
+          actions: {
+            cancel: {
+              text: t('actions.cancel'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            shareNoClaim: {
+              text: t('actions.share_no_claim'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            claimAndShare: {
+              text: t('actions.claim_and_share'),
+              type: 'solid',
+              buttonClass:
+                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+            },
+          },
+        });
+
+        if (result.key === 'cancel' || !result) {
+          return;
+        }
+
+        if (result.key === 'claimAndShare') {
+          noClaimText = '';
+        }
+
+        if (result.key === 'shareNoClaim') {
+          if (!result.response) {
+            $toasted.error(t('casesVue.please_explain_why_no_claim'));
+            return shareWorksite(id);
+          }
+
+          noClaimText = result.response;
+        }
+      }
+
+      let emails: string[] = [];
+      let phoneNumbers: string[] = [];
+      let shareMessage = '';
+
+      const result = await component({
+        title: t('actions.share'),
+        component: ShareWorksite,
+        classes: 'w-full h-144',
+        actionText: t('actions.share'),
+        props: {
+          worksite: id,
+        },
+        listeners: {
+          phoneNumbersUpdated(value: string[]) {
+            phoneNumbers = value.map((number) =>
+              String(number).replaceAll(/\D/g, ''),
+            );
+          },
+          emailsUpdated(value: string[]) {
+            emails = value;
+          },
+          shareMessageUpdated(value: string) {
+            shareMessage = value;
+          },
+        },
+      });
+      if (result === 'no' || result === 'cancel') {
+        return;
+      }
+
+      await Worksite.api().shareWorksite(
+        id,
+        emails,
+        phoneNumbers,
+        shareMessage,
+        noClaimText,
+      );
+      await reloadCase();
+      $toasted.success(t('casesVue.sucessfully_shared_case'));
+    }
+
+    async function printWorksite(id: number) {
+      console.info('onPrintWorksite');
+      loading.value = true;
+      let file;
+      const worksiteToPrint = await Worksite.find(id);
+      const hasClaimedWorkType = worksiteToPrint?.work_types.some(
+        (type) =>
+          currentUser?.value?.organization.affiliates.includes(type.claimed_by),
+      );
+      if (hasClaimedWorkType) {
+        file = await Worksite.api().printWorksite(id, '');
+      } else {
+        const result = await prompt({
+          title: t('actions.print_case'),
+          content: t('casesVue.please_claim_if_print'),
+          actions: {
+            cancel: {
+              text: t('actions.cancel'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            printNoClaim: {
+              text: t('actions.print_without_claiming'),
+              type: 'solid',
+              buttonClass:
+                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+            },
+            claimAndPrint: {
+              text: t('actions.claim_and_print'),
+              type: 'solid',
+              buttonClass:
+                'border text-base p-2 px-4 mx-2 text-black border-primary-light',
+            },
+          },
+        });
+
+        if (result.key === 'claimAndPrint') {
+          file = await Worksite.api().printWorksite(id, '');
+        }
+
+        if (result.key === 'printNoClaim') {
+          if (result.response) {
+            file = await Worksite.api().printWorksite(id, result.response);
+          } else {
+            $toasted.error(t('casesVue.please_explain_why_no_claim'));
+          }
+        }
+      }
+
+      if (file) {
+        forceFileDownload(file.response);
+      }
+
+      loading.value = false;
+      await reloadCase();
+    }
+
     async function addMarkerToMap(location) {
       mapUtils.value.addMarkerToMap(location);
     }
@@ -1259,6 +1512,13 @@ export default defineComponent({
           markers.map((m) => m.id),
         );
       });
+    }
+
+    async function reloadCase() {
+      return Worksite.api().fetch(
+        worksite?.value?.id,
+        currentIncidentId.value.id,
+      );
     }
 
     async function onSaveCase(worksite) {
@@ -1445,6 +1705,9 @@ export default defineComponent({
       search,
       addMarkerToMap,
       jumpToCase,
+      downloadWorksites,
+      shareWorksite,
+      printWorksite,
       onSelectMarker,
       getWorksites,
       onLoggedIn,
@@ -1463,6 +1726,7 @@ export default defineComponent({
       onSaveCase,
       reportBug,
       reloadMap,
+      reloadCase,
       mq,
       showingSearchModal,
       mobileSearch,
