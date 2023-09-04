@@ -482,7 +482,7 @@
               {{ getIncidentPhoneNumbers(incident) }}
             </div>
           </template>
-          <div v-else class="flex-grow bg-red-500">
+          <div v-else class="flex-grow">
             {{ $t('homeVue.phone_or_website') }}
           </div>
         </div>
