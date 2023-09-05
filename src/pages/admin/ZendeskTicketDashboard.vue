@@ -344,7 +344,7 @@ const getTicketStats = () => {
         return 'android';
       }
 
-      if (ticket.description.includes('ios_res')) {
+      if (ticket.description.includes('file:///var/containers/Bundle/Application')) {
         return 'ios';
       }
 
