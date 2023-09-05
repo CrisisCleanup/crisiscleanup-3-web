@@ -670,6 +670,7 @@ onMounted(() => {
         </base-link>
       </template>
     </Table>
+    <div v-else class="h-full flex items-center justify-center text-center m-5 font-bold text-crisiscleanup-dark-300 text-xl">Great news! No Tickets at the moment. Take a well-deserved break, you've been doing an amazing job today!</div>
   </div>
 
   <modal
