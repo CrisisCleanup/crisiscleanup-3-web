@@ -539,7 +539,7 @@ onMounted(() => {
           {{ ticketStats.users?.undefined || 0 }}
         </BaseText>
         <BaseText
-          ><span class="font-bold">{{ t('helpdesk.other') }}</span>
+          ><span class="font-bold">{{ t('helpdesk.other') }}:</span>
           {{ ticketStats.survivors?.undefined || 0 }}</BaseText
         >
       </div>
