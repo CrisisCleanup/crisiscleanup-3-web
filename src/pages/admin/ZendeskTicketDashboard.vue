@@ -29,6 +29,47 @@ const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}/zendesk`,
 });
 const toast = useToast();
+
+// Starting logic for hotline numbers
+import { formatNationalNumber } from '@/filters';
+
+const ccuApi = useApi();
+const fieldsToFetch = [
+  'id',
+  'name',
+  'short_name',
+  'active_phone_number',
+  'start_at',
+];
+const { isDataLoading, data } = ccuApi(
+  '/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at',
+  {
+    method: 'GET',
+    params: {
+      fields: fieldsToFetch.join(','),
+      limit: 200,
+      sort: '-start_at',
+    },
+  },
+);
+const incidentList = computed(() => data.value?.results);
+function getIncidentPhoneNumbers(incident) {
+  if (Array.isArray(incident.active_phone_number)) {
+    return incident.active_phone_number
+      .map((number) => formatNationalNumber(String(number)))
+      .join(', ');
+  }
+
+  return formatNationalNumber(String(incident.active_phone_number));
+}
+
+function filterNumbers(item) {
+  return item.filter((filterItem) => filterItem.active_phone_number);
+}
+
+// Ending logic for hotline numbers
+
+
 interface Ticket {
   assignee_id: number;
   collaborator_ids: number[];
@@ -689,7 +730,7 @@ onMounted(() => {
           <div class="px-2" >Ticket: {{activeTicket.id}}</div>
           <BaseButton v-if="!mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded m-2 p-2" icon="x"/>
         </div>
-        <div class="px-2" v-for="item in IncidentNumbers">{{item.shortName }} <span class="text-[#2c9ffe]" @click="copyToClipboard(item.number)">{{ item.number }}</span></div>
+        <div class="px-2" v-for="incident in filterNumbers(incidentList)">{{incident.short_name }} <span class="text-[#2c9ffe]" @click="copyToClipboard(getIncidentPhoneNumbers(incident))">{{ getIncidentPhoneNumbers(incident) }}</span></div>
         <BaseButton  v-if="mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded p-2" icon="x"/>
       </div>
     </template>
