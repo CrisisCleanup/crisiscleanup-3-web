@@ -730,7 +730,11 @@ onMounted(() => {
           <div class="px-2" >Ticket: {{activeTicket.id}}</div>
           <BaseButton v-if="!mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded m-2 p-2" icon="x"/>
         </div>
-        <div class="px-2" v-for="incident in filterNumbers(incidentList)">{{incident.short_name }} <span class="text-[#2c9ffe]" @click="copyToClipboard(getIncidentPhoneNumbers(incident))">{{ getIncidentPhoneNumbers(incident) }}</span></div>
+        <div v-if="incidentList" class="title flex p-3  justify-between" :class="mq.mdPlus ? 'flex-row items-center' : 'flex-col'">
+<!--          <div class="px-2" v-for="item in IncidentNumbers">{{item.shortName }} <span class="text-[#2c9ffe]" @click="copyToClipboard(item.number)">{{ item.number }}</span></div>-->
+          <div class="px-2" v-for="incident in filterNumbers(incidentList)">{{incident.short_name }} <span class="text-[#2c9ffe]" @click="copyToClipboard(getIncidentPhoneNumbers(incident))">{{ getIncidentPhoneNumbers(incident) }}</span></div>
+        </div>
+        <div v-else class="h-full flex items-center justify-center text-center m-5 font-bold text-crisiscleanup-dark-300 text-xl">No Active hotlines or Error retrieving hotlines</div>
         <BaseButton  v-if="mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded p-2" icon="x"/>
       </div>
     </template>
