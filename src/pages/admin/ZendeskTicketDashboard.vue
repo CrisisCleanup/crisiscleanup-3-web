@@ -670,7 +670,7 @@ onMounted(() => {
         </base-link>
       </template>
     </Table>
-    <div v-else class="h-full flex items-center justify-center text-center m-5 font-bold text-crisiscleanup-dark-300 text-xl">Great news! No Tickets at the moment. Take a well-deserved break, you've been doing an amazing job today!</div>
+    <div v-if="usersRelatedToTickets && isLoading" class="h-full flex items-center justify-center text-center m-5 font-bold text-crisiscleanup-dark-300 text-xl">Great news! No Tickets at the moment. Take a well-deserved break, you've been doing an amazing job today!</div>
   </div>
 
   <modal
@@ -685,8 +685,12 @@ onMounted(() => {
   >
     <template #header>
       <div class="title flex p-3  justify-between border-b" :class="mq.mdPlus ? 'flex-row items-center' : 'flex-col'">
-        <div class="px-2" :class="mq.mdPlus ? 'border-r' : 'border-b'">Ticket: {{activeTicket.id}}</div>
+        <div :class="mq.mdPlus ? 'border-r' : 'border-b'" class="flex justify-between items-center">
+          <div class="px-2" >Ticket: {{activeTicket.id}}</div>
+          <BaseButton v-if="!mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded m-2 p-2" icon="x"/>
+        </div>
         <div class="px-2" v-for="item in IncidentNumbers">{{item.shortName }} <span class="text-[#2c9ffe]" @click="copyToClipboard(item.number)">{{ item.number }}</span></div>
+        <BaseButton  v-if="mq.mdPlus" :action="() => showTicketModal()" size="sm" variant="primary" class="rounded p-2" icon="x"/>
       </div>
     </template>
     <template #default>
