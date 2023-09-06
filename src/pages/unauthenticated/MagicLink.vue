@@ -48,19 +48,6 @@
             <base-text class="w-3/4 text-center" variant="body" wieght="300">{{
               $t('magicLink.magic_link_sent')
             }}</base-text>
-            <base-button
-              :text="$t('resetPassword.go_to_login')"
-              :alt="$t('resetPassword.go_to_login')"
-              data-testid="testGoToLogin2Button"
-              size="large"
-              variant="solid"
-              class="mt-10"
-              :action="
-                () => {
-                  $router.push('/login');
-                }
-              "
-            ></base-button>
           </div>
           <template #footer></template>
         </modal>
