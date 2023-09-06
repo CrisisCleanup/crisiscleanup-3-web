@@ -50,29 +50,7 @@
           r.text || $t(`nav.${r.key}`)
         }}</base-link>
       </div>
-      <div v-if='mq.mdMinus' class="flex items-center p-1 ">
-        <BaseText> {{ $t('Download the App')}}</BaseText>
-        <a href="https://apps.apple.com/us/app/crisis-cleanup/id6463570192" target="_blank">
-          <ccu-icon
-            data-testid="testMainMenuDownloadAndroidLink"
-            :alt="$t('~~Download for Android')"
-            size="large"
-            class="p-1 py-2"
-            type="apple-app-store"
-            linked
-          />
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=com.crisiscleanup.prod" target="_blank">
-          <ccu-icon
-            data-testid="testMainMenuDownloadIosLink"
-            :alt="$t('~~Download for Ios')"
-            size="large"
-            class="p-1 py-2"
-            type="google-play-store"
-            linked
-          />
-        </a>
-      </div>
+      <AppDownloadLinks />
     </modal>
   </template>
 
@@ -189,12 +167,14 @@ import DisasterIcon from '@/components/DisasterIcon.vue';
 import useDialogs from '@/hooks/useDialogs';
 import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
 import useEmitter from "@/hooks/useEmitter";
+import AppDownloadLinks from "@/components/AppDownloadLinks.vue";
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default defineComponent({
   name: 'Authenticated',
   components: {
+    AppDownloadLinks,
     DisasterIcon,
     LoginForm,
     CompletedTransferModal,
