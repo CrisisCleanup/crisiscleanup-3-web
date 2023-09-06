@@ -148,7 +148,7 @@
       <div class="flex justify-between items-center my-6">
         <div class="flex items-center">
           <div class="text-base">
-            {{ $t('~~Persistent Invitations') }}
+            {{ $t('invitationsVue.qr_invitations') }}
           </div>
         </div>
         <div class="flex">
@@ -181,8 +181,8 @@
                   showQRCode(slotProps.item);
                 }
               "
-              :text="$t('~~Show QR Code')"
-              :alt="$t('~~Show QR Code')"
+              :text="$t('actions.show_qr_code')"
+              :alt="$t('actions.show_qr_code')"
             />
           </div>
         </template>
@@ -374,7 +374,7 @@ export default defineComponent({
         await axios.delete(
           `${persistentInvitationsUrl}/${persistentInvitation.token}`,
         );
-        await $toasted.success(t('~~Persistent Invitation Deleted'));
+        await $toasted.success(t('persistentInvitations.qr_invitation_deleted'));
         await persistentInvitationsTable.value.getData();
       } catch (error) {
         debugger;
@@ -384,7 +384,7 @@ export default defineComponent({
 
     function showQRCode(persistentInvitation) {
       return component({
-        title: t('~~Join the team'),
+        title: t('persistentInvitations.join_the_team'),
         component: QRCode,
         classes: 'w-full h-84 overflow-auto p-3',
         modalClasses: 'bg-white max-w-sm shadow',
@@ -397,7 +397,7 @@ export default defineComponent({
     async function createNewPersistentInvitation() {
       const response = await component({
         id: 'persistent_invitation_modal',
-        title: t('~~Create New Persistent Invitation'),
+        title: t('persistentInvitations.create_qr_invitation'),
         component: CreateNewPersistentInvitation,
         classes: 'w-full h-72 overflow-auto p-3',
         modalClasses: 'bg-white max-w-sm shadow',

@@ -6,13 +6,13 @@
     >
       <div class="w-2/3">
         <div class="text-5xl">
-          {{ $t('~~Accept Invitation') }}
+          {{ $t('actions.accept_invite') }}
         </div>
       </div>
       <form ref="form" class="w-108 flex flex-col" autocomplete="off">
         <fieldset>
           <base-text variant="body" weight="700" class="mt-4 mb-2 pt-8">
-            {{ $t('~~Accept Invitation') }}
+            {{ $t('actions.accept_invite') }}
           </base-text>
           <base-input
             v-model="email"
@@ -20,7 +20,7 @@
             type="search"
             class="input"
             size="large"
-            :placeholder="$t('~~Your Email')"
+            :placeholder="$t('persistentInvitations.your_email')"
             required
           />
           <base-input
@@ -29,7 +29,7 @@
             type="search"
             class="input"
             size="large"
-            :placeholder="$t('~~First Name')"
+            :placeholder="$t('persistentInvitations.first_name')"
             required
           />
           <base-input
@@ -38,7 +38,7 @@
             type="search"
             class="input"
             size="large"
-            :placeholder="$t('~~Last Name')"
+            :placeholder="$t('persistentInvitations.last_name')"
             required
           />
           <base-input
@@ -48,7 +48,7 @@
             autocomplete="title"
             class="input"
             size="large"
-            :placeholder="$t('~Title')"
+            :placeholder="$t('persistentInvitations.title')"
           />
           <base-input
             v-model="mobile"
@@ -56,7 +56,7 @@
             type="search"
             class="input"
             size="large"
-            :placeholder="$t('~~Mobile')"
+            :placeholder="$t('persistentInvitations.mobile')"
             required
           />
           <base-input
@@ -65,7 +65,7 @@
             type="password"
             class="input"
             size="large"
-            :placeholder="$t('~~Password')"
+            :placeholder="$t('persistentInvitations.password')"
             autocomplete="new-password"
             required
           />
@@ -76,7 +76,7 @@
             autocomplete="new-password"
             class="input"
             size="large"
-            :placeholder="$t('~~Confirm Password')"
+            :placeholder="$t('persistentInvitations.confirm_password')"
             required
           />
         </fieldset>
@@ -85,8 +85,8 @@
           data-testid="testAcceptPersistentInvitationButton"
           class="px-5 py-2 m-1 flex-grow"
           variant="solid"
-          :text="$t('~~Accept Invitation')"
-          :alt="$t('~~Accept Invitation')"
+          :text="$t('actions.accept_invite')"
+          :alt="$t('actions.accept_invite')"
           :action="acceptPersistentInvitation"
         />
       </form>
