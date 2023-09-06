@@ -75,7 +75,7 @@
             class="mx-1 text-green-600 cursor-pointer"
             type="up"
           />
-          {{ $t("~~Your organization has access to this incident") }}
+          {{ $t("requestRedeploy.you_already_have_access_to_incident") }}
         </div>
         <div class="flex items-start gap-2">
           <font-awesome-icon
@@ -85,7 +85,7 @@
             class="mx-1 cursor-pointer"
             type="up"
           />
-          {{ $t("~~Your organization has already requested access to this incident") }}
+          {{ $t("requestRedeploy.existing_request_pending") }}
         </div>
       </div>
       <template #footer>

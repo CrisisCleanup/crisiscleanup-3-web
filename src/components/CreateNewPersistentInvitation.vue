@@ -10,7 +10,7 @@
         select-classes="bg-white w-full h-10"
         item-key="id"
         label="name"
-        :placeholder="$t('~~Persistent Invitation Type')"
+        :placeholder="$t('persistentInvitations.qr_invitation_type')"
         @update:modelValue="persistentInvitationType = $event"
       />
 
@@ -24,7 +24,7 @@
         select-classes="bg-white w-full h-10"
         item-key="id"
         label="name"
-        :placeholder="$t('~~Select Team')"
+        :placeholder="$t('persistentInvitations.select_team')"
         @update:modelValue="selectedTeam = $event"
       />
 
@@ -34,7 +34,7 @@
         class="text-base"
       >
         <div>
-          {{ $t('~~Requires Approval') }}
+          {{ $t('persistentInvitations.requires_approval') }}
         </div>
       </base-checkbox>
 
@@ -110,7 +110,7 @@ export default defineComponent({
 
       try {
         await axios.post(url, data);
-        $toasted.success(t('~~Successfully created persistent invitation.'));
+        $toasted.success(t('info.created_qr_invitation_success'));
         return emitter.emit('modal_component:close', 'persistent_invitation_modal');
       } catch (error) {
         return $toasted.error(getErrorMessage(error));
