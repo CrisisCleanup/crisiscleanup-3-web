@@ -6,29 +6,6 @@
     data-testid="testDashboarddiv"
   >
     <div class="flex self-end mr-4 items-center">
-      <div class="flex items-center px-4">
-        <BaseText> {{ $t('Download the App')}}</BaseText>
-        <a href="https://apps.apple.com/us/app/crisis-cleanup/id6463570192" target="_blank">
-          <ccu-icon
-            data-testid="testDownloadAndroid"
-            :alt="$t('~~Download for Android')"
-            size="large"
-            class="p-1 py-2"
-            type="apple-app-store"
-            linked
-          />
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=com.crisiscleanup.prod" target="_blank">
-        <ccu-icon
-          data-testid="testDownloadIos"
-          :alt="$t('~~Download for Ios')"
-          size="large"
-          class="p-1 py-2"
-          type="google-play-store"
-          linked
-        />
-        </a>
-      </div>
       <RedeployRequest />
       <InviteUsers class="mx-1" />
     </div>

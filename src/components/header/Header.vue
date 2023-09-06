@@ -63,6 +63,29 @@
           :action="showCurrentIncidentStates"
         />
       </div>
+      <div class="flex items-center px-4">
+        <BaseText> {{ $t('Download the App')}}</BaseText>
+        <a href="https://apps.apple.com/us/app/crisis-cleanup/id6463570192" target="_blank">
+          <ccu-icon
+            data-testid="testHeaderDownloadAndroidLink"
+            :alt="$t('~~Download for Android')"
+            size="large"
+            class="p-1 py-2"
+            type="apple-app-store"
+            linked
+          />
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.crisiscleanup.prod" target="_blank">
+          <ccu-icon
+            data-testid="testHeaderDownloadIosLink"
+            :alt="$t('~~Download for Ios')"
+            size="large"
+            class="p-1 py-2"
+            type="google-play-store"
+            linked
+          />
+        </a>
+      </div>
       <div class="flex h-full items-center">
         <div
           v-if="can && can('phone_agent')"
@@ -102,10 +125,12 @@ import PhoneIndicator from '../phone/PhoneIndicator.vue';
 import RedeployRequest from '../modals/RedeployRequest.vue';
 import UserProfileMenu from './UserProfileMenu.vue';
 import User from '@/models/User';
+import BaseText from "@/components/BaseText.vue";
 
 export default defineComponent({
   name: 'Header',
   components: {
+    BaseText,
     RedeployRequest,
     PhoneIndicator,
     BaseSelect,
