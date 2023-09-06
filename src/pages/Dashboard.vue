@@ -8,7 +8,7 @@
     <div class="flex self-end mr-4 items-center">
       <div class="flex items-center px-4">
         <BaseText> {{ $t('Download the App')}}</BaseText>
-        <a>
+        <a href="https://apps.apple.com/us/app/crisis-cleanup/id6463570192" target="_blank">
           <ccu-icon
             data-testid="testDownloadAndroid"
             :alt="$t('~~Download for Android')"
@@ -18,7 +18,7 @@
             linked
           />
         </a>
-        <a>
+        <a href="https://play.google.com/store/apps/details?id=com.crisiscleanup.prod" target="_blank">
         <ccu-icon
           data-testid="testDownloadIos"
           :alt="$t('~~Download for Ios')"
