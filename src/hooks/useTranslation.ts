@@ -29,7 +29,27 @@ export default function useTranslation() {
     }
   };
 
+  const translateWithAWS = async (
+    q: string,
+    source: string,
+    target: string,
+  ) => {
+    try {
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/languages/${target}/translate`,
+        {
+          text: q,
+        },
+      );
+      return response.data.translated_text;
+    } catch {
+      return '';
+    }
+  };
+
   return {
-    translate,
+    translate: translateWithAWS,
   };
 }
