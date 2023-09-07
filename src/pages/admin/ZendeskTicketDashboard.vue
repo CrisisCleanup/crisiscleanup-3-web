@@ -475,7 +475,7 @@ const getAppTypeIcons = (appPlatform: string, ticketSubject: string) => {
     return webIcon;
   }
 
-  if (ticketSubject.includes('ios_res')) {
+  if (ticketSubject.includes('file:///var/containers/Bundle/Application')) {
     return iosIcon;
   }
 
