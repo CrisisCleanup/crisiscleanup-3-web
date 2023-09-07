@@ -611,14 +611,14 @@ onMounted(() => {
         <div
           v-if="slotProps.item.user.ccu_user"
           style="color: #3498db"
-          class="user-type rounded-md text-center p-2 my-2"
+          class="user-type rounded-md text-center px-2"
         >
           {{ t('helpdesk.user_account') }}
         </div>
 
         <div
           v-else
-          class="user-type rounded-md text-center p-2 my-2"
+          class="user-type rounded-md text-center px-2"
           style="color: #27ae60"
         >
           {{ t('helpdesk.other') }}
