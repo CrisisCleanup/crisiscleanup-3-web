@@ -278,22 +278,27 @@ export default defineComponent({
             contact: { ...state.user },
           },
         );
-        [state.organization] = savedOrganization.entities.organizations;
-        await saveCapabilities(
-          state.updatedOrganizationCapabilitiesMatrix,
-          state.organizationCapabilities,
-          state.organization,
-          false,
-        );
-        $toasted.success(t('registerOrg.org_registration_success'), {
-          duration: 7000,
-        });
+        console.info('Saved Org', savedOrganization);
+        if (savedOrganization.response instanceof Error) {
+          $toasted.error(getErrorMessage(savedOrganization.response));
+        } else {
+          $toasted.success(t('registerOrg.org_registration_success'), {
+            duration: 7000,
+          });
+          [state.organization] =
+            savedOrganization.entities?.organizations || [];
+          await saveCapabilities(
+            state.updatedOrganizationCapabilitiesMatrix,
+            state.organizationCapabilities,
+            state.organization,
+            false,
+          );
+          await router.push('/');
+        }
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
         return;
       }
-
-      await router.push('/');
     }
 
     function updateOrganizationIncident(value) {
