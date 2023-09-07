@@ -665,7 +665,6 @@ onMounted(() => {
                   slotProps.item.description,
                 )
               "
-              height="36"
               width="36"
             />
           </BaseText>
