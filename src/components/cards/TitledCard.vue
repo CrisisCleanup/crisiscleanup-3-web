@@ -11,9 +11,10 @@
       <slot name="right">
         <div class="right">
           <slot name="dropdown">
-            <div v-if="hasDropdown" class="card__dropdown mx-3">
+            <div v-if="hasDropdown" class="card__dropdown mx-3 m-4">
               <base-select
                 ref="drop"
+                :model-value="dropdown.value"
                 :style="{
                   minWidth: `${dropdownWidth_}px`,
                   flexWrap: 'nowrap',

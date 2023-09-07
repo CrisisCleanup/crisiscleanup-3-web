@@ -142,7 +142,7 @@ export default defineComponent({
   }
 
   &__close {
-    @apply w-full relative mb-2 z-40;
+    @apply w-full relative mb-6 z-40;
     &-icon {
       @apply absolute right-0 p-2 cursor-pointer;
     }
