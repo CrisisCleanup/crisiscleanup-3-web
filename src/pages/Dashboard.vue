@@ -445,6 +445,7 @@
         <div class="p-4">
           <UserTransferRequestTable
             :requests="transferRequests"
+            :loading="loading"
             data-testid="testUserTransferRequestTable"
             @reload="getUserTransferRequests"
           />

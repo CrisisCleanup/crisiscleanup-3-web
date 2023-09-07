@@ -104,8 +104,8 @@ export default defineComponent({
           .map(
             (work_type) => `
           <div>${work_type.case_number} - ${getWorkTypeName(
-              work_type.work_type,
-            )} - ${getStatusName(work_type.status)}</div>
+            work_type.work_type,
+          )} - ${getStatusName(work_type.status)}</div>
         `,
           )
           .join(''),
@@ -235,8 +235,9 @@ export default defineComponent({
       }
     }
 
-    onMounted(async () => {
-      if (props.requests.length > 0) {
+    watch(
+      () => props.requests.length,
+      async () => {
         const organizations = props.requests.map(
           (request) => request.origin_organization,
         );
@@ -247,8 +248,8 @@ export default defineComponent({
           },
         );
         await getUsers();
-      }
-    });
+      },
+    );
 
     return {
       columns,
