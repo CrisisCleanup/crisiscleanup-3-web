@@ -103,6 +103,7 @@
             ></ManualDialer>
           </template>
         </PhoneComponentButton>
+
         <PhoneComponentButton
           name="chat"
           data-testid="testPhoneComponentChatButton"
@@ -161,6 +162,26 @@
               @onNewUrgentMessage="unreadUrgentChatCount += 1"
               @focusNewsTab="focusNewsTab"
             />
+          </template>
+        </PhoneComponentButton>
+        <PhoneComponentButton
+          name="zoom"
+          data-testid="testZoomMeetingButton"
+          :alt="$t('~~Join CCU Zoom Meeting Room')"
+          class="phone-system__action"
+          component-class="phone-system__action-content phone-system__action-content--zoom"
+        >
+          <template #button>
+            <div class="w-full h-full flex items-center justify-center">
+              <ccu-icon type="zoom" class="p-1" size="medium" />
+            </div>
+          </template>
+          <template #component>
+            <div class="flex items-center justify-center p-3 gap-2">
+              <a href="https://bit.ly/ccuzoom" target="_blank"><div class="bg-primary-light py-1 px-4">
+                Join Zoom Chatroom
+              </div></a>
+            </div>
           </template>
         </PhoneComponentButton>
         <PhoneComponentButton
@@ -232,6 +253,7 @@
             <Leaderboard class="h-full" />
           </template>
         </PhoneComponentButton>
+
       </div>
       <span
         v-if="allWorksiteCount"
@@ -647,6 +669,26 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
+                name="zoom"
+                data-testid="testZoomMeetingButton"
+                :alt="$t('~~Join CCU Zoom Meeting Room')"
+                class="phone-system__action"
+                component-class="phone-system__action-content phone-system__action-content--zoom"
+              >
+                <template #button>
+                  <div class="w-full h-full flex items-center justify-center">
+                    <ccu-icon type="zoom" class="p-1" size="medium" />
+                  </div>
+                </template>
+                <template #component>
+                  <div class="flex items-center justify-center p-3 gap-2">
+                    <a href="https://bit.ly/ccuzoom" target="_blank"><div class="bg-primary-light py-1 px-4">
+                      Join Zoom Chatroom
+                    </div></a>
+                  </div>
+                </template>
+              </PhoneComponentButton>
+              <PhoneComponentButton
                 name="news"
                 data-testid="testPhoneComponentNewsButton"
                 :alt="$t('phoneDashboard.news')"
@@ -682,6 +724,7 @@
                   <PhoneNews @unreadCount="unreadNewsCount = $event" />
                 </template>
               </PhoneComponentButton>
+
               <PhoneComponentButton
                 v-if="callHistory"
                 data-testid="testPhoneComponentHistoryButton"
@@ -751,6 +794,7 @@
                   <Leaderboard class="h-full" />
                 </template>
               </PhoneComponentButton>
+
               <PhoneComponentButton
                 name="reset"
                 data-testid="testPhoneComponentResetButton"
@@ -784,6 +828,8 @@
                   </div>
                 </template>
               </PhoneComponentButton>
+
+
             </div>
           </div>
           <div v-show="showingTable" class="phone-system__main-content--table">
