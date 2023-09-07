@@ -78,6 +78,17 @@
       <div class="flex justify-between items-center my-6">
         <div class="flex items-center">
           <div class="text-base">
+            {{ $t('dashboard.user_transfer_requests') }}
+          </div>
+        </div>
+      </div>
+      <UserTransferRequestTable
+        :requests="transferRequests?.results || []"
+        data-testid="testUserTransferRequestTable"
+      />
+      <div class="flex justify-between items-center my-6">
+        <div class="flex items-center">
+          <div class="text-base">
             {{ $t('invitationsVue.incomplete_invitations') }}
           </div>
         </div>
@@ -213,6 +224,7 @@ import type { TableSorterObject } from '@/components/Table.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
 import AjaxTable from '@/components/AjaxTable.vue';
+import UserTransferRequestTable from '@/components/UserTransferRequestTable.vue';
 import { makeTableColumns } from '@/utils/table';
 import { get } from 'lodash';
 import useDialogs from '@/hooks/useDialogs';
@@ -226,16 +238,21 @@ type TableInstance = InstanceType<typeof Table>;
 
 export default defineComponent({
   name: 'Invitations',
-  components: { AjaxTable, InviteUsers, Table },
+  components: { AjaxTable, InviteUsers, Table, UserTransferRequestTable },
   setup() {
     const { t } = useI18n();
     const $toasted = useToast();
+    const ccuApi = useApi();
     const { component } = useDialogs();
 
     const invitationsTable = ref<TableInstance | null>(null);
     const invitationRequestsTable = ref<TableInstance | null>(null);
     const invitationSorter = ref<TableSorterObject<Invitation>>({});
     const invitationRequestsSorter = ref<TableSorterObject<Invitation>>({});
+
+    const { data: transferRequests } = ccuApi<{
+      results: Record<string, any>[];
+    }>('/transfer_requests', { method: 'GET' });
 
     const currentRequestsColumns = reactive([
       {
@@ -374,7 +391,9 @@ export default defineComponent({
         await axios.delete(
           `${persistentInvitationsUrl}/${persistentInvitation.token}`,
         );
-        await $toasted.success(t('persistentInvitations.qr_invitation_deleted'));
+        await $toasted.success(
+          t('persistentInvitations.qr_invitation_deleted'),
+        );
         await persistentInvitationsTable.value.getData();
       } catch (error) {
         debugger;
@@ -407,13 +426,20 @@ export default defineComponent({
       if (response === 'ok') {
         await persistentInvitationsTable.value.getData();
       }
-
     }
 
     async function loadAllInvitationRequests() {
       await InvitationRequest.api().get(`/invitation_requests`, {
         dataKey: 'results',
       });
+    }
+
+    async function getUserTransferRequests() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
+      );
+
+      transferRequests.value = response.data.results;
     }
 
     function exportInvitationsTable() {
@@ -496,6 +522,7 @@ export default defineComponent({
     });
 
     return {
+      transferRequests,
       invitationRequestsTable,
       invitationsTable,
       currentRequestsColumns,
