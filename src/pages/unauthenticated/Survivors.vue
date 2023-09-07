@@ -1,16 +1,8 @@
 <template>
   <div
-    v-if="survivorToken"
     class="survivors-page h-full overflow-auto main"
     data-testid="testSurvivorsDiv"
   >
-    <div
-      v-if="survivorToken.worksite && survivorToken.worksite.invalidated_at"
-      data-testid="testInvalidatedTokenDiv"
-      class="bg-red-300 text-2xl"
-    >
-      {{ $t('survivorContact.deleted_notice') }}
-    </div>
     <div id="top" class="logo flex justify-center p-3 border border-b">
       <img
         id="header"
@@ -18,6 +10,13 @@
         src="@/assets/ccu-logo-black-500w.png"
         style="height: 53px"
       />
+    </div>
+    <div
+      v-if="survivorToken?.worksite && survivorToken?.worksite?.invalidated_at"
+      data-testid="testInvalidatedTokenDiv"
+      class="bg-red-300 text-2xl"
+    >
+      {{ $t('survivorContact.deleted_notice') }}
     </div>
     <section v-if="survivorToken" class="main p-8">
       <div
@@ -137,7 +136,10 @@
 
       <div v-if="!survivorToken.address_confirmed_at" class="pt-2">
         <div>
-          <div class="text-lg my-2 font-bold" data-testid="testUnconfirmedAddressDiv">
+          <div
+            class="text-lg my-2 font-bold"
+            data-testid="testUnconfirmedAddressDiv"
+          >
             {{ $t('survivorContact.confirm_address_instructions') }}
           </div>
           <div
@@ -239,8 +241,13 @@
           @photosChanged="() => getSurvivorToken(true)"
           @image-click="showImage"
         />
-        <base-checkbox :model-value="survivorToken.allow_sharing" @update:modelValue="survivorToken.allow_sharing = $event" class="w-full mt-2" data-testid="survivorContactSharePermissionSwitch">
-          {{$t('survivorContact.share_permission')}}
+        <base-checkbox
+          :model-value="survivorToken.allow_sharing"
+          @update:modelValue="survivorToken.allow_sharing = $event"
+          class="w-full mt-2"
+          data-testid="survivorContactSharePermissionSwitch"
+        >
+          {{ $t('survivorContact.share_permission') }}
         </base-checkbox>
       </div>
       <hr class="my-4" />
@@ -350,7 +357,17 @@
         :text="$t('actions.save')"
         :alt="$t('actions.save')"
       />
-
+    </section>
+    <section v-else class="px-8 py-4">
+      <base-text variant="h1">
+        {{
+          $t(
+            '~~Invalid/expired survivor token or worksite does not exist for that survivor token',
+          )
+        }}
+      </base-text>
+    </section>
+    <section class="faqs p-8">
       <div class="text-xl my-2 font-bold">
         {{ $t('survivorContact.faqs') }}
       </div>
@@ -369,10 +386,9 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useI18n } from 'vue-i18n';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getErrorMessage } from '@/utils/errors';
 import WorksiteSearchInput from '@/components/work/WorksiteSearchInput.vue';
 import GeocoderService from '@/services/geocoder.service';
@@ -381,15 +397,15 @@ import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
 import WorksiteNotes from '@/components/work/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
-import survivor from "@/pages/home/Survivor.vue";
-import BaseCheckbox from "@/components/BaseCheckbox.vue";
+import survivor from '@/pages/home/Survivor.vue';
+import BaseCheckbox from '@/components/BaseCheckbox.vue';
 
 export default defineComponent({
   name: 'Survivors',
   computed: {
     survivor() {
-      return survivor
-    }
+      return survivor;
+    },
   },
   components: {
     BaseCheckbox,
@@ -400,9 +416,34 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const $toasted = useToast();
     const { t } = useI18n();
 
+    watch(
+      () => route.params.token,
+      (newToken, oldToken) => {
+        const _token = sanitizeToken(newToken);
+        router.push({
+          name: 'nav.survivors',
+          // replace: true,
+          params: {
+            token: _token,
+          },
+        });
+      },
+      {
+        immediate: true,
+      },
+    );
+
+    const sToken = computed(() => {
+      console.info('asdfsdf', route.params?.token);
+      if (route.params?.token) {
+        return sanitizeToken(route.params.token);
+      }
+      return null;
+    });
     const state = reactive({
       scale: 1,
       numClicks: 0,
@@ -456,6 +497,10 @@ export default defineComponent({
         )
       );
     });
+
+    function sanitizeToken(token) {
+      return token.replace(/\./g, '');
+    }
 
     function showImage(image, index, fileList) {
       state.imageIndex = index;
@@ -571,9 +616,9 @@ export default defineComponent({
     async function getSurvivorToken(filesOnly = false) {
       state.loading = true;
       try {
-        const response = await axios.get(
+        const result = await axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
-            route.params.token
+            sToken.value
           }`,
           {
             headers: {
@@ -581,11 +626,19 @@ export default defineComponent({
             },
           },
         );
+        if (result instanceof AxiosError && result.response.status === 404) {
+          $toasted.error(
+            '~~Survivor Token not found. Worksite might be deleted',
+          );
+        }
         if (filesOnly) {
-          state.survivorToken.files = response.data.files;
+          state.survivorToken.files = result.data.files;
         } else {
-          state.survivorToken = response.data;
-          state.survivorToken.allow_sharing = !!state.survivorToken.permission_public_share_at;
+          if (result.data) {
+            state.survivorToken = result.data;
+            state.survivorToken.allow_sharing =
+              !!state.survivorToken.permission_public_share_at;
+          }
         }
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -601,7 +654,7 @@ export default defineComponent({
       try {
         await axios.put(
           `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
-            route.params.token
+            sToken.value
           }`,
           {
             ...state.survivorToken,
@@ -611,7 +664,7 @@ export default defineComponent({
         if (state.currentNote) {
           await axios.post(
             `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
-              route.params.token
+              sToken.value
             }/notes`,
             { note: state.currentNote },
           );
