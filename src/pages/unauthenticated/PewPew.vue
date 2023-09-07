@@ -805,7 +805,7 @@ export default defineComponent({
         await getAllEvents(),
         () => [],
         null,
-        1000,
+        2000,
         getLatestEvents,
         (card) => {
           cards.value?.addCardComponent(card);
