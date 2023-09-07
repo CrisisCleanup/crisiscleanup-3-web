@@ -506,7 +506,7 @@ const copyToClipboard = (text) => {
   textarea.select();
   document.execCommand('copy');
   document.body.removeChild(textarea);
-  toast.info(t('~~Text copied to clipboard: ' + text));
+  toast.info(t('helpdesk.phone_copied_clipboard ' + text));
 
 };
 
