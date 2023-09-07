@@ -2,20 +2,16 @@ import * as Sentry from '@sentry/vue';
 import { i18n } from '../main';
 
 export function getErrorMessage(error: any) {
+  Sentry.captureException(error);
+  const t = i18n.global.t;
   if (!error.response || !error.response.status) {
-    Sentry.captureException(error);
-    // If (window.vue.$log) {
-    //   window.vue.$log.debug(error);
-    // }
-    return i18n.global.t('info.unknown_error');
+    return t('info.unknown_error');
   }
-
+  if (error.response.status === 404) {
+    return t('~~404 Entity/Item not found.');
+  }
   if (error.response.status === 500) {
-    Sentry.captureException(error);
-    // If (window.vue.$log) {
-    //   window.vue.$log.debug(error);
-    // }
-    return i18n.global.t('info.error_500');
+    return t('info.error_500');
   }
 
   const _errors = error.response.data.errors as Array<Record<string, string>>;
@@ -29,7 +25,7 @@ export function getErrorMessage(error: any) {
     for (const e of _errors) {
       let { field } = e;
       field = field === 'non_field_errors' ? '' : `${field}: `;
-      response = `${response}${field}${e.message}<br>`;
+      response = `${response}${field}${e.message}`;
     }
 
     return response;
