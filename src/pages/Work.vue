@@ -848,8 +848,7 @@ import useWorksiteTableActions from '@/hooks/worksite/useWorksiteTableActions';
 import ShareWorksite from '@/components/modals/ShareWorksite.vue';
 import useEmitter from '@/hooks/useEmitter';
 import Organization from '@/models/Organization';
-
-const INTERACTIVE_ZOOM_LEVEL = 12;
+import { INTERACTIVE_ZOOM_LEVEL } from '@/constants';
 
 export default defineComponent({
   name: 'Work',

@@ -290,3 +290,5 @@ export const BUTTON_VARIANTS = {
   OUTLINE_DARK: 'outline-dark',
   TEXT: 'text',
 };
+
+export const INTERACTIVE_ZOOM_LEVEL = 12;
