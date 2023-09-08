@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { DialogWrapper } from 'vue3-promise-dialog';
 import axios, { type AxiosError } from 'axios';
-import { cachedGet, hash } from './utils/promise';
+import { hash } from './utils/promise';
 import { AuthService } from './services/auth.service';
 import { useProvideZendesk } from '@/hooks';
 
@@ -20,10 +20,10 @@ export default defineComponent({
     const layout = computed(
       () => `${route.meta?.layout || defaultLayout}-layout`,
     );
-    const { t, locale } = useI18n();
+    const { t } = useI18n();
     const store = useStore();
 
-    const eventsInterval = ref<any | null>(null);
+    const eventsInterval = ref<ReturnType<typeof setInterval> | null>(null);
 
     async function pushCurrentEvents(): Promise<void> {
       if (store.getters['auth/isLoggedIn']) {
@@ -33,14 +33,14 @@ export default defineComponent({
 
     async function getEnums(): Promise<void> {
       const enums = await hash({
-        statuses: cachedGet(
+        statuses: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/statuses`,
           {
             headers: {
               Authorization: null,
             },
           },
-          `statuses:${locale.value}`,
+          // `statuses:${locale.value}`,
         ),
         workTypes: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/work_types`,
@@ -50,32 +50,32 @@ export default defineComponent({
             },
           },
         ),
-        phases: cachedGet(
+        phases: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/incidents_phases`,
           {
             headers: {
               Authorization: null,
             },
           },
-          `incidents_phases:${locale.value}`,
+          // `incidents_phases:${locale.value}`,
         ),
-        locationTypes: cachedGet(
+        locationTypes: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/location_types`,
           {
             headers: {
               Authorization: null,
             },
           },
-          `location_types:${locale.value}`,
+          // `location_types:${locale.value}`,
         ),
-        portal: cachedGet(
+        portal: axios.get(
           `${import.meta.env.VITE_APP_API_BASE_URL}/portals/current`,
           {
             headers: {
               Authorization: null,
             },
           },
-          `portal:${locale.value}`,
+          // `portal:${locale.value}`,
         ),
       });
       store.commit('enums/setStatuses', enums.statuses.data.results);
@@ -88,7 +88,7 @@ export default defineComponent({
     watch(
       () => route.name,
       (n) => {
-        const newTitle = `${t(n.toString() || '')}: Crisis Cleanup`;
+        const newTitle = `${t(n?.toString() || '')}: Crisis Cleanup`;
         if (document.title !== newTitle) {
           document.title = newTitle;
         }
@@ -117,7 +117,7 @@ export default defineComponent({
             isReauthenticating.value = true;
             AuthService.refreshAccessToken()
               .then(() => {
-                void Promise.allSettled(
+                Promise.allSettled(
                   reauthSubscribers.value.map((cb) =>
                     cb(AuthService.getAccessToken()!),
                   ),
@@ -132,6 +132,7 @@ export default defineComponent({
                 reauthSubscribers.value = [];
               });
           }
+
           // wait for the reauth to finish then retry the request.
           return new Promise((resolve) => {
             reauthSubscribers.value.push((token) =>
@@ -147,6 +148,7 @@ export default defineComponent({
             );
           });
         }
+
         return error;
       });
       await getEnums();
@@ -156,16 +158,16 @@ export default defineComponent({
 
       // eslint-disable-next-line unicorn/prefer-add-event-listener
       oauthTokenChannel.onmessage = (event) => {
-        let token = JSON.parse(event.data);
-        const user = axios.get(
-          `${import.meta.env.VITE_APP_API_BASE_URL}/users/me`,
-          {
+        const token = JSON.parse(event.data);
+        axios
+          .get(`${import.meta.env.VITE_APP_API_BASE_URL}/users/me`, {
             headers: {
               Authorization: `Bearer ${token.access_token}`,
             },
-          },
-        );
-        AuthService.saveUser(user.data);
+          })
+          .then((user) => {
+            AuthService.saveUser(user.data);
+          });
       };
 
       // eslint-disable-next-line unicorn/prefer-add-event-listener
