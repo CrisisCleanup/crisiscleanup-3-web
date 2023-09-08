@@ -1338,9 +1338,14 @@ export default defineComponent({
       }
     }
 
-    watch(props.dataPrefill, (newValue) => {
-      worksite.value = { ...worksite.value, ...newValue };
-    });
+    watch(
+      () => props.dataPrefill,
+      (newValue) => {
+        console.info('prefilling data...', props.dataPrefill);
+        worksite.value = { ...worksite.value, ...newValue };
+      },
+      { immediate: true },
+    );
 
     watch(props.worksiteId, (newValue) => {
       if (!newValue) {
