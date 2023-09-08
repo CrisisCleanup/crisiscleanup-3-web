@@ -178,9 +178,11 @@
           </template>
           <template #component>
             <div class="flex items-center justify-center p-3 gap-2">
-              <a href="https://bit.ly/ccuzoom" target="_blank"><div class="bg-primary-light py-1 px-4">
-                Join Zoom Chatroom
-              </div></a>
+              <a href="https://bit.ly/ccuzoom" target="_blank"
+                ><div class="bg-primary-light py-1 px-4">
+                  Join Zoom Chatroom
+                </div></a
+              >
             </div>
           </template>
         </PhoneComponentButton>
@@ -253,7 +255,6 @@
             <Leaderboard class="h-full" />
           </template>
         </PhoneComponentButton>
-
       </div>
       <span
         v-if="allWorksiteCount"
@@ -529,7 +530,15 @@
         />
         <div class="phone-system__main-content">
           <div v-show="showingMap" class="phone-system__main-content--map">
-            <SimpleMap :key="showingMap" :map-loading="mapLoading" />
+            <SimpleMap
+              :key="showingMap"
+              :map-loading="mapLoading"
+              show-zoom-buttons
+              @onZoomIn="zoomIn"
+              @onZoomOut="zoomOut"
+              @onZoomIncidentCenter="goToIncidentCenter"
+              @onZoomInteractive="goToInteractive"
+            />
             <div
               ref="phoneButtons"
               class="phone-system__actions"
@@ -682,9 +691,11 @@
                 </template>
                 <template #component>
                   <div class="flex items-center justify-center p-3 gap-2">
-                    <a href="https://bit.ly/ccuzoom" target="_blank"><div class="bg-primary-light py-1 px-4">
-                      Join Zoom Chatroom
-                    </div></a>
+                    <a href="https://bit.ly/ccuzoom" target="_blank"
+                      ><div class="bg-primary-light py-1 px-4">
+                        Join Zoom Chatroom
+                      </div></a
+                    >
                   </div>
                 </template>
               </PhoneComponentButton>
@@ -828,8 +839,6 @@
                   </div>
                 </template>
               </PhoneComponentButton>
-
-
             </div>
           </div>
           <div v-show="showingTable" class="phone-system__main-content--table">
@@ -1040,6 +1049,9 @@ import BugReport from '@/components/BugReport.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import ShareWorksite from '@/components/modals/ShareWorksite.vue';
 import CaseFlag from '@/components/work/CaseFlag.vue';
+import { INTERACTIVE_ZOOM_LEVEL } from '@/constants';
+import { averageGeolocation } from '@/utils/map';
+import type { MapUtils } from '@/hooks/worksite/useLiveMap';
 
 export default defineComponent({
   name: 'PhoneSystem',
@@ -1105,7 +1117,7 @@ export default defineComponent({
     const unreadChatCount = ref(0);
     const unreadUrgentChatCount = ref(0);
     const search = ref('');
-    const mapUtils = ref(null);
+    const mapUtils = ref<MapUtils>();
     const worksiteForm = ref(null);
     const statusTab = ref(null);
     const callTab = ref(null);
@@ -1623,6 +1635,61 @@ export default defineComponent({
       }
     }
 
+    function zoomIn() {
+      mapUtils.value?.getMap().zoomIn();
+    }
+
+    function zoomOut() {
+      mapUtils.value?.getMap().zoomOut();
+    }
+
+    function goToIncidentCenter() {
+      const { locationModels } = Incident.find(
+        currentIncidentId.value,
+      ) as Incident;
+      if (locationModels.length > 0) {
+        for (const location of locationModels) {
+          mapUtils.value?.fitLocation(location);
+        }
+      } else {
+        const center = averageGeolocation(
+          mapUtils.value
+            ?.getPixiContainer()
+            ?.children.map((marker) => [marker.x, marker.y]),
+        );
+        if (center.latitude && center.longitude) {
+          mapUtils.value
+            ?.getMap()
+            .setView([center.latitude, center.longitude], 6);
+        }
+      }
+    }
+
+    function goToInteractive() {
+      const { locationModels } = Incident.find(
+        currentIncidentId.value,
+      ) as Incident;
+
+      if (locationModels.length > 0) {
+        mapUtils.value?.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
+        goToIncidentCenter();
+      } else {
+        const center = averageGeolocation(
+          mapUtils.value
+            ?.getPixiContainer()
+            ?.children.map((marker) => [marker.x, marker.y]),
+        );
+        if (center.latitude && center.longitude) {
+          mapUtils.value
+            ?.getMap()
+            .setView(
+              [center.latitude, center.longitude],
+              INTERACTIVE_ZOOM_LEVEL,
+            );
+        }
+      }
+    }
+
     async function reportBug() {
       await component({
         id: 'phone_bug_modal',
@@ -1761,6 +1828,10 @@ export default defineComponent({
       selectCase,
       getChatGroups,
       focusNewsTab,
+      zoomIn,
+      zoomOut,
+      goToInteractive,
+      goToIncidentCenter,
       getWorkTypeName,
       updateUserState: User.api().updateUserState,
       moment,
