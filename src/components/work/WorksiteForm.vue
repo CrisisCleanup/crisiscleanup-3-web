@@ -493,7 +493,7 @@ export default defineComponent({
     const route = useRoute();
     const { emitter } = useEmitter();
     const dirtyFields = ref(new Set());
-    const worksite = ref({});
+    const worksite = ref<Record<string, any>>({});
     const updatedFiles = ref([]);
     const updateImage = (formData) => {
       updatedFiles.value.push(formData.id);
@@ -764,12 +764,29 @@ export default defineComponent({
       worksite.value = Worksite.find(worksite.value.id);
     }
 
-    async function sendSms(phone) {
+    async function sendSms(phone: string) {
       try {
-        await Worksite.api().sendSurvivorSms(worksite.value.id, phone);
-        await $toasted.success(t('caseForm.sms_sent'));
+        const result = await confirm({
+          title: t(`~~Confirm`),
+          content: t(`~~Are you sure you want to send sms to ${phone}`),
+          actions: {
+            no: {
+              text: t('actions.cancel'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            yes: {
+              text: t('actions.send_message'),
+              type: 'solid',
+            },
+          },
+        });
+        if (result === 'yes') {
+          await Worksite.api().sendSurvivorSms(worksite.value.id, phone);
+          $toasted.success(t('caseForm.sms_sent'));
+        }
       } catch (error) {
-        await $toasted.error(getErrorMessage(error));
+        $toasted.error(getErrorMessage(error));
       }
     }
 
