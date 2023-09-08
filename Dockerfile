@@ -38,7 +38,7 @@ RUN apk add --no-cache \
 # Builder
 FROM base as builder
 ARG TARGETPLATFORM
-ARG PNPM_VERSION=8.6.12
+ARG PNPM_VERSION=8.7.4
 RUN corepack enable pnpm \
     && corepack prepare pnpm@${PNPM_VERSION} --activate
 WORKDIR ${APP_PATH}
