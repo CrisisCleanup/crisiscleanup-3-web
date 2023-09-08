@@ -53,7 +53,7 @@ export default defineConfig(async ({ command }) => {
       org: 'crisis-cleanup',
       project: 'crisiscleanup-4-web',
     }),
-    mkcert(),
+    process.env.CI ? undefined : mkcert(),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
