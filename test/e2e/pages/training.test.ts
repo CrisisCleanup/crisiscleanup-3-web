@@ -25,7 +25,6 @@ test.describe('Training', () => {
         'testMandatoryTrainingVideoIframe',
         'testSupplimentPhoneTrainingIframe',
         'testCalldownTrainingIframe',
-        'testCcuDuringCovidIframe',
       ];
       const locators: Locator[] = [];
       for (const testId of dataTestIds) {
