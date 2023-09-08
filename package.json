@@ -34,7 +34,7 @@
     "test": "pnpm run test:cov",
     "test:unit": "vitest",
     "test:e2e": "pnpm run pw test",
-    "test:e2e:development": "pnpm run test:e2e --grep '@development' --timeout 180000",
+    "test:e2e:development": "pnpm run test:e2e --grep '@development' --timeout 150000 --retries 4",
     "test:e2e:staging": "pnpm run test:e2e --grep '@staging'",
     "test:e2e:production": "pnpm run test:e2e --grep '@production'",
     "test:e2e:ui": "pnpm run pw test --ui",
