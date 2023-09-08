@@ -53,7 +53,7 @@ export default defineConfig(async ({ command }) => {
       org: 'crisis-cleanup',
       project: 'crisiscleanup-4-web',
     }),
-    process.env.CI ? undefined : mkcert(),
+    mkcert(),
   ];
 
   const configs: Array<Partial<UserConfig>> = [];
@@ -69,6 +69,9 @@ export default defineConfig(async ({ command }) => {
             new URL('tailwind.config.cjs', import.meta.url),
           ),
         },
+      },
+      server: {
+        https: false,
       },
       css: {
         postcss: {
