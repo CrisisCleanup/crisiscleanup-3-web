@@ -1,0 +1,42 @@
+{
+    "applinks": {
+        "details": [
+            {
+                "appIDs": [
+                    "6447981267.com.crisiscleanup",
+                    "6463570192.com.crisiscleanup.prod"
+                ],
+                "components": [
+                    {
+                        "#": "no_universal_links",
+                        "exclude": true,
+                        "comment": "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
+                    },
+                    {
+                        "/": "/o/callback/*",
+                        "comment": "Email login link."
+                    },
+                    {
+                        "/": "/password/reset/*",
+                        "comment": "Reset password."
+                    },
+                    {
+                        "/": "/register",
+                        "exclude": true,
+                        "comment": "Org registration"
+                    },
+                    {
+                        "/": "/terms",
+                        "exclude": true,
+                        "comment": "Terms of service"
+                    },
+                    {
+                        "/": "/privacy",
+                        "exclude": true,
+                        "comment": "Privacy policy"
+                    }
+                ]
+            }
+        ]
+    }
+}
