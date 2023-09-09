@@ -8,6 +8,7 @@
       ref="icon"
       data-testid="testIsTakingCallsIcon"
       class="cursor-pointer"
+      :class="isTakingCalls ? 'pulse' : ''"
       type="image/svg+xml"
       :alt="$t('phoneDashboard.taking_calls')"
       :data="ICON_MAP.phone"
@@ -50,3 +51,19 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+@keyframes pulse-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>
