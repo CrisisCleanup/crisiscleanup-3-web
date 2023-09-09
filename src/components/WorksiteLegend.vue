@@ -57,6 +57,18 @@
             {{ $t('worksiteMap.multiple_work_types') }}
           </div>
         </div>
+        <div class="w-full flex justify-between">
+          <span></span>
+          <a
+            class="w-32 block md:self-end mt-3"
+            data-testid="testAwsLink"
+            target="_blank"
+            href="https://aws.amazon.com/government-education/nonprofits/disaster-response/"
+            ><img
+              src="@/assets/powered_by_aws.png"
+              data-testid="testAwsImgIcon"
+          /></a>
+        </div>
       </div>
     </div>
     <div
