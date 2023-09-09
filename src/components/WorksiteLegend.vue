@@ -7,9 +7,11 @@
       class="legend absolute legend-landscape bottom-0 w-72 bg-white border-2 p-2"
     >
       <div class="flex items-center justify-between">
-        <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
+        <div class="text-base font-bold my-1">
+          {{ $t('worksiteMap.legend') }}
+        </div>
         <font-awesome-icon
-          icon="minus"
+          icon="chevron-down"
           data-testid="testHideLegendIcon"
           size="1x"
           class="cursor-pointer"
@@ -60,10 +62,13 @@
     <div
       v-else
       style="z-index: 1001"
-      class="legend absolute legend-landscape bottom-0 w-16 bg-white border-2 p-2 flex justify-center"
+      class="legend absolute legend-landscape bottom-0 w-22 bg-white border-2 p-2 flex justify-center items-center"
     >
+      <div class="text-base font-bold my-1 mr-2">
+        {{ $t('worksiteMap.legend') }}
+      </div>
       <font-awesome-icon
-        icon="plus"
+        icon="chevron-up"
         size="1x"
         :title="$t('worksiteMap.show_legend')"
         class="cursor-pointer"
