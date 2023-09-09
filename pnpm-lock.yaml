@@ -69,11 +69,11 @@ dependencies:
     specifier: ^7946.0.10
     version: 7946.0.10
   '@types/leaflet.gridlayer.googlemutant':
-    specifier: ^0.4.6
-    version: 0.4.6
+    specifier: ^0.4.7
+    version: 0.4.7
   '@types/leaflet.heat':
-    specifier: ^0.2.1
-    version: 0.2.1
+    specifier: ^0.2.2
+    version: 0.2.2
   '@vitejs/plugin-vue-jsx':
     specifier: ^3.0.2
     version: 3.0.2(vite@4.4.9)(vue@3.3.4)
@@ -284,26 +284,26 @@ devDependencies:
     specifier: ^2.7.1
     version: 2.7.1
   '@types/crypto-js':
-    specifier: ^4.1.1
-    version: 4.1.1
+    specifier: ^4.1.2
+    version: 4.1.2
   '@types/d3':
     specifier: ^7.4.0
     version: 7.4.0
   '@types/google.maps':
-    specifier: ^3.53.6
-    version: 3.53.6
+    specifier: ^3.54.0
+    version: 3.54.0
   '@types/leaflet':
-    specifier: ^1.9.3
-    version: 1.9.3
+    specifier: ^1.9.4
+    version: 1.9.4
   '@types/lodash':
-    specifier: ^4.14.197
-    version: 4.14.197
+    specifier: ^4.14.198
+    version: 4.14.198
   '@types/node':
     specifier: ^18.16.3
     version: 18.16.3
   '@types/xo':
-    specifier: ^0.39.5
-    version: 0.39.5
+    specifier: ^0.39.6
+    version: 0.39.6
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.3.0
     version: 6.3.0(@typescript-eslint/parser@6.3.0)(eslint@8.47.0)(typescript@5.1.6)
@@ -3457,8 +3457,8 @@ packages:
     resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
     dev: true
 
-  /@types/crypto-js@4.1.1:
-    resolution: {integrity: sha512-BG7fQKZ689HIoc5h+6D2Dgq1fABRa0RbBWKBd9SP/MVRVXROflpm5fhwyATX5duFmbStzyzyycPB8qUYKDH3NA==}
+  /@types/crypto-js@4.1.2:
+    resolution: {integrity: sha512-t33RNmTu5ufG/sorROIafiCVJMx3jz95bXUMoPAZcUD14fxMXnuTzqzXZoxpR0tNx2xpw11Dlmem9vGCsrSOfA==}
     dev: true
 
   /@types/d3-array@3.0.4:
@@ -3657,13 +3657,6 @@ packages:
       '@types/estree': 1.0.1
     dev: true
 
-  /@types/eslint@8.37.0:
-    resolution: {integrity: sha512-Piet7dG2JBuDIfohBngQ3rCt7MgO9xCO4xIMKxBThCq5PNRB91IjlJ10eJVwfoNtvTErmxLzwBZ7rHZtbOMmFQ==}
-    dependencies:
-      '@types/estree': 1.0.1
-      '@types/json-schema': 7.0.11
-    dev: true
-
   /@types/eslint@8.44.2:
     resolution: {integrity: sha512-sdPRb9K6iL5XZOmBubg8yiFp5yS/JdUDQsq5e6h95km91MCYMuvp7mh1fjPEYUhvHepKpZOjnEaMBR4PxjWDzg==}
     dependencies:
@@ -3682,8 +3675,8 @@ packages:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
     dev: false
 
-  /@types/google.maps@3.53.6:
-    resolution: {integrity: sha512-zDU8c7K0YR1Ob7Wn0qCSQvICIuxilZH9KFIDHK6JO/5QzqEMv8e4+9bmyoDEktA9vPNmwP++zzg65h9y53iZ6Q==}
+  /@types/google.maps@3.54.0:
+    resolution: {integrity: sha512-b1MBy2eGrZoEFLnzq1RrlHbfzuWHz+Nitgqbb5N+MFA0kAUv0kYPmAXtczpb4dHlFZyu58EYzcKXtWNqSInyXg==}
     dev: true
 
   /@types/istanbul-lib-coverage@2.0.4:
@@ -3694,10 +3687,6 @@ packages:
     resolution: {integrity: sha512-qC4bCqYGy1y/NP7dDVr7KJarn+PbX1nSpwA7JXdu0HxT3QYjO8MJ+cntENtHFVy2dRAyBV23OZ6MxsW1AM1L8g==}
     dev: true
 
-  /@types/json-schema@7.0.11:
-    resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
-    dev: true
-
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
     dev: true
@@ -3706,25 +3695,25 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@types/leaflet.gridlayer.googlemutant@0.4.6:
-    resolution: {integrity: sha512-L0J7NadcZp5bcKQrv4DVlsEbQ90xLsOKScckAMnxoghh/wogk0GVkauYOYHBKeKDkx9qkMRzTf8oO+fKeYD7oQ==}
+  /@types/leaflet.gridlayer.googlemutant@0.4.7:
+    resolution: {integrity: sha512-Wgy2vDTVZnTCnnxiCmGnqVmEKe1zZ2JRtdgy4JjO3EVtiqfiTIm28t1JsEHOzveP3I48gR02KbRQWUd8NPRRDw==}
     dependencies:
-      '@types/leaflet': 1.9.3
+      '@types/leaflet': 1.9.4
     dev: false
 
-  /@types/leaflet.heat@0.2.1:
-    resolution: {integrity: sha512-NESIrQcnaT2gONYOUMfuppWdPDNkmH69qTa5F1kHCSh2WXno84YpOzJn/U+aGSNjUFRdVnRcxn1uxJn68/GNRA==}
+  /@types/leaflet.heat@0.2.2:
+    resolution: {integrity: sha512-5PLDNtbbc/1uZTb37FY8c/Sxf3mSioj7fSg8HAUPcsybSJ9+lPViWTWJTc4/McVWwHNehjjrklKeYA7dZCjnKQ==}
     dependencies:
-      '@types/leaflet': 1.9.3
+      '@types/leaflet': 1.9.4
     dev: false
 
-  /@types/leaflet@1.9.3:
-    resolution: {integrity: sha512-Caa1lYOgKVqDkDZVWkto2Z5JtVo09spEaUt2S69LiugbBpoqQu92HYFMGUbYezZbnBkyOxMNPXHSgRrRY5UyIA==}
+  /@types/leaflet@1.9.4:
+    resolution: {integrity: sha512-kfwgQf4eOxoe/tD9CaKQrBKHbc7VpyfJOG5sxsQtkH+ML9xYa8hUC3UMa0wU1pKfciJtO0pU9g9XbWhPo7iBCA==}
     dependencies:
       '@types/geojson': 7946.0.10
 
-  /@types/lodash@4.14.197:
-    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
+  /@types/lodash@4.14.198:
+    resolution: {integrity: sha512-trNJ/vtMZYMLhfN45uLq4ShQSw0/S7xCTLLVM+WM1rmFpba/VS42jVUgaO3w/NOLiWR/09lnYk0yMaA/atdIsg==}
     dev: true
 
   /@types/minimist@1.2.2:
@@ -3763,10 +3752,10 @@ packages:
   /@types/web-bluetooth@0.0.17:
     resolution: {integrity: sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA==}
 
-  /@types/xo@0.39.5:
-    resolution: {integrity: sha512-s0nxeZhocJTFmomUNE3o/MbuOirnNUuMs9qqyIeis6BwKsxHGa+kr1/VeOvsYGx4PNo53o4evk0jzqb/ueS0RQ==}
+  /@types/xo@0.39.6:
+    resolution: {integrity: sha512-sF3+TfzEaNCOo6BS8WZrD1E3WQiRGB45ayqaXu/nrXx4+GB32jRI/fJbXtXp9fXnLNrXf7yeKU3H7+TSK6065w==}
     dependencies:
-      '@types/eslint': 8.37.0
+      '@types/eslint': 8.44.2
     dev: true
 
   /@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.47.0)(typescript@5.1.6):
