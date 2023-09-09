@@ -76,6 +76,8 @@ import logout from './assets/icons/logout.svg';
 import plane from './assets/icons/plane.svg';
 import news from './assets/icons/news.svg';
 import stickyNoteSolid from './assets/icons/sticky-note-solid.svg';
+import downloadAppStoreBadge from './assets/icons/download-appstore-badge.svg';
+import downloadPlayStoreBadge from './assets/icons/download-playstore-badge.svg';
 import appleAppStore from './assets/icons/appleAppStore.svg';
 import googlePlayStore from './assets/icons/googlePlayStore.svg';
 import zoom from './assets/icons/zoom.svg'
@@ -257,6 +259,8 @@ export const ICON_MAP = {
   logout,
   plane,
   news,
+  'download-playstore-badge': downloadPlayStoreBadge,
+  'download-appstore-badge': downloadAppStoreBadge,
   'google-play-store': googlePlayStore,
   'apple-app-store': appleAppStore,
   'sticky-note-solid': stickyNoteSolid,
