@@ -9,6 +9,7 @@ import { store } from './store';
 import AdminRoutes from './pages/admin/routes';
 import OrganizationRoutes from './pages/organization/routes';
 import UnauthenticatedRoutes from './pages/unauthenticated/routes';
+import AppDownload from './pages/AppDownload.vue';
 import useSetupLanguage from '@/hooks/useSetupLanguage';
 import OtherOrganizations from '@/pages/OtherOrganizations.vue';
 import Reports from '@/pages/admin/Reports.vue';
@@ -69,6 +70,13 @@ const routes = [
     component: Downloads,
     name: 'nav.downloads',
     meta: { layout: 'authenticated' },
+  },
+  {
+    // For app download links
+    path: '/apps',
+    component: AppDownload,
+    name: 'nav.mobile',
+    meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
     path: '/incident/:incident_id/work',
