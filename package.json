@@ -133,7 +133,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@playwright/test": "^1.37.0",
+    "@playwright/test": "^1.37.1",
     "@sentry/vite-plugin": "^2.7.1",
     "@types/crypto-js": "^4.1.2",
     "@types/d3": "^7.4.0",
