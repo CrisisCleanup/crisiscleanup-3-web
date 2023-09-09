@@ -3,6 +3,8 @@
     :title="$t('~~Organization Inactive')"
     data-testid="testVerificationTitleModal"
     modal-classes="max-w-lg h-auto verification-modal"
+    :closeable="true"
+    @close="$emit('userLoggedOut')"
   >
     <div class="overflow-auto">
       <div class="px-3">
@@ -44,12 +46,16 @@ export default defineComponent({
     },
   },
   emits: ['userLoggedOut'],
-  methods: {
-    logout() {
+  setup({ emit }) {
+    function logout() {
       // Your logout logic here. This could involve emitting an event or
       // calling some API endpoint or global function to perform the logout.
-      this.$emit('userLoggedOut');
-    },
+      emit('userLoggedOut');
+    }
+
+    return {
+      logout,
+    };
   },
 });
 </script>
