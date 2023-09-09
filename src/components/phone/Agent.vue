@@ -5,12 +5,11 @@
     </div>
     <div class="flex items-center justify-between mr-3">
       <div class="flex items-start justify-start">
-        <div class="flex ml-4">
+        <div class="flex ml-4 mr-1">
           <base-text
             v-if="currentUser"
             data-testid="testCurrentUserMobileContent"
             variant="bodysm"
-            class="w-18"
           >
             {{ currentUser.mobile }}
           </base-text>
@@ -73,9 +72,11 @@
       <base-checkbox
         v-if="currentUser && currentUser.isAdmin"
         data-testid="testServeOutboundCallsCheckbox"
-        class="p-0.5 ml-3"
+        class="p-0.5 ml-3 text-[["
         @update:modelValue="$emit('onToggleOutbounds', $event)"
-        >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
+        ><span class="whitespace-nowrap">{{
+          $t('phoneDashboard.serve_outbound_calls')
+        }}</span></base-checkbox
       >
       <ccu-icon
         v-if="(isOnCall || caller) && isOutboundCall"
