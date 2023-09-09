@@ -12,7 +12,7 @@
           <div v-for="(item, idx) in section.values" :key="idx">
             <div
               class="m-1 p-1 rounded cursor-pointer"
-              :class="item.value === status ? '' : 'opacity-70'"
+              :class="item.value === status ? 'outline' : 'opacity-80'"
               :style="`background: ${section.color}`"
               @click="status = item.value"
             >
@@ -95,7 +95,7 @@ export default defineComponent({
             value: 8,
           },
         ],
-        color: '#0FA355',
+        color: '#15d671',
       },
       noAnswer: {
         name: t('phoneState.no-answer'),
