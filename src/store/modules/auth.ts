@@ -33,7 +33,7 @@ const getters = {
 // Actions
 const actions = {
   async login(
-    { commit }: ActionContext<any, any>,
+    { commit }: ActionContext<never, never>,
     { email, password }: Record<string, string>,
   ) {
     const response = await axios.post(
@@ -47,9 +47,9 @@ const actions = {
     return response;
   },
 
-  logout({ commit }: ActionContext<any, any>) {
-    commit('setUser', null);
+  logout({ commit }: ActionContext<never, never>) {
     AuthService.logoutUser().then(() => {
+      commit('setUser', null);
       const broadcast = new BroadcastChannel('logoutChannel');
       broadcast.postMessage('logout');
       window.location.href = '/';

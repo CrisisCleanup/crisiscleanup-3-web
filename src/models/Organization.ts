@@ -78,6 +78,8 @@ export default class Organization extends CCUModel {
       phone2: this.attr(null),
       email: this.attr(null),
       donate_url: this.attr(null),
+      is_active: this.attr(null),
+      is_verified: this.attr(null),
     };
   }
 
@@ -109,6 +111,8 @@ export default class Organization extends CCUModel {
   phone2!: string | undefined;
   email!: string | undefined;
   donate_url!: string | undefined;
+  is_active!: boolean | undefined;
+  is_verified!: boolean | undefined;
 
   get incident_list() {
     return Incident.query().whereIdIn(this.incidents).get();

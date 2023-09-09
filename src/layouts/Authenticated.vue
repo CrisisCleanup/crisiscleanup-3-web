@@ -116,6 +116,17 @@
           @acceptedTerms="acceptTermsAndConditions"
         />
       </template>
+      <template
+        v-if="
+          currentOrganization &&
+          (!currentOrganization.is_active || !currentOrganization.is_verified)
+        "
+      >
+        <OrganizationInactiveModal
+          :organization="currentOrganization"
+          @user-logged-out="logoutApp"
+        />
+      </template>
       <div v-if="transferRequest">
         <CompletedTransferModal
           :transfer-request="transferRequest"
@@ -166,14 +177,16 @@ import useAcl from '@/hooks/useAcl';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import useDialogs from '@/hooks/useDialogs';
 import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
-import useEmitter from "@/hooks/useEmitter";
-import AppDownloadLinks from "@/components/AppDownloadLinks.vue";
+import useEmitter from '@/hooks/useEmitter';
+import AppDownloadLinks from '@/components/AppDownloadLinks.vue';
+import OrganizationInactiveModal from '@/components/modals/OrganizationInactiveModal.vue';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default defineComponent({
   name: 'Authenticated',
   components: {
+    OrganizationInactiveModal,
     AppDownloadLinks,
     DisasterIcon,
     LoginForm,
