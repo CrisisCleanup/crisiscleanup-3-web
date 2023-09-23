@@ -1,0 +1,21 @@
+{
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
+    extends: [
+        "config:base",
+        ":rebaseStalePrs",
+        ":pinDependencies",
+        ":automergeMinor",
+        ":automergeDigest",
+        "group:recommended",
+        "group:linters",
+        "group:monorepos",
+        "helpers:disableTypesNodeMajor",
+        "schedule:nonOfficeHours"
+    ],
+    addLabels: ["dependencies"],
+    major: {
+        automerge: false
+    },
+    ignorePaths: ["internal/storybook"],
+    dependencyDashboard: true
+}
