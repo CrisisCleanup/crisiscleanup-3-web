@@ -1,5 +1,5 @@
 <template>
-  <div class="table-grid w-full">
+  <div class="table-grid w-full" :style="gridStyleTable">
     <div
       v-if="!hideHeader && $mq !== 'sm'"
       class="header text-crisiscleanup-grey-700 bg-white"
@@ -29,48 +29,49 @@
           }
         "
       >
-        <slot :name="`${column.key}-title`" :column="column">
-          <base-text
-            class="text-crisiscleanup-grey-700"
-            :class="column.titleClass && column.titleClass"
-            variant="h3"
-            regular
-          >
-            {{ $t(column.title) }}
-          </base-text>
-        </slot>
-        <div v-if="column.sortable">
-          <ccu-icon
-            v-if="
+        <div v-if="!column.hidden">
+          <slot :name="`${column.key}-title`" :column="column">
+            <base-text
+              class="text-crisiscleanup-grey-700"
+              :class="column.titleClass && column.titleClass"
+              variant="h3"
+              regular
+            >
+              {{ $t(column.title) }}
+            </base-text>
+          </slot>
+          <div v-if="column.sortable">
+            <ccu-icon
+              v-if="
               sorter.key === (column.sortKey || column.key) &&
               sorter.direction === 'asc'
             "
-            :alt="$t('actions.sort_ascending')"
-            size="small"
-            type="up"
-          />
-          <ccu-icon
-            v-else-if="
+              :alt="$t('actions.sort_ascending')"
+              size="small"
+              type="up"
+            />
+            <ccu-icon
+              v-else-if="
               sorter.key === (column.sortKey || column.key) &&
               sorter.direction === 'desc'
             "
-            :alt="$t('actions.sort_descending')"
-            size="small"
-            type="down"
-          />
-          <ccu-icon
-            v-else
-            :alt="$t('actions.sortable')"
-            size="small"
-            type="updown"
-          />
+              :alt="$t('actions.sort_descending')"
+              size="small"
+              type="down"
+            />
+            <ccu-icon
+              v-else
+              :alt="$t('actions.sortable')"
+              size="small"
+              type="updown"
+            />
+          </div>
         </div>
-      </div>
-      <template v-if="enableColumnSearch">
-        <div
-          v-for="column of columns"
-          :key="`search-${column.key}`"
-          class="
+        <template v-if="enableColumnSearch">
+          <div
+            v-for="column of columns"
+            :key="`search-${column.key}`"
+            class="
             p-2
             border-b
             flex
@@ -78,37 +79,38 @@
             cursor-pointer
             bg-crisiscleanup-light-grey
           "
-        >
-          <template v-if="column.searchable">
-            <form-select
-              v-if="column.searchSelect"
-              class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
-              :options="column ? column.getSelectValues(data) : []"
-              item-key="value"
-              label="name_t"
-              :value="columnSearch[column.key]"
-              @input="
+          >
+            <template v-if="column.searchable">
+              <form-select
+                v-if="column.searchSelect"
+                class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
+                :options="column ? column.getSelectValues(data) : []"
+                item-key="value"
+                label="name_t"
+                :value="columnSearch[column.key]"
+                @input="
                 (value) => {
                   columnSearch[column.key] = value;
                   onSearch();
                 }
               "
-            ></form-select>
-            <base-input
-              v-else
-              :placeholder="column.title"
-              :value="columnSearch[column.key]"
-              @input="
+              ></form-select>
+              <base-input
+                v-else
+                :placeholder="column.title"
+                :value="columnSearch[column.key]"
+                @input="
                 (value) => {
                   columnSearch[column.key] = value;
                   onSearch();
                 }
               "
-              input-style="width: 100%"
-            ></base-input>
-          </template>
+                input-style="width: 100%"
+              ></base-input>
+            </template>
+          </div>
+        </template>
         </div>
-      </template>
     </div>
     <div class="body bg-white relative" :style="gridStyleBody">
       <div
@@ -170,7 +172,7 @@
           :style="column.style || []"
           @click="handleColumnAction(column, item[column.key], item)"
         >
-          <slot :name="column.key" :item="item">
+          <slot :name="column.key" :item="item" v-if="!column.hidden">
             <span v-if="$mq === 'sm'" class="font-semibold mr-2">
               {{ column.title }}:
             </span>
@@ -336,6 +338,12 @@ export default {
         return {};
       },
     },
+    tableStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -431,6 +439,11 @@ export default {
         ...this.rowStyle,
       };
     },
+    gridStyleTable() {
+      return {
+        ...this.tableStyle,
+      };
+    },
   },
   mounted() {},
   methods: {
@@ -516,6 +529,7 @@ export default {
       this.logEvent(
         sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
       );
+      this.$emit('sort', { pagination, filter, sorter, columnSearch });
       this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     onSearch() {

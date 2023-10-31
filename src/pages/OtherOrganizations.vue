@@ -1,10 +1,10 @@
 <template>
-  <div class="p-10">
+  <div class="p-10" style="height: inherit">
     <div
       class="
         sm:w-3/5
         border-primary-dark
-        h-20
+        sm:h-20
         border-2
         my-4
         flex
@@ -23,23 +23,39 @@
       </div>
     </div>
 
-    <base-input
-      :value="organizations.search"
-      icon="search"
-      class="sm:w-84 my-2"
-      :placeholder="$t('actions.search')"
-      @input="
-        (value) => {
-          organizations.search = value;
-          throttle(getOrganizations, 1000)();
-        }
-      "
-    ></base-input>
+    <div class="flex sm:flex-row flex-col justify-between mb-2">
+      <base-input
+        :value="organizations.search"
+        icon="search"
+        class="sm:w-84 my-2"
+        :placeholder="$t('actions.search')"
+        @input="
+          (value) => {
+            organizations.search = value;
+            throttle(getOrganizations, 1000)();
+          }
+        "
+      ></base-input>
 
+      <base-button
+        v-if="$refs.table"
+        :action="$refs.table.exportTableCSV"
+        type="primary"
+        :size="$mq === 'sm' ? 'lg' : 'small'"
+        :text="$t('actions.download')"
+        :alt="$t('actions.download')"
+        class="table-action-button"
+        ccu-icon="download"
+        icon-size="small"
+      />
+    </div>
     <Table
+      ref="table"
+      :sorter="tableSorter"
       :columns="columns"
       :data="organizations.data"
-      :body-style="{ height: '300px' }"
+      :body-style="{ height: '100%' }"
+      :table-style="{ height: '70%' }"
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
@@ -102,6 +118,65 @@
           </div>
         </div>
       </template>
+      <template #url="slotProps">
+        <base-button
+          class="text-primary-dark underline sm:ml-0 ml-1"
+          :icon-classes="$mq === 'sm' ? 'fa-2x' : 'fa-lg'"
+          icon="globe"
+          :style="slotProps.item.url === '' ? 'opacity: .5' : ''"
+          :action="
+            () => {
+              if (slotProps.item.url != '') $router.push(slotProps.item.url);
+            }
+          "
+        />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-2"
+          :href="slotProps.item.url"
+          >{{ slotProps.item.url }}</a
+        >
+      </template>
+      <template #facebook="slotProps">
+        <img
+          src="@/assets/facebook.svg"
+          class="sm:ml-1 sm:w-16 w-12"
+          :style="slotProps.item.facebook === '' ? 'opacity: .5' : ''"
+          @click="
+            () => {
+              if (slotProps.item.facebook != '')
+                $router.push(slotProps.item.facebook);
+            }
+          "
+          alt="facebook"
+        />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-1"
+          :href="slotProps.item.facebook"
+          >{{ slotProps.item.facebook }}</a
+        >
+      </template>
+      <template #twitter="slotProps">
+        <img
+          src="@/assets/twitter.svg"
+          class="sm:w-6 w-10 sm:ml-0 ml-1"
+          :style="slotProps.item.twitter === '' ? 'opacity: .5' : ''"
+          @click="
+            () => {
+              if (slotProps.item.twitter != '')
+                $router.push(slotProps.item.twitter);
+            }
+          "
+          alt="twitter"
+        />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-2"
+          :href="slotProps.item.twitter"
+          >{{ slotProps.item.twitter }}</a
+        >
+      </template>
       <template #approved_roles="slotProps">
         <v-popover popover-class="org-role-popover">
           <base-text class="details-name" variant="body">
@@ -147,6 +222,7 @@
 <script>
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
+import * as _ from 'lodash';
 import Table from '@/components/Table';
 import User from '@/models/User';
 import { getQueryString } from '../utils/urls';
@@ -166,13 +242,36 @@ export default {
           title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
-          width: this.isLandscape() ? '2fr' : '350px',
+          width: this.isLandscape() ? '2fr' : '250px',
+          class: 'sm:text-sm text-xl',
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: this.$t('Links'),
+          dataIndex: 'url',
+          key: 'url',
+          width: '30px',
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: '',
+          dataIndex: 'facebook',
+          key: 'facebook',
+          width: '50px',
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: '',
+          dataIndex: 'twitter',
+          key: 'twitter',
+          width: '50px',
         },
         {
           title: this.$t('otherOrganizations.access_level'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
           width: '150px',
+          class: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.incidents'),
@@ -227,10 +326,16 @@ export default {
           key: 'last_login',
           class: 'justify-center',
           headerClass: 'justify-center',
-          width: '150px',
+          width: '200px',
           transformer: (item) => {
             return this.$moment(item).fromNow();
           },
+        },
+        {
+          title: this.$t('primary_contacts'),
+          dataIndex: 'primary_contacts',
+          key: 'primary_contacts',
+          hidden: true,
         },
       ];
     },
@@ -267,6 +372,7 @@ export default {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.currentIncidentId}/organizations?${queryString}`,
       );
+      console.log(response.data);
       this.organizations.data = response.data.results;
       const newPagination = {
         ...pagination,
@@ -316,6 +422,7 @@ export default {
         visible: true,
       },
       organizationRoles: [],
+      tableSorter: {},
     };
   },
 };
