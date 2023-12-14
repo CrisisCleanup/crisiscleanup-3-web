@@ -15,11 +15,12 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
                 size="xs"
                 type="cancel"
-                @click.native="
+                @click="
                   () => {
-                    $close('cancel');
+                    closeDialog('cancel');
                   }
                 "
               />
@@ -31,22 +32,24 @@
               <component
                 :is="dynamicComponent"
                 v-bind="props"
-                v-on="listeners"
                 :class="classes"
+                :style="styles"
+                v-on="listeners"
               />
             </div>
           </div>
 
-          <div class="modal-footer flex-shrink">
+          <div v-if="!hideFooter" class="modal-footer flex-shrink">
             <div class="flex items-center justify-center py-2 border-t">
               <div class="flex flex-col items-center justify-center">
                 <base-button
                   :alt="$t('actions.ok')"
+                  data-testid="testOkButton"
                   variant="solid"
                   size="lg"
                   :action="
                     () => {
-                      $close('ok');
+                      closeDialog('ok');
                     }
                   "
                 >
@@ -61,26 +64,13 @@
   </transition>
 </template>
 
-<script>
-import { EventBus } from '@/event-bus';
+<script lang="ts">
+import { computed, defineComponent } from 'vue';
+import { closeDialog } from 'vue3-promise-dialog';
+import useEmitter from '../../hooks/useEmitter';
 
-export default {
+export default defineComponent({
   name: 'ComponentDialog',
-  created() {
-    EventBus.$on('modal_component:close', (key) => {
-      if (key === this.id) {
-        this.$close();
-      }
-    });
-  },
-  computed: {
-    dynamicComponent() {
-      if (typeof this.component === 'string') {
-        return () => import(`@/components/${this.component}`);
-      }
-      return this.component;
-    },
-  },
   props: {
     id: {
       type: String,
@@ -91,10 +81,14 @@ export default {
       default: '',
     },
     component: {
-      type: [String, Function],
-      default: '',
+      type: [Function],
+      default() {},
     },
     classes: {
+      type: String,
+      default: '',
+    },
+    styles: {
       type: String,
       default: '',
     },
@@ -116,18 +110,44 @@ export default {
     },
     props: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     listeners: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
+    hideFooter: {
+      type: Boolean,
+      default: false,
+    },
   },
-};
+  setup(props) {
+    const { emitter } = useEmitter();
+
+    emitter.on('modal_component:close', (key) => {
+      if (key === props.id) {
+        try {
+          closeDialog('ok');
+        } catch {
+          return false;
+        }
+      }
+    });
+
+    const dynamicComponent = computed(() => {
+      return props.component;
+    });
+
+    return {
+      dynamicComponent,
+      closeDialog,
+    };
+  },
+});
 </script>
 
 <style scoped>

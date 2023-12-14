@@ -1,19 +1,20 @@
 <template>
   <div class="tag flex items-center px-1 justify-center text-xs">
     <ccu-icon
-      :alt="$t('actions.cancel')"
       v-if="closeable"
+      data-testid="testCancelIcon"
+      :alt="$t('actions.cancel')"
       size="xxs"
       class="mx-1"
       type="cancel"
-      @click.native="onClose"
+      @click="$emit('closed')"
     />
     <slot></slot>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Tag',
   props: {
     closeable: {
@@ -21,12 +22,7 @@ export default {
       default: false,
     },
   },
-  methods: {
-    onClose() {
-      this.$emit('closed');
-    },
-  },
-};
+});
 </script>
 
 <style scoped>

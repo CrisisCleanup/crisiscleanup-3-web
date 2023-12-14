@@ -1,56 +1,64 @@
 import _ from 'lodash';
 
-type LocaleFormFieldsT = {
-  [key: string]: {
-    locale: string | null;
-    value: string | null;
-    key: string | null;
-  };
-};
+type LocaleFormFieldsT = Record<
+  string,
+  {
+    locale: string | undefined;
+    value: string | undefined;
+    key: string | undefined;
+  }
+>;
 
-export const groupBy = (key) => (array) =>
-  array.reduce((objectsByKeyValue, obj) => {
-    const value = obj[key];
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-    return objectsByKeyValue;
-  }, {});
+export const groupBy =
+  <T extends Record<string, any>, K extends keyof T>(key: K) =>
+  (array: T[]): Record<T[K], T[]> =>
+    array.reduce<Record<T[K], T[]>>((objectsByKeyValue, object) => {
+      const value = object[key];
+      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(
+        object,
+      );
+      return objectsByKeyValue;
+    }, {});
 
-export const buildForm = (key, dict, array) => {
-  // TODO: refactor after writing unit tests
-  // eslint-disable-next-line no-restricted-syntax
+export const buildForm = <T extends Record<string, any>, K extends keyof T>(
+  key: K,
+  dict: Record<K, T[]>,
+  array: T[],
+) => {
   for (const item of dict[key]) {
     if (item.label_t && Boolean(item.field_key)) {
       array.push(item);
     }
+
     if (item.field_key in dict && Boolean(item.field_key)) {
       buildForm(item.field_key, dict, array);
     }
   }
 };
 
-// @ts-ignore
-// @ts-ignore
-export const nest = (
-  items,
-  key = null,
+export const nest = <T extends Record<string, any>, K extends keyof T>(
+  items: T[],
+  value: T[K] | undefined = null,
   link = 'field_parent_key',
-  excluded = [],
-) =>
+  excluded: K[] = [],
+): Array<Record<K, T & { children: T[] | undefined }>> =>
   items
-    .filter((item: { field_key: string }) => Boolean(item.field_key))
+    .filter((item) => Boolean(item.field_key))
     .filter(
-      (item: { field_key: string }) =>
-        // @ts-ignore
-        item[link] === key && !excluded.includes(item.field_key),
+      (item) => item[link] === value && !excluded.includes(item.field_key),
     )
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
-export const nestUsers = (items, key: string | null = null) => {
+export const nestUsers = <T extends Record<string, any>, K extends keyof T>(
+  items: T[],
+  referringUserId: T[K] | undefined = null,
+): Array<Record<K, T & { label: string; children: T[] | undefined }>> => {
   return items
     .filter((item) => {
       if (item.referring_user) {
-        return item.referring_user === key;
+        return item.referring_user === referringUserId;
       }
+
       return false;
     })
     .map((item) => {
@@ -62,8 +70,7 @@ export const nestUsers = (items, key: string | null = null) => {
     });
 };
 
-export const emailRegex =
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+export const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 /**
  * Iterates over locale inputs and generates locale keys for each.
@@ -78,8 +85,8 @@ export const makeLocaleInputs = ({
   base = '',
 }: {
   inputs: string[];
-  prefix: string;
-  base: string;
+  prefix?: string;
+  base?: string;
 }): LocaleFormFieldsT =>
   _.transform(
     inputs,
@@ -95,5 +102,5 @@ export const makeLocaleInputs = ({
         key: _key,
       };
     },
-    {},
+    {} as Record<string, any>,
   );

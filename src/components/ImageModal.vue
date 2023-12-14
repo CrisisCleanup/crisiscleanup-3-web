@@ -5,17 +5,33 @@
         <div v-for="(image, idx) in imageList" :key="idx">
           <slot name="image">
             <div class="relative image-container w-24 h-24 mb-2">
+              <div
+                v-if="image.filename.endsWith('.pdf')"
+                class="w-20 h-20 mx-2 cursor-pointer flex flex-col items-center justify-center gap-2"
+                :title="image.filename_original"
+                @click="appearPdf(image)"
+              >
+                <font-awesome-icon
+                  icon="file-pdf"
+                  data-testid="testPdfIcon"
+                  :alt="$t('imageModal.upload_pdf_ok')"
+                  size="3x"
+                  class="cursor-pointer"
+                />
+              </div>
               <img
+                v-else
                 class="w-20 h-20 mx-2 cursor-pointer"
                 :src="image.small_thumbnail_url"
                 @click="appearModal(image, idx)"
               />
               <ccu-icon
                 :alt="$t('actions.delete')"
+                data-testid="testDeleteIcon"
                 size="xs"
                 type="trash"
                 class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-                @click.native="$emit('removeImage', image.file, image.id)"
+                @click="$emit('removeImage', image.file, image.id)"
               />
             </div>
           </slot>
@@ -24,12 +40,14 @@
     </div>
   </div>
 </template>
-<script>
-import 'viewerjs/dist/viewer.css';
-import _ from 'lodash';
-import { api as viewerApi } from 'v-viewer';
 
-export default {
+<script lang="ts">
+import { api as viewerApi } from 'v-viewer';
+import { computed } from 'vue';
+import useDialogs from '@/hooks/useDialogs';
+import PdfViewer from '@/components/PdfViewer.vue';
+
+export default defineComponent({
   name: 'ImageModal',
   props: {
     imageList: {
@@ -41,39 +59,51 @@ export default {
       default: false,
     },
   },
-  computed: {
-    images() {
-      return this.imageList.map((image) => {
+  setup(props) {
+    const { component } = useDialogs();
+
+    const images = computed(() => {
+      return props.imageList.map((image) => {
         return {
           src: image.small_thumbnail_url,
           'data-source': image.large_thumbnail_url,
         };
       });
-    },
-  },
-  data() {
-    return {
-      showModal: false,
-      numClicks: 0,
-      scale: 1,
-      selectedImage: '',
-      imageIndex: -1,
-    };
-  },
-  methods: {
-    appearModal(image, idx) {
-      const $viewer = viewerApi({
+    });
+    async function appearPdf(file) {
+      await component({
+        title: file.filename_original,
+        component: PdfViewer,
+        classes: 'w-full h-144 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-4xl shadow',
+        props: {
+          pdf: file,
+        },
+      });
+    }
+
+    function appearModal(image, idx) {
+      viewerApi({
         options: {
           toolbar: true,
           url: 'data-source',
           initialViewIndex: idx,
         },
-        images: this.images,
+        images: images.value,
       });
-    },
+    }
+
+    return {
+      images,
+      appearModal,
+      appearPdf,
+    };
   },
-};
+});
 </script>
+
+<style src="viewerjs/dist/viewer.css"></style>
+
 <style scoped>
 .image-container:hover .image-close {
   display: flex;

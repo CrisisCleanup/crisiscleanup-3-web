@@ -2,13 +2,12 @@
   <div :id="id" class="relative"></div>
 </template>
 
-<script>
-import { onMounted } from '@vue/composition-api';
+<script lang="ts">
+import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import moment from 'moment';
-import usei18n from '@/use/usei18n';
 
-export default {
+export default defineComponent({
   name: 'ReportBarChart',
   props: {
     data: {
@@ -33,7 +32,7 @@ export default {
     },
   },
   setup(props) {
-    const { $t } = usei18n();
+    const { t } = useI18n();
 
     onMounted(() => {
       const { data } = props;
@@ -62,9 +61,9 @@ export default {
           0,
           d3.max(props.data, function (m) {
             let value = 0;
-            keys.forEach((k) => {
+            for (const k of keys) {
               value += m[k];
-            });
+            }
 
             return value;
           }),
@@ -108,7 +107,7 @@ export default {
         .attr('text-anchor', 'start')
         .attr('x', width / 2)
         .attr('y', height + margin.bottom / 2 + 50)
-        .text($t(props.displayOptions.axes.x.name));
+        .text(t(props.displayOptions.axes.x.name));
 
       svg
         .append('text')
@@ -118,7 +117,7 @@ export default {
         .attr('x', -height / 2 - 80)
         .attr('dy', '.75em')
         .attr('transform', 'rotate(-90)')
-        .text($t(props.displayOptions.axes.y.name));
+        .text(t(props.displayOptions.axes.y.name));
 
       svg
         .append('text')
@@ -126,7 +125,7 @@ export default {
         .attr('y', -20)
         .attr('text-anchor', 'middle')
         .style('font-size', '20px')
-        .text($t(`reports.${props.reportName}`));
+        .text(t(`reports.${props.reportName}`));
 
       svg
         .append('text')
@@ -134,7 +133,7 @@ export default {
         .attr('y', height + margin.bottom - 50)
         .attr('text-anchor', 'middle')
         .style('font-size', '15px')
-        .html($t(`reports.paid_for_statement`));
+        .html(t(`reports.paid_for_statement`));
 
       const toolTip = d3
         .select(`#${props.id}`)
@@ -174,17 +173,17 @@ export default {
           const mouseY = mouse[1];
 
           let displaytext = '';
-          Object.keys(d.data).forEach((key) => {
+          for (const key of Object.keys(d.data)) {
             if (d.data[key] instanceof Date) {
-              displaytext += `${$t(
+              displaytext += `${t(
                 `reports.${props.reportName}.${key}`,
               )}: ${moment(d.data[key]).format('ddd MMMM Do YYYY')}\n`;
             } else {
-              displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
+              displaytext += `${t(`reports.${props.reportName}.${key}`)}: ${
                 d.data[key]
               }\n`;
             }
-          });
+          }
 
           // update the tooltip position and value
           toolTip
@@ -199,7 +198,7 @@ export default {
         });
     });
   },
-};
+});
 </script>
 
 <style scoped></style>

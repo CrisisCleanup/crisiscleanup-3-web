@@ -6,25 +6,28 @@
         <div class="flex flex-col sm:flex-row items-center">
           <base-input
             v-model="currentSearch"
+            data-testid="testGetLocationsSearch"
             icon="search"
             class="sm:w-72 w-full sm:mr-4"
             :placeholder="$t('actions.search')"
-            @input="getLocations"
+            @update:modelValue="getLocations"
           ></base-input>
           <div class="flex w-full">
-            <form-select
+            <base-select
               v-model="locationTypeFilter"
+              data-testid="testLocationTypeFilterSelect"
               :options="locationTypes"
               class="w-full sm:w-64 border border-crisiscleanup-dark-100"
               item-key="id"
               label="name_t"
               :placeholder="$t('locationVue.location_type')"
               select-classes="bg-white border text-xs location-select p-1"
-              @input="getLocations"
+              @update:modelValue="getLocations"
             />
             <base-button
               :text="$t('actions.create_location')"
               :alt="$t('actions.create_location')"
+              data-testid="testCreateLocationButton"
               variant="solid"
               size="small"
               :action="
@@ -40,6 +43,7 @@
         :locations="locations"
         :meta="locationsMeta"
         :loading="locationsLoading"
+        data-testid="testLocationsTable"
         @change="handleTableChange"
         @deleteLocation="deleteLocation"
       />
@@ -47,77 +51,59 @@
   </div>
 </template>
 
-<script>
-import LayerUploadTool from '@/components/LayerUploadTool';
-import LocationTable from '../../components/LocationTable';
-import User from '../../models/User';
-import Location from '../../models/Location';
-import LocationType from '../../models/LocationType';
-import { getQueryString } from '../../utils/urls';
-import { getErrorMessage } from '../../utils/errors';
+<script lang="ts">
+import { useToast } from 'vue-toastification';
+import { debounce } from 'lodash';
+import LayerUploadTool from '@/components/locations/LayerUploadTool.vue';
+import LocationTable from '@/components/LocationTable.vue';
+import User from '@/models/User';
+import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
+import { getQueryString } from '@/utils/urls';
+import { getErrorMessage } from '@/utils/errors';
 
-export default {
+export default defineComponent({
   name: 'Layers',
   components: { LocationTable, LayerUploadTool },
-  data() {
-    return {
-      locations: [],
-      locationTypeFilter: null,
-      currentSearch: '',
-      locationsLoading: false,
-      locationsMeta: {
-        pagination: {
-          pageSize: 20,
-          page: 1,
-          current: 1,
-        },
+  setup() {
+    const store = useStore();
+    const toasted = useToast();
+    const { t } = useI18n();
+
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const locationTypes = computed(() => LocationType.all());
+    const locationTypeFilter = ref();
+    const currentSearch = ref<string>('');
+    const locationsLoading = ref(false);
+    const locations = ref<Array<Location>>([]);
+    const locationsMeta = reactive({
+      pagination: {
+        pageSize: 20,
+        page: 1,
+        current: 1,
+        total: 0,
       },
-    };
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    locationTypes() {
-      return LocationType.all();
-    },
-  },
-  methods: {
-    async handleTableChange({ pagination }) {
-      this.locationsMeta.pagination = { ...pagination };
-      await this.getLocations();
-    },
-    async deleteLocation(locationId) {
-      this.locationsLoading = true;
-      try {
-        await Location.api().delete(`/locations/${locationId}`, {
-          delete: locationId,
-        });
-        await this.$toasted.success(this.$t('locationVue.location_deleted'));
-        await this.getLocations();
-      } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-      } finally {
-        this.locationsLoading = false;
-      }
-    },
-    async getLocations() {
-      this.locationsLoading = true;
-      const params = {
-        created_by__organization: this.currentUser.organization.id,
+    });
+
+    const getLocations = async () => {
+      locationsLoading.value = true;
+      const params: Record<string, any> = {
+        created_by__organization: currentUser.value?.organization.id,
         type__isnull: false,
         fields: 'id,name,type,shared',
         offset:
-          this.locationsMeta.pagination.pageSize *
-          (this.locationsMeta.pagination.page - 1),
-        limit: this.locationsMeta.pagination.pageSize,
+          locationsMeta.pagination.pageSize *
+          (locationsMeta.pagination.page - 1),
+        limit: locationsMeta.pagination.pageSize,
       };
-      if (this.currentSearch) {
-        params.search = this.currentSearch;
+      if (currentSearch.value) {
+        params.search = currentSearch.value;
       }
-      if (this.locationTypeFilter) {
-        params.type = this.locationTypeFilter;
+
+      if (locationTypeFilter.value) {
+        params.type = locationTypeFilter.value;
       }
+
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
         {
@@ -125,20 +111,53 @@ export default {
           save: false,
         },
       );
-      this.locations = results.response.data.results;
+      locations.value = results.response.data.results;
 
-      this.locationsMeta.pagination.total = results.response.data.count;
-      this.locationsMeta.pagination = { ...this.locationsMeta.pagination };
-      this.locationsLoading = false;
-    },
+      locationsMeta.pagination.total = results.response.data.count;
+      locationsMeta.pagination = { ...locationsMeta.pagination };
+      locationsLoading.value = false;
+    };
+
+    const handleTableChange = async ({ pagination }) => {
+      locationsMeta.pagination = { ...pagination };
+      await getLocations();
+    };
+
+    const deleteLocation = async (locationId: string) => {
+      locationsLoading.value = true;
+      try {
+        await Location.api().delete(`/locations/${locationId}`, {
+          delete: locationId,
+        });
+        await toasted.success(t('locationVue.location_deleted'));
+        await getLocations();
+      } catch (error) {
+        await toasted.error(getErrorMessage(error));
+      } finally {
+        locationsLoading.value = false;
+      }
+    };
+
+    onMounted(async () => await getLocations());
+
+    return {
+      currentUser,
+      locationTypes,
+      locations,
+      locationTypeFilter,
+      currentSearch,
+      locationsLoading,
+      locationsMeta,
+      getLocations,
+      handleTableChange,
+      deleteLocation,
+      debounce,
+    };
   },
-  async mounted() {
-    await this.getLocations();
-  },
-};
+});
 </script>
 
-<style>
+<style scoped lang="postcss">
 .location-select .vs__selected {
   @apply text-xs bg-white !important;
 }

@@ -1,16 +1,7 @@
 <template>
   <div :class="classes">
     <div
-      class="
-        rounded-full
-        w-full
-        h-full
-        overflow-hidden
-        text-center
-        bg-purple
-        flex
-        cursor-pointer
-      "
+      class="rounded-full w-full h-full overflow-hidden text-center bg-purple flex cursor-pointer"
       :class="innerClasses"
     >
       <span
@@ -20,20 +11,17 @@
       <img
         :src="url"
         :alt="initials"
-        class="
-          object-cover object-center
-          w-full
-          h-full
-          visible
-          group-hover:hidden
-        "
+        data-testid="testAvatarIcon"
+        class="object-cover object-center w-full h-full visible group-hover:hidden"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import type { PropType } from 'vue';
+import { computed, defineComponent } from 'vue';
+import useCurrentUser from '../hooks/useCurrentUser';
 
 type AvatarSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xl';
 
@@ -58,6 +46,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { currentUser } = useCurrentUser();
     const classes = computed(() => {
       return {
         [props.size]: true,
@@ -66,6 +55,7 @@ export default defineComponent({
 
     return {
       classes,
+      currentUser,
     };
   },
 });

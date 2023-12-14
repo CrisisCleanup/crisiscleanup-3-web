@@ -1,11 +1,11 @@
-import { secondsToHm } from '@/filters';
-import Organization from '@/models/Organization';
-import User from '@/models/User';
-import enums from '@/store/modules/enums';
-import { getQueryString } from '@/utils/urls';
-import CCUModel from '@/models/model';
+import { secondsToHm } from '../filters';
+import enums from '../store/modules/enums';
+import { getQueryString } from '../utils/urls';
+import Organization from './Organization';
+import User from './User';
+import CCUModel from '@/models/base';
 
-export default class Worksite extends CCUModel<Worksite> {
+export default class Worksite extends CCUModel {
   static entity = 'worksites';
 
   id!: string;
@@ -37,6 +37,11 @@ export default class Worksite extends CCUModel<Worksite> {
   work_types!: any[];
 
   favorite!: boolean;
+  favorite_id!: string | undefined;
+  svi!: number;
+  language!: number;
+
+  key_work_type!: Record<string, any>;
 
   static fields() {
     return {
@@ -67,6 +72,7 @@ export default class Worksite extends CCUModel<Worksite> {
       updated_at: this.attr(null),
       favorite: this.attr(null),
       auto_contact_frequency_t: this.attr(null),
+      language: this.attr(null),
     };
   }
 
@@ -89,18 +95,19 @@ export default class Worksite extends CCUModel<Worksite> {
   }
 
   get total_volunteers() {
-    return this.time.reduce((total, obj) => {
-      return total + obj.volunteers;
+    return this.time.reduce((total, object) => {
+      return total + object.volunteers;
     }, 0);
   }
 
   get total_time() {
     if (this.time) {
-      const seconds = this.time.reduce((total, obj) => {
-        return total + obj.seconds * obj.volunteers;
+      const seconds = this.time.reduce((total, object) => {
+        return total + object.seconds * object.volunteers;
       }, 0);
       return secondsToHm(seconds);
     }
+
     return null;
   }
 
@@ -109,16 +116,16 @@ export default class Worksite extends CCUModel<Worksite> {
       return {};
     }
 
-    return this.form_data.reduce((obj, item) => {
+    return this.form_data.reduce((object, item) => {
       return {
-        ...obj,
+        ...object,
         [item.field_key]: item.field_value,
       };
     }, {});
   }
 
   get isHighPriority() {
-    return Boolean(this.flags.filter((flag) => flag.is_high_priority).length);
+    return this.flags.some((flag) => flag.is_high_priority);
   }
 
   get isFavorite() {
@@ -174,57 +181,69 @@ export default class Worksite extends CCUModel<Worksite> {
     if (allWorkTypes.length === 1) {
       return allWorkTypes[0];
     }
+
     if (workTypesInFilter.length === 1) {
       return workTypesInFilter[0];
     }
+
     if (workTypesInFilter.length > 1) {
-      if (filterByClaimedOrg(workTypesInFilter).length) {
+      if (filterByClaimedOrg(workTypesInFilter).length > 0) {
         return filterByClaimedOrg(workTypesInFilter)[0];
       }
 
-      if (filterByUnclaimed(workTypesInFilter).length) {
+      if (filterByUnclaimed(workTypesInFilter).length > 0) {
         return filterByUnclaimed(workTypesInFilter)[0];
       }
+
       return workTypesInFilter[0];
     }
-    if (filterByClaimedOrg(allWorkTypes).length) {
+
+    if (filterByClaimedOrg(allWorkTypes).length > 0) {
       return filterByClaimedOrg(allWorkTypes)[0];
     }
 
-    if (filterByUnclaimed(allWorkTypes).length) {
+    if (filterByUnclaimed(allWorkTypes).length > 0) {
       return filterByUnclaimed(allWorkTypes)[0];
     }
+
     return allWorkTypes[0];
   }
 
   static apiConfig = {
     actions: {
       async fetch(id, incident = null) {
-        const worksiteParams: any = {};
+        const worksiteParameters: any = {};
         if (incident) {
-          worksiteParams.incident = incident;
+          worksiteParameters.incident = incident;
         }
+
         const worksite = await this.get(
-          `/worksites/${id}?${getQueryString(worksiteParams)}`,
+          `/worksites/${id}?${getQueryString(worksiteParameters)}`,
         );
         const organizations = worksite.response.data.work_types
           .filter((workType) => Boolean(workType.claimed_by))
           .map((workType) => workType.claimed_by);
-        await Organization.api().get(
-          `/organizations?id__in=${organizations.join(',')}`,
-          {
-            dataKey: 'results',
-          },
-        );
+        if (organizations.length > 0) {
+          await Organization.api().get(
+            `/organizations?id__in=${organizations.join(',')}`,
+            {
+              dataKey: 'results',
+            },
+          );
+        }
+
         const eventUserIds = worksite.response.data.events
           .map((event) => event.created_by)
           .filter(
             (userId) =>
               Number(userId) !== Number(User.store().getters['auth/userId']),
           );
-        await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
-          dataKey: 'results',
-        });
+        if (eventUserIds.length > 0) {
+          await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
+            dataKey: 'results',
+          });
+        }
+
         return worksite;
       },
       async find_or_fetch(id, { resolve = true }) {
@@ -239,6 +258,7 @@ export default class Worksite extends CCUModel<Worksite> {
             item = data;
           }
         }
+
         return item;
       },
       claimWorksite(id, workTypes) {
@@ -257,6 +277,7 @@ export default class Worksite extends CCUModel<Worksite> {
         if (status) {
           data.status = status;
         }
+
         return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
       releaseWorkType(id, workTypes, unclaimReason = '') {
@@ -266,6 +287,7 @@ export default class Worksite extends CCUModel<Worksite> {
         if (unclaimReason) {
           data.unclaim_reason = unclaimReason;
         }
+
         return this.post(`/worksites/${id}/release`, data, { save: false });
       },
       requestWorksite(id, workTypes, reason) {
@@ -412,13 +434,14 @@ export default class Worksite extends CCUModel<Worksite> {
         );
       },
       // TODO: handle exceptions and ensure a value is returned
-      // eslint-disable-next-line consistent-return
+
       printWorksite(id, noClaimReason = null) {
         try {
           const data: Record<string, any> = {};
           if (noClaimReason) {
             data.no_claim_reason_text = noClaimReason;
           }
+
           return this.request({
             url: `/worksites/${id}/download`,
             method: 'POST',
@@ -427,16 +450,39 @@ export default class Worksite extends CCUModel<Worksite> {
             headers: { Accept: 'application/pdf' },
             save: false,
           });
-        } catch (e) {
-          // console.error(e)
+        } catch {
+          // Console.error(e)
+        }
+      },
+      shareWorksite(
+        id,
+        emails: string[],
+        phoneNumbers: string[],
+        shareMessage: string,
+        noClaimReason = '',
+      ) {
+        try {
+          const data: Record<string, any> = {
+            emails,
+            phone_numbers: phoneNumbers,
+            share_message: shareMessage,
+          };
+          if (noClaimReason) {
+            data.no_claim_reason_text = noClaimReason;
+          }
+
+          return this.post(`/worksites/${id}/share`, data, { save: false });
+        } catch {
+          // Console.error(e)
         }
       },
       // TODO: handle exceptions and ensure a value is returned
-      // eslint-disable-next-line consistent-return
+
       downloadWorksite(ids, type = 'text/csv') {
-        if (!ids.length) {
-          throw Error('Ids are required');
+        if (ids.length === 0) {
+          throw new Error('Ids are required');
         }
+
         try {
           return this.request({
             url: `/worksites?id__in=${ids.join(',')}`,
@@ -445,8 +491,8 @@ export default class Worksite extends CCUModel<Worksite> {
             headers: { Accept: type },
             save: false,
           });
-        } catch (e) {
-          // console.error(e)
+        } catch {
+          // Console.error(e)
         }
       },
       async fetchByPhoneNumber(phoneNumber, incidentId) {

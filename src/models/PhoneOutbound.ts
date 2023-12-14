@@ -1,7 +1,7 @@
 import { isArray, isNil, omitBy } from 'lodash';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
-export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
+export default class PhoneOutbound extends CCUModel {
   static entity = 'phone_outbound';
 
   phone_number!: string;
@@ -11,6 +11,12 @@ export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
   id!: string;
 
   dnis1!: string;
+
+  location_name!: string;
+
+  state_name!: string;
+
+  latest_status!: string;
 
   static fields() {
     return {
@@ -41,7 +47,7 @@ export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
   }
 
   async skipOutbound() {
-    // @ts-ignore
+    // @ts-expect-error
     await this.api().post(`/phone_outbound/${this.id}/unlock`, {
       skipped: true,
     });
@@ -49,10 +55,10 @@ export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
 
   static apiConfig = {
     actions: {
-      async acceptCall(id) {
+      async acceptCall(id: string) {
         await this.post(`/phone_outbound/${id}/accept`, { save: false });
       },
-      async skipCall(id) {
+      async skipCall(id: string) {
         await this.post(`/phone_outbound/${id}/skip`, { save: false });
       },
       async getNextOutbound({
@@ -65,55 +71,50 @@ export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
         if (agentId) {
           queryUrl = `${queryUrl}&agent=${agentId}`;
         }
+
         if (useCalldowns) {
           queryUrl = `${queryUrl}&use_calldowns=1`;
         }
+
         if (isManual) {
           queryUrl = `${queryUrl}&manual=1`;
         }
+
         const phoneOutbound = await this.get(queryUrl);
         const {
           response: { data },
         } = phoneOutbound;
         return data;
       },
-      async getRemainingCallbackCount(incidentId) {
-        const phoneOutbound = await this.get(
-          `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=callback`,
-        );
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data.count;
+      async getRemainingCallbackCount(incidentId: string) {
+        try {
+          const phoneOutbound = await this.get(
+            `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=callback`
+          );
+          const {
+            response: { data }
+          } = phoneOutbound;
+          return data.count;
+        } catch (e) {
+          console.log(e);
+        }
       },
-      async getRemainingCalldownCount(incidentId) {
-        const phoneOutbound = await this.get(
-          `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=calldown`,
-        );
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data.count;
-      },
-      async getSingleOutbound(id) {
-        const phoneOutbound = await this.get(`/phone_outbound/${id}`);
-        const {
-          response: { data },
-        } = phoneOutbound;
-        return data;
-      },
-      async callOutbound(id, { isManual = false } = {}) {
-        return this.post(
-          `/phone_outbound/${id}/call`,
-          {
-            manual: isManual,
-          },
-          { save: false },
-        );
+      async getRemainingCalldownCount(incidentId: string) {
+        try {
+          const phoneOutbound = await this.get(
+            `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True&call_type=calldown`
+          );
+          const {
+            response: { data }
+          } = phoneOutbound;
+          return data.count;
+        } catch (e) {
+          console.log(e);
+        }
       },
       async updateStatus(
-        id,
-        { statusId, notes, dnisMeta, agentId, cases, worksiteId },
+        id: string,
+        { statusId, notes, dnisMeta, agentId, cases, worksiteId }: any,
       ) {
         const body = omitBy(
           {
@@ -130,7 +131,7 @@ export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
           save: false,
         });
       },
-      async createManual({ number, incidentId, ani, language, userId }) {
+      async createManual({ number, incidentId, ani, language, userId }: any) {
         const resp = await this.post(
           `/phone_outbound`,
           omitBy(

@@ -1,37 +1,33 @@
 <template>
   <section
-    class="
-      w-full
-      h-full
-      text-center
-      flex flex-col
-      justify-center
-      items-center
-      gap-6
-      p-6
-    "
+    class="w-full h-full text-center flex flex-col justify-center items-center gap-6 p-6"
   >
-    <div class="text-5xl">We&rsquo;ll be back soon</div>
+    <base-text bold variant="h1" font="display">We will be back soon</base-text>
     <div class="w-full md:w-2/3 text-2xl">
-      <p>
+      <base-text>
         We are currently down for some scheduled (or, perhaps unscheduled)
         maintenance.
-      </p>
-      <p>We will be back online in: {{ formattedCountdown }}.</p>
-      <p>
+      </base-text>
+      <base-text>
         In the meantime, let's both just take a moment to appreciate just how
         awesome you are... Yep, you're awesome.
-      </p>
-      <p>&mdash; The Team</p>
+      </base-text>
+      <base-text>
+        If anything unusual is happening, we will share details on our
+        <base-link href="http://blog.crisiscleanup.org"> blog. </base-link>
+      </base-text>
+      <base-text>&mdash; The Team</base-text>
     </div>
   </section>
 </template>
 
-<script>
-import { ref, computed, onMounted } from '@vue/composition-api';
+<script lang="ts">
+import BaseLink from '@/components/BaseLink.vue';
+import BaseText from '@/components/BaseText.vue';
 
-export default {
+export default defineComponent({
   name: 'DownForMaintenance',
+  components: { BaseText, BaseLink },
   setup() {
     const deadline = ref(new Date(2021, 8, 7, 2, 0, 0));
     const current = ref(new Date());
@@ -62,7 +58,7 @@ export default {
       formattedCountdown,
     };
   },
-};
+});
 </script>
 
 <style scoped lang="postcss">

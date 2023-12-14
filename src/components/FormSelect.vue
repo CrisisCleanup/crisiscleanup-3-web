@@ -3,7 +3,7 @@
     <resize-observer @notify="handleResize" />
     <v-select
       :input-id="inputIdSelector"
-      :value="value"
+      :value="modelValue"
       :options="options"
       :label="label"
       :components="{ OpenIndicator, Deselect }"
@@ -14,20 +14,22 @@
       class="form-select text-base"
       :class="[
         selectClasses,
-        isInvalid && !value ? 'invalid' : '',
+        isInvalid && !modelValue ? 'invalid' : '',
         floatLabel ? 'py-2 pt-3' : '',
       ]"
       :placeholder="placeholder"
       :reduce="(item) => (itemKey ? item[itemKey] : item)"
       :selectable="
         () =>
-          !multiple || !limit || (multiple && limit > 0 && value.length < limit)
+          !multiple ||
+          !limit ||
+          (multiple && limit > 0 && modelValue.length < limit)
       "
+      v-bind="$attrs"
       @input="onInput"
       @search:focus="open"
       @search:blur="onBlur"
       @search="(payload) => $emit('search', payload)"
-      v-bind="$attrs"
     >
       <template #selected-option="option">
         <slot name="selected-option" :option="option" />
@@ -42,18 +44,18 @@
         <input
           ref="input"
           class="vs__search"
-          :required="!value"
+          :required="!modelValue"
           :readonly="false"
           v-bind="attributes"
-          v-on="events"
           :placeholder="placeholder"
+          v-on="events"
         />
       </template>
     </v-select>
     <label
-      :style="isFloated && floatStyle"
       v-if="floatLabel"
       ref="inputLabel"
+      :style="isFloated && floatStyle"
       for="select-id"
     >
       <slot name="float-label" v-bind="{ isFloated }">
@@ -63,9 +65,15 @@
   </div>
 </template>
 
-<script>
-import { xor, kebabCase, isEmpty } from 'lodash';
-export default {
+<script lang="jsx">
+import { useI18n } from 'vue-i18n';
+import { computed, onMounted, ref, nextTick, defineComponent, h } from 'vue';
+import { kebabCase, isEmpty as empty, xor } from 'lodash';
+
+/**
+ * @deprecated Use `BaseSelect` instead
+ */
+export default defineComponent({
   name: 'FormSelect',
   props: {
     searchable: {
@@ -94,7 +102,7 @@ export default {
     },
     options: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
@@ -114,7 +122,7 @@ export default {
       type: String,
       default: 'large',
     },
-    value: {
+    modelValue: {
       type: null,
       default: null,
     },
@@ -131,145 +139,131 @@ export default {
       default: '',
     },
   },
-  data() {
-    const iconSize = this.multiple ? 'xxs' : 'medium';
-    const { indicatorIcon } = this;
-    const cancelText = this.$t('actions.cancel');
-    return {
-      isFloated_: false,
-      isEmpty_: true,
-      isInvalid: false,
-      baseHeight_: 0.0,
-      currentHeight_: 0.0,
-      floatDisplacement: 0,
-      Deselect: {
-        render() {
-          return (
-            <ccu-icon
-              alt={cancelText}
-              size={iconSize}
-              class="mx-1 opacity-50"
-              type="cancel"
-            />
-          );
-        },
-      },
-      OpenIndicator: {
-        render() {
-          return (
-            <font-awesome-icon
-              size="sm"
-              icon={indicatorIcon}
-              class="mx-1 text-crisiscleanup-dark-400"
-            />
-          );
-        },
+  setup(props, { emit }) {
+    const { t } = useI18n();
+    const cancelText = t('actions.cancel');
+
+    const iconSize = props.multiple ? 'xxs' : 'medium';
+    const { indicatorIcon } = props;
+    const input = ref(null);
+    const inputLabel = ref(null);
+    const isFloated_ = ref(false);
+    const isEmpty_ = ref(false);
+    const isInvalid = ref(false);
+    const baseHeight_ = ref(0);
+    const currentHeight_ = ref(0);
+    const floatDisplacement = ref(0);
+    const Deselect = {
+      render() {
+        return (
+          <ccu-icon
+            alt={cancelText}
+            size={iconSize}
+            class="mx-1 opacity-50"
+            type="cancel"
+          />
+        );
       },
     };
-  },
-  computed: {
-    inputIdSelector() {
-      const idSpec = this.floatLabel ? this.floatLabel : '';
+    const OpenIndicator = {
+      render: () =>
+        h('i', {
+          class: `fa fa-${indicatorIcon}`,
+        }),
+    };
+
+    const inputIdSelector = computed(() => {
+      const idSpec = props.floatLabel ? props.floatLabel : '';
       return `select-id-${kebabCase(idSpec)}`;
-    },
-    inputRef() {
-      if (this.$refs.input) return this.$refs.input;
-      return document.getElementById(this.inputIdSelector);
-    },
-    heightMultiplier() {
-      if (this.currentHeight_ === 0.0) return 1;
-      this.$log.debug('current container height:', this.currentHeight_);
-      const multi = this.currentHeight_ / this.baseHeight_;
-      this.$log.debug('height multiplier change: ', multi);
-      return multi;
-    },
-    floatStyle() {
-      const displace = this.heightMultiplier * -12;
+    });
+
+    const inputRef = computed(() => {
+      return input.value || document.getElementById(inputIdSelector.value);
+    });
+
+    const heightMultiplier = computed(() => {
+      if (currentHeight_.value === 0) return 1;
+      return currentHeight_.value / baseHeight_.value;
+    });
+
+    const floatStyle = computed(() => {
+      const displace = heightMultiplier.value * -12;
       return { transform: `translateY(${displace}px)` };
-    },
-    isEmpty() {
-      if (this.value !== null) {
-        return isEmpty(this.value);
+    });
+
+    const isEmpty = computed(() => {
+      if (props.modelValue !== null) {
+        return empty(props.modelValue);
       }
-      return this.isEmpty_;
-    },
-    isFloated() {
-      if (this.isFloated_ === true) {
+
+      return isEmpty_.value;
+    });
+
+    const isFloated = computed(() => {
+      if (isFloated_.value === true) {
         return true;
       }
-      if (this.isEmpty === false) {
+
+      if (isEmpty.value === false) {
         return true;
       }
-      return this.isFloated_;
-    },
-  },
-  mounted() {
-    this.id = this._uid;
-    if (this.required) {
-      this.$refs.input.addEventListener(
-        'invalid',
-        () => {
-          this.isInvalid = true;
-        },
-        true,
-      );
-    }
-    if (this.floatLabel) {
-      this.inputRef.parentElement.classList.add('has-float');
-      this.baseHeight_ = this.inputRef.parentElement.clientHeight;
-    }
-  },
-  methods: {
-    onInput(value) {
-      this.$emit('input', value);
-      this.isEmpty_ = value === null;
-      if (value === null && this.floatLabel) {
-        this.isFloated_ = false;
-        this.$refs.inputLabel.classList.remove('focused');
+
+      return isFloated_.value;
+    });
+
+    function onInput(value) {
+      isEmpty_.value = value === null;
+      if (value === null && props.floatLabel) {
+        isFloated_.value = false;
+        inputLabel.value.classList.remove('focused');
       }
-      if (this.multiple) {
-        const current = this.value || [];
-        this.$emit(
+
+      if (props.multiple) {
+        const current = props.modelValue || [];
+        emit(
           'changed',
           xor(
             value,
-            current.map((item) => (this.itemKey ? item[this.itemKey] : item)),
+            current.map((item) => (props.itemKey ? item[props.itemKey] : item)),
           ),
         );
       }
-      if (this.required) {
-        if (this.$refs.input.checkValidity()) {
-          this.isInvalid = false;
-        }
+
+      if (props.required && input.value.checkValidity()) {
+        isInvalid.value = false;
       }
-    },
-    onBlur() {
-      if (this.floatLabel && this.isEmpty) {
-        this.isFloated_ = false;
-        this.$refs.inputLabel.classList.remove('focused');
+    }
+
+    function onBlur() {
+      if (props.floatLabel && isEmpty.value) {
+        isFloated_.value = false;
+        inputLabel.value.classList.remove('focused');
       }
-    },
-    open() {
-      if (this.floatLabel) {
-        this.isFloated_ = true;
-        this.$refs.inputLabel.classList.add('focused');
+    }
+
+    function open() {
+      if (props.floatLabel) {
+        isFloated_.value = true;
+        inputLabel.value.classList.add('focused');
       }
-      this.$nextTick(() => {
-        const items = [].slice.call(
+
+      nextTick(() => {
+        const items = Array.prototype.slice.call(
           document.querySelectorAll('.vs__dropdown-option'),
         );
 
-        items.forEach((item) => {
+        for (const item of items) {
           item.classList.remove('vs__dropdown-option--highlight');
-        });
+        }
 
         const selected = items.find((item) => {
-          if (this.value) {
-            const currentLabel = this.label
-              ? this.value[this.label]
-              : this.value;
+          if (props.modelValue) {
+            const currentLabel = props.label
+              ? props.modelValue[props.label]
+              : props.modelValue;
             return item.textContent.trim() === currentLabel;
           }
+
           return false;
         });
 
@@ -279,17 +273,54 @@ export default {
             selected.offsetTop;
         }
       });
-    },
-    handleResize() {
-      this.currentHeight_ = this.inputRef.parentElement.clientHeight;
-      this.$emit('resize', this.currentHeight_);
-    },
+    }
+
+    function handleResize() {
+      currentHeight_.value = inputRef.value.parentElement.clientHeight;
+      emit('resize', currentHeight_.value);
+    }
+
+    onMounted(() => {
+      if (props.required) {
+        input.value.addEventListener(
+          'invalid',
+          () => {
+            isInvalid.value = true;
+          },
+          true,
+        );
+      }
+
+      if (props.floatLabel) {
+        inputRef.value.parentElement.classList.add('has-float');
+        baseHeight_.value = inputRef.value.parentElement.clientHeight;
+      }
+    });
+
+    return {
+      isInvalid,
+      floatDisplacement,
+      cancelText,
+      Deselect,
+      OpenIndicator,
+      inputIdSelector,
+      inputRef,
+      heightMultiplier,
+      floatStyle,
+      isEmpty,
+      isFloated,
+      onInput,
+      onBlur,
+      open,
+      handleResize,
+      input,
+      inputLabel,
+    };
   },
-};
+});
 </script>
 
 <style>
-@import '~vue-select/dist/vue-select.css';
 .form-select .vs__dropdown-menu {
   border-radius: 0;
 }

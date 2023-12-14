@@ -1,23 +1,25 @@
 <template>
-  <div style="height: 85%" class="h-full flex justify-center">
-    <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
+  <div
+    class="h-full flex justify-center mt-10 md:mt-0"
+    data-testid="testProfileDiv"
+  >
+    <div class="h-full flex flex-col w-11/12 md:w-3/4 my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
-          class="
-            border-b
-            px-4
-            py-2
-            font-semibold
-            flex
-            justify-between
-            items-center
-            h-16
-          "
+          class="md:border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
         >
           {{ currentUser.full_name }}
-          <div class="flex justify-end">
+          <div class="flex justify-end gap-2">
+            <base-button
+              data-testid="testLogoutButton"
+              class="px-4 py-2 bg-red-600 text-white md:hidden"
+              :text="$t('actions.logout')"
+              :alt="$t('actions.logout')"
+              :action="logoutApp"
+            />
             <base-button
               variant="solid"
+              data-testid="testSaveButton"
               class="px-4 py-2"
               :text="$t('actions.save')"
               :alt="$t('actions.save')"
@@ -25,45 +27,57 @@
             />
           </div>
         </div>
-        <div class="overflow-auto">
-          <div class="flex sm:flex-row flex-col">
-            <div class="flex flex-col p-8 sm:w-64 items-center">
+        <div class="">
+          <div class="flex md:flex-row flex-col">
+            <div class="flex flex-col p-8 md:w-64 items-center">
               <Avatar
                 :initials="currentUser.first_name"
                 :url="currentUser.profilePictureUrl"
+                data-testid="testFirstNameAvatarIcon"
                 class="p-1"
                 size="large"
               />
               <DragDrop
                 class="text-primary-dark cursor-pointer"
+                data-testid="testProfilePictureUploadFile"
                 :disabled="uploading"
                 @files="handleProfilePictureUpload"
               >
                 <base-button
                   class="text-center pb-4 cursor-pointer"
+                  data-testid="testChangePhotoButton"
                   :show-spinner="uploading"
                   :disabled="uploading"
+                  :alt="$t('actions.change_photo')"
                   >{{ $t('actions.change_photo') }}
                 </base-button>
               </DragDrop>
 
-              <base-button variant="solid" class="py-2 px-4"
-                >{{ $t('actions.view_id_badge') }}
+              <base-button
+                variant="solid"
+                data-testid="testViewIdBadgeButton"
+                class="py-2 px-4"
+                :alt="$t('actions.view_id_badge')"
+              >
+                {{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
-            <div class="user-form p-10 sm:p-8">
+            <div class="user-form p-10 md:p-8">
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
-                  <div class="flex pb-4">
-                    <div class="form-field mr-2">
-                      <label for="first_name">{{ $t('profileUser.first_name_placeholder') }}</label>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pb-4">
+                    <div class="form-field">
+                      <label for="first_name">{{
+                        $t('profileUser.first_name_placeholder')
+                      }}</label>
                       <base-input
                         name="first_name"
+                        data-testid="testFirstNameTextInput"
                         size="large"
-                        :value="currentUser.first_name"
+                        :model-value="currentUser.first_name"
                         :placeholder="$t('profileUser.first_name_placeholder')"
                         required
-                        @input="
+                        @update:modelValue="
                           (value) => {
                             updateUser(value, 'first_name');
                           }
@@ -71,32 +85,36 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="mobile">{{$t('profileUser.mobile_placeholder')}}</label>
+                      <label for="mobile">{{
+                        $t('profileUser.mobile_placeholder')
+                      }}</label>
                       <base-input
                         name="mobile"
+                        data-testid="testMobileTextInput"
                         size="large"
-                        :value="currentUser.mobile"
+                        :model-value="currentUser.mobile"
                         :placeholder="$t('profileUser.mobile_placeholder')"
                         required
                         :validator="validatePhoneNumber"
-                        @input="
+                        @update:modelValue="
                           (value) => {
                             updateUser(value, 'mobile');
                           }
                         "
                       />
                     </div>
-                  </div>
-                  <div class="flex pb-4">
                     <div class="form-field mr-2">
-                      <label for="last_name">{{ $t('profileUser.last_name_placeholder') }}</label>
+                      <label for="last_name">{{
+                          $t('profileUser.last_name_placeholder')
+                        }}</label>
                       <base-input
                         name="last_name"
+                        data-testid="testLastNameTextInput"
                         size="large"
-                        :value="currentUser.last_name"
+                        :model-value="currentUser.last_name"
                         :placeholder="$t('profileUser.last_name_placeholder')"
                         required
-                        @input="
+                        @update:modelValue="
                           (value) => {
                             updateUser(value, 'last_name');
                           }
@@ -104,14 +122,17 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="email">{{ $t('profileUser.email_placeholder') }}</label>
+                      <label for="email">{{
+                          $t('profileUser.email_placeholder')
+                        }}</label>
                       <base-input
                         name="email"
-                        :value="currentUser.email"
+                        data-testid="testEmailTextInput"
+                        :model-value="currentUser.email"
                         size="large"
                         :placeholder="$t('profileUser.email_placeholder ')"
                         required
-                        @input="
+                        @update:modelValue="
                           (value) => {
                             updateUser(value, 'email');
                           }
@@ -121,49 +142,40 @@
                   </div>
                 </div>
                 <hr class="p-2 m-auto" />
-                <div class="flex flex-col sm:flex-row pb-4">
-                  <div class="sm:w-1/2 mr-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 pb-4 gap-2">
+                  <div class="">
                     <p>{{ $t('profileUser.user_roles') }}</p>
                     <UserRolesSelect
-                      class="
-                        w-full
-                        flex-grow
-                        border border-crisiscleanup-dark-100
-                      "
+                      class="w-full flex-grow"
+                      data-testid="testUserRolesSelect"
                       :user="currentUser"
                     />
                   </div>
-                  <div class="w-1/2">
+                  <div>
                     <p>{{ $t('profileUser.equipment') }}</p>
-                    <form-select
+                    <base-select
                       v-model="currentUser.equipment"
-                      class="
-                        w-full
-                        flex-grow
-                        border border-crisiscleanup-dark-100
-                      "
-                      :value="currentUser.equipment"
+                      data-testid="testEquipmentSelect"
+                      :model-value="currentUser.equipment"
                       :options="[]"
                       item-key="value"
                       label="name_t"
                       size="large"
-                      select-classes="bg-white border text-xs"
                     />
                   </div>
                 </div>
-                <div>{{$t('profileUser.languages')}}</div>
+                <div>{{ $t('profileUser.languages') }}</div>
                 <div class="flex pb-4">
-                  <form-select
-                    class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
-                    :value="currentUser.languages"
+                  <base-select
+                    :model-value="currentUser.languageIds"
+                    data-testid="testLanguagesSelect"
                     multiple
                     :options="languages"
                     item-key="id"
                     label="name_t"
                     size="large"
-                    select-classes="bg-white border text-xs p-1 profile-select"
-                    :limit="2"
-                    @input="
+                    class="w-full"
+                    @update:modelValue="
                       (value) => {
                         const [primary_language, secondary_language] = value;
                         updateUser(primary_language, 'primary_language');
@@ -185,16 +197,18 @@
                       <img
                         src="https://simpleicons.org/icons/facebook.svg"
                         class="w-8 mr-4"
+                        :alt="$t('profileUser.facebook')"
                       />
                       <label class="pr-3">{{
                         $t('profileUser.facebook')
                       }}</label>
                     </div>
                     <base-input
-                      :value="currentUser.facebook"
+                      :model-value="currentUser.facebook"
+                      data-testid="testFacebookTextInput"
                       size="small"
                       :placeholder="$t('profileUser.facebook')"
-                      @input="
+                      @update:modelValue="
                         (value) => {
                           const social = {
                             ...currentUser.social,
@@ -210,16 +224,18 @@
                       <img
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
+                        :alt="$t('profileUser.twitter')"
                       />
                       <label class="pr-3">{{
                         $t('profileUser.twitter')
                       }}</label>
                     </div>
                     <base-input
-                      :value="currentUser.twitter"
+                      :model-value="currentUser.twitter"
+                      data-testid="testTwitterTextInput"
                       size="small"
                       :placeholder="$t('profileUser.twitter')"
-                      @input="
+                      @update:modelValue="
                         (value) => {
                           const social = {
                             ...currentUser.social,
@@ -236,7 +252,9 @@
               <div class="my-2">
                 <base-button
                   variant="solid"
+                  data-testid="testChangePasswordButton"
                   class="px-4 py-1"
+                  :alt="$t('actions.change_password')"
                   :action="
                     () => {
                       $router.push(`/password/new?email=${currentUser.email}`);
@@ -250,20 +268,16 @@
                 <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div
-                    class="
-                      w-8
-                      h-8
-                      rounded-full
-                      bg-crisiscleanup-grey-300
-                      border border-black
-                    "
+                    class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
                 <div class="my-2">
                   <base-button
                     variant="solid"
+                    data-testid="testChangeOrganizationButton"
                     class="px-4 py-1"
+                    :alt="$t('profileUser.change_organization')"
                     :action="
                       () => {
                         showChangeOrganizationModal = true;
@@ -278,26 +292,28 @@
                   />
                 </div>
               </div>
-              <div class="mt-6">
+              <div class="mt-6" data-testid="testNotificationSettingsDiv">
                 <h3>{{ $t('profileUser.notification_settings') }}</h3>
                 <div class="flex flex-col py-3">
                   <base-radio
                     class="mb-2"
+                    data-testid="testHasNotificationsYesRadio"
                     name="Yes"
                     type="boolean"
-                    :value="currentUser.notificationSettings.has_notifications"
-                    @click.native="
-                      () => setNotifications('has_notifications', true)
+                    :model-value="
+                      currentUser.notificationSettings.has_notifications
                     "
+                    @click="() => setNotifications('has_notifications', true)"
                   />
                   <base-radio
                     class="mb-2"
+                    data-testid="testHasNotificationsNoRadio"
                     name="No"
                     type="boolean"
-                    :value="!currentUser.notificationSettings.has_notifications"
-                    @click.native="
-                      () => setNotifications('has_notifications', false)
+                    :model-value="
+                      !currentUser.notificationSettings.has_notifications
                     "
+                    @click="() => setNotifications('has_notifications', false)"
                   />
                   <div
                     v-if="currentUser.notificationSettings.has_notifications"
@@ -305,13 +321,16 @@
                   >
                     <div
                       v-for="(value, key) in notifications"
+                      :data-testid="`testNotificationSettingsKey${key}Div`"
                       :key="key"
                       class="flex w-1/2"
                     >
                       <base-checkbox
                         class="mr-1"
-                        :value="currentUser.notificationSettings[key]"
-                        @input="(value) => setNotifications(key, value)"
+                        :model-value="currentUser.notificationSettings[key]"
+                        @update:modelValue="
+                          (value) => setNotifications(key, value)
+                        "
                       >
                       </base-checkbox>
                       {{ value }}
@@ -323,6 +342,8 @@
                 <h3 class="pb-4">{{ $t('profileUser.troubleshooting') }}</h3>
                 <base-button
                   :text="$t('profileUser.reset_user_states')"
+                  :alt="$t('profileUser.reset_user_states')"
+                  data-testid="testResetUserStatesButton"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetStates"
@@ -332,6 +353,8 @@
                 </p>
                 <base-button
                   :text="$t('profileUser.reset_user_preferences')"
+                  :alt="$t('profileUser.reset_user_preferences')"
+                  data-testid="testResetUserPreferencesButton"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetPreferences"
@@ -340,9 +363,10 @@
                   {{ $t('profileUser.clear_favorites_user_settings') }}
                 </p>
 
-                <div class="extra-settings" v-if="false">
+                <div v-if="false" class="extra-settings">
                   <base-checkbox
                     v-model="currentUser.preferences.enable_worksite_caching"
+                    data-testid="testEnableWorksiteCachingCheckbox"
                   >
                     {{ $t('profileUser.enable_worksite_caching') }}
                   </base-checkbox>
@@ -356,101 +380,97 @@
   </div>
 </template>
 
-<script>
-import { size } from 'lodash';
-import { mapMutations } from 'vuex';
-import detectBrowserLanguage from 'detect-browser-language';
+<script lang="ts">
+import { computed, reactive, toRefs } from 'vue';
+import { useToast } from 'vue-toastification';
+import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import axios from 'axios';
+import { getErrorMessage } from '@/utils/errors';
+import Avatar from '@/components/Avatar.vue';
 import User from '@/models/User';
 import Role from '@/models/Role';
 import Language from '@/models/Language';
-import { i18nService } from '@/services/i18n.service';
-import DragDrop from '@/components/DragDrop';
-import UserRolesSelect from '@/components/UserRolesSelect';
-import { ValidateMixin } from '@/mixins';
-import { getErrorMessage } from '../utils/errors';
-import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
-import Avatar from '../components/Avatar';
+import DragDrop from '@/components/DragDrop.vue';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
+import useSetupLanguage from '@/hooks/useSetupLanguage';
+import useValidation from '@/hooks/useValidation';
+import ChangeOrganizationModal from '@/components/modals/ChangeOrganizationModal.vue';
 
-export default {
+export default defineComponent({
   name: 'Profile',
   components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
-  mixins: [ValidateMixin],
-  mounted() {
-    if (this.$route.query.move) {
-      this.showChangeOrganizationModal = true;
-    }
-  },
-  data() {
-    return {
+  setup() {
+    const $toasted = useToast();
+    const route = useRoute();
+    const router = useRouter();
+    const store = useStore();
+    const { validatePhoneNumber } = useValidation();
+    const { t } = useI18n();
+    const form = ref(null);
+    const state = reactive({
       mode: 'view',
       uploading: false,
       showChangeOrganizationModal: false,
       notifications: {
-        new_incident: this.$t('profileUser.notification_new_incident'),
-        request_work_type: this.$t('profileUser.notification_request_work'),
-        new_or_move_user: this.$t('profileUser.notification_new_moving_user'),
-        affiliate_requests: this.$t('profileUser.notification_affiliate'),
-        periodic_reports: this.$t('profileUser.notification_periodic_reports'),
-        custom_reports: this.$t('profileUser.notification_custom_reports'),
-        organization_registration: this.$t(
+        new_incident: t('profileUser.notification_new_incident'),
+        request_work_type: t('profileUser.notification_request_work'),
+        new_or_move_user: t('profileUser.notification_new_moving_user'),
+        affiliate_requests: t('profileUser.notification_affiliate'),
+        periodic_reports: t('profileUser.notification_periodic_reports'),
+        custom_reports: t('profileUser.notification_custom_reports'),
+        organization_registration: t(
           'profileUser.notification_org_registration',
         ),
-        location_approval: this.$t(
-          'profileUser.notification_location_approval',
-        ),
-        move_user_to_organization: this.$t(
-          'profileUser.notification_moving_users',
-        ),
-        incident_access_approval: this.$t(
-          'profileUser.notification_incident_access',
-        ),
-        user_role_approval: this.$t('profileUser.notification_user_roles'),
-        organization_role_approval: this.$t(
-          'profileUser.notification_org_roles',
-        ),
-        phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
+        location_approval: t('profileUser.notification_location_approval'),
+        move_user_to_organization: t('profileUser.notification_moving_users'),
+        incident_access_approval: t('profileUser.notification_incident_access'),
+        user_role_approval: t('profileUser.notification_user_roles'),
+        organization_role_approval: t('profileUser.notification_org_roles'),
+        phone_volunteer_needs: t('profileUser.notification_phone_needs'),
       },
       nav: {
         request_reset_password: '/password/new',
       },
-    };
-  },
-  computed: {
-    name() {
-      if (this.currentUser) {
-        return `${this.currentUser.first_name} ${this.currentUser.last_name}`;
+    });
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+
+    const name = computed(() => {
+      if (currentUser.value) {
+        return `${currentUser.value.first_name} ${currentUser.value.last_name}`;
       }
+
       return '';
-    },
-    roles() {
+    });
+
+    const roles = computed(() => {
       return Role.all();
-    },
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    userRoles() {
-      return Role.query().whereIdIn(this.currentUser.roles).get();
-    },
-    languages() {
+    });
+
+    const languages = computed(() => {
       return Language.all();
-    },
-  },
-  methods: {
-    handleSubmit(e) {
+    });
+
+    const userRoles = computed(() => {
+      return Role.query().whereIdIn(currentUser.value.roles).get();
+    });
+
+    function handleSubmit(e) {
       e.preventDefault();
-    },
-    setNotifications(key, value) {
-      if (this.currentUser.preferences) {
+    }
+
+    function setNotifications(key, value) {
+      if (currentUser.value.preferences) {
         const preferences = {
-          ...this.currentUser.preferences,
+          ...currentUser.value.preferences,
           notification_settings: {
-            ...this.currentUser.preferences.notification_settings,
+            ...currentUser.value.preferences.notification_settings,
             [key]: value,
           },
         };
-        this.updateUser(preferences, 'preferences');
+        updateUser(preferences, 'preferences');
       } else {
-        this.updateUser(
+        updateUser(
           {
             notification_settings: {
               [key]: value,
@@ -459,19 +479,21 @@ export default {
           'preferences',
         );
       }
-    },
-    async handleProfilePictureUpload(fileList) {
+    }
+
+    async function handleProfilePictureUpload(fileList) {
       if (fileList.length === 0) {
-        this.uploading = false;
+        state.uploading = false;
         return;
       }
+
       const formData = new FormData();
       formData.append('upload', fileList[0]);
       formData.append('type_t', 'fileTypes.user_profile_picture');
-      this.uploading = true;
+      state.uploading = true;
       try {
-        const result = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
+        const result = await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
           formData,
           {
             headers: {
@@ -482,95 +504,105 @@ export default {
         );
         const file = result.data.id;
 
-        const profilePictures = this.currentUser.files.filter(
+        const profilePictures = currentUser.value.files.filter(
           (picture) => picture.file_type_t === 'fileTypes.user_profile_picture',
         );
 
         const oldImages = profilePictures.map((picture) =>
-          User.api().deleteFile(this.currentUser.id, picture.file),
+          User.api().deleteFile(currentUser.value.id, picture.file),
         );
         await Promise.all(oldImages);
 
-        await User.api().addFile(this.currentUser.id, file);
+        await User.api().addFile(currentUser.value.id, file);
         await User.api().get('/users/me', {});
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.uploading = false;
+        state.uploading = false;
       }
-    },
+    }
 
-    updateUser(value, key) {
+    function updateUser(value, key) {
       User.update({
-        where: this.currentUser.id,
+        where: currentUser.value.id,
         data: {
           [key]: value,
         },
       });
-    },
-    async updateUserLanguage() {
-      let currentLanguage = detectBrowserLanguage();
-      const userLanguage =
-        Language.find(this.currentUser.primary_language) ||
-        Language.find(this.currentUser.secondary_language);
-      if (userLanguage) {
-        currentLanguage = userLanguage.subtag;
-      }
+    }
 
-      this.setLanguage(currentLanguage);
+    async function updateUserLanguage() {
+      const { setupLanguage } = useSetupLanguage();
+      await setupLanguage();
+    }
 
-      if (currentLanguage !== this.$i18n.locale) {
-        try {
-          const data = await i18nService.getLanguage(currentLanguage);
-          const { translations } = data;
-          if (size(translations) > 0) {
-            this.$i18n.setLocaleMessage(currentLanguage, translations);
-            this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common['Accept-Language'] =
-              currentLanguage;
-            document
-              .querySelector('html')
-              .setAttribute('lang', currentLanguage);
-          }
-        } catch (e) {
-          this.$log.error(e);
-        }
-      }
-    },
-    ...mapMutations('locale', ['setLanguage']),
-    async saveUser() {
-      const isValid = this.$refs.form.reportValidity();
+    async function saveUser() {
+      const isValid = form.value.reportValidity();
       if (!isValid) {
         return;
       }
+
       try {
-        await User.api().patch(`/users/${this.currentUser.id}`, {
-          ...this.currentUser.$toJson(),
-          preferences: { ...this.currentUser.preferences, ...{} },
-          states: { ...this.currentUser.states, ...{} },
+        await User.api().patch(`/users/${currentUser.value.id}`, {
+          ...User.find(currentUser.value.id).$toJson(),
+          preferences: { ...currentUser.value.preferences },
+          states: { ...currentUser.value.states },
         });
-        await this.$toasted.success(this.$t('profileUser.save_user_success'));
-        this.mode = 'view';
-        await this.updateUserLanguage();
+        await $toasted.success(t('profileUser.save_user_success'));
+        state.mode = 'view';
+        await updateUserLanguage();
         window.location.reload();
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    async resetStates() {
+    }
+
+    async function resetStates() {
       await User.api().clearUserStates();
-    },
-    async resetPreferences() {
+    }
+
+    async function resetPreferences() {
       await User.api().clearUserPreferences();
-    },
+    }
+
+    const logoutApp = async () => {
+      await store.dispatch('auth/logout');
+      await router.push('/login');
+    };
+
+    onMounted(() => {
+      if (route.query.move) {
+        state.showChangeOrganizationModal = true;
+      }
+    });
+
+    const stateRefs = toRefs(state);
+    return {
+      ...stateRefs,
+      name,
+      roles,
+      languages,
+      userRoles,
+      currentUser,
+      handleSubmit,
+      setNotifications,
+      handleProfilePictureUpload,
+      updateUser,
+      saveUser,
+      resetPreferences,
+      resetStates,
+      validatePhoneNumber,
+      form,
+      logoutApp,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
 .user-form {
   .form-field {
-    @apply flex flex-col w-1/2 ml-0;
+    @apply flex flex-col ml-0;
   }
 }
 .profile-image {

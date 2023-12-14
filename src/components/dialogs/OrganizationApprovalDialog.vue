@@ -10,11 +10,12 @@
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelIcon"
                 size="xs"
                 type="cancel"
                 @click.native="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               />
@@ -22,23 +23,20 @@
           </div>
 
           <div class="modal-body flex-grow p-3">
-            <form-select
-              :placeholder="$t('orgApprovalTable.give_approve_reason')"
-              class="
-                w-auto
-                flex-grow
-                border border-crisiscleanup-dark-100
-                select
-              "
-              :options="approveRejectReasons"
+            <base-select
               v-model="response.reason"
+              data-testid="testApproveRejectReasonsSelect"
+              :placeholder="$t('orgApprovalTable.give_approve_reason')"
+              class="w-auto flex-grow select"
+              :options="approveRejectReasons"
               item-key="key"
               label="label"
-            ></form-select>
+            ></base-select>
             <base-input
+              v-model="response.note"
+              data-testid="testRejectionNoteTextInput"
               class="my-2"
               text-area
-              v-model="response.note"
               :rows="3"
               :placeholder="$t('adminOrganization.rejection_note')"
             />
@@ -48,11 +46,12 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
+                data-testid="testOkButton"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
                   () => {
-                    $close(response);
+                    closeDialog(response);
                   }
                 "
               >
@@ -60,10 +59,11 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               >
@@ -77,43 +77,54 @@
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, reactive } from 'vue';
+import { closeDialog } from 'vue3-promise-dialog';
+import { useI18n } from 'vue-i18n';
+
+export default defineComponent({
   name: 'OrganizationApprovalDialog',
-  data() {
+  setup() {
+    const { t } = useI18n();
+
+    const response = reactive({
+      reason: '',
+      note: '',
+    });
+
+    const approveRejectReasons = [
+      'approveRejectReasons.approve_none',
+      'approveRejectReasons.approve_public',
+      'approveRejectReasons.approve_preliminary',
+      'approveRejectReasons.approve_statistics',
+      'approveRejectReasons.approve_situational_awareness',
+      'approveRejectReasons.approve_coordination',
+      'approveRejectReasons.approve_ltr',
+      'approveRejectReasons.approve_recovery',
+      'approveRejectReasons.approve_academic',
+      'approveRejectReasons.approve_waiver',
+      'approveRejectReasons.reject_not_reputable',
+      'approveRejectReasons.reject_spam',
+      'approveRejectReasons.reject_contractor',
+      'approveRejectReasons.reject_duplicate',
+      'approveRejectReasons.reject_inactive',
+      'approveRejectReasons.reject_unresponsive',
+      'approveRejectReasons.reject_no_capacity',
+      'approveRejectReasons.reject_out_of_scope',
+      'approveRejectReasons.reject_survivor',
+      'approveRejectReasons.reject_volunteer',
+      'approveRejectReasons.reject_withdrawn',
+    ].map((key) => {
+      return { key, label: t(key) };
+    });
+
     return {
-      response: {
-        reason: '',
-        note: '',
-      },
-      approveRejectReasons: [
-        'approveRejectReasons.approve_none',
-        'approveRejectReasons.approve_public',
-        'approveRejectReasons.approve_preliminary',
-        'approveRejectReasons.approve_statistics',
-        'approveRejectReasons.approve_situational_awareness',
-        'approveRejectReasons.approve_coordination',
-        'approveRejectReasons.approve_ltr',
-        'approveRejectReasons.approve_recovery',
-        'approveRejectReasons.approve_academic',
-        'approveRejectReasons.approve_waiver',
-        'approveRejectReasons.reject_not_reputable',
-        'approveRejectReasons.reject_spam',
-        'approveRejectReasons.reject_contractor',
-        'approveRejectReasons.reject_duplicate',
-        'approveRejectReasons.reject_inactive',
-        'approveRejectReasons.reject_unresponsive',
-        'approveRejectReasons.reject_no_capacity',
-        'approveRejectReasons.reject_out_of_scope',
-        'approveRejectReasons.reject_survivor',
-        'approveRejectReasons.reject_volunteer',
-        'approveRejectReasons.reject_withdrawn',
-      ].map((key) => {
-        return { key, label: this.$t(key) };
-      }),
+      approveRejectReasons,
+      response,
+      closeDialog,
     };
   },
-};
+});
 </script>
 
 <style scoped>

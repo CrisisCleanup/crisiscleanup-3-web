@@ -7,6 +7,11 @@ node_modules
 # Environment Files
 .env*
 !.env.sample
+!.env.test
+
+# Direnv
+!.envrc
+.envrc.local
 
 # Log files
 npm-debug.log*
@@ -137,3 +142,13 @@ modules.xml
 # Quokka
 .quokka
 /deploy.sh
+
+# Playwright E2E Testing
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth
+
+# Sentry Auth Token
+.env.sentry-build-plugin

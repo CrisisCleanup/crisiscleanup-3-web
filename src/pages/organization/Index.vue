@@ -1,24 +1,15 @@
 <template>
-  <div class="flex flex-col h-full" data-cy="myorg-dashboard">
+  <div class="flex flex-col h-full" data-testid="testMyOrganizationDashboardDiv">
     <div
-      class="
-        h-12
-        bg-white
-        mx-5
-        border-t
-        flex
-        justify-center
-        text-crisiscleanup-grey-700
-      "
+      class="h-max bg-white mx-5 border-t md:flex grid grid-cols-2 justify-around text-crisiscleanup-grey-700"
     >
       <template v-for="r in routes">
         <router-link
-          v-if="r.isActive"
-          :to="`/organization/${r.name}`"
-          class="flex w-48 justify-center mx-2 cursor-pointer"
-          tag="div"
-          :data-cy="`myorg-nav-${r.name}`"
+          v-if="!r.isDisabled"
           :key="`myorg-nav-${r.name}`"
+          :to="`/organization/${r.name}`"
+          class="flex justify-center mx-2 cursor-pointer"
+          :data-testid="`testMyOrganizationNav${r.name}Link`"
           :class="r.class ? r.class : null"
         >
           <span class="p-3">
@@ -33,55 +24,75 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { computed, defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
+
+export default defineComponent({
   name: 'Organization',
-  data() {
-    return {
-      routes: [
+  setup(props) {
+    const route = useRoute();
+
+    const _routes = computed(() => {
+      return [
         {
           name: 'invitations',
           key: 'invitation_management',
-          class: { 'router-link-active': this.isInvitationsActive },
-          isActive: true,
+          isActive: route.name === 'invitations',
         },
         {
           name: 'users',
           key: 'user_management',
-          isActive: true,
+          isActive: route.name === 'users',
         },
         {
           name: 'teams',
           key: 'team_management',
-          isActive: true,
+          isActive: route.name === 'teams',
         },
         {
           name: 'profile',
           key: 'organization_profile',
-          isActive: true,
+          isActive: route.name === 'profile',
         },
         {
           name: 'affiliates',
           key: 'affiliated_orgs',
-          isActive: true,
+          isActive: route.name === 'affiliates',
         },
         {
           name: 'layers',
           key: 'layer_library',
-          isActive: true,
+          isActive: route.name === 'layers',
         },
-      ],
+      ].map((r) => ({
+        isDisabled: false,
+        class: {
+          'router-link': true,
+          'router-link-active': false,
+        },
+        ...r,
+      }));
+    });
+
+    const routes = computed(() => {
+      return _routes.value.map((r) => {
+        if (r.isActive) {
+          r.class['router-link-active'] = true;
+        }
+
+        return r;
+      });
+    });
+
+    return {
+      routes,
     };
   },
-  computed: {
-    isInvitationsActive() {
-      return this.$route.meta.id === 'invitations';
-    },
-  },
-};
+});
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .router-link:hover {
   text-decoration: none !important;
 }

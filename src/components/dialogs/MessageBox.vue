@@ -11,11 +11,12 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
                 size="xs"
                 type="cancel"
                 @click.native="
                   () => {
-                    $close('cancel');
+                    closeDialog('cancel');
                   }
                 "
               />
@@ -24,23 +25,24 @@
 
           <div class="modal-body flex-grow p-3">
             <div>
-              <div v-html="content"></div>
+              <div v-html="content" data-testid="testContentDiv"></div>
             </div>
           </div>
 
           <div class="modal-footer flex-shrink">
             <div class="flex items-center justify-center py-2 border-t">
               <div
-                class="flex flex-col items-center justify-center"
                 v-if="Object.keys(actions).length === 0"
+                class="flex flex-col items-center justify-center"
               >
                 <base-button
                   :alt="$t('actions.ok')"
+                  data-testid="testOkButton"
                   variant="solid"
                   class="px-6 p-3"
                   :action="
                     () => {
-                      $close('ok');
+                      closeDialog('ok');
                     }
                   "
                 >
@@ -49,11 +51,12 @@
               </div>
 
               <div
-                class="flex items-center justify-end w-full"
                 v-if="Object.keys(actions).length > 0"
+                class="flex items-center justify-end w-full"
               >
                 <base-button
                   v-for="(value, key) in actions"
+                  data-testid="testActionsButton"
                   :key="key"
                   :alt="value.text"
                   :variant="value.type"
@@ -61,7 +64,7 @@
                   :class="value.buttonClass"
                   :action="
                     () => {
-                      $close(key);
+                      closeDialog(key);
                     }
                   "
                 >
@@ -76,8 +79,11 @@
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { closeDialog } from 'vue3-promise-dialog';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'MessageBox',
   props: {
     title: {
@@ -90,12 +96,17 @@ export default {
     },
     actions: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
   },
-};
+  setup() {
+    return {
+      closeDialog,
+    };
+  },
+});
 </script>
 
 <style scoped>

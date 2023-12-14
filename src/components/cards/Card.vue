@@ -1,35 +1,33 @@
 <template>
-  <Loader :overlay="true" :loading="loading">
-    <template #content>
-      <div class="shadow-crisiscleanup-card card h-full">
-        <div class="header" slot="header">
-          <div class="header--inner">
-            <slot name="header"></slot>
-          </div>
-        </div>
-        <div class="body">
-          <div class="body--inner h-full" :style="bodyStyle">
-            <template v-if="!loading">
-              <slot></slot>
-            </template>
-          </div>
-        </div>
+  <div class="shadow-crisiscleanup-card card h-full">
+    <div class="header">
+      <div class="header--inner">
+        <slot name="header"></slot>
       </div>
-    </template>
-  </Loader>
+    </div>
+    <div class="body">
+      <div class="body--inner h-full" :style="bodyStyle">
+        <template v-if="!loading">
+          <slot></slot>
+        </template>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
-import Loader from '@/components/Loader.vue';
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Card',
-  components: { Loader },
   props: {
-    loading: VueTypes.bool.def(false),
-    bodyStyle: VueTypes.any,
+    bodyStyle: {
+      type: String,
+      default: '',
+    },
+    loading: {
+      type: Boolean,
+    },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

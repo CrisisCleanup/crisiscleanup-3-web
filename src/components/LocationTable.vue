@@ -15,6 +15,7 @@
       <div class="flex mr-2 justify-center w-full">
         <ccu-icon
           :alt="$t('actions.edit')"
+          data-testid="testEditButton"
           size="small"
           type="edit"
           class="mx-2"
@@ -26,6 +27,7 @@
         />
         <ccu-icon
           :alt="$t('actions.delete')"
+          data-testid="testDeleteButton"
           size="small"
           type="trash"
           class="mx-2"
@@ -40,11 +42,11 @@
   </Table>
 </template>
 
-<script>
-import Table from '@/components/Table';
+<script lang="ts">
+import Table from '@/components/Table.vue';
 import LocationType from '@/models/LocationType';
 
-export default {
+export default defineComponent({
   name: 'LocationTable',
   components: { Table },
   props: {
@@ -54,53 +56,57 @@ export default {
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
-    loading: Boolean,
-  },
-  methods: {
-    getLocationType(type) {
-      return LocationType.find(type).name_t;
+    loading: {
+      type: Boolean,
     },
   },
-  data() {
+  setup(props) {
+    const { t } = useI18n();
+    const columns = ref([
+      {
+        title: t('locationTable.name'),
+        dataIndex: 'name',
+        key: 'name',
+        width: '1.5fr',
+      },
+      {
+        title: t('locationTable.type'),
+        dataIndex: 'type',
+        key: 'type',
+        width: '1.5fr',
+      },
+      {
+        title: t('locationTable.shared'),
+        dataIndex: 'shared',
+        key: 'shared',
+      },
+      {
+        title: '',
+        dataIndex: 'map',
+        key: 'map',
+        width: '0.25fr',
+      },
+      {
+        title: '',
+        dataIndex: 'actions',
+        key: 'actions',
+        width: '0.5fr',
+      },
+    ]);
+    const getLocationType = (type: string) => {
+      return LocationType.find(type)?.name_t;
+    };
+
     return {
-      columns: [
-        {
-          title: this.$t('locationTable.name'),
-          dataIndex: 'name',
-          key: 'name',
-          width: '1.5fr',
-        },
-        {
-          title: this.$t('locationTable.type'),
-          dataIndex: 'type',
-          key: 'type',
-          width: '1.5fr',
-        },
-        {
-          title: this.$t('locationTable.shared'),
-          dataIndex: 'shared',
-          key: 'shared',
-        },
-        {
-          title: '',
-          dataIndex: 'map',
-          key: 'map',
-          width: '0.25fr',
-        },
-        {
-          title: '',
-          dataIndex: 'actions',
-          key: 'actions',
-          width: '0.5fr',
-        },
-      ],
+      columns,
+      getLocationType,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

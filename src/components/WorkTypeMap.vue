@@ -2,22 +2,25 @@
   <div class="relative">
     <div
       id="map"
+      data-testid="testWorkTypeMapDiv"
       ref="map"
       class="absolute top-0 left-0 right-0 bottom-0"
     ></div>
   </div>
 </template>
-<script>
-import * as L from 'leaflet';
-import { colors, templates } from '@/icons/icons_templates';
-import { mapAttribution, mapTileLayer } from '../utils/map';
 
-export default {
+<script lang="ts">
+import * as L from 'leaflet';
+import type { PropType } from 'vue';
+import { colors, templates } from '@/icons/icons_templates';
+import { mapAttribution, mapTileLayer } from '@/utils/map';
+
+export default defineComponent({
   name: 'WorkTypeMap',
   props: {
     workTypes: {
-      type: Array,
-      default: () => {
+      type: Array as PropType<Record<string, any>[]>,
+      default() {
         return [];
       },
     },
@@ -26,42 +29,31 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      markers: [],
-      templates,
-      colors,
-      map: null,
-    };
-  },
-  async mounted() {
-    await this.loadMap();
-    if (this.polygon) {
-      this.polygon.addTo(this.map);
-      this.map.fitBounds(this.polygon.getBounds());
-    }
-  },
-  methods: {
-    async loadMap() {
-      this.mapLoading = true;
+  setup(props) {
+    const markers = ref<Record<string, any>[]>([]);
+    const map = ref<any>(null);
+    const mapLoading = ref(false);
 
-      this.markers = this.workTypes;
-      await this.renderMap(this.workTypes);
+    const loadMap = async () => {
+      mapLoading.value = true;
 
-      this.$nextTick(() => {
+      markers.value = props.workTypes;
+      await renderMap(props.workTypes);
+
+      await nextTick(() => {
         // Add this slight pan to re-render map
-        this.map.panBy([1, 0]);
+        map.value.panBy([1, 0]);
       });
 
-      this.mapLoading = false;
-    },
-    async renderMap(markers) {
-      if (!this.map) {
-        this.map = L.map('map', {
+      mapLoading.value = false;
+    };
+
+    const renderMap = async (markers: Record<string, any>[]) => {
+      if (!map.value) {
+        map.value = L.map('map', {
           zoomControl: false,
-        }).setView([35.7465122599185, -96.41150963125656], 10);
+        }).setView([35.746_512_259_918_5, -96.411_509_631_256_56], 10);
       }
-      const { map } = this;
 
       L.tileLayer(mapTileLayer, {
         // tileSize: 512,
@@ -70,9 +62,9 @@ export default {
         detectRetina: false,
         maxZoom: 18,
         noWrap: false,
-      }).addTo(map);
+      }).addTo(map.value);
 
-      markers.forEach((wt) => {
+      for (const wt of markers) {
         const { coordinates } = wt.location;
         const latLng = L.latLng(coordinates[1], coordinates[0]);
 
@@ -101,19 +93,33 @@ export default {
           popupAnchor: [0, -28],
         });
 
-        new L.marker(latLng, { icon: divIcon }).addTo(map);
+        L.marker(latLng, { icon: divIcon }).addTo(map);
         map.panTo(latLng);
-      });
+      }
 
       map.attributionControl.setPosition('bottomright');
-    },
+    };
+
+    onMounted(async () => {
+      await loadMap();
+      if (props.polygon) {
+        props.polygon.addTo(map.value);
+        map.value.fitBounds(props.polygon.getBounds());
+      }
+    });
+    return {
+      markers,
+      templates,
+      colors,
+      map,
+      loadMap,
+      renderMap,
+    };
   },
-};
+});
 </script>
 
-<style>
-@import '~leaflet/dist/leaflet.css';
-
+<style scoped>
 .leaflet-data-marker svg {
   width: 30px;
   height: 30px;

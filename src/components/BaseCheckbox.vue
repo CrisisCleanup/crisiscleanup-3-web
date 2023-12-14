@@ -2,63 +2,27 @@
   <label class="checkbox-container" :style="containerStyle">
     <slot></slot>
     <input
-      type="checkbox"
-      :checked="value"
       ref="input"
+      type="checkbox"
+      :checked="modelValue"
       class="checkmark-input"
       :class="isInvalid ? 'checkmark-input-invalid' : ''"
       :disabled="disabled"
-      @input="update"
-      @change="change"
       :required="required"
+      @update:modelValue="update"
+      @change="change"
     />
     <span class="checkmark" :style="checkmarkStyle"></span>
   </label>
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
-import { EventsMixin } from '@/mixins';
-import useLogEvent from '@/use/events/useLogEvent';
+import { ref, defineComponent, onMounted } from 'vue';
+import useLogEvent from '@/hooks/useLogEvent';
 
 export default defineComponent({
   name: 'BaseCheckbox',
-  mixins: [EventsMixin],
-
-  setup(props, context) {
-    const { logEvent } = useLogEvent();
-
-    const isInvalid = ref(false);
-    const input = ref<HTMLInputElement | null>(null);
-
-    onMounted(async () => {
-      input?.value?.addEventListener(
-        'invalid',
-        () => {
-          isInvalid.value = true;
-        },
-        true,
-      );
-    });
-
-    function update(e) {
-      context.emit('input', e.target.checked);
-      isInvalid.value = input?.value?.checkValidity() || false;
-      logEvent(props.ccuEvent);
-    }
-
-    function change(e) {
-      context.emit('change', e.target.checked);
-      isInvalid.value = input?.value?.checkValidity() || false;
-    }
-
-    return {
-      isInvalid,
-      update,
-      change,
-    };
-  },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false,
     },
@@ -82,6 +46,40 @@ export default defineComponent({
       type: String,
       default: 'display: block; padding-left: 30px;',
     },
+  },
+
+  setup(props, context) {
+    const { logEvent } = useLogEvent();
+
+    const isInvalid = ref(false);
+    const input = ref<HTMLInputElement | null>(null);
+
+    onMounted(async () => {
+      input?.value?.addEventListener(
+        'invalid',
+        () => {
+          isInvalid.value = true;
+        },
+        true,
+      );
+    });
+
+    function update(e) {
+      context.emit('update:modelValue', e.target.checked);
+      isInvalid.value = input?.value?.checkValidity() || false;
+      logEvent(props.ccuEvent);
+    }
+
+    function change(e) {
+      context.emit('update:modelValue', e.target.checked);
+      isInvalid.value = input?.value?.checkValidity() || false;
+    }
+
+    return {
+      isInvalid,
+      update,
+      change,
+    };
   },
 });
 </script>

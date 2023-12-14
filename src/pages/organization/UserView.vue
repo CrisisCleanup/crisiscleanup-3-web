@@ -1,5 +1,9 @@
 <template>
-  <div class="h-full w-full flex flex-col">
+  <div
+    v-if="selectedUser"
+    class="h-full w-full flex flex-col"
+    data-testid="testUserViewDiv"
+  >
     <div class="flex justify-between border-b px-3 py-1">
       <div class="font-semibold flex justify-between items-center h-16">
         {{ selectedUser.full_name }}
@@ -7,17 +11,19 @@
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
           :alt="$t('actions.edit')"
+          data-testid="testEditIcon"
           type="edit"
           class="mx-2"
           size="small"
-          @click.native="isEditing = true"
+          @click="isEditing = true"
         />
         <ccu-icon
           :alt="$t('userView.remove_user')"
+          data-testid="testRemoveUserIcon"
           type="trash"
           class="mx-2"
           size="small"
-          @click.native="orphanUser"
+          @click="orphanUser"
         />
       </div>
     </div>
@@ -25,10 +31,11 @@
       <div class="flex sm:flex-row flex-col">
         <img
           class="rounded-full profile-image mr-16"
+          data-testid="testProfilePictureIcon"
           :src="selectedUser.profilePictureUrl"
           :alt="$t('userView.profile_picture')"
         />
-        <div class="w-full">
+        <div class="w-full" data-testid="testUserDetailsDiv">
           <div class="flex flex-wrap items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
@@ -62,8 +69,8 @@
               </div>
               <div class="py-2 text-base">
                 <div
-                  class="text-primary-dark cursor-pointer"
                   v-if="selectedUser.referringUser"
+                  class="text-primary-dark cursor-pointer"
                   @click="
                     $router.push(
                       `/organization/users/${selectedUser.referringUser.id}`,
@@ -83,8 +90,9 @@
           </div>
           <div>
             <UserRolesSelect
-              :user="selectedUser"
               :key="JSON.stringify(selectedUser)"
+              :user="selectedUser"
+              data-testid="testUserRolesSelect"
             />
           </div>
         </div>
@@ -92,77 +100,101 @@
     </div>
     <UserEditModal
       v-if="isEditing"
+      data-testid="testUserEditModal"
       :user="selectedUser"
       @close="isEditing = false"
       @save="saveUser"
     />
   </div>
 </template>
-<script>
-import { create } from 'vue-modal-dialogs';
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useToast } from 'vue-toastification';
+import UserEditModal from './UserEditModal.vue';
+import useDialogs from '@/hooks/useDialogs';
 import User from '@/models/User';
 import Role from '@/models/Role';
-import MessageBox from '@/components/dialogs/MessageBox';
-import UserEditModal from './UserEditModal';
-import { getErrorMessage } from '../../utils/errors';
-import UserRolesSelect from '../../components/UserRolesSelect';
+import { getErrorMessage } from '@/utils/errors';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
-const messageBox = create(MessageBox);
-
-export default {
+export default defineComponent({
   name: 'UserView',
   components: { UserEditModal, UserRolesSelect },
-  async mounted() {
-    await User.fetchOrFindId(this.$route.params.user_id);
-  },
-  data() {
-    return {
-      isEditing: false,
-    };
-  },
-  computed: {
-    roles() {
+  setup(props) {
+    const route = useRoute();
+    const router = useRouter();
+    const $toasted = useToast();
+    const { t } = useI18n();
+    const isEditing = ref(false);
+    const { confirm: messageBox } = useDialogs();
+
+    const roles = computed(() => {
       return Role.all();
-    },
-    selectedUser() {
-      return User.find(this.$route.params.user_id);
-    },
-  },
-  methods: {
-    async saveUser() {
+    });
+    const selectedUser = computed(() => {
+      return User.find(route.params.user_id);
+    });
+
+    onMounted(async () => {
+      // TODO: CCU base model needs to be fixed to avoid doing this
+      await User.find(route.params.user_id);
+    });
+
+    async function saveUser() {
       try {
-        await User.api().patch(`/users/${this.selectedUser.id}`, {
-          ...this.selectedUser.$toJson(),
+        if (!isDefined(selectedUser)) {
+          $toasted.error(t('profileUser.save_user_fail'));
+          return;
+        }
+
+        await User.api().patch(`/users/${selectedUser.value.id}`, {
+          ...selectedUser.value.$toJson(),
         });
-        await this.$toasted.success(this.$t('profileUser.save_user_success'));
-        this.isEditing = false;
+        await $toasted.success(t('profileUser.save_user_success'));
+        isEditing.value = false;
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    async orphanUser() {
+    }
+
+    async function orphanUser() {
       const result = await messageBox({
-        title: this.$t('actions.remove_user'),
-        content: this.$t('userView.remove_user_warning'),
+        title: t('actions.remove_user'),
+        content: t('userView.remove_user_warning'),
         actions: {
           cancel: {
-            text: this.$t('actions.cancel'),
+            text: t('actions.cancel'),
             buttonClass: 'px-2 py-1 mx-2 border border-black',
           },
           delete: {
-            text: this.$t('actions.delete'),
+            text: t('actions.delete'),
             buttonClass: 'px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white',
           },
         },
       });
       if (result === 'delete') {
-        await User.api().orphan(this.selectedUser.id);
-        await this.$router.push(`/organization/users`);
+        if (!isDefined(selectedUser)) {
+          $toasted.error(t('profileUser.delete_user_fail'));
+          return;
+        }
+
+        await User.api().orphan(selectedUser.value.id);
+        await router.push(`/organization/users`);
       }
-    },
+    }
+
+    return {
+      isEditing,
+      roles,
+      selectedUser,
+      saveUser,
+      orphanUser,
+    };
   },
-};
+});
 </script>
+
 <style scoped>
 .profile-image {
   height: 175px;

@@ -1,30 +1,24 @@
 <template>
   <router-link
+    v-if="!route.disabled"
     :to="route.to"
     class="menu-item router-link p-2 border-b border-t border-gray-800"
     :class="{ 'router-link-active': isActive }"
-    :data-cy="`navigation.${route.key}`"
-    v-if="!route.disabled"
+    :data-testid="`test${route.key}Link`"
   >
     <div :key="route.key" class="flex flex-col items-center relative">
       <badge
         v-if="route.newBadge"
+        data-testid="testNewBadgeIcon"
         width="2rem"
         height="1rem"
-        class="
-          text-white
-          bg-crisiscleanup-red-700
-          mx-1
-          absolute
-          -top-0.5
-          -right-8
-          p-3
-        "
+        class="text-white bg-crisiscleanup-red-700 mx-1 absolute -top-0.5 -right-8 p-3"
         :title="$t('info.new_badge')"
         >{{ $t('info.new') }}</badge
       >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
+        :data-testid="$t(`test${route.key}Icon`)"
         v-bind="iconProps"
         :linked="true"
       />
@@ -35,35 +29,46 @@
   </router-link>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
-export default {
+export default defineComponent({
   name: 'NavButton',
   props: {
-    route: VueTypes.shape({
-      key: VueTypes.string,
-      text: VueTypes.string,
-      to: VueTypes.string,
-      icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-      iconSize: VueTypes.string,
-      disabled: VueTypes.bool,
-    }),
+    route: {
+      type: Object,
+      default: () => ({}),
+    },
   },
-  computed: {
-    iconProps() {
-      return typeof this.route.icon === 'object'
-        ? this.route.icon
+
+  setup(props) {
+    const { t } = useI18n();
+
+    const iconProps = computed(() => {
+      return typeof props.route.icon === 'object'
+        ? props.route.icon
         : {
-            type: this.route.icon || this.route.key,
+            type: props.route.icon || props.route.key,
             size: 'xl',
           };
-    },
-    isActive() {
-      return this.$t(this.$route.name).includes(this.route.key.toLowerCase());
-    },
+    });
+
+    const routeName = useRoute().name;
+    const isActive = computed(() =>
+      routeName
+        ? t(routeName as string).includes(props.route.key.toLowerCase())
+        : false,
+    );
+
+    return {
+      isActive,
+      iconProps,
+      routeName,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -1,40 +1,32 @@
 <template>
-  <div v-show="isActive"><slot></slot></div>
+  <div v-show="isActive" class="tab">
+    <slot></slot>
+  </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { onBeforeMount, ref, watch, inject, defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'Tab',
   props: {
     name: { required: true, type: String },
     selected: { type: Boolean },
     disabled: { type: Boolean, default: false },
   },
+  setup() {
+    const index = ref(0);
+    const isActive = computed(() => index.value === tabs.selectedIndex);
 
-  data() {
-    return {
-      isActive: false,
-    };
-  },
+    const tabs = inject('TabsProvider');
 
-  watch: {
-    selected: {
-      handler() {
-        this.isActive = this.selected;
-      },
-    },
+    onBeforeMount(() => {
+      index.value = tabs.count;
+      tabs.count++;
+    });
+    return { index, isActive };
   },
-
-  computed: {
-    href() {
-      return `#${this.name.toLowerCase().replace(/ /g, '-')}`;
-    },
-  },
-
-  mounted() {
-    this.isActive = this.selected;
-  },
-};
+});
 </script>
 
 <style scoped></style>

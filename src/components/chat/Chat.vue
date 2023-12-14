@@ -8,27 +8,18 @@
         <div class="message-container">
           <div
             id="messages"
-            ref="messages"
+            ref="messagesBox"
+            data-testid="testMessagesContent"
+            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
             @wheel="handleWheel"
             @ontouchmove="handleWheel"
-            class="
-              flex flex-col flex-grow
-              py-2
-              space-y-5
-              overflow-y-auto
-              scrollbar-thumb-blue
-              scrollbar-thumb-rounded
-              scrollbar-track-blue-lighter
-              scrollbar-w-2
-              scrolling-touch
-            "
           >
             <ChatMessage
               v-for="message in sortedMessages"
-              :message="message"
               :key="message.id"
-              @onFavorite="(message) => toggleFavorite(message, true)"
-              @onUnfavorite="(message) => toggleFavorite(message, false)"
+              :message="message"
+              @onFavorite="(message: any) => toggleFavorite(message, true)"
+              @onUnfavorite="(message: any) => toggleFavorite(message, false)"
             />
           </div>
           <div
@@ -43,6 +34,7 @@
             >
               <ccu-icon
                 :alt="$t('chat.urgent')"
+                data-testid="testIsUrgentStyle"
                 size="small"
                 type="attention-red"
                 class="mr-1"
@@ -51,24 +43,33 @@
             </div>
             <div class="flex flex-col">
               <base-input
-                text-area
-                @enter="sendMessage"
-                class=""
                 v-model="currentMessage"
+                data-testid="testCurrentMessageContent"
+                text-area
+                class=""
+                @enter="sendMessage"
               />
               <div class="flex items-center justify-between py-2">
-                <base-checkbox v-model="urgent">
+                <base-checkbox
+                  v-model="urgent"
+                  data-testid="testIsUrgentCheckbox"
+                >
                   {{ $t('chat.urgent') }}
                 </base-checkbox>
-                <span class="italic cursor-pointer" @click="focusNewsTab">{{
-                  $t('chat.read_faq_first')
-                }}</span>
+                <span
+                  class="italic cursor-pointer"
+                  data-testid="testFocusNewsTabLink"
+                  @click="focusNewsTab"
+                  >{{ $t('chat.read_faq_first') }}</span
+                >
                 <div class="flex">
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
+                    data-testid="testSendMessageButton"
                     :disabled="!Boolean(currentMessage)"
                     ccu-icon="plane"
                     :action="sendMessage"
+                    :alt="$t('actions.send_message')"
                   />
                 </div>
               </div>
@@ -79,22 +80,40 @@
       <tab :name="$t('chat.favorites')">
         <div class="flex flex-col h-84">
           <div
-            class="
-              flex flex-col flex-grow
-              py-2
-              space-y-5
-              overflow-y-auto
-              scrollbar-thumb-blue
-              scrollbar-thumb-rounded
-              scrollbar-track-blue-lighter
-              scrollbar-w-2
-              scrolling-touch
-            "
+            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
           >
             <ChatMessage
               v-for="favorite in favorites"
-              :message="favorite"
               :key="favorite.id"
+              data-testid="testFavoritesContent"
+              :message="favorite"
+            />
+          </div>
+        </div>
+      </tab>
+      <tab :name="$t('chat.search')">
+        <div class="flex flex-col h-84 w-full my-4">
+          <base-input
+            data-testid="testMessagesSearchTextInput"
+            :model-value="search"
+            icon="search"
+            class="w-full"
+            :placeholder="$t('info.search_items')"
+            @update:modelValue="
+              (value) => {
+                search = value;
+                throttle(searchMessages, 1000)();
+              }
+            "
+          />
+          <div
+            class="flex flex-col flex-grow py-2 space-y-5 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+          >
+            <ChatMessage
+              v-for="chat in searchResults"
+              :key="chat.id"
+              data-testid="testFavoritesContent"
+              :message="chat"
             />
           </div>
         </div>
@@ -103,16 +122,28 @@
   </div>
 </template>
 
-<script>
-import { uniqWith } from 'lodash/array';
-import { isEqual } from 'lodash/lang';
-import { UserMixin } from '@/mixins';
-import ChatMessage from '@/components/chat/ChatMessage';
-import { useWebSockets } from '@/use/useWebSockets';
-import { getQueryString } from '@/utils/urls';
-import { getErrorMessage } from '@/utils/errors';
+<script lang="ts">
+import _, { throttle } from 'lodash';
+import {
+  computed,
+  nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from 'vue';
+import axios from 'axios';
+import moment from 'moment';
+import { useToast } from 'vue-toastification';
+import { getQueryString } from '../../utils/urls';
+import { getErrorMessage } from '../../utils/errors';
+import useCurrentUser from '../../hooks/useCurrentUser';
+import User from '../../models/User';
+import { useWebSockets } from '../../hooks/useWebSockets';
+import ChatMessage from './ChatMessage.vue';
+import type { Message } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'Chat',
   components: { ChatMessage },
   props: {
@@ -125,160 +156,224 @@ export default {
       default: 'chat_last_seen',
     },
   },
-  async mounted() {
-    await this.getUnreadMessagesCount();
-    await this.getUnreadUrgentMessagesCount();
-    await this.getMessages();
-    await this.getFavorites();
-    const { socket, send } = useWebSockets(
-      `/ws/chat/${this.chat.id}`,
-      'chat',
-      (data) => {
-        this.messages = [data, ...this.messages];
-        if (data.created_by !== this.currentUser.id) {
-          if (data.is_urgent) {
-            this.$emit('onNewUrgentMessage');
-          } else {
-            this.$emit('onNewMessage');
-          }
-        }
+  setup(props, { emit }) {
+    const socket = ref<WebSocket | null>(null);
+    const currentMessage = ref('');
+    const search = ref('');
+    const messages = ref<Message[]>([]);
+    const favorites = ref<Message[]>([]);
+    const searchResults = ref<Message[]>([]);
+    const urgent = ref(false);
+    const loadingMessages = ref(false);
+    const searchLoading = ref(false);
+    let sendToWebsocket: (data: Partial<Message>) => void;
+    const messagesBox = ref<HTMLDivElement | null>(null);
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
 
-        this.$nextTick(() => {
-          if (this.$refs.messages) {
-            this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
-          }
-        });
-      },
-    );
-    this.socket = socket;
-    this.send = send;
-  },
-  unmounted() {
-    this.socket.close();
-  },
-  data() {
-    return {
-      socket: null,
-      messages: [],
-      favorites: [],
-      currentMessage: '',
-      urgent: false,
-      send: () => {},
-      loadingMessages: false,
-    };
-  },
-  mixins: [UserMixin],
-  computed: {
-    sortedMessages() {
-      const sortedMessages = [...this.messages];
-      sortedMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
-      return uniqWith(sortedMessages, isEqual);
-    },
-  },
-  methods: {
-    handleWheel() {
+    const sortedMessages = computed(() => {
+      const currentMessages = [...messages.value];
+      currentMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
+      return _.uniqWith(currentMessages, _.isEqual);
+    });
+
+    async function searchMessages() {
+      searchLoading.value = false;
+      const parameters = {
+        message_group: props.chat.id,
+        limit: 30,
+        search: search.value,
+      } as Record<string, any>;
+      const queryString = getQueryString(parameters);
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+      );
+      searchResults.value = response.data.results;
+      searchLoading.value = false;
+    }
+
+    function handleWheel() {
       if (
-        this.$refs.messages.scrollTop === 0 &&
-        this.sortedMessages.length &&
-        !this.loadingMessages
+        messagesBox?.value?.scrollTop === 0 &&
+        sortedMessages.value.length > 0 &&
+        !loadingMessages.value
       ) {
-        this.getMessages(this.sortedMessages[0].created_at, false);
+        getMessages(sortedMessages.value[0].created_at, false);
       }
-    },
-    async getMessages(before = null, scroll = true) {
-      this.loadingMessages = true;
-      const params = {
-        message_group: this.chat.id,
+    }
+
+    async function getMessages(before: string | null = null, scroll = true) {
+      loadingMessages.value = true;
+      const parameters = {
+        message_group: props.chat.id,
         limit: 5,
-      };
-      if (before && this.messages.length) {
-        params.created_at__lte = before;
+      } as Record<string, any>;
+      if (before && messages.value.length > 0) {
+        parameters.created_at__lte = before;
       }
-      const queryString = getQueryString(params);
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+
+      const queryString = getQueryString(parameters);
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
-      this.messages = [...this.messages, ...response.data.results];
+      messages.value = [...messages.value, ...response.data.results];
       if (scroll) {
-        this.$nextTick(() => {
-          if (this.$refs.messages) {
-            this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+        nextTick(() => {
+          if (messagesBox.value) {
+            messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
           }
         });
       }
-      this.loadingMessages = false;
-    },
-    async getFavorites() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_groups/${this.chat.id}/my_favorites`,
+
+      loadingMessages.value = false;
+    }
+
+    async function getFavorites() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_groups/${
+          props.chat.id
+        }/my_favorites`,
       );
-      this.favorites = response.data;
-    },
-    async getUnreadMessagesCount() {
-      this.loadingMessages = true;
-      const params = {
-        message_group: this.chat.id,
+      favorites.value = response.data;
+    }
+
+    async function getUnreadMessagesCount() {
+      loadingMessages.value = true;
+      const parameters = {
+        message_group: props.chat.id,
         limit: 1,
         is_urgent: false,
-      };
-      if (this.currentUser.states[this.stateKey]) {
-        params.created_at__gte = this.currentUser.states[this.stateKey];
+      } as Record<string, any>;
+      if (currentUser?.states[props.stateKey]) {
+        parameters.created_at__gte = currentUser.states[props.stateKey];
       }
-      const queryString = getQueryString(params);
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+
+      const queryString = getQueryString(parameters);
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
-      this.$emit('unreadCount', response.data.count);
-    },
-    async getUnreadUrgentMessagesCount() {
-      this.loadingMessages = true;
-      const params = {
-        message_group: this.chat.id,
+      emit('unreadCount', response.data.count);
+    }
+
+    async function getUnreadUrgentMessagesCount() {
+      loadingMessages.value = true;
+      const parameters = {
+        message_group: props.chat.id,
         limit: 1,
         is_urgent: true,
-      };
-      if (this.currentUser.states[this.stateKey]) {
-        params.created_at__gte = this.currentUser.states[this.stateKey];
+      } as Record<string, any>;
+      if (currentUser?.states[props.stateKey]) {
+        parameters.created_at__gte = currentUser.states[props.stateKey];
       }
-      const queryString = getQueryString(params);
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+
+      const queryString = getQueryString(parameters);
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
-      this.$emit('unreadUrgentCount', response.data.count);
-    },
-    sendMessage() {
-      this.send({
-        content: this.currentMessage,
-        is_urgent: this.urgent,
+      emit('unreadUrgentCount', response.data.count);
+    }
+
+    function sendMessage() {
+      sendToWebsocket({
+        content: currentMessage.value,
+        is_urgent: urgent.value,
       });
-      this.currentMessage = '';
-      this.urgent = false;
-      this.updateUserState({ [this.stateKey]: this.$moment().toISOString() });
-    },
-    async toggleFavorite(message, state) {
+      currentMessage.value = '';
+      urgent.value = false;
+      User.api().updateUserState(
+        { [props.stateKey]: moment().toISOString() },
+        {},
+      );
+    }
+
+    async function toggleFavorite(
+      message: { id: any; is_favorite: boolean },
+      state: any,
+    ) {
       try {
         if (state) {
-          await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/chat_messages/${message.id}/favorite`,
+          await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages/${
+              message.id
+            }/favorite`,
           );
           message.is_favorite = true;
         } else {
-          await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/chat_messages/${message.id}/unfavorite`,
+          await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/chat_messages/${
+              message.id
+            }/unfavorite`,
           );
           message.is_favorite = false;
         }
 
-        await this.getFavorites();
+        await getFavorites();
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    focusNewsTab() {
-      this.$emit('focusNewsTab');
-    },
+    }
+
+    function focusNewsTab() {
+      emit('focusNewsTab');
+    }
+
+    onBeforeMount(() => {
+      const { socket: s, send } = useWebSockets(
+        `/ws/chat/${props.chat.id}`,
+        'chat',
+        (data: Message) => {
+          messages.value = [data, ...messages.value];
+          if (String(data.created_by) !== String(currentUser?.id)) {
+            if (data.is_urgent) {
+              emit('onNewUrgentMessage');
+            } else {
+              emit('onNewMessage');
+            }
+          }
+
+          nextTick(() => {
+            if (messagesBox.value) {
+              messagesBox.value.scrollTop = messagesBox.value.scrollHeight;
+            }
+          });
+        },
+      );
+
+      socket.value = s;
+      sendToWebsocket = send;
+    });
+
+    onMounted(async () => {
+      await getUnreadMessagesCount();
+      await getUnreadUrgentMessagesCount();
+      await getMessages();
+      await getFavorites();
+    });
+
+    onBeforeUnmount(() => {
+      socket?.value?.close();
+    });
+
+    return {
+      socket,
+      messages,
+      favorites,
+      currentMessage,
+      urgent,
+      loadingMessages,
+      sortedMessages,
+      messagesBox,
+      handleWheel,
+      sendMessage,
+      toggleFavorite,
+      focusNewsTab,
+      throttle,
+      searchMessages,
+      search,
+      searchResults,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

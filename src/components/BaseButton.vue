@@ -6,58 +6,38 @@
     type="submit"
     :size="size"
     :title="buttonTitle"
-    :data-cy="buttonSelector"
+    :data-testid="buttonSelector"
     @click.prevent="performAction"
   >
-    <font-awesome-icon
-      v-if="loading || showSpinner"
-      size="sm"
-      icon="spinner"
-      spin
-    />
-    <font-awesome-icon
-      v-if="icon"
-      class="m-1"
-      :icon="icon"
-      :size="iconSize"
-      :class="iconClasses"
-    />
-    <ccu-icon
-      v-if="ccuIcon"
-      class="m-1"
-      :type="ccuIcon"
-      :size="iconSize"
-      :class="iconClasses"
-    />
+    <spinner v-if="loading || showSpinner" size="sm" />
+    <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
+    <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
     <slot>{{ text }}</slot>
-    <font-awesome-icon
-      v-if="suffixIcon"
-      class="m-1"
-      :icon="suffixIcon"
-      :class="iconClasses"
-    />
+    <font-awesome-icon v-if="suffixIcon" class="m-1" :icon="suffixIcon" />
   </button>
 </template>
 
 <script lang="ts">
 import { kebabCase } from 'lodash';
-import { ref, computed, defineComponent, PropType } from '@vue/composition-api';
-import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
-import { EventsMixin } from '@/mixins';
-import { delay } from '@/utils/promise';
-import useLogEvent from '@/use/events/useLogEvent';
+import type { PropType } from 'vue';
+import { ref, computed, defineComponent } from 'vue';
+import type {
+  BUTTON_VARIANTS as VARIANTS,
+  ICON_SIZES,
+  ICONS,
+} from '../constants';
+import useLogEvent from '@/hooks/useLogEvent';
 
 type ButtonSize = 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
-type IconSize = typeof ICON_SIZES[number];
+type IconSize = (typeof ICON_SIZES)[number];
 
 export default defineComponent({
   name: 'BaseButton',
-  mixins: [EventsMixin],
 
   props: {
     action: {
       type: Function as PropType<() => any>,
-      default: () => {},
+      required: true,
     },
     disabled: {
       type: Boolean,
@@ -92,19 +72,15 @@ export default defineComponent({
       default: '',
     },
     ccuIcon: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
       default: '',
     },
     iconSize: {
       type: String as PropType<IconSize>,
       default: '',
     },
-    iconClasses: {
-      type: String as PropType<IconSize>,
-      default: '',
-    },
     suffixIcon: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
       default: '',
     },
     selector: {
@@ -112,16 +88,22 @@ export default defineComponent({
       default: '',
     },
     variant: {
-      type: String as PropType<typeof VARIANTS[keyof typeof VARIANTS]>,
+      type: String as PropType<(typeof VARIANTS)[keyof typeof VARIANTS]>,
       default: '',
     },
     type: {
       type: String,
       default: '',
     },
+    timeout: {
+      type: Number,
+      default: 5000,
+    },
   },
 
   setup(props) {
+    const delay = async (ms: number) =>
+      new Promise((res) => setTimeout(res, ms));
     const loading = ref(false);
 
     const buttonTitle = computed(() => props.text || props.alt || props.title);
@@ -149,17 +131,18 @@ export default defineComponent({
         'items-center': true,
         'justify-center': true,
         'base-button': true,
-      };
+      } as Record<string, string | boolean>;
       if (props.variant) {
         styleObject[props.variant] = true;
       }
+
       styleObject[props.variant] = true;
       return styleObject;
     });
 
     const timeout = async () => {
-      await delay(5000);
-      return Promise.reject();
+      await delay(props.timeout);
+      throw undefined;
     };
 
     const performAction = async () => {
@@ -169,7 +152,7 @@ export default defineComponent({
         if (props.action) {
           await Promise.race([props.action(), timeout()]);
         }
-      } catch (e) {
+      } catch {
         // TODO: expose method for handling button exceptions
       } finally {
         const { logEvent } = useLogEvent();
@@ -210,7 +193,7 @@ button:focus {
 /** ----- DEPRECATED ----- */
 
 button.solid {
-  @apply bg-primary-light;
+  @apply bg-primary-light border-primary-light border;
 }
 
 button.solid:hover {
@@ -223,8 +206,7 @@ button.solid.disabled {
 }
 
 button.outline {
-  background-color: transparent;
-  border: 1px solid black;
+  @apply bg-transparent border-black border;
 }
 
 button.outline:hover {

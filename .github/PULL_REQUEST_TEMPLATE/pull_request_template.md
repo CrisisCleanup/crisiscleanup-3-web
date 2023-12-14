@@ -9,6 +9,7 @@ you have that information about the pull request
 - Describe your changes in detail
 - What does this pull request add/fix? Explain your changes.
 -->
+
 ## Description
 
 ### Current Behavior
@@ -18,6 +19,7 @@ you have that information about the pull request
 <!--
 - Screenshots
 -->
+
 ## Screenshots
 
 <!--
@@ -26,6 +28,7 @@ you have that information about the pull request
 - Does your pull request close any issue? If so, please provide a link to the issue.
 - If your pull request references an issue, please provide a link to the issue.
 -->
+
 ## Related Issue
 
 <!--
@@ -38,6 +41,7 @@ you have that information about the pull request
 - What types of changes does your code introduce?
 - Put an `x` in all the boxes that apply:
 -->
+
 ## Pull Request Type
 
 Please check the type of change your PR introduces:
@@ -53,6 +57,7 @@ Please check the type of change your PR introduces:
 - Go over all the following points, and put an `x` in all the boxes that apply.
 - If you're unsure about any of these, don't hesitate to ask. We're here to help!
 -->
+
 ## Checklist
 
 - [ ] My code follows the code style of this project.
@@ -72,4 +77,3 @@ Please check the type of change your PR introduces:
 - Examples: version, OS, Browser, Other environment information, error logs, etc.
 -->
 <!-- ## Additional Context -->
-

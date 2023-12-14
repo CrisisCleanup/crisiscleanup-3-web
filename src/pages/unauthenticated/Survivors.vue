@@ -1,32 +1,43 @@
 <template>
-  <div v-if="survivorToken" class="survivors-page h-full overflow-auto main">
-    <div
-      class="bg-red-300 text-2xl"
-      v-if="survivorToken.worksite && survivorToken.worksite.invalidated_at"
-    >
-      {{ $t('survivorContact.deleted_notice') }}
-    </div>
+  <div
+    class="survivors-page h-full overflow-auto main"
+    data-testid="testSurvivorsDiv"
+  >
     <div id="top" class="logo flex justify-center p-3 border border-b">
       <img
         id="header"
+        data-testid="testCcuLogoIcon"
         src="@/assets/ccu-logo-black-500w.png"
         style="height: 53px"
       />
     </div>
-    <section class="main p-8" v-if="survivorToken">
-      <div class="text-2xl text-center mb-3 font-bold">
+    <div
+      v-if="survivorToken?.worksite && survivorToken?.worksite?.invalidated_at"
+      data-testid="testInvalidatedTokenDiv"
+      class="bg-red-300 text-2xl"
+    >
+      {{ $t('survivorContact.deleted_notice') }}
+    </div>
+    <section v-if="survivorToken" class="main p-8">
+      <div
+        class="text-2xl text-center mb-3 font-bold"
+        data-testid="testCaseNumberDiv"
+      >
         {{ $t('survivorContact.case_number') }}:
         {{ survivorToken.worksite.case_number }}
       </div>
-      <div class="text-lg mb-1">{{ survivorToken.worksite.name }}:</div>
+      <div class="text-lg mb-1" data-testid="testNameDiv">
+        {{ survivorToken.worksite.name }}:
+      </div>
       <div class="text-lg" v-html="$t(survivorToken.survivor_message)"></div>
       <div>
-        <div class="text-lg font-bold my-2">
+        <div class="text-lg font-bold my-2" data-testid="testDoYouNeedHelpDiv">
           {{ $t('survivorContact.do_you_need_help') }}
         </div>
         <div class="flex flex-col mt-2">
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testHelpNeededRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.help_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -35,11 +46,12 @@
             label-class="pt-1 text-xl"
             label="survivorContact.help_needed"
             :name="$t('survivorContact.help_needed')"
-            :value="survivorToken.status_t"
-            @change="survivorToken.status_t = $event"
+            :model-value="survivorToken.status_t"
+            @update:modelValue="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testHelpNotNeededRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.help_not_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -48,11 +60,12 @@
             label-class="pt-1 text-xl"
             label="survivorContact.help_not_needed"
             :name="$t('survivorContact.help_not_needed')"
-            :value="survivorToken.status_t"
-            @change="survivorToken.status_t = $event"
+            :model-value="survivorToken.status_t"
+            @update:modelValue="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testAlreadyHelpedRadio"
             :class="[
               survivorToken.status_t === 'survivorContact.already_helped'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
@@ -61,11 +74,12 @@
             label-class="pt-1 text-xl"
             label="survivorContact.already_helped"
             :name="$t('survivorContact.already_helped')"
-            :value="survivorToken.status_t"
-            @change="survivorToken.status_t = $event"
+            :model-value="survivorToken.status_t"
+            @update:modelValue="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
+            data-testid="testAlreadyHelpedHelpNeededRadio"
             :class="[
               survivorToken.status_t ===
               'survivorContact.already_helped_help_needed'
@@ -75,8 +89,8 @@
             label-class="pt-1 text-xl"
             label="survivorContact.already_helped_help_needed"
             :name="$t('survivorContact.already_helped_help_needed')"
-            :value="survivorToken.status_t"
-            @change="survivorToken.status_t = $event"
+            :model-value="survivorToken.status_t"
+            @update:modelValue="survivorToken.status_t = $event"
           />
           <div
             v-if="
@@ -94,10 +108,11 @@
               </div>
               <base-checkbox
                 v-for="work_type_help_needed in survivorToken.work_types"
-                class="mb-3"
-                :value="workTypeHelpNeeded.has(work_type_help_needed.id)"
+                :data-testid="`testWorkTypeHelpNeeded${work_type_help_needed.id}Checkbox`"
                 :key="work_type_help_needed.id"
-                @input="
+                class="mb-3"
+                :model-value="workTypeHelpNeeded.has(work_type_help_needed.id)"
+                @update:modelValue="
                   (value) => {
                     updateWorkTypesHelpNeeded(value, work_type_help_needed);
                   }
@@ -119,26 +134,22 @@
       </div>
       <hr class="my-4" />
 
-      <div class="pt-2" v-if="!survivorToken.address_confirmed_at">
+      <div v-if="!survivorToken.address_confirmed_at" class="pt-2">
         <div>
-          <div class="text-lg my-2 font-bold">
+          <div
+            class="text-lg my-2 font-bold"
+            data-testid="testUnconfirmedAddressDiv"
+          >
             {{ $t('survivorContact.confirm_address_instructions') }}
           </div>
           <div
             v-if="addressSet"
-            class="
-              rounded-lg
-              shadow-lg
-              p-5
-              border
-              flex
-              justify-between
-              items-center
-            "
+            class="rounded-lg shadow-lg p-5 border flex justify-between items-center"
           >
             <div class="flex items-start">
               <ccu-icon
                 type="pin"
+                data-testid="testLocationIcon"
                 class="mr-1"
                 size="small"
                 style="margin-top: 3px"
@@ -149,12 +160,14 @@
             <div class="flex">
               <base-button
                 class="px-3 py-1 bg-crisiscleanup-green-700 text-white mx-1"
+                data-testid="testConfirmAddressButton"
                 :text="$t('survivorContact.confirm_address')"
                 :alt="$t('survivorContact.confirm_address')"
                 :action="confirmAddress"
               />
               <base-button
                 variant="solid"
+                data-testid="testEditAddressButton"
                 class="px-3 py-1 mx-1"
                 :text="$t('survivorContact.edit_address')"
                 :alt="$t('survivorContact.edit_address')"
@@ -164,61 +177,47 @@
           </div>
           <WorksiteSearchInput
             v-else
+            data-testid="testFullAddressSearch"
             :value="survivorToken.worksite.address"
             selector="js-worksite-address"
-            :suggestions="[
-              {
-                name: 'geocoder',
-                data: geocoderResults || [],
-                key: 'description',
-              },
-            ]"
-            @clearSuggestions="
-              () => {
-                geocoderResults = [];
-              }
-            "
             display-property="description"
             :placeholder="$t('survivorContact.full_address')"
             size="large"
+            required
+            use-geocoder
+            :use-worksites="false"
+            skip-validation
+            class="w-full"
             @input="() => {}"
             @selectedGeocode="onGeocodeSelect"
-            @search="geocoderSearch"
-            class="w-full"
           />
         </div>
         <base-button
           type="bare"
+          data-testid="testUseMyLocationButton"
           icon="street-view"
           class="text-gray-700 pt-3 w-full p-5 mt-5 border text-2xl"
           :action="locateMe"
           :text="$t('caseForm.use_my_location')"
+          :alt="$t('caseForm.use_my_location')"
         />
         <LocationViewer
-          :location="survivorToken.worksite.location"
           :key="JSON.stringify(survivorToken.worksite.location)"
+          :location="survivorToken.worksite.location"
+          data-testid="testLocationViewerDiv"
           class="h-84 mt-4 w-full"
-          @updatedLocation="(latLng) => geocodeWorksite(latLng.lat, latLng.lng)"
           use-google-maps
+          @updatedLocation="(latLng) => geocodeWorksite(latLng.lat, latLng.lng)"
         />
       </div>
 
       <div v-else class="pt-2">
         <div
-          class="
-            rounded-lg
-            shadow-lg
-            p-5
-            border
-            flex
-            justify-center
-            items-center
-            bg-crisiscleanup-green-600
-            text-white
-          "
+          class="rounded-lg shadow-lg p-5 border flex justify-center items-center bg-crisiscleanup-green-600 text-white"
         >
           <ccu-icon
             type="privacy"
+            data-testid="testAddressConfirmedIcon"
             class="mr-2"
             size="small"
             style="margin-top: 3px"
@@ -230,17 +229,26 @@
 
       <hr class="my-4" />
 
-      <div>
+      <div class="w-full">
         <div class="text-lg my-2 font-bold">
           {{ $t('survivorContact.upload_photos') }}
         </div>
         <WorksiteImageSection
-          :worksite="survivorToken"
           :key="JSON.stringify(survivorToken)"
+          :worksite="survivorToken"
           :is-survivor-token="true"
+          data-testid="testUploadPhotosFile"
           @photosChanged="() => getSurvivorToken(true)"
           @image-click="showImage"
         />
+        <base-checkbox
+          :model-value="survivorToken.allow_sharing"
+          @update:modelValue="survivorToken.allow_sharing = $event"
+          class="w-full mt-2"
+          data-testid="survivorContactSharePermissionSwitch"
+        >
+          {{ $t('survivorContact.share_permission') }}
+        </base-checkbox>
       </div>
       <hr class="my-4" />
 
@@ -248,10 +256,12 @@
         <div
           class="text-lg my-2 font-bold"
           v-html="$t('survivorContact.how_often_update')"
+          data-testid="testAutoContactFrequencyDiv"
         ></div>
         <div class="w-full flex text-center text-lg">
           <div
             class="w-1/3 border-t border-b border-r rounded-l-xl p-3"
+            data-testid="testAutoContactFrequencyOftenDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.often'
@@ -267,6 +277,7 @@
           </div>
           <div
             class="w-1/3 border-t border-b border-r p-3"
+            data-testid="testAutoContactFrequencyNotOftenDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.not_often'
@@ -282,6 +293,7 @@
           </div>
           <div
             class="w-1/3 border rounded-r-xl p-3"
+            data-testid="testAutoContactFrequencyNeverDiv"
             :class="
               survivorToken.worksite.auto_contact_frequency_t ===
               'formOptions.never'
@@ -310,47 +322,52 @@
         ></div>
 
         <WorksiteNotes
+          v-if="survivorToken.notes.length > 0"
           :can-add="false"
           :worksite="survivorToken"
-          v-if="survivorToken.notes.length > 0"
         />
 
         <textarea
           v-model="currentNote"
+          data-testid="testAddNoteTextArea"
           rows="5"
-          class="
-            text-base
-            border border-crisiscleanup-dark-100
-            placeholder-crisiscleanup-dark-200
-            outline-none
-            p-2
-            my-2
-            resize-none
-            w-full
-          "
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
           :placeholder="$t('survivorContact.notes')"
           required
         ></textarea>
       </div>
 
       <base-checkbox
+        v-if="!survivorToken.tos_accepted_at"
+        data-testid="testAcceptTermsCheckbox"
         v-model="survivorToken.accept_terms"
         class="block my-1 text-xl"
-        v-if="!survivorToken.tos_accepted_at"
       >
         <div class="privacy" v-html="$t('registerOrg.tos_priv_agree')"></div>
       </base-checkbox>
 
       <base-button
         class="w-full p-5 mt-5 text-2xl"
+        data-testid="testSaveButton"
         variant="solid"
         :disabled="
           !survivorToken.accept_terms && !survivorToken.tos_accepted_at
         "
         :action="saveSurvivorToken"
         :text="$t('actions.save')"
+        :alt="$t('actions.save')"
       />
-
+    </section>
+    <section v-else class="px-8 py-4">
+      <base-text variant="h1">
+        {{
+          $t(
+            '~~Invalid/expired survivor token or worksite does not exist for that survivor token',
+          )
+        }}
+      </base-text>
+    </section>
+    <section class="faqs p-8">
       <div class="text-xl my-2 font-bold">
         {{ $t('survivorContact.faqs') }}
       </div>
@@ -358,6 +375,7 @@
         <li v-for="faq in faqs" :key="faq.id">
           <div
             class="text-lg my-1 font-bold"
+            :data-testid="`testFaq${faq.id}Div`"
             v-html="$t(formatCmsItem(faq.title))"
           ></div>
           <div class="text-lg" v-html="$t(formatCmsItem(faq.content))"></div>
@@ -367,30 +385,66 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
+import axios, { AxiosError } from 'axios';
 import { getErrorMessage } from '@/utils/errors';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import WorksiteSearchInput from '@/components/work/WorksiteSearchInput.vue';
 import GeocoderService from '@/services/geocoder.service';
-import LocationViewer from '@/components/LocationViewer';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
-import WorksiteNotes from '@/pages/WorksiteNotes';
+import LocationViewer from '@/components/locations/LocationViewer.vue';
+import WorksiteImageSection from '@/components/work/WorksiteImageSection.vue';
+import WorksiteNotes from '@/components/work/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
+import survivor from '@/pages/home/Survivor.vue';
+import BaseCheckbox from '@/components/BaseCheckbox.vue';
 
-export default {
+export default defineComponent({
   name: 'Survivors',
+  computed: {
+    survivor() {
+      return survivor;
+    },
+  },
   components: {
+    BaseCheckbox,
     WorksiteNotes,
     WorksiteImageSection,
     LocationViewer,
     WorksiteSearchInput,
   },
-  async mounted() {
-    await this.getFaqs();
-    await this.getSurvivorToken();
-  },
-  data() {
-    return {
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const $toasted = useToast();
+    const { t } = useI18n();
+
+    watch(
+      () => route.params.token,
+      (newToken, oldToken) => {
+        const _token = sanitizeToken(newToken);
+        router.push({
+          name: 'nav.survivors',
+          // replace: true,
+          params: {
+            token: _token,
+          },
+        });
+      },
+      {
+        immediate: true,
+      },
+    );
+
+    const sToken = computed(() => {
+      console.info('asdfsdf', route.params?.token);
+      if (route.params?.token) {
+        return sanitizeToken(route.params.token);
+      }
+      return null;
+    });
+    const state = reactive({
       scale: 1,
       numClicks: 0,
       imageIndex: 0,
@@ -407,75 +461,87 @@ export default {
       currentNote: '',
       getWorkTypeImage,
       formatCmsItem,
-    };
-  },
-  computed: {
-    worksiteAddress() {
-      if (this.survivorToken?.worksite) {
-        // eslint-disable-next-line camelcase
+    });
+
+    const worksiteAddress = computed(() => {
+      if (state.survivorToken?.worksite) {
         const {
           address,
           city,
-          state,
+          state: addressState,
           postal_code: postalCode,
           county,
-        } = this.survivorToken.worksite;
-        return `${address} <br> ${city}, ${state}, ${county || ''} <br> ${
-          postalCode || ''
-        }`;
+        } = state.survivorToken.worksite;
+        return `${address} <br> ${city}, ${addressState}, ${
+          county || ''
+        } <br> ${postalCode || ''}`;
       }
+
       return '';
-    },
-    closedWorkTypes() {
+    });
+
+    const closedWorkTypes = computed(() => {
       return (
-        this.survivorToken &&
-        this.survivorToken.work_types.filter((wt) =>
+        state.survivorToken &&
+        state.survivorToken.work_types.filter((wt) =>
           wt.status.includes('closed'),
         )
       );
-    },
-    openWorkTypes() {
+    });
+
+    const openWorkTypes = computed(() => {
       return (
-        this.survivorToken &&
-        this.survivorToken.work_types.filter((wt) => wt.status.includes('open'))
+        state.survivorToken &&
+        state.survivorToken.work_types.filter((wt) =>
+          wt.status.includes('open'),
+        )
       );
-    },
-  },
-  methods: {
-    showImage(image, index, fileList) {
-      this.imageIndex = index;
-      this.imageList = fileList;
-      this.showImgModal = true;
-    },
-    updateWorkTypesHelpNeeded(value, workTypeToClaim) {
+    });
+
+    function sanitizeToken(token) {
+      return token.replace(/\./g, '');
+    }
+
+    function showImage(image, index, fileList) {
+      state.imageIndex = index;
+      state.imageList = fileList;
+      state.showImgModal = true;
+    }
+
+    function updateWorkTypesHelpNeeded(value, workTypeToClaim) {
       if (value) {
-        this.workTypeHelpNeeded.add(workTypeToClaim.id);
+        state.workTypeHelpNeeded.add(workTypeToClaim.id);
       } else {
-        this.workTypeHelpNeeded.delete(workTypeToClaim.id);
+        state.workTypeHelpNeeded.delete(workTypeToClaim.id);
       }
-      this.workTypeHelpNeeded = new Set(this.workTypeHelpNeeded);
-    },
-    unlockLocationFields() {
-      this.hideDetailedAddressFields = false;
-      this.addressSet = false;
-    },
-    async confirmAddress() {
-      this.survivorToken.confirm_address = true;
-      await this.saveSurvivorToken();
-    },
-    async locateMe() {
-      this.gettingLocation = true;
+
+      state.workTypeHelpNeeded = new Set(state.workTypeHelpNeeded);
+    }
+
+    function unlockLocationFields() {
+      state.hideDetailedAddressFields = false;
+      state.addressSet = false;
+    }
+
+    async function confirmAddress() {
+      state.survivorToken.confirm_address = true;
+      await saveSurvivorToken();
+    }
+
+    async function locateMe() {
+      state.gettingLocation = true;
       try {
-        this.gettingLocation = false;
-        this.location = await this.getLocation();
-        const { latitude, longitude } = this.location.coords;
-        await this.geocodeWorksite(latitude, longitude);
-      } catch (e) {
-        this.gettingLocation = false;
-        this.errorStr = e.message;
+        state.gettingLocation = false;
+        state.location = await getLocation();
+        const { latitude, longitude } = state.location.coords;
+        await geocodeWorksite(latitude, longitude);
+      } catch (error) {
+        state.gettingLocation = false;
+        state.errorStr = error.message;
       }
-    },
-    async geocodeWorksite(latitude, longitude, skipAddress = false) {
+    }
+
+    async function geocodeWorksite(latitude, longitude, skipAddress = false) {
       const geocode = await GeocoderService.getLocationDetails({
         latitude,
         longitude,
@@ -488,21 +554,24 @@ export default {
           'state',
           'postal_code',
         ];
-        geocodeKeys.forEach((key) => {
-          this.survivorToken.worksite[key] = geocode.address_components[key];
-        });
+        for (const key of geocodeKeys) {
+          state.survivorToken.worksite[key] = geocode.address_components[key];
+        }
       }
-      this.survivorToken.worksite.location = {
+
+      state.survivorToken.worksite.location = {
         type: 'Point',
         coordinates: [longitude, latitude],
       };
       return geocode;
-    },
-    async getLocation() {
+    }
+
+    async function getLocation() {
       return new Promise((resolve, reject) => {
         if (!('geolocation' in navigator)) {
           reject(new Error('Geolocation is not available.'));
         }
+
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             resolve(pos);
@@ -512,95 +581,137 @@ export default {
           },
         );
       });
-    },
-    async geocoderSearch(value) {
-      this.geocoderResults = await GeocoderService.getMatchingAddresses(
+    }
+
+    async function geocoderSearch(value) {
+      state.geocoderResults = await GeocoderService.getMatchingAddresses(
         value,
         'USA',
       );
-    },
-    async onGeocodeSelect(value) {
+    }
+
+    async function onGeocodeSelect(value) {
       const geocode = await GeocoderService.getPlaceDetails(
         value.description,
         value.data.place_id,
       );
       const { lat, lng } = geocode.location;
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach((key) => {
-        this.survivorToken.worksite[key] = geocode.address_components[key];
-      });
+      for (const key of geocodeKeys) {
+        state.survivorToken.worksite[key] = geocode.address_components[key];
+      }
 
-      this.survivorToken.worksite.location = {
+      state.survivorToken.worksite.location = {
         type: 'Point',
         coordinates: [lng, lat],
       };
 
-      this.hideDetailedAddressFields = true;
-      this.addressSet = true;
+      state.hideDetailedAddressFields = true;
+      state.addressSet = true;
 
-      this.$log.debug(geocode.location);
+      // this.$log.debug(geocode.location);
       // await this.updateWorksiteFields(geocode);
-    },
-    async getSurvivorToken(filesOnly = false) {
-      this.loading = true;
+    }
+
+    async function getSurvivorToken(filesOnly = false) {
+      state.loading = true;
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}`,
+        const result = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
+            sToken.value
+          }`,
           {
             headers: {
               Authorization: null,
             },
           },
         );
+        if (result instanceof AxiosError && result.response.status === 404) {
+          $toasted.error(
+            '~~Survivor Token not found. Worksite might be deleted',
+          );
+        }
         if (filesOnly) {
-          this.survivorToken.files = response.data.files;
+          state.survivorToken.files = result.data.files;
         } else {
-          this.survivorToken = response.data;
+          if (result.data) {
+            state.survivorToken = result.data;
+            state.survivorToken.allow_sharing =
+              !!state.survivorToken.permission_public_share_at;
+          }
         }
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-        this.$log.debug(error);
+        await $toasted.error(getErrorMessage(error));
+        // this.$log.debug(error);
       } finally {
-        this.loading = false;
+        state.loading = false;
       }
-    },
-    async saveSurvivorToken() {
-      document.getElementById('header').scrollIntoView();
-      this.loading = true;
+    }
+
+    async function saveSurvivorToken() {
+      document.querySelector('#header').scrollIntoView();
+      state.loading = true;
       try {
-        await this.$http.put(
-          `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}`,
+        await axios.put(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
+            sToken.value
+          }`,
           {
-            ...this.survivorToken,
-            help_needed_work_types: Array.from(this.workTypeHelpNeeded),
+            ...state.survivorToken,
+            help_needed_work_types: [...state.workTypeHelpNeeded],
           },
         );
-        if (this.currentNote) {
-          await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}/notes`,
-            { note: this.currentNote },
+        if (state.currentNote) {
+          await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/survivor_tokens/${
+              sToken.value
+            }/notes`,
+            { note: state.currentNote },
           );
-          this.currentNote = '';
+          state.currentNote = '';
         }
-        await this.$toasted.success(
-          this.$t('survivorContact.case_update_success'),
-        );
-        await this.getSurvivorToken();
+
+        await $toasted.success(t('survivorContact.case_update_success'));
+        await getSurvivorToken();
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-        this.$log.debug(error);
+        await $toasted.error(getErrorMessage(error));
+        // this.$log.debug(error);
       } finally {
-        this.loading = false;
+        state.loading = false;
       }
-    },
-    async getFaqs() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=faq`,
+    }
+
+    async function getFaqs() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=faq`,
       );
-      this.faqs = response.data.results;
-    },
+      state.faqs = response.data.results;
+    }
+
+    onMounted(async () => {
+      await getFaqs();
+      await getSurvivorToken();
+    });
+
+    return {
+      ...toRefs(state),
+      worksiteAddress,
+      closedWorkTypes,
+      openWorkTypes,
+      showImage,
+      updateWorkTypesHelpNeeded,
+      unlockLocationFields,
+      confirmAddress,
+      locateMe,
+      geocodeWorksite,
+      geocoderSearch,
+      onGeocodeSelect,
+      getSurvivorToken,
+      saveSurvivorToken,
+      getFaqs,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

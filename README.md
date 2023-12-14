@@ -2,26 +2,53 @@
 
 # Crisis Cleanup
 
-Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 631,620 volunteers from 1,919 organizations with 128,080 households in 55 states/provinces and 157 disasters in 7 countries; a new disaster every two weeks.
+<!-- Badges -->
+<p>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/main.yml" >
+    <img src="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/main.yml/badge.svg"/>
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/deploy.yml" >
+    <img src="https://github.com/CrisisCleanup/crisiscleanup-4-web/actions/workflows/deploy.yml/badge.svg"/>
+  </a>
+  <a href="https://codecov.io/gh/CrisisCleanup/crisiscleanup-4-web" >
+    <img src="https://codecov.io/gh/CrisisCleanup/crisiscleanup-4-web/branch/master/graph/badge.svg?token=O8D9FKSJJR"/>
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/issues/">
+    <img src="https://img.shields.io/github/issues/CrisisCleanup/crisiscleanup-4-web" alt="open issues" />
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/github/last-commit/CrisisCleanup/crisiscleanup-4-web" alt="last update" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/CrisisCleanup/crisiscleanup-4-web" alt="contributors" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/stargazers">
+    <img src="https://img.shields.io/github/stars/CrisisCleanup/crisiscleanup-4-web" alt="stars" />
+  </a>
+  <a href="https://github.com/CrisisCleanup/crisiscleanup-4-web/network/members">
+    <img src="https://img.shields.io/github/forks/CrisisCleanup/crisiscleanup-4-web" alt="forks" />
+  </a>
+</p>
 
-Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction. 
+Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 600,000+ volunteers from 2,500+ organizations with 140,000+ households in 55 states/provinces and 207 disasters in 7 countries; a new disaster every two weeks.
 
-Other Project Stats (As of 2020-10-17)
--------------
+Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction.
 
- - 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
- - 32,020: Households that could not have been helped without Crisis Cleanup.
- - 7.7 Million: Number of volunteer hours facilitated.
- - 1,920,000: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
- - $733.2 Million: Minimum total market value of services to survivors.
- - $1,161: Value of each cleanup volunteer to his/her community.
- - $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
- - $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
- - $9,052: Average commercial value of service to each homeowner.
- - $157: Return on investment to survivors, for every $1 invested in Crisis Cleanup.
-How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
+## Other Project Stats (As of 2023-03-13)
+
+- 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
+- 35,000+: Households that could not have been helped without Crisis Cleanup.
+- 5.6 Million: Number of volunteer hours facilitated.
+- 1.4 Million: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
+- $1.695 Billion: Minimum total market value of services to survivors.
+- $1,741: Value of each cleanup volunteer to his/her community.
+- $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
+- $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
+- $9,052: Average commercial value of service to each homeowner.
+  How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
 
 # Contributing
+
 To preserve our ability to provide open source humanitarian disaster software, all contributions are subject to the terms of the relevant [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) downloadable at [crisiscleanup.org/contributions](https://www.crisiscleanup.org/contributions).
 
 Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-web/blob/master/CONTRIBUTING.md) for important details.
@@ -30,88 +57,144 @@ Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-w
 
 ## Project Setup
 
-Clone the repository to your machine and install the dependencies via:
+### Tools
 
-```sh
- $ git clone https://github.com/CrisisCleanup/crisiscleanup-3-web.git
- $ cd ./crisiscleanup-3-web
- $ yarn install
+#### ASDF VM
+
+Install [asdf](https://asdf-vm.com/#/) version manager.
+
+After installing `asdf`, add all the plugins found in
+the [.tool-versions](.tool-versions) file.
+
+```bash
+# Add all the plugins to asdf.
+cat .tool-versions | awk '{print $1}' | xargs -I _ asdf plugin add _
+
+# Install all according to .tool-versions.
+asdf install
 ```
 
-## Configuration
+**OR**
 
-To enable all of Crisis Cleanup's features, you must create and populate a `.env` file.
+#### RTX
 
-A sample of what this should look like can be found [here](.env.sample).
+_Note: You can also use [`asdf`](https://github.com/asdf-vm/asdf) if you already have it installed and working_
 
-## Running Locally
+- Install [rtx](https://github.com/jdxcode/rtx) (asdf clone in rust).
 
-When modifying Crisis Cleanup, you can begin serving it via:
+- Follow instructions on hooking rtx into your shell [here](https://github.com/jdxcode/rtx#quickstart)
 
-```sh
-  $ yarn serve-dev
-  $ sensible-browser http://localhost:8080 # defaults to port 8080
+- After installing `rtx`, add all the plugins found in the [.tool-versions](.tool-versions) file.
+
+  ```bash
+  # Add all the plugins.
+  cat .tool-versions | awk '{print $1}' | xargs -I _ rtx plugin add _
+
+  # Install all according to .tool-versions.
+  rtx install
+  ```
+
+- You should now have all the tools required (defined in [.tool-versions](.tool-versions)) to run this project.
+
+Performing this step should install all tools required to run this project.
+
+#### Direnv
+
+[`direnv`](https://direnv.net/) is an extension for your shell. It augments existing shells with a new feature that can load and unload environment variables depending on the current directory.
+
+- Install: https://direnv.net/docs/installation.html
+- Hook with your shell: https://direnv.net/docs/hook.html
+- Install [asdf-plugin](https://github.com/asdf-community/asdf-direnv) for direnv
+
+> For more detailed instructions on asdf + direnv setup, please refer to [this guide](https://docs.arroyodev.com/setups/setup-asdf-direnv/)
+
+##### Environment
+
+See [`.envrc`](.envrc) file for list of environment varibles needed for this project. Create `.envrc.local` file
+with the required env vars from `.envrc` file.
+
+Here are some `.envrc.local` file examples:
+
+Example 1:
+
+You may use `.env` file to load variables with `dotenv`. See [`.env.sample`](.env.sample) for an example.
+
+```bash
+#!/usr/bin/env bash
+
+# dotenv .env
+
+# Staging
+dotenv .env.staging
+
+# Dev
+#dotenv .env.dev
+
+# Proxy
+# dotenv .env.proxy
+
+# Prod
+# dotenv .env.prod
 ```
 
-> You can also serve the site via a docker service:
-> ```sh
->  $ docker-compose build
->  $ docker-compose up dev # or prod for production
-> ```
+Example 2:
 
-This will enable hot module reloading among other developer tools to aid you.
+```bash
+#!/usr/bin/env bash
 
-To preview a production build locally, execute:
-```sh
- $ yarn serve
- $ sensible-browser http://localhost:8080 # default port
+# Options: staging | dev | proxy | prod | test | sample
+export CCU_ENV="${CCU_ENV:-staging}"
+env_file=".env"
+
+# check if env variable is set
+if [ -n "$CCU_ENV" ]; then
+  env_file=".env.$CCU_ENV"
+fi
+
+if [ ! -f "$env_file" ]; then
+  log_error "Environment file $env_file not found"
+  exit 1
+fi
+
+log_status "----------------------------------------------------------"
+log_status "Loading environment variables from $env_file"
+log_status "----------------------------------------------------------"
+dotenv "$env_file"
+
+# Env Vars
+export VUE_EDITOR=webstorm
+
+# More Env Vars ...
 ```
 
-This will enable the code optimizations that would be present in a live environment.
+#### Dependencies
 
-Finally, you can compile a production-ready, minified version via:
-```sh
-  $ yarn build
-  $ npx http-server ./dist
-  $ sensible-browser http://localhost:8080
+Clone the repository and install dependencies via:
+
+```bash
+$ pnpm install
 ```
 
-### Testing
+Run dev server:
 
-For unit tests, Crisis Cleanup uses [Jest](https://jestjs.io/). You can run the full test suite via:
-
-```sh
-  $ yarn test:unit
+```bash
+$ pnpm dev
 ```
 
-For end-to-end testing, Cypress is utilized. You can run all e2e specs via:
+#### Build
 
-```sh
-  $ yarn serve
-  $ yarn test:e2e  # or test:e2e:hl to run headlessly
+```bash
+pnpm run build
 ```
 
-Any recorded e2e test sessions can be found at: http://cypress.crisiscleanup.io
+#### Test
 
-### Linting
+```bash
+pnpm run test
 
-Utilizing [prettier](https://prettier.io/) and [ESLint](https://eslint.org/), CrisisCleanup enforces strict code style guidelines.
+# Show coverage
+pnpm run test:cov
 
-You can automagically format your code to comply with:
-
-```sh
-  $ yarn format  # executes eslint --fix and prettier --write
+# Run e2e tests
+pnpm run test:e2e
 ```
-
-### Storybook
-
-We use [Storybook](https://storybook.js.org/) for building our components in isolation and for documentation.
-
-You can run our storybook locally and add additional ones via:
-
-```sh
-  $ yarn storybook
-  $ sensible-browser http://localhost:6006 # port defaults to 6006
-```
-
-The live storybook can be found at: https://storybook.crisiscleanup.io

@@ -1,12 +1,13 @@
 import moment from 'moment';
 import Bowser from 'bowser';
-import * as Sentry from '@sentry/browser';
-import { AuthService } from '@/services/auth.service';
-import Language from '@/models/Language';
-import Role from '@/models/Role';
-import CCUModel from '@/models/model';
+import * as Sentry from '@sentry/vue';
+import type { Config } from '@vuex-orm/plugin-axios';
+import { AuthService } from '../services/auth.service';
+import Language from './Language';
+import Role from './Role';
+import CCUModel from '@/models/base';
 
-export default class User extends CCUModel<User> {
+export default class User extends CCUModel {
   static entity = 'users';
 
   id!: string;
@@ -27,6 +28,8 @@ export default class User extends CCUModel<User> {
 
   last_name!: string;
 
+  email!: string;
+
   mobile!: string;
 
   accepted_terms_timestamp!: string;
@@ -36,8 +39,13 @@ export default class User extends CCUModel<User> {
   social!: Record<string, any>;
 
   files!: any[];
+  approved_incidents!: any[];
 
   lineage!: any[];
+
+  permissions!: Record<string, boolean>;
+
+  beta_features!: string[];
 
   static fields() {
     return {
@@ -64,35 +72,37 @@ export default class User extends CCUModel<User> {
     };
   }
 
-  static afterUpdate(model) {
+  static afterUpdate(model: User) {
     if (model.id === User.store().getters['auth/userId']) {
       AuthService.updateUser(model.$toJson());
       Sentry.setUser(model.$toJson());
       Sentry.setContext('user_states', model.states);
       Sentry.setContext('user_preferences', model.preferences);
-      User.store().commit('auth/setAcl', window.vue.$router);
+      // User.store().commit("auth/setAcl", useRouter());
     }
   }
 
   get hasProfilePicture() {
-    if (this.files && this.files.length) {
+    if (this.files && this.files.length > 0) {
       const profilePictures = this.files.filter(
         (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
       return profilePictures.length;
     }
+
     return false;
   }
 
   get profilePictureUrl() {
-    if (this.files && this.files.length) {
+    if (this.files && this.files.length > 0) {
       const profilePictures = this.files.filter(
         (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
-      if (profilePictures.length) {
+      if (profilePictures.length > 0) {
         return profilePictures[0].large_thumbnail_url;
       }
     }
+
     return `https://avatars.dicebear.com/api/bottts/${this.full_name}.svg`;
   }
 
@@ -109,9 +119,24 @@ export default class User extends CCUModel<User> {
     if (this.primary_language) {
       languageList.push(Language.find(this.primary_language));
     }
+
     if (this.secondary_language) {
       languageList.push(Language.find(this.secondary_language));
     }
+
+    return languageList;
+  }
+
+  get languageIds() {
+    const languageList: any[] = [];
+    if (this.primary_language) {
+      languageList.push(this.primary_language);
+    }
+
+    if (this.secondary_language) {
+      languageList.push(this.secondary_language);
+    }
+
     return languageList;
   }
 
@@ -122,6 +147,7 @@ export default class User extends CCUModel<User> {
     if (this.preferences && this.preferences.notification_settings) {
       return this.preferences.notification_settings;
     }
+
     return settings;
   }
 
@@ -145,7 +171,7 @@ export default class User extends CCUModel<User> {
     return this.active_roles.includes(3);
   }
 
-  getStatesForIncident(incidentId, fallback = true) {
+  getStatesForIncident(incidentId: string, fallback = true) {
     if (
       this.states &&
       this.states.incidents &&
@@ -153,15 +179,17 @@ export default class User extends CCUModel<User> {
     ) {
       return this.states.incidents[incidentId];
     }
+
     if (fallback) {
       return this.states;
     }
+
     return null;
   }
 
-  static apiConfig = {
+  static apiConfig: Config = {
     actions: {
-      login(email, password) {
+      login(email: string, password: string) {
         return this.post(
           `/api-token-auth`,
           {
@@ -171,16 +199,24 @@ export default class User extends CCUModel<User> {
           { save: false },
         );
       },
-      inviteUser(email, organization = null) {
+      inviteUser(email: string, organization = null) {
         const data: Record<string, any> = {
           invitee_email: email,
         };
         if (organization) {
           data.organization = organization;
         }
+
         return this.post(`/invitations`, data, { save: false });
       },
-      acceptInvite({ token, first_name, last_name, password, mobile, title }) {
+      acceptInvite({
+        token,
+        first_name,
+        last_name,
+        password,
+        mobile,
+        title,
+      }: Record<string, any>) {
         return this.post(
           `/invitations/accept`,
           {
@@ -194,10 +230,10 @@ export default class User extends CCUModel<User> {
           { save: false },
         );
       },
-      orphan(id) {
+      orphan(id: string) {
         return this.patch(`/users/${id}/orphan`);
       },
-      addFile(id, file, type) {
+      addFile(id: string, file: string, type: string) {
         return this.post(
           `/users/${id}/files`,
           {
@@ -207,7 +243,7 @@ export default class User extends CCUModel<User> {
           { save: false },
         );
       },
-      deleteFile(id, file) {
+      deleteFile(id: string, file: string) {
         return this.delete(
           `/users/${id}/files`,
           {
@@ -238,7 +274,11 @@ export default class User extends CCUModel<User> {
         );
         await this.get('/users/me');
       },
-      async updateUserState(globalStates, incidentStates, reload = false) {
+      async updateUserState(
+        globalStates: Record<string, any>,
+        incidentStates: Record<string, any>,
+        reload = false,
+      ) {
         /* Update user states JSON with new states.
 
            To be backwards-compatible with clients without per-incident states,
@@ -252,7 +292,7 @@ export default class User extends CCUModel<User> {
         }
 
         const states = (currentUser && currentUser.states) || {};
-        const currentIncident = states.incident;
+        const currentIncident = globalStates.incident || states.incident;
         let updatedStates = {
           ...states,
           ...globalStates,
@@ -260,14 +300,21 @@ export default class User extends CCUModel<User> {
         };
         let updatedIncidentStates = states.incidents || {};
         if (incidentStates) {
+          const currentIncidentStates =
+            updatedIncidentStates[currentIncident] || {};
           updatedIncidentStates = {
             ...updatedIncidentStates,
-            [currentIncident]: incidentStates,
+            [currentIncident]: {
+              ...currentIncidentStates,
+              ...incidentStates,
+            },
           };
         }
+
         updatedStates = {
           ...updatedStates,
-          ...{ incidents: updatedIncidentStates },
+          incidents: updatedIncidentStates,
+          // eslint-disable-next-line import/no-named-as-default-member
           userAgent: Bowser.parse(window.navigator.userAgent),
         };
         await User.update({
@@ -276,7 +323,7 @@ export default class User extends CCUModel<User> {
             states: updatedStates,
           },
         });
-        currentUser = User.find(AuthService.getUser().user_claims.id);
+        currentUser = User.find(AuthService.getUser()?.id);
         await this.patch(
           `/users/${currentUser?.id}`,
           {
@@ -288,11 +335,15 @@ export default class User extends CCUModel<User> {
           await this.get('/users/me');
         }
       },
-      async updateUserPreferences(preferences, reload = false) {
-        const currentUser = User.find(AuthService.getUser().user_claims.id);
+      async updateUserPreferences(
+        preferences: Record<string, any>,
+        reload = false,
+      ) {
+        const currentUser = User.find(AuthService.getUser()?.id);
         if (!currentUser) {
           return;
         }
+
         const newPreferences = {
           ...currentUser.preferences,
           ...preferences,
@@ -309,12 +360,12 @@ export default class User extends CCUModel<User> {
         }
       },
       async acceptTerms() {
-        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        const currentUser = User.find(AuthService.getUser()?.id);
         await this.patch(`/users/${currentUser?.id}`, {
           accepted_terms: true,
           accepted_terms_timestamp: moment().toISOString(),
         });
       },
-    } as any,
+    },
   };
 }

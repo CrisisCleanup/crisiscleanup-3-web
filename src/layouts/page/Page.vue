@@ -1,30 +1,30 @@
 <template>
-  <Loader
-    :loading="isLoading"
-    class="pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
-  >
-    <template #content>
-      <template v-if="tabs">
-        <PageTabBar :tabs="tabs" />
-      </template>
-      <slot></slot>
+  <template v-if="!isLoading">
+    <template v-if="tabs">
+      <PageTabBar :tabs="tabs" />
     </template>
-  </Loader>
+    <slot></slot>
+  </template>
+  <div v-else class="flex h-screen items-center justify-center">
+    <spinner data-testid="testSpinnerLoadingIcon" size="xl" show-quote/>
+  </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
-import Loader from '@/components/Loader.vue';
+<script lang="ts">
 import PageTabBar from './PageTabBar.vue';
 
-export default {
+export default defineComponent({
   name: 'PageLayout',
-  components: { Loader, PageTabBar },
+  components: { PageTabBar },
   props: {
-    isLoading: VueTypes.bool.def(false),
-    tabs: PageTabBar.props.tabs.def(null),
+    isLoading: {
+      type: Boolean,
+    },
+    tabs: {
+      type: PageTabBar.props.tabs,
+    },
   },
-};
+});
 </script>
 
 <style scoped></style>

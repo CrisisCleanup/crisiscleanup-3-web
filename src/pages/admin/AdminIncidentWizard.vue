@@ -1,12 +1,15 @@
 <template>
-  <div class="relative h-full w-full flex flex-col">
-    <div class="text-2xl font-bold text-center my-2" v-if="savedIncident">
+  <div
+    class="relative h-full w-full flex flex-col"
+    data-testid="testGeneralIncidentInfoDiv"
+  >
+    <div v-if="savedIncident" class="text-2xl font-bold text-center my-2">
       {{ savedIncident.id }}: {{ savedIncident.name }}
     </div>
 
     <Wizard
-      class="flex-grow"
       ref="steps"
+      class="flex-grow"
       step-classes="text-xs"
       step-details-classes="p-2 pt-16"
       step-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
@@ -20,17 +23,17 @@
         <div class="grid grid-cols-2 gap-2">
           <Card>
             <IncidentForm
+              :key="savedIncident"
+              :incident="savedIncident"
+              :ani-incidents="savedAniIncidents"
               @onIncidentChange="currentIncident = $event"
               @onAniChange="currentAni = $event"
               @onDeleteAniIncident="deleteAniIncident"
-              :incident="savedIncident"
-              :ani-incidents="savedAniIncidents"
-              :key="savedIncident"
             />
           </Card>
           <IncidentLocationEditor
-            :location="currentIncidentLocation"
             :key="currentIncidentLocation"
+            :location="currentIncidentLocation"
             @onLocationChange="currentLocation = $event"
           />
         </div>
@@ -40,9 +43,9 @@
         :on-save="saveIncidentFields"
       >
         <IncidentFormBuilder
-          @onUpdateForm="formFieldTree = $event"
-          :incident="savedIncident"
           :key="savedIncident"
+          :incident="savedIncident"
+          @onUpdateForm="formFieldTree = $event"
         />
       </Step>
       <Step :name="$t('incidentBuilder.assets')">
@@ -55,6 +58,7 @@
               <base-button
                 :text="$t('actions.create')"
                 :alt="$t('actions.create')"
+                data-testid="testCreateButton"
                 variant="solid"
                 class="px-2 py-1"
                 :action="() => {}"
@@ -69,16 +73,20 @@
   </div>
 </template>
 
-<script>
-import Wizard from '@/components/wizard/Wizard';
-import Step from '@/components/wizard/Step';
-import Card from '@/components/cards/Card';
+<script lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import axios from 'axios';
+import moment from 'moment';
+import { useRoute } from 'vue-router';
+import Wizard from '@/components/wizard/Wizard.vue';
+import Step from '@/components/wizard/Step.vue';
+import Card from '@/components/cards/Card.vue';
 import Incident from '@/models/Incident';
-import IncidentForm from '@/components/admin/incidents/IncidentForm';
-import IncidentFormBuilder from '@/components/admin/incidents/IncidentFormBuilder';
-import IncidentLocationEditor from '@/pages/admin/IncidentLocationEditor';
+import IncidentForm from '@/components/admin/incidents/IncidentForm.vue';
+import IncidentFormBuilder from '@/components/admin/incidents/IncidentFormBuilder.vue';
+import IncidentLocationEditor from '@/components/admin/incidents/IncidentLocationEditor.vue';
 
-export default {
+export default defineComponent({
   name: 'AdminIncidentWizard',
   components: {
     IncidentLocationEditor,
@@ -88,45 +96,58 @@ export default {
     Step,
     Wizard,
   },
-  data() {
-    return {
-      currentIncident: {
-        name: '',
-        short_name: '',
-        timezone: '',
-        case_label: '',
-        incident_type: '',
-        start_at: null,
-      },
-      currentAni: {
-        anis: [],
-        start_at: null,
-        end_at: null,
-        timezone: '',
-        use_hotline: false,
-      },
-      currentLocation: null,
-      formFieldTree: null,
-      savedIncident: null,
-      savedAniIncidents: [],
-      loading: false,
-    };
-  },
-  async mounted() {
-    if (this.$route.params.incident_id) {
-      await this.loadIncident(this.$route.params.incident_id);
-    }
-  },
+  setup(props, { emit }) {
+    const route = useRoute();
 
-  methods: {
-    async loadIncident(id) {
-      this.loading = true;
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/${id}`,
+    const currentIncident = ref({
+      name: '',
+      short_name: '',
+      timezone: '',
+      case_label: '',
+      incident_type: '',
+      start_at: null,
+    });
+    const currentAni = ref({
+      anis: [],
+      start_at: null,
+      end_at: null,
+      timezone: '',
+      use_hotline: false,
+    });
+    const currentLocation = ref(null);
+    const formFieldTree = ref(null);
+    const savedIncident = ref(null);
+    const savedAniIncidents = ref([]);
+    const loading = ref(false);
+
+    const handBillUrl = computed(() => {
+      if (savedIncident.value) {
+        return `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${
+          savedIncident.value.id
+        }/handbill`;
+      }
+
+      return null;
+    });
+
+    const currentIncidentLocation = computed(() => {
+      if (savedIncident.value && savedIncident.value.locations.length > 0) {
+        return savedIncident.value.locations[
+          savedIncident.value.locations.length - 1
+        ];
+      }
+
+      return null;
+    });
+
+    async function loadIncident(id) {
+      loading.value = true;
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${id}`,
       );
 
-      const aniIncidentResponse = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/ani_incidents`,
+      const aniIncidentResponse = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/ani_incidents`,
         {
           params: {
             incident: id,
@@ -134,124 +155,141 @@ export default {
         },
       );
 
-      this.savedAniIncidents = aniIncidentResponse.data.results;
-      this.savedIncident = response.data;
-      this.currentIncident = {
-        ...this.savedIncident,
+      savedAniIncidents.value = aniIncidentResponse.data.results;
+      savedIncident.value = response.data;
+      currentIncident.value = {
+        ...savedIncident.value,
       };
-      this.loading = false;
-    },
+      loading.value = false;
+    }
 
-    async saveIncidentFields() {
+    async function saveIncidentFields() {
       const result = [];
-      const stack = [...this.formFieldTree];
+      const stack = [...formFieldTree.value];
       while (stack.length > 0) {
         const current = stack.pop();
 
         result.push(current);
 
         if (current.children && current.children.length > 0) {
-          [...current.children].forEach((child, index) => {
+          for (const [index, child] of [...current.children].entries()) {
             child.field_parent_key = current.field_key;
             child.list_order = index;
             if (!child.phase) {
               child.phase = 4;
             }
-            return stack.push(child);
-          });
+
+            stack.push(child);
+            continue;
+          }
         }
       }
-      this.loading = true;
+
+      loading.value = true;
 
       try {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/incident_forms`,
+        await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/incident_forms`,
           {
             fields: result,
-            incident: this.savedIncident.id,
+            incident: savedIncident.value.id,
           },
         );
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    updateIncident(value, key) {
+    }
+
+    function updateIncident(value, key) {
       Incident.update({
-        where: this.currentIncident.id,
+        where: currentIncident.value.id,
         data: {
           [key]: value,
         },
       });
-    },
-    async saveIncident() {
+    }
+
+    async function saveIncident() {
       let response;
-      if (this.savedIncident?.id) {
-        response = await this.$http.patch(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.savedIncident.id}`,
+      if (savedIncident.value?.id) {
+        response = await axios.patch(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/incidents/${
+            savedIncident.value.id
+          }`,
           {
-            ...this.currentIncident,
-            start_at: this.$moment(this.currentIncident.start_at),
+            ...currentIncident.value,
+            start_at: moment(currentIncident.value.start_at),
           },
         );
       } else {
-        response = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents`,
+        response = await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/incidents`,
           {
-            ...this.currentIncident,
-            start_at: this.$moment(this.currentIncident.start_at),
+            ...currentIncident.value,
+            start_at: moment(currentIncident.value.start_at),
           },
         );
       }
+
       const incidentId = response.data.id;
 
-      if (this.currentLocation?.id) {
-        await Incident.api().addLocation(incidentId, this.currentLocation.id);
+      if (currentLocation.value?.id) {
+        await Incident.api().addLocation(incidentId, currentLocation.value.id);
       }
 
-      if (this.currentAni.anis.length) {
+      if (currentAni.value.anis.length > 0) {
         const promises = [];
-        this.currentAni.anis.forEach((ani) => {
+        for (const ani of currentAni.value.anis) {
           promises.push(
-            this.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/ani_incidents`,
+            axios.post(
+              `${import.meta.env.VITE_APP_API_BASE_URL}/ani_incidents`,
               {
                 ani,
                 incident: incidentId,
-                start_at: this.$moment(this.currentAni.start_at),
-                end_at: this.$moment(this.currentAni.end_at),
+                start_at: moment(currentAni.value.start_at),
+                end_at: moment(currentAni.value.end_at),
               },
             ),
           );
-        });
+        }
+
         await Promise.all(promises);
       }
 
-      await this.loadIncident(incidentId);
-    },
-    async deleteAniIncident(id) {
-      await this.$http.delete(
-        `${process.env.VUE_APP_API_BASE_URL}/ani_incidents/${id}`,
+      await loadIncident(incidentId);
+    }
+
+    async function deleteAniIncident(id) {
+      await axios.delete(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/ani_incidents/${id}`,
       );
-      this.savedAniIncidents = this.savedAniIncidents.filter(
+      savedAniIncidents.value = savedAniIncidents.value.filter(
         (aniIncident) => aniIncident.id !== id,
       );
-    },
-  },
-  computed: {
-    handBillUrl() {
-      if (this.savedIncident) {
-        return `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.savedIncident.id}/handbill`;
+    }
+
+    onMounted(async () => {
+      if (route.params.incident_id) {
+        await loadIncident(route.params.incident_id);
       }
-      return null;
-    },
-    currentIncidentLocation() {
-      if (this.savedIncident && this.savedIncident.locations.length) {
-        return this.savedIncident.locations[
-          this.savedIncident.locations.length - 1
-        ];
-      }
-      return null;
-    },
+    });
+
+    return {
+      loadIncident,
+      saveIncidentFields,
+      updateIncident,
+      saveIncident,
+      deleteAniIncident,
+      currentIncident,
+      currentAni,
+      currentLocation,
+      formFieldTree,
+      savedIncident,
+      savedAniIncidents,
+      loading,
+      handBillUrl,
+      currentIncidentLocation,
+    };
   },
-};
+});
 </script>

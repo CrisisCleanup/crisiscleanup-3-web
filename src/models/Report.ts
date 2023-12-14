@@ -1,12 +1,13 @@
-import { Model } from '@vuex-orm/core';
 import moment from 'moment';
-import Role from '@/models/Role';
+import Role from './Role';
+import CCUModel from '@/models/base';
 
-export default class Report extends Model {
+export default class Report extends CCUModel {
   static entity = 'reports';
 
   id!: string;
 
+  name_t!: string;
   paid_for_statement!: string;
 
   created_at!: string;
@@ -35,7 +36,7 @@ export default class Report extends Model {
 
   static apiConfig = {
     actions: {
-      addFile(id, file, type) {
+      addFile(id: string, file: any, type: string) {
         return this.post(
           `/reports/${id}/files`,
           {
@@ -45,7 +46,7 @@ export default class Report extends Model {
           { save: false },
         );
       },
-      deleteFile(id, file) {
+      deleteFile(id: string, file: any) {
         return this.delete(
           `/reports/${id}/files`,
           {

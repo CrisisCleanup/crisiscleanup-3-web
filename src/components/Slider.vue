@@ -2,21 +2,18 @@
   <div class="flex flex-col" :style="[cssVars]">
     <div class="flex justify-between">
       <span
-        class="
-          text-crisiscleanup-grey-900 text-sm
-          mx-1
-          flex
-          items-center
-          justify-start
-        "
+        class="text-crisiscleanup-grey-900 text-sm mx-1 flex items-center justify-start"
       >
-        {{ from }}
+        <span class="cursor-pointer" @click="$emit('input', Number(1))">{{
+          from
+        }}</span>
         <ccu-icon
           v-if="fromTooltip"
           v-tooltip="{
             content: fromTooltip,
-            trigger: 'click',
-            classes: 'interactive-tooltip w-auto',
+            triggers: ['click'],
+            popperClass: 'interactive-tooltip w-auto',
+            html: true,
           }"
           :alt="$t('actions.help_alt')"
           type="help"
@@ -25,18 +22,15 @@
       </span>
       <div>
         <span
-          class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
           v-if="title"
+          :data-testid="`testSlider${title}Input`"
+          class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
           >{{ title }}</span
         >
       </div>
       <span
-        class="
-          text-crisiscleanup-grey-900 text-sm
-          items-center
-          justify-start
-          mx-1
-        "
+        class="text-crisiscleanup-grey-900 text-sm items-center justify-start mx-1 cursor-pointer"
+        @click="$emit('input', Number(max))"
         >{{ to }}</span
       >
     </div>
@@ -45,18 +39,21 @@
         class="range-slider__range flex-auto"
         :class="[sliderClass, { activated: value < max }]"
         type="range"
-        @input="update"
         :value="value"
         :min="min"
         :max="max"
         :step="step"
+        @input="update"
+        @input.stop=""
       />
     </div>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { computed } from 'vue';
+
+export default defineComponent({
   name: 'Slider',
   props: {
     value: {
@@ -113,23 +110,27 @@ export default {
       required: false,
     },
   },
-  methods: {
-    update(e) {
+  setup(props, { emit }) {
+    function update(e) {
       const { value } = e.target;
-      this.$emit('input', Number(value));
-    },
-  },
-  computed: {
-    cssVars() {
+      emit('input', Number(value));
+    }
+
+    const cssVars = computed(() => {
       return {
-        '--primary-color': this.primaryColor,
-        '--secondary-color': this.secondaryColor,
-        '--handle-size': this.handleSize,
-        '--track-size': this.trackSize,
+        '--primary-color': props.primaryColor,
+        '--secondary-color': props.secondaryColor,
+        '--handle-size': props.handleSize,
+        '--track-size': props.trackSize,
       };
-    },
+    });
+
+    return {
+      update,
+      cssVars,
+    };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

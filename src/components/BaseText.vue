@@ -5,10 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from '@vue/composition-api';
-import { TEXT_VARIANTS as VARIANTS } from '@/constants';
+import type { PropType } from 'vue';
+import { defineComponent, computed } from 'vue';
+import type { TEXT_VARIANTS as VARIANTS } from '../constants';
 
-type Variant = typeof VARIANTS[number];
+type Variant = (typeof VARIANTS)[number];
 type Font = 'sans' | 'display';
 
 export default defineComponent({
@@ -58,15 +59,19 @@ export default defineComponent({
         // weight prop takes priority.
         return { fontWeight: props.weight };
       }
+
       if (props.bold) {
         return { fontWeight: 700 };
       }
+
       if (props.semiBold) {
         return { fontWeight: 600 };
       }
+
       if (props.regular) {
         return { fontWeight: 400 };
       }
+
       return {};
     });
 

@@ -1,26 +1,29 @@
 <template>
   <modal
-    modal-classes="max-w-xl"
+    modal-classes="md:max-w-xl"
+    data-testid="testUserEditModal"
     :title="$t('profileUser.edit_user')"
     closeable
     @close="$emit('close')"
   >
-    <div class="flex px-10 py-5">
-      <div class="w-1/2 flex items-start justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 px-10 py-5">
+      <div class="flex items-start justify-center">
         <img
           class="rounded-full profile-image mr-16 w-40"
+          data-testid="testProfilePictureIcon"
           :src="user.profilePictureUrl"
           :alt="$t('userView.profile_picture')"
         />
       </div>
-      <div class="w-1/2 flex flex-col">
+      <div class="flex flex-col">
         <base-input
           size="large"
+          data-testid="testFirstNameTextInput"
           class="m-2"
-          :value="user.first_name"
+          :model-value="user.first_name"
           :placeholder="$t('profileUser.first_name_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'first_name');
             }
@@ -28,11 +31,12 @@
         />
         <base-input
           size="large"
+          data-testid="testLastNameTextInput"
           class="m-2"
-          :value="user.last_name"
+          :model-value="user.last_name"
           :placeholder="$t('profileUser.last_name_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'last_name');
             }
@@ -40,18 +44,20 @@
         />
         <base-input
           size="large"
+          data-testid="testMobileTextInput"
           class="m-2"
-          :value="user.mobile"
+          :model-value="user.mobile"
           :placeholder="$t('profileUser.mobile_placeholder')"
           required
-          @input="
+          @update:modelValue="
             (value) => {
               updateUser(value, 'mobile');
             }
           "
         />
         <base-input
-          :value="user.email"
+          :model-value="user.email"
+          data-testid="testEmailTextInput"
           size="large"
           class="m-2"
           :placeholder="$t('profileUser.email_placeholder ')"
@@ -60,67 +66,64 @@
         <UserRolesSelect :user="user" />
       </div>
     </div>
-    <div slot="footer" class="p-3 flex justify-end">
-      <base-button
-        :text="$t('actions.cancel')"
-        :alt="$t('actions.cancel')"
-        class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
-        :action="
-          () => {
-            $emit('close');
-          }
-        "
-      />
-      <base-button
-        variant="solid"
-        :action="saveUser"
-        :text="$t('actions.save')"
-        :alt="$t('actions.save')"
-        class="ml-2 p-3 px-6 text-xs"
-      />
-    </div>
+    <template #footer>
+      <div class="p-3 flex justify-end">
+        <base-button
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+          data-testid="testCancelButton"
+          class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+          :action="
+            () => {
+              $emit('close');
+            }
+          "
+        />
+        <base-button
+          variant="solid"
+          data-testid="testSaveButton"
+          :action="saveUser"
+          :text="$t('actions.save')"
+          :alt="$t('actions.save')"
+          class="ml-2 p-3 px-6 text-xs"
+        />
+      </div>
+    </template>
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import User from '@/models/User';
-import Role from '@/models/Role';
-import UserRolesSelect from '@/components/UserRolesSelect';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
-export default {
+export default defineComponent({
   name: 'UserEditModal',
   components: { UserRolesSelect },
   props: {
     user: {
       type: Object,
-      default: () => {
-        return {};
-      },
+      required: true,
+      default: () => ({}),
     },
   },
-  methods: {
-    updateUser(value, key) {
-      const { user } = this;
+  setup(props, { emit }) {
+    function updateUser(value: unknown, key: string) {
       User.update({
-        where: user.id,
-        data: {
-          [key]: value,
-        },
+        where: props.user.id,
+        data: { [key]: value },
       });
-    },
-    saveUser() {
-      this.$emit('save');
-    },
+    }
+
+    function saveUser() {
+      emit('save');
+    }
+
+    return {
+      updateUser,
+      saveUser,
+    };
   },
-  computed: {
-    roles() {
-      return Role.all();
-    },
-    userRoles() {
-      return Role.query().whereIdIn(this.user.roles).get();
-    },
-  },
-};
+});
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>

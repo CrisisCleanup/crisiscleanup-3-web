@@ -1,17 +1,19 @@
 <template>
   <div id="cms" class="bg-white p-3 cms">
     <base-input
-      :placeholder="$t('adminCMS.title')"
       v-model="cmsItem.title"
+      data-testid="testTitleTextInput"
+      :placeholder="$t('adminCMS.title')"
       class="mb-2"
     />
     <template v-if="showHtml">
-      <Editor class="mb-2" v-model="cmsItem.content" :key="cmsItem.id" />
+      <Editor :key="cmsItem.id" v-model="cmsItem.content" class="mb-2" />
     </template>
     <base-input
       v-else
-      :placeholder="$t('adminCMS.content')"
+      data-testid="testContentTextInput"
       v-model="cmsItem.content"
+      :placeholder="$t('adminCMS.content')"
       class="mb-2"
     />
     <div class="mb-2 flex items-center">
@@ -21,6 +23,12 @@
             ? $t('adminCMS.toggle_regular_mode')
             : $t('adminCMS.toggle_advanced_mode')
         "
+        :alt="
+          showHtml
+            ? $t('adminCMS.toggle_regular_mode')
+            : $t('adminCMS.toggle_advanced_mode')
+        "
+        data-testid="testToggleRegularAdvancedModeButton"
         variant="link"
         :action="
           () => {
@@ -31,44 +39,51 @@
       <ccu-icon
         v-tooltip="{
           content: $t(`adminCMS.cms_help`),
-          trigger: 'click',
-          classes: 'interactive-tooltip w-auto',
+          triggers: ['click'],
+          popperClass: 'interactive-tooltip w-auto',
+          html: true,
         }"
-        :alt="$t('actions.help_alt')"
+        data-testid="testCmsHelpIcon"
         type="help"
         size="large"
       />
     </div>
     <datepicker
-      input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
-      wrapper-class="flex-grow"
-      :format="(date) => $moment(date).format('YYYY-MM-DD h:mm:ss')"
-      :placeholder="$t('adminCMS.publish_at')"
       v-model="cmsItem.publish_at"
+      data-testid="testPublishAtDatePickerInput"
+      auto-apply
+      format="yyyy-MM-dd"
     ></datepicker>
     <base-input
-      :placeholder="$t('adminCMS.list_order')"
       v-model="cmsItem.list_order"
-      class="mb-2 w-40"
+      data-testid="testListOrderTextInput"
+      :placeholder="$t('adminCMS.list_order')"
+      class="my-2 w-40"
       type="number"
     />
     <tag-input
       v-model="tags"
-      :tags.sync="tagsToAdd"
+      v-model:tags="tagsToAdd"
+      data-testid="testAddTagsInput"
       :placeholder="$t('actions.add_tags')"
       :autocomplete-items="tagsAutoComplete"
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
-      @tags-changed="(newTags) => (tagsToAdd = newTags)"
       class="my-4"
+      @tags-changed="(newTags) => (tagsToAdd = newTags)"
     />
-    <base-checkbox class="pb-2" v-model="cmsItem.is_active">{{
-      $t('adminCMS.is_active')
-    }}</base-checkbox>
+    <base-checkbox
+      v-model="cmsItem.is_active"
+      data-testid="testIsActiveCheckbox"
+      class="pb-2"
+    >
+      {{$t('adminCMS.is_active')}}
+    </base-checkbox>
 
     <div class="flex items-center">
       <DragDrop
         class="cursor-pointer py-2"
+        data-testid="testUploadThumbnailFile"
         container-class="items-start"
         :multiple="false"
         @files="
@@ -79,6 +94,7 @@
       >
         <base-button
           class="cursor-pointer px-3 py-1"
+          data-testid="testUploadThumbnailButton"
           variant="solid"
           :text="$t('actions.upload_thumbnail')"
           :alt="$t('actions.upload_thumbnail')"
@@ -89,6 +105,7 @@
 
       <a
         v-if="cmsItem.thumbnail_file"
+        data-testid="testThumbnailFileLink"
         :href="cmsItem.thumbnail_file.blog_url"
         target="_blank"
         :title="cmsItem.thumbnail_file.filename"
@@ -100,33 +117,40 @@
     <div class="flex justify-end">
       <base-button
         type="bare"
+        data-testid="testClearItemButton"
         class="p-3 w-32 mr-3"
         variant="outline"
         :action="clearItem"
         :text="$t('actions.clear')"
+        :alt="$t('actions.clear')"
       />
       <base-button
         type="bare"
+        data-testid="testShowPreviewButton"
         class="p-3 w-32 mr-3"
         variant="solid"
         :action="showPreview"
         :text="$t('actions.show_preview')"
+        :alt="$t('actions.show_preview')"
       />
       <base-button
         type="bare"
+        data-testid="testSaveButton"
         class="p-3 w-32"
         variant="solid"
         :action="saveItem"
         :text="$t('actions.save')"
+        :alt="$t('actions.save')"
       />
     </div>
 
     <AjaxTable
+      ref="table"
+      data-testid="testCmsTableTable"
       :enable-search="true"
       :columns="columns"
       :url="tableUrl"
       :query="query"
-      ref="table"
       class="mt-6 shadow-lg"
       @rowClick="(payload) => editItem(payload)"
     >
@@ -134,7 +158,8 @@
         <div class="px-4 py-2">
           <base-checkbox
             class="pb-2"
-            @input="
+            data-testid="testActiveOnlyCheckbox"
+            @update:modelValue="
               (value) => {
                 if (value) {
                   query = { ...query, is_active: true };
@@ -149,16 +174,17 @@
         </div>
       </template>
       <template
+        v-if="columns.some((c) => c.key === 'actions')"
         #actions="slotProps"
-        v-if="columns.find((c) => c.key === 'actions')"
       >
         <div class="flex mr-2 justify-center w-full">
           <ccu-icon
             :alt="$t('actions.delete')"
+            data-testid="testDeleteIcon"
             size="small"
             type="trash"
             class="mx-2"
-            @click.native="
+            @click="
               () => {
                 deleteItem(slotProps.item.id);
               }
@@ -169,8 +195,9 @@
       <template #tags="slotProps">
         <tag
           v-for="tag in slotProps.item.tags"
-          class="mx-1"
+          data-testid="testTagListContent"
           :key="`${tag}:${slotProps.item.id}`"
+          class="mx-1"
           >{{ tag }}</tag
         >
       </template>
@@ -178,162 +205,167 @@
   </div>
 </template>
 
-<script>
-import { getErrorMessage } from '@/utils/errors';
-import { makeTableColumns } from '@/utils/table';
-import AjaxTable from '@/components/AjaxTable';
-import Editor from '@/components/Editor';
-import { DialogsMixin } from '@/mixins';
-import { formatCmsItem } from '@/utils/helpers';
-import DragDrop from '@/components/DragDrop';
+<script lang="ts">
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import moment from 'moment';
+import { getErrorMessage } from '../../utils/errors';
+import { makeTableColumns } from '../../utils/table';
+import AjaxTable from '../../components/AjaxTable.vue';
+import Editor from '../../components/Editor.vue';
+import { formatCmsItem } from '../../utils/helpers';
+import DragDrop from '../../components/DragDrop.vue';
+import useDialogs from '../../hooks/useDialogs';
+import CmsViewer from '../../components/cms/CmsViewer.vue';
 
-export default {
-  data() {
-    return {
-      name: 'app',
-      cmsItem: {
-        content: '',
-        tags: '',
-        title: '',
-        publish_at: null,
-        list_order: null,
-        is_active: true,
-        thumbnail: null,
-        thumbnail_file: null,
-      },
-      tags: '',
-      tagsToAdd: [],
-      tagsAutoComplete: [],
-      showHtml: false,
-      query: {},
-    };
-  },
+export default defineComponent({
   components: {
     DragDrop,
     Editor,
     AjaxTable,
   },
-  mixins: [DialogsMixin],
-  computed: {
-    columns() {
-      return makeTableColumns([
-        [
-          'title',
-          '30%',
-          'adminCMS.title',
-          { sortKey: 'title', sortable: true },
-        ],
-        [
-          'publish_at',
-          '20%',
-          'adminCMS.publish_date',
-          { sortKey: 'publish_at', sortable: true },
-        ],
-        [
-          'list_order',
-          '10%',
-          'adminCMS.list_order',
-          { sortKey: 'list_order', sortable: true },
-        ],
-        ['is_active', '10%', 'adminCMS.is_active'],
-        ['tags', '20%', 'adminCMS.tags'],
-        ['actions', '10%', ''],
-      ]);
-    },
-    tableUrl() {
-      return `${process.env.VUE_APP_API_BASE_URL}/admins/cms`;
-    },
-  },
-  async mounted() {
-    await this.loadTags();
-  },
-  methods: {
-    async loadTags() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/admins/cms/tags`,
+  setup() {
+    const { component } = useDialogs();
+    const { t } = useI18n();
+    const $toasted = useToast();
+
+    const name = ref('app');
+    const cmsItem = ref({
+      content: '',
+      tags: '',
+      title: '',
+      publish_at: '',
+      list_order: null,
+      is_active: true,
+      thumbnail: null,
+      thumbnail_file: null,
+    });
+    const tagsToAdd = ref([]);
+    const tags = ref('');
+    const table = ref(null);
+    const tagsAutoComplete = ref([]);
+    const showHtml = ref(false);
+    const query = ref({});
+    const tableUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms`;
+    const columns = makeTableColumns([
+      ['title', '30%', 'adminCMS.title', { sortKey: 'title', sortable: true }],
+      [
+        'publish_at',
+        '20%',
+        'adminCMS.publish_date',
+        { sortKey: 'publish_at', sortable: true },
+      ],
+      [
+        'list_order',
+        '10%',
+        'adminCMS.list_order',
+        { sortKey: 'list_order', sortable: true },
+      ],
+      ['is_active', '10%', 'adminCMS.is_active'],
+      ['tags', '20%', 'adminCMS.tags'],
+      ['actions', '10%', ''],
+    ]);
+    const uploading = ref(null);
+
+    async function loadTags() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms/tags`,
       );
-      this.tagsAutoComplete = response.data.map((t) => t.replaceAll('"', ''));
-    },
-    async showPreview() {
-      await this.$component({
-        title: this.$t(`adminCMS.preview`),
-        component: 'CmsViewer',
+      tagsAutoComplete.value = response.data.map((t) => t.replaceAll('"', ''));
+    }
+
+    async function showPreview() {
+      await component({
+        title: t(`adminCMS.preview`),
+        component: CmsViewer,
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
-          title: formatCmsItem(this.cmsItem.title),
-          content: formatCmsItem(this.cmsItem.content),
-          image: this.cmsItem.thumbnail_file?.blog_url,
+          title: formatCmsItem(cmsItem.value.title),
+          content: formatCmsItem(cmsItem.value.content),
+          image: cmsItem.value.thumbnail_file?.blog_url,
         },
       });
-    },
-    editItem(payload) {
-      this.cmsItem = payload;
-      this.tagsToAdd = payload.tags.map((tag) => {
+    }
+
+    function editItem(payload) {
+      cmsItem.value = {
+        ...payload,
+        publish_at: moment(payload.publish_at).format('YYYY-MM-DD'),
+      };
+      tagsToAdd.value = payload.tags.map((tag) => {
         return { text: tag };
       });
-    },
-    async saveItem() {
+    }
+
+    async function saveItem() {
       try {
-        if (this.cmsItem.id) {
-          await this.$http.put(
-            `${process.env.VUE_APP_API_BASE_URL}/admins/cms/${this.cmsItem.id}`,
+        if (cmsItem.value.id) {
+          await axios.put(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms/${
+              cmsItem.value.id
+            }`,
             {
-              ...this.cmsItem,
-              tags: this.tagsToAdd.map((a) => a.text),
+              ...cmsItem.value,
+              publish_at: moment(cmsItem.value.publish_at).toISOString(),
+              tags: tagsToAdd.value.map((a) => a.text),
             },
           );
         } else {
-          await this.$http.post(
-            `${process.env.VUE_APP_API_BASE_URL}/admins/cms`,
+          await axios.post(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms`,
             {
-              ...this.cmsItem,
-              tags: this.tagsToAdd.map((a) => a.text),
+              ...cmsItem.value,
+              tags: tagsToAdd.value.map((a) => a.text),
             },
           );
         }
-        await this.$toasted.success(this.$t('adminCMS.saved_item'));
-        this.$refs.table.getData().catch(() => {});
-        this.loadTags().catch(() => {});
+
+        await $toasted.success(t('adminCMS.saved_item'));
+        table.value.getData().catch(() => {});
+        loadTags().catch(() => {});
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-    async deleteItem(id) {
-      await this.$http.delete(
-        `${process.env.VUE_APP_API_BASE_URL}/admins/cms/${id}`,
+    }
+
+    async function deleteItem(id) {
+      await axios.delete(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/admins/cms/${id}`,
       );
-      await this.$toasted.success(this.$t('adminCMS.deleted_item'));
-      this.$refs.table.getData();
-    },
-    clearItem() {
-      this.cmsItem = {
+      await $toasted.success(t('adminCMS.deleted_item'));
+      table.value.getData();
+    }
+
+    function clearItem() {
+      cmsItem.value = {
         content: '',
         tags: '',
         title: '',
-        publish_at: null,
+        publish_at: '',
         list_order: null,
         is_active: true,
         thumbnail: null,
         thumbnail_file: null,
       };
-      this.showHtml = false;
-      this.tagsToAdd = [];
-    },
-    async handleFileUpload(fileList) {
-      this.fileList = fileList;
+      showHtml.value = false;
+      tagsToAdd.value = [];
+    }
 
-      if (this.fileList.length === 0) {
+    async function handleFileUpload(fileList) {
+      if (fileList.length === 0) {
         return;
       }
-      this.file = this.fileList[0].originFileObj;
+
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
       formData.append('type_t', 'fileTypes.other_file');
-      this.uploading = true;
+      uploading.value = true;
       try {
-        const result = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
+        const result = await axios.post(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
           formData,
           {
             headers: {
@@ -342,16 +374,45 @@ export default {
             },
           },
         );
-        this.cmsItem.thumbnail = result.data.id;
-        this.cmsItem.thumbnail_file = result.data;
+        cmsItem.value.thumbnail = result.data.id;
+        cmsItem.value.thumbnail_file = result.data;
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.uploading = false;
+        uploading.value = false;
       }
-    },
+    }
+
+    onMounted(async () => {
+      await loadTags();
+    });
+
+    return {
+      name,
+      cmsItem,
+      tags,
+      tagsToAdd,
+      tagsAutoComplete,
+      showHtml,
+      query,
+      columns,
+      tableUrl,
+      loadTags,
+      table,
+      showPreview,
+      editItem,
+      saveItem,
+      deleteItem,
+      clearItem,
+      handleFileUpload,
+      uploading,
+      moment,
+      $t(text) {
+        return text ? t(text) : null;
+      },
+    };
   },
-};
+});
 </script>
 
 <style scoped></style>

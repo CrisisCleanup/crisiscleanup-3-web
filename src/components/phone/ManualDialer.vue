@@ -1,51 +1,54 @@
 <template>
   <div class="text-center flex flex-col items-center">
-    <base-text variant="h2" class="my-1">{{
-      $t('phoneDashboard.manual_dialer')
-    }}</base-text>
-    <base-text class="my-1">{{
-      $t('phoneDashboard.manual_dial_hidden_caller_id')
-    }}</base-text>
-    <div class="grid grid-cols-3 my-1">
-      <form-select
+    <base-text
+      variant="h2"
+      class="my-1"
+      data-testid="testManualDialerContent"
+    >
+      {{$t('phoneDashboard.manual_dialer')}}
+    </base-text>
+    <base-text
+      class="my-1"
+      data-testid="testManualDialHiddenCallerIdContent"
+    >
+      {{$t('phoneDashboard.manual_dial_hidden_caller_id')}}
+    </base-text>
+    <div class="grid grid-cols-4 my-1">
+      <base-select
         v-model="countryCode"
+        data-testid="testCountryCodeSelect"
         :options="[$t('+1')]"
         indicator-icon="caret-down"
-        select-classes="h-8 border bg-white text-sm"
-        class="col-span-1 text-sm"
+        class="col-span-2 text-sm"
         :placeholder="$t('phoneDashboard.code')"
       />
       <input
-        type="text"
-        class="
-          h-8
-          p-1
-          border
-          bg-white
-          text-sm
-          placeholder-crisiscleanup-dark-200
-          outline-none
-          col-span-2
-        "
-        size="large"
         v-model="phoneNumber"
+        data-testid="testPhoneNumberTextInput"
+        type="text"
+        class="h-10 p-1 border bg-white text-sm placeholder-crisiscleanup-dark-200 outline-none col-span-2"
+        size="large"
         :placeholder="$t('phoneDashboard.phone_number')"
       />
     </div>
     <base-button
       variant="solid"
+      data-testid="testDialingButton"
       class="px-5 py-1 my-3"
       :text="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
+      :alt="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
       :disabled="dialing"
       :action="() => $emit('onDial', `${countryCode}${phoneNumber}`)"
     ></base-button>
   </div>
 </template>
 
-<script>
-import { EventBus } from '@/event-bus';
+<script lang="ts">
+import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
+import useEmitter from '../../hooks/useEmitter';
 
-export default {
+export default defineComponent({
   name: 'ManualDialer',
   props: {
     dialing: {
@@ -53,18 +56,20 @@ export default {
       default: false,
     },
   },
-  created() {
-    EventBus.$on('dialer:set_phone_number', (phone) => {
-      this.phoneNumber = phone;
+  setup() {
+    const { emitter } = useEmitter();
+    const { t } = useI18n();
+
+    const phoneNumber = ref(null);
+    emitter.on('dialer:set_phone_number', (phone) => {
+      phoneNumber.value = phone;
     });
-  },
-  data() {
     return {
-      countryCode: this.$t('+1'),
-      phoneNumber: null,
+      countryCode: t('+1'),
+      phoneNumber,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

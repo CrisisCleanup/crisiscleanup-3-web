@@ -1,8 +1,9 @@
 <template>
-  <div class="p-3">
+  <div v-if="hasData" class="p-3">
     <div class="actions flex my-4 justify-end items-center">
       <base-button
         class="text-base font-thin mx-1"
+        data-testid="testDownloadWidgetCsvButton"
         ccu-icon="download"
         icon-size="small"
         variant="outline"
@@ -13,6 +14,7 @@
       />
       <base-button
         class="text-base font-thin mx-1"
+        data-testid="testPrintWidgetButton"
         ccu-icon="print"
         icon-size="small"
         variant="outline"
@@ -24,10 +26,11 @@
         "
       />
       <base-checkbox
-        class="text-sm mx-1"
         v-if="allowAdd"
-        :value="availableWidgets.includes(widgetKey)"
-        @input="
+        data-testid="testAddToDashboardCheckbox"
+        class="text-sm mx-1"
+        :model-value="availableWidgets.includes(widgetKey)"
+        @update:modelValue="
           (v) => {
             if (v) {
               $emit('addWidgetToDashboard', widgetKey);
@@ -42,6 +45,8 @@
     </div>
     <div v-if="value.type === 'pie'" class="grid grid-flow-col">
       <ReportPieChart
+        :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportPieChart${widgetKey}Chart`"
         :key="JSON.stringify(currentFilters)"
         :data="
           Object.entries(value.data).map(([reportKey, reportValue]) => ({
@@ -50,7 +55,6 @@
           }))
         "
         :display-options="value.display_options"
-        :id="`d3Chart-${widgetKey}`"
         class="first:ml-auto last:mr-auto"
         :report-name="widgetKey"
       />
@@ -60,12 +64,13 @@
       class="flex items-center justify-center"
     >
       <ReportLineChart
+        :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportLineChart${widgetKey}Chart`"
+        :key="JSON.stringify(currentFilters)"
         :data="value.data"
         :display-options="value.display_options"
         :group-by="value.group_by"
-        :key="JSON.stringify(currentFilters)"
         :report-name="widgetKey"
-        :id="`d3Chart-${widgetKey}`"
       />
     </div>
     <div
@@ -73,17 +78,18 @@
       class="flex items-center justify-center"
     >
       <ReportBarChart
+        :id="`d3Chart-${widgetKey}`"
+        :data-testid="`testReportBarChart${widgetKey}Chart`"
+        :key="JSON.stringify(currentFilters)"
         :data="value.data"
         :report-name="widgetKey"
         :group-by="value.group_by"
         :display-options="value.display_options"
-        :key="JSON.stringify(currentFilters)"
-        :id="`d3Chart-${widgetKey}`"
       />
     </div>
     <div
-      @click="showDescription = !showDescription"
       class="underline text-primary-dark cursor-pointer mb-2"
+      @click="showDescription = !showDescription"
     >
       {{
         showDescription
@@ -98,13 +104,13 @@
   </div>
 </template>
 <script lang="ts">
-import { onMounted, ref } from '@vue/composition-api';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
 import ReportLineChart from '@/components/reports/ReportLineChart.vue';
 import ReportPieChart from '@/components/reports/ReportPieChart.vue';
 import ReportBarChart from '@/components/reports/ReportBarChart.vue';
-import useHttp from '@/use/useHttp';
 
-export default {
+export default defineComponent({
   name: 'ReportWidget',
   components: { ReportLineChart, ReportPieChart, ReportBarChart },
   props: {
@@ -125,9 +131,19 @@ export default {
     },
   },
   setup(props) {
-    const { $http } = useHttp();
+    const $http = axios;
     const availableWidgets = ref<any[]>([]);
     const showDescription = ref<boolean>(false);
+
+    const hasData = computed(() => {
+      if (!props.value.data) {
+        return false;
+      }
+
+      return (
+        props.value.data.length > 0 || Object.keys(props.value.data).length > 0
+      );
+    });
 
     function getWidgetSvg() {
       return document.querySelector(`#d3Chart-${props.widgetKey} > svg`)
@@ -136,7 +152,7 @@ export default {
 
     async function reloadUserWidgets() {
       const response = await $http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/user_widgets`,
+        `${import.meta.env.VITE_APP_API_BASE_URL}/user_widgets`,
       );
       availableWidgets.value = response.data.results.map((w) => w.widget);
     }
@@ -152,7 +168,8 @@ export default {
       availableWidgets,
       reloadUserWidgets,
       showDescription,
+      hasData,
     };
   },
-};
+});
 </script>

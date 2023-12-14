@@ -1,43 +1,65 @@
 <template>
-  <autocomplete
-    icon="search"
-    :suggestions="organizationResults"
-    :size="size"
-    display-property="name"
+  <Multiselect
     :placeholder="$t('registerOrg.organization_name')"
-    clear-on-selected
-    @selected="
-      (value) => {
-        $emit('selectedOrganization', value);
+    data-testid="testOrganizationNameSelect"
+    label="name"
+    :filter-results="false"
+    :min-chars="1"
+    :resolve-on-load="false"
+    :no-options-text="$t('registerOrg.search_for_organization')"
+    :delay="0"
+    :searchable="true"
+    :object="true"
+    value-prop="id"
+    :options="onOrganizationSearch"
+    :clear-on-blur="false"
+    class="outline-none"
+    native-support
+    :class="[isInvalid ? 'invalid' : '']"
+    @close="
+      (select) => {
+        const value = select.input.value;
+        if (value) {
+          isInvalid = false;
+        }
+        $nextTick(() => {
+          if (!Number.isInteger(select.textValue) && allowNew) {
+            $emit('input', value);
+          }
+        });
       }
     "
-    @search="onOrganizationSearch"
+    @update:modelValue="
+      (value) => {
+        if (value) {
+          isInvalid = false;
+        }
+        if (Number.isInteger(value.id)) {
+          $emit('selectedOrganization', value);
+        } else {
+          $emit('input', value.name);
+        }
+      }
+    "
   >
-    <template #result="slotProps" v-if="isAdmin">
-      <div
-        class="
-          flex
-          justify-between
-          text-sm
-          p-1
-          cursor-pointer
-          hover:bg-crisiscleanup-light-grey
-          border-b
-        "
-      >
-        <span
-          >{{ slotProps.suggestion.item.id }} -
-          {{ slotProps.suggestion.item.name }}</span
-        >
-      </div>
+    <template v-if="isAdmin" #option="{ option }">
+      <span>{{ option.id }} - {{ option.name }}</span>
     </template>
-  </autocomplete>
+    <template v-if="allowNew" #nooptions>
+      <div></div>
+    </template>
+  </Multiselect>
 </template>
-<script>
+
+<script lang="ts">
+import Multiselect from '@vueform/multiselect';
+import { defineComponent } from 'vue';
 import Organization from '@/models/Organization';
-import { getQueryString } from '../utils/urls';
-export default {
+import { getQueryString } from '@/utils/urls';
+
+export default defineComponent({
   name: 'OrganizationSearchInput',
+  components: { Multiselect },
   props: {
     size: {
       type: String,
@@ -55,32 +77,34 @@ export default {
       type: Array,
       default: () => [],
     },
+    allowNew: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      organizationResults: [],
-    };
-  },
-  methods: {
-    async onOrganizationSearch(value) {
-      this.$emit('input', value);
-
-      const params = {
+  setup(props) {
+    const isInvalid = ref(false);
+    async function onOrganizationSearch(value: string) {
+      const parameters: Record<string, unknown> = {
         fields: 'id,name',
         limit: '10',
         search: value,
       };
 
-      if (!this.includeInactive) {
-        params.is_active = true;
+      if (!props.includeInactive) {
+        parameters.is_active = true;
       }
 
-      if (this.allowedOrganizationIds.length > 0 && !this.isAdmin) {
-        params.id__in = this.allowedOrganizationIds.join(',');
+      if (props.allowedOrganizationIds.length > 0 && !props.isAdmin) {
+        parameters.id__in = props.allowedOrganizationIds.join(',');
       }
 
       const results = await Organization.api().get(
-        `/organizations?${getQueryString(params)}`,
+        `/organizations?${getQueryString(parameters)}`,
         {
           headers: {
             Authorization: null,
@@ -88,8 +112,43 @@ export default {
           dataKey: 'results',
         },
       );
-      this.organizationResults = results.entities.organizations;
-    },
+
+      return results.entities?.organizations || [];
+    }
+
+    onMounted(() => {
+      if (props.required) {
+        const input = document.querySelector(
+          '.multiselect-search',
+        ) as HTMLInputElement;
+        const form = document.querySelector('.form') as HTMLFormElement;
+        if (input) {
+          form?.addEventListener(
+            'invalid',
+            (event) => {
+              if (!input.value) {
+                isInvalid.value = true;
+                input.setCustomValidity('Please fill out this field');
+                input.focus();
+              }
+            },
+            true,
+          );
+        }
+      }
+    });
+
+    return {
+      onOrganizationSearch,
+      log: console.log,
+      isInvalid,
+    };
   },
-};
+});
 </script>
+
+<style lang="postcss" scoped>
+.form-field.invalid {
+  @apply border-crisiscleanup-red-100;
+}
+</style>

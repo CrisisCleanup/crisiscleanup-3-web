@@ -1,19 +1,31 @@
 <template>
-  <autocomplete
-    class="form-field"
-    icon="search"
-    :suggestions="userResults"
-    display-property="full_name"
+  <base-select
+    :model-value="selectedUser"
     :placeholder="placeholder"
-    clear-on-selected
-    @selected="$emit('selectedUser', $event)"
-    @search="onUserSearch"
-  />
+    :options="onUserSearch"
+    :min-chars="1"
+    :add-option-on="['enter', 'tab']"
+    data-testid="testUserSearchSelect"
+    value-prop="id"
+    object
+    searchable
+    @update:modelValue="onUserUpdate"
+  >
+    <template #option="{ option }">
+      <div class="flex items-center">
+        <div class="flex flex-col">
+          <span class="text-sm">{{ option.full_name }}</span>
+          <span class="text-xs">{{ option[displayProp] }}</span>
+        </div>
+      </div>
+    </template>
+  </base-select>
 </template>
 
-<script>
+<script lang="ts">
 import User from '@/models/User';
-export default {
+
+export default defineComponent({
   name: 'UserSearchInput',
   props: {
     placeholder: {
@@ -21,27 +33,41 @@ export default {
       default: '',
       required: false,
     },
-  },
-  data() {
-    return { userResults: [] };
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
+    displayProp: {
+      type: String,
+      default: 'email',
     },
   },
-  methods: {
-    async onUserSearch(value) {
-      const results = await User.api().get(
-        `/users?search=${value}&limit=10&&organization=${this.currentUser.organization.id}`,
-        {
-          dataKey: 'results',
-        },
+  emits: ['selectedUser'],
+  setup(props, { emit }) {
+    const store = useStore();
+    const userResults = ref<User[]>([]);
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const selectedUser = ref<unknown>();
+
+    async function onUserSearch(value: string) {
+      const _results = await User.api().get(
+        `/users?search=${value}&limit=10&&organization=${currentUser?.value?.organization.id}`,
+        { dataKey: 'results' },
       );
-      this.userResults = results.entities.users;
-    },
+      const results = (_results.entities?.users || []) as User[];
+      userResults.value = results;
+      return results;
+    }
+
+    const onUserUpdate = (value: any) => {
+      emit('selectedUser', value);
+      selectedUser.value = value;
+    };
+
+    return {
+      selectedUser,
+      userResults,
+      onUserSearch,
+      onUserUpdate,
+    };
   },
-};
+});
 </script>
 
-<style scoped></style>
+<style lang="postcss" scoped></style>

@@ -1,36 +1,33 @@
 <template>
-  <div class="header header--grid bg-white w-full">
+  <div class="header header--grid bg-white w-full" style="z-index: 4999">
     <div class="flex justify-between h-full items-center">
       <div class="flex items-center ml-2">
         <div class="h-10 w-10 flex items-center">
           <DisasterIcon
-            v-show="$mq !== 'sm'"
             v-if="currentIncident && currentIncident.incidentImage"
             :current-incident="currentIncident"
+            data-testid="testDisasterIcon"
+            :alt="$t('info.double_click_surprise')"
+            :title="$t('info.double_click_surprise')"
           />
         </div>
         <div class="flex flex-col ml-2 md:w-84 lg:w-84">
-          <form-select
+          <BaseSelect
             :key="String(currentIncident && currentIncident.id)"
-            :value="currentIncident"
+            :model-value="currentIncident?.id"
             :options="incidents"
             :clearable="false"
+            data-testid="testIncidentSelectorSelect"
             searchable
-            select-classes="h-12"
+            container-classes="relative mx-auto w-full flex items-center justify-end cursor-pointer bg-white text-base leading-snug outline-none"
+            select-classes="w-full absolute inset-0 outline-none focus:ring-0 appearance-none border-0 text-base font-sans bg-white rounded p-2"
             item-key="id"
             label="name"
-            @input="(payload) => $emit('update:incident', payload)"
+            @update:modelValue="(payload: string) => $emit('update:incident', payload)"
           >
             <template #list-header>
               <div
-                class="
-                  px-5
-                  py-1
-                  cursor-pointer
-                  flex
-                  items-center
-                  hover:bg-gray-300 hover:text-white
-                "
+                class="px-5 py-1 cursor-pointer flex items-center hover:bg-gray-300 hover:text-white"
                 @click="showRedeployModal = true"
               >
                 <ccu-icon
@@ -42,31 +39,44 @@
                 {{ $t('actions.add_incident') }}
               </div>
             </template>
-          </form-select>
-          <div class="flex ml-2 font-bold">
-            <span>{{ $t($route.name) }}</span>
+          </BaseSelect>
+          <div class="flex ml-2 font-bold mt-2">
+            <span>{{ $t($route.name as string) }}</span>
           </div>
         </div>
       </div>
-      <div v-if="$can && $can('development_mode')">
+      <div v-if="can('development_mode')" class="flex gap-2">
         <base-button
           class="p-1.5"
           variant="solid"
+          data-testid="testDebugUserButton"
           :text="$t('actions.debug_user')"
+          :alt="$t('actions.debug_user')"
           :action="showCurrentUser"
         />
+        <base-button
+          class="p-1.5"
+          variant="solid"
+          data-testid="testDebugIncidentStatesButton"
+          :text="$t('actions.debug_incident_states')"
+          :alt="$t('actions.debug_incident_states')"
+          :action="showCurrentIncidentStates"
+        />
       </div>
+      <AppDownloadLinks />
       <div class="flex h-full items-center">
         <div
-          v-if="$can && $can('phone_agent')"
+          v-if="can && can('phone_agent')"
           class="flex items-center header-item h-full"
+          data-testid="testPhoneIndicatorDiv"
         >
           <PhoneIndicator />
         </div>
 
         <UserProfileMenu
-          @auth:logout="() => $emit('auth:logout')"
           class="header-item"
+          @auth:logout="() => $emit('auth:logout')"
+          data-testid="testLogoutLink"
         />
       </div>
     </div>
@@ -74,67 +84,91 @@
       v-if="showRedeployModal"
       :hide-trigger="true"
       :open-modal="true"
+      data-testid="testRedeployRequestButton"
       @close="showRedeployModal = false"
     />
   </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
-import DisasterIcon from '@/components/DisasterIcon.vue';
-import useUser from '@/use/user/useUser';
-import { DialogsMixin } from '@/mixins';
-import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
-import RedeployRequest from '@/pages/RedeployRequest';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
-
-export default {
+<script lang="ts">
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import DisasterIcon from '../DisasterIcon.vue';
+import BaseSelect from '../BaseSelect.vue';
+import useDialogs from '../../hooks/useDialogs';
+import JsonWrapper from '../JsonWrapper.vue';
+import useAcl from '../../hooks/useAcl';
+import PhoneIndicator from '../phone/PhoneIndicator.vue';
+import RedeployRequest from '../modals/RedeployRequest.vue';
+import UserProfileMenu from './UserProfileMenu.vue';
+import User from '@/models/User';
+import BaseText from "@/components/BaseText.vue";
+import AppDownloadLinks from "@/components/AppDownloadLinks.vue";
+export default defineComponent({
   name: 'Header',
   components: {
-    PhoneIndicator,
+    AppDownloadLinks,
+    BaseText,
     RedeployRequest,
+    PhoneIndicator,
+    BaseSelect,
     UserProfileMenu,
     DisasterIcon,
   },
-  mixins: [DialogsMixin],
   props: {
-    incidents: VueTypes.array,
-    currentIncident: VueTypes.object,
-  },
-  data() {
-    return {
-      showRedeployModal: false,
-    };
-  },
-  setup() {
-    return {
-      ...useUser(),
-    };
-  },
-  methods: {
-    async showCurrentUser() {
-      await this.$component({
-        title: `User: ${this.currentUser.id} | ${this.currentUser.first_name} ${this.currentUser.last_name}`,
-        component: 'JsonWrapper',
-        classes: 'w-full h-96',
-        props: {
-          jsonData: this.currentUser,
-        },
-      });
+    incidents: {
+      type: Array,
+      default: () => [],
+    },
+    currentIncident: {
+      type: Object,
+      default: () => ({}),
     },
   },
-};
+  setup(props) {
+    const { component } = useDialogs();
+    const { $can } = useAcl();
+    const { t } = useI18n();
+    const store = useStore();
+
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    async function showCurrentUser() {
+      await component({
+        title: `User: ${currentUser?.value?.id} | ${currentUser?.value?.first_name} ${currentUser?.value?.last_name}`,
+        component: JsonWrapper,
+        classes: 'w-full h-96',
+        props: {
+          jsonData: currentUser.value,
+        },
+      });
+    }
+
+    async function showCurrentIncidentStates() {
+      const states = currentUser?.value?.getStatesForIncident(
+        props.currentIncident?.id,
+        true,
+      );
+      await component({
+        title: `Incident: ${props.currentIncident?.id}`,
+        component: JsonWrapper,
+        classes: 'w-full h-96',
+        props: {
+          jsonData: states,
+        },
+      });
+    }
+
+    const showRedeployModal = ref(false);
+    return {
+      can: $can,
+      showRedeployModal,
+      showCurrentUser,
+      $t(text: string) {
+        return text ? t(text) : null;
+      },
+      showCurrentIncidentStates,
+    };
+  },
+});
 </script>
-
-<style scoped lang="postcss">
-/*.header {*/
-/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
-/*  border: 1px solid #efefef;*/
-/*}*/
-
-/*.header-item {*/
-/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
-/*  border: 1px solid rgba(151, 151, 151, 0.1);*/
-/*  @apply px-2;*/
-/*}*/
-</style>

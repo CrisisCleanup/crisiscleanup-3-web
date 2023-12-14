@@ -2,7 +2,10 @@
  * Wrap/Unwrap Vue Composition Api Ref Helpers
  */
 
-import { unref, isRef, ref, Ref } from '@vue/composition-api';
+import { unref, isRef, ref } from 'vue';
+import type { MaybeRef } from '@vueuse/core';
 
-export const wrap = (value): Ref => (isRef(value) ? value : ref(value));
-export const unwrap = (value) => (isRef(value) ? unref(value) : value);
+export const wrap = <T>(value: MaybeRef<T>) =>
+  isRef(value) ? value : ref(value);
+export const unwrap = <T>(value: MaybeRef<T>) =>
+  isRef(value) ? unref(value) : value;

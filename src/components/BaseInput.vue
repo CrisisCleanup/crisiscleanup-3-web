@@ -7,23 +7,23 @@
       :is="textArea ? 'textarea' : 'input'"
       ref="input"
       :class="[inputClasses, defaultInputClasses, selector]"
-      :data-cy="selector"
       :style="[cssVars, inputStyle]"
       :type="passwordView || type || 'search'"
-      :value.prop="value"
+      :value.prop="modelValue"
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
       :hidden="hidden"
       :pattern="pattern"
       :autocomplete="autocomplete"
-      :readonly="readonly"
+      :rows="rows"
       @input="update"
+      @input.stop=""
       @change="change"
-      @blur="$emit('blur')"
+      @blur="$emit('blur', $event)"
+      @focus="$emit('focus', $event)"
       @keyup.enter="$emit('enter')"
       @invalid="isInvalid = true"
-      :rows="rows"
     />
     <div
       v-if="breakGlass && !glassBroken && !hidden"
@@ -33,7 +33,7 @@
     >
       <ccu-icon
         :alt="$t('actions.edit')"
-        data-cy="js-break-glass"
+        data-testid="testBreakGlassButton"
         type="edit"
         size="small"
         class="js-break-glass"
@@ -60,8 +60,9 @@
       v-else-if="icon || tooltip"
       v-tooltip="{
         content: tooltip,
-        trigger: 'hover',
-        classes: 'interactive-tooltip w-72',
+        triggers: ['hover'],
+        popperClass: 'interactive-tooltip w-72',
+        html: true,
       }"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
@@ -92,13 +93,11 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, defineComponent } from '@vue/composition-api';
-import BaseIcon from '@/components/BaseIcon';
+<script lang="ts">
+import { ref, computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'BaseInput',
-  components: { BaseIcon },
   props: {
     size: {
       type: String,
@@ -116,7 +115,7 @@ export default defineComponent({
       type: String,
       default: 'small',
     },
-    value: {
+    modelValue: {
       type: null,
       default: null,
     },
@@ -197,6 +196,7 @@ export default defineComponent({
       default: '40',
     },
   },
+  emits: ['update:modelValue'],
 
   setup(props, context) {
     const id = ref(null);
@@ -232,7 +232,7 @@ export default defineComponent({
       large: props.size === 'large',
       medium: props.size === 'medium',
       small: props.size === 'small',
-      base: !props.size,
+      base: props.size === 0,
       'has-icon': Boolean(props.icon),
       'has-tooltip': Boolean(props.tooltip),
       invalid: Boolean(isInvalid.value),
@@ -246,10 +246,11 @@ export default defineComponent({
         isInvalid.value = valid;
         if (newValue) {
           input.value = newValue;
-          return context.emit('input', newValue);
+          return context.emit('update:modelValue', newValue);
         }
       }
-      context.emit('input', value);
+
+      context.emit('update:modelValue', value);
       isInvalid.value = !input?.value?.checkValidity();
       return value;
     }
@@ -297,12 +298,18 @@ input.invalid {
   @apply border border-crisiscleanup-red-100;
 }
 
+textarea.invalid {
+  @apply border border-crisiscleanup-red-100;
+}
+
 input {
   outline: none;
   width: var(--width);
   height: var(--height);
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
+  -webkit-appearance: none;
+  opacity: 1;
 }
 
 textarea {
@@ -326,10 +333,11 @@ input.large {
 
 input.medium {
   height: 40px;
+  width: 225px;
 }
 
 input.small {
-  height: 30px;
+  height: 32px;
   width: 150px;
 }
 

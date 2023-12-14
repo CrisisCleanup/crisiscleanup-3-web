@@ -1,140 +1,184 @@
 <template>
-  <HomeLayout>
-    <template #grid-overlay>
-      <div class="grid--overlay homegrid-backdrop" />
-    </template>
-    <template #grid-content>
-      <home-nav />
-      <home-actions />
-      <div class="grid--main">
-        <div class="text-4xl">
-          {{ $t('mapVue.visualize_disaster') }}
-        </div>
-        <div class="text-xl">
-          {{ $t('mapVue.choose_incident_dropdown') }}
-        </div>
-
-        <form-select
-          :value="selectedIncident"
-          class="form-field"
-          :options="incidents"
-          searchable
-          select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-72"
-          item-key="id"
-          label="name"
-          :placeholder="$t('mapVue.disaster')"
-          @input="
-            (value) => {
-              selectedIncident = value;
-              setLocations(value);
-            }
-          "
-        />
-
-        <div class="w-full h-full border bg-crisiscleanup-light-grey">
-          <PublicMap
-            v-if="selectedIncident"
-            ref="publicMap"
-            @onSelectmarker="displayWorksite"
-            :incident="selectedIncident"
-            :work-types="workTypeMap"
-            :locations="locations"
-          ></PublicMap>
-        </div>
-
-        <div class="text-lg my-1">
-          {{ $t('mapVue.personal_info_hidden') }}
-        </div>
+  <Home>
+    <div class="grid--main">
+      <div class="text-4xl">
+        {{ $t('mapVue.visualize_disaster') }}
       </div>
-      <home-footer />
-    </template>
-  </HomeLayout>
+      <div class="text-xl">
+        {{ $t('mapVue.choose_incident_dropdown') }}
+      </div>
+
+      <base-select
+        :model-value="selectedIncident"
+        data-testid="testIncidentSelect"
+        class="form-field"
+        :options="incidents"
+        style="z-index: 10000; position: relative"
+        searchable
+        select-classes="bg-white outline-none h-12 mb-3 w-72"
+        item-key="id"
+        label="name"
+        :placeholder="$t('mapVue.disaster')"
+        @update:modelValue="
+          (value) => {
+            selectedIncident = value;
+            reloadMap();
+            setLocations(value);
+          }
+        "
+      />
+
+      <div class="h-120 border bg-crisiscleanup-light-grey relative">
+        <SimpleMap
+          :map-loading="false"
+          :available-work-types="availableWorkTypes"
+          :show-legend="Object.keys(availableWorkTypes)"
+          data-testid="testSimpleMapContent"
+        />
+      </div>
+
+      <div class="text-lg my-1">
+        {{ $t('mapVue.personal_info_hidden') }}
+      </div>
+    </div>
+  </Home>
 </template>
 
-<script>
+<script lang="ts">
+import axios from 'axios';
+import { reactive, toRefs, onMounted } from 'vue';
 import * as L from 'leaflet';
-import HomeLayout, {
-  HomeNav,
-  HomeFooter,
-  HomeActions,
-} from '@/layouts/Home.vue';
-import PublicMap from '@/components/PublicMap.vue';
+import Home from '@/layouts/Home.vue';
+import SimpleMap from '@/components/SimpleMap.vue';
+import useWorksiteMap from '@/hooks/worksite/useWorksiteMap';
 
-export default {
+export default defineComponent({
   name: 'Map',
-  components: { PublicMap, HomeLayout, HomeNav, HomeFooter, HomeActions },
-  data() {
-    return {
+  components: { Home, SimpleMap },
+  setup() {
+    let mapUtils;
+    const state = reactive({
       incidents: [],
       locations: [],
       workTypeMap: {},
       statusMap: {},
       selectedIncident: null,
-    };
-  },
-  async mounted() {
-    const incidentsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations,turn_on_release&limit=200&sort=-start_at`,
-    );
-    const workTypesResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/work_types`,
-    );
-    const statusResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/statuses`,
-    );
-    this.incidents = incidentsResponse.data.results;
-    this.workTypeMap = workTypesResponse.data.results.reduce(function (
-      map,
-      obj,
-    ) {
-      map[obj.key] = obj.name_t;
-      return map;
-    },
-    {});
-    this.statusMap = statusResponse.data.results.reduce(function (map, obj) {
-      map[obj.status] = obj.status_name_t;
-      return map;
-    }, {});
-    this.selectedIncident = this.incidents[0].id;
-    await this.setLocations(this.incidents[0].id);
-  },
-  methods: {
-    async setLocations(incidentId) {
-      const incident = this.incidents.find((i) => i.id === incidentId);
-      if (incident.locations.length) {
+      availableWorkTypes: {},
+    });
+
+    async function setLocations(incidentId) {
+      const incident = state.incidents.find((i) => i.id === incidentId);
+      if (incident && incident.locations.length > 0) {
         const locationIds = incident.locations.map(
           (location) => location.location,
         );
-        const locationsResponse = await this.$http.get(
+        const locationsResponse = await axios.get(
           `${
-            process.env.VUE_APP_API_BASE_URL
+            import.meta.env.VITE_APP_API_BASE_URL
           }/locations?id__in=${locationIds.join(',')}`,
         );
-        this.locations = locationsResponse.data.results;
+        state.locations = locationsResponse.data.results;
       } else {
-        this.locations = [];
+        state.locations = [];
       }
-    },
-    displayWorksite(worksite) {
+
+      mapUtils?.removeLayer('public_incident_objects');
+
+      for (const location of state.locations) {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: location.attr,
+          geometry: location.poly || location.geom || location.point,
+        };
+        const geojsonLayer = L.geoJSON(geojsonFeature);
+        const [layer] = geojsonLayer.getLayers();
+        layer.key = 'public_incident_objects';
+        layer.addTo(mapUtils.getMap());
+      }
+    }
+
+    function displayWorksite(worksite) {
       const popup = L.popup({ className: 'pixi-popup' });
       let popupContent = `<b>${worksite.address} (${worksite.case_number}</b>)`;
 
-      worksite.work_types.forEach((worktype) => {
-        popupContent += `<div>${this.workTypeMap[worktype.work_type]}(${
-          this.statusMap[worktype.status]
+      for (const worktype of worksite.work_types) {
+        popupContent += `<div>${state.workTypeMap[worktype.work_type]}(${
+          state.statusMap[worktype.status]
         })</div>`;
-      });
+      }
 
       popup
-        .setLatLng([
-          worksite.location.coordinates[1],
-          worksite.location.coordinates[0],
-        ])
+        .setLatLng([worksite.x, worksite.y])
         .setContent(popupContent)
-        .openOn(this.$refs.publicMap.map);
-    },
+        .openOn(mapUtils.getMap());
+    }
+
+    async function loadCases() {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/worksites_public`,
+        {
+          params: { incident: state.selectedIncident },
+        },
+      );
+
+      const markers = response.data.results;
+      return markers;
+    }
+
+    async function reloadMap() {
+      const cases = await loadCases();
+      mapUtils?.reloadMap(
+        cases,
+        cases.map((m) => m.id),
+      );
+    }
+
+    onMounted(async () => {
+      const incidentsResponse = await axios.get(
+        `${
+          import.meta.env.VITE_APP_API_BASE_URL
+        }/incidents_list?fields=id,name,short_name,geofence,locations,turn_on_release&limit=200&sort=-start_at`,
+      );
+      const workTypesResponse = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/work_types`,
+      );
+      const statusResponse = await axios.get(
+        `${import.meta.env.VITE_APP_API_BASE_URL}/statuses`,
+      );
+      state.incidents = incidentsResponse.data.results;
+      state.workTypeMap = workTypesResponse.data.results.reduce(function (
+        map,
+        obj,
+      ) {
+        map[obj.key] = obj.name_t;
+        return map;
+      },
+      {});
+      state.statusMap = statusResponse.data.results.reduce(function (map, obj) {
+        map[obj.status] = obj.status_name_t;
+        return map;
+      }, {});
+      state.selectedIncident = state.incidents[0].id;
+      const markers = await loadCases();
+
+      mapUtils = useWorksiteMap(
+        markers,
+        markers.map((m) => m.id),
+        displayWorksite,
+        ({ workTypes }) => {
+          state.availableWorkTypes = workTypes;
+        },
+      );
+
+      await setLocations(state.incidents[0].id);
+    });
+    return {
+      ...toRefs(state),
+      setLocations,
+      reloadMap,
+    };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

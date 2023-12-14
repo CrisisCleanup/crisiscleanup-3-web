@@ -3,7 +3,7 @@
  */
 import detectBrowserLanguage from 'detect-browser-language';
 import _ from 'lodash';
-import CCUModel from '@/models/model';
+import CCUModel from '@/models/base';
 
 interface LanguageTranslationResponse {
   text: string;
@@ -12,7 +12,7 @@ interface LanguageTranslationResponse {
   target_subtag: string;
 }
 
-export default class Language extends CCUModel<Language> {
+export default class Language extends CCUModel {
   static entity = 'languages';
 
   id!: string;
@@ -25,7 +25,7 @@ export default class Language extends CCUModel<Language> {
     return {
       _browserLanguage: detectBrowserLanguage(),
     } as {
-      _browserLanguage: null | string;
+      _browserLanguage: undefined | string;
     };
   }
 

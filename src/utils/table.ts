@@ -4,12 +4,17 @@
 
 import _ from 'lodash';
 
-type ColumnT = {
+interface ColumnT {
+  titleClass: string;
+  class: string;
+  style: { border: number };
+  headerStyle: { border: number };
   dataIndex: string;
   key: string;
   title: string;
   width?: string;
-};
+  transformer?: (field: string, item: any) => string;
+}
 
 /**
  * Create a singular column item while providing
@@ -38,7 +43,7 @@ const makeColumn = ([
  * @param cols - Array of columns to make.
  * @returns {Array<ColumnT>}
  */
-const makeTableColumns = (cols: string[][]): ColumnT[] =>
+const makeTableColumns = (cols: any[][]): ColumnT[] =>
   cols.map((c) => makeColumn(c));
 
 export { makeTableColumns };

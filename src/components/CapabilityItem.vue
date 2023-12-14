@@ -5,11 +5,12 @@
       <ccu-icon
         v-tooltip="{
           content: $t(capability.description_t),
-          trigger: 'click',
-          classes: 'interactive-tooltip w-auto',
+          triggers: ['click'],
+          popperClass: 'interactive-tooltip w-auto',
+          html: true,
         }"
         :invert-color="true"
-        :alt="$t('actions.help_alt')"
+        :data-testid="`testCapability${capability.name_t}Tooltip`"
         type="help"
         size="medium"
       />
@@ -22,30 +23,23 @@
       <div
         v-for="phase in phases"
         :key="phase.id"
-        @mouseover="hoverEffect($t(phase.name_t))"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
+        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
         :class="
           hasCapabilityForPhase(phase.id)
             ? 'border-2 border-white light-box'
             : 'bg-crisiscleanup-dark-400'
         "
+        @mouseover="hoverEffect($t(phase.name_t))"
+        @mouseleave="hoverEffect('')"
       ></div>
     </div>
   </div>
 </template>
-<script>
-import { mapState } from 'vuex';
 
-export default {
+<script lang="ts">
+import { computed } from 'vue';
+
+export default defineComponent({
   name: 'CapabilityItem',
   props: {
     capability: {
@@ -61,18 +55,26 @@ export default {
       default: () => [],
     },
   },
-  methods: {
-    hoverEffect(item) {
-      this.$emit('onHover', item + this.index);
-    },
-    hasCapabilityForPhase(phase) {
-      return this.availableCapabilities.some((item) => item.phase === phase);
-    },
+  emits: ['onHover'],
+  setup(props, { emit }) {
+    const store = useStore();
+    const phases = computed(() => store.getters['enums/phases']);
+
+    function hoverEffect(item) {
+      emit('onHover', item + props.index);
+    }
+
+    function hasCapabilityForPhase(phase) {
+      return props.availableCapabilities.some((item) => item.phase === phase);
+    }
+
+    return {
+      hoverEffect,
+      hasCapabilityForPhase,
+      phases,
+    };
   },
-  computed: {
-    ...mapState('enums', ['phases']),
-  },
-};
+});
 </script>
 
 <style scoped>

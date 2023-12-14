@@ -1,14 +1,13 @@
 <template>
-  <div :id="id"></div>
+  <div :id="id" ref="chart"></div>
 </template>
 
-<script>
-import { onMounted } from '@vue/composition-api';
+<script lang="ts">
+import { onMounted } from 'vue';
 import * as d3 from 'd3';
 import { sumBy } from 'lodash';
-import usei18n from '@/use/usei18n';
 
-export default {
+export default defineComponent({
   name: 'ReportPieChart',
   props: {
     data: {
@@ -29,8 +28,9 @@ export default {
     },
   },
   setup(props) {
-    const { $t } = usei18n();
+    const { t } = useI18n();
     let formatter = new Intl.NumberFormat('en-US');
+    const chart = ref(null);
     if (props.displayOptions.number_format === 'currency') {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -39,6 +39,7 @@ export default {
         minimumFractionDigits: 0,
       });
     }
+
     if (props.displayOptions.number_format === 'percentage') {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'percent',
@@ -46,6 +47,7 @@ export default {
         maximumFractionDigits: 2,
       });
     }
+
     function renderPie(data, svg, index, toolTip) {
       const width = 100;
       const height = 80;
@@ -92,7 +94,7 @@ export default {
         .on('mouseover', function (e, d) {
           // Get this bar's x/y values, then augment for the tooltip
           let displaytext = '';
-          displaytext += `${$t(
+          displaytext += `${t(
             `reports.${props.reportName}.${d.data.name}`,
           )}: ${formatter.format(d.data.value)}\n`;
 
@@ -110,7 +112,7 @@ export default {
       g.append('g')
         .attr('transform', `translate(${-width},${height})`)
         .append('text')
-        .text($t(`reports.${props.reportName}.${data.titleKey}`))
+        .text(t(`reports.${props.reportName}.${data.titleKey}`))
         .attr('class', 'title');
 
       const legend = g
@@ -137,7 +139,7 @@ export default {
         .attr('dy', '.35em')
         .style('text-anchor', 'start')
         .text(function (d) {
-          return `${$t(
+          return `${t(
             `reports.${props.reportName}.${d.name}`,
           )} (${formatter.format(d.value)})`;
         });
@@ -169,7 +171,7 @@ export default {
       const width = 80 * 6 * 3;
       const height = 260 * Math.ceil(data.length / 3);
       const svg = d3
-        .select(`#${props.id}`)
+        .select(chart.value)
         ?.append('svg')
         .attr('class', 'pie')
         .attr('width', width)
@@ -181,7 +183,7 @@ export default {
         .attr('y', 20)
         .attr('text-anchor', 'middle')
         .style('font-size', '20px')
-        .text($t(`reports.${props.reportName}`));
+        .text(t(`reports.${props.reportName}`));
 
       svg
         .append('text')
@@ -189,18 +191,25 @@ export default {
         .attr('y', height - 10)
         .attr('text-anchor', 'middle')
         .style('font-size', '15px')
-        .html($t(`reports.paid_for_statement`));
+        .html(t(`reports.paid_for_statement`));
 
       const toolTip = d3
-        .select(`#${props.id}`)
+        .select(chart.value)
         ?.append('div')
         .attr('class', 'chart-tooltip');
 
-      data.forEach((pieData, index) => renderPie(pieData, svg, index, toolTip));
+      for (const [index, pieData] of data.entries()) {
+        renderPie(pieData, svg, index, toolTip);
+      }
+
       renderPie(data);
     });
+
+    return {
+      chart,
+    };
   },
-};
+});
 </script>
 
 <style scoped></style>

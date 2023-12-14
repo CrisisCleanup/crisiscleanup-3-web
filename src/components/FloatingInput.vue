@@ -1,46 +1,30 @@
 <template>
   <div class="floating-input relative">
     <input
-      class="
-        focus:outline-none
-        rounded-md
-        focus:border-gray-500 focus:shadow-sm
-        w-full
-        p-3
-        h-12
-      "
+      class="focus:outline-none rounded-md focus:border-gray-500 focus:shadow-sm w-full p-3 h-12"
+      v-bind="$attrs"
+      :value.prop="modelValue"
       @input="
         (e) => {
-          $emit('input', e.target.value);
+          $emit('update:modelValue', e.target.value);
         }
       "
-      v-bind="$attrs"
     />
     <label
       :for="$attrs.id"
-      class="
-        absolute
-        top-0
-        left-0
-        p-3
-        h-full
-        pointer-events-none
-        transform
-        origin-left
-        transition-all
-        duration-100
-        ease-in-out
-        text-base text-crisiscleanup-dark-200
-      "
+      class="absolute top-0 left-0 p-3 h-full pointer-events-none transform origin-left transition-all duration-100 ease-in-out text-base text-crisiscleanup-dark-200"
       >{{ $attrs.placeholder }}</label
     >
   </div>
 </template>
 
 <script lang="ts">
-export default {
+export default defineComponent({
   name: 'FloatingInput',
-};
+  props: {
+    modelValue: { type: String, default: '' },
+  },
+});
 </script>
 
 <style scoped>

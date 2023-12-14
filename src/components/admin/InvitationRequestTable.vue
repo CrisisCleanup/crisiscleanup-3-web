@@ -5,13 +5,14 @@
     :body-style="{ height: '300px' }"
     :pagination="meta.pagination"
     :loading="loading"
-    @change="$emit('change', $event)"
     enable-pagination
+    @change="$emit('change', $event)"
   >
     <template #actions="slotProps">
       <base-button
         size="small"
         type="bare"
+        data-testid="testRejectButton"
         class="m-1 mx-2 border-2 border-black text-black px-3 py-1"
         :action="
           () => {
@@ -24,6 +25,7 @@
       <base-button
         size="small"
         variant="solid"
+        data-testid="testAcceptButton"
         class="m-1 mx-2 text-black text-xs px-3 py-1"
         :action="
           () => {
@@ -37,12 +39,14 @@
   </Table>
 </template>
 
-<script>
-import Table from '@/components/Table';
-import User from '@/models/User';
-import InvitationRequest from '@/models/InvitationRequest';
+<script lang="ts">
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import Table from '../Table.vue';
+import InvitationRequest from '../../models/InvitationRequest';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
-export default {
+export default defineComponent({
   name: 'InvitationRequestTable',
   components: { Table },
   props: {
@@ -52,79 +56,83 @@ export default {
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     loading: Boolean,
   },
-  methods: {
-    async acceptInvitationRequest(request) {
+  setup(props, { emit }) {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
+
+    async function loadAllInvitationRequests() {
+      await InvitationRequest.api().get(`/invitation_requests`, {
+        dataKey: 'results',
+      });
+    }
+
+    async function acceptInvitationRequest(request: InvitationRequest) {
       await InvitationRequest.api().acceptInvitationRequest(request);
-      await this.loadAllInvitationRequests();
-      await this.$toasted.success(
-        this.$t('invitationsVue.invitation_request_accepted'),
-      );
-      this.$emit('reload');
-    },
-    async rejectInvitationRequest(request) {
+      await loadAllInvitationRequests();
+      await $toasted.success(t('invitationsVue.invitation_request_accepted'));
+      emit('reload');
+    }
+
+    async function rejectInvitationRequest(request: InvitationRequest) {
       await InvitationRequest.api().rejectInvitationRequest(request);
-      await this.loadAllInvitationRequests();
-      await this.$toasted.success(
-        this.$t('invitationsVue.invitation_request_declined'),
-      );
-      this.$emit('reload');
-    },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  data() {
+      await loadAllInvitationRequests();
+      await $toasted.success(t('invitationsVue.invitation_request_declined'));
+      emit('reload');
+    }
+
     return {
+      currentUser,
+      acceptInvitationRequest,
+      rejectInvitationRequest,
       columns: [
         {
-          title: this.$t('invitationTables.id'),
+          title: t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('invitationTables.email'),
+          title: t('invitationTables.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.full_name'),
+          title: t('invitationTables.full_name'),
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1fr',
-          transformer: (field, item) => {
+          transformer(field: string, item: InvitationRequest) {
             return `${item.first_name} ${item.last_name}`;
           },
         },
         {
-          title: this.$t('invitationTables.mobile'),
+          title: t('invitationTables.mobile'),
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.requested_to'),
+          title: t('invitationTables.requested_to'),
           dataIndex: 'requested_to',
           key: 'requested_to',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.organization'),
+          title: t('invitationTables.organization'),
           dataIndex: 'requested_to_organization',
           key: 'requested_to_organization',
           width: '2fr',
         },
         {
-          title: this.$t(''),
+          title: t(''),
           dataIndex: 'actions',
           key: 'actions',
           width: '2fr',
@@ -132,7 +140,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

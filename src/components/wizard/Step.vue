@@ -2,41 +2,43 @@
   <div v-show="isActive"><slot></slot></div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { computed, inject, onBeforeMount, ref, watch } from 'vue';
+
+export default defineComponent({
   name: 'Step',
   props: {
     name: { required: true, type: String },
-    onSave: { required: false, type: Function, default: () => {} },
+    onSave: { required: false, type: Function, default() {} },
     selected: { type: Boolean },
     disabled: { type: Boolean, default: false },
   },
 
-  data() {
-    return {
-      isActive: false,
-      isCompleted: false,
-    };
-  },
+  setup(props) {
+    const index = ref(0);
+    const isActive = ref(false);
 
-  watch: {
-    selected: {
-      handler() {
-        this.isActive = this.selected;
+    const href = computed(() => {
+      return `#${props.name.toLowerCase().replace(/ /g, '-')}`;
+    });
+
+    const steps = inject('StepsProvider');
+
+    watch(
+      () => steps.selectedIndex,
+      () => {
+        isActive.value = index.value === steps.selectedIndex;
       },
-    },
-  },
+    );
 
-  computed: {
-    href() {
-      return `#${this.name.toLowerCase().replace(/ /g, '-')}`;
-    },
+    onBeforeMount(() => {
+      index.value = steps.count;
+      steps.count++;
+      isActive.value = index.value === steps.selectedIndex;
+    });
+    return { index, isActive, href };
   },
-
-  mounted() {
-    this.isActive = this.selected;
-  },
-};
+});
 </script>
 
 <style scoped></style>

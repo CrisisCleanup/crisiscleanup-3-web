@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type PresignedPostUrlResponse = {
+interface PresignedPostUrlResponse {
   url: string;
   fields: {
     key: string;
@@ -8,7 +8,7 @@ type PresignedPostUrlResponse = {
     bucket: string;
   };
   filePath: string;
-};
+}
 
 export async function uploadToS3({
   fileContents,
@@ -18,32 +18,36 @@ export async function uploadToS3({
   presignedPostUrl: PresignedPostUrlResponse;
 }) {
   const formData = new FormData();
-  Object.entries(presignedPostUrl.fields).forEach(([k, v]) => {
+  for (const [k, v] of Object.entries(presignedPostUrl.fields)) {
     formData.append(k, v);
-  });
+  }
+
   formData.append('file', fileContents); // The file has be the last element
 
-  const response = await axios.post(presignedPostUrl.url, formData, {
+  const instance = axios.create();
+  delete instance.defaults.headers.common.Authorization;
+
+  await instance.post(presignedPostUrl.url, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
-    transformRequest: (data, headers) => {
-      delete headers.common.Authorization;
-      return data;
-    },
   });
 
   return presignedPostUrl.filePath;
 }
 
-export async function uploadFile(formData) {
+export async function uploadFile(formData: FormData) {
   const upload = formData.get('upload');
+  if (!upload || !(upload instanceof File)) {
+    throw new Error('No file to upload');
+  }
+
   const contentType = upload.type;
   const filename = upload.name;
   formData.delete('upload');
   formData.append('filename', filename);
   formData.append('content_type', contentType);
 
-  const result = await axios.post(
-    `${process.env.VUE_APP_API_BASE_URL}/files`,
+  const result = await axios.post<Record<string, any>>(
+    `${import.meta.env.VITE_APP_API_BASE_URL}/files`,
     formData,
     {
       headers: {

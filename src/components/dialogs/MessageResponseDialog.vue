@@ -11,11 +11,12 @@
               <span class="text-base font-bold">{{ title }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelIcon"
                 size="xs"
                 type="cancel"
                 @click.native="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               />
@@ -29,16 +30,8 @@
             <div>
               <textarea
                 v-model="response"
-                class="
-                  text-base
-                  border border-crisiscleanup-dark-100
-                  placeholder-crisiscleanup-dark-200
-                  outline-none
-                  p-2
-                  my-2
-                  resize-none
-                  w-full
-                "
+                data-testid="testResponseTextarea"
+                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
                 rows="4"
               />
             </div>
@@ -46,16 +39,17 @@
 
           <div class="modal-footer flex-shrink">
             <div
-              class="flex items-center justify-center py-2 border-t"
               v-if="Object.keys(actions).length === 0"
+              class="flex items-center justify-center py-2 border-t"
             >
               <base-button
                 :alt="$t('actions.ok')"
+                data-testid="testOkButton"
                 variant="solid"
                 class="px-4 p-2 mx-2"
                 :action="
                   () => {
-                    $close(response);
+                    closeDialog(response);
                   }
                 "
               >
@@ -63,10 +57,11 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
+                data-testid="testCancelButton"
                 class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
-                    $close(false);
+                    closeDialog(false);
                   }
                 "
               >
@@ -74,11 +69,12 @@
               </base-button>
             </div>
             <div
-              class="flex items-center justify-end w-full"
               v-if="Object.keys(actions).length > 0"
+              class="flex items-center justify-center w-full py-2"
             >
               <base-button
                 v-for="(value, key) in actions"
+                data-testid="testButtonActionButton"
                 :key="key"
                 :alt="value.text"
                 :variant="value.type"
@@ -86,7 +82,7 @@
                 :class="value.buttonClass"
                 :action="
                   () => {
-                    $close({
+                    closeDialog({
                       key,
                       response,
                     });
@@ -103,8 +99,11 @@
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { closeDialog } from 'vue3-promise-dialog';
+import { defineComponent, ref } from 'vue';
+
+export default defineComponent({
   name: 'MessageResponseDialog',
   props: {
     title: {
@@ -117,17 +116,19 @@ export default {
     },
     actions: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
   },
-  data() {
+  setup() {
+    const response = ref('');
     return {
-      response: '',
+      response,
+      closeDialog,
     };
   },
-};
+});
 </script>
 
 <style scoped>

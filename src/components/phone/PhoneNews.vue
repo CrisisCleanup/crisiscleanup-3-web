@@ -1,6 +1,6 @@
 <template>
-  <tabs class="" ref="tabs" tab-details-classes="h-full overflow-auto">
-    <tab :name="$t('phoneDashboard.news')">
+  <tabs ref="tabs" class="" tab-details-classes="h-full overflow-auto">
+    <tab :name="$t('phoneDashboard.news')" data-testid="testPhoneNewsDiv">
       <ul>
         <li
           v-for="newItem in news"
@@ -17,7 +17,7 @@
             />
             <img
               v-else
-              src="@/assets/cc-logo.svg"
+              src="../../assets/cc-logo.svg"
               class="w-20 h-20 mr-2"
               alt="crisis-cleanup-logo"
             />
@@ -38,32 +38,17 @@
   </tabs>
 </template>
 
-<script>
-import { formatCmsItem } from '@/utils/helpers';
-import { DialogsMixin, UserMixin } from '@/mixins';
-export default {
+<script lang="ts">
+import { onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
+import axios from 'axios';
+import moment from 'moment';
+import { formatCmsItem } from '../../utils/helpers';
+import useDialogs from '../../hooks/useDialogs';
+import CmsViewer from '../cms/CmsViewer.vue';
+import useCurrentUser from '../../hooks/useCurrentUser';
+
+export default defineComponent({
   name: 'PhoneNews',
-  mixins: [DialogsMixin, UserMixin],
-  data() {
-    return {
-      news: [],
-      unreadCount: 0,
-      newsInterval: undefined,
-      formatCmsItem,
-    };
-  },
-  created() {
-    this.newsInterval = setInterval(this.getNews, 10000);
-  },
-  beforeDestroy() {
-    if (this.newsInterval) {
-      clearInterval(this.newsInterval);
-      this.newsInterval = undefined;
-    }
-  },
-  async mounted() {
-    await this.getNews();
-  },
   props: {
     cmsTag: {
       type: String,
@@ -74,28 +59,43 @@ export default {
       default: 'news_last_seen',
     },
   },
-  methods: {
-    async getNews() {
-      if (this.currentUser.states[this.stateKey]) {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${
-            this.cmsTag
-          }&publish_at__gt=${
-            this.currentUser.states[this.stateKey]
-          }&publish_at__lt=${this.$moment().toISOString()}&limit=1`,
+  setup(props, { emit }) {
+    const { component } = useDialogs();
+    const { currentUser } = useCurrentUser();
+
+    const newsInterval = ref(undefined);
+    const news = ref([]);
+    const unreadCount = ref(0);
+
+    async function getNews() {
+      try {
+        if (currentUser.states[props.stateKey]) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
+              props.cmsTag
+            }&publish_at__gt=${
+              currentUser.states[props.stateKey]
+            }&publish_at__lt=${moment().toISOString()}&limit=1`
+          );
+          unreadCount.value = response.data.count;
+          emit("unreadCount", response.data.count);
+        }
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_BASE_URL}/cms?tags=${
+            props.cmsTag
+          }&sort=-publish_at&limit=10`
         );
-        this.unreadCount = response.data.count;
-        this.$emit('unreadCount', response.data.count);
+        news.value = response.data.results;
+      } catch (e) {
+        console.error(e);
       }
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${this.cmsTag}&sort=-publish_at&limit=10`,
-      );
-      this.news = response.data.results;
-    },
-    async showDetails(newItem) {
-      await this.$component({
+    }
+
+    async function showDetails(newItem) {
+      await component({
         title: formatCmsItem(newItem.title),
-        component: 'CmsViewer',
+        component: CmsViewer,
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
@@ -104,9 +104,32 @@ export default {
           image: newItem.thumbnail_file?.blog_url,
         },
       });
-    },
+    }
+
+    onBeforeMount(() => {
+      newsInterval.value = setInterval(getNews, 60_000);
+    });
+
+    onBeforeUnmount(() => {
+      if (newsInterval.value) {
+        clearInterval(newsInterval.value);
+        newsInterval.value = undefined;
+      }
+    });
+
+    onMounted(() => {
+      getNews();
+    });
+
+    return {
+      news,
+      unreadCount,
+      newsInterval,
+      formatCmsItem,
+      showDetails,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -1,51 +1,42 @@
 <template>
-  <div class="flex h-full relative">
+  <div class="flex h-full relative" data-testid="testLocationdiv">
     <div
       v-if="loading"
       style="z-index: 1001"
-      class="
-        absolute
-        bottom-0
-        left-0
-        right-0
-        top-0
-        bg-crisiscleanup-light-grey
-        opacity-75
-        flex
-        items-center
-        justify-center
-      "
+      class="absolute inset-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
     >
       <spinner />
     </div>
     <div v-else class="mx-2 flex flex-col pt-2 w-84">
       <div class="flex items-center justify-between">
-        <div v-if="isNew" class="font-bold">
+        <div v-if="isNew" class="font-bold" data-testid="testNewLocationDiv">
           {{ $t('actions.new_location') }}
         </div>
-        <div v-else class="font-bold w-4/5">
+        <div v-else class="font-bold w-4/5" data-testid="testEditLocationDiv">
           {{ $t('actions.edit') }} {{ currentLocation && currentLocation.name }}
         </div>
         <div class="flex">
           <ccu-icon
             v-show="false"
+            data-testid="testEditLocationIcon"
             :alt="$t('actions.edit_location')"
             size="small"
             class="p-1 py-2"
             type="edit"
-            @click.native="() => {}"
           />
           <ccu-icon
             v-if="!isNew"
+            data-testid="testDownloadAsShapefileIcon"
             :alt="$t('locationVue.download_as_shapefile')"
             size="small"
             class="p-1 py-2"
             type="download"
-            @click.native="downloadCurrentLocation"
+            @click="downloadCurrentLocation"
           />
           <ccu-icon
             v-show="false"
             v-if="!isNew"
+            data-testid="testShareLocationIcon"
             :alt="$t('actions.share_location')"
             size="small"
             class="p-1 py-2"
@@ -53,11 +44,12 @@
           />
           <ccu-icon
             v-if="!isNew"
+            data-testid="testDeleteIcon"
             :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
             type="trash"
-            @click.native="deleteCurrentLocation"
+            @click="deleteCurrentLocation"
           />
         </div>
       </div>
@@ -69,24 +61,24 @@
         <div class="flex flex-col">
           <base-input
             v-model="currentLocation.name"
+            data-testid="testCurrentLocationNameTextInput"
             type="text"
             class="input my-2"
             size="large"
             required
             :placeholder="$t('locationVue.location_name')"
           />
-          <form-select
+          <base-select
             v-if="!loading"
-            :value="currentLocation.type"
+            data-testid="testLocationTypeTextInput"
+            :model-value="currentLocation.type"
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            :required="true"
             :placeholder="$t('locationVue.location_type')"
-            select-classes="bg-white border border-crisiscleanup-dark-100 h-12"
-            @input="
-              (type) => {
-                currentLocation.type = type;
+            @update:model-value="
+              (t) => {
+                currentLocation.type = t;
                 selectedIncidentId = null;
                 selectedOrganization = null;
               }
@@ -95,29 +87,28 @@
 
           <div v-if="!currentLocation.id" class="extra-actions">
             <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
-              <autocomplete
-                class="my-2"
-                icon="search"
-                :suggestions="organizationResults"
-                display-property="name"
-                size="large"
+              <base-select
+                label="name"
+                data-testid="testSearchForOrganizationSelect"
+                item-key="id"
+                :options="onOrganizationSearch"
                 :placeholder="$t('locationVue.search_for_organization')"
-                clear-on-selected
-                @selected="onSelectOrganization"
-                @search="onOrganizationSearch"
+                :model-value="selectedOrganization"
+                searchable
+                object
+                @update:model-value="onSelectOrganization"
               />
             </div>
             <div v-if="isIncidentRelated">
-              <form-select
+              <base-select
                 :value="selectedIncidentId"
-                class="my-2"
                 :options="incidents"
+                data-testid="testIncidentSelect"
                 searchable
-                select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12 mb-3"
                 item-key="id"
                 label="name"
                 :placeholder="$t('locationVue.select_incident')"
-                @input="onSelectIncident"
+                @update:model-value="onSelectIncident"
               />
             </div>
           </div>
@@ -126,7 +117,7 @@
             <div
               v-if="
                 (isPrimaryResponseArea || isSecondaryResponseArea) &&
-                relatedOrganizations.length
+                relatedOrganizations.length > 0
               "
             >
               <base-text :weight="400">{{
@@ -135,14 +126,16 @@
               <div
                 v-for="organization in relatedOrganizations"
                 :key="`${organization.id}`"
+                :data-testid="`testOrganizationResults${organization.id}Div`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ organization.name }}
                 <ccu-icon
                   type="trash"
+                  :data-testid="`testClearLocationFromOrganization${organization.id}Icon`"
                   size="small"
                   :alt="$t('actions.clear_location')"
-                  @click.native="
+                  @click="
                     () => {
                       detachLocationFromOrganization(organization);
                     }
@@ -150,25 +143,23 @@
                 />
               </div>
             </div>
-            <div v-if="isIncidentRelated && relatedIncidents.length">
+            <div v-if="isIncidentRelated && relatedIncidents.length > 0">
               <base-text :weight="400">{{
                 $t('locationVue.related_incidents')
               }}</base-text>
               <div
                 v-for="incident in relatedIncidents"
                 :key="`${incident.id}`"
+                :data-testid="`testIncidentResults${incident.id}Div`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ incident.name }}
                 <ccu-icon
                   type="trash"
+                  :data-testid="`testRelatedIncidents${incident.id}Div`"
                   size="small"
                   :alt="$t('actions.clear_location')"
-                  @click.native="
-                    () => {
-                      detachLocationFromIncident(incident);
-                    }
-                  "
+                  @click="() => detachLocationFromIncident(incident)"
                 />
               </div>
             </div>
@@ -176,41 +167,34 @@
 
           <textarea
             v-model="currentLocation.notes"
-            class="
-              text-base
-              my-2
-              border border-crisiscleanup-dark-100
-              placeholder-crisiscleanup-dark-200
-              outline-none
-              p-2
-              resize-none
-            "
+            data-testid="testLocationNotesTextArea"
+            class="text-base my-2 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
             rows="4"
             :placeholder="$t('locationVue.notes')"
           />
           <div>
-            <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
+            <div class="mt-20 text-base">{{ $t('locationVue.access') }}</div>
             <div class="flex flex-wrap mt-2">
               <base-radio
+                v-model="currentLocation.shared"
+                data-testid="testSharedRadio"
                 class="mr-4"
                 label="shared"
                 :name="$t('locationVue.shared')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
               />
               <base-radio
+                v-model="currentLocation.shared"
+                data-testid="testPrivateRadio"
                 class="mr-4"
                 label="private"
                 :name="$t('locationVue.private')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
               />
               <base-radio
+                v-model="currentLocation.shared"
+                data-testid="testPublicRadio"
                 class="mr-4"
                 label="public"
                 :name="$t('locationVue.public')"
-                :value="currentLocation.shared"
-                @change="currentLocation.shared = $event"
               />
             </div>
           </div>
@@ -223,6 +207,7 @@
             <div
               v-for="incident in selectedOrganization.incident_list"
               :key="`${incident.id}`"
+              :data-testid="`testOrganizationIncidents${incident.id}Div`"
             >
               {{ incident.name }}
             </div>
@@ -232,11 +217,13 @@
           <base-button
             :text="$t('actions.reset')"
             :alt="$t('actions.reset')"
+            data-testid="testResetButton"
             class="border border-black p-2 mr-1"
           />
           <base-button
             :text="$t('actions.save_location')"
             :alt="$t('actions.save_location')"
+            data-testid="testSaveLocationButton"
             class="p-2 mr-1"
             variant="solid"
             :action="saveLocation"
@@ -245,13 +232,10 @@
             v-if="isNew"
             :text="$t('actions.save_and_new')"
             :alt="$t('actions.save_and_new')"
+            data-testid="testSaveAndNewButton"
             class="p-2"
             variant="solid"
-            :action="
-              () => {
-                saveLocation(true);
-              }
-            "
+            :action="() => saveLocation(true)"
           />
         </div>
       </form>
@@ -273,65 +257,69 @@
   </div>
 </template>
 
-<script>
-import { create } from 'vue-modal-dialogs';
+<script lang="ts">
+import { useRouter, useRoute } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import useDialogs from '@/hooks/useDialogs';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import LocationTool from '@/components/LocationTool';
+import LocationTool from '@/components/locations/LocationTool.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
-import MessageBox from '@/components/dialogs/MessageBox';
-const messageBox = create(MessageBox);
+import BaseSelect from '@/components/BaseSelect.vue';
 
-export default {
+export default defineComponent({
   name: 'Location',
-  components: { LocationTool },
-  data() {
-    return {
-      currentLocation: null,
-      loading: false,
-      locationAccess: 'Public',
-      organizationResults: [],
-      selectedOrganization: null,
-      selectedIncidentId: null,
-      relatedOrganizations: [],
-      relatedIncidents: [],
-    };
-  },
-  computed: {
-    isNew() {
-      return !this.$route.params.location_id;
-    },
-    locationTypes() {
-      return LocationType.all();
-    },
-    selectedIncident() {
-      if (this.selectedIncidentId) {
-        return Incident.find(this.selectedIncidentId);
+  components: { BaseSelect, LocationTool },
+  setup(props, ctx) {
+    const { confirm: messageBox } = useDialogs();
+    const { t } = useI18n();
+    const $toasted = useToast();
+    const route = useRoute();
+    const router = useRouter();
+    const currentLocation = ref<Location>();
+    const currentPolygon = ref();
+    const loading = ref(false);
+    const locationAccess = ref('Public');
+    const organizationResults = ref<Array<Organization>>([]);
+    const selectedOrganization = ref<Organization | null>();
+    const selectedIncidentId = ref<string | null>();
+    const relatedOrganizations = ref<Array<Organization>>([]);
+    const relatedIncidents = ref<Array<Incident>>([]);
+    const locationTool = ref();
+    const form = ref<HTMLFormElement | null>(null);
+    const isNew = computed(() => {
+      return !route.params.location_id;
+    });
+    const locationTypes = computed(() => LocationType.all());
+    const selectedIncident = computed(() => {
+      if (selectedIncidentId.value) {
+        return Incident.find(selectedIncidentId.value);
       }
+
       return null;
-    },
-    incidents() {
+    });
+    const incidents = computed(() => {
       return Incident.query().orderBy('id', 'desc').get();
-    },
-    isPrimaryResponseArea() {
+    });
+    const isPrimaryResponseArea = computed(() => {
       return (
         LocationType.query().where('key', 'org_primary_response_area').get()[0]
-          .id === this.currentLocation.type
+          .id === currentLocation.value?.type
       );
-    },
-    isSecondaryResponseArea() {
+    });
+    const isSecondaryResponseArea = computed(() => {
       return (
         LocationType.query()
           .where('key', 'org_secondary_response_area')
-          .get()[0].id === this.currentLocation.type
+          .get()[0].id === currentLocation.value?.type
       );
-    },
-    isIncidentRelated() {
+    });
+    const isIncidentRelated = computed(() => {
       const incidentRelatedTypes = LocationType.query()
-        .where('key', (key) =>
+        .where('key', (key: string) =>
           [
             'incident_primary_damaged_area',
             'incident_storm_track',
@@ -341,92 +329,66 @@ export default {
         )
         .get();
       return incidentRelatedTypes.some(
-        (key) => key.id === this.currentLocation.type,
+        (key) => key.id === currentLocation.value?.type,
       );
-    },
-  },
-  async mounted() {
-    await this.loadLocation();
-  },
-  methods: {
-    async loadLocation() {
-      this.loading = true;
-      await LocationType.api().get('/location_types', {
-        dataKey: 'results',
-      });
-      if (this.$route.params.location_id) {
-        try {
-          await Location.api().fetchById(this.$route.params.location_id);
-          this.currentLocation = Location.find(this.$route.params.location_id);
-          this.loadRelatedEntities();
-        } catch (e) {
-          this.currentLocation = new Location();
-          await this.$router.replace(`/locations/new`);
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.reset();
+    });
+    const reset = () => {
+      currentLocation.value = new Location();
+      currentPolygon.value = null;
+      selectedIncidentId.value = null;
+      selectedOrganization.value = null;
+      if (locationTool.value) {
+        locationTool.value.reset();
       }
-      this.loading = false;
-    },
-    reset() {
-      this.currentLocation = new Location();
-      this.currentPolygon = null;
-      this.selectedIncidentId = null;
-      this.selectedOrganization = null;
-      if (this.$refs.locationTool) {
-        this.$refs.locationTool.reset();
-      }
-    },
-    async downloadCurrentLocation() {
-      this.loading = true;
-      const shapefile = await Location.api().download(
-        this.$route.params.location_id,
-      );
+    };
+
+    const downloadCurrentLocation = async () => {
+      loading.value = true;
+      const shapefile = await Location.api().download(route.params.location_id);
       forceFileDownload(shapefile.response);
-      this.loading = false;
-    },
-    async deleteCurrentLocation() {
-      this.loading = true;
+      loading.value = false;
+    };
+
+    const setCurrentLocation = (location: Location) => {
+      currentPolygon.value = location;
+    };
+
+    const deleteCurrentLocation = async () => {
+      loading.value = true;
       try {
-        await Location.api().delete(
-          `/locations/${this.$route.params.location_id}`,
-          {
-            delete: this.$route.params.location_id,
-          },
-        );
-        await this.$toasted.success(this.$t('locationVue.location_deleted'));
-        this.reset();
-        await this.$router.push('/locations/new');
+        await Location.api().delete(`/locations/${route.params.location_id}`, {
+          delete: route.params.location_id as string,
+        });
+        await $toasted.success(t('locationVue.location_deleted'));
+        reset();
+        await router.push('/locations/new');
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    setCurrentLocation(location) {
-      this.currentPolygon = location;
-    },
-    async onSelectOrganization(value) {
-      this.selectedOrganization = value;
-      if (!this.currentLocation.name) {
-        this.currentLocation.name = `${this.selectedOrganization.name} ${this.currentLocation.location_type.name_t}`;
+    };
+
+    const onSelectOrganization = async (value: Organization) => {
+      selectedOrganization.value = value;
+      if (currentLocation.value && !currentLocation.value.name) {
+        currentLocation.value.name = `${selectedOrganization.value?.name} ${currentLocation.value.location_type?.name_t}`;
       }
-      if (this.isPrimaryResponseArea && value.primary_location) {
+
+      if (isPrimaryResponseArea.value && value.primary_location) {
         const result = await messageBox({
-          title: this.$t('locationVue.existing_location'),
-          content: this.$t('locationVue.location_already_exists_organization', {
+          title: t('locationVue.existing_location'),
+          content: t('locationVue.location_already_exists_organization', {
             organization: value.name,
           }),
           actions: {
             continue: {
-              text: this.$t('actions.create_new'),
+              text: t('actions.create_new'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             edit: {
-              text: this.$t('actions.edit_existing'),
+              text: t('actions.edit_existing'),
               type: 'solid',
               buttonClass: 'border border-black',
             },
@@ -434,37 +396,38 @@ export default {
         });
 
         if (result === 'edit') {
-          await this.$router.push(`/locations/${value.primary_location}/edit`);
+          await router.push(`/locations/${value.primary_location}/edit`);
         }
       }
-    },
+    };
 
-    async onSelectIncident(value) {
-      this.selectedIncidentId = value;
+    const onSelectIncident = async (value: string) => {
+      selectedIncidentId.value = value;
       let incident = Incident.find(value);
-      if (!this.currentLocation.name) {
-        this.currentLocation.name = `${incident.name} ${this.currentLocation.location_type.name_t}`;
+      if (currentLocation.value && !currentLocation.value.name) {
+        currentLocation.value.name = `${incident?.name} ${currentLocation.value.location_type?.name_t}`;
       }
-      if (this.isIncidentRelated && incident.locations.length) {
+
+      if (isIncidentRelated.value && incident?.locations.length) {
         await Incident.api().fetchById(value);
         incident = Incident.find(value);
-        const existingLocation = incident.locationModels.find(
-          (location) => location.type === this.currentLocation.type,
+        const existingLocation = incident?.locationModels.find(
+          (location) => location.type === currentLocation.value?.type,
         );
         if (existingLocation) {
           const result = await messageBox({
-            title: this.$t('locationVue.existing_location'),
-            content: this.$t('locationVue.location_already_exists_incident', {
-              incident: incident.name,
+            title: t('locationVue.existing_location'),
+            content: t('locationVue.location_already_exists_incident', {
+              incident: incident?.name,
             }),
             actions: {
               continue: {
-                text: this.$t('actions.create_new'),
+                text: t('actions.create_new'),
                 type: 'outline',
                 buttonClass: 'border border-black',
               },
               edit: {
-                text: this.$t('actions.edit_existing'),
+                text: t('actions.edit_existing'),
                 type: 'outline',
                 buttonClass: 'border border-black',
               },
@@ -472,152 +435,256 @@ export default {
           });
 
           if (result === 'edit') {
-            await this.$router.push(`/locations/${existingLocation.id}/edit`);
+            await router.push(`/locations/${existingLocation.id}/edit`);
           }
         }
       }
-    },
-    async onOrganizationSearch(value) {
+    };
+
+    const onOrganizationSearch = async (value: string) => {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
           dataKey: 'results',
         },
       );
-      this.organizationResults = results.entities.organizations;
-    },
-    async saveLocation(goToNew) {
-      const isValid = this.$refs.form.reportValidity();
+      organizationResults.value = (results.entities?.organizations ||
+        []) as Array<Organization>;
+      return organizationResults.value;
+    };
+
+    const saveLocation = async (goToNew: boolean) => {
+      if (!form.value) {
+        console.error('Form ref not found!');
+        return;
+      }
+
+      const isValid = form.value.reportValidity();
       if (!isValid) {
+        console.error('Form is not valid!');
+        $toasted.error(t('locationVue.form_not_valid'));
         return;
       }
 
-      if (!this.currentPolygon) {
-        this.$toasted.error(this.$t('locationVue.no_valid_drawing_found'));
+      if (!currentPolygon.value) {
+        $toasted.error(t('locationVue.no_valid_drawing_found'));
         return;
       }
 
-      this.loading = true;
-      let { geometry } = this.currentPolygon.toGeoJSON();
-      const { type, features } = this.currentPolygon.toGeoJSON();
+      loading.value = true;
+      let { geometry } = currentPolygon.value.toGeoJSON();
+      const { type, features } = currentPolygon.value.toGeoJSON();
       if (type === 'FeatureCollection') {
         const [feature] = features;
         geometry = feature.geometry;
       }
 
-      this.currentLocation.point = null;
-      this.currentLocation.poly = null;
-      this.currentLocation.geom = null;
+      if (currentLocation.value) {
+        currentLocation.value.point = null;
+        currentLocation.value.poly = null;
+        currentLocation.value.geom = null;
 
-      if (geometry.type === 'Point') {
-        this.currentLocation.point = geometry;
-      } else if (geometry.type === 'Polygon') {
-        this.currentLocation.poly = geometry;
-      } else if (geometry.type === 'MultiPolygon') {
-        this.currentLocation.geom = geometry;
+        switch (geometry.type) {
+          case 'Point': {
+            currentLocation.value.point = geometry;
+
+            break;
+          }
+
+          case 'Polygon': {
+            currentLocation.value.poly = geometry;
+
+            break;
+          }
+
+          case 'MultiPolygon': {
+            currentLocation.value.geom = geometry;
+
+            break;
+          }
+          // No default
+        }
       }
 
       try {
         let response;
-        if (this.$route.params.location_id) {
+        if (route.params.location_id) {
           response = await Location.api().put(
-            `/locations/${this.$route.params.location_id}`,
-            this.currentLocation,
+            `/locations/${route.params.location_id}`,
+            currentLocation.value,
           );
         } else {
           response = await Location.api().post(
             '/locations',
-            this.currentLocation,
+            currentLocation.value,
           );
-          if (this.isPrimaryResponseArea) {
+          if (isPrimaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${this.selectedOrganization.id}`,
+              `/organizations/${selectedOrganization.value?.id}`,
               {
                 primary_location: response.response.data.id,
               },
             );
           }
 
-          if (this.isSecondaryResponseArea) {
+          if (isSecondaryResponseArea.value) {
             await Organization.api().patch(
-              `/organizations/${this.selectedOrganization.id}`,
+              `/organizations/${selectedOrganization.value?.id}`,
               {
                 secondary_location: response.response.data.id,
               },
             );
           }
 
-          if (this.isIncidentRelated) {
+          if (isIncidentRelated.value) {
             await Incident.api().addLocation(
-              this.selectedIncidentId,
+              selectedIncidentId.value,
               response.response.data.id,
             );
           }
         }
-        await this.$toasted.success(this.$t('locationVue.location_saved'));
+
+        await $toasted.success(t('locationVue.location_saved'));
 
         if (goToNew) {
-          this.reset();
+          reset();
         } else {
           const locationId = response.response.data.id;
-          await this.$router.push(`/locations/${locationId}/edit`);
-          await this.loadLocation();
+          await router.push(`/locations/${locationId}/edit`);
+          await loadLocation();
         }
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-    async loadRelatedEntities() {
-      this.relatedOrganizations = [];
-      this.relatedIncidents = [];
-      if (this.isPrimaryResponseArea) {
+    };
+
+    const loadRelatedEntities = async () => {
+      relatedOrganizations.value = [];
+      relatedIncidents.value = [];
+      if (isPrimaryResponseArea.value) {
         const results = await Organization.api().get(
-          `/organizations?primary_location=${this.$route.params.location_id}&fields=id,name`,
+          `/organizations?primary_location=${route.params.location_id}&fields=id,name`,
           {
             dataKey: 'results',
           },
         );
-        this.relatedOrganizations = [...results.entities.organizations];
+        if (results.entities) {
+          relatedOrganizations.value = [
+            ...results.entities.organizations,
+          ] as Organization[];
+        }
       }
-      if (this.isSecondaryResponseArea) {
+
+      if (isSecondaryResponseArea.value) {
         const results = await Organization.api().get(
-          `/organizations?secondary_location=${this.$route.params.location_id}&fields=id,name`,
+          `/organizations?secondary_location=${route.params.location_id}&fields=id,name`,
           {
             dataKey: 'results',
           },
         );
-        this.relatedOrganizations = [...results.entities.organizations];
+        relatedOrganizations.value = (results.entities?.organizations ||
+          []) as Organization[];
       }
-      if (this.isIncidentRelated) {
-        const incidentIds = this.currentLocation.joins.map(
+
+      if (isIncidentRelated.value) {
+        const incidentIds = currentLocation.value?.joins.map(
           (join) => join.object_id,
         );
         const incidents = Incident.query().whereIdIn(incidentIds).get();
-        this.relatedIncidents = [...incidents];
+        relatedIncidents.value = [...incidents] as Incident[];
       }
-    },
-    async detachLocationFromOrganization(organization) {
-      const data = {};
-      if (this.isPrimaryResponseArea) {
+    };
+
+    const detachLocationFromOrganization = async (
+      organization: Organization,
+    ) => {
+      const data: Record<string, unknown> = {};
+      if (isPrimaryResponseArea.value) {
         data.primary_location = null;
       }
-      if (this.isSecondaryResponseArea) {
+
+      if (isSecondaryResponseArea.value) {
         data.secondary_location = null;
       }
+
       await Organization.api().patch(`/organizations/${organization.id}`, data);
-      await this.loadLocation();
-    },
-    async detachLocationFromIncident(incident) {
-      await Incident.api().removeLocation(incident.id, this.currentLocation.id);
-      await this.loadLocation();
-    },
+      await loadLocation();
+    };
+
+    const detachLocationFromIncident = async (incident: Incident) => {
+      await Incident.api().removeLocation(
+        incident.id,
+        currentLocation.value?.id,
+      );
+      await loadLocation();
+    };
+
+    const loadLocation = async () => {
+      loading.value = true;
+      await LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      });
+      if (route.params.location_id) {
+        try {
+          await Location.api().fetchById(route.params.location_id);
+          currentLocation.value = Location.find(
+            route.params.location_id,
+          ) as Location;
+          await loadRelatedEntities();
+        } catch (error) {
+          $toasted.error(getErrorMessage(error));
+          currentLocation.value = new Location();
+          await router.replace(`/locations/new`);
+        } finally {
+          loading.value = false;
+        }
+      } else {
+        reset();
+      }
+
+      loading.value = false;
+    };
+
+    onMounted(async () => {
+      await loadLocation();
+    });
+    return {
+      currentLocation,
+      loading,
+      locationAccess,
+      organizationResults,
+      selectedOrganization,
+      selectedIncidentId,
+      relatedOrganizations,
+      relatedIncidents,
+      isNew,
+      locationTypes,
+      selectedIncident,
+      incidents,
+      isPrimaryResponseArea,
+      isSecondaryResponseArea,
+      isIncidentRelated,
+      locationTool,
+      form,
+      reset,
+      downloadCurrentLocation,
+      deleteCurrentLocation,
+      setCurrentLocation,
+      onSelectOrganization,
+      onSelectIncident,
+      onOrganizationSearch,
+      saveLocation,
+      loadRelatedEntities,
+      detachLocationFromOrganization,
+      detachLocationFromIncident,
+    };
   },
-};
+});
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .form-field {
   @apply my-2;
 }

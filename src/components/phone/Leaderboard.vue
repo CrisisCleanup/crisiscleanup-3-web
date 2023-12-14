@@ -2,19 +2,21 @@
   <TitledCard
     :title="$t('phoneDashboard.leaderboard')"
     :dropdown="dropdownProps"
+    data-testid="testLeaderboardDiv"
     @update:dropdown="onDropdownUpdate"
   >
     <div class="h-full overflow-y-scroll">
       <div
-        class="flex items-center justify-between p-2"
         v-for="rank in leaderboard"
         :key="rank.user"
+        class="flex items-center justify-between p-2"
       >
         <div class="flex">
           <div class="image">
             <Avatar
               :initials="rank.user.full_name"
               :url="rank.user && rank.user.profilePictureUrl"
+              data-testid="testAvatarIcon"
               size="xsmall"
               inner-classes="shadow"
             />
@@ -26,20 +28,21 @@
                 :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
                 :user="rank.user.id"
                 :name-style="nameTextStyle"
+                data-testid="testUserInfoTooltip"
               />
               <div class="flex">
                 <div
-                  class="flex flex-col pl-1"
                   v-for="l in getLanguageTags('en-US')"
                   :key="l"
+                  class="flex flex-col pl-1"
                 >
                   <LanguageTag class="text-bodyxsm" :language-subtag="l" />
                 </div>
               </div>
             </div>
-            <div class="info--org" v-if="rank.user.organization">
+            <div v-if="rank.user.organization" class="info--org">
               <base-text :style="{ lineHeight: '16px' }" variant="h4" regular>
-                {{ rank.user.organization.name | truncate(28) }}
+                {{ truncate(rank.user.organization.name, 28) }}
               </base-text>
             </div>
             <div
@@ -56,45 +59,49 @@
               variant="h4"
               regular
             >
-              {{ rank.state_at | moment('from', 'now') }}
+              {{ momentFromNow(rank.state_at) }}
             </base-text>
           </div>
         </div>
         <div class="grid grid-cols-3 gap-x-4">
           <template v-if="true">
-            <div>{{ $t('phoneDashboard.inbound') }}</div>
-            <div>{{ $t('phoneDashboard.outbound') }}</div>
-            <div>{{ $t('phoneDashboard.total') }}</div>
+            <div data-testid="testInboundCountDiv">{{ $t('phoneDashboard.inbound') }}</div>
+            <div data-testid="testOutboundCountDiv">{{ $t('phoneDashboard.outbound') }}</div>
+            <div data-testid="testTotalCountdiv">{{ $t('phoneDashboard.total') }}</div>
           </template>
           <div
-            class="metric"
             v-for="m in ['inbound_calls', 'outbound_calls', 'total']"
             :key="m"
+            class="metric"
           >
             <base-text variant="h1" semi-bold>
-              {{ rank[m] | padStart(2, '0') }}
+              {{ padStart(rank[m], 2, '0') }}
             </base-text>
           </div>
         </div>
       </div>
     </div>
     <div
-      class="flex items-center justify-between p-2 border-t"
       v-if="previous || next"
+      class="flex items-center justify-between p-2 border-t"
     >
       <base-button
         :disabled="!previous"
+        data-testid="testPreviousButton"
         class="bg-crisiscleanup-light-smoke w-6 h-6"
         variant="solid"
         icon-size="xs"
         ccu-icon="arrow-left"
+        :alt="$t('actions.previous')"
         :action="() => loadLeaderboard(null, previous)"
       />
       <base-button
         ccu-icon="arrow-right"
+        data-testid="testNextButton"
         icon-size="xs"
         class="bg-crisiscleanup-light-smoke w-6 h-6"
         variant="solid"
+        :alt="$t('actions.next')"
         :disabled="!next"
         :action="() => loadLeaderboard(null, next)"
       />
@@ -102,14 +109,26 @@
   </TitledCard>
 </template>
 
-<script>
-import User from '@/models/User';
-import Avatar from '@/components/Avatar';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
-import LanguageTag from '@/components/tags/LanguageTag';
-import TitledCard from '@/components/cards/TitledCard';
-import { useWebSockets } from '@/use/useWebSockets';
-import { EventBus } from '@/event-bus';
+<script lang="ts">
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
+import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+import { padStart, truncate } from 'lodash';
+import User from '../../models/User';
+import Avatar from '../Avatar.vue';
+import UserDetailsTooltip from '../user/DetailsTooltip.vue';
+import LanguageTag from '../tags/LanguageTag.vue';
+import TitledCard from '../cards/TitledCard.vue';
+import { useWebSockets } from '../../hooks/useWebSockets';
+import useEmitter from '../../hooks/useEmitter';
+import { momentFromNow } from '../../filters/index';
 
 const LEADERBOARD_RESOLUTIONS = Object.freeze({
   DAILY: 'daily',
@@ -125,122 +144,153 @@ const AGENT_STATES = Object.freeze({
   ENGAGED: ['talking', 'text-crisiscleanup-teal'],
 });
 
-export default {
+export default defineComponent({
   name: 'Leaderboard',
   components: { TitledCard, LanguageTag, UserDetailsTooltip, Avatar },
-  data() {
-    return {
-      leaderboard: [],
-      previous: null,
-      next: null,
-      resolution: LEADERBOARD_RESOLUTIONS.DAILY,
-      nameTextStyle: {
-        lineHeight: '1rem',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      },
-      socket: null,
-      agentStats: null,
+  setup() {
+    const { emitter } = useEmitter();
+    const { t } = useI18n();
+    const leaderboard = ref([]);
+    const previous = ref(null);
+    const next = ref(null);
+    const resolution = ref(LEADERBOARD_RESOLUTIONS.DAILY);
+    const socket = ref(null);
+    const agentStats = ref(null);
+    const nameTextStyle = {
+      lineHeight: '1rem',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     };
-  },
-  async created() {
-    const { socket } = useWebSockets(
-      '/ws/phone_stats',
-      'phone_stats',
-      (data) => {
-        this.agentStats = data;
-      },
-    );
-    this.socket = socket;
-  },
-  async mounted() {
-    await this.loadLeaderboard(this.resolution);
-  },
-  unmounted() {
-    this.socket.close();
-  },
-  methods: {
-    async loadLeaderboard(resolution, url) {
-      this.resolution = resolution;
-      const { data } = await this.$http.get(
+
+    async function loadLeaderboard(r, url) {
+      resolution.value = r;
+      const { data } = await axios.get(
         url ||
-          `${process.env.VUE_APP_API_BASE_URL}/phone/leaderboard?resolution=${resolution}`,
+          `${
+            import.meta.env.VITE_APP_API_BASE_URL
+          }/phone/leaderboard?resolution=${resolution.value}`,
       );
 
-      const leaderboard = data.results || data;
-      this.next = data.next;
-      this.previous = data.previous;
+      const lb = data.results || data;
+      next.value = data.next;
+      previous.value = data.previous;
 
-      await this.getUsers(leaderboard.map((ranking) => ranking.user));
-      this.leaderboard = leaderboard;
-      this.leaderboard.forEach((ranking) => {
-        ranking.user = this.getUser(ranking.user);
-      });
-      this.buildLeaderboard();
-    },
-    async getUsers(userIds) {
+      await getUsers(lb.map((ranking) => ranking.user));
+      leaderboard.value = lb;
+      for (const ranking of leaderboard.value) {
+        ranking.user = getUser(ranking.user);
+      }
+
+      buildLeaderboard();
+    }
+
+    async function getUsers(userIds) {
       await User.api().get(`/users?id__in=${userIds.join(',')}`, {
         dataKey: 'results',
       });
-    },
-    buildLeaderboard() {
-      this.leaderboard.forEach((ranking) => {
-        if (this.agentStats) {
-          const agentState = this.agentStats.find(
+    }
+
+    function buildLeaderboard() {
+      for (const ranking of leaderboard.value) {
+        if (agentStats.value) {
+          const agentState = agentStats.value.find(
             (u) => String(u.user) === String(ranking.user.id),
           );
           ranking.state =
             AGENT_STATES[agentState ? agentState.state : 'OFFLINE'];
           ranking.state_at = agentState ? agentState.state_at : null;
         }
+
         ranking.total = ranking.inbound_calls + ranking.outbound_calls;
-      });
-      this.leaderboard.sort((a, b) => b.total - a.total);
-      this.leaderboard = [...this.leaderboard];
-    },
-    getLanguageTags(locale) {
+      }
+
+      leaderboard.value.sort((a, b) => b.total - a.total);
+      leaderboard.value = [...leaderboard.value];
+    }
+
+    function getLanguageTags(locale) {
       return locale.split('#');
-    },
-    getUser(id) {
+    }
+
+    function getUser(id) {
       return User.find(id);
-    },
-    async onDropdownUpdate(value) {
-      await this.loadLeaderboard(value);
-    },
-  },
-  computed: {
-    dropdownProps() {
+    }
+
+    async function onDropdownUpdate(value) {
+      await loadLeaderboard(value);
+    }
+
+    onBeforeMount(() => {
+      const { socket: s } = useWebSockets(
+        '/ws/phone_stats',
+        'phone_stats',
+        (data) => {
+          agentStats.value = data;
+        },
+      );
+      socket.value = s;
+    });
+
+    onMounted(async () => {
+      await loadLeaderboard(resolution.value);
+    });
+
+    onBeforeUnmount(() => {
+      socket.value.close();
+    });
+
+    const dropdownProps = computed(() => {
       return {
         label: 'name',
         itemKey: 'key',
-        value: this.resolution,
+        value: resolution.value,
         options: [
           {
             key: LEADERBOARD_RESOLUTIONS.DAILY,
-            name: this.$t('phoneDashboard.today'),
+            name: t('phoneDashboard.today'),
           },
           {
             key: LEADERBOARD_RESOLUTIONS.WEEKLY,
-            name: this.$t('phoneDashboard.this_week'),
+            name: t('phoneDashboard.this_week'),
           },
           {
             key: LEADERBOARD_RESOLUTIONS.ALL_TIME,
-            name: this.$t('phoneDashboard.all_time'),
+            name: t('phoneDashboard.all_time'),
           },
         ],
       };
-    },
+    });
+
+    watch(
+      () => agentStats.value,
+      (agents) => {
+        buildLeaderboard();
+        if (agents) {
+          emitter.emit(
+            'phone:agents_online',
+            agents.filter((agent) => agent.state === 'AVAILABLE').length,
+          );
+        }
+      },
+    );
+
+    return {
+      leaderboard,
+      previous,
+      next,
+      resolution,
+      nameTextStyle,
+      socket,
+      agentStats,
+      loadLeaderboard,
+      getUsers,
+      onDropdownUpdate,
+      getLanguageTags,
+      dropdownProps,
+      momentFromNow,
+      padStart,
+      truncate,
+    };
   },
-  watch: {
-    agentStats(agents) {
-      this.buildLeaderboard();
-      if (agents) {
-        EventBus.$emit(
-          'phone:agents_online',
-          agents.filter((agent) => agent.state === 'AVAILABLE').length,
-        );
-      }
-    },
-  },
-};
+});
 </script>

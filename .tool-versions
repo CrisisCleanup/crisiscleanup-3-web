@@ -1,3 +1,3 @@
-nodejs 14.17.0
-direnv 2.21.2
-java adoptopenjdk-8.0.272+10
+nodejs 18.16.0
+pnpm   8.7.4
+direnv 2.32.2

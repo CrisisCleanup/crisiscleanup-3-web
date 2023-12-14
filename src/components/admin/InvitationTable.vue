@@ -5,14 +5,15 @@
     :body-style="{ height: '300px' }"
     :pagination="meta.pagination"
     :loading="loading"
-    @change="$emit('change', $event)"
     enable-pagination
+    @change="$emit('change', $event)"
   >
     <template #invitation_token="slotProps">
       <base-link
         :href="`/invitation_token/${slotProps.item.invitation_token}`"
         text-variant="bodysm"
         class="px-2"
+        data-testid="testActivateButton"
         >{{ $t('actions.activate') }}</base-link
       >
     </template>
@@ -21,6 +22,7 @@
         :href="`/admin/organization/${slotProps.item.organization}`"
         text-variant="bodysm"
         class="px-2"
+        data-testid="testOrganizationLink"
         >{{ slotProps.item.organization }}</base-link
       >
     </template>
@@ -29,6 +31,7 @@
         <base-button
           size="small"
           variant="solid"
+          data-testid="testReInviteButton"
           class="m-1 mx-2 text-black font-light text-xs py-1 px-3"
           :action="
             () => {
@@ -43,12 +46,16 @@
   </Table>
 </template>
 
-<script>
-import Table from '@/components/Table';
-import User from '@/models/User';
-import Invitation from '@/models/Invitation';
+<script lang="ts">
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'vue-toastification';
+import moment from 'moment';
+import Table from '../Table.vue';
+import Invitation from '../../models/Invitation';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import type User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'InvitationTable',
   components: { Table },
   props: {
@@ -58,72 +65,78 @@ export default {
     },
     meta: {
       type: Object,
-      default: () => {
+      default() {
         return {};
       },
     },
     loading: Boolean,
   },
-  methods: {
-    async resendInvitation(invitation) {
+  setup(props, { emit }) {
+    const { t } = useI18n();
+    const { currentUser } = useCurrentUser();
+    const $toasted = useToast();
+
+    async function loadAllInvitations() {
+      await Invitation.api().get(`/invitations`, {
+        dataKey: 'results',
+      });
+    }
+
+    async function resendInvitation(invitation: Invitation) {
       await Invitation.api().resendInvitation(invitation);
-      await this.loadAllInvitations();
-      await this.$toasted.success(this.$t('invitationsVue.invitation_resent'));
-      this.$emit('reload');
-    },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-  },
-  data() {
+      await loadAllInvitations();
+      await $toasted.success(t('invitationsVue.invitation_resent'));
+      emit('reload');
+    }
+
     return {
+      currentUser,
+      resendInvitation,
       columns: [
         {
-          title: this.$t('invitationTables.id'),
+          title: t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('invitationTables.email'),
+          title: t('invitationTables.email'),
           dataIndex: 'invitee_email',
           key: 'invitee_email',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.invited_by'),
+          title: t('invitationTables.invited_by'),
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
-          transformer: (item) => {
+          transformer(item: User) {
             return `${item.email}`;
           },
         },
         {
-          title: this.$t('invitationTables.activation_link'),
+          title: t('invitationTables.activation_link'),
           dataIndex: 'invitation_token',
           key: 'invitation_token',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.organization'),
+          title: t('invitationTables.organization'),
           dataIndex: 'organization',
           key: 'organization',
           width: '1fr',
         },
         {
-          title: this.$t('invitationTables.expiration_date'),
+          title: t('invitationTables.expiration_date'),
           dataIndex: 'expires_at',
           key: 'expires_at',
           width: '1fr',
-          transformer: (expires_at) => {
-            return this.$moment(expires_at).format('L');
+          transformer(expires_at: string) {
+            return moment(expires_at).format('L');
           },
         },
         {
-          title: this.$t(''),
+          title: t(''),
           dataIndex: 'actions',
           key: 'actions',
           width: '1fr',
@@ -131,7 +144,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

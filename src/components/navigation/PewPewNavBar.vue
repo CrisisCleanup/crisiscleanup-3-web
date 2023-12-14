@@ -1,39 +1,43 @@
 <template>
-  <div class="pewpew__nav">
+  <div class="pewpew__nav h-full">
     <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
       <img
         v-if="colorMode === 'dark'"
+        data-testid="testPewPewLogoIcon"
         src="@/assets/cc-pew-pew-logo.gif"
         :alt="$t('nav.crisis_cleanup')"
         class="h-8"
       />
       <img
         v-else
+        data-testid="testCrisiscleanupLogoIcon"
         src="@/assets/ccu-logo-black-500w.png"
         :alt="$t('nav.crisis_cleanup')"
         class="h-16"
       />
     </router-link>
 
-    <template v-for="r in navRoutes">
-      <a
-        v-if="r.external"
-        :key="r.title"
-        :alt="r.title"
-        :href="r.route"
-        target="_blank"
-      >
+    <template v-for="r in navRoutes" :key="r.title">
+      <a v-if="r.external" :alt="r.title" :href="r.route" target="_blank">
         <div class="pewpew__navlink">
-          <ccu-icon :linked="true" v-bind="r.iconProps" />
+          <ccu-icon
+            :linked="true"
+            :data-testid="`test${r.title}Button`"
+            v-bind="r.iconProps"
+          />
           {{ r.title }}
         </div>
       </a>
-      <router-link v-else :key="r.title" :to="r.routeProps">
+      <a v-else :href="r.routeProps">
         <div class="pewpew__navlink">
-          <ccu-icon :linked="true" v-bind="r.iconProps" />
+          <ccu-icon
+            :data-testid="`test${r.title}Icon`"
+            :linked="true"
+            v-bind="r.iconProps"
+          />
           {{ r.title }}
         </div>
-      </router-link>
+      </a>
     </template>
 
     <div v-if="!isLoggedIn" class="pewpew__navactions flex flex-col m-1 mt-6">
@@ -43,6 +47,8 @@
       <base-button
         class="text-black text-xs font-semibold flex flex-grow p-1"
         variant="solid"
+        data-testid="testRegisterButton"
+        :alt="$t('actions.register')"
         :action="() => $router.push({ name: 'nav.register' })"
       >
         {{ $t('actions.register') }}
@@ -51,25 +57,33 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
-import { mapGetters } from 'vuex';
-import { UserMixin } from '@/mixins';
-import { HomeNavigation } from '@/components/home/SideNav.vue';
-import { FooterNavigation } from '@/components/home/Footer.vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+import useNavigation from '@/hooks/useNavigation';
+import useAcl from '@/hooks/useAcl';
+import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'PewPewNavBar',
-  mixins: [UserMixin],
   props: {
     colorMode: {
       type: String,
       required: true,
     },
   },
-  computed: {
-    ...mapGetters('incident', ['currentIncident']),
-    publicRoutes() {
+  setup(props) {
+    const store = useStore();
+    const { $can } = useAcl();
+    const { t } = useI18n();
+    const isLoggedIn = computed(() => store.getters['auth/isLoggedIn']);
+
+    const currentIncidentId = store.getters['incident/currentIncidentId'];
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+
+    const { HomeNavigation, FooterNavigation } = useNavigation();
+    const publicRoutes = computed(() => {
       const _homeSideRoutes = _.keyBy(HomeNavigation, 'key');
       const _homeFooterRoutes = _.keyBy(FooterNavigation, 'key');
       const homeRoutes = { ..._homeSideRoutes, ..._homeFooterRoutes };
@@ -81,57 +95,73 @@ export default {
         terms: homeRoutes.terms,
         privacy: homeRoutes.privacy,
       };
-    },
-    routes() {
-      return {
-        dashboard: {},
-        cases: {
-          route: {
-            name: 'nav.new_case',
-            params: {
-              incidentId: this.currentIncident && this.currentIncident.id,
-            },
-          },
+    });
+
+    const routes = computed(() => {
+      const _routes = {
+        dashboard: {
+          route: { to: `/dashboard` },
         },
         phone: {
-          disabled: !this.$can || !this.$can('phone_agent'),
+          route: { to: `/phone` },
+          disabled: !$can || !$can('phone_agent'),
         },
         organization: {
           title: 'nav.my_organization',
-          route: { name: 'nav.organization_invitations' },
+          route: {
+            name: 'nav.organization_invitations',
+            to: '/organization/invitations',
+          },
         },
-        other_organizations: { icon: 'otherorg' },
-        reports: {},
-        training: { icon: { type: 'info', invertColor: true } },
+        other_organizations: {
+          icon: 'otherorg',
+          route: { to: '/other_organizations' },
+        },
+        reports: { route: { to: '/reports' } },
+        training: {
+          icon: { type: 'info', invertColor: true },
+          route: { to: '/training' },
+        },
         admin: {
-          disabled: !(this.currentUser && this.currentUser.isAdmin),
-          route: { name: 'nav.admin_dashboard' },
+          disabled: !(currentUser?.value && currentUser?.value.isAdmin),
+          route: { name: 'nav.admin_dashboard', to: '/admin' },
         },
       };
-    },
-    navRoutes() {
-      const _routeDefs = this.isLoggedIn ? this.routes : this.publicRoutes;
-      const _routeRootKey = this.isLoggedIn ? 'nav' : 'publicNav';
-      return _.map(_routeDefs, (value, key) => {
-        const { icon, disabled, title, route, external } = value;
-        if (disabled === true) return false;
+      return _routes;
+    });
+
+    const navRoutes = computed(() => {
+      const _routeDefs = store.getters['auth/isLoggedIn']
+        ? routes.value
+        : publicRoutes.value;
+      const _routeRootKey = store.getters['auth/isLoggedIn']
+        ? 'nav'
+        : 'publicNav';
+      const map = _.map(_routeDefs, (value, key) => {
+        const { icon, disabled, title, route, external } = value as Record<
+          string,
+          any
+        >;
         let iconProps = { type: key };
         if (!_.isNil(icon)) {
           if (_.isObject(icon)) {
-            iconProps = icon;
+            iconProps = icon as any;
           } else {
             iconProps.type = icon;
           }
         }
+
         const routeName = `${_routeRootKey}.${key}`;
-        let _title = this.$t(routeName);
+        let _title = t(routeName);
         if (!_.isNil(title)) {
-          _title = this.$t(title);
+          _title = t(title);
         }
-        let routeProps = route;
+
+        let routeProps = route.to;
         if (!external && _.isNil(route)) {
           routeProps = { name: routeName };
         }
+
         return {
           ...value,
           iconProps,
@@ -140,9 +170,18 @@ export default {
           routeProps,
         };
       });
-    },
+      return map;
+    });
+
+    return {
+      currentIncidentId,
+      publicRoutes,
+      routes,
+      navRoutes,
+      isLoggedIn,
+    } as Record<string, any>;
   },
-};
+});
 </script>
 <style lang="scss">
 .pewpew {

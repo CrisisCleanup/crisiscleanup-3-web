@@ -1,5 +1,9 @@
 <template>
-  <div v-if="capabilities.length" class="mt-1">
+  <div
+    v-if="capabilities.length > 0"
+    class="mt-1"
+    data-testid="testCapabilityTableDiv"
+  >
     <div v-for="(capability, index) in capabilitiesTree" :key="index">
       <template v-if="hasParent(capability)">
         <div class="selected rounded">
@@ -13,19 +17,20 @@
           >
             <div
               v-for="phase in phases"
+              :data-testid="`testCapability${capability.name_t}Phase${phase.id}Item`"
               :key="phase.id"
               class="col-span-1 text-crisiscleanup-dark-300 truncate"
               :class="hoverItem === 'normal' + index ? 'light' : ''"
             >
-              {{ $t(phase.phase_name_t) | upper }}
+              {{ $t(phase.phase_name_t) }}
             </div>
           </div>
           <div class="mb-5">
             <div v-for="(item, idx) in capability.children" :key="idx">
               <CapabilityItem
+                v-if="hasCapability(item)"
                 :capability="item"
                 :available-capabilities="organizationCapabilitiesForChild(item)"
-                v-if="hasCapability(item)"
                 :index="index"
                 @onHover="changeHover"
               />
@@ -39,16 +44,15 @@
     {{ $t('info.no_items_found') }}
   </div>
 </template>
-<script>
-import { mapState } from 'vuex';
+
+<script lang="ts">
+import { computed } from 'vue';
 import CapabilityItem from '@/components/CapabilityItem.vue';
-import { CapabilityMixin } from '@/mixins';
 import { childrenBy, groupBy } from '@/utils/array';
 
-export default {
+export default defineComponent({
   name: 'Capability',
   components: { CapabilityItem },
-  mixins: [CapabilityMixin],
   props: {
     capabilities: {
       type: Array,
@@ -59,40 +63,48 @@ export default {
       default: () => [],
     },
   },
-  data() {
-    return {
-      hoverItem: '',
-    };
-  },
-  computed: {
-    ...mapState('enums', ['phases']),
-    capabilitiesTree() {
-      return childrenBy(groupBy(this.capabilities, 'parent_id'), 'id');
-    },
-  },
-  methods: {
-    changeHover(hoverItem) {
-      this.hoverItem = hoverItem;
-    },
-    organizationCapabilitiesForChild(capability) {
-      return this.organizationCapabilities.filter(
+  setup(props) {
+    const store = useStore();
+    const hoverItem = ref('');
+    const phases = computed(() => store.getters['enums/phases']);
+    const capabilitiesTree = computed(() => {
+      return childrenBy(groupBy(props.capabilities, 'parent_id'), 'id');
+    });
+
+    function changeHover(hoverItem) {
+      hoverItem.value = hoverItem;
+    }
+
+    function organizationCapabilitiesForChild(capability) {
+      return props.organizationCapabilities.filter(
         (item) => item.capability === capability.id,
       );
-    },
-    hasCapability(capability) {
-      return this.organizationCapabilities.some(
+    }
+
+    function hasCapability(capability) {
+      return props.organizationCapabilities.some(
         (item) => item.capability === capability.id,
       );
-    },
-    hasParent(capability) {
+    }
+
+    function hasParent(capability) {
       return (
         capability.children &&
-        capability.children.length &&
-        capability.children.some((item) => this.hasCapability(item))
+        capability.children.some((item) => hasCapability(item))
       );
-    },
+    }
+
+    return {
+      hoverItem,
+      phases,
+      capabilitiesTree,
+      changeHover,
+      organizationCapabilitiesForChild,
+      hasCapability,
+      hasParent,
+    };
   },
-};
+});
 </script>
 <style scoped>
 .light {

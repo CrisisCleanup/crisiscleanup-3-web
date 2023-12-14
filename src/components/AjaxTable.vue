@@ -2,12 +2,13 @@
   <div>
     <div class="flex items-center justify-between">
       <base-input
-        :value="search"
         v-if="enableSearch"
+        data-testid="testTableSearchTextInput"
+        :model-value="search"
         icon="search"
         class="w-72 mx-4"
         :placeholder="$t('info.search_items')"
-        @input="
+        @update:modelValue="
           (value) => {
             search = value;
             meta.pagination.page = 1;
@@ -23,14 +24,16 @@
       :body-style="bodyStyle"
       :pagination="meta.pagination"
       :sorter="meta.sorter"
+      data-testid="testTableContent"
       enable-pagination
       :enable-selection="enableSelection"
-      @change="getData"
       :loading="loading"
+      @change="getData"
       @rowClick="(payload) => $emit('rowClick', payload)"
       @selectionChanged="(payload) => $emit('selectionChanged', payload)"
+      v-bind="$attrs"
     >
-      <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
+      <template v-for="(_, slot) of $slots" #[slot]="scope"
         ><slot :name="slot" v-bind="scope"
       /></template>
     </Table>
@@ -39,16 +42,11 @@
 
 <script lang="ts">
 import { throttle } from 'lodash';
-import {
-  defineComponent,
-  onMounted,
-  PropType,
-  ref,
-  watch,
-} from '@vue/composition-api';
-import Table from '@/components/Table.vue';
-import { getQueryString } from '@/utils/urls';
-import useHttp from '@/use/useHttp';
+import type { PropType } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
+import axios from 'axios';
+import { getQueryString } from '../utils/urls';
+import Table from './Table.vue';
 
 interface TablePagination {
   pageSize: number;
@@ -91,26 +89,24 @@ export default defineComponent({
     },
     columns: {
       type: Array,
-      default: () => {
+      default() {
         return [];
       },
     },
     query: {
       type: Object as PropType<TableApiParameters>,
-      default: () => {
+      default() {
         return {};
       },
     },
     bodyStyle: {
       type: Object,
-      default: () => {
+      default() {
         return { height: '300px' };
       },
     },
   },
   setup(props) {
-    const { $http } = useHttp();
-
     const defaultColumns = ref<any[]>([]);
     const data = ref<any[]>([]);
     const search = ref<string>('');
@@ -141,10 +137,11 @@ export default defineComponent({
       if (sorter && sorter.key) {
         params.sort = `${sorter.direction === 'desc' ? '-' : ''}${sorter.key}`;
       }
-      const queryString = getQueryString(params);
 
-      const response = await $http.get(`${props.url}?${queryString}`);
-      data.value = response.data.results;
+      const response = await axios.get(`${props.url}`, {
+        params,
+      });
+      data.value = response.data.results || response.data;
       meta.value.pagination = {
         ...pagination,
         total: response.data.count,
@@ -176,13 +173,6 @@ export default defineComponent({
       getData,
       loading,
     };
-  },
-  watch: {
-    query: {
-      handler() {
-        throttle(this.getData, 1000)();
-      },
-    },
   },
 });
 </script>

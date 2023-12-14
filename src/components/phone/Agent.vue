@@ -5,13 +5,22 @@
     </div>
     <div class="flex items-center justify-between mr-3">
       <div class="flex items-start justify-start">
-        <div class="flex ml-4">
-          <base-text variant="bodysm">{{ currentUser.mobile }}</base-text>
+        <div class="flex ml-4 mr-1">
+          <base-text
+            v-if="currentUser"
+            data-testid="testCurrentUserMobileContent"
+            variant="bodysm"
+          >
+            {{ currentUser.mobile }}
+          </base-text>
         </div>
       </div>
       <div class="py-3">
-        <div class="flex flex-row tags">
-          <div class="mx-2 text-crisiscleanup-dark-200">
+        <div
+          class="flex flex-row tags"
+          data-testid="testPhoneDashboardLanguagesDiv"
+        >
+          <div class="mx-2 text-crisiscleanup-dark-200 hidden md:block">
             {{ $t('phoneDashboard.languages') }}
           </div>
           <div
@@ -23,10 +32,11 @@
           </div>
           <ccu-icon
             type="edit"
+            data-testid="testLanguageEditIcon"
             size="small"
             class="mx-1"
             :alt="$t('actions.edit')"
-            @click.native="editingAgent = true"
+            @click="editingAgent = true"
           />
         </div>
       </div>
@@ -34,57 +44,93 @@
     <div class="flex items-center justify-between">
       <base-button
         v-if="isOnCall || caller"
+        data-testid="testIsOnCallButton"
         size="medium"
         :disabled="true"
         :text="$t('phoneDashboard.on_call')"
+        :alt="$t('phoneDashboard.on_call')"
         class="text-white bg-crisiscleanup-dark-400 bg-opacity-40"
       ></base-button>
       <base-button
         v-else-if="isNotTakingCalls"
+        data-testid="testIsNotTakingCallsButton"
         variant="solid"
         size="medium"
         :action="loginPhone"
         :text="$t('phoneDashboard.start_taking_calls')"
+        :alt="$t('phoneDashboard.start_taking_calls')"
       ></base-button>
       <base-button
         v-else-if="!isOnCall"
+        data-testid="testIsNotOnCallButton"
         variant="solid"
         size="medium"
         :action="setAway"
         :text="$t('phoneDashboard.stop_taking_calls')"
+        :alt="$t('phoneDashboard.stop_taking_calls')"
       ></base-button>
       <base-checkbox
-        v-if="currentUser.isAdmin"
-        class="p-0.5 ml-3"
-        @input="$emit('onToggleOutbounds', $event)"
-        >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
+        v-if="currentUser && currentUser.isAdmin"
+        data-testid="testServeOutboundCallsCheckbox"
+        class="p-0.5 ml-3 text-[["
+        @update:modelValue="$emit('onToggleOutbounds', $event)"
+        ><span class="whitespace-nowrap">{{
+          $t('phoneDashboard.serve_outbound_calls')
+        }}</span></base-checkbox
       >
       <ccu-icon
-        @click.native="$phoneService.hangup"
         v-if="(isOnCall || caller) && isOutboundCall"
+        :alt="$t('actions.hangup')"
+        data-testid="testHangupIcon"
         size="lg"
         class="ml-2"
         type="hangup"
+        @click="hangup"
       ></ccu-icon>
     </div>
-    <EditAgentModal @cancel="editingAgent = false" v-if="editingAgent" />
+    <EditAgentModal v-if="editingAgent" @cancel="editingAgent = false" />
   </div>
 </template>
 
-<script>
-import { ConnectFirstMixin } from '@/mixins';
-import LanguageTag from '@/components/tags/LanguageTag';
-import EditAgentModal from '@/components/phone/EditAgentModal';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
+<script lang="ts">
+import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
+import LanguageTag from '../tags/LanguageTag.vue';
+import useConnectFirst from '../../hooks/useConnectFirst';
+import EditAgentModal from './EditAgentModal.vue';
+import PhoneIndicator from './PhoneIndicator.vue';
+import usePhoneService from '@/hooks/phone/usePhoneService';
+import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'Agent',
   components: { PhoneIndicator, EditAgentModal, LanguageTag },
-  mixins: [ConnectFirstMixin],
-  data() {
+  setup(props, context) {
+    const editingAgent = ref(false);
+    const currentUser = computed(() => User.find(store.getters['auth/userId']));
+    const store = useStore();
+    const phoneService = reactive(usePhoneService());
+    const {
+      languages,
+      isOnCall,
+      caller,
+      isNotTakingCalls,
+      setAway,
+      loginPhone,
+      isOutboundCall,
+    } = useConnectFirst(context);
     return {
-      editingAgent: false,
+      editingAgent,
+      languages,
+      currentUser,
+      isOnCall,
+      caller,
+      isNotTakingCalls,
+      setAway,
+      loginPhone,
+      isOutboundCall,
+      hangup: phoneService.hangup,
     };
   },
-};
+});
 </script>

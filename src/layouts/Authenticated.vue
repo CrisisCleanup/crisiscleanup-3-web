@@ -1,128 +1,222 @@
 <template>
-  <div class="layout" v-if="!loading">
-    <div
-      class="sidebar h-full overflow-auto"
-      :class="{ 'slide-over': slideOverVisible }"
+  <template v-if="mq.mdMinus">
+    <div v-if="!loading && currentIncident" class="flex flex-col">
+      <DisasterIcon
+        v-if="currentIncident && currentIncident.incidentImage"
+        :current-incident="currentIncident"
+        data-testid="testDisasterIcon"
+        class="fixed left-4 top-4"
+        style="z-index: 1003"
+        @click="showIncidentSelectionModal"
+      />
+      <main>
+        <slot />
+      </main>
+      <footer
+        style="width: 100svw"
+        class="pt-3 pb-3 bg-zinc-800 text-white fixed inset-x-0 bottom-0 flex justify-around items-center"
+      >
+        <div
+          v-for="r in mobileRoutes"
+          :key="r.key"
+          class="flex flex-col items-center"
+        >
+          <a :href="r.to" class="text-white flex flex-col">
+            <font-awesome-icon :icon="r.icon" class="mb-1" size="small" />
+            {{ r.text }}
+          </a>
+        </div>
+        <div class="flex flex-col items-center">
+          <a class="text-white flex flex-col" @click="showingMoreLinks = true">
+            <font-awesome-icon icon="bars" class="mb-1" />
+            {{ $t('nav.more') }}</a
+          >
+        </div>
+      </footer>
+    </div>
+    <div v-else class="flex h-screen items-center justify-center">
+      <spinner show-quote />
+    </div>
+    <modal
+      v-if="showingMoreLinks"
+      data-testid="testShowingMoreLinksModal"
+      modal-classes="bg-white h-120 shadow p-3"
+      closeable
+      :title="$t('nav.all_links')"
+      @close="showingMoreLinks = false"
     >
-      <div v-if="slideOverVisible" class="flex items-center justify-end p-1.5">
+      <div v-for="r in routes" :key="r.key" class="flex items-center">
+        <base-link :href="r.to" class="text-black text-base p-1">{{
+          r.text || $t(`nav.${r.key}`)
+        }}</base-link>
+      </div>
+      <AppDownloadLinks />
+    </modal>
+  </template>
+
+  <template v-else>
+    <div
+      v-if="!loading && currentIncident"
+      class="layout"
+      data-testid="testIsAuthenticatedDiv"
+    >
+      <div
+        class="sidebar h-full overflow-auto"
+        :class="{ 'slide-over': slideOverVisible }"
+      >
+        <div
+          v-if="slideOverVisible"
+          class="flex items-center justify-end p-1.5"
+        >
+          <font-awesome-icon
+            icon="times"
+            :alt="$t('nav.hide_navigation')"
+            data-testid="testAuthenticatedToggleIcon"
+            class="menu-button mx-2 cursor-pointer text-white self-end"
+            size="2xl"
+            @click="toggle"
+          />
+        </div>
+        <NavMenu
+          :key="route"
+          :routes="routes"
+          :logo-route="logoRoute"
+          class="flex flex-col text-sm"
+        />
+      </div>
+      <div class="header p-1 flex items-center">
         <font-awesome-icon
-          icon="times"
-          class="menu-button mx-2 cursor-pointer text-white self-end"
+          icon="bars"
+          :alt="$t('nav.show_navigation')"
+          data-testid="testHamburgerIcon"
+          class="menu-button mx-3 cursor-pointer"
           size="2xl"
           @click="toggle"
         />
+        <Header
+          :current-incident="currentIncident"
+          :incidents="incidents"
+          @update:incident="handleChange"
+          @auth:logout="
+            () => {
+              logoutApp();
+            }
+          "
+        />
       </div>
-      <NavMenu
-        :routes="routes"
-        :logo-route="logoRoute"
-        class="flex flex-col text-sm"
-        :key="JSON.stringify(currentUser && currentUser.permissions)"
-      />
-    </div>
-    <div class="header p-1 flex items-center">
-      <font-awesome-icon
-        icon="bars"
-        class="menu-button mx-3 cursor-pointer"
-        size="2xl"
-        @click="toggle"
-      />
-      <Header
-        :class="$mq === 'sm' ? '' : isLandscape() ? 'ml-16' : ''"
-        :current-incident="currentIncident"
-        :incidents="incidents"
-        @update:incident="handleChange"
-        @auth:logout="
-          () => {
-            logoutApp();
-          }
+      <div class="main">
+        <div class="h-full overflow-auto w-screen md:w-auto">
+          <slot />
+        </div>
+      </div>
+      <template v-if="showAcceptTermsModal">
+        <TermsandConditionsModal
+          :organization="currentOrganization"
+          data-testid="testShowAcceptTermsModal"
+          @acceptedTerms="acceptTermsAndConditions"
+        />
+      </template>
+      <template
+        v-if="
+          currentOrganization &&
+          (!currentOrganization.is_active || !currentOrganization.is_verified)
         "
-      />
-    </div>
-    <div class="main">
-      <div class="h-full overflow-scroll">
-        <slot />
+      >
+        <OrganizationInactiveModal
+          :organization="currentOrganization"
+          @user-logged-out="logoutApp"
+        />
+      </template>
+      <div v-if="transferRequest">
+        <CompletedTransferModal
+          :transfer-request="transferRequest"
+          data-testid="testCompletedTransferModal"
+          @close="
+            () => {
+              transferRequest = null;
+            }
+          "
+        />
+      </div>
+      <div v-if="showLoginModal">
+        <modal modal-classes="bg-white max-w-lg shadow p-5" :closeable="false">
+          <LoginForm :redirect="false" />
+          <div slot="footer"></div>
+        </modal>
       </div>
     </div>
-    <div v-if="showAcceptTermsModal">
-      <TermsandConditionsModal
-        @acceptedTerms="acceptTermsAndConditions"
-        :organization="currentOrganization"
-      />
+    <div v-else class="flex h-screen items-center justify-center">
+      <spinner show-quote />
     </div>
-    <div v-if="transferRequest">
-      <CompletedTransferModal
-        :transfer-request="transferRequest"
-        @close="
-          () => {
-            transferRequest = null;
-          }
-        "
-      />
-    </div>
-    <div v-if="showLoginModal">
-      <modal modal-classes="bg-white max-w-lg shadow p-5" :closeable="false">
-        <LoginForm :redirect="false" />
-        <div slot="footer"></div>
-      </modal>
-    </div>
-  </div>
-  <Loader v-else :loading="loading" class="flex layout h-full" />
+  </template>
 </template>
 
 <script lang="ts">
-import detectBrowserLanguage from 'detect-browser-language';
-import { size } from 'lodash';
-import { Slide } from 'vue-burger-menu';
-import { parsePhoneNumber } from 'libphonenumber-js';
-import { ref, computed, watch, onMounted } from '@vue/composition-api';
-import {
-  useState,
-  useGetters,
-  useMutations,
-  useActions,
-  useRouter,
-} from '@u3u/vue-hooks';
+import { computed, onMounted, ref, watch } from 'vue';
 import moment from 'moment';
-import Incident from '@/models/Incident';
-import User from '@/models/User';
-import Organization from '@/models/Organization';
-import Language from '@/models/Language';
-import Report from '@/models/Report';
-import Role from '@/models/Role';
-import { i18nService } from '@/services/i18n.service';
-import NavMenu from '@/components/navigation/NavMenu.vue';
-import Loader from '@/components/Loader.vue';
-import TermsandConditionsModal from '@/components/TermsandConditionsModal.vue';
-import Header from '@/components/header/Header.vue';
-import PhoneStatus from '@/models/PhoneStatus';
-import CompletedTransferModal from '@/components/CompletedTransferModal.vue';
-import { AuthService } from '@/services/auth.service';
-import LoginForm from '@/components/forms/LoginForm.vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import { useMq } from 'vue3-mq';
+import Incident from '../models/Incident';
+import User from '../models/User';
+import Organization from '../models/Organization';
+import Language from '../models/Language';
+import Report from '../models/Report';
+import Role from '../models/Role';
+import PhoneStatus from '../models/PhoneStatus';
+import NavMenu from '../components/navigation/NavMenu.vue';
+import TermsandConditionsModal from '../components/modals/TermsandConditionsModal.vue';
+import Header from '../components/header/Header.vue';
+import CompletedTransferModal from '../components/modals/CompletedTransferModal.vue';
+import { AuthService } from '../services/auth.service';
+import LoginForm from '../components/LoginForm.vue';
+import useSetupLanguage from '@/hooks/useSetupLanguage';
+import useAcl from '@/hooks/useAcl';
+import DisasterIcon from '@/components/DisasterIcon.vue';
+import useDialogs from '@/hooks/useDialogs';
+import { useZendesk, ZendeskCommand, ZendeskTarget } from '@/hooks';
+import useEmitter from '@/hooks/useEmitter';
+import AppDownloadLinks from '@/components/AppDownloadLinks.vue';
+import OrganizationInactiveModal from '@/components/modals/OrganizationInactiveModal.vue';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
-export default {
+export default defineComponent({
   name: 'Authenticated',
   components: {
+    OrganizationInactiveModal,
+    AppDownloadLinks,
+    DisasterIcon,
     LoginForm,
     CompletedTransferModal,
     NavMenu,
-    Loader,
     TermsandConditionsModal,
-    Slide,
     Header,
   },
-  setup(props, context) {
-    const { router, route } = useRouter();
-    const { $http, $log, $t, $phoneService } = context.root;
+  setup() {
+    const mq = useMq();
 
-    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
-    const { user, showLoginModal } = useState('auth', [
-      'user',
-      'showLoginModal',
-    ]);
-    const { portal } = useState('enums', ['portal']);
-    const { userId } = useGetters('auth', ['userId']);
+    const route = useRoute();
+    const router = useRouter();
+    const $http = axios;
+    const { t, setLocaleMessage, locale } = useI18n();
+    const store = useStore();
+    const { $can } = useAcl();
+    const zendesk = useZendesk()!;
+    const { selection } = useDialogs();
+    const { emitter } = useEmitter();
+
+    // const { $log } = context.root;
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
+    );
+    const user = computed(() => store.getters['auth/user']);
+    const showLoginModal = computed(() => store.getters['auth/showLoginModal']);
+
+    const portal = computed(() => store.getters['enums/portal']);
+    const userId = computed(() => store.getters['auth/userId']);
 
     const slideOverVisible = ref(false);
     const toggle = () => {
@@ -132,6 +226,7 @@ export default {
     const loading = ref(false);
     const ready = ref(false);
     const showAcceptTermsModal = ref(false);
+    const showingMoreLinks = ref(false);
     const transferRequest = ref(null);
 
     const currentUser = computed(() => User.find(userId.value));
@@ -146,7 +241,7 @@ export default {
 
     const logoRoute = computed(() => ({
       key: 'pew',
-      text: $t('nav.pew'),
+      text: t('nav.pew'),
       to: '/pew-pew',
     }));
 
@@ -157,42 +252,21 @@ export default {
     const routes = computed(() => [
       {
         key: 'dashboard',
-        text: $t('nav.dashboard'),
+        text: t('nav.dashboard'),
         to: `/incident/${currentIncidentId.value}/dashboard`,
       },
       {
         key: 'work',
         to: `/incident/${currentIncidentId.value}/work`,
         icon: 'cases',
-        text: $t('nav.work'),
-      },
-      {
-        key: 'cases',
-        to: `/incident/${currentIncidentId.value}/cases/new`,
+        text: t('nav.work'),
       },
       {
         key: 'phone',
         icon: 'phone',
-        text: $t('nav.phone'),
+        text: t('nav.phone'),
         to: '/phone',
-        disabled: !context.root.$can || !context.root.$can('phone_agent'),
-      },
-      {
-        key: 'caller',
-        icon: 'phone',
-        text: $t('nav.phone_beta'),
-        to: '/caller',
-        disabled: true,
-      },
-      {
-        key: 'connect_first',
-        icon: 'phone',
-        text: $t('nav.phone_alpha'),
-        to: '/connect_first',
-        disabled:
-          !context.root.$can ||
-          !context.root.$can('phone_agent') ||
-          !context.root.$can('beta_feature.connect_first_integration'),
+        disabled: !$can || !$can('phone_agent'),
       },
       {
         key: 'my_organization',
@@ -209,22 +283,22 @@ export default {
       {
         key: 'reports',
         icon: 'reports',
-        text: $t('nav.reports'),
+        text: t('nav.reports'),
         to: '/reports',
-        newBadge: Report.query()
-          .where('created_at', (created_at) => {
-            const reportsAccessed =
-              currentUser?.value?.states &&
-              currentUser.value.states.reports_last_accessed;
-            return reportsAccessed
-              ? moment(created_at).isAfter(moment(reportsAccessed))
-              : true;
-          })
-          .exists(),
+        // newBadge: Report.query()
+        //     .where('created_at', (created_at: string) => {
+        //       const reportsAccessed =
+        //           currentUser?.value?.states &&
+        //           currentUser.value.states.reports_last_accessed;
+        //       return reportsAccessed
+        //           ? moment(created_at).isAfter(moment(reportsAccessed))
+        //           : true;
+        //     })
+        //     .exists(),
       },
       {
         key: 'training',
-        text: $t('nav.training'),
+        text: t('nav.training'),
         icon: {
           type: 'info',
           invertColor: true,
@@ -234,37 +308,52 @@ export default {
       {
         key: 'admin',
         icon: 'admin',
-        text: $t('nav.admin'),
+        text: t('nav.admin'),
         to: '/admin',
         disabled: !(currentUser.value && currentUser.value.isAdmin),
       },
     ]);
 
-    const { setAcl } = useMutations('auth', ['setAcl']);
-    const { setCurrentIncidentId } = useMutations('incident', [
-      'setCurrentIncidentId',
-    ]);
-    const { setWorksitesLoading } = useMutations('loading', [
-      'setWorksitesLoading',
-    ]);
-    const { setLanguage } = useMutations('locale', ['setLanguage']);
-    const { setStatuses, setWorkTypes } = useMutations('enums', [
-      'setStatuses',
-      'setWorkTypes',
+    const mobileRoutes = computed(() => [
+      {
+        key: 'dashboard',
+        text: t('nav.dashboard'),
+        to: `/incident/${currentIncidentId.value}/dashboard`,
+        icon: 'dashboard',
+      },
+      {
+        key: 'work',
+        to: `/incident/${currentIncidentId.value}/work`,
+        icon: 'briefcase',
+        text: t('nav.work'),
+      },
+      {
+        key: 'phone',
+        icon: 'phone',
+        text: t('nav.phone'),
+        to: '/phone',
+        disabled: !$can || !$can('phone_agent'),
+      },
+      {
+        key: 'profile',
+        icon: 'user',
+        text: t('nav.profile'),
+        to: '/profile',
+      },
     ]);
 
-    const { login, logout } = useActions('auth', ['login', 'logout']);
+    // store.commit('auth/setShowLoginModal', false);
 
-    const handleChange = async (value) => {
+    const handleChange = async (value: string) => {
       await Incident.api().fetchById(value);
       await User.api().updateUserState({
         incident: value,
       });
-      setCurrentIncidentId(value);
+      store.commit('incident/setCurrentIncidentId', value);
       await router.push({
-        name: route.value.name as string,
-        params: { ...route.value.params, incident_id: value },
-        query: { ...route.value.query },
+        name: route.name as string,
+        params: { ...route.params, incident_id: value },
+        query: { ...route.query },
       });
     };
 
@@ -274,41 +363,7 @@ export default {
       ).matches;
     };
 
-    const setupLanguage = async () => {
-      let currentLanguage = detectBrowserLanguage();
-      if (
-        currentUser?.value?.primary_language ||
-        currentUser?.value?.secondary_language
-      ) {
-        const userLanguage =
-          Language.find(currentUser?.value?.primary_language) ||
-          Language.find(currentUser?.value?.secondary_language);
-
-        if (userLanguage) {
-          currentLanguage = userLanguage.subtag;
-        }
-      }
-
-      setLanguage(currentLanguage);
-      if (currentLanguage !== context.root.$i18n.locale) {
-        try {
-          const data = await i18nService.getLanguage(currentLanguage);
-          const { translations } = data;
-          if (size(translations) > 0) {
-            context.root.$i18n.setLocaleMessage(currentLanguage, translations);
-            context.root.$i18n.locale = currentLanguage;
-            $http.defaults.headers.common['Accept-Language'] = currentLanguage;
-            const htmlHtmlElement = document.querySelector('html');
-            if (htmlHtmlElement) {
-              htmlHtmlElement.setAttribute('lang', currentLanguage);
-            }
-          }
-        } catch (e) {
-          $log.error(e);
-        }
-      }
-      moment.locale(currentLanguage.split('-')[0]);
-    };
+    const { setupLanguage } = useSetupLanguage();
 
     const acceptTermsAndConditions = async () => {
       await User.api().acceptTerms();
@@ -317,89 +372,115 @@ export default {
 
     const getUserTransferRequests = async () => {
       const response = await $http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
+        `${import.meta.env.VITE_APP_API_BASE_URL}/transfer_requests`,
       );
-      transferRequest.value = response.data.results.find((request) => {
+      transferRequest.value = response.data.results.find((request: any) => {
         return request.user === currentUser?.value?.id;
       });
     };
 
-    const logoutByPhoneNumber = async () => {
-      const parsedNumber = parsePhoneNumber(
-        currentUser?.value?.mobile || '',
-        'US',
-      );
-      if (
-        currentUser.value &&
-        currentUser?.value?.mobile &&
-        $phoneService.queueIds
-      ) {
-        await Promise.all(
-          $phoneService.queueIds.map((queueId) =>
-            $phoneService
-              .apiLoginsByPhone(
-                parsedNumber.formatNational().replace(/[^\d.]/g, ''),
-                queueId,
-              )
-              .then(async ({ data }) => {
-                if (data.length) {
-                  await Promise.all(
-                    data.map((phoneLogin) =>
-                      $phoneService.apiLogoutAgent(phoneLogin.agentId),
-                    ),
-                  );
-                }
-                return null;
-              })
-              .catch(() => {}),
-          ),
-        );
-      }
+    const logoutApp = async () => {
+      await store.dispatch('auth/logout');
+      await router.push('/login');
     };
 
-    const logoutApp = async () => {
-      await logoutByPhoneNumber();
-      await logout();
-    };
+    async function showIncidentSelectionModal() {
+      const result = await selection({
+        title: t('Select Incident'),
+        content: t('locationVue.select_incident'),
+        options: incidents.value,
+        placeholder: t('locationVue.select_incident'),
+        itemKey: 'id',
+        label: 'name',
+      });
+
+      if (result) {
+        await handleChange(result);
+      }
+    }
 
     watch(
-      () => route.value.params.incident_id,
+      () => route.params.incident_id,
       (value) => {
         if (value && Number(currentIncidentId.value) !== Number(value)) {
-          handleChange(value);
+          handleChange(value as string);
         }
       },
     );
 
     onMounted(() => {
-      if (route.value.params.incident_id) {
-        handleChange(route.value.params.incident_id);
+      emitter.on('update:incident', (incidentId) => {
+        handleChange(incidentId);
+      });
+      if (route.params.incident_id) {
+        handleChange(route.params.incident_id as string);
+      }
+    });
+
+    // update zendesk current user.
+    watchEffect(() => {
+      if (currentUser.value && zendesk.isOpen.value) {
+        // ccu user id custom zendesk field.
+        const ccuIdFieldId = '16781124470797';
+        // prefill base zendesk fields.
+        zendesk.zE(ZendeskTarget.WEB_WIDGET, ZendeskCommand.PREFILL, {
+          name: {
+            value: currentUser.value!.full_name,
+            readOnly: false,
+          },
+          email: {
+            value: currentUser.value!.email,
+            readOnly: false,
+          },
+        });
+        // merge contact form fields.
+        zendesk.config.webWidget.contactForm!.fields ??= [];
+        zendesk.config.webWidget.contactForm!.fields = [
+          ...zendesk.config.webWidget.contactForm!.fields.filter(
+            (field) => field.id !== ccuIdFieldId,
+          ),
+          {
+            id: ccuIdFieldId,
+            hidden: true,
+            prefill: { '*': String(currentUser.value!.id) },
+          },
+        ];
       }
     });
 
     onMounted(async () => {
       loading.value = true;
-      setCurrentIncidentId(null);
       let u;
+
       try {
-        await User.api().get('/users/me', {});
-        u = User.find(userId.value);
-        AuthService.updateUser(u.$toJson());
+        try {
+          await User.api().get('/users/me', {});
+          u = User.find(userId.value);
+          if (u) {
+            AuthService.updateUser(u.$toJson());
+          }
+        } catch {
+          await AuthService.refreshAccessToken();
+          await User.api().get('/users/me', {});
+          u = User.find(userId.value);
+          if (u) {
+            AuthService.updateUser(u.$toJson());
+          }
+        }
       } catch {
         await AuthService.removeUser();
-        await logout();
-        return;
+        await logoutApp();
       }
-      await Promise.all([
-        Incident.api().get(
-          '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
-          {
-            dataKey: 'results',
-          },
-        ),
-        Organization.api().get(
-          `/organizations/${user.value.user_claims.organization.id}`,
-        ),
+
+      await Incident.api().get(
+        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
+        {
+          dataKey: 'results',
+        },
+      );
+
+      await Promise.any([
+        Organization.api().get(`/organizations/${user.value.organization.id}`),
         Language.api().get('/languages', {
           dataKey: 'results',
         }),
@@ -414,53 +495,56 @@ export default {
         PhoneStatus.api().get('/phone_statuses', {
           dataKey: 'results',
         });
-      } catch (e) {
+      } catch {
         // TODO(tobi): Empty for now make this better
       }
+
       await getUserTransferRequests();
       await setupLanguage();
-      setAcl(router);
+      store.commit('acl/setUserAcl', user.value.id);
 
-      let incidentId = route.value.params.incident_id;
+      let incidentId =
+        route.params.incident_id || currentUser?.value?.approved_incidents?.[0];
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {
-          incidentId = incident.id;
+          incidentId = String(incident.id);
         }
       }
 
-      if (currentUser?.value?.states && currentUser.value.states.incident) {
-        incidentId = currentUser.value.states.incident;
+      if (currentUser?.value?.states && currentUser.value?.states.incident) {
+        incidentId = currentUser.value?.states.incident;
       }
 
       if (incidentId) {
-        setCurrentIncidentId(incidentId);
+        store.commit('incident/setCurrentIncidentId', incidentId);
       }
 
       if (
         !currentUser?.value?.accepted_terms_timestamp ||
-        context.root
-          .$moment(VERSION_3_LAUNCH_DATE)
-          .isAfter(moment(currentUser.value.accepted_terms_timestamp)) ||
-        (portal.value.tos_updated_at &&
-          context.root
-            .$moment(portal.value.tos_updated_at)
-            .isAfter(currentUser.value.accepted_terms_timestamp))
+        moment(VERSION_3_LAUNCH_DATE).isAfter(
+          moment(currentUser.value?.accepted_terms_timestamp),
+        ) ||
+        (portal.value?.tos_updated_at &&
+          moment(portal.value?.tos_updated_at).isAfter(
+            currentUser.value?.accepted_terms_timestamp,
+          ))
       ) {
         showAcceptTermsModal.value = true;
       }
 
       try {
         await Incident.api().fetchById(incidentId);
-      } catch (e) {
-        setCurrentIncidentId(null);
+      } catch {
+        store.commit('incident/setCurrentIncidentId', null);
         User.api().updateUserState({
           incident: null,
         });
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {
-          setCurrentIncidentId(incident.id);
+          store.commit('incident/setCurrentIncidentId', false);
         }
+
         await router.push(`/`).catch(() => {});
       }
 
@@ -478,30 +562,29 @@ export default {
       ready,
       showAcceptTermsModal,
       transferRequest,
-
+      showingMoreLinks,
       currentUser,
       currentOrganization,
       currentIncident,
       incidents,
-
+      route,
       routes,
+      mobileRoutes,
       logoRoute,
-
-      setWorksitesLoading,
-      login,
-      setStatuses,
-      setWorkTypes,
+      // login,
       acceptTermsAndConditions,
       logoutApp,
-      logoutByPhoneNumber,
+      // logoutByPhoneNumber,
       handleChange,
       isLandscape,
 
       slideOverVisible,
       toggle,
+      mq,
+      showIncidentSelectionModal,
     };
   },
-};
+});
 </script>
 
 <style scoped>
@@ -523,7 +606,7 @@ export default {
   grid-area: sidebar;
   border: 1px solid #dfdfdf;
   display: none;
-  z-index: 10000;
+  z-index: 5000;
   background-color: #2d2d2d;
 }
 

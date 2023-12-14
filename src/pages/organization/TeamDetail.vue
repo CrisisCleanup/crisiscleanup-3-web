@@ -2,25 +2,27 @@
   <div class="bg-white h-full h-84">
     <div class="flex justify-between">
       <div
-        class="font-semibold flex justify-between items-center h-12 px-3"
         v-if="team"
+        class="font-semibold flex justify-between items-center h-12 px-3"
       >
         {{ team.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
           :alt="$t('actions.jump_to_case')"
+          data-testid="testJumpToCaseIcon"
           size="small"
           class="p-2"
           type="go-case"
-          @click.native="showAllOnMap"
+          @click="showAllOnMap()"
         />
         <ccu-icon
           :alt="$t('actions.delete')"
+          data-testid="testDeleteTeamIcon"
           type="trash"
           class="p-2"
           size="small"
-          @click.native="
+          @click="
             () => {
               deleteCurrentTeam();
             }
@@ -28,17 +30,19 @@
         />
         <img
           :alt="$t('actions.rename_team')"
+          data-testid="testRenameTeamIcon"
           src="@/assets/icons/edit.svg"
           class="cursor-pointer p-2"
           @click="showRenameModal = true"
         />
       </div>
     </div>
-    <tabs class="w-full" ref="tabs">
-      <tab :name="`${$t('teams.manage_users')} (${allTeamUsers.length})`">
+    <tabs ref="tabs" class="w-full">
+      <tab :name="`${$t('teams.manage_users')} (${allTeamUsers?.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
+            data-testid="testAddMembersButton"
             type="link"
             :text="$t('teams.add_members')"
             :alt="$t('teams.add_members')"
@@ -51,9 +55,11 @@
           <div>
             <base-button
               variant="outline"
+              data-testid="testRemoveFromTeamButton"
               class="px-2 py-1"
               :text="$t('teams.remove_from_team')"
-              :disabled="selectedUsers.length === 0"
+              :alt="$t('teams.remove_from_team')"
+              :disabled="selectedUsers?.length === 0"
               :action="
                 () => {
                   removeFromTeam([...selectedUsers]);
@@ -63,7 +69,7 @@
             ></base-button>
           </div>
         </div>
-        <div class="mt-2">
+        <div v-if="allTeamUsers" class="mt-2">
           <Table
             :columns="[
               {
@@ -92,19 +98,21 @@
               },
             ]"
             :data="allTeamUsers"
+            data-testid="testAllTeamUsersTable"
             enable-selection
+            :body-style="{ height: '300px' }"
             @selectionChanged="
               (selectedItems) => {
                 selectedUsers = Array.from(selectedItems);
               }
             "
-            :body-style="{ height: '300px' }"
           >
             <template #name="slotProps">
               <div class="flex items-center">
                 <Avatar
                   :initials="slotProps.item.first_name"
                   :url="slotProps.item.profilePictureUrl"
+                  :data-testid="`testFirstName${slotProps.item.id}Div`"
                   classes="mb-1"
                   size="xsmall"
                 />
@@ -113,97 +121,94 @@
             </template>
             <template #email="slotProps">
               <span>
-                <font-awesome-icon icon="envelope" />
+                <font-awesome-icon
+                  icon="envelope"
+                  :alt="$t('actions.email')"
+                  :data-testid="`testEnvelope${slotProps.item.id}Icon`"
+                />
                 {{ slotProps.item.email }}
               </span>
             </template>
             <template #phone1="slotProps">
               <span>
-                <font-awesome-icon icon="phone" />
+                <font-awesome-icon
+                  icon="phone"
+                  :alt="$t('actions.call')"
+                  :data-testid="`testPhone${slotProps.item.id}Icon`"
+                />
                 {{ slotProps.item.mobile }}
               </span>
             </template>
             <template #actions="slotProps">
               <div style="margin-top: 2px" class="flex justify-end">
-                <base-dropdown
-                  :trigger="'click'"
-                  class-name="team-detail-user"
-                  :x="-145"
-                >
+                <v-popover placement="bottom-end" :triggers="['click']">
                   <ccu-icon
-                    slot="icon"
                     :alt="$t('teams.settings')"
+                    data-testid="testTeamsSettingsIcon"
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
-                    <ul class="overflow-auto w-40">
+                  <template #popper>
+                    <ul class="overflow-auto w-40" data-testid="testTeamsEmailsDiv">
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testSendUserEmailLink"
                       >
-                        <font-awesome-icon icon="envelope"></font-awesome-icon>
+                        <font-awesome-icon icon="envelope" :alt="$t('actions.email')">
+                        </font-awesome-icon>
                         <a :href="`mailto:${slotProps.item.email}`">{{
                           $t('teams.send_email')
                         }}</a>
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testEditUserProfileLink"
                       >
-                        <font-awesome-icon icon="user"></font-awesome-icon>
+                        <font-awesome-icon icon="user" :alt="$t('nav.profile')">
+                        </font-awesome-icon>
                         <a :href="`/organization/users/${slotProps.item.id}`">
                           {{ $t('teams.view_full_profile') }}
                         </a>
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testMoveToAnotherTeamLink"
                         @click="
                           () => {
                             moveToDifferentTeam(slotProps.item.id);
                           }
                         "
                       >
-                        <font-awesome-icon icon="pen"></font-awesome-icon>
+                        <font-awesome-icon icon="pen" :alt="$t('actions.edit')">
+                        </font-awesome-icon>
                         {{ $t('teams.move_to_another_team') }}
                       </li>
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testRemoveFromTeamLink"
                         @click="
                           () => {
-                            removeFromTeam(slotProps.item.id);
+                            removeFromTeam([slotProps.item.id]);
                           }
                         "
                       >
-                        <font-awesome-icon icon="trash"></font-awesome-icon>
+                        <font-awesome-icon icon="trash" :alt="$t('actions.delete')">
+                        </font-awesome-icon>
                         {{ $t('teams.remove_from_team') }}
                       </li>
                     </ul>
                   </template>
-                </base-dropdown>
+                </v-popover>
               </div>
             </template>
           </Table>
         </div>
       </tab>
-      <tab :name="`${$t('teams.manage_cases')} (${assignedWorksites.length})`">
+      <tab :name="`${$t('teams.manage_cases')} (${assignedWorksites?.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
+            data-testid="testAssignedClaimedCasesPlusButton"
             type="link"
             :text="$t('teams.assigned_claimed_cases_plus')"
             :alt="$t('teams.assigned_claimed_cases_plus')"
@@ -215,9 +220,11 @@
           />
           <base-button
             variant="outline"
+            data-testid="testRemoveFromTeam2Button"
             class="px-2 py-1"
             :text="$t('teams.remove_from_team')"
-            :disabled="selectedWorksites.length === 0"
+            :alt="$t('teams.remove_from_team')"
+            :disabled="selectedWorksites?.length === 0"
             :action="
               () => {
                 Promise.all(
@@ -230,26 +237,27 @@
         <div class="flex" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
+            data-testid="testMapViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingWorksiteMap ? 'filter-yellow' : 'filter-gray'"
             type="map"
-            @click.native="toggleView('showingWorksiteMap')"
-            data-cy="cases.mapButton"
+            @click="toggleView('showingWorksiteMap')"
           />
           <ccu-icon
             :alt="$t('casesVue.table_view')"
+            data-testid="testTableViewIcon"
             size="medium"
             class="mr-4 cursor-pointer"
             :class="showingWorksiteTable ? 'filter-yellow' : 'filter-gray'"
             type="table"
-            @click.native="toggleView('showingWorksiteTable')"
-            data-cy="cases.tableButton"
+            @click="toggleView('showingWorksiteTable')"
           />
         </div>
         <div class="mt-2">
           <Table
             v-if="showingWorksiteTable"
+            data-testid="testWorksiteTable"
             :columns="[
               {
                 title: '',
@@ -306,11 +314,13 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in slotProps.item.work_types"
+                  :data-testid="`testWorksiteDetails${work_type.id}Div`"
                   :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
                     class="block"
+                    :data-testid="`testWorkTypeStatus${work_type.id}Select`"
                     :current-work-type="work_type"
                     use-icon
                     hide-name
@@ -327,36 +337,30 @@
               <div class="flex items-start">
                 <ccu-icon
                   :alt="$t('actions.jump_to_case')"
+                  :data-testid="`testJumpToCase${slotProps.item.id}Icon`"
                   size="small"
                   class="p-1 py-2"
                   type="go-case"
-                  @click.native="
-                    () => {
-                      showOnMap(slotProps.item);
-                    }
-                  "
+                  @click="showOnMap(slotProps.item)"
                 />
               </div>
               <div style="margin-top: 2px" class="flex justify-end">
-                <base-dropdown
-                  :trigger="'click'"
+                <v-popover
+                  placement="bottom-end"
+                  :triggers="['click']"
                   class-name="team-detail-case"
-                  :x="-145"
                 >
                   <ccu-icon
-                    slot="icon"
                     :alt="$t('teams.settings')"
+                    data-testid="testTeamsSettings2Icon"
                     size="medium"
                     type="settings"
                   />
-                  <template slot="body">
+                  <template #popper>
                     <ul class="overflow-auto w-40">
                       <li
-                        class="
-                          py-2
-                          cursor-pointer
-                          hover:bg-crisiscleanup-light-grey
-                        "
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        data-testid="testRemoveFromTeam3Button"
                         @click="
                           () => {
                             removeWorksiteFromTeam(slotProps.item.id);
@@ -367,25 +371,27 @@
                       </li>
                     </ul>
                   </template>
-                </base-dropdown>
+                </v-popover>
               </div>
             </template>
           </Table>
           <WorkTypeMap
             v-if="showingWorksiteMap"
+            data-testid="testMapView2Content"
             class="w-full h-96"
-            :work-types="mapAssingedWorkTypes"
+            :work-types="mapAssignedWorkTypes"
             :polygon="caseArea"
           ></WorkTypeMap>
         </div>
       </tab>
       <tab :name="$t('teams.notes')">
         <base-input
-          :value="team.notes"
+          :value="team?.notes"
+          data-testid="testTeamsNotesTextInput"
           text-area
           :rows="4"
           :placeholder="$t('teams.notes')"
-          @input="updateNotes"
+          @update:model-value="updateNotes"
           @blur="updateCurrentTeam"
         />
       </tab>
@@ -393,10 +399,11 @@
 
     <modal
       v-if="showAddMembersModal"
+      data-testid="testMembersModal"
       :title="$t('teams.add_members')"
       closeable
-      @close="showAddMembersModal = false"
       modal-classes="max-w-xl"
+      @close="showAddMembersModal = false"
     >
       <div class="px-5 py-2">
         <div class="py-2">
@@ -404,10 +411,11 @@
         </div>
         <base-input
           v-model="currentUserSearch"
+          data-testid="testChooseMembersSearch"
           icon="search"
           class="w-64 mr-4 mb-6"
           :placeholder="$t('actions.search')"
-          @input="onUserSearch"
+          @update:modelValue="onUserSearch"
         ></base-input>
 
         <div class="h-64 overflow-auto">
@@ -415,12 +423,14 @@
             v-for="user in userResults.filter(
               (user) => !team.users.includes(user.id),
             )"
+            :data-testid="`testUserResults${user.id}Div`"
             :key="`${user.id}`"
             class="border-t pt-2"
           >
             <base-checkbox
-              :value="usersToAdd.includes(user.id)"
-              @input="
+              :model-value="usersToAdd.includes(user.id)"
+              :data-testid="`testSelectUser${user.id}Checkbox`"
+              @update:modelValue="
                 (value) => {
                   if (value) {
                     usersToAdd.push(user.id);
@@ -443,36 +453,45 @@
           </div>
         </div>
       </div>
-      <div slot="footer" class="p-3 flex items-center justify-center">
-        <base-button
-          :action="
+      <template #footer>
+        <div slot="footer" class="p-3 flex items-center justify-center">
+          <base-button
+            :action="
             () => {
               showAddMembersModal = false;
             }
           "
-          :text="$t('actions.cancel')"
-          variant="outline"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-        <base-button
-          variant="solid"
-          :action="addUsers"
-          :text="$t('actions.add')"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-      </div>
+            :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
+            data-testid="testCancelButton"
+            variant="outline"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+          <base-button
+            variant="solid"
+            data-testid="testAddButton"
+            :action="addUsers"
+            :text="$t('actions.add')"
+            :alt="$t('actions.add')"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+        </div>
+
+      </template>
     </modal>
     <modal
       v-if="showAddCasesModal"
+      data-testid="testAddCasesModal"
       :title="$t('teams.assign_cases')"
       closeable
-      @close="showAddCasesModal = false"
       modal-classes="max-w-4xl"
+      @close="showAddCasesModal = false"
     >
       <div class="flex">
         <div class="w-1/3">
           <WorkTypeMap
             class="w-full h-96"
+            data-testid="testWorkTypeMapDiv"
             :work-types="mapWorkTypes"
           ></WorkTypeMap>
         </div>
@@ -482,6 +501,7 @@
           </div>
           <base-input
             v-model="currentCaseSearch"
+            data-testid="testCaseSearch"
             icon="search"
             class="w-64 mr-4 mb-6"
             :placeholder="$t('actions.search')"
@@ -490,6 +510,7 @@
           <div class="h-64 overflow-auto">
             <div
               v-for="worksite in assignableWorksites"
+              :data-testid="`testAssignableWorksiteDetail${worksite.id}Div`"
               :key="`${worksite.id}`"
               class="border-t last:border-b py-3 px-3 bg-white"
               style="
@@ -499,7 +520,8 @@
               "
             >
               <base-checkbox
-                @input="
+                :data-testid="`testAssignableWorksite${worksite.id}Checkbox`"
+                @update:modelValue="
                   (value) => {
                     const ids = worksite.work_types
                       .filter(
@@ -519,11 +541,13 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in worksite.work_types"
+                  :data-testid="`testWorkTypeList${work_type.id}Div`"
                   :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
                     class="block"
+                    :data-testid="`testWorkTypeDropdown${work_type.id}Select`"
                     :current-work-type="work_type"
                     use-icon
                     hide-name
@@ -541,36 +565,44 @@
           </div>
         </div>
       </div>
-      <div slot="footer" class="p-3 flex items-center justify-center">
-        <base-button
-          :action="
-            () => {
-              showAddCasesModal = false;
-              currentCaseSearch = null;
-              getClaimedWorksites();
-            }
-          "
-          :text="$t('actions.cancel')"
-          variant="outline"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-        <base-button
-          variant="solid"
-          :action="addCases"
-          :text="$t('actions.add')"
-          class="ml-2 p-3 px-6 text-xs"
-        />
-      </div>
+      <template #footer>
+        <div class="p-3 flex items-center justify-center">
+          <base-button
+            :action="
+              () => {
+                showAddCasesModal = false;
+                currentCaseSearch = null;
+                getClaimedWorksites();
+              }
+            "
+            :text="$t('actions.cancel')"
+            :alt="$t('actions.cancel')"
+            data-testid="testCancel2Button"
+            variant="outline"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+          <base-button
+            variant="solid"
+            data-testid="testAddCases2Button"
+            :action="addCases"
+            :text="$t('actions.add')"
+            :alt="$t('actions.add')"
+            class="ml-2 p-3 px-6 text-xs"
+          />
+        </div>
+      </template>
     </modal>
     <modal
       v-if="showRenameModal"
+      data-testid="testRenameTeam2Modal"
       closeable
       :title="$t('actions.rename_team')"
-      @close="renameTeam"
       modal-classes="max-w-xl"
+      @close="renameTeam"
     >
       <base-input
         v-model="team.name"
+        data-testid="testTeamsNameTextInput"
         :placeholder="$t('teams.name')"
         class="w-64 m-6"
       />
@@ -578,105 +610,132 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
 import * as L from 'leaflet';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import type { PropType } from 'vue';
+import { GeoJSONObject } from '@turf/turf';
+import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
-import { UserMixin, DialogsMixin } from '@/mixins';
-import Avatar from '../../components/Avatar';
-import { getColorForStatus } from '../../filters';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
-import { getErrorMessage } from '../../utils/errors';
-import WorkTypeMap from '../../components/WorkTypeMap';
-import { getQueryString } from '../../utils/urls';
-import Table from '../../components/Table';
+import Avatar from '@/components/Avatar.vue';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
+import WorkTypeMap from '@/components/WorkTypeMap.vue';
+import { getQueryString } from '@/utils/urls';
+import Table from '@/components/Table.vue';
+import useDialogs from '@/hooks/useDialogs';
+import User from '@/models/User';
 
-export default {
+export default defineComponent({
   name: 'TeamDetail',
-  components: { Table, WorkTypeMap, WorksiteStatusDropdown, Avatar },
-  mixins: [UserMixin, DialogsMixin],
-  async mounted() {
-    await Team.api().get(`/teams/${this.$route.params.team_id}`);
-    const feature = await Team.api().getCasesArea(
-      this.$route.params.team_id,
-      this.currentIncidentId,
-    );
-    const geojsonFeature = {
-      type: 'Feature',
-      properties: {},
-      geometry: feature.response.data,
-    };
-    this.caseArea = L.geoJSON(geojsonFeature, {
-      weight: '1',
-    });
-    await this.getClaimedWorksites();
-  },
+  components: { Table, WorksiteStatusDropdown, Avatar, WorkTypeMap },
   props: {
     workTypes: {
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       default: () => [],
     },
     users: {
-      type: Array,
+      type: Array as PropType<User[]>,
       default: () => [],
     },
     teams: {
-      type: Array,
+      type: Array as PropType<Team[]>,
       default: () => [],
     },
   },
-  data() {
-    return {
-      Promise,
-      getColorForStatus,
-      currentUsers: [],
-      userResults: [],
-      caseResults: [],
-      usersToAdd: [],
-      casesToAdd: [],
-      worksites: [],
-      selectedUsers: [],
-      selectedWorksites: [],
-      showAddMembersModal: false,
-      showAddCasesModal: false,
-      showRenameModal: false,
-      showingWorksiteTable: true,
-      showingWorksiteMap: false,
-      caseArea: null,
-      currentUserSearch: '',
-      currentCaseSearch: '',
+  emits: ['reload'],
+  setup(props, ctx) {
+    const $toasted = useToast();
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+    const { t } = useI18n();
+    const { component: dialogComponent, selection, confirm } = useDialogs();
+    const $http = axios;
+    const currentUser = computed(
+      () => User.find(store.getters['auth/userId']) as User,
+    );
+    const currentUsers = ref([]);
+    const userResults = ref<User[]>([]);
+    const caseResults = ref<Record<string, any>[]>([]);
+    const usersToAdd = ref([]);
+    const casesToAdd = ref([]);
+    const worksites = ref<Worksite[]>([]);
+    const selectedUsers = ref([]);
+    const selectedWorksites = ref([]);
+    const showAddMembersModal = ref(false);
+    const showAddCasesModal = ref(false);
+    const showRenameModal = ref(false);
+    const showingWorksiteTable = ref(true);
+    const showingWorksiteMap = ref(false);
+    const caseArea = ref<L.GeoJSON | null>(null);
+    const currentUserSearch = ref('');
+    const currentCaseSearch = ref('');
+
+    const team = computed(() => {
+      return Team.find(route.params.team_id) as Team;
+    });
+    const assignableWorksites = computed(() =>
+      worksites.value.filter(
+        (w) => !assignedWorksites.value.map((ws) => ws.id).includes(w.id),
+      ),
+    );
+    const mapWorkTypes = computed(() =>
+      assignableWorksites.value.map((worksite) => {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          null,
+          currentUser.value.organization,
+        );
+        return { ...workType, location: worksite.location };
+      }),
+    );
+    const assignedWorksites = computed(() =>
+      Worksite.query()
+        .where((worksite: Worksite) => {
+          return props.workTypes
+            .filter((wt) => {
+              return team.value?.assigned_work_types
+                .map((awt) => awt.id)
+                .includes(wt.id);
+            })
+            .map((awt) => awt.case_number)
+            .includes(worksite.case_number);
+        })
+        .get(),
+    );
+    const mapAssignedWorkTypes = computed(() =>
+      assignedWorksites.value.map((worksite) => {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          null,
+          currentUser.value?.organization,
+        );
+        return { ...workType, location: worksite.location };
+      }),
+    );
+    const getUser = (id) => {
+      return User.find(id);
     };
-  },
-  watch: {
-    showAddMembersModal() {
-      this.onUserSearch();
-    },
-    showAddCasesModal() {
-      this.onCaseSearch();
-    },
-  },
-  methods: {
-    async renameTeam() {
-      Team.update({
-        where: this.team.id,
-        data: {
-          name: this.team.name,
-        },
-      });
-      await this.updateCurrentTeam();
-      this.showRenameModal = false;
-    },
-    async getClaimedWorksites() {
-      const params = {
-        incident: this.currentIncidentId,
-        work_type__claimed_by: this.currentUser.organization.id,
+
+    const allTeamUsers = computed(
+      () => team.value && team.value.users.map((u) => getUser(u)),
+    );
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'],
+    );
+
+    const getClaimedWorksites = async () => {
+      const params: Record<string, unknown> = {
+        incident: currentIncidentId.value,
+        work_type__claimed_by: currentUser.value?.organization.id,
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
 
-      if (this.currentCaseSearch) {
-        params.search = this.currentCaseSearch;
+      if (currentCaseSearch.value) {
+        params.search = currentCaseSearch.value;
       }
 
       const results = await Worksite.api().get(
@@ -685,152 +744,197 @@ export default {
           dataKey: 'results',
         },
       );
-      this.worksites = results.entities.worksites;
-    },
-    onUserSearch() {
-      this.userResults = Array.from(
-        this.users.filter((user) => {
-          return (
-            user.full_name
-              .toLowerCase()
-              .includes(this.currentUserSearch.toLowerCase()) ||
-            user.email.toLowerCase().includes(this.currentSearch.toLowerCase())
-          );
-        }),
-      );
-    },
-    onCaseSearch() {
-      this.caseResults = Array.from(
-        this.workTypes.filter((c) => {
-          return (
-            c.case_number
-              .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase()) ||
-            c.work_type
-              .toLowerCase()
-              .includes(this.currentCaseSearch.toLowerCase())
-          );
-        }),
-      );
-    },
-    async addUsers() {
-      Team.update({
-        where: this.team.id,
+      worksites.value = (results.entities?.worksites || []) as Worksite[];
+    };
+
+    const renameTeam = async () => {
+      await Team.update({
+        where: team.value?.id,
         data: {
-          users: Array.from(new Set([...this.team.users, ...this.usersToAdd])),
+          name: team.value?.name,
         },
       });
+      await updateCurrentTeam();
+      showRenameModal.value = false;
+    };
 
-      await this.updateCurrentTeam();
-      this.usersToAdd = [];
-      this.showAddMembersModal = false;
-    },
-    updateNotes(value) {
+    const onUserSearch = () => {
+      userResults.value = props.users.filter((user) => {
+        return (
+          user.full_name
+            .toLowerCase()
+            .includes(currentUserSearch.value.toLowerCase()) ||
+          user.email
+            .toLowerCase()
+            .includes(currentUserSearch.value.toLowerCase())
+        );
+      });
+    };
+
+    const onCaseSearch = () => {
+      caseResults.value = props.workTypes.filter((c) => {
+        return (
+          c.case_number
+            .toLowerCase()
+            .includes(currentCaseSearch.value.toLowerCase()) ||
+          c.work_type
+            .toLowerCase()
+            .includes(currentCaseSearch.value.toLowerCase())
+        );
+      });
+    };
+
+    const addUsers = async () => {
+      await Team.update({
+        where: team.value?.id,
+        data: {
+          users: [
+            ...new Set([...(team.value?.users || []), ...usersToAdd.value]),
+          ],
+        },
+      });
+      await updateCurrentTeam();
+      usersToAdd.value = [];
+      showAddMembersModal.value = false;
+    };
+
+    const updateNotes = (value: string) => {
       Team.update({
-        where: this.team.id,
+        where: team.value?.id,
         data: {
           notes: value,
         },
       });
-    },
-    async updateCurrentTeam() {
-      await Team.api().patch(`/teams/${this.team.id}`, this.team.$toJson());
-    },
-    async updateTeam(id, data) {
+    };
+
+    const updateCurrentTeam = async () => {
+      await Team.api().patch(`/teams/${team.value?.id}`, team.value?.$toJson());
+    };
+
+    const updateTeam = async (
+      id: number | string,
+      data: Record<string, any>,
+    ) => {
+      console.log('updateTeam', id, data);
       await Team.api().patch(`/teams/${id}`, data);
-    },
-    async getWorksite(id) {
+    };
+
+    const getWorksite = async (id: number) => {
       const {
         response: { data },
       } = await Worksite.api().get(`/worksites/${id}`);
       return data;
-    },
-    async addCases() {
-      if (this.casesToAdd.length) {
+    };
+
+    const addCases = async () => {
+      if (casesToAdd.value?.length) {
         await Promise.all(
-          this.casesToAdd.map((c) =>
-            this.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+          casesToAdd.value.map((c) =>
+            $http.post(
+              `${
+                import.meta.env.VITE_APP_API_BASE_URL
+              }/worksite_work_types_teams`,
               {
-                team: this.team.id,
+                team: team.value?.id,
                 worksite_work_type: c,
               },
             ),
           ),
         );
       }
-      this.casesToAdd = [];
-      this.showAddCasesModal = false;
-      this.currentCaseSearch = null;
-      this.getClaimedWorksites();
-      this.$emit('reload');
-    },
-    async removeFromTeam(userIds) {
-      const newUsers = this.team.users.filter((id) => !userIds.includes(id));
-      Team.update({
-        where: this.team.id,
+
+      casesToAdd.value = [];
+      showAddCasesModal.value = false;
+      currentCaseSearch.value = '';
+      await getClaimedWorksites();
+      ctx.emit('reload');
+    };
+
+    const removeFromTeam = async (userIds: number[]) => {
+      const newUsers = team.value?.users.filter((id) => !userIds.includes(id));
+      await Team.update({
+        where: team.value?.id,
         data: {
           users: newUsers,
         },
       });
-      await this.updateCurrentTeam();
-      this.$emit('reload');
-    },
-    async removeWorksiteFromTeam(worksiteId) {
-      const worksite = await this.getWorksite(worksiteId);
+      await updateCurrentTeam();
+      ctx.emit('reload');
+    };
 
-      const ids = worksite.work_types
-        .filter((type) => type.claimed_by === this.currentUser.organization.id)
-        .map((wt) => wt.id);
+    const removeWorksiteFromTeam = async (worksiteId: number) => {
+      const worksite = await getWorksite(worksiteId);
 
-      const workTypesToDelete = this.team.assigned_work_types.filter((awt) =>
-        ids.includes(awt.id),
+      const ids = new Set(
+        worksite.work_types
+          .filter((t) => t.claimed_by === currentUser.value?.organization.id)
+          .map((wt) => wt.id),
+      );
+
+      const workTypesToDelete = (team.value?.assigned_work_types || []).filter(
+        (awt) => ids.has(awt.id),
       );
       await Promise.all(
         workTypesToDelete.map((wt) => {
-          return this.$http.delete(
-            `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams/${wt.id}`,
+          return $http.delete(
+            `${
+              import.meta.env.VITE_APP_API_BASE_URL
+            }/worksite_work_types_teams/${wt.id}`,
             {
-              data: { team: this.team.id },
+              data: { team: team.value?.id },
             },
           );
         }),
       );
+      ctx.emit('reload');
+    };
 
-      this.$emit('reload');
-    },
-    toggleView(view) {
-      this.showingWorksiteTable = false;
-      this.showingWorksiteMap = false;
-      this[view] = true;
-    },
-    async moveToDifferentTeam(userId) {
-      const result = await this.$selection({
-        title: this.$t('teams.move_teams'),
+    const toggleView = (
+      view: 'showingWorksiteTable' | 'showingWorksiteMap',
+    ) => {
+      showingWorksiteTable.value = view === 'showingWorksiteTable';
+      showingWorksiteMap.value = view === 'showingWorksiteMap';
+    };
+
+    const moveToDifferentTeam = async (userId) => {
+      const _id: number = await selection({
+        title: t('teams.move_teams'),
         content: '',
         label: 'name',
-        options: this.teams.filter((t) => t.id !== this.team.id),
-        placeholder: this.$t('teams.select_target_team'),
+        itemKey: 'id',
+        options: props.teams.filter((t) => t.id !== team.value?.id),
+        placeholder: t('teams.select_target_team'),
       });
-      if (result.id) {
-        await this.removeFromTeam([userId]);
-        result.users.push(userId);
-        await this.updateTeam(result.id, result.$toJson());
-        this.$emit('reload');
+      const result = Team.find(_id);
+      if (result && result.id) {
+        await removeFromTeam([userId]);
+        await Team.update({
+          where: result.id,
+          data: {
+            users: [...(result.users || []), userId],
+          },
+        });
+        const t = Team.find(result.id);
+        if (t) {
+          await updateTeam(t.id, t.$toJson());
+        }
+
+        ctx.emit('reload');
       }
-    },
-    async deleteCurrentTeam() {
-      const result = await this.$confirm({
-        title: this.$t('teams.delete_team'),
-        content: this.$t('teams.delete_team_confirm'),
+    };
+
+    const deleteCurrentTeam = async () => {
+      const result = await confirm({
+        title: t('teams.delete_team'),
+        content: t('teams.delete_team_confirm'),
         actions: {
           no: {
-            text: this.$t('actions.cancel'),
+            text: t('actions.cancel'),
             type: 'outline',
             buttonClass: 'border border-black',
           },
           yes: {
-            text: this.$t('teams.yes'),
+            text: t('teams.yes'),
             type: 'solid',
           },
         },
@@ -839,116 +943,134 @@ export default {
         return;
       }
 
-      await Team.api().delete(`/teams/${this.team.id}`, {
-        delete: this.team.id,
+      await Team.api().delete(`/teams/${team.value?.id}`, {
+        delete: team.value?.id,
       });
-      this.$emit('reload');
-      await this.$router.push('/organization/teams');
-    },
-    async showOnMap(worksite) {
+      ctx.emit('reload');
+      await router.push('/organization/teams');
+    };
+
+    const showOnMap = async (worksite: Worksite) => {
       const workType = Worksite.getWorkType(
         worksite.work_types,
         null,
-        this.currentUser.organization,
+        currentUser.value?.organization,
       );
-      await this.$component({
-        title: this.$t('teams.view_case'),
+      await dialogComponent({
+        title: t('teams.view_case'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
           workTypes: [{ ...workType, location: worksite.location }],
         },
       });
-    },
-    async statusValueChange(value, workType, worksiteId) {
+    };
+
+    const statusValueChange = async (
+      value: string,
+      workType: Record<string, any>,
+      worksiteId: number,
+    ) => {
       try {
         await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
         await Worksite.api().fetch(worksiteId);
       }
-    },
-    async showAllOnMap() {
-      await this.$component({
-        title: this.$t('teams.view_all_cases'),
+    };
+
+    const showAllOnMap = async () => {
+      await dialogComponent({
+        title: t('teams.view_all_cases'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
-          workTypes: this.assignedWorksites.map((worksite) => {
+          workTypes: assignedWorksites.value.map((worksite) => {
             const workType = Worksite.getWorkType(
               worksite.work_types,
               null,
-              this.currentUser.organization,
+              currentUser.value?.organization,
             );
             return { ...workType, location: worksite.location };
           }),
         },
       });
-    },
-  },
-  computed: {
-    team() {
-      return Team.find(this.$route.params.team_id);
-    },
-    assignableWorksites() {
-      return this.worksites.filter(
-        (w) => !this.assignedWorksites.map((ws) => ws.id).includes(w.id),
+    };
+
+    watch(showAddMembersModal, () => {
+      onUserSearch();
+    });
+    watch(showAddCasesModal, () => {
+      onCaseSearch();
+    });
+
+    onMounted(async () => {
+      await Team.api().get(`/teams/${route.params.team_id}`);
+      const feature = await Team.api().getCasesArea(
+        route.params.team_id,
+        currentIncidentId.value,
       );
-    },
-    mapWorkTypes() {
-      return this.assignableWorksites.map((worksite) => {
-        const workType = Worksite.getWorkType(
-          worksite.work_types,
-          null,
-          this.currentUser.organization,
-        );
-        return { ...workType, location: worksite.location };
+      const geojsonFeature = {
+        type: 'Feature',
+        properties: {},
+        geometry: feature.response.data,
+      };
+      caseArea.value = L.geoJSON(geojsonFeature, {
+        weight: '1',
       });
-    },
-    mapAssingedWorkTypes() {
-      return this.assignedWorksites.map((worksite) => {
-        const workType = Worksite.getWorkType(
-          worksite.work_types,
-          null,
-          this.currentUser.organization,
-        );
-        return { ...workType, location: worksite.location };
-      });
-    },
-    assignedWorksites() {
-      return Worksite.query()
-        .where((worksite) => {
-          return this.workTypes
-            .filter((wt) => {
-              return this.team.assigned_work_types
-                .map((awt) => awt.id)
-                .includes(wt.id);
-            })
-            .map((awt) => awt.case_number)
-            .includes(worksite.case_number);
-        })
-        .get();
-    },
-    allTeamUsers: {
-      get() {
-        return this.team && this.team.users.map((u) => this.getUser(u));
-      },
-      set(newValue) {
-        Team.update({
-          where: this.team.id,
-          data: {
-            users: newValue.map((u) => u.id),
-          },
-        });
-      },
-    },
-    ...mapState('incident', ['currentIncidentId']),
+      await getClaimedWorksites();
+    });
+
+    return {
+      Promise,
+      currentUser,
+      userResults,
+      caseResults,
+      usersToAdd,
+      casesToAdd,
+      worksites,
+      selectedUsers,
+      selectedWorksites,
+      showAddMembersModal,
+      showAddCasesModal,
+      showRenameModal,
+      showingWorksiteTable,
+      showingWorksiteMap,
+      caseArea,
+      currentUserSearch,
+      currentCaseSearch,
+      team,
+      assignableWorksites,
+      mapWorkTypes,
+      assignedWorksites,
+      mapAssignedWorkTypes,
+      allTeamUsers,
+      currentIncidentId,
+      renameTeam,
+      getClaimedWorksites,
+      onUserSearch,
+      onCaseSearch,
+      addUsers,
+      updateNotes,
+      updateCurrentTeam,
+      updateTeam,
+      getWorksite,
+      addCases,
+      removeFromTeam,
+      removeWorksiteFromTeam,
+      toggleView,
+      moveToDifferentTeam,
+      deleteCurrentTeam,
+      showOnMap,
+      statusValueChange,
+      showAllOnMap,
+    };
   },
-};
+});
 </script>
 
-<style>
+<style lang="postcss" scoped>
 .team-detail-user-bp__btn--active {
   background: #fff;
 }

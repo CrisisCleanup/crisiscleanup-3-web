@@ -11,18 +11,21 @@
       <slot name="right">
         <div class="right">
           <slot name="dropdown">
-            <div v-if="hasDropdown" class="card__dropdown mx-3">
-              <form-select
-                ref="dropdown"
+            <div v-if="hasDropdown" class="card__dropdown mx-3 m-4">
+              <base-select
+                ref="drop"
+                :model-value="dropdown.value"
                 :style="{
                   minWidth: `${dropdownWidth_}px`,
                   flexWrap: 'nowrap',
                 }"
                 :searchable="false"
                 :clearable="false"
-                @resize="calcDropdownWidth"
-                @input="(payload) => $emit('update:dropdown', payload)"
                 v-bind="dropdown"
+                @resize="calcDropdownWidth"
+                @update:modelValue="
+                  (payload) => $emit('update:dropdown', payload)
+                "
               >
                 <template #selected-option="{ option }">
                   <base-text
@@ -33,7 +36,7 @@
                     {{ option[dropdown.label] }}
                   </base-text>
                 </template>
-              </form-select>
+              </base-select>
             </div>
           </slot>
         </div>
@@ -43,49 +46,58 @@
   </Card>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
 import _ from 'lodash';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import Card from './Card.vue';
 
-export default {
+export default defineComponent({
   name: 'TitledCard',
   components: {
     Card,
   },
   props: {
-    title: VueTypes.string,
-    loading: VueTypes.bool.def(false),
-    dropdown: VueTypes.object.def({}),
-  },
-  data() {
-    return {
-      dropdownWidth_: 0,
-    };
-  },
-  mounted() {
-    this.$nextTick(() => this.calcDropdownWidth());
-  },
-  computed: {
-    hasDropdown() {
-      return !_.isEmpty(this.dropdown);
+    title: {
+      type: String,
+      default: '',
+    },
+    loading: {
+      type: Boolean,
+    },
+    dropdown: {
+      type: Object,
+      default: () => ({}),
     },
   },
-  methods: {
-    calcDropdownWidth() {
-      if (!this.$refs.dropdown) return;
-      const elWidth = this.$refs.dropdown.$el.clientWidth;
-      if (elWidth) {
-        this.dropdownWidth_ = elWidth;
-        const container = this.$refs.dropdown.$el.querySelector(
-          '.vs__selected-options',
-        );
+  setup(props) {
+    const dropdownWidth_ = ref(200);
+    const drop = ref(null);
+    function calcDropdownWidth() {
+      if (!drop.value) return;
+      const elementWidth = drop.value.$el.clientWidth;
+      if (elementWidth) {
+        dropdownWidth_.value = elementWidth;
+        const container = drop.value.$el.querySelector('.vs__selected-options');
         container.style.flexWrap = 'nowrap';
         container.style.flexDirection = 'row-reverse';
       }
-    },
+    }
+
+    const hasDropdown = computed(() => {
+      return !_.isEmpty(props.dropdown);
+    });
+
+    onMounted(() => {
+      nextTick(() => calcDropdownWidth());
+    });
+    return {
+      dropdownWidth_,
+      drop,
+      calcDropdownWidth,
+      hasDropdown,
+    };
   },
-};
+});
 </script>
 
 <style lang="postcss" scoped>

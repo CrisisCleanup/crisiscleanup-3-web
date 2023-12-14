@@ -20,12 +20,12 @@
 *.bat             text eol=crlf
 *.cmd             text eol=crlf
 *.coffee          text
-*.css             text
+*.css             text diff=css
 *.htm             text diff=html
 *.html            text diff=html
 *.inc             text
 *.ini             text
-*.js              text eol=lf
+*.js              text
 *.json            text
 *.jsx             text
 *.less            text
@@ -42,6 +42,7 @@
 *.scm             text
 *.scss            text diff=css
 *.sh              text eol=lf
+.husky/*          text eol=lf
 *.sql             text
 *.styl            text
 *.tag             text
@@ -54,13 +55,13 @@
 Dockerfile        text
 
 # Documentation
-*.ipynb           text
-*.markdown        text
-*.md              text
-*.mdwn            text
-*.mdown           text
-*.mkd             text
-*.mkdn            text
+*.ipynb           text eol=lf
+*.markdown        text diff=markdown
+*.md              text diff=markdown
+*.mdwn            text diff=markdown
+*.mdown           text diff=markdown
+*.mkd             text diff=markdown
+*.mkdn            text diff=markdown
 *.mdtxt           text
 *.mdtext          text
 *.txt             text
@@ -82,6 +83,7 @@ TODO              text
 # Templates
 *.dot             text
 *.ejs             text
+*.erb             text
 *.haml            text
 *.handlebars      text
 *.hbs             text
@@ -91,10 +93,11 @@ TODO              text
 *.mustache        text
 *.njk             text
 *.phtml           text
+*.svelte          text
 *.tmpl            text
 *.tpl             text
 *.twig            text
-*.vue             text eol=lf
+*.vue             text
 
 # Configs
 *.cnf             text
@@ -106,7 +109,11 @@ TODO              text
 .gitconfig        text
 .htaccess         text
 *.lock            text -diff
-package-lock.json text -diff
+package.json      text eol=lf
+package-lock.json text eol=lf -diff
+pnpm-lock.yaml    text eol=lf -diff
+.prettierrc       text
+yarn.lock         text -diff
 *.toml            text
 *.yaml            text
 *.yml             text
@@ -160,6 +167,7 @@ Procfile          text
 *.as              binary
 *.asf             binary
 *.asx             binary
+*.avi             binary
 *.fla             binary
 *.flv             binary
 *.m4v             binary

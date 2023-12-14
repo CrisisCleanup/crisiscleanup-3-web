@@ -29,21 +29,20 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable global-require */
 import { kebabCase } from 'lodash';
-import { computed, defineComponent, PropType, ref } from '@vue/composition-api';
-import { ICON_MAP, ICON_SIZES, ICONS } from '@/constants';
-import { EventsMixin } from '@/mixins';
+import type { PropType } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
+import type { ICON_SIZES, ICONS } from '../constants';
+import { ICON_MAP } from '../constants';
 
-type IconSize = typeof ICON_SIZES[number];
+type IconSize = (typeof ICON_SIZES)[number];
 
 export default defineComponent({
   name: 'BaseIcon',
-  mixins: [EventsMixin],
 
   props: {
     type: {
-      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      type: String as PropType<(typeof ICONS)[keyof typeof ICONS]>,
       default: '',
     },
     fa: {
@@ -84,7 +83,7 @@ export default defineComponent({
     },
     action: {
       type: Function as PropType<() => any>,
-      default: () => {},
+      default() {},
     },
     width: {
       type: String,
@@ -189,5 +188,9 @@ export default defineComponent({
 .filter-yellow {
   filter: invert(92%) sepia(21%) saturate(3995%) hue-rotate(346deg)
     brightness(98%) contrast(106%);
+}
+
+img {
+  max-width: fit-content;
 }
 </style>

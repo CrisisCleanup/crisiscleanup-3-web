@@ -2,6 +2,7 @@
   <div class="phone-system-action">
     <div
       class="phone-system-action__button"
+      data-testid="testPhoneSystemActionButtonDiv"
       :class="showComponent ? 'phone-system-action__button--active' : ''"
       @click="toggleComponent"
     >
@@ -9,6 +10,8 @@
         <div class="phone-system-action__icon">
           <ccu-icon
             v-if="icon"
+            data-testid="testPhoneSystemActionIcon"
+            :alt="$t('phoneDashboard.call_this_person')"
             :type="icon"
             :class="iconClass"
             :size="iconSize"
@@ -16,47 +19,46 @@
         </div>
       </slot>
     </div>
-    <div
-      class="phone-system-action__content"
-      :class="componentClass"
-      :style="componentStyle"
-      v-show="showComponent"
-    >
-      <div class="phone-system-action__close">
-        <ccu-icon
-          :alt="$t('actions.cancel')"
-          size="xs"
-          type="cancel"
-          class="phone-system-action__close-icon"
-          @click.native="() => (showComponent = false)"
-        />
+
+    <template v-if="mq.mdMinus">
+      <modal v-show="showComponent" @close="() => (showComponent = false)">
+        <slot name="component"></slot>
+      </modal>
+    </template>
+
+    <template v-else>
+      <div
+        v-show="showComponent"
+        data-testid="testPhoneSystemActionContentDiv"
+        class="phone-system-action__content"
+        :class="componentClass"
+        :style="componentStyle"
+      >
+        <div class="phone-system-action__close">
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            data-testid="testPhoneSystemActionCloseIcon"
+            size="xs"
+            type="cancel"
+            class="phone-system-action__close-icon"
+            @click="() => (showComponent = false)"
+          />
+        </div>
+        <slot name="component"></slot>
       </div>
-      <slot name="component"></slot>
-    </div>
+    </template>
   </div>
 </template>
 
-<script>
-import { EventBus } from '@/event-bus';
-export default {
+<script lang="ts">
+import { onBeforeMount, ref, watch } from 'vue';
+import { useMq } from 'vue3-mq';
+import useEmitter from '../../hooks/useEmitter';
+import Modal from '@/components/Modal.vue';
+
+export default defineComponent({
   name: 'PhoneComponentButton',
-  created() {
-    EventBus.$on('phone_component:close', () => {
-      this.showComponent = this.keepOpen;
-    });
-    EventBus.$on('phone_component:open', (name) => {
-      if (this.name === name) {
-        EventBus.$emit('phone_component:close');
-        this.showComponent = true;
-      }
-    });
-  },
-  data() {
-    return {
-      showComponent: false,
-      top: 0,
-    };
-  },
+  components: { Modal },
   props: {
     name: { type: String, default: null, required: true },
     icon: { type: String, default: null, required: false },
@@ -66,33 +68,55 @@ export default {
     iconSize: { type: String, default: null, required: false },
     keepOpen: { type: Boolean, default: false, required: false },
   },
-  methods: {
-    mounted() {
-      if (this.keepOpen) {
-        this.showComponent = true;
-      }
-    },
-    toggleComponent() {
-      if (this.keepOpen) {
-        this.showComponent = true;
+  setup(props, { emit }) {
+    const showComponent = ref(false);
+    const top = ref(0);
+    const { emitter } = useEmitter();
+    const mq = useMq();
+
+    function toggleComponent() {
+      if (props.keepOpen) {
+        showComponent.value = true;
       } else {
-        const newState = !this.showComponent;
-        EventBus.$emit('phone_component:close');
-        this.showComponent = newState;
+        const newState = !showComponent.value;
+        emitter.emit('phone_component:close');
+        showComponent.value = newState;
       }
-    },
+    }
+
+    onBeforeMount(() => {
+      emitter.on('phone_component:close', () => {
+        showComponent.value = props.keepOpen;
+      });
+      emitter.on('phone_component:open', (name) => {
+        if (props.name === name) {
+          emitter.emit('phone_component:close');
+          showComponent.value = true;
+        }
+      });
+    });
+
+    watch(
+      () => showComponent.value,
+      (newValue, oldValue) => {
+        if (newValue && !oldValue) {
+          emit('open');
+          // TODO: Fix scrolling
+          // const el = this.$parent.$refs.phoneButtons;
+          // const rect = el.getBoundingClientRect();
+          // this.top = `${parseInt(rect.top + window.scrollY)}px`;
+        }
+      },
+    );
+
+    return {
+      top,
+      showComponent,
+      toggleComponent,
+      mq,
+    };
   },
-  watch: {
-    showComponent(newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.$emit('open');
-        const el = this.$parent.$refs.phoneButtons;
-        const rect = el.getBoundingClientRect();
-        this.top = `${parseInt(rect.top + window.scrollY)}px`;
-      }
-    },
-  },
-};
+});
 </script>
 
 <style lang="postcss" scoped>
@@ -118,7 +142,7 @@ export default {
   }
 
   &__close {
-    @apply w-full relative mb-2 z-40;
+    @apply w-full relative mb-6 z-40;
     &-icon {
       @apply absolute right-0 p-2 cursor-pointer;
     }

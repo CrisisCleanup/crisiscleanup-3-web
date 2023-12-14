@@ -12,31 +12,27 @@
               :dark="false"
               :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
               :user="message.created_by"
+              data-testid="testCreatedByTooltip"
             />
             <span
-              v-if="$moment(message.created_at).isSame($moment(), 'day')"
+              v-if="moment(message.created_at).isSame(moment(), 'day')"
               class="opacity-40 text-xs ml-1"
+              data-testid="testCreatedAtTimestamp"
               :title="message.created_at"
-              >{{ message.created_at | moment('h:mm A') }}</span
+              >{{ formatDateString(message.created_at, 'h:mm A') }}</span
             >
             <span v-else class="opacity-40 text-xs ml-1">{{
-              message.created_at | moment('MMM Do h:mm A')
+              formatDateString(message.created_at, 'MMM Do h:mm A')
             }}</span>
           </div>
           <div
             v-if="message.is_urgent"
-            class="
-              px-4
-              py-2
-              inline-block
-              bg-crisiscleanup-chat-red bg-opacity-40
-              text-crisiscleanup-dark-400
-              w-full
-            "
+            class="px-4 py-2 inline-block bg-crisiscleanup-chat-red bg-opacity-40 text-crisiscleanup-dark-400 w-full"
           >
             <div class="text-crisiscleanup-chat-red flex items-center">
               <ccu-icon
                 :alt="$t('chat.urgent')"
+                data-testid="testIsUrgentStyle"
                 size="small"
                 type="attention-red"
                 class="mr-1"
@@ -47,28 +43,25 @@
           </div>
           <div
             v-else
-            class="
-              px-4
-              py-2
-              inline-block
-              bg-crisiscleanup-chat-blue
-              text-black
-              w-full
-            "
+            class="px-4 py-2 inline-block bg-crisiscleanup-chat-blue text-black w-full"
           >
             {{ message.content }}
           </div>
           <font-awesome-icon
             v-if="showFavorite"
-            :icon="['far', 'star']"
-            class="absolute top-1/2 right-2 mt-2"
+            :alt="$t('chat.show_favorite')"
+            data-testid="testShowFavoriteContent"
+            icon="star"
+            class="absolute top-1/2 right-2 mt-3"
             @click="$emit('onFavorite', message)"
           />
           <font-awesome-icon
             v-if="message.is_favorite"
+            :alt="$t('chat.is_favorite')"
+            data-testid="testIsFavoriteIcon"
+            icon="star"
+            class="absolute top-1/2 right-2 mt-3"
             @mouseover="showFavorite"
-            :icon="['fa', 'star']"
-            class="absolute top-1/2 right-2 mt-2"
             @click="$emit('onUnfavorite', message)"
           />
         </div>
@@ -86,26 +79,32 @@
   </div>
 </template>
 
-<script>
-import { UserMixin } from '@/mixins';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
+<script lang="ts">
+import type { PropType } from 'vue';
+import { ref } from 'vue';
+import moment from 'moment';
+import UserDetailsTooltip from '../user/DetailsTooltip.vue';
+import { formatDateString } from '../../filters/index';
+import type { Message } from '@/models/types';
 
-export default {
+export default defineComponent({
   name: 'ChatMessage',
   components: { UserDetailsTooltip },
-  mixins: [UserMixin],
-  data() {
-    return {
-      showFavorite: false,
-    };
-  },
   props: {
     message: {
-      type: Object,
+      type: Object as PropType<Message>,
       default: () => ({}),
     },
   },
-};
+  setup() {
+    const showFavorite = ref(false);
+    return {
+      showFavorite,
+      formatDateString,
+      moment,
+    };
+  },
+});
 </script>
 
 <style scoped></style>

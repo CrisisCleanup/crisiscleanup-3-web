@@ -2,42 +2,44 @@
   <div class="navbar overflow-y-auto">
     <router-link :to="logoRoute.to" class="logo--grid">
       <div class="logo flex justify-center p-3">
-        <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
+        <img 
+          src="../../assets/crisiscleanup_logo.png"
+          style="height: 53px"
+          data-testid="testCrisiscleanupLogoIcon"
+        />
       </div>
     </router-link>
 
     <div class="menu overflow-y-auto grid">
       <NavButton
-        class="overflow-y-auto"
         v-for="r in routes"
         :key="r.key"
+        :data-testid="$t(`test${r.key}Link`)"
+        class="overflow-y-auto"
         :route="r"
       />
     </div>
   </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
-import NavButton from './NavButton';
+<script lang="ts">
+import type { PropType } from 'vue';
+import NavButton from './NavButton.vue';
 
-const routeShape = VueTypes.shape({
-  key: VueTypes.string,
-  text: VueTypes.string,
-  to: VueTypes.string,
-  icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-  iconSize: VueTypes.string,
-  disabled: VueTypes.bool,
-});
-
-export default {
+export default defineComponent({
   name: 'NavMenu',
   components: { NavButton },
   props: {
-    routes: VueTypes.arrayOf(routeShape),
-    logoRoute: routeShape,
+    routes: {
+      type: Array as PropType<Record<string, any>[]>,
+      default: () => [],
+    },
+    logoRoute: {
+      type: Object,
+      default: () => ({}),
+    },
   },
-};
+});
 </script>
 
 <style>

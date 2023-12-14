@@ -1,7 +1,9 @@
 <template>
   <ul class="tree-menu text-sm" :class="`ml-${indent * 2}`">
     <base-checkbox
-      @input="
+      :model-value="selectedUsers.includes(data.id)"
+      :data-testid="`testAddRemoveUser${data.id}Checkbox`"
+      @update:modelValue="
         (value) => {
           if (value) {
             $emit('addUser', data.id);
@@ -10,9 +12,8 @@
           }
         }
       "
-      :value="selectedUsers.includes(data.id)"
     >
-      <div class="flex">
+      <div class="flex" :data-testid="`testAUser${data.id}InfoDiv`">
         <Avatar
           :initials="data.first_name"
           :url="profilePictureUrl"
@@ -23,13 +24,15 @@
       </div>
     </base-checkbox>
     <li
-      v-if="children.length"
+      v-if="children.length > 0"
       :class="`ml-${(indent + 1) * 2}`"
       class="pb-2 text-primary-dark"
     >
       <base-checkbox
-        :value="children.every((child) => selectedUsers.includes(child.id))"
-        @input="
+        :model-value="
+          children.every((child) => selectedUsers.includes(child.id))
+        "
+        @update:modelValue="
           (value) => {
             if (value) {
               $emit('addUserTree', data.id);
@@ -58,24 +61,27 @@
     </li>
   </ul>
 </template>
-<script>
-import Avatar from './Avatar';
-export default {
+
+<script lang="ts">
+import Avatar from '@/components/Avatar.vue';
+
+export default defineComponent({
+  name: 'TreeMenu',
   components: { Avatar },
   props: ['label', 'children', 'indent', 'data', 'selectedUsers'],
-  name: 'TreeMenu',
-  computed: {
-    profilePictureUrl() {
-      if (this.data.files && this.data.files.length) {
-        const profilePictures = this.data.files.filter(
+  setup(props) {
+    const profilePictureUrl = computed(() => {
+      if (props.data.files && props.data.files.length > 0) {
+        const profilePictures = props.data.files.filter(
           (file) => file.file_type_t === 'fileTypes.user_profile_picture',
         );
-        if (profilePictures.length) {
+        if (profilePictures.length > 0) {
           return profilePictures[0].small_thumbnail_url;
         }
       }
-      return `https://avatars.dicebear.com/api/bottts/${this.data.first_name}.svg`;
-    },
+
+      return `https://avatars.dicebear.com/api/bottts/${props.data.first_name}.svg`;
+    });
   },
-};
+});
 </script>

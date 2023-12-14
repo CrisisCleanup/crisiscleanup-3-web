@@ -3,10 +3,11 @@
     <div class="flex justify-between items-center">
       <base-input
         v-model="currentSearch"
+        data-testid="testTeamSearch"
         icon="search"
         class="w-84 mr-4 mb-6"
         :placeholder="$t('actions.search')"
-        @input="onSearch"
+        @update:modelValue="onSearch"
       ></base-input>
     </div>
     <div style="display: grid; grid-template-columns: 0.75fr 2fr" class="h-120">
@@ -15,6 +16,8 @@
           <span>{{ $t('teams.team_management') }}</span>
           <base-button
             :text="$t('teams.create_new_team')"
+            :alt="$t('teams.create_new_team')"
+            data-testid="testTeamCreateBtn"
             variant="solid"
             size="small"
             :action="
@@ -31,18 +34,12 @@
             grid-auto-rows: min-content;
           "
           class="overflow-auto h-120"
+          data-testid="testTeamsContainerDiv"
         >
           <div
             v-for="team in teams"
             :key="`${team.id}`"
-            class="
-              h-full
-              px-4
-              pt-2
-              pb-6
-              hover:bg-crisiscleanup-light-grey
-              cursor-pointer
-            "
+            class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :class="
               String(team.id) === String($route.params.team_id)
                 ? 'bg-crisiscleanup-light-grey'
@@ -57,7 +54,7 @@
             <div class="flex justify-between items-center">
               <base-text>{{ team.name }}</base-text>
               <base-text
-                >{{ getAssignedWorkTypes(team).length }}
+                >{{ getAssignedWorkTypes(team)?.length }}
                 {{ $t('teams.cases_assigned') }}
               </base-text>
             </div>
@@ -82,11 +79,11 @@
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
           <router-view
-            v-show="teams && teams.length"
+            v-show="teams && teams.length > 0"
+            :key="$route.params.team_id"
             :work-types="claimedWorktypes"
             :users="usersWithoutTeams"
             :teams="teams"
-            :key="$route.params.team_id"
             @reload="getData"
           ></router-view>
         </div>
@@ -94,123 +91,61 @@
     </div>
     <CreateTeamModal
       v-if="creatingTeam"
-      @close="creatingTeam = false"
-      @saved="getData"
       :users="usersWithoutTeams"
       :cases="claimedWorktypes"
       :teams="teams"
+      @close="creatingTeam = false"
+      @saved="getData"
     />
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-import { UserMixin } from '@/mixins';
+<script lang="ts">
+import CreateTeamModal from './CreateTeamModal.vue';
 import User from '@/models/User';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
-import Avatar from '../../components/Avatar';
-import CreateTeamModal from './CreateTeamModal';
-import { getQueryString } from '../../utils/urls';
-import enums from '../../store/modules/enums';
+import Avatar from '@/components/Avatar.vue';
+import { getQueryString } from '@/utils/urls';
+import enums from '@/store/modules/enums';
 
-export default {
+export default defineComponent({
   name: 'Teams',
   components: { CreateTeamModal, Avatar },
-  mixins: [UserMixin],
+  setup() {
+    const store = useStore();
+    const currentSearch = ref('');
+    const creatingTeam = ref(false);
+    const users = ref<User[]>([]);
+    const usersWithoutTeams = ref<User[]>([]);
+    const teams = ref<Team[]>([]);
 
-  methods: {
-    async onSearch() {
-      await this.getTeams();
-    },
-    async getTeams() {
-      const results = await Team.api().get(
-        `/teams?search=${this.currentSearch || ''}&limit=500&incident=${
-          this.currentIncidentId
-        }`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.teams = results.entities.teams;
-    },
-    getAssignedWorkTypes(team) {
-      return this.claimedWorktypes.filter((wt) => {
-        return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
-      });
-    },
-    getCaseCompletion(team) {
-      const workTypes = this.getAssignedWorkTypes(team);
-      if (workTypes && workTypes.length) {
-        return Number(
-          (workTypes.filter((wt) => Boolean(wt.completed)).length /
-            workTypes.length) *
-            100,
-        ).toFixed(0);
-      }
-      return 0;
-    },
-    async getClaimedWorksites() {
-      const params = {
-        incident: this.currentIncidentId,
-        work_type__claimed_by: this.currentUser.organization.id,
-        limit: 500,
-        fields:
-          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
-      };
-
-      Worksite.api().get(`/worksites?${getQueryString(params)}`, {
-        dataKey: 'results',
-      });
-    },
-    async getData() {
-      const results = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&limit=500`,
-        {
-          dataKey: 'results',
-        },
-      );
-      const usersWithoutTeamsResults = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&no_team_incident=${this.currentIncidentId}&limit=500`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.users = results.entities.users;
-      this.usersWithoutTeams = usersWithoutTeamsResults.entities.users;
-      await this.getTeams();
-      await this.getClaimedWorksites();
-    },
-  },
-  data() {
-    return {
-      currentSearch: '',
-      creatingTeam: false,
-      users: [],
-      usersWithoutTeams: [],
-      teams: [],
-    };
-  },
-  computed: {
-    claimedWorktypes() {
-      const query = Worksite.query().where((worksite) => {
+    const currentUser = computed(
+      () => User.find(store.getters['auth/userId']) as User,
+    );
+    const currentIncidentId = computed(
+      () => store.getters['incident/currentIncidentId'] as number,
+    );
+    const claimedWorktypes = computed(() => {
+      const query = Worksite.query().where((worksite: Worksite) => {
         if (
           worksite.work_types &&
-          this.currentIncidentId === worksite.incident
+          currentIncidentId.value === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
             (workType) =>
-              workType.claimed_by === this.currentUser.organization.id,
+              workType.claimed_by === currentUser.value.organization.id,
           );
           return Boolean(claimed);
         }
+
         return false;
       });
-      const worksites = query.get();
-      const workTypes = [];
-      worksites.forEach((w) => {
-        w.work_types.forEach((wt) => {
-          if (wt.claimed_by === this.currentUser.organization.id) {
+      const worksites = query.get() as Worksite[];
+      const workTypes: Record<string, any>[] = [];
+      for (const w of worksites) {
+        for (const wt of w.work_types) {
+          if (wt.claimed_by === currentUser.value.organization.id) {
             const closedStatuses = enums.state.statuses.filter(
               (status) => status.primary_state === 'closed',
             );
@@ -227,27 +162,115 @@ export default {
                 .includes(wt.status),
             });
           }
-        });
-      });
-      return workTypes;
-    },
-    ...mapState('incident', ['currentIncidentId']),
-    ...mapState('enums', ['statuses']),
-  },
-  watch: {
-    currentIncidentId(newState, oldState) {
-      if (String(newState) !== String(oldState)) {
-        this.getData().then(() => {});
+        }
       }
-    },
+
+      return workTypes;
+    });
+
+    const getUser = (id: number) => {
+      return User.find(id);
+    };
+
+    const getTeams = async () => {
+      const results = await Team.api().get(
+        `/teams?search=${currentSearch.value || ''}&limit=500&incident=${
+          currentIncidentId.value
+        }`,
+        {
+          dataKey: 'results',
+        },
+      );
+      teams.value = (results.entities?.teams || []) as Team[];
+    };
+
+    const getAssignedWorkTypes = (team: Team) => {
+      return claimedWorktypes.value.filter((wt) => {
+        return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
+      });
+    };
+
+    const getCaseCompletion = (team: Team) => {
+      const workTypes = getAssignedWorkTypes(team);
+      if (workTypes && workTypes.length > 0) {
+        return Number(
+          (workTypes.filter((wt) => Boolean(wt.completed)).length /
+            workTypes.length) *
+            100,
+        ).toFixed(0);
+      }
+
+      return 0;
+    };
+
+    const getClaimedWorksites = async () => {
+      const params = {
+        incident: currentIncidentId.value,
+        work_type__claimed_by: currentUser.value.organization.id,
+        limit: 500,
+        fields:
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
+      };
+
+      Worksite.api().get(`/worksites?${getQueryString(params)}`, {
+        dataKey: 'results',
+      });
+    };
+
+    const getData = async () => {
+      const results = await User.api().get(
+        `/users?organization=${currentUser.value.organization.id}&limit=500`,
+        {
+          dataKey: 'results',
+        },
+      );
+      const usersWithoutTeamsResults = await User.api().get(
+        `/users?organization=${currentUser.value.organization.id}&no_team_incident=${currentIncidentId.value}&limit=500`,
+        {
+          dataKey: 'results',
+        },
+      );
+      users.value = (results.entities?.users || []) as User[];
+      usersWithoutTeams.value = (usersWithoutTeamsResults.entities?.users ||
+        []) as User[];
+      await getTeams();
+      await getClaimedWorksites();
+    };
+
+    const onSearch = async () => {
+      await getTeams();
+    };
+
+    watch(currentIncidentId, (newState, oldState) => {
+      if (String(newState) !== String(oldState)) {
+        getData().then(() => {});
+      }
+    });
+
+    onMounted(async () => {
+      await getData();
+    });
+    return {
+      getTeams,
+      getUser,
+      getData,
+      onSearch,
+      getAssignedWorkTypes,
+      getCaseCompletion,
+      getClaimedWorksites,
+      currentSearch,
+      creatingTeam,
+      users,
+      usersWithoutTeams,
+      teams,
+      currentUser,
+      claimedWorktypes,
+    };
   },
-  async mounted() {
-    await this.getData();
-  },
-};
+});
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .users-avatars-list {
   grid-template-columns: repeat(auto-fill, 3.5rem);
 }
