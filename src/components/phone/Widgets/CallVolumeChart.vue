@@ -18,7 +18,24 @@ import { theme } from '@/../tailwind.config';
 export default {
   name: 'CallVolumeChart',
   components: { TitledCard, LineChart },
-  props: ['callsDataset', 'missedDataset', 'casesDataset', 'loading'],
+  props: {
+    callsDataset: {
+      type: Array,
+      default: () => [],
+    },
+    missedDataset: {
+      type: Array,
+      default: () => [],
+    },
+    casesDataset: {
+      type: Array,
+      default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     chartData() {
       return {

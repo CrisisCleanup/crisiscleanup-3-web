@@ -26,7 +26,6 @@
 </template>
 <script>
 import 'viewerjs/dist/viewer.css';
-import _ from 'lodash';
 import { api as viewerApi } from 'v-viewer';
 
 export default {
@@ -62,7 +61,7 @@ export default {
   },
   methods: {
     appearModal(image, idx) {
-      const $viewer = viewerApi({
+      viewerApi({
         options: {
           toolbar: true,
           url: 'data-source',

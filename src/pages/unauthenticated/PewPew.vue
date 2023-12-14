@@ -157,9 +157,9 @@
             "
           >
             <div v-if="incidentList.length">
-              <div v-for="incident in incidentList" :key="incident.id">
-                {{ incident.short_name }}:
-                {{ getIncidentPhoneNumbers(incident) }}
+              <div v-for="incidentItem in incidentList" :key="incidentItem.id">
+                {{ incidentItem.short_name }}:
+                {{ getIncidentPhoneNumbers(incidentItem) }}
               </div>
             </div>
             <div v-else>
