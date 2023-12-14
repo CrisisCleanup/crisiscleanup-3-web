@@ -41,9 +41,7 @@ export default {
 </script>
 
 <style>
-@media only screen and (max-width: 1223px) and (orientation: landscape) {
-  .navbar {
-    @apply mb-20;
-  }
+.navbar {
+  @apply mb-20;
 }
 </style>
