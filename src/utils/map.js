@@ -34,10 +34,10 @@ export const mapAttribution =
   '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 export const getGoogleMapsLocation = (url) => {
-  const regex = new RegExp('@(.*),(.*),');
-  const match = url.match(regex);
-  const latitude = Number(match[1]);
-  const longitude = Number(match[2]);
+  const regex = '@(-?\\d+\\.\\d+),(-?\\d+\\.\\d+),(\\d+\\.?\\d?)+z';
+  const match = url.matchAll(regex);
+  const latitude = match[0];
+  const longitude = match[1];
 
   return {
     longitude,
