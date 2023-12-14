@@ -1,10 +1,6 @@
 <template>
-  <modal
-    v-if="show"
-    modal-classes="bg-white max-w-2xl shadow"
-    modal-style="min-height: 60%"
-  >
-    <div class="flex flex-col h-full">
+  <modal v-if="show" modal-classes="bg-white max-w-2xl shadow">
+    <div class="flex flex-col">
       <div class="p-3">
         {{ $t('worksiteFilters.filters') }}
         <span
@@ -60,8 +56,8 @@
         </div>
       </div>
 
-      <div class="flex flex-grow h-full">
-        <div class="w-1/4 border-r">
+      <div class="flex flex-grow h-full" style="max-height: 40vh">
+        <div class="w-1/4 border-r overflow-y-auto">
           <div
             class="p-3 px-4 border-b cursor-pointer"
             :class="{
@@ -844,7 +840,6 @@ export default {
 
 <style scoped>
 .modal-item {
-  height: 450px;
   overflow: auto;
 }
 @media only screen and (max-width: 1223px) and (orientation: landscape) {
