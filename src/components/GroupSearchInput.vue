@@ -33,9 +33,12 @@
     </template>
   </autocomplete>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import { getQueryString } from '../utils/urls';
-export default {
+import useHttp from '@/use/useHttp';
+
+export default defineComponent({
   name: 'GroupSearchInput',
   props: {
     size: {
@@ -51,26 +54,25 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      groupResults: [],
-    };
-  },
-  methods: {
-    async onGroupSearch(value) {
-      this.$emit('input', value);
-
+  setup(props, { emit }) {
+    const { $http } = useHttp();
+    const groupResults = ref([]);
+    const onGroupSearch = async (value) => {
+      emit('input', value);
       const params = {
         fields: 'id,name',
         limit: '10',
         search: value,
       };
-
-      const results = await this.$http.get(
+      const results = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/groups?${getQueryString(params)}`,
       );
-      this.groupResults = results.data.results;
-    },
+      groupResults.value = results.data.results;
+    };
+    return {
+      onGroupSearch,
+      groupResults,
+    };
   },
-};
+});
 </script>

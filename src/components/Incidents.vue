@@ -43,10 +43,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 import CaseDonutChart from '@/components/charts/CaseDonutChart.vue';
 
-export default {
+export default defineComponent({
   name: 'Incidents',
   components: { CaseDonutChart },
   props: {
@@ -55,5 +56,8 @@ export default {
       default: () => [],
     },
   },
-};
+  setup() {
+    return {};
+  },
+});
 </script>

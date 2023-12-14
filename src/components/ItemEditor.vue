@@ -14,42 +14,32 @@
   </div>
 </template>
 
-<script>
-const beautify = require('js-beautify').js; // import the styles somewhere
+<script lang="ts">
+// import the styles somewhere
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
+const beautify = require('js-beautify').js;
 
-export default {
+export default defineComponent({
   name: 'ItemEditor',
-  mounted() {
-    this.currentObject = this.mergeObjects(this.item, this.initialObject);
-    Object.keys(this.currentObject).forEach((key) => {
-      this.updateProperty(key, this.currentObject[key]);
-    });
-    delete this.currentObject.children;
-  },
   props: {
     item: {
       type: Object,
       default: () => ({}),
     },
   },
-  data() {
-    return {
-      beautify,
-      currentObject: {},
-      initialObject: {
-        values: null,
-        is_required: false,
-        is_read_only: false,
-        list_order: 0,
-        field_key: '',
-        field_parent_key: null,
-        if_selected_then_work_type: null,
-        phase: 4,
-      },
-    };
-  },
-  methods: {
-    mergeObjects(obj1, obj2) {
+  setup(props, { emit }) {
+    const currentObject = ref();
+    const initialObject = ref({
+      values: null,
+      is_required: false,
+      is_read_only: false,
+      list_order: 0,
+      field_key: '',
+      field_parent_key: null,
+      if_selected_then_work_type: null,
+      phase: 4,
+    });
+    const mergeObjects = (obj1, obj2) => {
       const common = (a, b) => {
         const result = {};
 
@@ -61,22 +51,36 @@ export default {
       };
 
       return common(obj1, obj2);
-    },
-    updateProperty(prop, value) {
+    };
+    const updateProperty = (prop, value) => {
       try {
-        this.currentObject[prop] = JSON.parse(value);
-        this.$emit('update', {
-          field_key: this.item.field_key,
+        currentObject.value[prop] = JSON.parse(value);
+        emit('update', {
+          field_key: props.item.field_key,
           prop,
           value: JSON.parse(value),
         });
       } catch (e) {
-        const currentValue = this.currentObject[prop];
-        this.currentObject[prop] = currentValue;
+        const currentValue = currentObject.value[prop];
+        currentObject.value[prop] = currentValue;
       }
-    },
+    };
+    onMounted(() => {
+      currentObject.value = mergeObjects(props.item, initialObject.value);
+      Object.keys(currentObject.value).forEach((key) => {
+        updateProperty(key, currentObject.value[key]);
+      });
+      delete currentObject.value.children;
+    });
+    return {
+      beautify,
+      currentObject,
+      initialObject,
+      mergeObjects,
+      updateProperty,
+    };
   },
-};
+});
 </script>
 
 <style>

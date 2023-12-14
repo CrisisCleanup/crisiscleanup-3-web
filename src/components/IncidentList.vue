@@ -6,8 +6,9 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
+export default defineComponent({
   name: 'IncidentList',
   props: {
     incidents: {
@@ -15,7 +16,7 @@ export default {
       default: () => [],
     },
   },
-};
+});
 </script>
 
 <style scoped></style>

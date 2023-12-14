@@ -33,16 +33,22 @@
   </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 
-export default {
+export default defineComponent({
   name: 'Loader',
   props: {
-    loading: VueTypes.bool.def(true),
-    overlay: VueTypes.bool.def(false),
+    loading: {
+      type: Boolean,
+      default: true,
+    },
+    overlay: {
+      type: Boolean,
+      default: false,
+    },
   },
-};
+});
 </script>
 
 <style lang="postcss">
